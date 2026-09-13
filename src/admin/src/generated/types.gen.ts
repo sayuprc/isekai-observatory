@@ -158,6 +158,11 @@ export type MediaSearchResponse = {
     maxPage: number;
 };
 
+/**
+ * メディア検索のソート条件
+ */
+export type MediaSearchSortBy = 'published_at' | 'title';
+
 export type MediaType = {
     name: MediaTypeName;
     value: MediaTypeValue;
@@ -401,6 +406,11 @@ export type ReleaseGroupSearchResponse = {
     releaseGroups: Array<ReleaseGroupSummary>;
     maxPage: number;
 };
+
+/**
+ * リリースグループ検索のソート条件
+ */
+export type ReleaseGroupSearchSortBy = 'first_released_on' | 'title';
 
 /**
  * リリースグループ一覧の 1 行分。firstReleasedOn は傘下リリースの最古発売日(リリース未登録なら null)
@@ -1359,6 +1369,8 @@ export type MediaServiceSearchMediaData = {
         title?: string;
         type?: MediaTypeValue;
         is_display?: boolean;
+        sort?: MediaSearchSortBy;
+        order?: SortOrder;
         page?: Page;
         per_page?: PerPage;
     };
@@ -1943,6 +1955,8 @@ export type ReleaseGroupServiceSearchReleaseGroupsData = {
         title?: string;
         type?: ReleaseGroupTypeValue;
         is_display?: boolean;
+        sort?: ReleaseGroupSearchSortBy;
+        order?: SortOrder;
         page?: Page;
         per_page?: PerPage;
     };

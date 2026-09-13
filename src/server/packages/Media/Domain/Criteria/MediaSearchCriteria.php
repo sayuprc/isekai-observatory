@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Media\Domain\Criteria;
 
 use Media\Domain\Models\MediaType;
+use Support\Domain\SearchCriteria\Order;
 use Support\Domain\SearchCriteria\PerPage;
 use Support\Domain\ValueObjects\String\TextNormalizer;
 use Support\Optional\Optional;
@@ -24,6 +25,8 @@ readonly class MediaSearchCriteria
         Optional $title,
         public Optional $type,
         public Optional $isDisplay,
+        public Sort $sort = Sort::PublishedAt,
+        public Order $order = Order::Asc,
         public int $page = 1,
         public PerPage $perPage = PerPage::TwentyFive,
     ) {

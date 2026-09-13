@@ -35,6 +35,8 @@ readonly class SearchUseCase
             $inputData->isDisplay === Arg::Optional
                 ? new None()
                 : new Some($inputData->isDisplay),
+            $inputData->sort,
+            $inputData->order,
             $inputData->page,
             $inputData->perPage,
         );

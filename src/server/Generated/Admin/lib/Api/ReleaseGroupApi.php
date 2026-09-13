@@ -1072,6 +1072,8 @@ class ReleaseGroupApi
      * @param  string|null $title title (optional)
      * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type type (optional)
      * @param  bool|null $is_display is_display (optional)
+     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort sort (optional)
+     * @param  \OpenAPIAdminClientModelSortOrder|null $order order (optional)
      * @param  Int|null $page page (optional)
      * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
@@ -1080,9 +1082,9 @@ class ReleaseGroupApi
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
      */
-    public function releaseGroupServiceSearchReleaseGroups($title = null, $type = null, $is_display = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
+    public function releaseGroupServiceSearchReleaseGroups($title = null, $type = null, $is_display = null, $sort = null, $order = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
     {
-        list($response) = $this->releaseGroupServiceSearchReleaseGroupsWithHttpInfo($title, $type, $is_display, $page, $per_page, $contentType);
+        list($response) = $this->releaseGroupServiceSearchReleaseGroupsWithHttpInfo($title, $type, $is_display, $sort, $order, $page, $per_page, $contentType);
         return $response;
     }
 
@@ -1092,6 +1094,8 @@ class ReleaseGroupApi
      * @param  string|null $title (optional)
      * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
      * @param  bool|null $is_display (optional)
+     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional)
+     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional)
      * @param  Int|null $page (optional)
      * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
@@ -1100,9 +1104,9 @@ class ReleaseGroupApi
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function releaseGroupServiceSearchReleaseGroupsWithHttpInfo($title = null, $type = null, $is_display = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
+    public function releaseGroupServiceSearchReleaseGroupsWithHttpInfo($title = null, $type = null, $is_display = null, $sort = null, $order = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
     {
-        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest($title, $type, $is_display, $page, $per_page, $contentType);
+        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest($title, $type, $is_display, $sort, $order, $page, $per_page, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1221,6 +1225,8 @@ class ReleaseGroupApi
      * @param  string|null $title (optional)
      * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
      * @param  bool|null $is_display (optional)
+     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional)
+     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional)
      * @param  Int|null $page (optional)
      * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
@@ -1228,9 +1234,9 @@ class ReleaseGroupApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function releaseGroupServiceSearchReleaseGroupsAsync($title = null, $type = null, $is_display = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
+    public function releaseGroupServiceSearchReleaseGroupsAsync($title = null, $type = null, $is_display = null, $sort = null, $order = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
     {
-        return $this->releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo($title, $type, $is_display, $page, $per_page, $contentType)
+        return $this->releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo($title, $type, $is_display, $sort, $order, $page, $per_page, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1244,6 +1250,8 @@ class ReleaseGroupApi
      * @param  string|null $title (optional)
      * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
      * @param  bool|null $is_display (optional)
+     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional)
+     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional)
      * @param  Int|null $page (optional)
      * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
@@ -1251,10 +1259,10 @@ class ReleaseGroupApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo($title = null, $type = null, $is_display = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
+    public function releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo($title = null, $type = null, $is_display = null, $sort = null, $order = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
     {
         $returnType = '\OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse';
-        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest($title, $type, $is_display, $page, $per_page, $contentType);
+        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest($title, $type, $is_display, $sort, $order, $page, $per_page, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1298,6 +1306,8 @@ class ReleaseGroupApi
      * @param  string|null $title (optional)
      * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
      * @param  bool|null $is_display (optional)
+     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional)
+     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional)
      * @param  Int|null $page (optional)
      * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
@@ -1305,8 +1315,10 @@ class ReleaseGroupApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function releaseGroupServiceSearchReleaseGroupsRequest($title = null, $type = null, $is_display = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
+    public function releaseGroupServiceSearchReleaseGroupsRequest($title = null, $type = null, $is_display = null, $sort = null, $order = null, $page = null, $per_page = null, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
     {
+
+
 
 
 
@@ -1344,6 +1356,24 @@ class ReleaseGroupApi
             $is_display,
             'is_display', // param base name
             'boolean', // openApiType
+            'form', // style
+            false, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'ReleaseGroupSearchSortBy', // openApiType
+            'form', // style
+            false, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $order,
+            'order', // param base name
+            'SortOrder', // openApiType
             'form', // style
             false, // explode
             false // required

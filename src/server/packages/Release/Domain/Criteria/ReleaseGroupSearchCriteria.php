@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Release\Domain\Criteria;
 
 use Release\Domain\Models\ReleaseGroupType;
+use Support\Domain\SearchCriteria\Order;
 use Support\Domain\SearchCriteria\PerPage;
 use Support\Domain\ValueObjects\String\TextNormalizer;
 use Support\Optional\Optional;
@@ -24,6 +25,8 @@ readonly class ReleaseGroupSearchCriteria
         Optional $title,
         public Optional $type,
         public Optional $isDisplay,
+        public Sort $sort = Sort::FirstReleasedOn,
+        public Order $order = Order::Desc,
         public int $page = 1,
         public PerPage $perPage = PerPage::TwentyFive,
     ) {
