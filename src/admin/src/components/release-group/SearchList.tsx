@@ -1,5 +1,5 @@
 import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
-import type { ReleaseGroupTypeValue } from '../../generated';
+import type { ReleaseGroupSearchSortBy, ReleaseGroupTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
@@ -7,6 +7,8 @@ import { Pagination } from '../Pagination';
 const PER_PAGE_OPTIONS = [25, 50, 100] as const;
 type PerPage = (typeof PER_PAGE_OPTIONS)[number];
 type DisplayFilter = '' | 'true' | 'false';
+type Sort = ReleaseGroupSearchSortBy;
+type Order = SortOrder;
 
 const RELEASE_GROUP_TYPE_OPTIONS: Array<{ value: '' | `${ReleaseGroupTypeValue}`; label: string }> = [
   { value: '', label: 'すべて' },
@@ -20,6 +22,8 @@ const DEFAULT_PARAMS = {
   title: '',
   type: '' as '' | `${ReleaseGroupTypeValue}`,
   isDisplay: '' as DisplayFilter,
+  sort: 'first_released_on' as Sort,
+  order: 'desc' as Order,
   page: 1,
   perPage: 25 as PerPage,
 };
@@ -28,10 +32,15 @@ const getInitialParams = () => {
   const params = new URLSearchParams(window.location.search);
   const perPageRaw = Number(params.get('per_page'));
 
+  const sort = params.get('sort');
+  const order = params.get('order');
+
   return {
     title: params.get('title') ?? DEFAULT_PARAMS.title,
     type: (params.get('type') ?? DEFAULT_PARAMS.type) as '' | `${ReleaseGroupTypeValue}`,
     isDisplay: (params.get('is_display') ?? DEFAULT_PARAMS.isDisplay) as DisplayFilter,
+    sort: sort === 'first_released_on' || sort === 'title' ? sort : DEFAULT_PARAMS.sort,
+    order: order === 'asc' || order === 'desc' ? order : DEFAULT_PARAMS.order,
     page: Number(params.get('page') ?? String(DEFAULT_PARAMS.page)) || DEFAULT_PARAMS.page,
     perPage: (PER_PAGE_OPTIONS.includes(perPageRaw as PerPage) ? perPageRaw : DEFAULT_PARAMS.perPage) as PerPage,
   };
@@ -66,18 +75,24 @@ export const SearchList = () => {
   const [title, setTitle] = createSignal(initial.title);
   const [type, setType] = createSignal(initial.type);
   const [isDisplay, setIsDisplay] = createSignal<DisplayFilter>(initial.isDisplay);
+  const [sort, setSort] = createSignal<Sort>(initial.sort);
+  const [order, setOrder] = createSignal<Order>(initial.order);
   const [page, setPage] = createSignal(initial.page);
   const [perPage, setPerPage] = createSignal<PerPage>(initial.perPage);
 
   const [inputTitle, setInputTitle] = createSignal(initial.title);
   const [inputType, setInputType] = createSignal(initial.type);
   const [inputIsDisplay, setInputIsDisplay] = createSignal<DisplayFilter>(initial.isDisplay);
+  const [inputSort, setInputSort] = createSignal<Sort>(initial.sort);
+  const [inputOrder, setInputOrder] = createSignal<Order>(initial.order);
   const [inputPerPage, setInputPerPage] = createSignal<PerPage>(initial.perPage);
 
   const updateUrl = (params: {
     title: string;
     type: string;
     isDisplay: DisplayFilter;
+    sort: Sort;
+    order: Order;
     page: number;
     perPage: number;
   }) => {
@@ -85,6 +100,8 @@ export const SearchList = () => {
     if (params.title) searchParams.set('title', params.title);
     if (params.type) searchParams.set('type', params.type);
     if (params.isDisplay) searchParams.set('is_display', params.isDisplay);
+    if (params.sort) searchParams.set('sort', params.sort);
+    if (params.order) searchParams.set('order', params.order);
     searchParams.set('page', String(params.page));
     searchParams.set('per_page', String(params.perPage));
     history.pushState(null, '', `?${searchParams.toString()}`);
@@ -97,6 +114,8 @@ export const SearchList = () => {
       title: title(),
       type: type(),
       isDisplay: isDisplay(),
+      sort: sort(),
+      order: order(),
       page: page(),
       perPage: perPage(),
     }),
@@ -108,6 +127,8 @@ export const SearchList = () => {
           title: params.title,
           type: params.type || undefined,
           is_display: params.isDisplay === '' ? undefined : params.isDisplay === 'true',
+          sort: params.sort,
+          order: params.order,
           page: params.page,
           per_page: params.perPage,
         },
@@ -135,12 +156,16 @@ export const SearchList = () => {
     setTitle(inputTitle());
     setType(inputType());
     setIsDisplay(inputIsDisplay());
+    setSort(inputSort());
+    setOrder(inputOrder());
     setPerPage(inputPerPage());
     setPage(newPage);
     updateUrl({
       title: inputTitle(),
       type: inputType(),
       isDisplay: inputIsDisplay(),
+      sort: inputSort(),
+      order: inputOrder(),
       page: newPage,
       perPage: inputPerPage(),
     });
@@ -152,6 +177,8 @@ export const SearchList = () => {
       title: title(),
       type: type(),
       isDisplay: isDisplay(),
+      sort: sort(),
+      order: order(),
       page: nextPage,
       perPage: perPage(),
     });
@@ -161,10 +188,14 @@ export const SearchList = () => {
     setInputTitle(DEFAULT_PARAMS.title);
     setInputType(DEFAULT_PARAMS.type);
     setInputIsDisplay(DEFAULT_PARAMS.isDisplay);
+    setInputSort(DEFAULT_PARAMS.sort);
+    setInputOrder(DEFAULT_PARAMS.order);
     setInputPerPage(DEFAULT_PARAMS.perPage);
     setTitle(DEFAULT_PARAMS.title);
     setType(DEFAULT_PARAMS.type);
     setIsDisplay(DEFAULT_PARAMS.isDisplay);
+    setSort(DEFAULT_PARAMS.sort);
+    setOrder(DEFAULT_PARAMS.order);
     setPage(DEFAULT_PARAMS.page);
     setPerPage(DEFAULT_PARAMS.perPage);
     updateUrl(DEFAULT_PARAMS);
@@ -224,6 +255,42 @@ export const SearchList = () => {
             </option>
             <option value="false" selected={inputIsDisplay() === 'false'}>
               表示しない
+            </option>
+          </select>
+        </fieldset>
+        <fieldset class="fieldset">
+          <label class="fieldset-label" for="sort">
+            ソート項目
+          </label>
+          <select
+            id="sort"
+            name="sort"
+            class="select select-bordered select-sm"
+            onChange={e => setInputSort(e.currentTarget.value as Sort)}
+          >
+            <option value="first_released_on" selected={inputSort() === 'first_released_on'}>
+              初リリース日
+            </option>
+            <option value="title" selected={inputSort() === 'title'}>
+              タイトル
+            </option>
+          </select>
+        </fieldset>
+        <fieldset class="fieldset">
+          <label class="fieldset-label" for="order">
+            並び順
+          </label>
+          <select
+            id="order"
+            name="order"
+            class="select select-bordered select-sm"
+            onChange={e => setInputOrder(e.currentTarget.value as Order)}
+          >
+            <option value="desc" selected={inputOrder() === 'desc'}>
+              降順
+            </option>
+            <option value="asc" selected={inputOrder() === 'asc'}>
+              昇順
             </option>
           </select>
         </fieldset>

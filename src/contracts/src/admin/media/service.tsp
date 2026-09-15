@@ -9,6 +9,12 @@ using Http;
 
 namespace IsekaiObservatory.Admin;
 
+@doc("メディア検索のソート条件")
+enum MediaSearchSortBy {
+  publishedAt: "published_at",
+  title: "title",
+}
+
 @tag("Media")
 @route("/media")
 @useAuth(BearerAuth)
@@ -28,6 +34,8 @@ interface MediaService {
     @query title?: string,
     @query type?: MediaTypeValue,
     @query("is_display") isDisplay?: boolean,
+    @query sort?: MediaSearchSortBy = MediaSearchSortBy.publishedAt,
+    @query order?: SortOrder = SortOrder.asc,
     @query page?: page = 1,
     @query("per_page") perPage?: PerPage = PerPage.twentyFive,
   ): Ok<MediaSearchResponse> | Unauthorized | Forbidden | ServerError;

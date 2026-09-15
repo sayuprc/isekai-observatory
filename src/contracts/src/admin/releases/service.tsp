@@ -7,6 +7,12 @@ using Http;
 
 namespace IsekaiObservatory.Admin;
 
+@doc("リリースグループ検索のソート条件")
+enum ReleaseGroupSearchSortBy {
+  firstReleasedOn: "first_released_on",
+  title: "title",
+}
+
 @tag("ReleaseGroup")
 @route("/release-groups")
 @useAuth(BearerAuth)
@@ -56,6 +62,8 @@ interface ReleaseGroupService {
     @query title?: string,
     @query type?: ReleaseGroupTypeValue,
     @query("is_display") isDisplay?: boolean,
+    @query sort?: ReleaseGroupSearchSortBy = ReleaseGroupSearchSortBy.firstReleasedOn,
+    @query order?: SortOrder = SortOrder.desc,
     @query page?: page = 1,
     @query("per_page") perPage?: PerPage = PerPage.twentyFive,
   ): Ok<ReleaseGroupSearchResponse> | Unauthorized | Forbidden | ServerError;

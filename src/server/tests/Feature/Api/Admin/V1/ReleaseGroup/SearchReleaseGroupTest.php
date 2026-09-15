@@ -152,4 +152,51 @@ class SearchReleaseGroupTest extends DatabaseTestCase
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1);
     }
+
+    #[Test]
+    public function canSortByFirstReleasedOnAscending(): void
+    {
+        $releaseGroupId1 = $this->generateUuid();
+        $releaseGroupId2 = $this->generateUuid();
+        $releaseGroupId3 = $this->generateUuid();
+
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($releaseGroupId1, '古い作品', ReleaseGroupType::Single, true),
+            $this->createReleaseGroup($releaseGroupId2, '新しい作品', ReleaseGroupType::Album, true),
+            $this->createReleaseGroup($releaseGroupId3, 'リリース未登録の作品', ReleaseGroupType::Ep, true),
+        );
+        $this->storeReleases(
+            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
+                ['position' => 1, 'name' => null, 'tracks' => []],
+            ]),
+            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
+                ['position' => 1, 'name' => null, 'tracks' => []],
+            ]),
+        );
+
+        $this->withAuth()
+            ->getJson(route(ReleaseGroupRouteMap::Search, ['sort' => 'first_released_on', 'order' => 'asc']))
+            ->assertStatus(200)
+            ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
+            ->assertJsonPath('releaseGroups.1.releaseGroupId', $releaseGroupId2)
+            ->assertJsonPath('releaseGroups.2.releaseGroupId', $releaseGroupId3);
+    }
+
+    #[Test]
+    public function canSortByTitle(): void
+    {
+        $releaseGroupId1 = $this->generateUuid();
+        $releaseGroupId2 = $this->generateUuid();
+
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($releaseGroupId1, 'い作品', ReleaseGroupType::Single, true),
+            $this->createReleaseGroup($releaseGroupId2, 'あ作品', ReleaseGroupType::Album, true),
+        );
+
+        $this->withAuth()
+            ->getJson(route(ReleaseGroupRouteMap::Search, ['sort' => 'title', 'order' => 'asc']))
+            ->assertStatus(200)
+            ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
+            ->assertJsonPath('releaseGroups.1.releaseGroupId', $releaseGroupId1);
+    }
 }

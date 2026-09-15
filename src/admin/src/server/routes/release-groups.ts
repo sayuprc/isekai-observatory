@@ -6,7 +6,7 @@ import {
   releaseGroupServiceSearchReleaseGroups,
   releaseGroupServiceUpdateReleaseGroup,
 } from '../../generated';
-import type { PerPage, ReleaseGroupTypeValue } from '../../generated';
+import type { PerPage, ReleaseGroupSearchSortBy, ReleaseGroupTypeValue, SortOrder } from '../../generated';
 import { withAuthRetry } from '../client';
 import { resolveApiResponse } from '../errors';
 import { authGuard } from '../middleware';
@@ -49,6 +49,8 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
               title: query.title || undefined,
               type: query.type as ReleaseGroupTypeValue | undefined,
               is_display: query.is_display,
+              sort: (query.sort ?? 'first_released_on') as ReleaseGroupSearchSortBy,
+              order: (query.order ?? 'desc') as SortOrder,
               page: query.page ?? 1,
               per_page: (query.per_page ?? 25) as PerPage,
             },
@@ -61,6 +63,8 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
         title: t.Optional(t.String()),
         type: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('99')])),
         is_display: t.Optional(t.Boolean()),
+        sort: t.Optional(t.Union([t.Literal('first_released_on'), t.Literal('title')])),
+        order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),
         page: t.Optional(t.Number()),
         per_page: t.Optional(t.Number()),
       }),

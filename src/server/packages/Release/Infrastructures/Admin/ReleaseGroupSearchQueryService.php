@@ -10,6 +10,7 @@ use Override;
 use Release\Application\Admin\Query\ReleaseGroupSearchQueryServiceInterface;
 use Release\Application\Admin\Query\ReleaseGroupSummary;
 use Release\Domain\Criteria\ReleaseGroupSearchCriteria;
+use Release\Domain\Criteria\Sort;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -28,7 +29,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
     {
         $offset = ($criteria->page - 1) * $criteria->perPage->value;
 
-        $rows = $this->queryFactory->fetchAll(
+        $query = $this->applyOrder(
             $this->buildSearchQuery($criteria)
                 ->withSelect([
                     'release_groups.release_group_id',
@@ -45,11 +46,12 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
                 ->groupBy('release_groups.type')
                 ->groupBy('release_groups.description')
                 ->groupBy('release_groups.is_display')
-                ->groupBy('release_groups.order_no')
-                // 最古発売日の降順、同日は order_no の降順、リリース未登録のグループは末尾にする
-                ->orderBy('first_released_on', 'desc')
-                ->orderBy('release_groups.order_no', 'desc')
-                ->orderBy('release_groups.title')
+                ->groupBy('release_groups.order_no'),
+            $criteria,
+        );
+
+        $rows = $this->queryFactory->fetchAll(
+            $query
                 ->limit($criteria->perPage->value)
                 ->offset($offset),
         );
@@ -97,5 +99,22 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
         }
 
         return $query;
+    }
+
+    private function applyOrder(SelectBuilder $query, ReleaseGroupSearchCriteria $criteria): SelectBuilder
+    {
+        if ($criteria->sort === Sort::Title) {
+            return $query
+                ->orderBy('release_groups.title', $criteria->order->value)
+                ->orderBy('first_released_on', 'desc')
+                ->orderBy('release_groups.order_no', 'desc');
+        }
+
+        // リリース未登録のグループは末尾にする
+        return $query
+            ->orderBy(new Sql('first_released_on IS NULL'))
+            ->orderBy('first_released_on', $criteria->order->value)
+            ->orderBy('release_groups.order_no', 'desc')
+            ->orderBy('release_groups.title');
     }
 }

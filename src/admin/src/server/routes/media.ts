@@ -6,7 +6,7 @@ import {
   mediaServiceSearchMedia,
   mediaServiceUpdateMedia,
 } from '../../generated';
-import type { MediaTypeValue, PerPage } from '../../generated';
+import type { MediaSearchSortBy, MediaTypeValue, PerPage, SortOrder } from '../../generated';
 import { withAuthRetry } from '../client';
 import { normalizeDateTimeApiValue } from '../date';
 import { resolveApiResponse } from '../errors';
@@ -34,6 +34,8 @@ export const media = new Elysia({ prefix: '/media' })
               title: query.title || undefined,
               type: query.type as MediaTypeValue | undefined,
               is_display: query.is_display,
+              sort: (query.sort ?? 'published_at') as MediaSearchSortBy,
+              order: (query.order ?? 'asc') as SortOrder,
               page: query.page ?? 1,
               per_page: (query.per_page ?? 25) as PerPage,
             },
@@ -48,6 +50,8 @@ export const media = new Elysia({ prefix: '/media' })
           t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('4'), t.Literal('5'), t.Literal('99')]),
         ),
         is_display: t.Optional(t.Boolean()),
+        sort: t.Optional(t.Union([t.Literal('published_at'), t.Literal('title')])),
+        order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),
         page: t.Optional(t.Number()),
         per_page: t.Optional(t.Number()),
       }),

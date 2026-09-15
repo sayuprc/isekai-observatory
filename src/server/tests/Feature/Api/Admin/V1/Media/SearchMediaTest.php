@@ -68,4 +68,36 @@ class SearchMediaTest extends DatabaseTestCase
             ->assertJsonPath('media.0.isDisplay', true)
             ->assertJsonPath('maxPage', 1);
     }
+
+    #[Test]
+    public function canSortByPublishedAtDescending(): void
+    {
+        $repository = $this->app->make(MediaRepository::class);
+        $olderId = $this->generateUuid();
+        $newerId = $this->generateUuid();
+        $repository->save($this->createMedia($olderId, '古い動画', 'https://example.com/old', MediaType::Mv, true, new DateTimeImmutable('2024-01-01 00:00:00')));
+        $repository->save($this->createMedia($newerId, '新しい動画', 'https://example.com/new', MediaType::Mv, true, new DateTimeImmutable('2024-03-01 12:00:00')));
+
+        $this->withAuth()
+            ->getJson(route(MediaRouteMap::Search, ['sort' => 'published_at', 'order' => 'desc']))
+            ->assertStatus(200)
+            ->assertJsonPath('media.0.mediaId', $newerId)
+            ->assertJsonPath('media.1.mediaId', $olderId);
+    }
+
+    #[Test]
+    public function canSortByTitle(): void
+    {
+        $repository = $this->app->make(MediaRepository::class);
+        $idA = $this->generateUuid();
+        $idI = $this->generateUuid();
+        $repository->save($this->createMedia($idI, 'い動画', 'https://example.com/i', MediaType::Mv, true));
+        $repository->save($this->createMedia($idA, 'あ動画', 'https://example.com/a', MediaType::Mv, true));
+
+        $this->withAuth()
+            ->getJson(route(MediaRouteMap::Search, ['sort' => 'title', 'order' => 'asc']))
+            ->assertStatus(200)
+            ->assertJsonPath('media.0.mediaId', $idA)
+            ->assertJsonPath('media.1.mediaId', $idI);
+    }
 }
