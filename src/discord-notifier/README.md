@@ -81,4 +81,6 @@ curl -sS -X POST "http://127.0.0.1:8080/" \
 - `infra/staging/docker/discord-notifier/Dockerfile`
 - `infra/production/docker/discord-notifier/Dockerfile`
 
-各 Dockerfile の `ARG MOONBIT_VERSION` に `moonc` の version 文字列 (`0.10.6+80dc50f24` 形式) を書く
+`moonc` の version 文字列 (`0.10.6+80dc50f24` 形式) は `mise.toml` の `moonbit_version` に書く
+
+イメージ build は `tools/read-mise-value.sh` で読み、`--build-arg MOONBIT_VERSION` で渡す

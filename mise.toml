@@ -8,8 +8,7 @@ node = "24.17.0"
 pnpm = "11.20.0"
 
 [vars]
-mise_version = "2026.7.13"
-# moonc の version 文字列 (moon version --all の moonc 行)。GitHub Actions の install script で使う
+# moonc の version 文字列 (moon version --all の moonc 行)
 moonbit_version = "0.10.6+80dc50f24"
 uid = "`id -u`"
 user_name = "`id -un`"

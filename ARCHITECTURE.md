@@ -21,7 +21,7 @@
 - `src/discord-notifier/`: MoonBit 製 Discord 通知配達サービス (Cloud Run)
 - `src/notify-publish/`: MoonBit 製の通知 JSON → Pub/Sub publish CLI
 - `src/notify-contract/`: MoonBit 製のアプリ通知 JSON 共有契約 (`notify-publish` / `discord-notifier` が依存)
-- `mise.toml`: 開発ツールとタスク定義。ホスト向けツール版は `[tools]`
+- `mise.toml`: 開発ツールとタスク定義。ホスト向けツール版は `[tools]`。MoonBit の install 版は `[vars].moonbit_version`
 - `compose.yaml`: ローカルで使う proxy / php / mysql / redis の定義
 
 ## Source-Of-Truth Flow

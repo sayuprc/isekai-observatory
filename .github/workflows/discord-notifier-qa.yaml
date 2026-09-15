@@ -16,6 +16,7 @@ on:
       - ".github/workflows/discord-notifier-qa.yaml"
       - ".github/actions/setup-mise/**"
       - ".github/actions/setup-moonbit/**"
+      - "tools/read-mise-value.sh"
   push:
     branches:
       - dev
@@ -27,6 +28,7 @@ on:
       - ".github/workflows/discord-notifier-qa.yaml"
       - ".github/actions/setup-mise/**"
       - ".github/actions/setup-moonbit/**"
+      - "tools/read-mise-value.sh"
   workflow_call:
 
 env:
