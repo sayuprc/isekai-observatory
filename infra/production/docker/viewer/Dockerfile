@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim AS notify-publish-builder
 
-# moonc の version 文字列 (moon version --all の moonc 行)
-ARG MOONBIT_VERSION=0.10.6+80dc50f24
+# moonc の version 文字列は mise.toml の moonbit_version から --build-arg で渡す
+ARG MOONBIT_VERSION
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -14,7 +14,8 @@ RUN apt-get update \
 
 ENV PATH="/root/.moon/bin:${PATH}"
 
-RUN curl -fsSL https://cli.moonbitlang.com/install/unix.sh \
+RUN test -n "${MOONBIT_VERSION}" \
+  && curl -fsSL https://cli.moonbitlang.com/install/unix.sh \
   | bash -s -- "${MOONBIT_VERSION}"
 
 WORKDIR /workspace

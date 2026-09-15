@@ -52,6 +52,8 @@
 
 コンテナイメージの base / インストーラ版は各 Dockerfile に直接書く。Renovate の dockerfile manager が検知できるようにする
 
+MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を Source of Truth にし、build 時に `--build-arg MOONBIT_VERSION` で渡す
+
 ## Dockerfiles (共通)
 
 各環境の `docker/` に同名の Dockerfile がある。役割は環境横断で同じ

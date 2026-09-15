@@ -12,6 +12,8 @@ on:
       - "infra/development/**"
       - "infra/staging/**"
       - "infra/production/**"
+      - "mise.toml"
+      - "tools/read-mise-value.sh"
       - ".github/workflows/infra-docker-qa.yaml"
   push:
     branches:
@@ -20,6 +22,8 @@ on:
       - "infra/development/**"
       - "infra/staging/**"
       - "infra/production/**"
+      - "mise.toml"
+      - "tools/read-mise-value.sh"
       - ".github/workflows/infra-docker-qa.yaml"
   workflow_call:
 
@@ -64,6 +68,10 @@ jobs:
 
           if [[ "${IMAGE}" == "admin" ]]; then
             extra_args+=(--build-arg "PUBLIC_APP_URL=https://example.invalid")
+          fi
+
+          if [[ "${IMAGE}" == "discord-notifier" || "${IMAGE}" == "viewer" ]]; then
+            extra_args+=(--build-arg "MOONBIT_VERSION=$(./tools/read-mise-value.sh moonbit_version)")
           fi
 
           docker build \
