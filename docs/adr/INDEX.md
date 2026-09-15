@@ -27,3 +27,4 @@
 | ADR-0021 | accepted | Viewer API は Admin と分離した公開 read model とする | [api, viewer] |
 | ADR-0022 | accepted | 監査ログは Support の明示記録とする | [api, admin] |
 | ADR-0023 | accepted | 人物は Person に一本化し役割は関係の role で表す | [api, admin] |
+| ADR-0024 | accepted | コンテナイメージの版は Dockerfile に直接書く | [api, admin, viewer] |

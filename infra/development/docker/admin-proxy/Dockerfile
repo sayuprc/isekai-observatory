@@ -1,5 +1,4 @@
-ARG NODE_VERSION
-FROM node:${NODE_VERSION}-slim
+FROM node:24.17.0-slim
 
 ENV TZ=Asia/Tokyo
 ENV PNPM_HOME=/pnpm

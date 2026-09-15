@@ -1,5 +1,4 @@
-ARG TAG=8.5.7
-FROM dunglas/frankenphp:php${TAG}
+FROM dunglas/frankenphp:php8.5.7
 
 COPY certs/rootCA.pem /usr/share/ca-certificates/
 

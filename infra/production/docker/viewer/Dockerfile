@@ -1,7 +1,7 @@
-ARG NODE_VERSION
 FROM debian:bookworm-slim AS notify-publish-builder
 
-ARG MOONBIT_VERSION
+# moonc の version 文字列 (moon version --all の moonc 行)
+ARG MOONBIT_VERSION=0.10.6+80dc50f24
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -30,7 +30,7 @@ WORKDIR /workspace/notify-publish
 RUN moon update \
   && moon build --target native --release
 
-FROM node:${NODE_VERSION}-slim
+FROM node:24.17.0-slim
 
 ENV TZ=Asia/Tokyo
 ENV PNPM_HOME=/pnpm

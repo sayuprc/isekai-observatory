@@ -1,14 +1,13 @@
 [env]
-SERVER_IMAGE = "ghcr.io/sayuprc/isekai-observatory-api:{{vars.server_tag}}"
-OPENAPI_IMAGE = "ghcr.io/sayuprc/openapi-generator:{{vars.openapi_tag}}"
-MYSQL_IMAGE = "ghcr.io/sayuprc/isekai-observatory-mysql:{{vars.mysql_tag}}"
+SERVER_IMAGE = "ghcr.io/sayuprc/isekai-observatory-api:local"
+OPENAPI_IMAGE = "ghcr.io/sayuprc/openapi-generator:local"
+MYSQL_IMAGE = "ghcr.io/sayuprc/isekai-observatory-mysql:local"
 
 [tasks."build:php"]
 description = "CI 向けに PHP イメージをビルドして GHCR にプッシュする"
 run = '''
 touch ./infra/local/docker/php/certs/rootCA.pem
 docker build -t $SERVER_IMAGE ./infra/local/docker/php \
-  --build-arg TAG={{vars.server_tag}} \
   --build-arg UID=$(id -u) \
   --build-arg GID=$(id -g) \
   --build-arg USERNAME=$(id -u -n) \
@@ -20,7 +19,6 @@ docker push $SERVER_IMAGE
 description = "CI 向けに OpenAPI Generator イメージをビルドして GHCR にプッシュする"
 run = '''
 docker build -t $OPENAPI_IMAGE ./infra/local/docker/openapi-generator \
-  --build-arg TAG={{vars.openapi_tag}} \
   --build-arg UID=$(id -u) \
   --build-arg GID=$(id -g) \
   --build-arg USERNAME=$(id -u -n) \
@@ -31,8 +29,7 @@ docker push $OPENAPI_IMAGE
 [tasks."build:mysql"]
 description = "CI 向けに MySQL イメージをビルドして GHCR にプッシュする"
 run = '''
-docker build -t $MYSQL_IMAGE ./infra/local/docker/mysql \
-  --build-arg TAG={{vars.mysql_tag}}
+docker build -t $MYSQL_IMAGE ./infra/local/docker/mysql
 docker push $MYSQL_IMAGE
 '''
 

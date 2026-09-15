@@ -1,5 +1,4 @@
-ARG MISE_VERSION
-FROM jdxcode/mise:${MISE_VERSION} AS atlas
+FROM jdxcode/mise:2026.7.13 AS atlas
 
 ENV MISE_AUTO_INSTALL=false
 
