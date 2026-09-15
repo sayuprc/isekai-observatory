@@ -1,4 +1,4 @@
-FROM php:8.5.7-cli-alpine
+FROM php:8.5.10-cli-alpine
 
 ENV TZ=Asia/Tokyo
 
@@ -17,7 +17,7 @@ RUN apk add --no-cache \
   && apk del .build-deps \
   && rm -rf /tmp/pear
 
-COPY --from=composer:2.10.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.10.3 /usr/bin/composer /usr/bin/composer
 COPY src/server/composer.json src/server/composer.lock ./
 
 RUN composer install \
