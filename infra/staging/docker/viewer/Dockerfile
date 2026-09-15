@@ -31,7 +31,7 @@ WORKDIR /workspace/notify-publish
 RUN moon update \
   && moon build --target native --release
 
-FROM node:24.17.0-slim
+FROM node:24.21.0-slim
 
 ENV TZ=Asia/Tokyo
 ENV PNPM_HOME=/pnpm

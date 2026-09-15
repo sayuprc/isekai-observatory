@@ -1,4 +1,4 @@
-FROM openapitools/openapi-generator-cli:v7.21.0
+FROM openapitools/openapi-generator-cli:v7.25.0
 
 ARG UID=1000
 ARG GID=1000

@@ -1,4 +1,4 @@
-FROM oven/bun:1.3.14 AS build
+FROM oven/bun:1.4.2 AS build
 
 ENV MISE_AUTO_INSTALL=false
 
@@ -37,7 +37,7 @@ ENV ADMIN_SSR_NO_EXTERNAL=true
 
 RUN bun --filter admin build
 
-FROM oven/bun:1.3.14-slim AS runtime
+FROM oven/bun:1.4.2-slim AS runtime
 
 ENV TZ=Asia/Tokyo
 

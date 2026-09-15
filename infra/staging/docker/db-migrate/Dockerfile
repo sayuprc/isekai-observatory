@@ -1,4 +1,4 @@
-FROM jdxcode/mise:2026.7.13 AS atlas
+FROM jdxcode/mise:2026.9.9 AS atlas
 
 ENV MISE_AUTO_INSTALL=false
 
@@ -10,7 +10,7 @@ RUN mise trust \
   && mise install atlas \
   && install -Dm755 "$(mise which atlas)" /out/atlas
 
-FROM alpine:3.22
+FROM alpine:3.24
 
 ENV TZ=Asia/Tokyo
 
