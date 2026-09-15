@@ -2,7 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
+    "security:minimumReleaseAgeNpm"
   ],
   "timezone": "Asia/Tokyo",
   "schedule": [
@@ -10,6 +11,21 @@
   ],
   "updateNotScheduled": false,
   "packageRules": [
+    {
+      "description": "pnpm の minimumReleaseAge に合わせて npm 更新 PR を遅らせる",
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest",
+        "pinDigest"
+      ],
+      "minimumReleaseAge": "7 days",
+      "internalChecksFilter": "strict"
+    },
     {
       "description": "パッケージマネージャーごとに non-major 更新をまとめる",
       "matchUpdateTypes": [
