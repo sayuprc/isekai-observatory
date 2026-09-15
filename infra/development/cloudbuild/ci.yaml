@@ -89,106 +89,85 @@ steps:
 
   - id: build-db-migrate-image
     name: gcr.io/cloud-builders/docker
-    entrypoint: bash
     waitFor:
       - pull-db-migrate-image
     args:
-      - -c
-      - |
-        set -euo pipefail
-
-        MISE_VERSION=$$(./tools/read-mise-value.sh mise_version)
-
-        docker build \
-          -f infra/development/docker/db-migrate/Dockerfile \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DB_MIGRATE_IMAGE}:$COMMIT_SHA \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DB_MIGRATE_IMAGE}:latest \
-          --cache-from ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DB_MIGRATE_IMAGE}:latest \
-          --build-arg "MISE_VERSION=$${MISE_VERSION}" \
-          .
+      - build
+      - -f
+      - infra/development/docker/db-migrate/Dockerfile
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DB_MIGRATE_IMAGE}:$COMMIT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DB_MIGRATE_IMAGE}:latest
+      - --cache-from
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DB_MIGRATE_IMAGE}:latest
+      - .
 
   - id: build-discord-notifier-image
     name: gcr.io/cloud-builders/docker
-    entrypoint: bash
     waitFor:
       - pull-discord-notifier-image
     args:
-      - -c
-      - |
-        set -euo pipefail
-
-        MOONBIT_VERSION=$$(./tools/read-mise-value.sh moonbit_version)
-
-        docker build \
-          -f infra/development/docker/discord-notifier/Dockerfile \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DISCORD_NOTIFIER_IMAGE}:$COMMIT_SHA \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DISCORD_NOTIFIER_IMAGE}:latest \
-          --cache-from ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DISCORD_NOTIFIER_IMAGE}:latest \
-          --build-arg "MOONBIT_VERSION=$${MOONBIT_VERSION}" \
-          .
+      - build
+      - -f
+      - infra/development/docker/discord-notifier/Dockerfile
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DISCORD_NOTIFIER_IMAGE}:$COMMIT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DISCORD_NOTIFIER_IMAGE}:latest
+      - --cache-from
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DISCORD_NOTIFIER_IMAGE}:latest
+      - .
 
   - id: build-admin-image
     name: gcr.io/cloud-builders/docker
-    entrypoint: bash
     waitFor:
       - pull-admin-image
     args:
-      - -c
-      - |
-        set -euo pipefail
-
-        BUN_VERSION=$$(./tools/read-mise-value.sh bun)
-
-        docker build \
-          -f infra/development/docker/admin/Dockerfile \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_IMAGE}:$COMMIT_SHA \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_IMAGE}:latest \
-          --cache-from ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_IMAGE}:latest \
-          --build-arg "BUN_VERSION=$${BUN_VERSION}" \
-          --build-arg "PUBLIC_APP_URL=${_PUBLIC_APP_URL}" \
-          .
+      - build
+      - -f
+      - infra/development/docker/admin/Dockerfile
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_IMAGE}:$COMMIT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_IMAGE}:latest
+      - --cache-from
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_IMAGE}:latest
+      - --build-arg
+      - PUBLIC_APP_URL=${_PUBLIC_APP_URL}
+      - .
 
   - id: build-viewer-image
     name: gcr.io/cloud-builders/docker
-    entrypoint: bash
     waitFor:
       - pull-viewer-image
     args:
-      - -c
-      - |
-        set -euo pipefail
-
-        NODE_VERSION=$$(./tools/read-mise-value.sh node)
-        MOONBIT_VERSION=$$(./tools/read-mise-value.sh moonbit_version)
-
-        docker build \
-          -f infra/development/docker/viewer/Dockerfile \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_VIEWER_IMAGE}:$COMMIT_SHA \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_VIEWER_IMAGE}:latest \
-          --cache-from ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_VIEWER_IMAGE}:latest \
-          --build-arg "NODE_VERSION=$${NODE_VERSION}" \
-          --build-arg "MOONBIT_VERSION=$${MOONBIT_VERSION}" \
-          .
+      - build
+      - -f
+      - infra/development/docker/viewer/Dockerfile
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_VIEWER_IMAGE}:$COMMIT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_VIEWER_IMAGE}:latest
+      - --cache-from
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_VIEWER_IMAGE}:latest
+      - .
 
   - id: build-admin-proxy-image
     name: gcr.io/cloud-builders/docker
-    entrypoint: bash
     waitFor:
       - pull-admin-proxy-image
     args:
-      - -c
-      - |
-        set -euo pipefail
-
-        NODE_VERSION=$$(./tools/read-mise-value.sh node)
-
-        docker build \
-          -f infra/development/docker/admin-proxy/Dockerfile \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_PROXY_IMAGE}:$COMMIT_SHA \
-          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_PROXY_IMAGE}:latest \
-          --cache-from ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_PROXY_IMAGE}:latest \
-          --build-arg "NODE_VERSION=$${NODE_VERSION}" \
-          .
+      - build
+      - -f
+      - infra/development/docker/admin-proxy/Dockerfile
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_PROXY_IMAGE}:$COMMIT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_PROXY_IMAGE}:latest
+      - --cache-from
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_PROXY_IMAGE}:latest
+      - .
 
   - id: push-api-image
     name: gcr.io/cloud-builders/docker

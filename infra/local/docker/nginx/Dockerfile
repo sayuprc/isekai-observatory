@@ -1,2 +1,1 @@
-ARG TAG=1.27
-FROM nginx:${TAG}
+FROM nginx:1.27

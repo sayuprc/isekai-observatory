@@ -1,6 +1,7 @@
 FROM debian:bookworm-slim AS builder
 
-ARG MOONBIT_VERSION
+# moonc の version 文字列 (moon version --all の moonc 行)
+ARG MOONBIT_VERSION=0.10.6+80dc50f24
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \

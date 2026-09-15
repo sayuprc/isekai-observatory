@@ -50,7 +50,7 @@
 | `_JOB_SERVICE_ACCOUNT` | Cloud Run jobs の service account |
 | `_NOTIFY_SERVICE_ACCOUNT` | Discord Notifier の runtime service account |
 
-Cloud Build 上で使う tool / base image の版は `mise.toml`(`[tools]` / `[vars]`)を Source of Truth とし、`tools/read-mise-value.sh` 経由で参照する
+コンテナイメージの base / インストーラ版は各 Dockerfile に直接書く。Renovate の dockerfile manager が検知できるようにする
 
 ## Dockerfiles (共通)
 

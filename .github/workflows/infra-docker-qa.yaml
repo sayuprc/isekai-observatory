@@ -12,7 +12,6 @@ on:
       - "infra/development/**"
       - "infra/staging/**"
       - "infra/production/**"
-      - "tools/read-mise-value.sh"
       - ".github/workflows/infra-docker-qa.yaml"
   push:
     branches:
@@ -21,7 +20,6 @@ on:
       - "infra/development/**"
       - "infra/staging/**"
       - "infra/production/**"
-      - "tools/read-mise-value.sh"
       - ".github/workflows/infra-docker-qa.yaml"
   workflow_call:
 
@@ -62,59 +60,14 @@ jobs:
 
           dockerfile="infra/${ENV_NAME}/docker/${IMAGE}/Dockerfile"
           tag="infra-qa-${ENV_NAME}-${IMAGE}:local"
+          extra_args=()
 
-          case "${IMAGE}" in
-            api|cli)
-              docker build \
-                -f "${dockerfile}" \
-                -t "${tag}" \
-                .
-              ;;
-            db-migrate)
-              MISE_VERSION="$(./tools/read-mise-value.sh mise_version)"
-              docker build \
-                -f "${dockerfile}" \
-                -t "${tag}" \
-                --build-arg "MISE_VERSION=${MISE_VERSION}" \
-                .
-              ;;
-            discord-notifier)
-              MOONBIT_VERSION="$(./tools/read-mise-value.sh moonbit_version)"
-              docker build \
-                -f "${dockerfile}" \
-                -t "${tag}" \
-                --build-arg "MOONBIT_VERSION=${MOONBIT_VERSION}" \
-                .
-              ;;
-            admin)
-              BUN_VERSION="$(./tools/read-mise-value.sh bun)"
-              docker build \
-                -f "${dockerfile}" \
-                -t "${tag}" \
-                --build-arg "BUN_VERSION=${BUN_VERSION}" \
-                --build-arg "PUBLIC_APP_URL=https://example.invalid" \
-                .
-              ;;
-            viewer)
-              NODE_VERSION="$(./tools/read-mise-value.sh node)"
-              MOONBIT_VERSION="$(./tools/read-mise-value.sh moonbit_version)"
-              docker build \
-                -f "${dockerfile}" \
-                -t "${tag}" \
-                --build-arg "NODE_VERSION=${NODE_VERSION}" \
-                --build-arg "MOONBIT_VERSION=${MOONBIT_VERSION}" \
-                .
-              ;;
-            admin-proxy)
-              NODE_VERSION="$(./tools/read-mise-value.sh node)"
-              docker build \
-                -f "${dockerfile}" \
-                -t "${tag}" \
-                --build-arg "NODE_VERSION=${NODE_VERSION}" \
-                .
-              ;;
-            *)
-              echo "unknown image: ${IMAGE}" >&2
-              exit 1
-              ;;
-          esac
+          if [[ "${IMAGE}" == "admin" ]]; then
+            extra_args+=(--build-arg "PUBLIC_APP_URL=https://example.invalid")
+          fi
+
+          docker build \
+            -f "${dockerfile}" \
+            -t "${tag}" \
+            "${extra_args[@]}" \
+            .
