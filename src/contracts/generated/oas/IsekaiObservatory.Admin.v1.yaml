@@ -3169,8 +3169,7 @@ components:
         release:
           $ref: '#/components/schemas/Release'
         releaseGroupTitle:
-          allOf:
-            - $ref: '#/components/schemas/releaseGroupTitle'
+          $ref: '#/components/schemas/releaseGroupTitle'
           description: 所属リリースグループのタイトル。編集対象の文脈表示用
         songs:
           type: array

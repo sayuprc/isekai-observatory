@@ -13,21 +13,21 @@
     "format:check": "tsp format --check \"**/*.tsp\""
   },
   "peerDependencies": {
-    "@typespec/compiler": "1.13.0",
-    "@typespec/http": "1.13.0",
-    "@typespec/openapi": "1.13.0",
-    "@typespec/openapi3": "1.13.0",
-    "@typespec/rest": "0.83.0"
+    "@typespec/compiler": "1.16.0",
+    "@typespec/http": "1.16.0",
+    "@typespec/openapi": "1.16.0",
+    "@typespec/openapi3": "1.16.0",
+    "@typespec/rest": "0.86.0"
   },
   "devDependencies": {
     "typescript": "catalog:",
     "@types/bun": "catalog:",
-    "@typespec/compiler": "1.13.0",
-    "@typespec/http": "1.13.0",
-    "@typespec/openapi": "1.13.0",
-    "@typespec/openapi3": "1.13.0",
-    "@typespec/rest": "0.83.0",
-    "@typespec/versioning": "0.83.0",
+    "@typespec/compiler": "1.16.0",
+    "@typespec/http": "1.16.0",
+    "@typespec/openapi": "1.16.0",
+    "@typespec/openapi3": "1.16.0",
+    "@typespec/rest": "0.86.0",
+    "@typespec/versioning": "0.86.0",
     "@biomejs/biome": "catalog:lint"
   }
 }
