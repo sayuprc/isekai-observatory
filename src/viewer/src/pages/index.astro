@@ -59,7 +59,7 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
                 media={latestSong.media}
                 releaseGroups={latestSong.releaseGroups}
                 aspectRatio="1 / 1"
-                sizes="(max-width: 720px) calc(100vw - 40px), 240px"
+                sizes="(max-width: 720px) calc(100vw - 90px), (max-width: 900px) calc(100vw - 106px), calc((min(1480px, 100vw) - 260px) / 2)"
                 loading="eager"
               />
             </a>
@@ -89,8 +89,10 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
               <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>
             </h3>
             {latestReleaseGroup.description && <p class="feature-summary">{latestReleaseGroup.description}</p>}
-            <div class="rel-list feature-track-list" aria-label="収録曲">
-              {latestReleaseTracks.map(track => <TrackChip track={track} />)}
+            <div class="release-medium">
+              <div class="rel-list feature-track-list" aria-label="収録曲">
+                {latestReleaseTracks.map(track => <TrackChip track={track} />)}
+              </div>
             </div>
             <a class="btn feature-more" href={`/releases/${latestReleaseGroup.releaseGroupId}`}>リリース詳細 →</a>
           </div>

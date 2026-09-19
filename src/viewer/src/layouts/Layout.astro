@@ -92,6 +92,10 @@ const trail: readonly BreadcrumbItem[] = breadcrumbs.length > 0 ? [{ label: 'ホ
     </script>
   </head>
   <body>
+    <div class="viewer-ambient" aria-hidden="true">
+      <div class="viewer-ambient-light"></div>
+      <div class="viewer-ambient-wash"></div>
+    </div>
     <a class="skip-link" href="#main-content">メインコンテンツへスキップ</a>
     <Header currentPath={Astro.url.pathname} />
     <main id="main-content">
