@@ -16,7 +16,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
   {releaseGroup.description && <p class="detail-description" style="margin-top: 16px;">{releaseGroup.description}</p>}
 
   {
-    releaseGroup.releases.map(release => (
+    releaseGroup.releases.map((release, index) => (
       isSingleReleaseGroup
         ? (
             <section class="release-version release-version-single">
@@ -30,7 +30,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
             </section>
           )
         : (
-            <details class="release-version">
+            <details class="release-version" open={index === 0}>
               <summary class="release-version-summary">
                 <div class="release-version-heading">
                   <span class="label-mono">{release.releasedOn}</span>
