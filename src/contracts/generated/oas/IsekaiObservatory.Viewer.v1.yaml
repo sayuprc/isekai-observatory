@@ -219,8 +219,7 @@ components:
           items:
             $ref: '#/components/schemas/MediaListItem'
         nextCursor:
-          allOf:
-            - $ref: '#/components/schemas/cursor'
+          $ref: '#/components/schemas/cursor'
           description: 続きがある場合のみ返す
       examples:
         - media:
@@ -334,8 +333,7 @@ components:
         description:
           type: string
         firstReleasedOn:
-          allOf:
-            - $ref: '#/components/schemas/releasedOn'
+          $ref: '#/components/schemas/releasedOn'
           description: 傘下の公開リリースの最古発売日
         releases:
           type: array
@@ -352,8 +350,7 @@ components:
           items:
             $ref: '#/components/schemas/ReleaseGroupListItem'
         nextCursor:
-          allOf:
-            - $ref: '#/components/schemas/cursor'
+          $ref: '#/components/schemas/cursor'
           description: 続きがある場合のみ返す
       examples:
         - releaseGroups:
@@ -579,8 +576,7 @@ components:
           items:
             $ref: '#/components/schemas/SongListItem'
         nextCursor:
-          allOf:
-            - $ref: '#/components/schemas/cursor'
+          $ref: '#/components/schemas/cursor'
           description: 続きがある場合のみ返す
       examples:
         - songs:
@@ -675,8 +671,7 @@ components:
         firstReleasedOn:
           $ref: '#/components/schemas/releasedOn'
         color:
-          allOf:
-            - $ref: '#/components/schemas/color'
+          $ref: '#/components/schemas/color'
           description: 代表色(公開リリースを発売日順に見て最初のもの)
       description: 楽曲が収録されている公開リリースグループの概要
     SongType:
