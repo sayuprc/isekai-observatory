@@ -184,6 +184,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+html {
+  /* ドロワー表示時に viewport のスクロールバー幅が消えても背面を動かさない */
+  scrollbar-gutter: stable;
+}
+
 body {
   min-height: 100vh;
   isolation: isolate;
