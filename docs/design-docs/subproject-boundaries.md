@@ -16,7 +16,7 @@
 - `src/app/server/`: PHP 8.5 / Laravel API サーバー
 - `src/app/server/app/`: Laravel 固有の wiring
 - `src/app/server/packages/{Package}/`: 業務ドメイン
-- `src/app/server/database/atlas/`: Atlas によるスキーマ管理
+- `src/app/server/database/`: Atlas によるスキーマ管理
 - `src/app/server/tests/`: Unit / Integration / Feature テスト
 - `src/app/server/Generated/`: OpenAPI 由来の生成コード
 
