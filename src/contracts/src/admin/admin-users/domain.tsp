@@ -64,6 +64,8 @@ enum PermissionValue {
   WriteMedia: "write_media",
   ReadRelease: "read_release",
   WriteRelease: "write_release",
+  ReadVenue: "read_venue",
+  WriteVenue: "write_venue",
 }
 
 @example(#{ name: "管理ユーザー読み取り", value: PermissionValue.ReadAdminUser })

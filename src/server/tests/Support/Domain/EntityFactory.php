@@ -53,9 +53,18 @@ use Song\Domain\Models\Tag\SongTagName;
 use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
 use Support\Domain\ValueObjects\OrderNo;
+use Venue\Domain\Models\Venue;
+use Venue\Domain\Models\VenueId;
+use Venue\Domain\Models\VenueKind;
+use Venue\Domain\Models\VenueName;
 
 trait EntityFactory
 {
+    protected function createVenue(string $venueId, string $name, VenueKind $kind): Venue
+    {
+        return new Venue(new VenueId($venueId), new VenueName($name), $kind);
+    }
+
     protected function createPerson(string $personId, string $name, int $orderNo): Person
     {
         return new Person(

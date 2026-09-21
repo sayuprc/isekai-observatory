@@ -14,6 +14,7 @@ tags:
   - name: ReleaseGroup
   - name: Release
   - name: SongType
+  - name: Venue
 paths:
   /admin-users:
     get:
@@ -2424,6 +2425,317 @@ paths:
         - Song
       security:
         - BearerAuth: []
+  /venues:
+    post:
+      operationId: VenueService_createVenue
+      description: 開催先作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenueCreateRequest'
+      security:
+        - BearerAuth: []
+  /venues/search:
+    get:
+      operationId: VenueService_searchVenues
+      description: 開催先検索API
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: kind
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/VenueKindValue'
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/VenueSearchSortBy'
+            default: name
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 25
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      security:
+        - BearerAuth: []
+  /venues/{venueId}:
+    get:
+      operationId: VenueService_getVenue
+      description: 開催先取得API
+      parameters:
+        - name: venueId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      security:
+        - BearerAuth: []
+    put:
+      operationId: VenueService_updateVenue
+      description: 開催先更新API
+      parameters:
+        - name: venueId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenueUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: VenueService_deleteVenue
+      description: 開催先削除API
+      parameters:
+        - name: venueId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      security:
+        - BearerAuth: []
 components:
   schemas:
     AdminUser:
@@ -2571,6 +2883,7 @@ components:
         - ReleaseGroup
         - Song
         - SongTag
+        - Venue
       description: 監査ログの対象種別
     ErrorCode:
       type: string
@@ -2860,6 +3173,8 @@ components:
         - write_media
         - read_release
         - write_release
+        - read_venue
+        - write_venue
       description: 権限の値
     Person:
       type: object
@@ -3884,6 +4199,104 @@ components:
         trackNo:
           $ref: '#/components/schemas/orderNo'
       description: 収録曲。songId / title の少なくとも一方を指定する(検証はサーバー側の責務)。songId ありは Song 集約を参照する参照トラックで、title を併記すると表示名を上書きする。songId なしは表示専用のタイトルのみトラック
+    Venue:
+      type: object
+      required:
+        - venueId
+        - name
+        - kind
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKind'
+      examples:
+        - venueId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
+          name: 会場サンプルA
+          kind:
+            name: 現地
+            value: 1
+    VenueCreateRequest:
+      type: object
+      required:
+        - name
+        - kind
+      properties:
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
+    VenueCreateResponse:
+      type: object
+      required:
+        - venue
+      properties:
+        venue:
+          $ref: '#/components/schemas/Venue'
+    VenueGetResponse:
+      type: object
+      required:
+        - venue
+      properties:
+        venue:
+          $ref: '#/components/schemas/Venue'
+    VenueKind:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          $ref: '#/components/schemas/venueKindName'
+        value:
+          $ref: '#/components/schemas/VenueKindValue'
+      examples:
+        - name: 現地
+          value: 1
+    VenueKindValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+      description: 開催先種別の値
+    VenueSearchResponse:
+      type: object
+      required:
+        - venues
+        - maxPage
+      properties:
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Venue'
+        maxPage:
+          type: integer
+          format: int32
+    VenueSearchSortBy:
+      type: string
+      enum:
+        - name
+      description: 開催先検索のソート条件
+    VenueUpdateRequest:
+      type: object
+      required:
+        - name
+        - kind
+      properties:
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
+    VenueUpdateResponse:
+      type: object
+      required:
+        - venue
+      properties:
+        venue:
+          $ref: '#/components/schemas/Venue'
     Version:
       type: string
       enum:
@@ -4047,6 +4460,19 @@ components:
       type: string
       format: uuid
       description: UUID v4
+    venueId:
+      type: string
+      format: uuid
+      description: 開催先ID
+    venueKindName:
+      type: string
+      minLength: 1
+      description: 開催先種別名
+    venueName:
+      type: string
+      minLength: 1
+      maxLength: 255
+      description: 開催先名
   securitySchemes:
     BearerAuth:
       type: http

@@ -120,6 +120,24 @@ const ShieldIcon = () => (
   </svg>
 );
 
+const MapPinIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="currentColor"
+    class="size-5"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M12 21s7.5-4.35 7.5-11.25a7.5 7.5 0 1 0-15 0C4.5 16.65 12 21 12 21Z"
+    />
+    <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+  </svg>
+);
+
 type NavItem = {
   href: string;
   label: string;
@@ -145,6 +163,10 @@ const navSections: NavSection[] = [
   {
     title: '関係者',
     items: [{ href: '/persons', label: '人物', icon: UsersIcon }],
+  },
+  {
+    title: '活動',
+    items: [{ href: '/venues', label: '開催先', icon: MapPinIcon }],
   },
   {
     title: '管理',

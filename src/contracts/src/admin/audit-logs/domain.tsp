@@ -28,6 +28,7 @@ enum AuditTargetType {
   releaseGroup: "ReleaseGroup",
   song: "Song",
   songTag: "SongTag",
+  venue: "Venue",
 }
 
 @doc("監査ログ一覧の 1 行分")

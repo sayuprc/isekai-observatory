@@ -11,6 +11,7 @@ API の形状は TypeSpec (`src/contracts`) が Source of Truth である
 | `release.md` | ReleaseGroup / Release / Medium / Track |
 | `media.md` | 公式 Media |
 | `person.md` | 人物マスタ |
+| `venue.md` | 現地・オンラインの開催先マスタ |
 | `admin-auth.md` | 管理認証 (passkey / 招待 / 復旧) |
 
 長くなったドメインはファイルを分割してよい

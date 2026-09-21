@@ -66,7 +66,7 @@ export type AuditLogSummary = {
 /**
  * 監査ログの対象種別
  */
-export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'Release' | 'ReleaseGroup' | 'Song' | 'SongTag';
+export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'Release' | 'ReleaseGroup' | 'Song' | 'SongTag' | 'Venue';
 
 /**
  * エラー分類を表す機械可読なコード
@@ -207,7 +207,7 @@ export type Permission = {
 /**
  * 権限の値
  */
-export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_media' | 'write_media' | 'read_release' | 'write_release';
+export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_media' | 'write_media' | 'read_release' | 'write_release' | 'read_venue' | 'write_venue';
 
 export type Person = {
     personId: PersonId;
@@ -662,6 +662,54 @@ export type Track = {
     trackNo: OrderNo;
 };
 
+export type Venue = {
+    venueId: VenueId;
+    name: VenueName;
+    kind: VenueKind;
+};
+
+export type VenueCreateRequest = {
+    name: VenueName;
+    kind: VenueKindValue;
+};
+
+export type VenueCreateResponse = {
+    venue: Venue;
+};
+
+export type VenueGetResponse = {
+    venue: Venue;
+};
+
+export type VenueKind = {
+    name: VenueKindName;
+    value: VenueKindValue;
+};
+
+/**
+ * 開催先種別の値
+ */
+export type VenueKindValue = 1 | 2;
+
+export type VenueSearchResponse = {
+    venues: Array<Venue>;
+    maxPage: number;
+};
+
+/**
+ * 開催先検索のソート条件
+ */
+export type VenueSearchSortBy = 'name';
+
+export type VenueUpdateRequest = {
+    name: VenueName;
+    kind: VenueKindValue;
+};
+
+export type VenueUpdateResponse = {
+    venue: Venue;
+};
+
 export type Version = 'v1';
 
 /**
@@ -863,6 +911,21 @@ export type TrackTitle = string;
  * UUID v4
  */
 export type Uuid = string;
+
+/**
+ * 開催先ID
+ */
+export type VenueId = string;
+
+/**
+ * 開催先種別名
+ */
+export type VenueKindName = string;
+
+/**
+ * 開催先名
+ */
+export type VenueName = string;
 
 export type AdminUserServiceListAdminUsersData = {
     body?: never;
@@ -2949,3 +3012,261 @@ export type SongServiceUpdateSongResponses = {
 };
 
 export type SongServiceUpdateSongResponse = SongServiceUpdateSongResponses[keyof SongServiceUpdateSongResponses];
+
+export type VenueServiceCreateVenueData = {
+    body: VenueCreateRequest;
+    path?: never;
+    query?: never;
+    url: '/venues';
+};
+
+export type VenueServiceCreateVenueErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type VenueServiceCreateVenueError = VenueServiceCreateVenueErrors[keyof VenueServiceCreateVenueErrors];
+
+export type VenueServiceCreateVenueResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: VenueCreateResponse;
+};
+
+export type VenueServiceCreateVenueResponse = VenueServiceCreateVenueResponses[keyof VenueServiceCreateVenueResponses];
+
+export type VenueServiceSearchVenuesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        name?: string;
+        kind?: VenueKindValue;
+        sort?: VenueSearchSortBy;
+        order?: SortOrder;
+        page?: Page;
+        per_page?: PerPage;
+    };
+    url: '/venues/search';
+};
+
+export type VenueServiceSearchVenuesErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type VenueServiceSearchVenuesError = VenueServiceSearchVenuesErrors[keyof VenueServiceSearchVenuesErrors];
+
+export type VenueServiceSearchVenuesResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: VenueSearchResponse;
+};
+
+export type VenueServiceSearchVenuesResponse = VenueServiceSearchVenuesResponses[keyof VenueServiceSearchVenuesResponses];
+
+export type VenueServiceDeleteVenueData = {
+    body?: never;
+    path: {
+        venueId: Uuid;
+    };
+    query?: never;
+    url: '/venues/{venueId}';
+};
+
+export type VenueServiceDeleteVenueErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type VenueServiceDeleteVenueError = VenueServiceDeleteVenueErrors[keyof VenueServiceDeleteVenueErrors];
+
+export type VenueServiceDeleteVenueResponses = {
+    /**
+     * There is no content to send for this request, but the headers may be useful.
+     */
+    204: void;
+};
+
+export type VenueServiceDeleteVenueResponse = VenueServiceDeleteVenueResponses[keyof VenueServiceDeleteVenueResponses];
+
+export type VenueServiceGetVenueData = {
+    body?: never;
+    path: {
+        venueId: Uuid;
+    };
+    query?: never;
+    url: '/venues/{venueId}';
+};
+
+export type VenueServiceGetVenueErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type VenueServiceGetVenueError = VenueServiceGetVenueErrors[keyof VenueServiceGetVenueErrors];
+
+export type VenueServiceGetVenueResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: VenueGetResponse;
+};
+
+export type VenueServiceGetVenueResponse = VenueServiceGetVenueResponses[keyof VenueServiceGetVenueResponses];
+
+export type VenueServiceUpdateVenueData = {
+    body: VenueUpdateRequest;
+    path: {
+        venueId: Uuid;
+    };
+    query?: never;
+    url: '/venues/{venueId}';
+};
+
+export type VenueServiceUpdateVenueErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type VenueServiceUpdateVenueError = VenueServiceUpdateVenueErrors[keyof VenueServiceUpdateVenueErrors];
+
+export type VenueServiceUpdateVenueResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: VenueUpdateResponse;
+};
+
+export type VenueServiceUpdateVenueResponse = VenueServiceUpdateVenueResponses[keyof VenueServiceUpdateVenueResponses];
