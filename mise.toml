@@ -99,7 +99,7 @@ cp ${caroot_pem} infra/local/docker/php/certs/
 
 [tasks."pnpm:install"]
 description = "pnpm のパッケージをインストールする"
-dir = "src"
+dir = "src/app"
 run = "pnpm install --frozen-lockfile"
 
 # -- worktree --
@@ -121,17 +121,17 @@ run = "./tools/worktree/init.sh --status"
 
 [tasks."contract:format"]
 description = "TypeSpec をフォーマットする"
-dir = "src"
+dir = "src/app"
 run = "bun --filter contracts format"
 
 [tasks."contract:format:check"]
 description = "TypeSpec のフォーマットを検証する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter contracts format:check"
 
 [tasks."contract:test"]
 description = "contracts のテストを実行する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter contracts test"
 
 [tasks."contract:compile:all"]
@@ -140,27 +140,27 @@ depends = ["contract:compile:viewer", "contract:compile:admin"]
 
 [tasks."contract:compile:viewer"]
 description = "Viewer 用 OAS を生成する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter contracts compile:viewer"
 
 [tasks."contract:compile:viewer:watch"]
 description = "Viewer 用 OAS を監視付きで生成する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter contracts compile:viewer:watch"
 
 [tasks."contract:compile:admin"]
 description = "Admin 用 OAS を生成する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter contracts compile:admin"
 
 [tasks."contract:compile:admin:watch"]
 description = "Admin 用 OAS を監視付きで生成する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter contracts compile:admin:watch"
 
 [tasks."contract:re-compile"]
 description = "contracts の OAS を生成し直す"
-dir = "src"
+dir = "src/app"
 run = '''
 rm -rf contracts/generated/oas
 bun --filter contracts compile:viewer
@@ -194,26 +194,26 @@ depends = ["api:generate:*"]
 [tasks."api:generate:admin"]
 description = "OAS から Admin のコードを生成する"
 run = '''
-rm -rf ./src/server/Generated/Admin
+rm -rf ./src/app/server/Generated/Admin
 
 docker run --rm -u {{vars.uid}}:{{vars.gid}} -v ".:/local" ${OPENAPI_IMAGE} generate \
-  -i /local/src/contracts/generated/oas/${ADMIN_OAS_FILE} \
+  -i /local/src/app/contracts/generated/oas/${ADMIN_OAS_FILE} \
   -g php \
-  -t /local/src/server/tools/openapi-generator/templates \
-  -o /local/src/server/Generated/Admin \
+  -t /local/src/app/server/tools/openapi-generator/templates \
+  -o /local/src/app/server/Generated/Admin \
   -p invokerPackage=OpenAPI\\Admin\\Client
 '''
 
 [tasks."api:generate:viewer"]
 description = "OAS から Viewer のコードを生成する"
 run = '''
-rm -rf ./src/server/Generated/Viewer
+rm -rf ./src/app/server/Generated/Viewer
 
 docker run --rm -u {{vars.uid}}:{{vars.gid}} -v ".:/local" ${OPENAPI_IMAGE} generate \
-  -i /local/src/contracts/generated/oas/${VIEWER_OAS_FILE} \
+  -i /local/src/app/contracts/generated/oas/${VIEWER_OAS_FILE} \
   -g php \
-  -t /local/src/server/tools/openapi-generator/templates \
-  -o /local/src/server/Generated/Viewer \
+  -t /local/src/app/server/tools/openapi-generator/templates \
+  -o /local/src/app/server/Generated/Viewer \
   -p invokerPackage=OpenAPI\\Viewer\\Client
 '''
 
@@ -287,39 +287,39 @@ depends = ["migrate:local", "migrate:testing"]
 
 [tasks."migrate:local"]
 description = "スキーマを local データベースに適用する"
-dir = "src/server/database/atlas"
+dir = "src/app/server/database/atlas"
 run = 'atlas schema apply --env local --var "schema_name=${DB_DATABASE}"'
 
 [tasks."migrate:local".env]
-_.file = "src/server/.env"
+_.file = "src/app/server/.env"
 
 [tasks."migrate:testing"]
 description = "スキーマを testing データベースに適用する"
-dir = "src/server/database/atlas"
+dir = "src/app/server/database/atlas"
 run = 'atlas schema apply --env testing --var "schema_name=${DB_DATABASE}"'
 
 [tasks."migrate:testing".env]
-_.file = "src/server/.env.testing"
+_.file = "src/app/server/.env.testing"
 
 [tasks."migrate:dry-run"]
 quiet = true
 description = "適用されるスキーマの差分を確認する(適用はしない)"
-dir = "src/server/database/atlas"
+dir = "src/app/server/database/atlas"
 run = 'atlas schema apply --env local --var "schema_name=${DB_DATABASE}" --dry-run'
 
 [tasks."migrate:dry-run".env]
-_.file = "src/server/.env"
+_.file = "src/app/server/.env"
 
 # -- admin --
 
 [tasks."admin:dev"]
 description = "Admin の dev サーバーを worktree 専用ポートで起動する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter admin dev -- --host 0.0.0.0 --port \"${WORKTREE_ADMIN_PORT:-4321}\""
 
 [tasks."admin:generate"]
 description = "OAS から Admin のコードを生成する"
-dir = "src/admin"
+dir = "src/app/admin"
 run = '''
 rm -rf src/generated
 
@@ -328,7 +328,7 @@ bun run generate:api
 
 [tasks."admin:format"]
 description = "Admin の formatter を実行し、フォーマットを自動修正する"
-dir = "src/admin"
+dir = "src/app/admin"
 run = [
   "bun run biome:format",
   "bun run eslint:fix",
@@ -337,12 +337,12 @@ run = [
 
 [tasks."admin:format:check"]
 description = "Admin の formatter をチェックする"
-dir = "src/admin"
+dir = "src/app/admin"
 run = "bun run biome:format:check"
 
 [tasks."admin:lint"]
 description = "Admin の linter を実行する"
-dir = "src/admin"
+dir = "src/app/admin"
 run = [
   "bun run eslint:check",
   "bun run stylelint:check",
@@ -350,19 +350,19 @@ run = [
 
 [tasks."admin:lint:fix"]
 description = "Admin の ESLint を --fix オプション付きで実行する"
-dir = "src/admin"
+dir = "src/app/admin"
 run = "bun run eslint:fix"
 
 [tasks."admin:style"]
 description = "Stylelint を実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
-dir = "src/admin"
+dir = "src/app/admin"
 run = "bun run stylelint:check ${usage_path}"
 
 [tasks."admin:style:fix"]
 description = "Stylelint を --fix オプション付きで実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
-dir = "src/admin"
+dir = "src/app/admin"
 run = "bun run stylelint:fix ${usage_path}"
 
 [tasks."admin:fix"]
@@ -371,7 +371,7 @@ depends = ["admin:format"]
 
 [tasks."admin:check"]
 description = "Admin の formatter check / linter を直列で実行する"
-dir = "src/admin"
+dir = "src/app/admin"
 run = [
   "bun run biome:format:check",
   "bun run eslint:check",
@@ -380,19 +380,19 @@ run = [
 
 [tasks."admin:prism"]
 description = "Prism のモックサーバーを起動する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter admin prism"
 
 # -- viewer --
 
 [tasks."viewer:dev"]
 description = "Viewer の dev サーバーを worktree 専用ポートで起動する"
-dir = "src"
+dir = "src/app"
 run = "bun --filter viewer dev -- --host 0.0.0.0 --port \"${WORKTREE_VIEWER_PORT:-3000}\""
 
 [tasks."viewer:generate"]
 description = "OAS から Viewer のコードを生成する"
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = '''
 rm -rf src/generated
 
@@ -401,7 +401,7 @@ bun run generate:api
 
 [tasks."viewer:format"]
 description = "Viewer の formatter を実行し、フォーマットを自動修正する"
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = [
   "bun run biome:format",
   "bun run eslint:fix",
@@ -410,12 +410,12 @@ run = [
 
 [tasks."viewer:format:check"]
 description = "Viewer の formatter をチェックする"
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = "bun run biome:format:check"
 
 [tasks."viewer:lint"]
 description = "Viewer の linter を実行する"
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = [
   "bun run eslint:check",
   "bun run stylelint:check",
@@ -423,19 +423,19 @@ run = [
 
 [tasks."viewer:lint:fix"]
 description = "Viewer の ESLint を --fix オプション付きで実行する"
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = "bun run eslint:fix"
 
 [tasks."viewer:style"]
 description = "Stylelint を実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = "bun run stylelint:check ${usage_path}"
 
 [tasks."viewer:style:fix"]
 description = "Stylelint を --fix オプション付きで実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = "bun run stylelint:fix ${usage_path}"
 
 [tasks."viewer:fix"]
@@ -444,7 +444,7 @@ depends = ["viewer:format"]
 
 [tasks."viewer:check"]
 description = "Viewer の formatter check / linter を直列で実行する"
-dir = "src/viewer"
+dir = "src/app/viewer"
 run = [
   "bun run biome:format:check",
   "bun run eslint:check",
@@ -455,12 +455,12 @@ run = [
 
 [tasks."notify-contract:test"]
 description = "notify-contract の moon test を実行する"
-dir = "src/notify-contract"
+dir = "src/notification/contract"
 run = "moon test"
 
 [tasks."notify-contract:check"]
 description = "notify-contract の check / test を実行する"
-dir = "src/notify-contract"
+dir = "src/notification/contract"
 run = [
   "moon check",
   "moon test",
@@ -470,17 +470,17 @@ run = [
 
 [tasks."discord-notifier:test"]
 description = "discord-notifier の moon test を実行する"
-dir = "src/discord-notifier"
+dir = "src/notification/discord-notifier"
 run = "moon test"
 
 [tasks."discord-notifier:build"]
 description = "discord-notifier を native release ビルドする"
-dir = "src/discord-notifier"
+dir = "src/notification/discord-notifier"
 run = "moon build --target native --release"
 
 [tasks."discord-notifier:check"]
 description = "discord-notifier の check / test / native build を実行する"
-dir = "src/discord-notifier"
+dir = "src/notification/discord-notifier"
 run = [
   "moon check",
   "moon test",
@@ -491,17 +491,17 @@ run = [
 
 [tasks."notify-publish:test"]
 description = "notify-publish の moon test を実行する"
-dir = "src/notify-publish"
+dir = "src/notification/publish"
 run = "moon test"
 
 [tasks."notify-publish:build"]
 description = "notify-publish を native release ビルドする"
-dir = "src/notify-publish"
+dir = "src/notification/publish"
 run = "moon build --target native --release"
 
 [tasks."notify-publish:check"]
 description = "notify-publish の check / test / native build を実行する"
-dir = "src/notify-publish"
+dir = "src/notification/publish"
 run = [
   "moon check",
   "moon test",
@@ -512,22 +512,22 @@ run = [
 
 [tasks."admin-proxy:format"]
 description = "admin-proxy の formatter を実行し、フォーマットを自動修正する"
-dir = "src/admin-proxy"
+dir = "src/app/admin-proxy"
 run = "bun run format"
 
 [tasks."admin-proxy:format:check"]
 description = "admin-proxy の formatter をチェックする"
-dir = "src/admin-proxy"
+dir = "src/app/admin-proxy"
 run = "bun run format:check"
 
 [tasks."admin-proxy:lint"]
 description = "admin-proxy の linter を実行する"
-dir = "src/admin-proxy"
+dir = "src/app/admin-proxy"
 run = "bun run lint:check"
 
 [tasks."admin-proxy:typecheck"]
 description = "admin-proxy の TypeScript をチェックする"
-dir = "src/admin-proxy"
+dir = "src/app/admin-proxy"
 run = "bun run typecheck"
 
 [tasks."admin-proxy:check"]

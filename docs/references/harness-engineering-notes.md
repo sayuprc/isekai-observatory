@@ -14,7 +14,7 @@ OpenAI の Harness Engineering 記事をこのリポジトリ向けに要約し�
 
 - 共通入口は `docs/agent-map.md`。文書の置き場は `docs/INDEX.md`
 - Agent 指示の配置 (rules / skills / hooks) は `docs/references/agent-instruction-placement.md`
-- API の Source of Truth は `src/contracts` の TypeSpec であり、文書はその変更フローを補助する
+- API の Source of Truth は `src/app/contracts` の TypeSpec であり、文書はその変更フローを補助する
 
 ## いまはまだやらないこと
 

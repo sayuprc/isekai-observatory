@@ -24,12 +24,12 @@ RUN mise trust \
 
 WORKDIR /app/src
 
-COPY src/package.json src/pnpm-lock.yaml src/pnpm-workspace.yaml ./
-COPY src/admin/package.json admin/package.json
+COPY src/app/package.json src/app/pnpm-lock.yaml src/app/pnpm-workspace.yaml ./
+COPY src/app/admin/package.json admin/package.json
 
 RUN mise exec -- pnpm install --frozen-lockfile --filter admin --prod
 
-COPY src/admin admin
+COPY src/app/admin admin
 
 ARG PUBLIC_APP_URL
 ENV PUBLIC_APP_URL=${PUBLIC_APP_URL}

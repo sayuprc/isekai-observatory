@@ -20,11 +20,11 @@ RUN test -n "${MOONBIT_VERSION}" \
 
 WORKDIR /workspace
 
-COPY src/notify-contract/moon.mod src/notify-contract/moon.pkg /workspace/notify-contract/
-COPY src/notify-contract/*.mbt /workspace/notify-contract/
-COPY src/discord-notifier/moon.mod src/discord-notifier/moon.pkg src/discord-notifier/moon.work /workspace/discord-notifier/
-COPY src/discord-notifier/*.mbt /workspace/discord-notifier/
-COPY src/discord-notifier/cmd /workspace/discord-notifier/cmd
+COPY src/notification/contract/moon.mod src/notification/contract/moon.pkg /workspace/notify-contract/
+COPY src/notification/contract/*.mbt /workspace/notify-contract/
+COPY src/notification/discord-notifier/moon.mod src/notification/discord-notifier/moon.pkg src/notification/discord-notifier/moon.work /workspace/discord-notifier/
+COPY src/notification/discord-notifier/*.mbt /workspace/discord-notifier/
+COPY src/notification/discord-notifier/cmd /workspace/discord-notifier/cmd
 
 WORKDIR /workspace/discord-notifier
 
