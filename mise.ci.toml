@@ -54,7 +54,7 @@ docker compose exec -T php php artisan key:generate
 
 [tasks.migrate]
 description = "CI 環境でスキーマをデータベースに適用する"
-dir = "src/app/server/database/atlas"
+dir = "src/app/server/database"
 run = 'atlas schema apply --env local --var "schema_name=${DB_DATABASE}" --auto-approve'
 
 [tasks.migrate.env]

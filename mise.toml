@@ -287,7 +287,7 @@ depends = ["migrate:local", "migrate:testing"]
 
 [tasks."migrate:local"]
 description = "スキーマを local データベースに適用する"
-dir = "src/app/server/database/atlas"
+dir = "src/app/server/database"
 run = 'atlas schema apply --env local --var "schema_name=${DB_DATABASE}"'
 
 [tasks."migrate:local".env]
@@ -295,7 +295,7 @@ _.file = "src/app/server/.env"
 
 [tasks."migrate:testing"]
 description = "スキーマを testing データベースに適用する"
-dir = "src/app/server/database/atlas"
+dir = "src/app/server/database"
 run = 'atlas schema apply --env testing --var "schema_name=${DB_DATABASE}"'
 
 [tasks."migrate:testing".env]
@@ -304,7 +304,7 @@ _.file = "src/app/server/.env.testing"
 [tasks."migrate:dry-run"]
 quiet = true
 description = "適用されるスキーマの差分を確認する(適用はしない)"
-dir = "src/app/server/database/atlas"
+dir = "src/app/server/database"
 run = 'atlas schema apply --env local --var "schema_name=${DB_DATABASE}" --dry-run'
 
 [tasks."migrate:dry-run".env]
