@@ -12,6 +12,7 @@ import "./releases";
 import "./song-tags";
 import "./song-types";
 import "./songs";
+import "./venues";
 
 using Http;
 using Versioning;

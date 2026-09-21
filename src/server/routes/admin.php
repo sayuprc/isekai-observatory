@@ -46,6 +46,11 @@ use App\Http\Controllers\Api\Admin\V1\SongTag\ListSongTagController;
 use App\Http\Controllers\Api\Admin\V1\SongTag\SearchSongTagController;
 use App\Http\Controllers\Api\Admin\V1\SongTag\UpdateSongTagController;
 use App\Http\Controllers\Api\Admin\V1\SongType\ListSongTypeController;
+use App\Http\Controllers\Api\Admin\V1\Venue\CreateVenueController;
+use App\Http\Controllers\Api\Admin\V1\Venue\DeleteVenueController;
+use App\Http\Controllers\Api\Admin\V1\Venue\GetVenueController;
+use App\Http\Controllers\Api\Admin\V1\Venue\SearchVenueController;
+use App\Http\Controllers\Api\Admin\V1\Venue\UpdateVenueController;
 use App\Http\Middleware\Admin\AdminOpenApiValidator;
 use App\Http\Middleware\Admin\Authenticate;
 use Auth\Route\AuthRouteMap;
@@ -58,6 +63,7 @@ use Song\Route\SongRouteMap;
 use Song\Route\SongTypeRouteMap;
 use Song\Route\Tag\SongTagRouteMap;
 use Support\Route\AuditLogRouteMap;
+use Venue\Route\VenueRouteMap;
 
 Route::middleware(AdminOpenApiValidator::class)->group(static function () {
     Route::prefix('admin')->group(static function () {
@@ -104,6 +110,14 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                     Route::put('/{mediaId}', [UpdateMediaController::class, 'handle'])->name(MediaRouteMap::Update);
                     Route::get('/search', [SearchMediaController::class, 'handle'])->name(MediaRouteMap::Search);
                     Route::get('/{mediaId}', [GetMediaController::class, 'handle'])->name(MediaRouteMap::Get);
+                });
+
+                Route::prefix('venues')->group(static function () {
+                    Route::post('/', [CreateVenueController::class, 'handle'])->name(VenueRouteMap::Create);
+                    Route::put('/{venueId}', [UpdateVenueController::class, 'handle'])->name(VenueRouteMap::Update);
+                    Route::delete('/{venueId}', [DeleteVenueController::class, 'handle'])->name(VenueRouteMap::Delete);
+                    Route::get('/search', [SearchVenueController::class, 'handle'])->name(VenueRouteMap::Search);
+                    Route::get('/{venueId}', [GetVenueController::class, 'handle'])->name(VenueRouteMap::Get);
                 });
 
                 Route::prefix('songs')->group(static function () {

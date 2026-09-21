@@ -12,6 +12,7 @@ import { releases } from './routes/releases';
 import { songTags } from './routes/song-tags';
 import { songTypes } from './routes/song-types';
 import { songs } from './routes/songs';
+import { venues } from './routes/venues';
 
 export const app = new Elysia({ prefix: '/api', normalize: 'typebox' })
   .onError(({ error, set, request, code }) => {
@@ -37,6 +38,7 @@ export const app = new Elysia({ prefix: '/api', normalize: 'typebox' })
   .use(releases)
   .use(songTypes)
   .use(songTags)
-  .use(songs);
+  .use(songs)
+  .use(venues);
 
 export type App = typeof app;

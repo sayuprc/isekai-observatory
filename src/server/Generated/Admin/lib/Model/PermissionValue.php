@@ -63,6 +63,10 @@ enum PermissionValue: string
 
     case WRITE_RELEASE = 'write_release';
 
+    case READ_VENUE = 'read_venue';
+
+    case WRITE_VENUE = 'write_venue';
+
 }
 
 

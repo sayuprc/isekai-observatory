@@ -28,3 +28,4 @@
 | ADR-0022 | accepted | 監査ログは Support の明示記録とする | [api, admin] |
 | ADR-0023 | accepted | 人物は Person に一本化し役割は関係の role で表す | [api, admin] |
 | ADR-0024 | accepted | コンテナイメージの版は Dockerfile に直接書く | [api, admin, viewer] |
+| ADR-0025 | accepted | 開催先は物理施設とオンライン配信プラットフォームを統合する | [api, admin, viewer] |

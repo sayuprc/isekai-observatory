@@ -22,9 +22,17 @@ use Song\Domain\Models\Song;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Domain\Models\Tag\SongTag;
 use Song\Domain\Models\Tag\SongTagRepositoryInterface;
+use Venue\Domain\Models\Venue;
+use Venue\Domain\Models\VenueRepositoryInterface;
 
 trait EntityStore
 {
+    protected function storeVenues(Venue ...$items): void
+    {
+        $repository = $this->makeRepository(VenueRepositoryInterface::class);
+        array_map(static fn (Venue $item) => $repository->save($item), $items);
+    }
+
     protected function storePersons(Person ...$items): void
     {
         $repository = $this->makeRepository(PersonRepositoryInterface::class);
