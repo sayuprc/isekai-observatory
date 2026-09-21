@@ -16,7 +16,7 @@ RUN apk add --no-cache \
     redis
 
 COPY --from=composer:2.10.3 /usr/bin/composer /usr/bin/composer
-COPY src/server/composer.json src/server/composer.lock ./
+COPY src/app/server/composer.json src/app/server/composer.lock ./
 
 RUN composer install \
   --no-dev \
@@ -27,8 +27,8 @@ RUN composer install \
   --no-scripts
 
 COPY infra/staging/docker/api/php.ini /usr/local/etc/php/php.ini
-COPY src/contracts/generated/oas ../contracts/generated/oas
-COPY src/server ./
+COPY src/app/contracts/generated/oas ../contracts/generated/oas
+COPY src/app/server ./
 
 RUN composer dump-autoload --optimize --no-dev --no-interaction \
 	# OpenAPI schema の Filesystem キャッシュをイメージに焼き込む

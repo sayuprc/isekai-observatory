@@ -4,7 +4,7 @@
 
 ## 場所と基底
 
-- `src/server/tests/Unit/` (対象クラスのディレクトリ構造に合わせる)
+- `src/app/server/tests/Unit/` (対象クラスのディレクトリ構造に合わせる)
 - 基底は `Tests\TestCase`
 
 ## Mockery

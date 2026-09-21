@@ -21,12 +21,12 @@ RUN corepack enable \
 
 WORKDIR /app/src
 
-COPY src/package.json src/pnpm-lock.yaml src/pnpm-workspace.yaml ./
-COPY src/admin-proxy/package.json admin-proxy/package.json
+COPY src/app/package.json src/app/pnpm-lock.yaml src/app/pnpm-workspace.yaml ./
+COPY src/app/admin-proxy/package.json admin-proxy/package.json
 
 RUN pnpm install --frozen-lockfile --filter admin-proxy --prod \
   && rm -rf /pnpm/store
 
-COPY src/admin-proxy admin-proxy
+COPY src/app/admin-proxy admin-proxy
 
 ENTRYPOINT ["admin-proxy-deploy"]

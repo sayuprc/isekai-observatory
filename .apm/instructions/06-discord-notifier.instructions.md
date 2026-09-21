@@ -1,7 +1,7 @@
 ---
 name: 'Discord Notifier Instructions'
-description: 'Use when editing the MoonBit Discord notifier in src/discord-notifier. Covers module layout, env-based routing, README as contract SoT, and validation.'
-applyTo: "src/discord-notifier/**"
+description: 'Use when editing the MoonBit Discord notifier in src/notification/discord-notifier. Covers module layout, env-based routing, README as contract SoT, and validation.'
+applyTo: "src/notification/discord-notifier/**"
 ---
 
 # Discord Notifier 規約
@@ -22,8 +22,8 @@ applyTo: "src/discord-notifier/**"
 ## 実装規約
 
 - 業務処理は持たない。振り分けは環境変数で行う
-- アプリ通知 JSON の契約は `src/notify-contract/README.md` を Source of Truth とする
-- 起動・環境変数・Cloud Build 正規化の詳細は `src/discord-notifier/README.md` を参照する
+- アプリ通知 JSON の契約は `src/notification/contract/README.md` を Source of Truth とする
+- 起動・環境変数・Cloud Build 正規化の詳細は `src/notification/discord-notifier/README.md` を参照する
 
 ## 検証
 

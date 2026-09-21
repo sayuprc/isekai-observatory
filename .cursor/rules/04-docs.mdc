@@ -1,5 +1,5 @@
 ---
-description: Use when updating README, ARCHITECTURE.md, FRONTEND.md, PLANS.md, ADRs, docs/specs/, references, local exec plans, or other Markdown docs. Covers repository-as-record-system conventions and document placement.
+description: "Use when updating README, ARCHITECTURE.md, FRONTEND.md, PLANS.md, ADRs, docs/specs/, references, local exec plans, or other Markdown docs. Covers repository-as-record-system conventions and document placement."
 globs: "**/*.md"
 ---
 

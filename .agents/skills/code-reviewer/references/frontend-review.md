@@ -15,7 +15,7 @@
 
 ## API & データフェッチ
 - [ ] バックエンド API との通信に `openapi-fetch` を使用しているか
-- [ ] `src/admin/src/generated` から生成された型が正しく使用されているか
+- [ ] `src/app/admin/src/generated` から生成された型が正しく使用されているか
 
 ## TypeScript
 - [ ] `any` 型を使用していないか。適切なインターフェース/型を使用しているか

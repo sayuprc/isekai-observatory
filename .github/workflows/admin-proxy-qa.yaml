@@ -9,11 +9,11 @@ on:
       - main
       - stg
     paths:
-      - "src/admin-proxy/**"
-      - "src/package.json"
-      - "src/pnpm-lock.yaml"
-      - "src/pnpm-workspace.yaml"
-      - "src/biome.json"
+      - "src/app/admin-proxy/**"
+      - "src/app/package.json"
+      - "src/app/pnpm-lock.yaml"
+      - "src/app/pnpm-workspace.yaml"
+      - "src/app/biome.json"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/admin-proxy-qa.yaml"
@@ -22,11 +22,11 @@ on:
     branches:
       - dev
     paths:
-      - "src/admin-proxy/**"
-      - "src/package.json"
-      - "src/pnpm-lock.yaml"
-      - "src/pnpm-workspace.yaml"
-      - "src/biome.json"
+      - "src/app/admin-proxy/**"
+      - "src/app/package.json"
+      - "src/app/pnpm-lock.yaml"
+      - "src/app/pnpm-workspace.yaml"
+      - "src/app/biome.json"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/admin-proxy-qa.yaml"
@@ -56,8 +56,8 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
-            src/node_modules
-            src/admin-proxy/node_modules
+            src/app/node_modules
+            src/app/admin-proxy/node_modules
           key: admin-proxy-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages

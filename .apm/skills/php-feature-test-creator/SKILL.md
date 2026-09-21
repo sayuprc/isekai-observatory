@@ -12,7 +12,7 @@ description: プロジェクトのフィーチャーテスト規約(API testing,
 ## ワークフロー
 
 1. **対象の特定**: API はパス・メソッド・ルート名。Console は `signature`・引数・オプション
-2. **パス**: API は `src/server/tests/Feature/Api/`、Console は `src/server/tests/Feature/Console/`
+2. **パス**: API は `src/app/server/tests/Feature/Api/`、Console は `src/app/server/tests/Feature/Console/`
 3. **初期化**:
    - `Tests\Support\DatabaseTestCase` を継承する
    - 認証が必要な API は `Tests\Feature\Api\Admin\WithAuth` を使う

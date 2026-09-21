@@ -11,7 +11,7 @@ docs/
 infra/local/
 tools/
 
-src/biome.json
+src/app/biome.json
 
 AGENTS.md
 ARCHITECTURE.md
@@ -35,36 +35,36 @@ mise.local.toml
 
 # contracts
 
-src/contracts/
-!src/contracts/generated/oas/
-!src/contracts/package.json
+src/app/contracts/
+!src/app/contracts/generated/oas/
+!src/app/contracts/package.json
 
 # admin
 
-src/admin/.stylelintignore
-src/admin/biome.json
-src/admin/env.d.ts
-src/admin/openapi-ts.config.ts
-src/admin/stylelint.config.mjs
+src/app/admin/.stylelintignore
+src/app/admin/biome.json
+src/app/admin/env.d.ts
+src/app/admin/openapi-ts.config.ts
+src/app/admin/stylelint.config.mjs
 
 # viewer
 
-src/viewer/.stylelintignore
-src/viewer/biome.json
-src/viewer/env.d.ts
-src/viewer/openapi-ts.config.ts
-src/viewer/stylelint.config.mjs
+src/app/viewer/.stylelintignore
+src/app/viewer/biome.json
+src/app/viewer/env.d.ts
+src/app/viewer/openapi-ts.config.ts
+src/app/viewer/stylelint.config.mjs
 
 # server
 
-src/server/tests/
-src/server/tools/
+src/app/server/tests/
+src/app/server/tools/
 
-src/server/.gitattributes
-src/server/baseline.php
-src/server/ecs.php
-src/server/infection.json5
-src/server/phparkitect.php
-src/server/phpmetrics.json
-src/server/phpstan.neon
-src/server/phpunit.xml
+src/app/server/.gitattributes
+src/app/server/baseline.php
+src/app/server/ecs.php
+src/app/server/infection.json5
+src/app/server/phparkitect.php
+src/app/server/phpmetrics.json
+src/app/server/phpstan.neon
+src/app/server/phpunit.xml

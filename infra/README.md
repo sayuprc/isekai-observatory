@@ -94,6 +94,6 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 |---|---|
 | `docs/design-docs/local-runtime-topology.md` | ローカル実行構成 |
 | `docs/operations/release.md` | 閲覧サイトの版数運用 |
-| `src/notify-contract/README.md` | アプリ通知 JSON 契約 |
-| `src/discord-notifier/README.md` | Discord Notifier |
-| `src/notify-publish/README.md` | notify-publish |
+| `src/notification/contract/README.md` | アプリ通知 JSON 契約 |
+| `src/notification/discord-notifier/README.md` | Discord Notifier |
+| `src/notification/publish/README.md` | notify-publish |
