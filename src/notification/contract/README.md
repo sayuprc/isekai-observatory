@@ -38,6 +38,6 @@
 依存側は `moon.work` にこのモジュールを members として登録し、`isekai-observatory/notify-contract` を import する
 
 ```bash
-cd src/notify-contract
+cd src/notification/contract
 moon test
 ```

@@ -12,7 +12,7 @@ Discord 配達はしない。発信側から `{env}-discord-notify` へ載せる
 
 ## 契約
 
-アプリ通知 JSON の形は `src/notify-contract/README.md` を Source of Truth とする
+アプリ通知 JSON の形は `src/notification/contract/README.md` を Source of Truth とする
 
 ## 使い方
 
@@ -28,12 +28,12 @@ EOF
 ローカルビルド:
 
 ```bash
-cd src/notify-publish
+cd src/notification/publish
 moon test
 moon build --target native --release
 ```
 
-`moon.work` で `../notify-contract` を members に含めている
+`moon.work` で `../contract` を members に含めている
 
 ## 環境変数
 
