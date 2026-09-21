@@ -12,7 +12,7 @@ description: プロジェクトのテスト規約に従って、Laravel/PHP の�
 ## ワークフロー
 
 1. **対象クラスの分析**: 名前空間、コンストラクタ依存、公開メソッド、戻り値の型を特定する
-2. **パス**: `src/server/tests/Unit/` 配下に対象クラスの構造を模して置く
+2. **パス**: `src/app/server/tests/Unit/` 配下に対象クラスの構造を模して置く
 3. **初期化**:
    - `Tests\TestCase` を継承する
    - 依存は `MockInterface&ClassName` + `Mockery::mock()` で `setUp()` する

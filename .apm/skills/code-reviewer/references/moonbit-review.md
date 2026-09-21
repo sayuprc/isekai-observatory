@@ -3,9 +3,9 @@
 規約の詳細は各パッケージ README と `docs/design-docs/subproject-boundaries.md` を正とする
 ここではレビュー時に見る観点だけを列挙する
 
-- `src/notify-contract/README.md`
-- `src/notify-publish/README.md`
-- `src/discord-notifier/README.md`
+- `src/notification/contract/README.md`
+- `src/notification/publish/README.md`
+- `src/notification/discord-notifier/README.md`
 
 `moon fmt` は check タスクが担保するので、フォーマット自体は見ない
 
@@ -19,7 +19,7 @@
 
 ## 契約
 
-- [ ] 契約フィールドや必須条件の変更が `src/notify-contract/README.md` と実装で一致しているか
+- [ ] 契約フィールドや必須条件の変更が `src/notification/contract/README.md` と実装で一致しているか
 - [ ] Cloud Build / Cloud Run Job の正規化が notifier 側に閉じ、契約型へ不正な形を混ぜていないか
 
 ## テストと失敗の扱い

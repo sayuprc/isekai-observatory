@@ -12,7 +12,7 @@ description: プロジェクトのインテグレーションテスト規約に�
 ## ワークフロー
 
 1. **対象の分析**: 依存関係と扱う集約・テーブルを確認する
-2. **パス**: `src/server/tests/Integration/` 配下に対象の構造に合わせて置く
+2. **パス**: `src/app/server/tests/Integration/` 配下に対象の構造に合わせて置く
 3. **初期化**:
    - `Tests\Support\DatabaseTestCase` を継承する
    - `getInstance()` は `$this->app->make(TargetClass::class)` で解決する

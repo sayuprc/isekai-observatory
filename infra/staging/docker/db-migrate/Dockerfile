@@ -14,7 +14,7 @@ FROM alpine:3.24
 
 ENV TZ=Asia/Tokyo
 
-WORKDIR /app/src/server/database/atlas
+WORKDIR /app/src/app/server/database
 
 RUN apk add --no-cache \
     ca-certificates \
@@ -24,7 +24,7 @@ RUN apk add --no-cache \
 
 COPY --from=atlas /out/atlas /usr/local/bin/atlas
 COPY infra/staging/docker/db-migrate/db-migrate /usr/local/bin/db-migrate
-COPY src/server/database/atlas ./
+COPY src/app/server/database ./
 
 RUN chmod +x /usr/local/bin/db-migrate \
   && chown -R app:app /app

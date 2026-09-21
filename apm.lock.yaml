@@ -1,5 +1,5 @@
 lockfile_version: '1'
-generated_at: '2026-08-01T13:40:17.105819+00:00'
+generated_at: '2026-09-21T13:00:28.191586+00:00'
 apm_version: 0.26.0
 dependencies: []
 deployments:
@@ -29,7 +29,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:cd72da0959bc6a3b52f436ec50a7d9944f73aba3bdd46771a33d1228c4a840a8
+  content_hash: sha256:6216abd632692f2d092992d5f02831c6dd37ec43bd9f0a83fd97771584d0b00e
 - kind: project-relative
   target: agents
   value: .agents/skills/code-reviewer/references/general-review.md
@@ -47,7 +47,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a60a6622e88215cddd7544a80b8c67dd4cbd839836ef73e6381648bb4db72a1c
+  content_hash: sha256:a8f1b9d573985f3d647921d0476d2418c428addd9b3f9b02a3ca44ba17b5d712
 - kind: project-relative
   target: agents
   value: .agents/skills/code-reviewer/references/php-review.md
@@ -92,7 +92,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:c2bd7fa838e54afcb73ba480fc6151e84ad555d7b28cf01118204bbb7c14a39c
+  content_hash: sha256:de86430fac8aa2d440dfa79a003c527fc5dfd00c1bf91b163ca628ac5a94e9b0
 - kind: project-relative
   target: agents
   value: .agents/skills/php-feature-test-creator/references/patterns.md
@@ -119,7 +119,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:6e24bd1412736662286d663dd2be8d48f07b679806294bf393b4b55dbace8315
+  content_hash: sha256:46f4f2de1183d8e679f5555bbbf596c7c75a812edd0ccb3b3d3fd817136b4acf
 - kind: project-relative
   target: agents
   value: .agents/skills/php-integration-test-creator/references/patterns.md
@@ -146,7 +146,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:0af2933065baee9ec5a518a6fa531da46de6d0ec8e40ede305267d3ae73975fa
+  content_hash: sha256:60eeffe24d54f136fdb6fee4ea593ef270fff0098730e5f5943f3977ac4c417f
 - kind: project-relative
   target: agents
   value: .agents/skills/php-unit-test-creator/references/common.md
@@ -164,7 +164,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:0b3ea430ecbf7edb22109f4729ef570d677924912a9a10eb75d75286594544cf
+  content_hash: sha256:937eec0bfbabc39adecc825eb4de356c54c0ad2253122f36b13578622064c8a5
 - kind: project-relative
   target: agents
   value: .agents/skills/pr-creator
@@ -209,7 +209,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:f0a9c098e1d308b2f827c56ade6fd1242d26233a3e785f4106d4673a3f36d5fd
+  content_hash: sha256:0fa02290cd2ce4bc740ee1fd85f207090c576802a233b5e1d5e7535e20d245f2
 - kind: project-relative
   target: cursor
   value: .cursor/rules/02-admin.mdc
@@ -218,7 +218,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d1a0de1df21389eb206b8f9390f5f5ca3f746e6248a6a2b60da41ce9fa3b8f14
+  content_hash: sha256:4c88bcc41111d2d1216d798e243ccd7146d0773d3705aac117393f58c6a7757a
 - kind: project-relative
   target: cursor
   value: .cursor/rules/03-contracts.mdc
@@ -227,7 +227,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:885b6230351f768c40a503f9a4927bc1bb955d75d3943961b0a2ad4c0a7d4e87
+  content_hash: sha256:3047c08e80809f746ccfda1150e6ed09e899cc16914c757dd7069b05361056aa
 - kind: project-relative
   target: cursor
   value: .cursor/rules/04-docs.mdc
@@ -236,7 +236,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:346f0017fba6660e5c893721ef1f5930e554d04fc2156f22afa83c713b4c09ee
+  content_hash: sha256:6c95f8a67f136c7d8e304352f12612f5e2b28ba9f64d074e179691955a29b808
 - kind: project-relative
   target: cursor
   value: .cursor/rules/05-viewer.mdc
@@ -245,7 +245,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:2d8aec3a7980c4de8b3af15cd2be4fa559300187763d0e47e77e907c4b06c89d
+  content_hash: sha256:e0d08e41fb28b013eb1fc7544f015ea9cdc0cbd131013ba0df11a3e0eedae345
 - kind: project-relative
   target: cursor
   value: .cursor/rules/06-discord-notifier.mdc
@@ -254,7 +254,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:18cb5c0ca7563658b3a5e9187264b7655d9300353b091f456c019d7c3a634360
+  content_hash: sha256:d4feabd07d3857c90e7121e1b80e96347eb4382368e52937a070fd8462362473
 - kind: project-relative
   target: cursor
   value: .cursor/rules/07-notify-publish.mdc
@@ -263,7 +263,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:547df11e355e00c1af308047442e5bf84c1790178334040a38b739b6572f43ee
+  content_hash: sha256:e3970168f72de27c12871942c93a8a8f531ce160fdb33629ba3b7335e9fd47bd
 - kind: project-relative
   target: cursor
   value: .cursor/rules/08-notify-contract.mdc
@@ -272,7 +272,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a6c5761a8185a358f06424c042e5978d8a47d615a804cbaa7346966f85de8a8b
+  content_hash: sha256:ad8294ac859017551c4f36b67a7679112068716c8e1bbdb1696066283831b1fd
 local_deployed_files:
 - .agents/skills/code-reviewer
 - .agents/skills/code-reviewer/SKILL.md
@@ -306,26 +306,26 @@ local_deployed_files:
 - .cursor/rules/08-notify-contract.mdc
 local_deployed_file_hashes:
   .agents/skills/code-reviewer/SKILL.md: sha256:a16a87e2e3d1e2d2bd4f262b7efcb0c49d5159343db09e133272ed85de7131b8
-  .agents/skills/code-reviewer/references/frontend-review.md: sha256:cd72da0959bc6a3b52f436ec50a7d9944f73aba3bdd46771a33d1228c4a840a8
+  .agents/skills/code-reviewer/references/frontend-review.md: sha256:6216abd632692f2d092992d5f02831c6dd37ec43bd9f0a83fd97771584d0b00e
   .agents/skills/code-reviewer/references/general-review.md: sha256:e8db3b568ebf21b354df817317a536c0f733a355850da6c4b7d0d467717a71a1
-  .agents/skills/code-reviewer/references/moonbit-review.md: sha256:a60a6622e88215cddd7544a80b8c67dd4cbd839836ef73e6381648bb4db72a1c
+  .agents/skills/code-reviewer/references/moonbit-review.md: sha256:a8f1b9d573985f3d647921d0476d2418c428addd9b3f9b02a3ca44ba17b5d712
   .agents/skills/code-reviewer/references/php-review.md: sha256:e69b0498b788766175b453ac90d8f9ccc229271f2e88ae92495a1a7327fde960
   .agents/skills/exec-plan/SKILL.md: sha256:2bcf7216f32944841a8ab705c110a670db0f8ccd9f8f03dc68b24907c30661fe
-  .agents/skills/php-feature-test-creator/SKILL.md: sha256:c2bd7fa838e54afcb73ba480fc6151e84ad555d7b28cf01118204bbb7c14a39c
+  .agents/skills/php-feature-test-creator/SKILL.md: sha256:de86430fac8aa2d440dfa79a003c527fc5dfd00c1bf91b163ca628ac5a94e9b0
   .agents/skills/php-feature-test-creator/references/patterns.md: sha256:ae52eb1cb9736d4d90b7f5507634ddf06ecedb25900b97ee0c7e629ca4c7a4c4
-  .agents/skills/php-integration-test-creator/SKILL.md: sha256:6e24bd1412736662286d663dd2be8d48f07b679806294bf393b4b55dbace8315
+  .agents/skills/php-integration-test-creator/SKILL.md: sha256:46f4f2de1183d8e679f5555bbbf596c7c75a812edd0ccb3b3d3fd817136b4acf
   .agents/skills/php-integration-test-creator/references/patterns.md: sha256:a75b5511cc739b8fe9b4e791eea5a7b62dff08e7812284b659f095c84669e07d
-  .agents/skills/php-unit-test-creator/SKILL.md: sha256:0af2933065baee9ec5a518a6fa531da46de6d0ec8e40ede305267d3ae73975fa
+  .agents/skills/php-unit-test-creator/SKILL.md: sha256:60eeffe24d54f136fdb6fee4ea593ef270fff0098730e5f5943f3977ac4c417f
   .agents/skills/php-unit-test-creator/references/common.md: sha256:5b65ce4c2255ca406e8d40729b9da9d93781229c3b79d923811d3aa515be4ddf
-  .agents/skills/php-unit-test-creator/references/patterns.md: sha256:0b3ea430ecbf7edb22109f4729ef570d677924912a9a10eb75d75286594544cf
+  .agents/skills/php-unit-test-creator/references/patterns.md: sha256:937eec0bfbabc39adecc825eb4de356c54c0ad2253122f36b13578622064c8a5
   .agents/skills/pr-creator/SKILL.md: sha256:9001b301545422e0dbaf34add7144159b4cf38d368d3b188089cee268f2c8f53
   .codex/agents/docs-curator.toml: sha256:847e6bd60ef5f3aa1dc2e89034edb5e73681e3f453c7ba565e99c3de5cda734a
   .cursor/agents/docs-curator.md: sha256:74a098313fa00048bfd3e5cce164eeb77d7aa3af43b9a7346c9884bc496b4479
-  .cursor/rules/01-backend.mdc: sha256:f0a9c098e1d308b2f827c56ade6fd1242d26233a3e785f4106d4673a3f36d5fd
-  .cursor/rules/02-admin.mdc: sha256:d1a0de1df21389eb206b8f9390f5f5ca3f746e6248a6a2b60da41ce9fa3b8f14
-  .cursor/rules/03-contracts.mdc: sha256:885b6230351f768c40a503f9a4927bc1bb955d75d3943961b0a2ad4c0a7d4e87
-  .cursor/rules/04-docs.mdc: sha256:346f0017fba6660e5c893721ef1f5930e554d04fc2156f22afa83c713b4c09ee
-  .cursor/rules/05-viewer.mdc: sha256:2d8aec3a7980c4de8b3af15cd2be4fa559300187763d0e47e77e907c4b06c89d
-  .cursor/rules/06-discord-notifier.mdc: sha256:18cb5c0ca7563658b3a5e9187264b7655d9300353b091f456c019d7c3a634360
-  .cursor/rules/07-notify-publish.mdc: sha256:547df11e355e00c1af308047442e5bf84c1790178334040a38b739b6572f43ee
-  .cursor/rules/08-notify-contract.mdc: sha256:a6c5761a8185a358f06424c042e5978d8a47d615a804cbaa7346966f85de8a8b
+  .cursor/rules/01-backend.mdc: sha256:0fa02290cd2ce4bc740ee1fd85f207090c576802a233b5e1d5e7535e20d245f2
+  .cursor/rules/02-admin.mdc: sha256:4c88bcc41111d2d1216d798e243ccd7146d0773d3705aac117393f58c6a7757a
+  .cursor/rules/03-contracts.mdc: sha256:3047c08e80809f746ccfda1150e6ed09e899cc16914c757dd7069b05361056aa
+  .cursor/rules/04-docs.mdc: sha256:6c95f8a67f136c7d8e304352f12612f5e2b28ba9f64d074e179691955a29b808
+  .cursor/rules/05-viewer.mdc: sha256:e0d08e41fb28b013eb1fc7544f015ea9cdc0cbd131013ba0df11a3e0eedae345
+  .cursor/rules/06-discord-notifier.mdc: sha256:d4feabd07d3857c90e7121e1b80e96347eb4382368e52937a070fd8462362473
+  .cursor/rules/07-notify-publish.mdc: sha256:e3970168f72de27c12871942c93a8a8f531ce160fdb33629ba3b7335e9fd47bd
+  .cursor/rules/08-notify-contract.mdc: sha256:ad8294ac859017551c4f36b67a7679112068716c8e1bbdb1696066283831b1fd

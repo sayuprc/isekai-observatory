@@ -1,6 +1,6 @@
 # Specs Index
 
-API の形状は TypeSpec (`src/contracts`) が Source of Truth である
+API の形状は TypeSpec (`src/app/contracts`) が Source of Truth である
 判断の理由は ADR、作業中の手順はローカル plan (`docs/exec-plans/active/`) を使う
 ロードマップは GitHub Projects など docs 外で管理する
 

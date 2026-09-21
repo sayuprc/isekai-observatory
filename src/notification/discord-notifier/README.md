@@ -12,7 +12,7 @@ Pub/Sub push を受け取り、Discord Webhook へ配達する Cloud Run 向け�
 
 ## 契約
 
-アプリ通知 JSON の形は `src/notify-contract/README.md` を Source of Truth とする
+アプリ通知 JSON の形は `src/notification/contract/README.md` を Source of Truth とする
 
 `discord-notifier` はそれに加え、Cloud Build JSON と Cloud Run Job 失敗 LogEntry を同じ `Notification` へ正規化する
 
@@ -35,12 +35,12 @@ Pub/Sub push を受け取り、Discord Webhook へ配達する Cloud Run 向け�
 前提: MoonBit toolchain (`moon`)
 
 ```bash
-cd src/discord-notifier
+cd src/notification/discord-notifier
 moon test
 moon build --target native --release
 ```
 
-`moon.work` で `../notify-contract` を members に含めている
+`moon.work` で `../contract` を members に含めている
 
 起動例:
 

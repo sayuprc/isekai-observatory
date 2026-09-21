@@ -9,8 +9,8 @@ on:
       - main
       - stg
     paths:
-      - "src/notify-publish/**"
-      - "src/notify-contract/**"
+      - "src/notification/publish/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/notify-publish-qa.yaml"
@@ -21,8 +21,8 @@ on:
     branches:
       - dev
     paths:
-      - "src/notify-publish/**"
-      - "src/notify-contract/**"
+      - "src/notification/publish/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/notify-publish-qa.yaml"

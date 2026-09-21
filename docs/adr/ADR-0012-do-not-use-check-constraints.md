@@ -24,7 +24,7 @@ CHECK 制約付きのテーブル作成はエラーにならないが、TiDB は
 
 ## Decision
 
-スキーマ定義 (`src/server/database/atlas/schemas/`) で CHECK 制約を使わない
+スキーマ定義 (`src/app/server/database/schemas/`) で CHECK 制約を使わない
 行内の不変条件はドメイン層 (Entity / ValueObject / Domain Service) で保証する
 
 既存の唯一の CHECK (`release_tracks_song_id_title_at_least_one`) は削除した
