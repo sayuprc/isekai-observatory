@@ -1,7 +1,7 @@
 ---
 name: 'Contracts Instructions'
-description: 'Use when editing TypeSpec contracts, API shapes, versioned endpoints, or OpenAPI generation in src/contracts. Covers entrypoints, generated outputs, and validation.'
-applyTo: 'src/contracts/**'
+description: 'Use when editing TypeSpec contracts, API shapes, versioned endpoints, or OpenAPI generation in src/app/contracts. Covers entrypoints, generated outputs, and validation.'
+applyTo: 'src/app/contracts/**'
 ---
 
 # コントラクト規約
@@ -17,17 +17,17 @@ applyTo: 'src/contracts/**'
 
 ## 構成
 
-- `src/contracts/src/admin/main.tsp`: 管理画面向け API のエントリポイント
-- `src/contracts/src/viewer/main.tsp`: 閲覧サイト向け API のエントリポイント
-- `src/contracts/generated/oas/`: 生成された OpenAPI Specification
-- `src/contracts/scripts/fix-enum-types.ts`: OpenAPI 生成後の補正スクリプト
+- `src/app/contracts/src/admin/main.tsp`: 管理画面向け API のエントリポイント
+- `src/app/contracts/src/viewer/main.tsp`: 閲覧サイト向け API のエントリポイント
+- `src/app/contracts/generated/oas/`: 生成された OpenAPI Specification
+- `src/app/contracts/scripts/fix-enum-types.ts`: OpenAPI 生成後の補正スクリプト
 
 ## 実装規約
 
 - TypeSpec を API 契約の Source of Truth とする
 - 仕様変更時は生成物ではなく `.tsp` を編集する
-- `src/contracts/generated/` は手動編集しない
-- `src/contracts/tspconfig.yaml` の変更は出力先とエミッタ全体に影響するため慎重に扱う
+- `src/app/contracts/generated/` は手動編集しない
+- `src/app/contracts/tspconfig.yaml` の変更は出力先とエミッタ全体に影響するため慎重に扱う
 
 ## 検証
 

@@ -358,24 +358,24 @@ set_mise_local_env_block "$mise_local_toml_file"
 rm -f "${state_dir}/env"
 ensure_worktree_certs
 
-ensure_env_file "${repo_root}/src/admin/.env" "${repo_root}/src/admin/.env.example"
-set_env_value "${repo_root}/src/admin/.env" "API_URL" "$WORKTREE_API_BASE_URL"
-set_env_value "${repo_root}/src/admin/.env" "CACHE_URL" "http://127.0.0.1:${WORKTREE_REDIS_HTTP_PORT}"
-set_env_value "${repo_root}/src/admin/.env" "CACHE_TOKEN" "${REDIS_HTTP_TOKEN:-example_token}"
-set_env_value "${repo_root}/src/admin/.env" "PUBLIC_APP_URL" "$WORKTREE_ADMIN_URL"
+ensure_env_file "${repo_root}/src/app/admin/.env" "${repo_root}/src/app/admin/.env.example"
+set_env_value "${repo_root}/src/app/admin/.env" "API_URL" "$WORKTREE_API_BASE_URL"
+set_env_value "${repo_root}/src/app/admin/.env" "CACHE_URL" "http://127.0.0.1:${WORKTREE_REDIS_HTTP_PORT}"
+set_env_value "${repo_root}/src/app/admin/.env" "CACHE_TOKEN" "${REDIS_HTTP_TOKEN:-example_token}"
+set_env_value "${repo_root}/src/app/admin/.env" "PUBLIC_APP_URL" "$WORKTREE_ADMIN_URL"
 
-ensure_env_file "${repo_root}/src/viewer/.env" "${repo_root}/src/viewer/.env.example"
-set_env_value "${repo_root}/src/viewer/.env" "API_URL" "$WORKTREE_API_BASE_URL"
+ensure_env_file "${repo_root}/src/app/viewer/.env" "${repo_root}/src/app/viewer/.env.example"
+set_env_value "${repo_root}/src/app/viewer/.env" "API_URL" "$WORKTREE_API_BASE_URL"
 
-ensure_env_file "${repo_root}/src/server/.env" "${repo_root}/src/server/.env.example"
-set_env_value "${repo_root}/src/server/.env" "APP_URL" "$WORKTREE_API_BASE_URL"
-set_env_value "${repo_root}/src/server/.env" "DB_PORT" "3306"
-set_env_value "${repo_root}/src/server/.env" "ATLAS_DB_PORT" "$WORKTREE_MYSQL_PORT"
+ensure_env_file "${repo_root}/src/app/server/.env" "${repo_root}/src/app/server/.env.example"
+set_env_value "${repo_root}/src/app/server/.env" "APP_URL" "$WORKTREE_API_BASE_URL"
+set_env_value "${repo_root}/src/app/server/.env" "DB_PORT" "3306"
+set_env_value "${repo_root}/src/app/server/.env" "ATLAS_DB_PORT" "$WORKTREE_MYSQL_PORT"
 
-ensure_env_file "${repo_root}/src/server/.env.testing" "${repo_root}/src/server/.env.testing.example"
-set_env_value "${repo_root}/src/server/.env.testing" "APP_URL" "$WORKTREE_API_BASE_URL"
-set_env_value "${repo_root}/src/server/.env.testing" "DB_PORT" "3306"
-set_env_value "${repo_root}/src/server/.env.testing" "ATLAS_DB_PORT" "$WORKTREE_MYSQL_PORT"
+ensure_env_file "${repo_root}/src/app/server/.env.testing" "${repo_root}/src/app/server/.env.testing.example"
+set_env_value "${repo_root}/src/app/server/.env.testing" "APP_URL" "$WORKTREE_API_BASE_URL"
+set_env_value "${repo_root}/src/app/server/.env.testing" "DB_PORT" "3306"
+set_env_value "${repo_root}/src/app/server/.env.testing" "ATLAS_DB_PORT" "$WORKTREE_MYSQL_PORT"
 
 if [[ "${1:-}" == "--status" ]]; then
   cat <<EOF

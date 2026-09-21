@@ -9,7 +9,7 @@ on:
       - main
       - stg
     paths:
-      - "src/notify-contract/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/notify-contract-qa.yaml"
@@ -20,7 +20,7 @@ on:
     branches:
       - dev
     paths:
-      - "src/notify-contract/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/notify-contract-qa.yaml"

@@ -48,21 +48,21 @@ run = "docker compose exec -T php composer install -n --prefer-dist"
 [tasks."setup:env"]
 description = "CI 環境の環境変数をセットアップする"
 run = '''
-cp src/server/.env.example src/server/.env
+cp src/app/server/.env.example src/app/server/.env
 docker compose exec -T php php artisan key:generate
 '''
 
 [tasks.migrate]
 description = "CI 環境でスキーマをデータベースに適用する"
-dir = "src/server/database/atlas"
+dir = "src/app/server/database/atlas"
 run = 'atlas schema apply --env local --var "schema_name=${DB_DATABASE}" --auto-approve'
 
 [tasks.migrate.env]
-_.file = "src/server/.env"
+_.file = "src/app/server/.env"
 
 [tasks."admin:generate"]
 description = "CI 環境でクライアントコード生成を行い、差分をチェックする"
-dir = "src"
+dir = "src/app"
 run = '''
 bun --filter admin generate:api
 if [ -n "$(git status --porcelain)" ]; then
@@ -73,5 +73,5 @@ fi
 '''
 
 [tasks."pnpm:install"]
-dir = "src"
+dir = "src/app"
 run = "pnpm i --frozen-lockfile"

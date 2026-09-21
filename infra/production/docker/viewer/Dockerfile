@@ -20,13 +20,13 @@ RUN test -n "${MOONBIT_VERSION}" \
 
 WORKDIR /workspace
 
-COPY src/notify-contract/moon.mod src/notify-contract/moon.pkg /workspace/notify-contract/
-COPY src/notify-contract/*.mbt /workspace/notify-contract/
-COPY src/notify-publish/moon.mod src/notify-publish/moon.pkg src/notify-publish/moon.work /workspace/notify-publish/
-COPY src/notify-publish/*.mbt /workspace/notify-publish/
-COPY src/notify-publish/cmd /workspace/notify-publish/cmd
+COPY src/notification/contract/moon.mod src/notification/contract/moon.pkg /workspace/contract/
+COPY src/notification/contract/*.mbt /workspace/contract/
+COPY src/notification/publish/moon.mod src/notification/publish/moon.pkg src/notification/publish/moon.work /workspace/publish/
+COPY src/notification/publish/*.mbt /workspace/publish/
+COPY src/notification/publish/cmd /workspace/publish/cmd
 
-WORKDIR /workspace/notify-publish
+WORKDIR /workspace/publish
 
 RUN moon update \
   && moon build --target native --release
@@ -45,7 +45,7 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-COPY --from=notify-publish-builder /workspace/notify-publish/_build/native/release/build/isekai-observatory/notify-publish/cmd/main/main.exe \
+COPY --from=notify-publish-builder /workspace/publish/_build/native/release/build/isekai-observatory/notify-publish/cmd/main/main.exe \
   /usr/local/bin/notify-publish
 COPY infra/production/docker/viewer/viewer-deploy /usr/local/bin/viewer-deploy
 COPY mise.toml ./
@@ -56,12 +56,12 @@ RUN corepack enable \
 
 WORKDIR /app/src
 
-COPY src/package.json src/pnpm-lock.yaml src/pnpm-workspace.yaml ./
-COPY src/viewer/package.json viewer/package.json
+COPY src/app/package.json src/app/pnpm-lock.yaml src/app/pnpm-workspace.yaml ./
+COPY src/app/viewer/package.json viewer/package.json
 
 RUN pnpm install --frozen-lockfile --filter viewer --prod \
   && rm -rf /pnpm/store
 
-COPY src/viewer viewer
+COPY src/app/viewer viewer
 
 ENTRYPOINT ["viewer-deploy"]
