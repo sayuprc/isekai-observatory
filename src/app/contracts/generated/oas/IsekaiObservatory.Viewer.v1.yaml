@@ -3,11 +3,44 @@ info:
   title: ヰ世界観測所 API
   version: v1
 tags:
+  - name: Event
   - name: Media
   - name: ReleaseGroup
   - name: SiteStats
   - name: Song
 paths:
+  /events:
+    get:
+      operationId: EventService_listEvents
+      description: 公開活動一覧取得API
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/cursor'
+          explode: false
+        - name: limit
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Event
   /media:
     get:
       operationId: MediaService_listMedia
@@ -162,6 +195,178 @@ components:
           items:
             $ref: '#/components/schemas/ErrorDetail'
       description: 全エラーステータス共通のレスポンス
+    Event:
+      type: object
+      required:
+        - eventId
+        - title
+        - description
+        - typeValue
+        - schedule
+        - statusValue
+        - postponedToEventId
+        - venues
+        - media
+        - sources
+        - performances
+        - setlist
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          anyOf:
+            - $ref: '#/components/schemas/eventDescription'
+            - type: 'null'
+        typeValue:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        statusValue:
+          anyOf:
+            - $ref: '#/components/schemas/EventStatusValue'
+            - type: 'null'
+        postponedToEventId:
+          anyOf:
+            - $ref: '#/components/schemas/eventId'
+            - type: 'null'
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventVenueSummary'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventMediaSummary'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetlistItem'
+    EventListResponse:
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        nextCursor:
+          $ref: '#/components/schemas/cursor'
+    EventMediaSummary:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaType'
+    EventScheduleTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: 活動の開催時期
+    EventSource:
+      type: object
+      required:
+        - displayName
+        - url
+        - orderNo
+      properties:
+        displayName:
+          $ref: '#/components/schemas/eventSourceName'
+        url:
+          $ref: '#/components/schemas/eventSourceUrl'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    EventStatusValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+      description: 活動の開催状態。通常開催は値を持たず、延期・中止のみ表現する
+    EventTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 99
+      description: 活動種別
+    EventVenueSummary:
+      type: object
+      required:
+        - venueId
+        - name
+        - kindName
+      properties:
+        venueId:
+          $ref: '#/components/schemas/uuid'
+        name:
+          type: string
+        kindName:
+          type: string
+    IsekaiObservatory.Packages.Event.EventSchedule:
+      type: object
+      required:
+        - type
+        - startDate
+        - endDate
+        - startDateTime
+        - endDateTime
+        - timeZone
+      properties:
+        type:
+          $ref: '#/components/schemas/EventScheduleTypeValue'
+        startDate:
+          anyOf:
+            - $ref: '#/components/schemas/eventDate'
+            - type: 'null'
+        endDate:
+          anyOf:
+            - $ref: '#/components/schemas/eventDate'
+            - type: 'null'
+        startDateTime:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        endDateTime:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        timeZone:
+          anyOf:
+            - $ref: '#/components/schemas/eventTimeZone'
+            - type: 'null'
+      description: 活動の開催時期。type に応じた項目のみを設定する
     IsekaiObservatory.Viewer.Version:
       type: string
       enum:
@@ -291,6 +496,24 @@ components:
         - 5
         - 99
       description: メディア種別の値
+    PerformancePerson:
+      type: object
+      required:
+        - personId
+        - name
+        - creditName
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/uuid'
+        name:
+          type: string
+        creditName:
+          anyOf:
+            - $ref: '#/components/schemas/performanceCreditName'
+            - type: 'null'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
     ReleaseFormat:
       type: object
       required:
@@ -472,6 +695,23 @@ components:
         isDisplay:
           type: boolean
       description: '収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する'
+    SetlistItem:
+      type: object
+      required:
+        - orderNo
+        - label
+        - performances
+      properties:
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        label:
+          anyOf:
+            - type: string
+            - type: 'null'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
     SiteStatsResponse:
       type: object
       required:
@@ -502,6 +742,7 @@ components:
         - arrangers
         - media
         - releaseGroups
+        - performances
       properties:
         songId:
           $ref: '#/components/schemas/songId'
@@ -534,6 +775,11 @@ components:
           items:
             $ref: '#/components/schemas/SongReleaseGroupSummary'
           description: 収録先の公開リリースグループ(最古発売日の降順)
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformanceHistory'
+          description: 公開活動での披露履歴(開催時期の新しい順)
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
@@ -566,6 +812,7 @@ components:
                 value: 2
               firstReleasedOn: '2026-05-01'
               color: '#4a5a78'
+          performances: []
     SongListResponse:
       type: object
       required:
@@ -611,6 +858,7 @@ components:
                     value: 2
                   firstReleasedOn: '2026-05-01'
                   color: '#4a5a78'
+              performances: []
           nextCursor: eyJvcmRlck5vIjoxLCJzb25nSWQiOiIzY2Q0MmMwOS1mZjNjLTRjZDItOTEzZi1hMjc5YzRlYTg5YjQifQ==
     SongMediaSummary:
       type: object
@@ -639,6 +887,48 @@ components:
             value: 1
           url: https://www.youtube.com/watch?v=dummy
           publishedAt: '2024-03-01T12:00:00+09:00'
+    SongPerformance:
+      type: object
+      required:
+        - performanceId
+        - songId
+        - songTitle
+        - coVocalists
+      properties:
+        performanceId:
+          $ref: '#/components/schemas/uuid'
+        songId:
+          anyOf:
+            - $ref: '#/components/schemas/songId'
+            - type: 'null'
+        songTitle:
+          $ref: '#/components/schemas/title'
+        coVocalists:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerformancePerson'
+    SongPerformanceHistory:
+      type: object
+      required:
+        - eventId
+        - eventTitle
+        - typeValue
+        - schedule
+        - coVocalistNames
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        eventTitle:
+          $ref: '#/components/schemas/eventTitle'
+        typeValue:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        coVocalistNames:
+          type: array
+          items:
+            type: string
+      description: 楽曲が公開活動で披露された履歴
     SongRelationCounts:
       type: object
       required:
@@ -708,6 +998,33 @@ components:
     description:
       type: string
       description: 楽曲の説明
+    eventDate:
+      type: string
+      format: date
+      description: 活動日
+    eventDescription:
+      type: string
+      description: 活動説明
+    eventId:
+      type: string
+      format: uuid
+      description: 活動ID
+    eventSourceName:
+      type: string
+      minLength: 1
+      description: 活動の出典表示名
+    eventSourceUrl:
+      type: string
+      format: uri
+      description: 活動の出典URL
+    eventTimeZone:
+      type: string
+      minLength: 1
+      description: 活動のタイムゾーン
+    eventTitle:
+      type: string
+      minLength: 1
+      description: 活動タイトル
     limit:
       type: integer
       format: int32
@@ -739,6 +1056,10 @@ components:
       format: int32
       minimum: 1
       description: 表示順
+    performanceCreditName:
+      type: string
+      minLength: 1
+      description: 共演者としてのクレジット名
     releaseGroupId:
       type: string
       format: uuid

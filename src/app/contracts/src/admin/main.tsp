@@ -6,6 +6,7 @@ import "../shared";
 import "./admin-users";
 import "./audit-logs";
 import "./auth";
+import "./events";
 import "./media";
 import "./persons";
 import "./releases";

@@ -66,6 +66,8 @@ enum PermissionValue {
   WriteRelease: "write_release",
   ReadVenue: "read_venue",
   WriteVenue: "write_venue",
+  ReadEvent: "read_event",
+  WriteEvent: "write_event",
 }
 
 @example(#{ name: "管理ユーザー読み取り", value: PermissionValue.ReadAdminUser })
