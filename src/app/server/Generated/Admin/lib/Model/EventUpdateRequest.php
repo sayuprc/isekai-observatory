@@ -62,7 +62,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'type_value' => '\OpenAPI\Admin\Client\Model\EventTypeValue',
         'schedule' => '\OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
         'status_value' => '\OpenAPI\Admin\Client\Model\EventStatusValue',
-        'postponed_to_event_id' => 'string',
         'is_display' => 'bool',
         'venue_ids' => 'string[]',
         'media_ids' => 'string[]',
@@ -84,7 +83,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'type_value' => null,
         'schedule' => null,
         'status_value' => null,
-        'postponed_to_event_id' => 'uuid',
         'is_display' => null,
         'venue_ids' => 'uuid',
         'media_ids' => 'uuid',
@@ -100,11 +98,10 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
       */
     protected static array $openAPINullables = [
         'title' => false,
-        'description' => true,
+        'description' => false,
         'type_value' => false,
         'schedule' => false,
         'status_value' => true,
-        'postponed_to_event_id' => true,
         'is_display' => false,
         'venue_ids' => false,
         'media_ids' => false,
@@ -204,7 +201,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'type_value' => 'typeValue',
         'schedule' => 'schedule',
         'status_value' => 'statusValue',
-        'postponed_to_event_id' => 'postponedToEventId',
         'is_display' => 'isDisplay',
         'venue_ids' => 'venueIds',
         'media_ids' => 'mediaIds',
@@ -224,7 +220,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'type_value' => 'setTypeValue',
         'schedule' => 'setSchedule',
         'status_value' => 'setStatusValue',
-        'postponed_to_event_id' => 'setPostponedToEventId',
         'is_display' => 'setIsDisplay',
         'venue_ids' => 'setVenueIds',
         'media_ids' => 'setMediaIds',
@@ -244,7 +239,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'type_value' => 'getTypeValue',
         'schedule' => 'getSchedule',
         'status_value' => 'getStatusValue',
-        'postponed_to_event_id' => 'getPostponedToEventId',
         'is_display' => 'getIsDisplay',
         'venue_ids' => 'getVenueIds',
         'media_ids' => 'getMediaIds',
@@ -315,7 +309,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         $this->setIfExists('type_value', $data ?? [], null);
         $this->setIfExists('schedule', $data ?? [], null);
         $this->setIfExists('status_value', $data ?? [], null);
-        $this->setIfExists('postponed_to_event_id', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('venue_ids', $data ?? [], null);
         $this->setIfExists('media_ids', $data ?? [], null);
@@ -369,9 +362,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         }
         if ($this->container['status_value'] === null) {
             $invalidProperties[] = "'status_value' can't be null";
-        }
-        if ($this->container['postponed_to_event_id'] === null) {
-            $invalidProperties[] = "'postponed_to_event_id' can't be null";
         }
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
@@ -458,14 +448,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     public function setDescription($description)
     {
         if (is_null($description)) {
-            array_push($this->openAPINullablesSetToNull, 'description');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('description', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new \InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
 
@@ -556,40 +539,6 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
             }
         }
         $this->container['status_value'] = $status_value;
-
-        return $this;
-    }
-
-    /**
-     * Gets postponed_to_event_id
-     *
-     * @return string
-     */
-    public function getPostponedToEventId()
-    {
-        return $this->container['postponed_to_event_id'];
-    }
-
-    /**
-     * Sets postponed_to_event_id
-     *
-     * @param string $postponed_to_event_id 活動ID
-     *
-     * @return self
-     */
-    public function setPostponedToEventId($postponed_to_event_id)
-    {
-        if (is_null($postponed_to_event_id)) {
-            array_push($this->openAPINullablesSetToNull, 'postponed_to_event_id');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('postponed_to_event_id', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['postponed_to_event_id'] = $postponed_to_event_id;
 
         return $this;
     }

@@ -59,11 +59,8 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
       */
     protected static $openAPITypes = [
         'type' => '\OpenAPI\Viewer\Client\Model\EventScheduleTypeValue',
-        'start_date' => '\DateTime',
-        'end_date' => '\DateTime',
-        'start_date_time' => '\DateTime',
-        'end_date_time' => '\DateTime',
-        'time_zone' => 'string'
+        'start_on' => '\DateTime',
+        'end_on' => '\DateTime'
     ];
 
     /**
@@ -75,11 +72,8 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
       */
     protected static $openAPIFormats = [
         'type' => null,
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'start_date_time' => 'date-time',
-        'end_date_time' => 'date-time',
-        'time_zone' => null
+        'start_on' => 'date',
+        'end_on' => 'date'
     ];
 
     /**
@@ -89,11 +83,8 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
       */
     protected static array $openAPINullables = [
         'type' => false,
-        'start_date' => true,
-        'end_date' => true,
-        'start_date_time' => true,
-        'end_date_time' => true,
-        'time_zone' => true
+        'start_on' => true,
+        'end_on' => true
     ];
 
     /**
@@ -183,11 +174,8 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      */
     protected static $attributeMap = [
         'type' => 'type',
-        'start_date' => 'startDate',
-        'end_date' => 'endDate',
-        'start_date_time' => 'startDateTime',
-        'end_date_time' => 'endDateTime',
-        'time_zone' => 'timeZone'
+        'start_on' => 'startOn',
+        'end_on' => 'endOn'
     ];
 
     /**
@@ -197,11 +185,8 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      */
     protected static $setters = [
         'type' => 'setType',
-        'start_date' => 'setStartDate',
-        'end_date' => 'setEndDate',
-        'start_date_time' => 'setStartDateTime',
-        'end_date_time' => 'setEndDateTime',
-        'time_zone' => 'setTimeZone'
+        'start_on' => 'setStartOn',
+        'end_on' => 'setEndOn'
     ];
 
     /**
@@ -211,11 +196,8 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      */
     protected static $getters = [
         'type' => 'getType',
-        'start_date' => 'getStartDate',
-        'end_date' => 'getEndDate',
-        'start_date_time' => 'getStartDateTime',
-        'end_date_time' => 'getEndDateTime',
-        'time_zone' => 'getTimeZone'
+        'start_on' => 'getStartOn',
+        'end_on' => 'getEndOn'
     ];
 
     /**
@@ -276,11 +258,8 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     public function __construct(?array $data = null)
     {
         $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('start_date', $data ?? [], null);
-        $this->setIfExists('end_date', $data ?? [], null);
-        $this->setIfExists('start_date_time', $data ?? [], null);
-        $this->setIfExists('end_date_time', $data ?? [], null);
-        $this->setIfExists('time_zone', $data ?? [], null);
+        $this->setIfExists('start_on', $data ?? [], null);
+        $this->setIfExists('end_on', $data ?? [], null);
     }
 
     /**
@@ -313,25 +292,12 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";
         }
-        if ($this->container['start_date'] === null) {
-            $invalidProperties[] = "'start_date' can't be null";
+        if ($this->container['start_on'] === null) {
+            $invalidProperties[] = "'start_on' can't be null";
         }
-        if ($this->container['end_date'] === null) {
-            $invalidProperties[] = "'end_date' can't be null";
+        if ($this->container['end_on'] === null) {
+            $invalidProperties[] = "'end_on' can't be null";
         }
-        if ($this->container['start_date_time'] === null) {
-            $invalidProperties[] = "'start_date_time' can't be null";
-        }
-        if ($this->container['end_date_time'] === null) {
-            $invalidProperties[] = "'end_date_time' can't be null";
-        }
-        if ($this->container['time_zone'] === null) {
-            $invalidProperties[] = "'time_zone' can't be null";
-        }
-        if ((mb_strlen($this->container['time_zone']) < 1)) {
-            $invalidProperties[] = "invalid value for 'time_zone', the character length must be bigger than or equal to 1.";
-        }
-
         return $invalidProperties;
     }
 
@@ -375,176 +341,69 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     }
 
     /**
-     * Gets start_date
+     * Gets start_on
      *
      * @return \DateTime
      */
-    public function getStartDate()
+    public function getStartOn()
     {
-        return $this->container['start_date'];
+        return $this->container['start_on'];
     }
 
     /**
-     * Sets start_date
+     * Sets start_on
      *
-     * @param \DateTime $start_date 活動日
+     * @param \DateTime $start_on 活動日
      *
      * @return self
      */
-    public function setStartDate($start_date)
+    public function setStartOn($start_on)
     {
-        if (is_null($start_date)) {
-            array_push($this->openAPINullablesSetToNull, 'start_date');
+        if (is_null($start_on)) {
+            array_push($this->openAPINullablesSetToNull, 'start_on');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('start_date', $nullablesSetToNull);
+            $index = array_search('start_on', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['start_date'] = $start_date;
+        $this->container['start_on'] = $start_on;
 
         return $this;
     }
 
     /**
-     * Gets end_date
+     * Gets end_on
      *
      * @return \DateTime
      */
-    public function getEndDate()
+    public function getEndOn()
     {
-        return $this->container['end_date'];
+        return $this->container['end_on'];
     }
 
     /**
-     * Sets end_date
+     * Sets end_on
      *
-     * @param \DateTime $end_date 活動日
+     * @param \DateTime $end_on 活動日
      *
      * @return self
      */
-    public function setEndDate($end_date)
+    public function setEndOn($end_on)
     {
-        if (is_null($end_date)) {
-            array_push($this->openAPINullablesSetToNull, 'end_date');
+        if (is_null($end_on)) {
+            array_push($this->openAPINullablesSetToNull, 'end_on');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('end_date', $nullablesSetToNull);
+            $index = array_search('end_on', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['end_date'] = $end_date;
-
-        return $this;
-    }
-
-    /**
-     * Gets start_date_time
-     *
-     * @return \DateTime
-     */
-    public function getStartDateTime()
-    {
-        return $this->container['start_date_time'];
-    }
-
-    /**
-     * Sets start_date_time
-     *
-     * @param \DateTime $start_date_time start_date_time
-     *
-     * @return self
-     */
-    public function setStartDateTime($start_date_time)
-    {
-        if (is_null($start_date_time)) {
-            array_push($this->openAPINullablesSetToNull, 'start_date_time');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('start_date_time', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['start_date_time'] = $start_date_time;
-
-        return $this;
-    }
-
-    /**
-     * Gets end_date_time
-     *
-     * @return \DateTime
-     */
-    public function getEndDateTime()
-    {
-        return $this->container['end_date_time'];
-    }
-
-    /**
-     * Sets end_date_time
-     *
-     * @param \DateTime $end_date_time end_date_time
-     *
-     * @return self
-     */
-    public function setEndDateTime($end_date_time)
-    {
-        if (is_null($end_date_time)) {
-            array_push($this->openAPINullablesSetToNull, 'end_date_time');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('end_date_time', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['end_date_time'] = $end_date_time;
-
-        return $this;
-    }
-
-    /**
-     * Gets time_zone
-     *
-     * @return string
-     */
-    public function getTimeZone()
-    {
-        return $this->container['time_zone'];
-    }
-
-    /**
-     * Sets time_zone
-     *
-     * @param string $time_zone 活動のタイムゾーン
-     *
-     * @return self
-     */
-    public function setTimeZone($time_zone)
-    {
-        if (is_null($time_zone)) {
-            array_push($this->openAPINullablesSetToNull, 'time_zone');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('time_zone', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-
-        if (!is_null($time_zone) && (mb_strlen($time_zone) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $time_zone when calling IsekaiObservatoryPackagesEventEventSchedule., must be bigger than or equal to 1.');
-        }
-
-        $this->container['time_zone'] = $time_zone;
+        $this->container['end_on'] = $end_on;
 
         return $this;
     }

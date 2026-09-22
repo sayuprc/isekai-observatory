@@ -49,6 +49,4 @@ enum EventScheduleTypeValue: int
 
     case NUMBER_3 = 3;
 
-    case NUMBER_4 = 4;
-
 }
