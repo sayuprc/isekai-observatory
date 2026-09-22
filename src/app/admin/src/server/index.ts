@@ -4,6 +4,7 @@ import { createRequestLogger } from './logger';
 import { adminUsers } from './routes/admin-users';
 import { auditLogs } from './routes/audit-logs';
 import { auth } from './routes/auth';
+import { events } from './routes/events';
 import { media } from './routes/media';
 import { persons } from './routes/persons';
 import { recoveryCodes } from './routes/recovery-codes';
@@ -39,6 +40,7 @@ export const app = new Elysia({ prefix: '/api', normalize: 'typebox' })
   .use(songTypes)
   .use(songTags)
   .use(songs)
-  .use(venues);
+  .use(venues)
+  .use(events);
 
 export type App = typeof app;
