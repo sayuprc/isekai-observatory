@@ -1,14 +1,14 @@
 # Event Spec
 
-関連: ADR-0015 (画像)、ADR-0020 (Media)、ADR-0021 (公開 read model)、ADR-0022 (監査)、ADR-0023 (Person)、ADR-0025 (Venue)、ADR-0026 (Event / Activity 境界)
+関連: ADR-0015 (画像)、ADR-0020 (Media)、ADR-0021 (公開 read model)、ADR-0022 (監査)、ADR-0023 (Person)、ADR-0025 (Venue)、ADR-0026 (Event / Activity 境界)、ADR-0027 (Event の日付精度)
 
 ## 用語
 
-- **Event (活動)**: ヰ世界情緒による、または本人が公式に参加する、一回の開催または連続した開催期間
-- **Event** の主要フィールド: `eventId` / `title` / `description?` / `type` / `schedule` / `status?` / `postponedToEventId?` / `isDisplay`
+- **Event (イベント)**: ヰ世界情緒による、または本人が公式に参加する、一回の開催または連続した開催期間
+- **Event** の主要フィールド: `eventId` / `title` / `description` / `type` / `schedule` / `status?` / `isDisplay`
 - **EventType**: Live / Stream / Exhibition / Other。開催方法ではなく Event 全体の主目的を表す
-- **EventSchedule**: Undated / Date / DateRange / DateTime の判別可能な構造
-  DateTime は IANA タイムゾーンと必須の開始日時、任意の終了日時を持つ。DateRange は開始日と終了日を持つ
+- **EventSchedule**: Undated / Date / DateRange の判別可能な構造。時刻とタイムゾーンは持たない
+  Date は開始日、DateRange は開始日と終了日を持つ。詳細な時刻は Event の説明に記載する
 - **EventStatus**: Postponed / Cancelled のみ。通常時、予定、開催済みを表す値は持たない
 - **EventSource**: `displayName` / `url` / `orderNo`。用途を固定 enum で分類しない
 - **SongPerformance (楽曲披露)**: 本人が Event 内で一つの Song を一回披露した事実
@@ -18,12 +18,12 @@
 
 - Admin: Event の検索・取得・作成・更新・削除
   タイトル、活動種別、開催時期、延期・中止、開催先、公開状態で検索できる
-- Event はタイトル必須、改行可能なプレーンテキストの説明は任意。同じタイトル・日付を許容する
+- Event はタイトル必須、改行可能なプレーンテキストの説明は空文字を許容する必須値。同じタイトル・日付を許容する
 - 一回の開始を一つの Event とする。同日昼夜公演は別 Event、同時刻の現地会場と配信先は一つの Event とする
 - 開催先は 0 件以上。Venue / Media / EventSource は Event 内で重複不可かつ `orderNo` を持つ
 - EventSource は 0 件でも Event を公開できる。Viewer には表示名と URL を公開する
 - Event は複数の Media を関連づけられる。リンクの所有は Event 側
-- Postponed の Event は延期先 Event を 1 件参照する。延期を繰り返す場合は Event の鎖とし、循環させない
+- Postponed の Event は延期先 Event を参照しない。延期後の開催は別 Event として登録する
 - SongPerformance はすべての EventType に 0 件以上登録でき、必ず 1 件の Song を参照する
   同じ Event で同じ Song を複数回披露した場合も別 SongPerformance とする
 - SongPerformance は一緒に歌唱した Person を共演者として順序付きで参照できる
@@ -38,10 +38,9 @@
 - `ReadEvent` / `WriteEvent` で操作を認可し、作成・更新・削除を Event 対象で監査記録する
 - Viewer: 公開 Event の詳細を含む cursor 一覧。個別 get は持たない
   SSG は一覧から活動詳細ページを生成し、活動一覧、ホームの今後の予定、Song の披露履歴から辿れる
-- Viewer の活動一覧は、開催時期が未来の Event を日時昇順、日時未定を別枠、過去の Event を日時降順で表示する
-  活動種別、年、開催先をクライアント側で絞り込める。延期・中止も元の開催時期の位置に状態バッジ付きで残す
-- ホームの今後の予定は、延期・中止を除外したうえでブラウザ上の現在日時と比較して導出する
-  日時表示は Event に保存された現地タイムゾーンを使う
+- Viewer のイベント一覧は、開催日が未来の Event を日付昇順、日付未定を別枠、過去の Event を日付降順で表示する
+  イベント種別、年、開催先をクライアント側で絞り込める。延期・中止も元の開催日の位置に状態バッジ付きで残す
+- ホームの今後の予定は、延期・中止を除外したうえでブラウザ上の現在日付と比較して導出する
 - 公開 Event が非公開 Song を参照する場合、活動詳細には曲名だけを出し、Song ID とリンクは出さない
   非公開 Media は活動詳細から除外する
 
@@ -49,6 +48,7 @@
 
 - Activity 集約や共通テーブルを導入せず、Event / Release / Media を独立した集約として維持する
 - Event の予定／開催済み状態を永続化しない。現在日時を理由に状態を自動更新しない
+- Event の時刻やタイムゾーンを構造化データとして保存しない。必要な時刻情報は説明に記載する
 - EventSeries、主催者、Event 単位の出演者、団体マスタを持たない
 - Setlist を Exhibition / Other に持たせない
 - 共演者に演奏者を含めない。本人が歌唱しない演目を SongPerformance にしない
@@ -72,5 +72,4 @@ classDiagram
   Event "1" --> "0..1" Setlist : Live / Stream
   Setlist "1" --> "N" SetlistItem : order
   SetlistItem "0..1" --> "0..N" SongPerformance : 任意参照
-  Event "0..1" --> "0..1" Event : 延期先
 ```

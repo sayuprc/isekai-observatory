@@ -13,7 +13,7 @@ applies_to: [api, admin, viewer]
 
 ## Decision
 
-- 開催単位の集約は `Event` と呼び、UI では「活動」と表示する
+- 開催単位の集約は `Event` と呼び、UI では「イベント」と表示する
 - `Activity` は Event / Release / Media をまとめて捉えるための用語に留め、契約、集約、共通テーブルとして導入しない
 - Event / Release / Media はそれぞれ独立した集約として維持する
 - 種類を横断する活動履歴が必要な場合は、独立した集約から組み立てる read model として設計する
@@ -31,5 +31,5 @@ applies_to: [api, admin, viewer]
 ### Negative
 
 - 種類横断の活動履歴は、複数の公開 read model を統合して組み立てる必要がある
-- UI の「活動」とコード上の `Event` で語が一致しない
+- UI の「イベント」とコード上の `Event` で語を揃える必要がある
 - フロントエンドでは DOM `Event` と区別できる型名を選ぶ必要がある
