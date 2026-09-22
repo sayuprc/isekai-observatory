@@ -3,7 +3,8 @@ import type { Event as EventModel } from '../../generated/types.gen.js';
 export type Event = EventModel;
 
 export function eventDate(event: Event): string | null {
-  return event.schedule.startOn;
+  if (!event.schedule.startOn) return null;
+  return event.schedule.endOn ? `${event.schedule.startOn}〜${event.schedule.endOn}` : event.schedule.startOn;
 }
 
 export function eventTypeName(value: Event['typeValue']): string {
