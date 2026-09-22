@@ -1,0 +1,6 @@
+---
+import { DetailView } from '../../components/event/EditableForm';
+import Layout from '../../layouts/Layout.astro';
+const { id } = Astro.params;
+---
+<Layout pageTitle="活動詳細"><DetailView eventId={id ?? ''} client:only="solid-js" /></Layout>

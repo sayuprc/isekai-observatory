@@ -14,6 +14,11 @@ use App\Http\Controllers\Api\Admin\V1\Auth\RecoveryStartController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RefreshController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RegisterFinishController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RegisterStartController;
+use App\Http\Controllers\Api\Admin\V1\Event\CreateEventController;
+use App\Http\Controllers\Api\Admin\V1\Event\DeleteEventController;
+use App\Http\Controllers\Api\Admin\V1\Event\GetEventController;
+use App\Http\Controllers\Api\Admin\V1\Event\SearchEventController;
+use App\Http\Controllers\Api\Admin\V1\Event\UpdateEventController;
 use App\Http\Controllers\Api\Admin\V1\Media\CreateMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\DeleteMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\GetMediaController;
@@ -54,6 +59,7 @@ use App\Http\Controllers\Api\Admin\V1\Venue\UpdateVenueController;
 use App\Http\Middleware\Admin\AdminOpenApiValidator;
 use App\Http\Middleware\Admin\Authenticate;
 use Auth\Route\AuthRouteMap;
+use Event\Route\EventRouteMap;
 use Illuminate\Support\Facades\Route;
 use Media\Route\MediaRouteMap;
 use Person\Route\PersonRouteMap;
@@ -118,6 +124,14 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                     Route::delete('/{venueId}', [DeleteVenueController::class, 'handle'])->name(VenueRouteMap::Delete);
                     Route::get('/search', [SearchVenueController::class, 'handle'])->name(VenueRouteMap::Search);
                     Route::get('/{venueId}', [GetVenueController::class, 'handle'])->name(VenueRouteMap::Get);
+                });
+
+                Route::prefix('events')->group(static function () {
+                    Route::post('/', [CreateEventController::class, 'handle'])->name(EventRouteMap::Create);
+                    Route::put('/{eventId}', [UpdateEventController::class, 'handle'])->name(EventRouteMap::Update);
+                    Route::delete('/{eventId}', [DeleteEventController::class, 'handle'])->name(EventRouteMap::Delete);
+                    Route::get('/search', [SearchEventController::class, 'handle'])->name(EventRouteMap::Search);
+                    Route::get('/{eventId}', [GetEventController::class, 'handle'])->name(EventRouteMap::Get);
                 });
 
                 Route::prefix('songs')->group(static function () {
