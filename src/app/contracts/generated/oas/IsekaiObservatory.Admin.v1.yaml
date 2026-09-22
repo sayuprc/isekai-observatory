@@ -9,12 +9,13 @@ tags:
   - name: AuditLog
   - name: Media
   - name: Person
+  - name: Venue
+  - name: Event
   - name: SongTag
   - name: Song
   - name: ReleaseGroup
   - name: Release
   - name: SongType
-  - name: Venue
 paths:
   /admin-users:
     get:
@@ -523,6 +524,329 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegisterStartRequest'
+  /events:
+    post:
+      operationId: EventService_createEvent
+      description: 活動作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreateRequest'
+      security:
+        - BearerAuth: []
+  /events/search:
+    get:
+      operationId: EventService_searchEvents
+      description: 活動検索API
+      parameters:
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EventTypeValue'
+          explode: false
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EventStatusValue'
+          explode: false
+        - name: is_display
+          in: query
+          required: false
+          schema:
+            type: boolean
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EventSearchSortBy'
+            default: schedule
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 25
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+  /events/{eventId}:
+    get:
+      operationId: EventService_getEvent
+      description: 活動取得API
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+    put:
+      operationId: EventService_updateEvent
+      description: 活動更新API
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: EventService_deleteEvent
+      description: 活動削除API
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
   /media:
     post:
       operationId: MediaService_createMedia
@@ -2884,6 +3208,7 @@ components:
         - Song
         - SongTag
         - Venue
+        - Event
       description: 監査ログの対象種別
     ErrorCode:
       type: string
@@ -2921,6 +3246,282 @@ components:
           items:
             $ref: '#/components/schemas/ErrorDetail'
       description: 全エラーステータス共通のレスポンス
+    Event:
+      type: object
+      required:
+        - eventId
+        - title
+        - description
+        - typeValue
+        - schedule
+        - statusValue
+        - postponedToEventId
+        - isDisplay
+        - venues
+        - media
+        - sources
+        - performances
+        - setlist
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          anyOf:
+            - $ref: '#/components/schemas/eventDescription'
+            - type: 'null'
+        typeValue:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        statusValue:
+          anyOf:
+            - $ref: '#/components/schemas/EventStatusValue'
+            - type: 'null'
+        postponedToEventId:
+          anyOf:
+            - $ref: '#/components/schemas/eventId'
+            - type: 'null'
+        isDisplay:
+          type: boolean
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Venue'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetlistItem'
+      description: 活動
+    EventCreateRequest:
+      type: object
+      required:
+        - title
+        - description
+        - typeValue
+        - schedule
+        - statusValue
+        - postponedToEventId
+        - isDisplay
+        - venueIds
+        - mediaIds
+        - sources
+        - performances
+        - setlist
+      properties:
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          anyOf:
+            - $ref: '#/components/schemas/eventDescription'
+            - type: 'null'
+        typeValue:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        statusValue:
+          anyOf:
+            - $ref: '#/components/schemas/EventStatusValue'
+            - type: 'null'
+        postponedToEventId:
+          anyOf:
+            - $ref: '#/components/schemas/eventId'
+            - type: 'null'
+        isDisplay:
+          type: boolean
+        venueIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/uuid'
+        mediaIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/mediaId'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetlistItem'
+    EventCreateResponse:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/Event'
+    EventGetResponse:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/Event'
+    EventScheduleTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: 活動の開催時期
+    EventSearchResponse:
+      type: object
+      required:
+        - events
+        - maxPage
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSummary'
+        maxPage:
+          type: integer
+          format: int32
+    EventSearchSortBy:
+      type: string
+      enum:
+        - schedule
+        - title
+      description: 活動検索のソート条件
+    EventSource:
+      type: object
+      required:
+        - displayName
+        - url
+        - orderNo
+      properties:
+        displayName:
+          $ref: '#/components/schemas/eventSourceName'
+        url:
+          $ref: '#/components/schemas/eventSourceUrl'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: 活動出典
+    EventStatusValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+      description: 活動の開催状態。通常開催は値を持たず、延期・中止のみ表現する
+    EventSummary:
+      type: object
+      required:
+        - eventId
+        - title
+        - typeValue
+        - schedule
+        - statusValue
+        - isDisplay
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        typeValue:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        statusValue:
+          anyOf:
+            - $ref: '#/components/schemas/EventStatusValue'
+            - type: 'null'
+        isDisplay:
+          type: boolean
+      description: 活動一覧の 1 行分
+    EventTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 99
+      description: 活動種別
+    EventUpdateRequest:
+      type: object
+      required:
+        - title
+        - description
+        - typeValue
+        - schedule
+        - statusValue
+        - postponedToEventId
+        - isDisplay
+        - venueIds
+        - mediaIds
+        - sources
+        - performances
+        - setlist
+      properties:
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          anyOf:
+            - $ref: '#/components/schemas/eventDescription'
+            - type: 'null'
+        typeValue:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        statusValue:
+          anyOf:
+            - $ref: '#/components/schemas/EventStatusValue'
+            - type: 'null'
+        postponedToEventId:
+          anyOf:
+            - $ref: '#/components/schemas/eventId'
+            - type: 'null'
+        isDisplay:
+          type: boolean
+        venueIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/uuid'
+        mediaIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/mediaId'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetlistItem'
+    EventUpdateResponse:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/Event'
     GenerateRecoveryCodesResponse:
       type: object
       required:
@@ -2934,6 +3535,41 @@ components:
       type: string
       enum:
         - v1
+    IsekaiObservatory.Packages.Event.EventSchedule:
+      type: object
+      required:
+        - type
+        - startDate
+        - endDate
+        - startDateTime
+        - endDateTime
+        - timeZone
+      properties:
+        type:
+          $ref: '#/components/schemas/EventScheduleTypeValue'
+        startDate:
+          anyOf:
+            - $ref: '#/components/schemas/eventDate'
+            - type: 'null'
+        endDate:
+          anyOf:
+            - $ref: '#/components/schemas/eventDate'
+            - type: 'null'
+        startDateTime:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        endDateTime:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        timeZone:
+          anyOf:
+            - $ref: '#/components/schemas/eventTimeZone'
+            - type: 'null'
+      description: 活動の開催時期。type に応じた項目のみを設定する
     LoginFinishRequest:
       type: object
       required:
@@ -3147,6 +3783,25 @@ components:
         - 50
         - 100
       description: 1ページあたりの件数
+    PerformancePerson:
+      type: object
+      required:
+        - personId
+        - name
+        - creditName
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        creditName:
+          anyOf:
+            - $ref: '#/components/schemas/performanceCreditName'
+            - type: 'null'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: 活動に紐づく楽曲披露
     Permission:
       type: object
       required:
@@ -3175,6 +3830,8 @@ components:
         - write_release
         - read_venue
         - write_venue
+        - read_event
+        - write_event
       description: 権限の値
     Person:
       type: object
@@ -3773,6 +4430,27 @@ components:
         - 2
         - 3
       description: 役割の値
+    SetlistItem:
+      type: object
+      required:
+        - setlistItemId
+        - orderNo
+        - label
+        - performances
+      properties:
+        setlistItemId:
+          $ref: '#/components/schemas/uuid'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        label:
+          anyOf:
+            - type: string
+            - type: 'null'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+      description: セットリストの 1 項目
     Song:
       type: object
       required:
@@ -3942,6 +4620,31 @@ components:
             value: 1
           isDisplay: true
           orderNo: 1
+    SongPerformance:
+      type: object
+      required:
+        - performanceId
+        - songId
+        - songTitle
+        - orderNo
+        - coVocalists
+        - isDisplay
+      properties:
+        performanceId:
+          $ref: '#/components/schemas/uuid'
+        songId:
+          $ref: '#/components/schemas/songId'
+        songTitle:
+          $ref: '#/components/schemas/title'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        coVocalists:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerformancePerson'
+        isDisplay:
+          type: boolean
+      description: 活動に紐づく楽曲披露
     SongPerson:
       type: object
       required:
@@ -4335,6 +5038,33 @@ components:
       type: string
       format: email
       description: メールアドレス
+    eventDate:
+      type: string
+      format: date
+      description: 活動日
+    eventDescription:
+      type: string
+      description: 活動説明
+    eventId:
+      type: string
+      format: uuid
+      description: 活動ID
+    eventSourceName:
+      type: string
+      minLength: 1
+      description: 活動の出典表示名
+    eventSourceUrl:
+      type: string
+      format: uri
+      description: 活動の出典URL
+    eventTimeZone:
+      type: string
+      minLength: 1
+      description: 活動のタイムゾーン
+    eventTitle:
+      type: string
+      minLength: 1
+      description: 活動タイトル
     lyricsLink:
       type: string
       format: uri
@@ -4381,6 +5111,10 @@ components:
       format: int32
       minimum: 1
       description: ページ番号
+    performanceCreditName:
+      type: string
+      minLength: 1
+      description: 共演者としてのクレジット名
     permissionName:
       type: string
       minLength: 1
