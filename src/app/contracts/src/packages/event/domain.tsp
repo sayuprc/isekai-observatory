@@ -29,13 +29,8 @@ scalar eventSourceUrl extends string;
 
 @doc("活動日")
 @format("date")
-@friendlyName("eventDate")
-scalar eventDate extends string;
-
-@doc("活動のタイムゾーン")
-@minLength(1)
-@friendlyName("eventTimeZone")
-scalar eventTimeZone extends string;
+@friendlyName("eventOn")
+scalar eventOn extends string;
 
 @doc("共演者としてのクレジット名")
 @minLength(1)
@@ -64,15 +59,11 @@ enum EventScheduleTypeValue {
   Undated: 1,
   Date: 2,
   DateRange: 3,
-  DateTime: 4,
 }
 
 @doc("活動の開催時期。type に応じた項目のみを設定する")
 model EventSchedule {
   type: EventScheduleTypeValue;
-  startDate: eventDate | null;
-  endDate: eventDate | null;
-  startDateTime: utcDateTime | null;
-  endDateTime: utcDateTime | null;
-  timeZone: eventTimeZone | null;
+  startOn: eventOn | null;
+  endOn: eventOn | null;
 }

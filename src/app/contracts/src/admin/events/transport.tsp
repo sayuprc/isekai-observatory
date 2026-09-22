@@ -21,11 +21,10 @@ model EventGetResponse {
 
 model EventCreateRequest {
   title: eventTitle;
-  description: eventDescription | null;
+  description: eventDescription;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
   statusValue: EventStatusValue | null;
-  postponedToEventId: eventId | null;
   isDisplay: boolean;
   venueIds: uuid[];
   mediaIds: mediaId[];
@@ -40,11 +39,10 @@ model EventCreateResponse {
 
 model EventUpdateRequest {
   title: eventTitle;
-  description: eventDescription | null;
+  description: eventDescription;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
   statusValue: EventStatusValue | null;
-  postponedToEventId: eventId | null;
   isDisplay: boolean;
   venueIds: uuid[];
   mediaIds: mediaId[];

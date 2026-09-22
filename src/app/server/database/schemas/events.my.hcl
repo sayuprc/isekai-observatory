@@ -1,6 +1,6 @@
 table "events" {
   schema  = schema.db
-  comment = "活動"
+  comment = "イベント"
 
   column "event_id" {
     null    = false
@@ -22,7 +22,7 @@ table "events" {
     comment = "タイトル(小文字)"
   }
   column "description" {
-    null    = true
+    null    = false
     type    = text
     comment = "説明"
   }
@@ -38,41 +38,21 @@ table "events" {
     unsigned = true
     comment  = "開催時期種別"
   }
-  column "start_date" {
+  column "start_on" {
     null    = true
     type    = date
     comment = "開催開始日"
   }
-  column "end_date" {
+  column "end_on" {
     null    = true
     type    = date
     comment = "開催終了日"
-  }
-  column "start_at" {
-    null    = true
-    type    = datetime
-    comment = "開催開始日時"
-  }
-  column "end_at" {
-    null    = true
-    type    = datetime
-    comment = "開催終了日時"
-  }
-  column "time_zone" {
-    null    = true
-    type    = varchar(64)
-    comment = "開催時刻のタイムゾーン"
   }
   column "status" {
     null     = true
     type     = tinyint
     unsigned = true
     comment  = "開催状態(延期・中止のみ)"
-  }
-  column "postponed_to_event_id" {
-    null    = true
-    type    = binary(16)
-    comment = "延期先活動ID"
   }
   column "is_display" {
     null    = false
@@ -98,22 +78,13 @@ table "events" {
     columns = [column.title_lower]
   }
   index "idx_events_schedule" {
-    columns = [column.start_at, column.start_date, column.event_id]
+    columns = [column.start_on, column.end_on, column.event_id]
   }
   index "idx_events_type" {
     columns = [column.type]
   }
   index "idx_events_status" {
     columns = [column.status]
-  }
-  index "fk_events_postponed_to_event_id" {
-    columns = [column.postponed_to_event_id]
-  }
-
-  foreign_key "fk_events_postponed_to_event_id" {
-    columns     = [column.postponed_to_event_id]
-    ref_columns = [table.events.column.event_id]
-    on_delete   = RESTRICT
   }
 }
 

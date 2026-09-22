@@ -53,11 +53,10 @@ model SetlistItem {
 model Event {
   eventId: eventId;
   title: eventTitle;
-  description: eventDescription | null;
+  description: eventDescription;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
   statusValue: EventStatusValue | null;
-  postponedToEventId: eventId | null;
   venues: EventVenueSummary[];
   media: EventMediaSummary[];
   sources: EventSource[];

@@ -204,7 +204,6 @@ components:
         - typeValue
         - schedule
         - statusValue
-        - postponedToEventId
         - venues
         - media
         - sources
@@ -216,9 +215,7 @@ components:
         title:
           $ref: '#/components/schemas/eventTitle'
         description:
-          anyOf:
-            - $ref: '#/components/schemas/eventDescription'
-            - type: 'null'
+          $ref: '#/components/schemas/eventDescription'
         typeValue:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -226,10 +223,6 @@ components:
         statusValue:
           anyOf:
             - $ref: '#/components/schemas/EventStatusValue'
-            - type: 'null'
-        postponedToEventId:
-          anyOf:
-            - $ref: '#/components/schemas/eventId'
             - type: 'null'
         venues:
           type: array
@@ -288,7 +281,6 @@ components:
         - 1
         - 2
         - 3
-        - 4
       description: 活動の開催時期
     EventSource:
       type: object
@@ -336,35 +328,18 @@ components:
       type: object
       required:
         - type
-        - startDate
-        - endDate
-        - startDateTime
-        - endDateTime
-        - timeZone
+        - startOn
+        - endOn
       properties:
         type:
           $ref: '#/components/schemas/EventScheduleTypeValue'
-        startDate:
+        startOn:
           anyOf:
-            - $ref: '#/components/schemas/eventDate'
+            - $ref: '#/components/schemas/eventOn'
             - type: 'null'
-        endDate:
+        endOn:
           anyOf:
-            - $ref: '#/components/schemas/eventDate'
-            - type: 'null'
-        startDateTime:
-          anyOf:
-            - type: string
-              format: date-time
-            - type: 'null'
-        endDateTime:
-          anyOf:
-            - type: string
-              format: date-time
-            - type: 'null'
-        timeZone:
-          anyOf:
-            - $ref: '#/components/schemas/eventTimeZone'
+            - $ref: '#/components/schemas/eventOn'
             - type: 'null'
       description: 活動の開催時期。type に応じた項目のみを設定する
     IsekaiObservatory.Viewer.Version:
@@ -998,10 +973,6 @@ components:
     description:
       type: string
       description: 楽曲の説明
-    eventDate:
-      type: string
-      format: date
-      description: 活動日
     eventDescription:
       type: string
       description: 活動説明
@@ -1009,6 +980,10 @@ components:
       type: string
       format: uuid
       description: 活動ID
+    eventOn:
+      type: string
+      format: date
+      description: 活動日
     eventSourceName:
       type: string
       minLength: 1
@@ -1017,10 +992,6 @@ components:
       type: string
       format: uri
       description: 活動の出典URL
-    eventTimeZone:
-      type: string
-      minLength: 1
-      description: 活動のタイムゾーン
     eventTitle:
       type: string
       minLength: 1
