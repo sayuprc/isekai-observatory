@@ -4,7 +4,7 @@ import type { Event } from './types.js';
 const sortEvents = (events: Event[]): Event[] => {
   const now = Date.now();
   const timestamp = (event: Event): number | null => {
-    const value = event.schedule.startDateTime ?? event.schedule.startDate;
+    const value = event.schedule.startOn;
     if (!value) return null;
     const parsed = new Date(value).getTime();
     return Number.isNaN(parsed) ? null : parsed;

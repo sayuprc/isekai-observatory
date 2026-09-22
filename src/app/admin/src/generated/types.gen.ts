@@ -96,11 +96,10 @@ export type ErrorResponse = {
 export type Event = {
     eventId: EventId;
     title: EventTitle;
-    description: EventDescription | null;
+    description: EventDescription;
     typeValue: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue | null;
-    postponedToEventId: EventId | null;
     isDisplay: boolean;
     venues: Array<Venue>;
     media: Array<Media>;
@@ -111,11 +110,10 @@ export type Event = {
 
 export type EventCreateRequest = {
     title: EventTitle;
-    description: EventDescription | null;
+    description: EventDescription;
     typeValue: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue | null;
-    postponedToEventId: EventId | null;
     isDisplay: boolean;
     venueIds: Array<Uuid>;
     mediaIds: Array<MediaId>;
@@ -135,7 +133,7 @@ export type EventGetResponse = {
 /**
  * 活動の開催時期
  */
-export type EventScheduleTypeValue = 1 | 2 | 3 | 4;
+export type EventScheduleTypeValue = 1 | 2 | 3;
 
 export type EventSearchResponse = {
     events: Array<EventSummary>;
@@ -180,11 +178,10 @@ export type EventTypeValue = 1 | 2 | 3 | 99;
 
 export type EventUpdateRequest = {
     title: EventTitle;
-    description: EventDescription | null;
+    description: EventDescription;
     typeValue: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue | null;
-    postponedToEventId: EventId | null;
     isDisplay: boolean;
     venueIds: Array<Uuid>;
     mediaIds: Array<MediaId>;
@@ -208,11 +205,8 @@ export type IsekaiObservatoryAdminVersion = 'v1';
  */
 export type IsekaiObservatoryPackagesEventEventSchedule = {
     type: EventScheduleTypeValue;
-    startDate: EventDate | null;
-    endDate: EventDate | null;
-    startDateTime: string | null;
-    endDateTime: string | null;
-    timeZone: EventTimeZone | null;
+    startOn: EventOn | null;
+    endOn: EventOn | null;
 };
 
 export type LoginFinishRequest = {
@@ -909,11 +903,6 @@ export type Description = string;
 export type Email = string;
 
 /**
- * 活動日
- */
-export type EventDate = string;
-
-/**
  * 活動説明
  */
 export type EventDescription = string;
@@ -924,6 +913,11 @@ export type EventDescription = string;
 export type EventId = string;
 
 /**
+ * 活動日
+ */
+export type EventOn = string;
+
+/**
  * 活動の出典表示名
  */
 export type EventSourceName = string;
@@ -932,11 +926,6 @@ export type EventSourceName = string;
  * 活動の出典URL
  */
 export type EventSourceUrl = string;
-
-/**
- * 活動のタイムゾーン
- */
-export type EventTimeZone = string;
 
 /**
  * 活動タイトル

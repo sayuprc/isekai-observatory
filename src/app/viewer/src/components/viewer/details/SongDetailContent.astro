@@ -20,7 +20,7 @@ const formatPublishedAt = (value: string): string =>
   new Date(value).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
 const formatPerformanceDate = (value: Song['performances'][number]): string =>
-  value.schedule.startDate ?? value.schedule.startDateTime?.replace('T', ' ') ?? '開催時期未定';
+  value.schedule.startOn ?? '開催時期未定';
 ---
 
 <div class="detail-page-content song-detail-content" data-share-title={song.title}>
@@ -43,7 +43,7 @@ const formatPerformanceDate = (value: Song['performances'][number]): string =>
   {
     song.performances.length > 0 && (
       <>
-        <DetailSectionHead title="披露された活動" count={song.performances.length} />
+        <DetailSectionHead title="披露されたイベント" count={song.performances.length} />
         <div class="rel-list">
           {
             song.performances.map(performance => (

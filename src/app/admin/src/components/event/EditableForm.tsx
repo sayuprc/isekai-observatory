@@ -27,15 +27,7 @@ const SCHEDULE_TYPES: Array<{ value: EventScheduleTypeValue; label: string }> = 
   { value: 1, label: '開催時期未定' },
   { value: 2, label: '日付' },
   { value: 3, label: '期間' },
-  { value: 4, label: '日時' },
 ];
-
-const localDateTimeValue = (value: string | null): string => value?.replace(/([+-]\d\d:\d\d|Z)$/, '').slice(0, 16) ?? '';
-
-const utcDateTimeValue = (value: FormDataEntryValue | null): string | null => {
-  const raw = value?.toString() ?? '';
-  return raw === '' ? null : new Date(raw).toISOString();
-};
 
 const getListUrl = () => '/events';
 
@@ -64,7 +56,7 @@ export const DetailView = (props: DetailViewProps) => {
   return (
     <Switch>
       <Match when={resource.loading}><div class="flex items-center justify-center gap-3 py-10" role="status"><span class="loading loading-spinner loading-md" />読み込み中...</div></Match>
-      <Match when={resource()?.status === 'forbidden'}><div class="alert alert-error">活動の閲覧権限がありません。</div></Match>
+      <Match when={resource()?.status === 'forbidden'}><div class="alert alert-error">イベントの閲覧権限がありません。</div></Match>
       <Match when={resource.error || resource()?.status === 'error'}><div class="flex flex-col items-start gap-3"><p class="text-error">データの取得に失敗しました。</p><button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>再試行</button></div></Match>
       <Match when={loadedData()}>{data => <EditableForm data={data()} />}</Match>
     </Switch>
@@ -86,19 +78,16 @@ const EditableForm = (props: EditableFormProps) => {
     const statusValue = formData.get('statusValue');
     const selectedScheduleType = Number(formData.get('scheduleType') ?? scheduleType()) as EventScheduleTypeValue;
     const schedule = selectedScheduleType === 2
-      ? { type: selectedScheduleType, startDate: formData.get('startDate')?.toString() || null, endDate: null, startDateTime: null, endDateTime: null, timeZone: null }
+      ? { type: selectedScheduleType, startOn: formData.get('startOn')?.toString() || null, endOn: null }
       : selectedScheduleType === 3
-        ? { type: selectedScheduleType, startDate: formData.get('startDate')?.toString() || null, endDate: formData.get('endDate')?.toString() || null, startDateTime: null, endDateTime: null, timeZone: null }
-        : selectedScheduleType === 4
-          ? { type: selectedScheduleType, startDate: null, endDate: null, startDateTime: utcDateTimeValue(formData.get('startDateTime')), endDateTime: utcDateTimeValue(formData.get('endDateTime')), timeZone: formData.get('timeZone')?.toString() || null }
-          : { type: selectedScheduleType, startDate: null, endDate: null, startDateTime: null, endDateTime: null, timeZone: null };
+        ? { type: selectedScheduleType, startOn: formData.get('startOn')?.toString() || null, endOn: formData.get('endOn')?.toString() || null }
+        : { type: selectedScheduleType, startOn: null, endOn: null };
     const { data, error, status } = await client.api.events({ eventId: event.eventId }).put({
       title: formData.get('title')?.toString() ?? '',
-      description: formData.get('description')?.toString() || null,
+      description: formData.get('description')?.toString() ?? '',
       typeValue,
       schedule,
       statusValue: statusValue ? Number(statusValue) as EventStatusValue : null,
-      postponedToEventId: event.postponedToEventId,
       isDisplay: formData.get('isDisplay') === 'true',
       venueIds: event.venues.map(venue => venue.venueId),
       mediaIds: event.media.map(media => media.mediaId),
@@ -141,9 +130,8 @@ const EditableForm = (props: EditableFormProps) => {
               <div><label class="label" for="typeValue">種別</label><select id="typeValue" name="typeValue" class="select w-full">{EVENT_TYPES.map(option => <option value={option.value} selected={event.typeValue === option.value}>{option.label}</option>)}</select></div>
               <div><label class="label" for="scheduleType">開催時期</label><select id="scheduleType" name="scheduleType" class="select w-full" value={scheduleType()} onChange={e => setScheduleType(Number(e.currentTarget.value) as EventScheduleTypeValue)}>{SCHEDULE_TYPES.map(option => <option value={option.value}>{option.label}</option>)}</select></div>
             </div>
-            {scheduleType() === 2 && <div><label class="label" for="startDate">開催日</label><input id="startDate" name="startDate" type="date" class="input w-full" value={event.schedule.startDate ?? ''} /></div>}
-            {scheduleType() === 3 && <div class="grid gap-4 md:grid-cols-2"><div><label class="label" for="startDate">開始日</label><input id="startDate" name="startDate" type="date" class="input w-full" value={event.schedule.startDate ?? ''} /></div><div><label class="label" for="endDate">終了日</label><input id="endDate" name="endDate" type="date" class="input w-full" value={event.schedule.endDate ?? ''} /></div></div>}
-            {scheduleType() === 4 && <div class="grid gap-4 md:grid-cols-3"><div><label class="label" for="startDateTime">開始日時</label><input id="startDateTime" name="startDateTime" type="datetime-local" class="input w-full" value={localDateTimeValue(event.schedule.startDateTime)} /></div><div><label class="label" for="endDateTime">終了日時</label><input id="endDateTime" name="endDateTime" type="datetime-local" class="input w-full" value={localDateTimeValue(event.schedule.endDateTime)} /></div><div><label class="label" for="timeZone">タイムゾーン</label><input id="timeZone" name="timeZone" class="input w-full" value={event.schedule.timeZone ?? 'Asia/Tokyo'} /></div></div>}
+            {scheduleType() === 2 && <div><label class="label" for="startOn">開催日</label><input id="startOn" name="startOn" type="date" class="input w-full" value={event.schedule.startOn ?? ''} /></div>}
+            {scheduleType() === 3 && <div class="grid gap-4 md:grid-cols-2"><div><label class="label" for="startOn">開始日</label><input id="startOn" name="startOn" type="date" class="input w-full" value={event.schedule.startOn ?? ''} /></div><div><label class="label" for="endOn">終了日</label><input id="endOn" name="endOn" type="date" class="input w-full" value={event.schedule.endOn ?? ''} /></div></div>}
             <div class="grid gap-4 md:grid-cols-2">
               <div><label class="label" for="statusValue">状態</label><select id="statusValue" name="statusValue" class="select w-full"><option value="" selected={event.statusValue === null}>通常</option><option value="1" selected={event.statusValue === 1}>延期</option><option value="2" selected={event.statusValue === 2}>中止</option></select></div>
               <div><label class="label" for="isDisplay">表示設定</label><select id="isDisplay" name="isDisplay" class="select w-full"><option value="true" selected={event.isDisplay}>表示する</option><option value="false" selected={!event.isDisplay}>表示しない</option></select></div>
@@ -154,7 +142,7 @@ const EditableForm = (props: EditableFormProps) => {
         <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
           <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
           <p class="mt-1 text-sm text-base-content/60">この操作は取り消せません。</p>
-          <div class="mt-4"><button type="button" onClick={remove} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>この活動を削除する</button></div>
+          <div class="mt-4"><button type="button" onClick={remove} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>このイベントを削除する</button></div>
         </fieldset>
       </div>
     </>

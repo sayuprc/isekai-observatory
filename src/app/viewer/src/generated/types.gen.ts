@@ -29,11 +29,10 @@ export type ErrorResponse = {
 export type Event = {
     eventId: EventId;
     title: EventTitle;
-    description: EventDescription | null;
+    description: EventDescription;
     typeValue: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue | null;
-    postponedToEventId: EventId | null;
     venues: Array<EventVenueSummary>;
     media: Array<EventMediaSummary>;
     sources: Array<EventSource>;
@@ -57,7 +56,7 @@ export type EventMediaSummary = {
 /**
  * 活動の開催時期
  */
-export type EventScheduleTypeValue = 1 | 2 | 3 | 4;
+export type EventScheduleTypeValue = 1 | 2 | 3;
 
 export type EventSource = {
     displayName: EventSourceName;
@@ -86,11 +85,8 @@ export type EventVenueSummary = {
  */
 export type IsekaiObservatoryPackagesEventEventSchedule = {
     type: EventScheduleTypeValue;
-    startDate: EventDate | null;
-    endDate: EventDate | null;
-    startDateTime: string | null;
-    endDateTime: string | null;
-    timeZone: EventTimeZone | null;
+    startOn: EventOn | null;
+    endOn: EventOn | null;
 };
 
 export type IsekaiObservatoryViewerVersion = 'v1';
@@ -343,11 +339,6 @@ export type Cursor = string;
 export type Description = string;
 
 /**
- * 活動日
- */
-export type EventDate = string;
-
-/**
  * 活動説明
  */
 export type EventDescription = string;
@@ -358,6 +349,11 @@ export type EventDescription = string;
 export type EventId = string;
 
 /**
+ * 活動日
+ */
+export type EventOn = string;
+
+/**
  * 活動の出典表示名
  */
 export type EventSourceName = string;
@@ -366,11 +362,6 @@ export type EventSourceName = string;
  * 活動の出典URL
  */
 export type EventSourceUrl = string;
-
-/**
- * 活動のタイムゾーン
- */
-export type EventTimeZone = string;
 
 /**
  * 活動タイトル

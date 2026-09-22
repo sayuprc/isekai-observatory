@@ -12,22 +12,18 @@ import { authGuard } from '../middleware';
 
 const nullableString = () => t.Union([t.String(), t.Null()]);
 const eventScheduleSchema = t.Object({
-  type: t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(4)]),
-  startDate: nullableString(),
-  endDate: nullableString(),
-  startDateTime: nullableString(),
-  endDateTime: nullableString(),
-  timeZone: nullableString(),
+  type: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]),
+  startOn: nullableString(),
+  endOn: nullableString(),
 });
 const performancePersonSchema = t.Object({ personId: t.String(), name: t.String(), creditName: nullableString(), orderNo: t.Number() });
 const songPerformanceSchema = t.Object({ performanceId: t.String(), songId: t.String(), songTitle: t.String(), orderNo: t.Number(), coVocalists: t.Array(performancePersonSchema), isDisplay: t.Boolean() });
 const eventBodySchema = t.Object({
   title: t.String({ minLength: 1, maxLength: 255 }),
-  description: nullableString(),
+  description: t.String(),
   typeValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(99)]),
   schedule: eventScheduleSchema,
   statusValue: t.Union([t.Literal(1), t.Literal(2), t.Null()]),
-  postponedToEventId: nullableString(),
   isDisplay: t.Boolean(),
   venueIds: t.Array(t.String()),
   mediaIds: t.Array(t.String()),

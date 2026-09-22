@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 
 const { event } = Astro.props;
 ---
-<Layout pageTitle={event.title} pageDescription={event.description ?? `${event.title}の活動記録`} breadcrumbs={[{ label: '活動', href: '/events' }, { label: event.title, href: null }]}>
+<Layout pageTitle={event.title} pageDescription={event.description || `${event.title}のイベント記録`} breadcrumbs={[{ label: 'イベント', href: '/events' }, { label: event.title, href: null }]}>
   <section class="shell page-section detail-page">
     <div class="eyebrow">{eventTypeName(event.typeValue)}{eventStatusName(event.statusValue) ? ` — ${eventStatusName(event.statusValue)}` : ''}</div>
     <h1 class="page-title">{event.title}</h1>

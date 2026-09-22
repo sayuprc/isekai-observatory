@@ -8,9 +8,9 @@ import Layout from '../../layouts/Layout.astro';
 
 const events = await eventContentRepository.all();
 ---
-<Layout pageTitle="活動" pageDescription="ヰ世界情緒のライブ、配信、個展などの活動記録">
+<Layout pageTitle="イベント" pageDescription="ヰ世界情緒のライブ、配信、個展などのイベント記録">
   <section class="shell page-section">
-    <SectionHead title="活動" level={1} />
+    <SectionHead title="イベント" level={1} />
     <FilterBar
       client:idle
       filters={[
@@ -27,7 +27,7 @@ const events = await eventContentRepository.all();
     />
     <EntryStatus client:idle entrySelector="[data-event-entry]" emptySelector="[data-event-empty]" initialCount={events.length} />
     <div class="entry-empty entry-empty-panel" data-event-empty hidden>
-      <div class="entry-empty-title">該当する活動がありません</div>
+      <div class="entry-empty-title">該当するイベントがありません</div>
       <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
     </div>
     <div class="entry-list">
