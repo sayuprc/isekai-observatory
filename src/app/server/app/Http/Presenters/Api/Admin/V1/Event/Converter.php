@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Admin\V1\Event;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use Event\Domain\Models\Event;
 use Media\Domain\Models\MediaType;
 use Venue\Domain\Models\VenueKind;
@@ -23,7 +22,7 @@ class Converter
     {
         return [
             'eventId' => $event->eventId, 'title' => $event->title, 'description' => $event->description, 'typeValue' => $event->type->value,
-            'schedule' => $this->toSchedule($event), 'statusValue' => $event->status?->value, 'postponedToEventId' => $event->postponedToEventId, 'isDisplay' => $event->isDisplay,
+            'schedule' => $this->toSchedule($event), 'statusValue' => $event->status?->value, 'isDisplay' => $event->isDisplay,
             'venues' => array_map(static function (array $venue): array {
                 $kind = VenueKind::from($venue['kind']);
 
@@ -50,17 +49,9 @@ class Converter
         return ['performanceId' => $performance['performance_id'], 'songId' => $performance['song_id'], 'songTitle' => $performance['song_title'], 'orderNo' => $performance['order_no'], 'isDisplay' => $performance['is_display'], 'coVocalists' => array_map(static fn (array $person): array => ['personId' => $person['person_id'], 'name' => $person['name'], 'creditName' => $person['credit_name'], 'orderNo' => $person['order_no']], $performance['co_vocalists'])];
     }
 
-    /** @return array{type: int, startDate: ?string, endDate: ?string, startDateTime: ?string, endDateTime: ?string, timeZone: ?string} */
+    /** @return array{type: int, startOn: ?string, endOn: ?string} */
     private function toSchedule(Event $event): array
     {
-        $schedule = $event->schedule();
-        foreach (['startDateTime', 'endDateTime'] as $key) {
-            if ($schedule[$key] !== null) {
-                $zone = $event->timeZone === null ? null : new DateTimeZone($event->timeZone);
-                $schedule[$key] = new DateTimeImmutable($schedule[$key], $zone)->format(DATE_ATOM);
-            }
-        }
-
-        return $schedule;
+        return $event->schedule();
     }
 }

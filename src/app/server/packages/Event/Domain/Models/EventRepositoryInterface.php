@@ -17,7 +17,5 @@ interface EventRepositoryInterface
 
     public function save(Event $event): Event;
 
-    public function isReferenced(string $eventId): bool;
-
     public function delete(string $eventId): void;
 }

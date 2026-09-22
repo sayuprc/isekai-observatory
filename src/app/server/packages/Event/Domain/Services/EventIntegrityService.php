@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Event\Domain\Services;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use Event\Domain\Models\Event;
 use Event\Domain\Models\EventScheduleType;
-use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Exception;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
@@ -25,16 +23,6 @@ readonly class EventIntegrityService
 
         if (! in_array($event->type, [EventType::Live, EventType::Stream], true) && $event->setlist !== []) {
             throw new BusinessRuleViolationException('ライブまたは配信以外の活動にはセットリストを設定できません');
-        }
-
-        if ($event->status === EventStatus::Postponed && $event->postponedToEventId === null) {
-            throw new BusinessRuleViolationException('延期する活動には延期先活動を指定してください');
-        }
-        if ($event->status !== EventStatus::Postponed && $event->postponedToEventId !== null) {
-            throw new BusinessRuleViolationException('延期先活動は延期状態の活動にだけ指定できます');
-        }
-        if ($event->postponedToEventId === $event->eventId) {
-            throw new BusinessRuleViolationException('活動を自分自身へ延期することはできません');
         }
 
         $this->assertUnique(array_column($event->venues, 'venue_id'), '開催先');
@@ -74,32 +62,25 @@ readonly class EventIntegrityService
 
     private function validateSchedule(Event $event): void
     {
-        $hasDate = $event->startDate !== null;
-        $hasEndDate = $event->endDate !== null;
-        $hasDateTime = $event->startAt !== null;
-        $hasEndDateTime = $event->endAt !== null;
-        $hasTimeZone = $event->timeZone !== null;
+        $hasDate = $event->startOn !== null;
+        $hasEndDate = $event->endOn !== null;
 
         $valid = match ($event->scheduleType) {
-            EventScheduleType::Undated => ! $hasDate    && ! $hasEndDate && ! $hasDateTime && ! $hasEndDateTime && ! $hasTimeZone,
-            EventScheduleType::Date => $hasDate         && ! $hasEndDate && ! $hasDateTime && ! $hasEndDateTime && ! $hasTimeZone,
-            EventScheduleType::DateRange => $hasDate    && $hasEndDate && ! $hasDateTime && ! $hasEndDateTime && ! $hasTimeZone,
-            EventScheduleType::DateTime => $hasDateTime && ! $hasDate && ! $hasEndDate && ! $hasEndDateTime && $hasTimeZone,
+            EventScheduleType::Undated => ! $hasDate && ! $hasEndDate,
+            EventScheduleType::Date => $hasDate && ! $hasEndDate,
+            EventScheduleType::DateRange => $hasDate && $hasEndDate,
         };
 
         if (! $valid) {
             throw new BusinessRuleViolationException('開催時期の種別と指定項目が一致していません');
         }
 
-        if ($event->scheduleType === EventScheduleType::DateRange && $event->startDate > $event->endDate) {
+        if ($event->scheduleType === EventScheduleType::DateRange && $event->startOn > $event->endOn) {
             throw new BusinessRuleViolationException('開催終了日は開始日以降を指定してください');
-        }
-        if ($event->scheduleType === EventScheduleType::DateTime && $event->endAt !== null && $event->startAt > $event->endAt) {
-            throw new BusinessRuleViolationException('開催終了日時は開始日時以降を指定してください');
         }
 
         // 契約で形式検証済みだが、CLI や内部呼び出しでも壊れた日付を永続化しない。
-        foreach ([$event->startDate, $event->endDate, $event->startAt, $event->endAt] as $value) {
+        foreach ([$event->startOn, $event->endOn] as $value) {
             if ($value !== null) {
                 try {
                     new DateTimeImmutable($value);
@@ -109,13 +90,6 @@ readonly class EventIntegrityService
             }
         }
 
-        if ($event->timeZone !== null) {
-            try {
-                new DateTimeZone($event->timeZone);
-            } catch (Exception) {
-                throw new BusinessRuleViolationException('開催時期のタイムゾーンが不正です');
-            }
-        }
     }
 
     /** @param list<int|string> $values */

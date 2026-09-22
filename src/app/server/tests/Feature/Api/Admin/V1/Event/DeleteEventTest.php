@@ -35,33 +35,22 @@ class DeleteEventTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function rejectsDeletingAnEventInPostponementChain(): void
+    public function canDeletePostponedEventWithoutTargetLink(): void
     {
-        $targetId = $this->generateUuid();
-        $sourceId = $this->generateUuid();
-        $this->storeEvents(
-            $this->event($targetId),
-            $this->event($sourceId, 1, $targetId),
-        );
+        $eventId = $this->generateUuid();
+        $this->storeEvents($this->event($eventId, 1));
 
-        $client = $this->withAuth();
-        $client->delete(route(EventRouteMap::Delete, $targetId))
-            ->assertStatus(400)
-            ->assertJsonPath('code', 'business_rule_violation');
-        $client->delete(route(EventRouteMap::Delete, $sourceId))
-            ->assertStatus(400)
-            ->assertJsonPath('code', 'business_rule_violation');
+        $this->withAuth()->delete(route(EventRouteMap::Delete, $eventId))->assertStatus(204);
     }
 
-    private function event(string $eventId, int $status = 0, ?string $postponedToEventId = null): Event
+    private function event(string $eventId, int $status = 0): Event
     {
         return Event::fromInput($eventId, [
             'title' => $status === 0 ? '削除できる活動' : '延期元活動',
-            'description' => null,
+            'description' => '',
             'typeValue' => 1,
-            'schedule' => ['type' => 2, 'startDate' => '2026-10-01', 'endDate' => null, 'startDateTime' => null, 'endDateTime' => null, 'timeZone' => null],
+            'schedule' => ['type' => 2, 'startOn' => '2026-10-01', 'endOn' => null],
             'statusValue' => $status === 0 ? null : 1,
-            'postponedToEventId' => $postponedToEventId,
             'isDisplay' => true,
             'venueIds' => [],
             'mediaIds' => [],

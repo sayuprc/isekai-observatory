@@ -6,7 +6,7 @@ namespace Song\Application\Viewer\Query;
 
 readonly class SongPerformanceHistory
 {
-    /** @param array{type: int, startDate: ?string, endDate: ?string, startDateTime: ?string, endDateTime: ?string, timeZone: ?string} $schedule */
+    /** @param array{type: int, startOn: ?string, endOn: ?string} $schedule */
     public function __construct(
         public string $eventId,
         public string $eventTitle,

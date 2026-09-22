@@ -8,7 +8,6 @@ use AdminUser\Domain\Models\Permission;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
 use Support\Contracts\TransactionInterface;
-use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -32,9 +31,6 @@ readonly class DeleteUseCase
             $event = $this->repository->find($inputData->eventId);
             if ($event === null) {
                 throw new ResourceNotFoundException('Event', $inputData->eventId);
-            }
-            if ($event->postponedToEventId !== null || $this->repository->isReferenced($inputData->eventId)) {
-                throw new BusinessRuleViolationException('延期関係にある活動は削除できません');
             }
             $this->repository->delete($inputData->eventId);
             $this->recorder->record(AuditAction::Delete, AuditTargetType::Event, new EventId($event->eventId), $event->toArray());

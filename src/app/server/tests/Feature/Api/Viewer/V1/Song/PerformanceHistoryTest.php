@@ -28,11 +28,10 @@ class PerformanceHistoryTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storeEvents(Event::fromInput($eventId, [
             'title' => '披露ライブ',
-            'description' => null,
+            'description' => '',
             'typeValue' => 1,
-            'schedule' => ['type' => 2, 'startDate' => '2026-10-01', 'endDate' => null, 'startDateTime' => null, 'endDateTime' => null, 'timeZone' => null],
+            'schedule' => ['type' => 2, 'startOn' => '2026-10-01', 'endOn' => null],
             'statusValue' => null,
-            'postponedToEventId' => null,
             'isDisplay' => true,
             'venueIds' => [],
             'mediaIds' => [],

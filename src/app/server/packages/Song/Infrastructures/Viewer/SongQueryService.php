@@ -311,13 +311,13 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_performances.song_id', 'song_performances.performance_id', 'events.event_id', 'events.title', 'events.type', 'events.schedule_type', 'events.start_date', 'events.end_date', 'events.start_at', 'events.end_at', 'events.time_zone'])
+                ->withSelect(['song_performances.song_id', 'song_performances.performance_id', 'events.event_id', 'events.title', 'events.type', 'events.schedule_type', 'events.start_on', 'events.end_on'])
                 ->from('song_performances')
                 ->join('events', 'song_performances.event_id = events.event_id')
                 ->where('song_performances.song_id', 'IN', $binSongIds)
                 ->where('song_performances.is_display', '=', true)
                 ->where('events.is_display', '=', true)
-                ->orderBy('events.start_date', 'desc'),
+                ->orderBy('events.start_on', 'desc'),
         );
 
         $performanceIds = array_map(static fn (array $row): string => Row::string($row, 'performance_id'), $rows);
@@ -332,11 +332,8 @@ readonly class SongQueryService implements SongQueryServiceInterface
                 Row::int($row, 'type'),
                 [
                     'type' => Row::int($row, 'schedule_type'),
-                    'startDate' => Row::nullableString($row, 'start_date'),
-                    'endDate' => Row::nullableString($row, 'end_date'),
-                    'startDateTime' => Row::nullableString($row, 'start_at'),
-                    'endDateTime' => Row::nullableString($row, 'end_at'),
-                    'timeZone' => Row::nullableString($row, 'time_zone'),
+                    'startOn' => Row::nullableString($row, 'start_on'),
+                    'endOn' => Row::nullableString($row, 'end_on'),
                 ],
                 $coVocalistsByPerformance[$performanceId] ?? [],
             );

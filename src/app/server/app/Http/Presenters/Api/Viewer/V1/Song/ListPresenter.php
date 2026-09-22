@@ -90,15 +90,9 @@ class ListPresenter
         $scheduleModel = new IsekaiObservatoryPackagesEventEventSchedule()
             ->setType(EventScheduleTypeValue::from($schedule['type']))
             /** @phpstan-ignore-next-line */
-            ->setStartDate($schedule['startDate'] === null ? null : new DateTime($schedule['startDate']))
+            ->setStartOn($schedule['startOn'] === null ? null : new DateTime($schedule['startOn']))
             /** @phpstan-ignore-next-line */
-            ->setEndDate($schedule['endDate'] === null ? null : new DateTime($schedule['endDate']))
-            /** @phpstan-ignore-next-line */
-            ->setStartDateTime($schedule['startDateTime'] === null ? null : new DateTime($schedule['startDateTime']))
-            /** @phpstan-ignore-next-line */
-            ->setEndDateTime($schedule['endDateTime'] === null ? null : new DateTime($schedule['endDateTime']))
-            /** @phpstan-ignore-next-line */
-            ->setTimeZone($schedule['timeZone']);
+            ->setEndOn($schedule['endOn'] === null ? null : new DateTime($schedule['endOn']));
 
         return new OpenApiSongPerformanceHistory()
             ->setEventId($performance->eventId)

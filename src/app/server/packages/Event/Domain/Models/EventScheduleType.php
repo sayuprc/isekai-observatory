@@ -11,6 +11,4 @@ enum EventScheduleType: int
     case Date = 2;
 
     case DateRange = 3;
-
-    case DateTime = 4;
 }

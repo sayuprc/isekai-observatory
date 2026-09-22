@@ -16,16 +16,12 @@ class Event
     public function __construct(
         public string $eventId,
         public string $title,
-        public ?string $description,
+        public string $description,
         public EventType $type,
         public EventScheduleType $scheduleType,
-        public ?string $startDate,
-        public ?string $endDate,
-        public ?string $startAt,
-        public ?string $endAt,
-        public ?string $timeZone,
+        public ?string $startOn,
+        public ?string $endOn,
         public ?EventStatus $status,
-        public ?string $postponedToEventId,
         public bool $isDisplay,
         public array $venues = [],
         public array $media = [],
@@ -45,16 +41,12 @@ class Event
         return new self(
             $eventId,
             self::stringValue(self::at($data, 'title')),
-            self::nullableString(self::at($data, 'description')),
+            self::stringValue(self::at($data, 'description')),
             EventType::from(self::intValue(self::at($data, 'typeValue'))),
             EventScheduleType::from(self::intValue(self::at($schedule, 'type'), EventScheduleType::Undated->value)),
-            self::nullableString(self::at($schedule, 'startDate')),
-            self::nullableString(self::at($schedule, 'endDate')),
-            self::nullableString(self::at($schedule, 'startDateTime')),
-            self::nullableString(self::at($schedule, 'endDateTime')),
-            self::nullableString(self::at($schedule, 'timeZone')),
+            self::nullableString(self::at($schedule, 'startOn')),
+            self::nullableString(self::at($schedule, 'endOn')),
             self::nullableEnumValue(self::at($data, 'statusValue'), EventStatus::class),
-            self::nullableString(self::at($data, 'postponedToEventId')),
             self::boolValue(self::at($data, 'isDisplay')),
             self::venueIds(self::at($data, 'venueIds')),
             self::mediaIds(self::at($data, 'mediaIds')),
@@ -64,7 +56,7 @@ class Event
         );
     }
 
-    /** @return array{event_id: string, title: string, description: ?string, type: int, schedule_type: int, start_date: ?string, end_date: ?string, start_at: ?string, end_at: ?string, time_zone: ?string, status: ?int, postponed_to_event_id: ?string, is_display: bool} */
+    /** @return array{event_id: string, title: string, description: string, type: int, schedule_type: int, start_on: ?string, end_on: ?string, status: ?int, is_display: bool} */
     public function toArray(): array
     {
         return [
@@ -73,27 +65,20 @@ class Event
             'description' => $this->description,
             'type' => $this->type->value,
             'schedule_type' => $this->scheduleType->value,
-            'start_date' => $this->startDate,
-            'end_date' => $this->endDate,
-            'start_at' => $this->startAt,
-            'end_at' => $this->endAt,
-            'time_zone' => $this->timeZone,
+            'start_on' => $this->startOn,
+            'end_on' => $this->endOn,
             'status' => $this->status?->value,
-            'postponed_to_event_id' => $this->postponedToEventId,
             'is_display' => $this->isDisplay,
         ];
     }
 
-    /** @return array{type: int, startDate: ?string, endDate: ?string, startDateTime: ?string, endDateTime: ?string, timeZone: ?string} */
+    /** @return array{type: int, startOn: ?string, endOn: ?string} */
     public function schedule(): array
     {
         return [
             'type' => $this->scheduleType->value,
-            'startDate' => $this->startDate,
-            'endDate' => $this->endDate,
-            'startDateTime' => $this->startAt,
-            'endDateTime' => $this->endAt,
-            'timeZone' => $this->timeZone,
+            'startOn' => $this->startOn,
+            'endOn' => $this->endOn,
         ];
     }
 

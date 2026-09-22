@@ -69,16 +69,15 @@ class ListEventTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function formatsDateTimeScheduleForPublicContract(): void
+    public function formatsDateRangeScheduleForPublicContract(): void
     {
         $eventId = $this->generateUuid();
         $this->storeEvents(Event::fromInput($eventId, [
             'title' => '日時付き活動',
-            'description' => null,
+            'description' => '',
             'typeValue' => 2,
-            'schedule' => ['type' => 4, 'startDate' => null, 'endDate' => null, 'startDateTime' => '2026-10-01T10:30:00+09:00', 'endDateTime' => '2026-10-01T12:00:00+09:00', 'timeZone' => 'Asia/Tokyo'],
+            'schedule' => ['type' => 3, 'startOn' => '2026-10-01', 'endOn' => '2026-10-03'],
             'statusValue' => null,
-            'postponedToEventId' => null,
             'isDisplay' => true,
             'venueIds' => [],
             'mediaIds' => [],
@@ -90,8 +89,8 @@ class ListEventTest extends DatabaseTestCase
         $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
             ->assertStatus(200)
             ->assertJsonPath('events.0.eventId', $eventId)
-            ->assertJsonPath('events.0.schedule.startDateTime', '2026-10-01T10:30:00+09:00')
-            ->assertJsonPath('events.0.schedule.endDateTime', '2026-10-01T12:00:00+09:00');
+            ->assertJsonPath('events.0.schedule.startOn', '2026-10-01')
+            ->assertJsonPath('events.0.schedule.endOn', '2026-10-03');
     }
 
     private function event(
@@ -109,9 +108,8 @@ class ListEventTest extends DatabaseTestCase
             'title' => '公開ライブ',
             'description' => '説明',
             'typeValue' => 1,
-            'schedule' => ['type' => 2, 'startDate' => '2026-10-01', 'endDate' => null, 'startDateTime' => null, 'endDateTime' => null, 'timeZone' => null],
+            'schedule' => ['type' => 2, 'startOn' => '2026-10-01', 'endOn' => null],
             'statusValue' => null,
-            'postponedToEventId' => null,
             'isDisplay' => true,
             'venueIds' => [$venueId],
             'mediaIds' => [$visibleMediaId, $hiddenMediaId],

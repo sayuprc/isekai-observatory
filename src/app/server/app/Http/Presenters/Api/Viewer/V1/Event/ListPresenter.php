@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Viewer\V1\Event;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use Event\Application\Viewer\UseCase\List\ListOutputData;
 use Event\Domain\Models\Event;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +27,7 @@ class ListPresenter
     {
         return [
             'eventId' => $event->eventId, 'title' => $event->title, 'description' => $event->description, 'typeValue' => $event->type->value,
-            'schedule' => $this->toSchedule($event), 'statusValue' => $event->status?->value, 'postponedToEventId' => $event->postponedToEventId,
+            'schedule' => $this->toSchedule($event), 'statusValue' => $event->status?->value,
             'venues' => array_map(static fn (array $venue): array => ['venueId' => $venue['venue_id'], 'name' => $venue['name'], 'kindName' => $venue['kind'] === 2 ? '配信' : '現地'], $event->venues),
             'media' => array_values(array_filter(array_map(static function (array $media): ?array {
                 if (! $media['is_display']) {
@@ -54,17 +53,9 @@ class ListPresenter
         return ['performanceId' => $performance['performance_id'], 'songId' => $performance['is_display'] && $performance['song_is_display'] ? $performance['song_id'] : null, 'songTitle' => $performance['song_title'], 'coVocalists' => array_map(static fn (array $person): array => ['personId' => $person['person_id'], 'name' => $person['name'], 'creditName' => $person['credit_name'], 'orderNo' => $person['order_no']], $performance['co_vocalists'])];
     }
 
-    /** @return array{type: int, startDate: ?string, endDate: ?string, startDateTime: ?string, endDateTime: ?string, timeZone: ?string} */
+    /** @return array{type: int, startOn: ?string, endOn: ?string} */
     private function toSchedule(Event $event): array
     {
-        $schedule = $event->schedule();
-        foreach (['startDateTime', 'endDateTime'] as $key) {
-            if ($schedule[$key] !== null) {
-                $zone = $event->timeZone === null ? null : new DateTimeZone($event->timeZone);
-                $schedule[$key] = new DateTimeImmutable($schedule[$key], $zone)->format(DATE_ATOM);
-            }
-        }
-
-        return $schedule;
+        return $event->schedule();
     }
 }

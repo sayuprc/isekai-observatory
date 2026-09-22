@@ -79,11 +79,10 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this->storeMedia($this->createMedia($mediaId, '配信', 'https://example.com/stream', MediaType::LiveStream, true));
         $this->storeEvents(Event::fromInput($this->generateUuid(), [
             'title' => '参照活動',
-            'description' => null,
+            'description' => '',
             'typeValue' => 1,
-            'schedule' => ['type' => 2, 'startDate' => '2026-10-01', 'endDate' => null, 'startDateTime' => null, 'endDateTime' => null, 'timeZone' => null],
+            'schedule' => ['type' => 2, 'startOn' => '2026-10-01', 'endOn' => null],
             'statusValue' => null,
-            'postponedToEventId' => null,
             'isDisplay' => true,
             'venueIds' => [$venueId],
             'mediaIds' => [$mediaId],

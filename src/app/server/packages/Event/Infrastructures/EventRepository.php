@@ -23,8 +23,7 @@ readonly class EventRepository implements EventRepositoryInterface
 
     /** @var list<string> */
     private const array COLUMNS = [
-        'event_id', 'title', 'description', 'type', 'schedule_type', 'start_date', 'end_date',
-        'start_at', 'end_at', 'time_zone', 'status', 'postponed_to_event_id', 'is_display',
+        'event_id', 'title', 'description', 'type', 'schedule_type', 'start_on', 'end_on', 'status', 'is_display',
     ];
 
     public function __construct(
@@ -38,7 +37,7 @@ readonly class EventRepository implements EventRepositoryInterface
     {
         $offset = ($criteria->page - 1) * $criteria->perPage->value;
         $query = $this->applyCriteria($this->queryFactory->select()->from(self::TABLE), $criteria);
-        $sort = $criteria->sort === 'title' ? 'title_lower' : 'start_date';
+        $sort = $criteria->sort === 'title' ? 'title_lower' : 'start_on';
         $rows = $this->queryFactory->fetchAll(
             $query
                 ->withSelect(self::COLUMNS)
@@ -98,16 +97,13 @@ readonly class EventRepository implements EventRepositoryInterface
 
         $data = $event->toArray();
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['event_id', 'title', 'description', 'type', 'schedule_type', 'start_date', 'end_date', 'start_at', 'end_at', 'time_zone', 'status', 'postponed_to_event_id', 'is_display', 'created_at', 'updated_at'])
+            ->into(self::TABLE, ['event_id', 'title', 'description', 'type', 'schedule_type', 'start_on', 'end_on', 'status', 'is_display', 'created_at', 'updated_at'])
             ->values([
-                $binEventId,
-                $data['title'], $data['description'], $data['type'], $data['schedule_type'], $data['start_date'], $data['end_date'],
-                $data['start_at'], $data['end_at'], $data['time_zone'], $data['status'],
-                $data['postponed_to_event_id'] === null ? null : $this->converter->toBin($data['postponed_to_event_id']),
-                $data['is_display'], $now, $now,
+                $binEventId, $data['title'], $data['description'], $data['type'], $data['schedule_type'], $data['start_on'], $data['end_on'],
+                $data['status'], $data['is_display'], $now, $now,
             ])
             ->build()
-            ->append('ON DUPLICATE KEY UPDATE `title` = VALUES(`title`), `description` = VALUES(`description`), `type` = VALUES(`type`), `schedule_type` = VALUES(`schedule_type`), `start_date` = VALUES(`start_date`), `end_date` = VALUES(`end_date`), `start_at` = VALUES(`start_at`), `end_at` = VALUES(`end_at`), `time_zone` = VALUES(`time_zone`), `status` = VALUES(`status`), `postponed_to_event_id` = VALUES(`postponed_to_event_id`), `is_display` = VALUES(`is_display`), `updated_at` = VALUES(`updated_at`)')
+            ->append('ON DUPLICATE KEY UPDATE `title` = VALUES(`title`), `description` = VALUES(`description`), `type` = VALUES(`type`), `schedule_type` = VALUES(`schedule_type`), `start_on` = VALUES(`start_on`), `end_on` = VALUES(`end_on`), `status` = VALUES(`status`), `is_display` = VALUES(`is_display`), `updated_at` = VALUES(`updated_at`)')
             ->execute($pdo);
 
         $venueRows = [];
@@ -172,19 +168,6 @@ readonly class EventRepository implements EventRepositoryInterface
     }
 
     #[Override]
-    public function isReferenced(string $eventId): bool
-    {
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from(self::TABLE)
-                ->where('postponed_to_event_id', '=', $this->converter->toBin($eventId))
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
-
-        return $count > 0;
-    }
-
-    #[Override]
     public function delete(string $eventId): void
     {
         $this->queryFactory->delete()->from(self::TABLE)->where('event_id', '=', $this->converter->toBin($eventId))->execute($this->queryFactory->pdo());
@@ -215,16 +198,12 @@ readonly class EventRepository implements EventRepositoryInterface
         $event = new Event(
             $this->converter->toUuid($binEventId),
             Row::string($row, 'title'),
-            Row::nullableString($row, 'description'),
+            Row::string($row, 'description'),
             EventType::from(Row::int($row, 'type')),
             EventScheduleType::from(Row::int($row, 'schedule_type')),
-            Row::nullableString($row, 'start_date'),
-            Row::nullableString($row, 'end_date'),
-            Row::nullableString($row, 'start_at'),
-            Row::nullableString($row, 'end_at'),
-            Row::nullableString($row, 'time_zone'),
+            Row::nullableString($row, 'start_on'),
+            Row::nullableString($row, 'end_on'),
             ($status = Row::nullableString($row, 'status')) === null ? null : EventStatus::from((int)$status),
-            ($postponed = Row::nullableString($row, 'postponed_to_event_id')) === null ? null : $this->converter->toUuid($postponed),
             Row::bool($row, 'is_display'),
         );
 
