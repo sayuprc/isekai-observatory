@@ -49,6 +49,7 @@
       "Release\\": "packages/Release/",
       "Person\\": "packages/Person/",
       "Venue\\": "packages/Venue/",
+      "Event\\": "packages/Event/",
       "AdminUser\\": "packages/AdminUser/",
       "Auth\\": "packages/Auth/",
       "Tools\\": "tools/",

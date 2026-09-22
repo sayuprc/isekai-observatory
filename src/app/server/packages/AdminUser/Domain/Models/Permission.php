@@ -32,6 +32,10 @@ enum Permission: string
 
     case WriteVenue = 'write_venue';
 
+    case ReadEvent = 'read_event';
+
+    case WriteEvent = 'write_event';
+
     public function getName(): string
     {
         return match ($this) {
@@ -48,6 +52,8 @@ enum Permission: string
             self::WriteRelease => 'リリース編集',
             self::ReadVenue => '開催先閲覧',
             self::WriteVenue => '開催先編集',
+            self::ReadEvent => '活動閲覧',
+            self::WriteEvent => '活動編集',
         };
     }
 }

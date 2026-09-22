@@ -8,6 +8,7 @@ use AdminUser\Domain\Models\Permission;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -35,6 +36,9 @@ readonly class DeleteUseCase
 
             if (is_null($song)) {
                 throw new ResourceNotFoundException('Song', $songId->value);
+            }
+            if ($this->repository->isUsed($songId)) {
+                throw new BusinessRuleViolationException('この楽曲は活動で披露されているため削除できません');
             }
 
             $this->repository->delete($songId);
