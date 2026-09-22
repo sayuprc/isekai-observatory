@@ -2,6 +2,8 @@
 import SectionHead from '../components/viewer/SectionHead.astro';
 import SongTile from '../components/viewer/SongTile.astro';
 import TrackChip from '../components/viewer/TrackChip.astro';
+import { eventContentRepository } from '../features/events/content';
+import { eventDate, eventStatusName, eventTypeName } from '../features/events/types';
 import { YOUTUBE_THUMBNAIL_ORIGIN, youtubeThumbnailFromUrl } from '../features/media/labels';
 import { releaseGroupContentRepository } from '../features/releases/content';
 import { representativeColor } from '../features/releases/types';
@@ -13,6 +15,7 @@ import { SITE_DESCRIPTION } from '../shared/site';
 const latestReleaseGroup = await releaseGroupContentRepository.latest();
 const latestSong = await songContentRepository.latest();
 const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap(medium => medium.tracks) ?? [];
+const upcomingEvents = (await eventContentRepository.all()).filter(event => event.statusValue === null && eventDate(event) !== null);
 
 const siteStats = await siteStatsRepository.get();
 const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry.url) !== null)
@@ -46,6 +49,7 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
   </section>
 
   <div class="shell home-feature-row">
+    {upcomingEvents.length > 0 && <section class="home-feature" data-upcoming-section hidden><SectionHead title="今後の予定" /><div class="entry-list">{upcomingEvents.map(event => <article class="entry-list-item" data-upcoming-event data-start={eventDate(event)}><div class="eyebrow">{eventTypeName(event.typeValue)} — {eventDate(event)}</div><h3 class="feature-title"><a href={`/events/${event.eventId}`}>{event.title}</a></h3>{eventStatusName(event.statusValue) && <p>{eventStatusName(event.statusValue)}</p>}</article>)}</div><a class="btn feature-more" href="/events">活動一覧 →</a></section>}
     {
       latestSong && (
         <section class="home-feature">
@@ -101,3 +105,21 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
     }
   </div>
 </Layout>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-upcoming-section]');
+  if (section) {
+    const entries = [...section.querySelectorAll<HTMLElement>('[data-upcoming-event]')];
+    const future = entries
+      .filter((entry) => {
+        const value = entry.dataset.start;
+        return value !== undefined && !Number.isNaN(new Date(value).getTime()) && new Date(value).getTime() >= Date.now();
+      })
+      .sort((left, right) => new Date(left.dataset.start ?? '').getTime() - new Date(right.dataset.start ?? '').getTime())
+      .slice(0, 3);
+    entries.forEach((entry) => {
+      entry.hidden = !future.includes(entry);
+    });
+    section.hidden = future.length === 0;
+  }
+</script>
