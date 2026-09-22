@@ -1,6 +1,6 @@
 <?php
 /**
- * SongListItem
+ * Event
  *
  * PHP version 8.1
  *
@@ -32,7 +32,7 @@ use \ArrayAccess;
 use \OpenAPI\Viewer\Client\ObjectSerializer;
 
 /**
- * SongListItem Class Doc Comment
+ * Event Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
@@ -40,7 +40,7 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
+class Event implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +49,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongListItem';
+    protected static $openAPIModelName = 'Event';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,17 +57,18 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'song_id' => 'string',
+        'event_id' => 'string',
         'title' => 'string',
         'description' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\SongType',
-        'counts' => '\OpenAPI\Viewer\Client\Model\SongRelationCounts',
-        'lyricists' => 'string[]',
-        'composers' => 'string[]',
-        'arrangers' => 'string[]',
-        'media' => '\OpenAPI\Viewer\Client\Model\SongMediaSummary[]',
-        'release_groups' => '\OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[]',
-        'performances' => '\OpenAPI\Viewer\Client\Model\SongPerformanceHistory[]'
+        'type_value' => '\OpenAPI\Viewer\Client\Model\EventTypeValue',
+        'schedule' => '\OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
+        'status_value' => '\OpenAPI\Viewer\Client\Model\EventStatusValue',
+        'postponed_to_event_id' => 'string',
+        'venues' => '\OpenAPI\Viewer\Client\Model\EventVenueSummary[]',
+        'media' => '\OpenAPI\Viewer\Client\Model\EventMediaSummary[]',
+        'sources' => '\OpenAPI\Viewer\Client\Model\EventSource[]',
+        'performances' => '\OpenAPI\Viewer\Client\Model\SongPerformance[]',
+        'setlist' => '\OpenAPI\Viewer\Client\Model\SetlistItem[]'
     ];
 
     /**
@@ -78,17 +79,18 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'song_id' => 'uuid',
+        'event_id' => 'uuid',
         'title' => null,
         'description' => null,
-        'type' => null,
-        'counts' => null,
-        'lyricists' => null,
-        'composers' => null,
-        'arrangers' => null,
+        'type_value' => null,
+        'schedule' => null,
+        'status_value' => null,
+        'postponed_to_event_id' => 'uuid',
+        'venues' => null,
         'media' => null,
-        'release_groups' => null,
-        'performances' => null
+        'sources' => null,
+        'performances' => null,
+        'setlist' => null
     ];
 
     /**
@@ -97,17 +99,18 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'song_id' => false,
+        'event_id' => false,
         'title' => false,
-        'description' => false,
-        'type' => false,
-        'counts' => false,
-        'lyricists' => false,
-        'composers' => false,
-        'arrangers' => false,
+        'description' => true,
+        'type_value' => false,
+        'schedule' => false,
+        'status_value' => true,
+        'postponed_to_event_id' => true,
+        'venues' => false,
         'media' => false,
-        'release_groups' => false,
-        'performances' => false
+        'sources' => false,
+        'performances' => false,
+        'setlist' => false
     ];
 
     /**
@@ -196,17 +199,18 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'song_id' => 'songId',
+        'event_id' => 'eventId',
         'title' => 'title',
         'description' => 'description',
-        'type' => 'type',
-        'counts' => 'counts',
-        'lyricists' => 'lyricists',
-        'composers' => 'composers',
-        'arrangers' => 'arrangers',
+        'type_value' => 'typeValue',
+        'schedule' => 'schedule',
+        'status_value' => 'statusValue',
+        'postponed_to_event_id' => 'postponedToEventId',
+        'venues' => 'venues',
         'media' => 'media',
-        'release_groups' => 'releaseGroups',
-        'performances' => 'performances'
+        'sources' => 'sources',
+        'performances' => 'performances',
+        'setlist' => 'setlist'
     ];
 
     /**
@@ -215,17 +219,18 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'song_id' => 'setSongId',
+        'event_id' => 'setEventId',
         'title' => 'setTitle',
         'description' => 'setDescription',
-        'type' => 'setType',
-        'counts' => 'setCounts',
-        'lyricists' => 'setLyricists',
-        'composers' => 'setComposers',
-        'arrangers' => 'setArrangers',
+        'type_value' => 'setTypeValue',
+        'schedule' => 'setSchedule',
+        'status_value' => 'setStatusValue',
+        'postponed_to_event_id' => 'setPostponedToEventId',
+        'venues' => 'setVenues',
         'media' => 'setMedia',
-        'release_groups' => 'setReleaseGroups',
-        'performances' => 'setPerformances'
+        'sources' => 'setSources',
+        'performances' => 'setPerformances',
+        'setlist' => 'setSetlist'
     ];
 
     /**
@@ -234,17 +239,18 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'song_id' => 'getSongId',
+        'event_id' => 'getEventId',
         'title' => 'getTitle',
         'description' => 'getDescription',
-        'type' => 'getType',
-        'counts' => 'getCounts',
-        'lyricists' => 'getLyricists',
-        'composers' => 'getComposers',
-        'arrangers' => 'getArrangers',
+        'type_value' => 'getTypeValue',
+        'schedule' => 'getSchedule',
+        'status_value' => 'getStatusValue',
+        'postponed_to_event_id' => 'getPostponedToEventId',
+        'venues' => 'getVenues',
         'media' => 'getMedia',
-        'release_groups' => 'getReleaseGroups',
-        'performances' => 'getPerformances'
+        'sources' => 'getSources',
+        'performances' => 'getPerformances',
+        'setlist' => 'getSetlist'
     ];
 
     /**
@@ -304,17 +310,18 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('song_id', $data ?? [], null);
+        $this->setIfExists('event_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
-        $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('counts', $data ?? [], null);
-        $this->setIfExists('lyricists', $data ?? [], null);
-        $this->setIfExists('composers', $data ?? [], null);
-        $this->setIfExists('arrangers', $data ?? [], null);
+        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('schedule', $data ?? [], null);
+        $this->setIfExists('status_value', $data ?? [], null);
+        $this->setIfExists('postponed_to_event_id', $data ?? [], null);
+        $this->setIfExists('venues', $data ?? [], null);
         $this->setIfExists('media', $data ?? [], null);
-        $this->setIfExists('release_groups', $data ?? [], null);
+        $this->setIfExists('sources', $data ?? [], null);
         $this->setIfExists('performances', $data ?? [], null);
+        $this->setIfExists('setlist', $data ?? [], null);
     }
 
     /**
@@ -344,8 +351,8 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['song_id'] === null) {
-            $invalidProperties[] = "'song_id' can't be null";
+        if ($this->container['event_id'] === null) {
+            $invalidProperties[] = "'event_id' can't be null";
         }
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
@@ -357,29 +364,32 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
         }
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
+        if ($this->container['type_value'] === null) {
+            $invalidProperties[] = "'type_value' can't be null";
         }
-        if ($this->container['counts'] === null) {
-            $invalidProperties[] = "'counts' can't be null";
+        if ($this->container['schedule'] === null) {
+            $invalidProperties[] = "'schedule' can't be null";
         }
-        if ($this->container['lyricists'] === null) {
-            $invalidProperties[] = "'lyricists' can't be null";
+        if ($this->container['status_value'] === null) {
+            $invalidProperties[] = "'status_value' can't be null";
         }
-        if ($this->container['composers'] === null) {
-            $invalidProperties[] = "'composers' can't be null";
+        if ($this->container['postponed_to_event_id'] === null) {
+            $invalidProperties[] = "'postponed_to_event_id' can't be null";
         }
-        if ($this->container['arrangers'] === null) {
-            $invalidProperties[] = "'arrangers' can't be null";
+        if ($this->container['venues'] === null) {
+            $invalidProperties[] = "'venues' can't be null";
         }
         if ($this->container['media'] === null) {
             $invalidProperties[] = "'media' can't be null";
         }
-        if ($this->container['release_groups'] === null) {
-            $invalidProperties[] = "'release_groups' can't be null";
+        if ($this->container['sources'] === null) {
+            $invalidProperties[] = "'sources' can't be null";
         }
         if ($this->container['performances'] === null) {
             $invalidProperties[] = "'performances' can't be null";
+        }
+        if ($this->container['setlist'] === null) {
+            $invalidProperties[] = "'setlist' can't be null";
         }
         return $invalidProperties;
     }
@@ -397,28 +407,28 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets song_id
+     * Gets event_id
      *
      * @return string
      */
-    public function getSongId()
+    public function getEventId()
     {
-        return $this->container['song_id'];
+        return $this->container['event_id'];
     }
 
     /**
-     * Sets song_id
+     * Sets event_id
      *
-     * @param string $song_id 楽曲ID
+     * @param string $event_id 活動ID
      *
      * @return self
      */
-    public function setSongId($song_id)
+    public function setEventId($event_id)
     {
-        if (is_null($song_id)) {
-            throw new \InvalidArgumentException('non-nullable song_id cannot be null');
+        if (is_null($event_id)) {
+            throw new \InvalidArgumentException('non-nullable event_id cannot be null');
         }
-        $this->container['song_id'] = $song_id;
+        $this->container['event_id'] = $event_id;
 
         return $this;
     }
@@ -436,7 +446,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets title
      *
-     * @param string $title 楽曲名
+     * @param string $title 活動タイトル
      *
      * @return self
      */
@@ -447,7 +457,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling SongListItem., must be bigger than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $title when calling Event., must be bigger than or equal to 1.');
         }
 
         $this->container['title'] = $title;
@@ -468,14 +478,21 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets description
      *
-     * @param string $description 楽曲の説明
+     * @param string $description 活動説明
      *
      * @return self
      */
     public function setDescription($description)
     {
         if (is_null($description)) {
-            throw new \InvalidArgumentException('non-nullable description cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'description');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('description', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['description'] = $description;
 
@@ -483,136 +500,150 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets type
+     * Gets type_value
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongType
+     * @return \OpenAPI\Viewer\Client\Model\EventTypeValue
      */
-    public function getType()
+    public function getTypeValue()
     {
-        return $this->container['type'];
+        return $this->container['type_value'];
     }
 
     /**
-     * Sets type
+     * Sets type_value
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongType $type type
+     * @param \OpenAPI\Viewer\Client\Model\EventTypeValue $type_value type_value
      *
      * @return self
      */
-    public function setType($type)
+    public function setTypeValue($type_value)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if (is_null($type_value)) {
+            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
         }
-        $this->container['type'] = $type;
+        $this->container['type_value'] = $type_value;
 
         return $this;
     }
 
     /**
-     * Gets counts
+     * Gets schedule
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongRelationCounts
+     * @return \OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule
      */
-    public function getCounts()
+    public function getSchedule()
     {
-        return $this->container['counts'];
+        return $this->container['schedule'];
     }
 
     /**
-     * Sets counts
+     * Sets schedule
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongRelationCounts $counts counts
+     * @param \OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule $schedule schedule
      *
      * @return self
      */
-    public function setCounts($counts)
+    public function setSchedule($schedule)
     {
-        if (is_null($counts)) {
-            throw new \InvalidArgumentException('non-nullable counts cannot be null');
+        if (is_null($schedule)) {
+            throw new \InvalidArgumentException('non-nullable schedule cannot be null');
         }
-        $this->container['counts'] = $counts;
+        $this->container['schedule'] = $schedule;
 
         return $this;
     }
 
     /**
-     * Gets lyricists
+     * Gets status_value
      *
-     * @return string[]
+     * @return \OpenAPI\Viewer\Client\Model\EventStatusValue
      */
-    public function getLyricists()
+    public function getStatusValue()
     {
-        return $this->container['lyricists'];
+        return $this->container['status_value'];
     }
 
     /**
-     * Sets lyricists
+     * Sets status_value
      *
-     * @param string[] $lyricists lyricists
+     * @param \OpenAPI\Viewer\Client\Model\EventStatusValue $status_value status_value
      *
      * @return self
      */
-    public function setLyricists($lyricists)
+    public function setStatusValue($status_value)
     {
-        if (is_null($lyricists)) {
-            throw new \InvalidArgumentException('non-nullable lyricists cannot be null');
+        if (is_null($status_value)) {
+            array_push($this->openAPINullablesSetToNull, 'status_value');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('status_value', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['lyricists'] = $lyricists;
+        $this->container['status_value'] = $status_value;
 
         return $this;
     }
 
     /**
-     * Gets composers
+     * Gets postponed_to_event_id
      *
-     * @return string[]
+     * @return string
      */
-    public function getComposers()
+    public function getPostponedToEventId()
     {
-        return $this->container['composers'];
+        return $this->container['postponed_to_event_id'];
     }
 
     /**
-     * Sets composers
+     * Sets postponed_to_event_id
      *
-     * @param string[] $composers composers
+     * @param string $postponed_to_event_id 活動ID
      *
      * @return self
      */
-    public function setComposers($composers)
+    public function setPostponedToEventId($postponed_to_event_id)
     {
-        if (is_null($composers)) {
-            throw new \InvalidArgumentException('non-nullable composers cannot be null');
+        if (is_null($postponed_to_event_id)) {
+            array_push($this->openAPINullablesSetToNull, 'postponed_to_event_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('postponed_to_event_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['composers'] = $composers;
+        $this->container['postponed_to_event_id'] = $postponed_to_event_id;
 
         return $this;
     }
 
     /**
-     * Gets arrangers
+     * Gets venues
      *
-     * @return string[]
+     * @return \OpenAPI\Viewer\Client\Model\EventVenueSummary[]
      */
-    public function getArrangers()
+    public function getVenues()
     {
-        return $this->container['arrangers'];
+        return $this->container['venues'];
     }
 
     /**
-     * Sets arrangers
+     * Sets venues
      *
-     * @param string[] $arrangers arrangers
+     * @param \OpenAPI\Viewer\Client\Model\EventVenueSummary[] $venues venues
      *
      * @return self
      */
-    public function setArrangers($arrangers)
+    public function setVenues($venues)
     {
-        if (is_null($arrangers)) {
-            throw new \InvalidArgumentException('non-nullable arrangers cannot be null');
+        if (is_null($venues)) {
+            throw new \InvalidArgumentException('non-nullable venues cannot be null');
         }
-        $this->container['arrangers'] = $arrangers;
+        $this->container['venues'] = $venues;
 
         return $this;
     }
@@ -620,7 +651,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets media
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongMediaSummary[]
+     * @return \OpenAPI\Viewer\Client\Model\EventMediaSummary[]
      */
     public function getMedia()
     {
@@ -630,7 +661,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets media
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongMediaSummary[] $media media
+     * @param \OpenAPI\Viewer\Client\Model\EventMediaSummary[] $media media
      *
      * @return self
      */
@@ -645,28 +676,28 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets release_groups
+     * Gets sources
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[]
+     * @return \OpenAPI\Viewer\Client\Model\EventSource[]
      */
-    public function getReleaseGroups()
+    public function getSources()
     {
-        return $this->container['release_groups'];
+        return $this->container['sources'];
     }
 
     /**
-     * Sets release_groups
+     * Sets sources
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[] $release_groups 収録先の公開リリースグループ(最古発売日の降順)
+     * @param \OpenAPI\Viewer\Client\Model\EventSource[] $sources sources
      *
      * @return self
      */
-    public function setReleaseGroups($release_groups)
+    public function setSources($sources)
     {
-        if (is_null($release_groups)) {
-            throw new \InvalidArgumentException('non-nullable release_groups cannot be null');
+        if (is_null($sources)) {
+            throw new \InvalidArgumentException('non-nullable sources cannot be null');
         }
-        $this->container['release_groups'] = $release_groups;
+        $this->container['sources'] = $sources;
 
         return $this;
     }
@@ -674,7 +705,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets performances
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[]
+     * @return \OpenAPI\Viewer\Client\Model\SongPerformance[]
      */
     public function getPerformances()
     {
@@ -684,7 +715,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets performances
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[] $performances 公開活動での披露履歴(開催時期の新しい順)
+     * @param \OpenAPI\Viewer\Client\Model\SongPerformance[] $performances performances
      *
      * @return self
      */
@@ -694,6 +725,33 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable performances cannot be null');
         }
         $this->container['performances'] = $performances;
+
+        return $this;
+    }
+
+    /**
+     * Gets setlist
+     *
+     * @return \OpenAPI\Viewer\Client\Model\SetlistItem[]
+     */
+    public function getSetlist()
+    {
+        return $this->container['setlist'];
+    }
+
+    /**
+     * Sets setlist
+     *
+     * @param \OpenAPI\Viewer\Client\Model\SetlistItem[] $setlist setlist
+     *
+     * @return self
+     */
+    public function setSetlist($setlist)
+    {
+        if (is_null($setlist)) {
+            throw new \InvalidArgumentException('non-nullable setlist cannot be null');
+        }
+        $this->container['setlist'] = $setlist;
 
         return $this;
     }
@@ -787,5 +845,3 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

@@ -1,6 +1,6 @@
 <?php
 /**
- * SongListItem
+ * IsekaiObservatoryPackagesEventEventSchedule
  *
  * PHP version 8.1
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \OpenAPI\Viewer\Client\ObjectSerializer;
 
 /**
- * SongListItem Class Doc Comment
+ * IsekaiObservatoryPackagesEventEventSchedule Class Doc Comment
  *
  * @category Class
+ * @description 活動の開催時期。type に応じた項目のみを設定する
  * @package  OpenAPI\Viewer\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
+class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongListItem';
+    protected static $openAPIModelName = 'IsekaiObservatory.Packages.Event.EventSchedule';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,17 +58,12 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'song_id' => 'string',
-        'title' => 'string',
-        'description' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\SongType',
-        'counts' => '\OpenAPI\Viewer\Client\Model\SongRelationCounts',
-        'lyricists' => 'string[]',
-        'composers' => 'string[]',
-        'arrangers' => 'string[]',
-        'media' => '\OpenAPI\Viewer\Client\Model\SongMediaSummary[]',
-        'release_groups' => '\OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[]',
-        'performances' => '\OpenAPI\Viewer\Client\Model\SongPerformanceHistory[]'
+        'type' => '\OpenAPI\Viewer\Client\Model\EventScheduleTypeValue',
+        'start_date' => '\DateTime',
+        'end_date' => '\DateTime',
+        'start_date_time' => '\DateTime',
+        'end_date_time' => '\DateTime',
+        'time_zone' => 'string'
     ];
 
     /**
@@ -78,17 +74,12 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'song_id' => 'uuid',
-        'title' => null,
-        'description' => null,
         'type' => null,
-        'counts' => null,
-        'lyricists' => null,
-        'composers' => null,
-        'arrangers' => null,
-        'media' => null,
-        'release_groups' => null,
-        'performances' => null
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'start_date_time' => 'date-time',
+        'end_date_time' => 'date-time',
+        'time_zone' => null
     ];
 
     /**
@@ -97,17 +88,12 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'song_id' => false,
-        'title' => false,
-        'description' => false,
         'type' => false,
-        'counts' => false,
-        'lyricists' => false,
-        'composers' => false,
-        'arrangers' => false,
-        'media' => false,
-        'release_groups' => false,
-        'performances' => false
+        'start_date' => true,
+        'end_date' => true,
+        'start_date_time' => true,
+        'end_date_time' => true,
+        'time_zone' => true
     ];
 
     /**
@@ -196,17 +182,12 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'song_id' => 'songId',
-        'title' => 'title',
-        'description' => 'description',
         'type' => 'type',
-        'counts' => 'counts',
-        'lyricists' => 'lyricists',
-        'composers' => 'composers',
-        'arrangers' => 'arrangers',
-        'media' => 'media',
-        'release_groups' => 'releaseGroups',
-        'performances' => 'performances'
+        'start_date' => 'startDate',
+        'end_date' => 'endDate',
+        'start_date_time' => 'startDateTime',
+        'end_date_time' => 'endDateTime',
+        'time_zone' => 'timeZone'
     ];
 
     /**
@@ -215,17 +196,12 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'song_id' => 'setSongId',
-        'title' => 'setTitle',
-        'description' => 'setDescription',
         'type' => 'setType',
-        'counts' => 'setCounts',
-        'lyricists' => 'setLyricists',
-        'composers' => 'setComposers',
-        'arrangers' => 'setArrangers',
-        'media' => 'setMedia',
-        'release_groups' => 'setReleaseGroups',
-        'performances' => 'setPerformances'
+        'start_date' => 'setStartDate',
+        'end_date' => 'setEndDate',
+        'start_date_time' => 'setStartDateTime',
+        'end_date_time' => 'setEndDateTime',
+        'time_zone' => 'setTimeZone'
     ];
 
     /**
@@ -234,17 +210,12 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'song_id' => 'getSongId',
-        'title' => 'getTitle',
-        'description' => 'getDescription',
         'type' => 'getType',
-        'counts' => 'getCounts',
-        'lyricists' => 'getLyricists',
-        'composers' => 'getComposers',
-        'arrangers' => 'getArrangers',
-        'media' => 'getMedia',
-        'release_groups' => 'getReleaseGroups',
-        'performances' => 'getPerformances'
+        'start_date' => 'getStartDate',
+        'end_date' => 'getEndDate',
+        'start_date_time' => 'getStartDateTime',
+        'end_date_time' => 'getEndDateTime',
+        'time_zone' => 'getTimeZone'
     ];
 
     /**
@@ -304,17 +275,12 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('song_id', $data ?? [], null);
-        $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('counts', $data ?? [], null);
-        $this->setIfExists('lyricists', $data ?? [], null);
-        $this->setIfExists('composers', $data ?? [], null);
-        $this->setIfExists('arrangers', $data ?? [], null);
-        $this->setIfExists('media', $data ?? [], null);
-        $this->setIfExists('release_groups', $data ?? [], null);
-        $this->setIfExists('performances', $data ?? [], null);
+        $this->setIfExists('start_date', $data ?? [], null);
+        $this->setIfExists('end_date', $data ?? [], null);
+        $this->setIfExists('start_date_time', $data ?? [], null);
+        $this->setIfExists('end_date_time', $data ?? [], null);
+        $this->setIfExists('time_zone', $data ?? [], null);
     }
 
     /**
@@ -344,43 +310,28 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['song_id'] === null) {
-            $invalidProperties[] = "'song_id' can't be null";
-        }
-        if ($this->container['title'] === null) {
-            $invalidProperties[] = "'title' can't be null";
-        }
-        if ((mb_strlen($this->container['title']) < 1)) {
-            $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
-        }
-
-        if ($this->container['description'] === null) {
-            $invalidProperties[] = "'description' can't be null";
-        }
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";
         }
-        if ($this->container['counts'] === null) {
-            $invalidProperties[] = "'counts' can't be null";
+        if ($this->container['start_date'] === null) {
+            $invalidProperties[] = "'start_date' can't be null";
         }
-        if ($this->container['lyricists'] === null) {
-            $invalidProperties[] = "'lyricists' can't be null";
+        if ($this->container['end_date'] === null) {
+            $invalidProperties[] = "'end_date' can't be null";
         }
-        if ($this->container['composers'] === null) {
-            $invalidProperties[] = "'composers' can't be null";
+        if ($this->container['start_date_time'] === null) {
+            $invalidProperties[] = "'start_date_time' can't be null";
         }
-        if ($this->container['arrangers'] === null) {
-            $invalidProperties[] = "'arrangers' can't be null";
+        if ($this->container['end_date_time'] === null) {
+            $invalidProperties[] = "'end_date_time' can't be null";
         }
-        if ($this->container['media'] === null) {
-            $invalidProperties[] = "'media' can't be null";
+        if ($this->container['time_zone'] === null) {
+            $invalidProperties[] = "'time_zone' can't be null";
         }
-        if ($this->container['release_groups'] === null) {
-            $invalidProperties[] = "'release_groups' can't be null";
+        if ((mb_strlen($this->container['time_zone']) < 1)) {
+            $invalidProperties[] = "invalid value for 'time_zone', the character length must be bigger than or equal to 1.";
         }
-        if ($this->container['performances'] === null) {
-            $invalidProperties[] = "'performances' can't be null";
-        }
+
         return $invalidProperties;
     }
 
@@ -397,95 +348,9 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets song_id
-     *
-     * @return string
-     */
-    public function getSongId()
-    {
-        return $this->container['song_id'];
-    }
-
-    /**
-     * Sets song_id
-     *
-     * @param string $song_id 楽曲ID
-     *
-     * @return self
-     */
-    public function setSongId($song_id)
-    {
-        if (is_null($song_id)) {
-            throw new \InvalidArgumentException('non-nullable song_id cannot be null');
-        }
-        $this->container['song_id'] = $song_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->container['title'];
-    }
-
-    /**
-     * Sets title
-     *
-     * @param string $title 楽曲名
-     *
-     * @return self
-     */
-    public function setTitle($title)
-    {
-        if (is_null($title)) {
-            throw new \InvalidArgumentException('non-nullable title cannot be null');
-        }
-
-        if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling SongListItem., must be bigger than or equal to 1.');
-        }
-
-        $this->container['title'] = $title;
-
-        return $this;
-    }
-
-    /**
-     * Gets description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->container['description'];
-    }
-
-    /**
-     * Sets description
-     *
-     * @param string $description 楽曲の説明
-     *
-     * @return self
-     */
-    public function setDescription($description)
-    {
-        if (is_null($description)) {
-            throw new \InvalidArgumentException('non-nullable description cannot be null');
-        }
-        $this->container['description'] = $description;
-
-        return $this;
-    }
-
-    /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongType
+     * @return \OpenAPI\Viewer\Client\Model\EventScheduleTypeValue
      */
     public function getType()
     {
@@ -495,7 +360,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongType $type type
+     * @param \OpenAPI\Viewer\Client\Model\EventScheduleTypeValue $type type
      *
      * @return self
      */
@@ -510,190 +375,176 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets counts
+     * Gets start_date
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongRelationCounts
+     * @return \DateTime
      */
-    public function getCounts()
+    public function getStartDate()
     {
-        return $this->container['counts'];
+        return $this->container['start_date'];
     }
 
     /**
-     * Sets counts
+     * Sets start_date
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongRelationCounts $counts counts
+     * @param \DateTime $start_date 活動日
      *
      * @return self
      */
-    public function setCounts($counts)
+    public function setStartDate($start_date)
     {
-        if (is_null($counts)) {
-            throw new \InvalidArgumentException('non-nullable counts cannot be null');
+        if (is_null($start_date)) {
+            array_push($this->openAPINullablesSetToNull, 'start_date');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('start_date', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['counts'] = $counts;
+        $this->container['start_date'] = $start_date;
 
         return $this;
     }
 
     /**
-     * Gets lyricists
+     * Gets end_date
      *
-     * @return string[]
+     * @return \DateTime
      */
-    public function getLyricists()
+    public function getEndDate()
     {
-        return $this->container['lyricists'];
+        return $this->container['end_date'];
     }
 
     /**
-     * Sets lyricists
+     * Sets end_date
      *
-     * @param string[] $lyricists lyricists
+     * @param \DateTime $end_date 活動日
      *
      * @return self
      */
-    public function setLyricists($lyricists)
+    public function setEndDate($end_date)
     {
-        if (is_null($lyricists)) {
-            throw new \InvalidArgumentException('non-nullable lyricists cannot be null');
+        if (is_null($end_date)) {
+            array_push($this->openAPINullablesSetToNull, 'end_date');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('end_date', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['lyricists'] = $lyricists;
+        $this->container['end_date'] = $end_date;
 
         return $this;
     }
 
     /**
-     * Gets composers
+     * Gets start_date_time
      *
-     * @return string[]
+     * @return \DateTime
      */
-    public function getComposers()
+    public function getStartDateTime()
     {
-        return $this->container['composers'];
+        return $this->container['start_date_time'];
     }
 
     /**
-     * Sets composers
+     * Sets start_date_time
      *
-     * @param string[] $composers composers
+     * @param \DateTime $start_date_time start_date_time
      *
      * @return self
      */
-    public function setComposers($composers)
+    public function setStartDateTime($start_date_time)
     {
-        if (is_null($composers)) {
-            throw new \InvalidArgumentException('non-nullable composers cannot be null');
+        if (is_null($start_date_time)) {
+            array_push($this->openAPINullablesSetToNull, 'start_date_time');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('start_date_time', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['composers'] = $composers;
+        $this->container['start_date_time'] = $start_date_time;
 
         return $this;
     }
 
     /**
-     * Gets arrangers
+     * Gets end_date_time
      *
-     * @return string[]
+     * @return \DateTime
      */
-    public function getArrangers()
+    public function getEndDateTime()
     {
-        return $this->container['arrangers'];
+        return $this->container['end_date_time'];
     }
 
     /**
-     * Sets arrangers
+     * Sets end_date_time
      *
-     * @param string[] $arrangers arrangers
+     * @param \DateTime $end_date_time end_date_time
      *
      * @return self
      */
-    public function setArrangers($arrangers)
+    public function setEndDateTime($end_date_time)
     {
-        if (is_null($arrangers)) {
-            throw new \InvalidArgumentException('non-nullable arrangers cannot be null');
+        if (is_null($end_date_time)) {
+            array_push($this->openAPINullablesSetToNull, 'end_date_time');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('end_date_time', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['arrangers'] = $arrangers;
+        $this->container['end_date_time'] = $end_date_time;
 
         return $this;
     }
 
     /**
-     * Gets media
+     * Gets time_zone
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongMediaSummary[]
+     * @return string
      */
-    public function getMedia()
+    public function getTimeZone()
     {
-        return $this->container['media'];
+        return $this->container['time_zone'];
     }
 
     /**
-     * Sets media
+     * Sets time_zone
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongMediaSummary[] $media media
+     * @param string $time_zone 活動のタイムゾーン
      *
      * @return self
      */
-    public function setMedia($media)
+    public function setTimeZone($time_zone)
     {
-        if (is_null($media)) {
-            throw new \InvalidArgumentException('non-nullable media cannot be null');
+        if (is_null($time_zone)) {
+            array_push($this->openAPINullablesSetToNull, 'time_zone');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('time_zone', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['media'] = $media;
 
-        return $this;
-    }
-
-    /**
-     * Gets release_groups
-     *
-     * @return \OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[]
-     */
-    public function getReleaseGroups()
-    {
-        return $this->container['release_groups'];
-    }
-
-    /**
-     * Sets release_groups
-     *
-     * @param \OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[] $release_groups 収録先の公開リリースグループ(最古発売日の降順)
-     *
-     * @return self
-     */
-    public function setReleaseGroups($release_groups)
-    {
-        if (is_null($release_groups)) {
-            throw new \InvalidArgumentException('non-nullable release_groups cannot be null');
+        if (!is_null($time_zone) && (mb_strlen($time_zone) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $time_zone when calling IsekaiObservatoryPackagesEventEventSchedule., must be bigger than or equal to 1.');
         }
-        $this->container['release_groups'] = $release_groups;
 
-        return $this;
-    }
-
-    /**
-     * Gets performances
-     *
-     * @return \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[]
-     */
-    public function getPerformances()
-    {
-        return $this->container['performances'];
-    }
-
-    /**
-     * Sets performances
-     *
-     * @param \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[] $performances 公開活動での披露履歴(開催時期の新しい順)
-     *
-     * @return self
-     */
-    public function setPerformances($performances)
-    {
-        if (is_null($performances)) {
-            throw new \InvalidArgumentException('non-nullable performances cannot be null');
-        }
-        $this->container['performances'] = $performances;
+        $this->container['time_zone'] = $time_zone;
 
         return $this;
     }
@@ -787,5 +638,3 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-
