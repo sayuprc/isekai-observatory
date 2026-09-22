@@ -9,6 +9,7 @@ return [
     App\Providers\Domain\MediaServiceProvider::class,
     App\Providers\Domain\PersonServiceProvider::class,
     App\Providers\Domain\VenueServiceProvider::class,
+    App\Providers\Domain\EventServiceProvider::class,
     App\Providers\Domain\ReleaseServiceProvider::class,
     App\Providers\Domain\SiteStatsServiceProvider::class,
     App\Providers\Domain\SongServiceProvider::class,

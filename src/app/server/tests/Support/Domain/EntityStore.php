@@ -8,6 +8,8 @@ use AdminUser\Domain\Models\AdminUser;
 use AdminUser\Domain\Models\AdminUserRepositoryInterface;
 use Auth\Domain\Models\Token\RefreshToken\RefreshToken;
 use Auth\Domain\Models\Token\RefreshToken\RefreshTokenRepositoryInterface;
+use Event\Domain\Models\Event;
+use Event\Domain\Models\EventRepositoryInterface;
 use Media\Domain\Models\Media;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
@@ -31,6 +33,12 @@ trait EntityStore
     {
         $repository = $this->makeRepository(VenueRepositoryInterface::class);
         array_map(static fn (Venue $item) => $repository->save($item), $items);
+    }
+
+    protected function storeEvents(Event ...$items): void
+    {
+        $repository = $this->makeRepository(EventRepositoryInterface::class);
+        array_map(static fn (Event $item) => $repository->save($item), $items);
     }
 
     protected function storePersons(Person ...$items): void

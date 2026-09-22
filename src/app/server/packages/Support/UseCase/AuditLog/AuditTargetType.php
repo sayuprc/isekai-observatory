@@ -21,4 +21,6 @@ enum AuditTargetType: string
     case SongTag = 'SongTag';
 
     case Venue = 'Venue';
+
+    case Event = 'Event';
 }
