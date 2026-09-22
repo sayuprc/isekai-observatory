@@ -37,7 +37,7 @@ readonly class DeleteUseCase
                 throw new ResourceNotFoundException('Venue', $venueId->value);
             }
             if ($this->repository->isUsed($venueId)) {
-                throw new BusinessRuleViolationException('この開催先は活動に使用されているため削除できません');
+                throw new BusinessRuleViolationException('この開催先はイベントに使用されているため削除できません');
             }
 
             $this->repository->delete($venueId);

@@ -38,7 +38,7 @@ readonly class DeleteUseCase
                 throw new ResourceNotFoundException('Song', $songId->value);
             }
             if ($this->repository->isUsed($songId)) {
-                throw new BusinessRuleViolationException('この楽曲は活動で披露されているため削除できません');
+                throw new BusinessRuleViolationException('この楽曲はイベントで披露されているため削除できません');
             }
 
             $this->repository->delete($songId);

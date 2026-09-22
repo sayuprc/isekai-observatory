@@ -22,7 +22,7 @@ readonly class EventIntegrityService
         $this->validateSchedule($event);
 
         if (! in_array($event->type, [EventType::Live, EventType::Stream], true) && $event->setlist !== []) {
-            throw new BusinessRuleViolationException('ライブまたは配信以外の活動にはセットリストを設定できません');
+            throw new BusinessRuleViolationException('ライブまたは配信以外のイベントにはセットリストを設定できません');
         }
 
         $this->assertUnique(array_column($event->venues, 'venue_id'), '開催先');
