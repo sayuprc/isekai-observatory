@@ -49,7 +49,7 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
   </section>
 
   <div class="shell home-feature-row">
-    {upcomingEvents.length > 0 && <section class="home-feature" data-upcoming-section hidden><SectionHead title="今後の予定" /><div class="entry-list">{upcomingEvents.map(event => <article class="entry-list-item" data-upcoming-event data-start={eventDate(event)}><div class="eyebrow">{eventTypeName(event.typeValue)} — {eventDate(event)}</div><h3 class="feature-title"><a href={`/events/${event.eventId}`}>{event.title}</a></h3>{eventStatusName(event.statusValue) && <p>{eventStatusName(event.statusValue)}</p>}</article>)}</div><a class="btn feature-more" href="/events">活動一覧 →</a></section>}
+    {upcomingEvents.length > 0 && <section class="home-feature" data-upcoming-section hidden><SectionHead title="今後の予定" /><div class="entry-list">{upcomingEvents.map(event => <article class="entry-list-item" data-upcoming-event data-start={eventDate(event)}><div class="eyebrow">{eventTypeName(event.typeValue)} — {eventDate(event)}</div><h3 class="feature-title"><a href={`/events/${event.eventId}`}>{event.title}</a></h3>{eventStatusName(event.statusValue) && <p>{eventStatusName(event.statusValue)}</p>}</article>)}</div><a class="btn feature-more" href="/events">イベント一覧 →</a></section>}
     {
       latestSong && (
         <section class="home-feature">
