@@ -40,7 +40,7 @@ readonly class CoVocalists extends ImmutableCollection
         return new self(array_map(
             static fn (array $item): CoVocalist => new CoVocalist(
                 new PersonId($item['personId']),
-                $item['creditName'] === null ? null : new CreditName($item['creditName']),
+                is_null($item['creditName']) ? null : new CreditName($item['creditName']),
                 new OrderNo($item['orderNo']),
             ),
             $items,

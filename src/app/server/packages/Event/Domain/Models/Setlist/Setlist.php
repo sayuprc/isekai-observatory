@@ -35,7 +35,7 @@ readonly class Setlist extends ImmutableCollection
         }
 
         foreach ($items as $item) {
-            if ($item['label'] === null && $item['performanceIds'] === []) {
+            if (is_null($item['label']) && $item['performanceIds'] === []) {
                 throw new BusinessRuleViolationException('セットリスト項目には表示名または楽曲披露を指定してください');
             }
         }
@@ -52,7 +52,7 @@ readonly class Setlist extends ImmutableCollection
             static fn (array $item): SetlistItem => new SetlistItem(
                 new SetlistItemId($item['setlistItemId']),
                 new OrderNo($item['orderNo']),
-                $item['label'] === null ? null : new SetlistLabel($item['label']),
+                is_null($item['label']) ? null : new SetlistLabel($item['label']),
                 array_map(static fn (string $id): PerformanceId => new PerformanceId($id), $item['performanceIds']),
             ),
             $items,
