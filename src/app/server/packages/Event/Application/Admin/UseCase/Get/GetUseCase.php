@@ -26,7 +26,7 @@ readonly class GetUseCase
 
         $event = $this->repository->find(new EventId($inputData->eventId));
 
-        if ($event === null) {
+        if (is_null($event)) {
             throw new ResourceNotFoundException('Event', $inputData->eventId);
         }
 
