@@ -1,22 +1,27 @@
 table "event_sources" {
-  schema = schema.db
+  schema  = schema.db
+  comment = "イベント情報源"
 
   column "event_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "イベントID"
   }
   column "order_no" {
     null     = false
     type     = int
     unsigned = true
+    comment  = "表示順"
   }
   column "name" {
-    null = false
-    type = varchar(255)
+    null    = false
+    type    = varchar(255)
+    comment = "表示名"
   }
   column "url" {
-    null = false
-    type = text
+    null    = false
+    type    = text
+    comment = "URL"
   }
 
   primary_key {
