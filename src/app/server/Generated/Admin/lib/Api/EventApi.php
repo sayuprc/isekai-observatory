@@ -229,7 +229,7 @@ class EventApi
                     );
             }
 
-
+            
 
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
@@ -300,7 +300,7 @@ class EventApi
                     $e->setResponseObject($data);
                     throw $e;
             }
-
+        
 
             throw $e;
         }
@@ -582,7 +582,7 @@ class EventApi
                     $e->setResponseObject($data);
                     throw $e;
             }
-
+        
 
             throw $e;
         }
@@ -836,7 +836,7 @@ class EventApi
                     );
             }
 
-
+            
 
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
@@ -907,7 +907,7 @@ class EventApi
                     $e->setResponseObject($data);
                     throw $e;
             }
-
+        
 
             throw $e;
         }
@@ -1176,7 +1176,7 @@ class EventApi
                     );
             }
 
-
+            
 
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
@@ -1231,7 +1231,7 @@ class EventApi
                     $e->setResponseObject($data);
                     throw $e;
             }
-
+        
 
             throw $e;
         }
@@ -1592,7 +1592,7 @@ class EventApi
                     );
             }
 
-
+            
 
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
@@ -1671,7 +1671,7 @@ class EventApi
                     $e->setResponseObject($data);
                     throw $e;
             }
-
+        
 
             throw $e;
         }

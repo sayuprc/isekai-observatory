@@ -14,6 +14,7 @@
 - Admin: SongTag の一覧・検索・取得・作成・更新・削除
 - Viewer: 公開楽曲の cursor 一覧 (個別 get は持たない)
   item には説明・種別・作詞/作曲/編曲の名前・紐づく公開 Media・収録先の公開 ReleaseGroup 要約・公開 Event での披露履歴が載る
+  非公開 Event の SongPerformance は披露履歴に件数も含めて出さない
 
 ## できないこと
 
