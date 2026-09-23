@@ -38,15 +38,15 @@ class DeleteEventTest extends DatabaseTestCase
     public function canDeletePostponedEventWithoutTargetLink(): void
     {
         $eventId = $this->generateUuid();
-        $this->storeEvents($this->event($eventId, 1));
+        $this->storeEvents($this->event($eventId, 2));
 
         $this->withAuth()->delete(route(EventRouteMap::Delete, $eventId))->assertStatus(204);
     }
 
-    private function event(string $eventId, int $status = 0): Event
+    private function event(string $eventId, int $status = 1): Event
     {
         return Event::fromInput($eventId, [
-            'title' => $status === 0 ? '削除できる活動' : '延期元活動',
+            'title' => $status === 1 ? '削除できる活動' : '延期元活動',
             'description' => '',
             'typeValue' => 1,
             'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
