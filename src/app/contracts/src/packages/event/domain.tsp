@@ -46,24 +46,16 @@ enum EventTypeValue {
   Other: 99,
 }
 
-@doc("活動の開催状態。通常開催は値を持たず、延期・中止のみ表現する")
+@doc("活動の開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する")
 @friendlyName("EventStatusValue")
 enum EventStatusValue {
+  Normal: 0,
   Postponed: 1,
   Cancelled: 2,
 }
 
-@doc("活動の開催時期")
-@friendlyName("EventScheduleTypeValue")
-enum EventScheduleTypeValue {
-  Undated: 1,
-  Date: 2,
-  DateRange: 3,
-}
-
-@doc("活動の開催時期。type に応じた項目のみを設定する")
+@doc("活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す")
 model EventSchedule {
-  type: EventScheduleTypeValue;
   startOn: eventOn | null;
   endOn: eventOn | null;
 }

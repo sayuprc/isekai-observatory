@@ -18,10 +18,9 @@ class Event
         public string $title,
         public string $description,
         public EventType $type,
-        public EventScheduleType $scheduleType,
         public ?string $startOn,
         public ?string $endOn,
-        public ?EventStatus $status,
+        public EventStatus $status,
         public bool $isDisplay,
         public array $venues = [],
         public array $media = [],
@@ -43,10 +42,9 @@ class Event
             self::stringValue(self::at($data, 'title')),
             self::stringValue(self::at($data, 'description')),
             EventType::from(self::intValue(self::at($data, 'typeValue'))),
-            EventScheduleType::from(self::intValue(self::at($schedule, 'type'), EventScheduleType::Undated->value)),
             self::nullableString(self::at($schedule, 'startOn')),
             self::nullableString(self::at($schedule, 'endOn')),
-            self::nullableEnumValue(self::at($data, 'statusValue'), EventStatus::class),
+            EventStatus::from(self::intValue(self::at($data, 'statusValue'), -1)),
             self::boolValue(self::at($data, 'isDisplay')),
             self::venueIds(self::at($data, 'venueIds')),
             self::mediaIds(self::at($data, 'mediaIds')),
@@ -56,7 +54,7 @@ class Event
         );
     }
 
-    /** @return array{event_id: string, title: string, description: string, type: int, schedule_type: int, start_on: ?string, end_on: ?string, status: ?int, is_display: bool} */
+    /** @return array{event_id: string, title: string, description: string, type: int, start_on: ?string, end_on: ?string, status: int, is_display: bool} */
     public function toArray(): array
     {
         return [
@@ -64,19 +62,17 @@ class Event
             'title' => $this->title,
             'description' => $this->description,
             'type' => $this->type->value,
-            'schedule_type' => $this->scheduleType->value,
             'start_on' => $this->startOn,
             'end_on' => $this->endOn,
-            'status' => $this->status?->value,
+            'status' => $this->status->value,
             'is_display' => $this->isDisplay,
         ];
     }
 
-    /** @return array{type: int, startOn: ?string, endOn: ?string} */
+    /** @return array{startOn: ?string, endOn: ?string} */
     public function schedule(): array
     {
         return [
-            'type' => $this->scheduleType->value,
             'startOn' => $this->startOn,
             'endOn' => $this->endOn,
         ];
@@ -107,12 +103,6 @@ class Event
     private static function boolValue(mixed $value): bool
     {
         return is_bool($value) ? $value : (bool)$value;
-    }
-
-    /** @param class-string<EventStatus> $enum */
-    private static function nullableEnumValue(mixed $value, string $enum): ?EventStatus
-    {
-        return $value === null || $value === '' ? null : $enum::from(self::intValue($value));
     }
 
     private static function nullableString(mixed $value): ?string

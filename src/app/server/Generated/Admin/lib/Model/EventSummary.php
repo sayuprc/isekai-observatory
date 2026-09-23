@@ -92,7 +92,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => false,
         'type_value' => false,
         'schedule' => false,
-        'status_value' => true,
+        'status_value' => false,
         'is_display' => false
     ];
 
@@ -480,14 +480,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     public function setStatusValue($status_value)
     {
         if (is_null($status_value)) {
-            array_push($this->openAPINullablesSetToNull, 'status_value');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('status_value', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new \InvalidArgumentException('non-nullable status_value cannot be null');
         }
         $this->container['status_value'] = $status_value;
 
