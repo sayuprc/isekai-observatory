@@ -4,30 +4,30 @@ using IsekaiObservatory.Shared;
 
 namespace IsekaiObservatory.Packages.Event;
 
-@doc("活動ID")
+@doc("イベントID")
 @friendlyName("eventId")
 scalar eventId extends uuid;
 
-@doc("活動タイトル")
+@doc("イベントタイトル")
 @minLength(1)
 @friendlyName("eventTitle")
 scalar eventTitle extends string;
 
-@doc("活動説明")
+@doc("イベント説明")
 @friendlyName("eventDescription")
 scalar eventDescription extends string;
 
-@doc("活動の出典表示名")
+@doc("イベントの出典表示名")
 @minLength(1)
 @friendlyName("eventSourceName")
 scalar eventSourceName extends string;
 
-@doc("活動の出典URL")
+@doc("イベントの出典URL")
 @format("uri")
 @friendlyName("eventSourceUrl")
 scalar eventSourceUrl extends string;
 
-@doc("活動日")
+@doc("イベント日")
 @format("date")
 @friendlyName("eventOn")
 scalar eventOn extends string;
@@ -37,7 +37,7 @@ scalar eventOn extends string;
 @friendlyName("performanceCreditName")
 scalar performanceCreditName extends string;
 
-@doc("活動種別")
+@doc("イベント種別")
 @friendlyName("EventTypeValue")
 enum EventTypeValue {
   Live: 1,
@@ -46,7 +46,7 @@ enum EventTypeValue {
   Other: 99,
 }
 
-@doc("活動の開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する")
+@doc("イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する")
 @friendlyName("EventStatusValue")
 enum EventStatusValue {
   Normal: 0,
@@ -54,7 +54,7 @@ enum EventStatusValue {
   Cancelled: 2,
 }
 
-@doc("活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す")
+@doc("イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す")
 model EventSchedule {
   startOn: eventOn | null;
   endOn: eventOn | null;
