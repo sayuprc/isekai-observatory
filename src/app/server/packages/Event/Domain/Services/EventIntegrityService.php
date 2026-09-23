@@ -6,7 +6,6 @@ namespace Event\Domain\Services;
 
 use DateTimeImmutable;
 use Event\Domain\Models\Event;
-use Event\Domain\Models\EventScheduleType;
 use Event\Domain\Models\EventType;
 use Exception;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
@@ -62,20 +61,11 @@ readonly class EventIntegrityService
 
     private function validateSchedule(Event $event): void
     {
-        $hasDate = $event->startOn !== null;
-        $hasEndDate = $event->endOn !== null;
-
-        $valid = match ($event->scheduleType) {
-            EventScheduleType::Undated => ! $hasDate && ! $hasEndDate,
-            EventScheduleType::Date => $hasDate && ! $hasEndDate,
-            EventScheduleType::DateRange => $hasDate && $hasEndDate,
-        };
-
-        if (! $valid) {
-            throw new BusinessRuleViolationException('開催時期の種別と指定項目が一致していません');
+        if ($event->startOn === null && $event->endOn !== null) {
+            throw new BusinessRuleViolationException('開催終了日だけを指定できません');
         }
 
-        if ($event->scheduleType === EventScheduleType::DateRange && $event->startOn > $event->endOn) {
+        if ($event->endOn !== null && $event->startOn > $event->endOn) {
             throw new BusinessRuleViolationException('開催終了日は開始日以降を指定してください');
         }
 
@@ -89,7 +79,6 @@ readonly class EventIntegrityService
                 }
             }
         }
-
     }
 
     /** @param list<int|string> $values */

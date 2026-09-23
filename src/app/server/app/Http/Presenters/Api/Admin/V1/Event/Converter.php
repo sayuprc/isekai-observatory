@@ -15,7 +15,7 @@ class Converter
     /** @return array<string, mixed> */
     public function toSummary(Event $event): array
     {
-        return ['eventId' => $event->eventId, 'title' => $event->title, 'typeValue' => $event->type->value, 'schedule' => $this->toSchedule($event), 'statusValue' => $event->status?->value, 'isDisplay' => $event->isDisplay];
+        return ['eventId' => $event->eventId, 'title' => $event->title, 'typeValue' => $event->type->value, 'schedule' => $this->toSchedule($event), 'statusValue' => $event->status->value, 'isDisplay' => $event->isDisplay];
     }
 
     /** @return array<string, mixed> */
@@ -23,7 +23,7 @@ class Converter
     {
         return [
             'eventId' => $event->eventId, 'title' => $event->title, 'description' => $event->description, 'typeValue' => $event->type->value,
-            'schedule' => $this->toSchedule($event), 'statusValue' => $event->status?->value, 'isDisplay' => $event->isDisplay,
+            'schedule' => $this->toSchedule($event), 'statusValue' => $event->status->value, 'isDisplay' => $event->isDisplay,
             'venues' => array_map(static function (array $venue): array {
                 $kind = VenueKind::from($venue['kind']);
 
@@ -50,7 +50,7 @@ class Converter
         return ['performanceId' => $performance['performance_id'], 'songId' => $performance['song_id'], 'songTitle' => $performance['song_title'], 'orderNo' => $performance['order_no'], 'isDisplay' => $performance['is_display'], 'coVocalists' => array_map(static fn (array $person): array => ['personId' => $person['person_id'], 'name' => $person['name'], 'creditName' => $person['credit_name'], 'orderNo' => $person['order_no']], $performance['co_vocalists'])];
     }
 
-    /** @return array{type: int, startOn: ?string, endOn: ?string} */
+    /** @return array{startOn: ?string, endOn: ?string} */
     private function toSchedule(Event $event): array
     {
         return $event->schedule();
