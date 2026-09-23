@@ -7,11 +7,11 @@ namespace Event\Domain\Models;
 class Event
 {
     /**
-     * @param list<array{venue_id: string, name: string, kind: int, order_no: int}>                                                                                                                                                                                                                                                $venues
-     * @param list<array{media_id: string, title: string, url: string, published_at: string, type: int, is_display: bool, order_no: int}>                                                                                                                                                                                          $media
-     * @param list<array{name: string, url: string, order_no: int}>                                                                                                                                                                                                                                                                $sources
-     * @param list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>                                                                                    $performances
-     * @param list<array{setlist_item_id: string, order_no: int, label: ?string, performances: list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>}> $setlist
+     * @param list<array{venue_id: string, name: string, kind: int, order_no: int}>                                                                                                                                                                                                                              $venues
+     * @param list<array{media_id: string, title: string, url: string, published_at: string, type: int, is_display: bool, order_no: int}>                                                                                                                                                                        $media
+     * @param list<array{name: string, url: string, order_no: int}>                                                                                                                                                                                                                                              $sources
+     * @param list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>                                                                                    $performances
+     * @param list<array{setlist_item_id: string, order_no: int, label: ?string, performances: list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>}> $setlist
      */
     public function __construct(
         public string $eventId,
@@ -129,7 +129,7 @@ class Event
     }
 
     /**
-     * @return list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>
+     * @return list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>
      */
     private static function performances(mixed $value): array
     {
@@ -141,7 +141,6 @@ class Event
                 'song_id' => self::stringValue(self::at($performanceData, 'songId')),
                 'song_title' => self::stringValue(self::at($performanceData, 'songTitle')),
                 'order_no' => self::intValue(self::at($performanceData, 'orderNo'), count($result) + 1),
-                'is_display' => self::boolValue(self::at($performanceData, 'isDisplay')),
                 'song_is_display' => true,
                 'co_vocalists' => self::coVocalists(self::at($performanceData, 'coVocalists')),
             ];
@@ -151,7 +150,7 @@ class Event
     }
 
     /**
-     * @return list<array{setlist_item_id: string, order_no: int, label: ?string, performances: list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>}>
+     * @return list<array{setlist_item_id: string, order_no: int, label: ?string, performances: list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>}>
      */
     private static function setlist(mixed $value): array
     {

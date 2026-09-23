@@ -62,8 +62,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'string',
         'song_title' => 'string',
         'order_no' => 'int',
-        'co_vocalists' => '\OpenAPI\Admin\Client\Model\PerformancePerson[]',
-        'is_display' => 'bool'
+        'co_vocalists' => '\OpenAPI\Admin\Client\Model\PerformancePerson[]'
     ];
 
     /**
@@ -78,8 +77,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'uuid',
         'song_title' => null,
         'order_no' => 'int32',
-        'co_vocalists' => null,
-        'is_display' => null
+        'co_vocalists' => null
     ];
 
     /**
@@ -92,8 +90,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => false,
         'song_title' => false,
         'order_no' => false,
-        'co_vocalists' => false,
-        'is_display' => false
+        'co_vocalists' => false
     ];
 
     /**
@@ -186,8 +183,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'songId',
         'song_title' => 'songTitle',
         'order_no' => 'orderNo',
-        'co_vocalists' => 'coVocalists',
-        'is_display' => 'isDisplay'
+        'co_vocalists' => 'coVocalists'
     ];
 
     /**
@@ -200,8 +196,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'setSongId',
         'song_title' => 'setSongTitle',
         'order_no' => 'setOrderNo',
-        'co_vocalists' => 'setCoVocalists',
-        'is_display' => 'setIsDisplay'
+        'co_vocalists' => 'setCoVocalists'
     ];
 
     /**
@@ -214,8 +209,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'getSongId',
         'song_title' => 'getSongTitle',
         'order_no' => 'getOrderNo',
-        'co_vocalists' => 'getCoVocalists',
-        'is_display' => 'getIsDisplay'
+        'co_vocalists' => 'getCoVocalists'
     ];
 
     /**
@@ -280,7 +274,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('song_title', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
         $this->setIfExists('co_vocalists', $data ?? [], null);
-        $this->setIfExists('is_display', $data ?? [], null);
     }
 
     /**
@@ -332,9 +325,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if ($this->container['co_vocalists'] === null) {
             $invalidProperties[] = "'co_vocalists' can't be null";
-        }
-        if ($this->container['is_display'] === null) {
-            $invalidProperties[] = "'is_display' can't be null";
         }
         return $invalidProperties;
     }
@@ -495,33 +485,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
 
         return $this;
     }
-
-    /**
-     * Gets is_display
-     *
-     * @return bool
-     */
-    public function getIsDisplay()
-    {
-        return $this->container['is_display'];
-    }
-
-    /**
-     * Sets is_display
-     *
-     * @param bool $is_display is_display
-     *
-     * @return self
-     */
-    public function setIsDisplay($is_display)
-    {
-        if (is_null($is_display)) {
-            throw new \InvalidArgumentException('non-nullable is_display cannot be null');
-        }
-        $this->container['is_display'] = $is_display;
-
-        return $this;
-    }
     /**
      * Returns true if offset exists. False otherwise.
      *
@@ -612,3 +575,5 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
+
+
