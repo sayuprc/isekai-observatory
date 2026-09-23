@@ -62,7 +62,7 @@ export type EventSource = {
 /**
  * イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
  */
-export type EventStatusValue = 0 | 1 | 2;
+export type EventStatusValue = 1 | 2 | 3;
 
 /**
  * イベント種別

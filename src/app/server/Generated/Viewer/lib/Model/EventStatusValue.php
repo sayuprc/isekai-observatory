@@ -43,10 +43,10 @@ enum EventStatusValue: int
     /**
      * Possible values of this enum
      */
-    case NUMBER_0 = 0;
-
     case NUMBER_1 = 1;
 
     case NUMBER_2 = 2;
+
+    case NUMBER_3 = 3;
 
 }

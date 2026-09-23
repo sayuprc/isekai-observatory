@@ -6,9 +6,9 @@ namespace Event\Domain\Models;
 
 enum EventStatus: int
 {
-    case Normal = 0;
+    case Normal = 1;
 
-    case Postponed = 1;
+    case Postponed = 2;
 
-    case Cancelled = 2;
+    case Cancelled = 3;
 }
