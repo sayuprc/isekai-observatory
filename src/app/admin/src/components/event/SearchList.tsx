@@ -4,7 +4,7 @@ import { client } from '../../utils/client';
 import { ListState } from '../ListState';
 
 const typeName: Record<number, string> = { 1: 'ライブ', 2: '配信', 3: '個展', 99: 'その他' };
-const statusName: Record<EventStatusValue, string> = { 0: '通常', 1: '延期', 2: '中止' };
+const statusName: Record<EventStatusValue, string> = { 1: '通常', 2: '延期', 3: '中止' };
 
 export const SearchList = () => {
   const [title, setTitle] = createSignal('');
@@ -32,7 +32,7 @@ export const SearchList = () => {
       >
         <fieldset class="fieldset"><label class="fieldset-label" for="event-title">タイトル</label><input id="event-title" class="input input-bordered input-sm" value={title()} onInput={e => setTitle(e.currentTarget.value)} /></fieldset>
         <fieldset class="fieldset"><label class="fieldset-label" for="event-type">種別</label><select id="event-type" class="select select-bordered select-sm" value={type()} onChange={e => setType(e.currentTarget.value)}><option value="">すべて</option><option value="1">ライブ</option><option value="2">配信</option><option value="3">個展</option><option value="99">その他</option></select></fieldset>
-        <fieldset class="fieldset"><label class="fieldset-label" for="event-status">状態</label><select id="event-status" class="select select-bordered select-sm" value={status()} onChange={e => setStatus(e.currentTarget.value)}><option value="">すべて</option><option value="0">通常</option><option value="1">延期</option><option value="2">中止</option></select></fieldset>
+        <fieldset class="fieldset"><label class="fieldset-label" for="event-status">状態</label><select id="event-status" class="select select-bordered select-sm" value={status()} onChange={e => setStatus(e.currentTarget.value)}><option value="">すべて</option><option value="1">通常</option><option value="2">延期</option><option value="3">中止</option></select></fieldset>
         <button class="btn btn-primary btn-sm" type="submit">検索</button>
       </form>
       <div class="mb-4 flex justify-end"><a href="/events/create" class="btn btn-primary btn-sm">新規作成</a></div>
