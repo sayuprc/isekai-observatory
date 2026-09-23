@@ -18,9 +18,6 @@ const creditItems = [
 
 const formatPublishedAt = (value: string): string =>
   new Date(value).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
-
-const formatPerformanceDate = (value: Song['performances'][number]): string =>
-  value.schedule.startOn ? `${value.schedule.startOn}${value.schedule.endOn ? `〜${value.schedule.endOn}` : ''}` : '開催時期未定';
 ---
 
 <div class="detail-page-content song-detail-content" data-share-title={song.title}>
@@ -39,29 +36,6 @@ const formatPerformanceDate = (value: Song['performances'][number]): string =>
       ))
     }
   </dl>
-
-  {
-    song.performances.length > 0 && (
-      <>
-        <DetailSectionHead title="披露されたイベント" count={song.performances.length} />
-        <div class="rel-list">
-          {
-            song.performances.map(performance => (
-              <a class="rel-chip" href={`/events/${performance.eventId}`}>
-                <div class="rel-copy">
-                  <div class="rel-main">{performance.eventTitle}</div>
-                  <div class="label-mono rel-sub">
-                    {formatPerformanceDate(performance)} · {performance.coVocalistNames.length > 0 ? `共演: ${performance.coVocalistNames.join(' / ')}` : 'ヰ世界情緒'}
-                  </div>
-                </div>
-                <span class="rel-arrow rel-arrow-muted">→</span>
-              </a>
-            ))
-          }
-        </div>
-      </>
-    )
-  }
 
   {
     releaseGroups.length > 0 && (
