@@ -35,7 +35,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * IsekaiObservatoryPackagesEventEventSchedule Class Doc Comment
  *
  * @category Class
- * @description 活動の開催時期。type に応じた項目のみを設定する
+ * @description 活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -58,7 +58,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
       * @var string[]
       */
     protected static $openAPITypes = [
-        'type' => '\OpenAPI\Admin\Client\Model\EventScheduleTypeValue',
         'start_on' => '\DateTime',
         'end_on' => '\DateTime'
     ];
@@ -71,7 +70,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'type' => null,
         'start_on' => 'date',
         'end_on' => 'date'
     ];
@@ -82,7 +80,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'type' => false,
         'start_on' => true,
         'end_on' => true
     ];
@@ -173,7 +170,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      * @var string[]
      */
     protected static $attributeMap = [
-        'type' => 'type',
         'start_on' => 'startOn',
         'end_on' => 'endOn'
     ];
@@ -184,7 +180,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      * @var string[]
      */
     protected static $setters = [
-        'type' => 'setType',
         'start_on' => 'setStartOn',
         'end_on' => 'setEndOn'
     ];
@@ -195,7 +190,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      * @var string[]
      */
     protected static $getters = [
-        'type' => 'getType',
         'start_on' => 'getStartOn',
         'end_on' => 'getEndOn'
     ];
@@ -257,7 +251,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('start_on', $data ?? [], null);
         $this->setIfExists('end_on', $data ?? [], null);
     }
@@ -289,9 +282,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     {
         $invalidProperties = [];
 
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
-        }
         if ($this->container['start_on'] === null) {
             $invalidProperties[] = "'start_on' can't be null";
         }
@@ -312,33 +302,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets type
-     *
-     * @return \OpenAPI\Admin\Client\Model\EventScheduleTypeValue
-     */
-    public function getType()
-    {
-        return $this->container['type'];
-    }
-
-    /**
-     * Sets type
-     *
-     * @param \OpenAPI\Admin\Client\Model\EventScheduleTypeValue $type type
-     *
-     * @return self
-     */
-    public function setType($type)
-    {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
-        }
-        $this->container['type'] = $type;
-
-        return $this;
-    }
 
     /**
      * Gets start_on

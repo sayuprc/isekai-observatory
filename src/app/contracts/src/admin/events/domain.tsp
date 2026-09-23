@@ -53,7 +53,7 @@ model Event {
   description: eventDescription;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue | null;
+  statusValue: EventStatusValue;
   isDisplay: boolean;
   venues: Venue[];
   media: Media[];
@@ -68,6 +68,6 @@ model EventSummary {
   title: eventTitle;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue | null;
+  statusValue: EventStatusValue;
   isDisplay: boolean;
 }
