@@ -32,7 +32,19 @@ readonly class CreateUseCase
         $this->authorizer->authorize(Permission::WriteEvent);
 
         $output = $this->transaction->scope(function () use ($inputData): CreateOutputData {
-            $event = Event::fromInput((string)Str::uuid(), $inputData->data);
+            $event = Event::fromInput((string)Str::uuid(), [
+                'title' => $inputData->title,
+                'description' => $inputData->description,
+                'typeValue' => $inputData->typeValue,
+                'schedule' => $inputData->schedule,
+                'statusValue' => $inputData->statusValue,
+                'isDisplay' => $inputData->isDisplay,
+                'venueIds' => $inputData->venueIds,
+                'mediaIds' => $inputData->mediaIds,
+                'sources' => $inputData->sources,
+                'performances' => $inputData->performances,
+                'setlist' => $inputData->setlist,
+            ]);
             $this->integrityService->validate($event);
             $this->repository->save($event);
             $this->recorder->record(AuditAction::Create, AuditTargetType::Event, new EventId($event->eventId), $event->toArray());
