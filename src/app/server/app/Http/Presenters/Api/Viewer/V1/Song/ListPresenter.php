@@ -6,7 +6,6 @@ namespace App\Http\Presenters\Api\Viewer\V1\Song;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
-use OpenAPI\Viewer\Client\Model\EventScheduleTypeValue;
 use OpenAPI\Viewer\Client\Model\EventTypeValue;
 use OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule;
 use OpenAPI\Viewer\Client\Model\MediaType;
@@ -88,7 +87,6 @@ class ListPresenter
     {
         $schedule = $performance->schedule;
         $scheduleModel = new IsekaiObservatoryPackagesEventEventSchedule()
-            ->setType(EventScheduleTypeValue::from($schedule['type']))
             /** @phpstan-ignore-next-line */
             ->setStartOn($schedule['startOn'] === null ? null : new DateTime($schedule['startOn']))
             /** @phpstan-ignore-next-line */

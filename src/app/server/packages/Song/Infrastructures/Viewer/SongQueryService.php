@@ -311,7 +311,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_performances.song_id', 'song_performances.performance_id', 'events.event_id', 'events.title', 'events.type', 'events.schedule_type', 'events.start_on', 'events.end_on'])
+                ->withSelect(['song_performances.song_id', 'song_performances.performance_id', 'events.event_id', 'events.title', 'events.type', 'events.start_on', 'events.end_on'])
                 ->from('song_performances')
                 ->join('events', 'song_performances.event_id = events.event_id')
                 ->where('song_performances.song_id', 'IN', $binSongIds)
@@ -331,7 +331,6 @@ readonly class SongQueryService implements SongQueryServiceInterface
                 Row::string($row, 'title'),
                 Row::int($row, 'type'),
                 [
-                    'type' => Row::int($row, 'schedule_type'),
                     'startOn' => Row::nullableString($row, 'start_on'),
                     'endOn' => Row::nullableString($row, 'end_on'),
                 ],

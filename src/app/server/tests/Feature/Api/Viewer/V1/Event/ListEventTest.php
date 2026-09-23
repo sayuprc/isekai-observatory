@@ -59,6 +59,7 @@ class ListEventTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $eventId)
+            ->assertJsonPath('events.0.statusValue', 0)
             ->assertJsonPath('events.0.venues.0.name', '会場')
             ->assertJsonPath('events.0.media.0.mediaId', $visibleMediaId)
             ->assertJsonCount(1, 'events.0.media')
@@ -76,8 +77,8 @@ class ListEventTest extends DatabaseTestCase
             'title' => '日時付き活動',
             'description' => '',
             'typeValue' => 2,
-            'schedule' => ['type' => 3, 'startOn' => '2026-10-01', 'endOn' => '2026-10-03'],
-            'statusValue' => null,
+            'schedule' => ['startOn' => '2026-10-01', 'endOn' => '2026-10-03'],
+            'statusValue' => 0,
             'isDisplay' => true,
             'venueIds' => [],
             'mediaIds' => [],
@@ -108,8 +109,8 @@ class ListEventTest extends DatabaseTestCase
             'title' => '公開ライブ',
             'description' => '説明',
             'typeValue' => 1,
-            'schedule' => ['type' => 2, 'startOn' => '2026-10-01', 'endOn' => null],
-            'statusValue' => null,
+            'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+            'statusValue' => 0,
             'isDisplay' => true,
             'venueIds' => [$venueId],
             'mediaIds' => [$visibleMediaId, $hiddenMediaId],
