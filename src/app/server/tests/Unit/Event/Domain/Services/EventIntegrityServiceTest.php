@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Event\Domain\Services;
 
-use Event\Domain\Models\Event;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Event\Domain\Services\EventIntegrityService;
+use Mockery;
+use Mockery\MockInterface;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Tests\TestCase;
 
@@ -23,15 +26,42 @@ class EventIntegrityServiceTest extends TestCase
 
     private const string OTHER_PERFORMANCE_ID = 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD';
 
-    #[Test]
-    public function acceptsLiveWithPerformanceAndSetlist(): void
-    {
-        $this->expectNotToPerformAssertions();
+    private MockInterface&UuidGeneratorInterface $generator;
 
-        $this->getInstance()->validate($this->createEvent([
+    #[Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->generator = Mockery::mock(UuidGeneratorInterface::class);
+    }
+
+    #[Test]
+    public function prepareForCreateAssignsGeneratedEventId(): void
+    {
+        $this->generator->shouldReceive('generate')
+            ->with()
+            ->andReturn(self::EVENT_ID)
+            ->once();
+
+        $event = $this->getInstance()->prepareForCreate($this->input());
+
+        $this->assertSame(self::EVENT_ID, $event->eventId);
+        $this->assertSame('テストライブ', $event->title);
+    }
+
+    #[Test]
+    public function prepareForUpdateKeepsEventIdWithPerformanceAndSetlist(): void
+    {
+        $this->generator->shouldNotReceive('generate');
+
+        $event = $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
             'performances' => [self::performance(self::PERFORMANCE_ID, 1)],
             'setlist' => [self::setlistItem(1, '本編', [self::performance(self::PERFORMANCE_ID, 1)])],
         ]));
+
+        $this->assertSame(self::EVENT_ID, $event->eventId);
+        $this->assertSame(self::PERFORMANCE_ID, $event->setlist[0]['performances'][0]['performance_id']);
     }
 
     #[Test]
@@ -39,7 +69,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->validate($this->createEvent([
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
             'typeValue' => EventType::Exhibition->value,
             'setlist' => [self::setlistItem(1, '展示作品', [])],
         ]));
@@ -65,7 +95,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->validate($this->createEvent(['statusValue' => $status->value, ...$contents]));
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['statusValue' => $status->value, ...$contents]));
     }
 
     #[Test]
@@ -73,7 +103,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
 
-        $this->getInstance()->validate($this->createEvent(['statusValue' => EventStatus::Cancelled->value]));
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['statusValue' => EventStatus::Cancelled->value]));
     }
 
     #[Test]
@@ -81,7 +111,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->validate($this->createEvent(['schedule' => ['startOn' => null, 'endOn' => '2026-10-03']]));
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['schedule' => ['startOn' => null, 'endOn' => '2026-10-03']]));
     }
 
     #[Test]
@@ -89,7 +119,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->validate($this->createEvent(['schedule' => ['startOn' => '2026-10-03', 'endOn' => '2026-10-01']]));
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['schedule' => ['startOn' => '2026-10-03', 'endOn' => '2026-10-01']]));
     }
 
     #[Test]
@@ -98,7 +128,7 @@ class EventIntegrityServiceTest extends TestCase
         $this->expectException(BusinessRuleViolationException::class);
 
         $venueId = 'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE';
-        $this->getInstance()->validate($this->createEvent(['venueIds' => [$venueId, $venueId]]));
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['venueIds' => [$venueId, $venueId]]));
     }
 
     #[Test]
@@ -106,7 +136,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->validate($this->createEvent(['setlist' => [self::setlistItem(1, null, [])]]));
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['setlist' => [self::setlistItem(1, null, [])]]));
     }
 
     #[Test]
@@ -114,7 +144,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->validate($this->createEvent([
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
             'performances' => [self::performance(self::PERFORMANCE_ID, 1)],
             'setlist' => [self::setlistItem(1, null, [self::performance(self::OTHER_PERFORMANCE_ID, 1)])],
         ]));
@@ -125,7 +155,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->validate($this->createEvent([
+        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
             'performances' => [self::performance(self::PERFORMANCE_ID, 1)],
             'setlist' => [
                 self::setlistItem(1, null, [self::performance(self::PERFORMANCE_ID, 1)]),
@@ -136,10 +166,12 @@ class EventIntegrityServiceTest extends TestCase
 
     /**
      * @param array<string, mixed> $overrides
+     *
+     * @return array<string, mixed>
      */
-    private function createEvent(array $overrides = []): Event
+    private function input(array $overrides = []): array
     {
-        return Event::fromInput(self::EVENT_ID, [
+        return [
             'title' => 'テストライブ',
             'description' => '',
             'typeValue' => EventType::Live->value,
@@ -152,7 +184,7 @@ class EventIntegrityServiceTest extends TestCase
             'performances' => [],
             'setlist' => [],
             ...$overrides,
-        ]);
+        ];
     }
 
     /** @return array<string, mixed> */
@@ -173,6 +205,6 @@ class EventIntegrityServiceTest extends TestCase
 
     private function getInstance(): EventIntegrityService
     {
-        return new EventIntegrityService();
+        return new EventIntegrityService($this->generator);
     }
 }
