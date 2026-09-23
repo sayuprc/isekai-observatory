@@ -33,7 +33,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * EventTypeValue Class Doc Comment
  *
  * @category Class
- * @description 活動種別
+ * @description イベント種別
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

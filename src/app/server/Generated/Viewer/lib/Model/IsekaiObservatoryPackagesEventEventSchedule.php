@@ -35,7 +35,7 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
  * IsekaiObservatoryPackagesEventEventSchedule Class Doc Comment
  *
  * @category Class
- * @description 活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+ * @description イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
  * @package  OpenAPI\Viewer\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -316,7 +316,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Sets start_on
      *
-     * @param \DateTime $start_on 活動日
+     * @param \DateTime $start_on イベント日
      *
      * @return self
      */
@@ -350,7 +350,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Sets end_on
      *
-     * @param \DateTime $end_on 活動日
+     * @param \DateTime $end_on イベント日
      *
      * @return self
      */

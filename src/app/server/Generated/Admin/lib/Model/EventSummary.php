@@ -35,7 +35,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * EventSummary Class Doc Comment
  *
  * @category Class
- * @description 活動一覧の 1 行分
+ * @description イベント一覧の 1 行分
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -360,7 +360,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets event_id
      *
-     * @param string $event_id 活動ID
+     * @param string $event_id イベントID
      *
      * @return self
      */
@@ -387,7 +387,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets title
      *
-     * @param string $title 活動タイトル
+     * @param string $title イベントタイトル
      *
      * @return self
      */

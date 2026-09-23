@@ -19,7 +19,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
- * 公開活動一覧取得API
+ * 公開イベント一覧取得API
  */
 export const eventServiceListEvents = <ThrowOnError extends boolean = false>(options?: Options<EventServiceListEventsData, ThrowOnError>): RequestResult<EventServiceListEventsResponses, EventServiceListEventsErrors, ThrowOnError> => (options?.client ?? client).get<EventServiceListEventsResponses, EventServiceListEventsErrors, ThrowOnError>({ url: '/events', ...options });
 
