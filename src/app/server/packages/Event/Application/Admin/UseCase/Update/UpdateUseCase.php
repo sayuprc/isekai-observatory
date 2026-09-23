@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Event\Application\Admin\UseCase\Update;
 
 use AdminUser\Domain\Models\Permission;
-use Event\Domain\Models\Event;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
 use Event\Domain\Services\EventIntegrityService;
@@ -35,7 +34,7 @@ readonly class UpdateUseCase
             if ($this->repository->find($inputData->eventId) === null) {
                 throw new ResourceNotFoundException('Event', $inputData->eventId);
             }
-            $event = Event::fromInput($inputData->eventId, [
+            $event = $this->integrityService->prepareForUpdate($inputData->eventId, [
                 'title' => $inputData->title,
                 'description' => $inputData->description,
                 'typeValue' => $inputData->typeValue,
@@ -48,7 +47,6 @@ readonly class UpdateUseCase
                 'performances' => $inputData->performances,
                 'setlist' => $inputData->setlist,
             ]);
-            $this->integrityService->validate($event);
             $this->repository->save($event);
             $this->recorder->record(AuditAction::Update, AuditTargetType::Event, new EventId($event->eventId), $event->toArray());
 
