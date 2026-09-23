@@ -60,12 +60,12 @@ export type EventSource = {
 };
 
 /**
- * 活動の開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+ * イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
  */
 export type EventStatusValue = 0 | 1 | 2;
 
 /**
- * 活動種別
+ * イベント種別
  */
 export type EventTypeValue = 1 | 2 | 3 | 99;
 
@@ -76,7 +76,7 @@ export type EventVenueSummary = {
 };
 
 /**
- * 活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+ * イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
  */
 export type IsekaiObservatoryPackagesEventEventSchedule = {
     startOn: EventOn | null;
@@ -241,7 +241,7 @@ export type SongListItem = {
      */
     releaseGroups: Array<SongReleaseGroupSummary>;
     /**
-     * 公開活動での披露履歴(開催時期の新しい順)
+     * 公開イベントでの披露履歴(開催時期の新しい順)
      */
     performances: Array<SongPerformanceHistory>;
 };
@@ -270,7 +270,7 @@ export type SongPerformance = {
 };
 
 /**
- * 楽曲が公開活動で披露された履歴
+ * 楽曲が公開イベントで披露された履歴
  */
 export type SongPerformanceHistory = {
     eventId: EventId;
@@ -333,32 +333,32 @@ export type Cursor = string;
 export type Description = string;
 
 /**
- * 活動説明
+ * イベント説明
  */
 export type EventDescription = string;
 
 /**
- * 活動ID
+ * イベントID
  */
 export type EventId = string;
 
 /**
- * 活動日
+ * イベント日
  */
 export type EventOn = string;
 
 /**
- * 活動の出典表示名
+ * イベントの出典表示名
  */
 export type EventSourceName = string;
 
 /**
- * 活動の出典URL
+ * イベントの出典URL
  */
 export type EventSourceUrl = string;
 
 /**
- * 活動タイトル
+ * イベントタイトル
  */
 export type EventTitle = string;
 

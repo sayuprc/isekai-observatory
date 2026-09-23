@@ -35,7 +35,7 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
  * SongPerformanceHistory Class Doc Comment
  *
  * @category Class
- * @description 楽曲が公開活動で披露された履歴
+ * @description 楽曲が公開イベントで披露された履歴
  * @package  OpenAPI\Viewer\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -350,7 +350,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets event_id
      *
-     * @param string $event_id 活動ID
+     * @param string $event_id イベントID
      *
      * @return self
      */
@@ -377,7 +377,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets event_title
      *
-     * @param string $event_title 活動タイトル
+     * @param string $event_title イベントタイトル
      *
      * @return self
      */

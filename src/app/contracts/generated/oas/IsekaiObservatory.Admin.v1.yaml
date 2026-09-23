@@ -527,7 +527,7 @@ paths:
   /events:
     post:
       operationId: EventService_createEvent
-      description: 活動作成API
+      description: イベント作成API
       parameters: []
       responses:
         '200':
@@ -583,7 +583,7 @@ paths:
   /events/search:
     get:
       operationId: EventService_searchEvents
-      description: 活動検索API
+      description: イベント検索API
       parameters:
         - name: title
           in: query
@@ -673,7 +673,7 @@ paths:
   /events/{eventId}:
     get:
       operationId: EventService_getEvent
-      description: 活動取得API
+      description: イベント取得API
       parameters:
         - name: eventId
           in: path
@@ -727,7 +727,7 @@ paths:
         - BearerAuth: []
     put:
       operationId: EventService_updateEvent
-      description: 活動更新API
+      description: イベント更新API
       parameters:
         - name: eventId
           in: path
@@ -793,7 +793,7 @@ paths:
         - BearerAuth: []
     delete:
       operationId: EventService_deleteEvent
-      description: 活動削除API
+      description: イベント削除API
       parameters:
         - name: eventId
           in: path
@@ -3296,7 +3296,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SetlistItem'
-      description: 活動
+      description: イベント
     EventCreateRequest:
       type: object
       required:
@@ -3376,7 +3376,7 @@ components:
       enum:
         - schedule
         - title
-      description: 活動検索のソート条件
+      description: イベント検索のソート条件
     EventSource:
       type: object
       required:
@@ -3390,7 +3390,7 @@ components:
           $ref: '#/components/schemas/eventSourceUrl'
         orderNo:
           $ref: '#/components/schemas/orderNo'
-      description: 活動出典
+      description: イベント出典
     EventStatusValue:
       type: integer
       format: int32
@@ -3398,7 +3398,7 @@ components:
         - 0
         - 1
         - 2
-      description: 活動の開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+      description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
     EventSummary:
       type: object
       required:
@@ -3421,7 +3421,7 @@ components:
           $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
-      description: 活動一覧の 1 行分
+      description: イベント一覧の 1 行分
     EventTypeValue:
       type: integer
       format: int32
@@ -3430,7 +3430,7 @@ components:
         - 2
         - 3
         - 99
-      description: 活動種別
+      description: イベント種別
     EventUpdateRequest:
       type: object
       required:
@@ -3512,7 +3512,7 @@ components:
           anyOf:
             - $ref: '#/components/schemas/eventOn'
             - type: 'null'
-      description: 活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+      description: イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
     LoginFinishRequest:
       type: object
       required:
@@ -3744,7 +3744,7 @@ components:
             - type: 'null'
         orderNo:
           $ref: '#/components/schemas/orderNo'
-      description: 活動に紐づく楽曲披露
+      description: イベントに紐づく楽曲披露
     Permission:
       type: object
       required:
@@ -4587,7 +4587,7 @@ components:
             $ref: '#/components/schemas/PerformancePerson'
         isDisplay:
           type: boolean
-      description: 活動に紐づく楽曲披露
+      description: イベントに紐づく楽曲披露
     SongPerson:
       type: object
       required:
@@ -4983,27 +4983,27 @@ components:
       description: メールアドレス
     eventDescription:
       type: string
-      description: 活動説明
+      description: イベント説明
     eventId:
       type: string
       format: uuid
-      description: 活動ID
+      description: イベントID
     eventOn:
       type: string
       format: date
-      description: 活動日
+      description: イベント日
     eventSourceName:
       type: string
       minLength: 1
-      description: 活動の出典表示名
+      description: イベントの出典表示名
     eventSourceUrl:
       type: string
       format: uri
-      description: 活動の出典URL
+      description: イベントの出典URL
     eventTitle:
       type: string
       minLength: 1
-      description: 活動タイトル
+      description: イベントタイトル
     lyricsLink:
       type: string
       format: uri

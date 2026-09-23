@@ -13,14 +13,14 @@ using IsekaiObservatory.Packages.Song;
 
 namespace IsekaiObservatory.Admin;
 
-@doc("活動出典")
+@doc("イベント出典")
 model EventSource {
   displayName: eventSourceName;
   url: eventSourceUrl;
   orderNo: orderNo;
 }
 
-@doc("活動に紐づく楽曲披露")
+@doc("イベントに紐づく楽曲披露")
 model PerformancePerson {
   personId: personId;
   name: personName;
@@ -28,7 +28,7 @@ model PerformancePerson {
   orderNo: orderNo;
 }
 
-@doc("活動に紐づく楽曲披露")
+@doc("イベントに紐づく楽曲披露")
 model SongPerformance {
   performanceId: uuid;
   songId: songId;
@@ -46,7 +46,7 @@ model SetlistItem {
   performances: SongPerformance[];
 }
 
-@doc("活動")
+@doc("イベント")
 model Event {
   eventId: eventId;
   title: eventTitle;
@@ -62,7 +62,7 @@ model Event {
   setlist: SetlistItem[];
 }
 
-@doc("活動一覧の 1 行分")
+@doc("イベント一覧の 1 行分")
 model EventSummary {
   eventId: eventId;
   title: eventTitle;

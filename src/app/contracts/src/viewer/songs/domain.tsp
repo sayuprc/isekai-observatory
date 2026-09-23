@@ -19,7 +19,7 @@ model SongRelationCounts {
   mediaCount: int32;
 }
 
-@doc("楽曲が公開活動で披露された履歴")
+@doc("楽曲が公開イベントで披露された履歴")
 model SongPerformanceHistory {
   eventId: eventId;
   eventTitle: eventTitle;
@@ -71,7 +71,7 @@ model SongListItem {
   @doc("収録先の公開リリースグループ(最古発売日の降順)")
   releaseGroups: SongReleaseGroupSummary[];
 
-  @doc("公開活動での披露履歴(開催時期の新しい順)")
+  @doc("公開イベントでの披露履歴(開催時期の新しい順)")
   performances: SongPerformanceHistory[];
 }
 

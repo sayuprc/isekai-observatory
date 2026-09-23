@@ -684,7 +684,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets performances
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[] $performances 公開活動での披露履歴(開催時期の新しい順)
+     * @param \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[] $performances 公開イベントでの披露履歴(開催時期の新しい順)
      *
      * @return self
      */

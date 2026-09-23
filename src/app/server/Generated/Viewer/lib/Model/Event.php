@@ -409,7 +409,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets event_id
      *
-     * @param string $event_id 活動ID
+     * @param string $event_id イベントID
      *
      * @return self
      */
@@ -436,7 +436,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets title
      *
-     * @param string $title 活動タイトル
+     * @param string $title イベントタイトル
      *
      * @return self
      */
@@ -468,7 +468,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets description
      *
-     * @param string $description 活動説明
+     * @param string $description イベント説明
      *
      * @return self
      */
