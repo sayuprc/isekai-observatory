@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Admin\V1\Event;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use Event\Domain\Models\Event;
 use Media\Domain\Models\MediaType;
 use Venue\Domain\Models\VenueKind;
