@@ -9,6 +9,6 @@ namespace IsekaiObservatory.Viewer;
 @tag("Event")
 @route("/events")
 interface EventService {
-  @doc("公開活動一覧取得API")
+  @doc("公開イベント一覧取得API")
   listEvents(@query cursor?: cursor, @query limit?: limit): Ok<EventListResponse> | InternalServerError;
 }
