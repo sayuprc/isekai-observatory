@@ -38,8 +38,8 @@ class Converter
             ->setTitle($event->title->value)
             ->setTypeValue(EventTypeValue::from($event->type->value))
             ->setSchedule(new OpenApiEventSchedule([
-                'start_on' => is_null($event->schedule->startOn) ? null : DateTime::createFromImmutable($event->schedule->startOn->value),
-                'end_on' => is_null($event->schedule->endOn) ? null : DateTime::createFromImmutable($event->schedule->endOn->value),
+                'start_on' => is_null($event->schedule->startOn) ? null : DateTime::createFromImmutable($event->schedule->startOn),
+                'end_on' => is_null($event->schedule->endOn) ? null : DateTime::createFromImmutable($event->schedule->endOn),
             ]))
             ->setStatusValue(EventStatusValue::from($event->status->value))
             ->setIsDisplay($event->isDisplay);

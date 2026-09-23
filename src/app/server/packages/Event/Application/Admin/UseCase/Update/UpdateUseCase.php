@@ -33,7 +33,7 @@ readonly class UpdateUseCase
         $this->authorizer->authorize(Permission::WriteEvent);
 
         return $this->transaction->scope(function () use ($inputData): UpdateOutputData {
-            if ($this->repository->find(new EventId($inputData->eventId)) === null) {
+            if (is_null($this->repository->find(new EventId($inputData->eventId)))) {
                 throw new ResourceNotFoundException('Event', $inputData->eventId);
             }
 
