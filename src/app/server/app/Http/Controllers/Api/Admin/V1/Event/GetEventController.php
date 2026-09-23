@@ -20,6 +20,8 @@ class GetEventController extends Controller
 
     public function handle(string $eventId): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle(new GetInputData($eventId)));
+        return new GetInputData($eventId)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }
