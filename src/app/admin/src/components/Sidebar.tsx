@@ -165,8 +165,11 @@ const navSections: NavSection[] = [
     items: [{ href: '/persons', label: '人物', icon: UsersIcon }],
   },
   {
-    title: '活動',
-    items: [{ href: '/venues', label: '開催先', icon: MapPinIcon }],
+    title: 'イベント',
+    items: [
+      { href: '/events', label: 'イベント', icon: PlayIcon },
+      { href: '/venues', label: '開催先', icon: MapPinIcon },
+    ],
   },
   {
     title: '管理',
