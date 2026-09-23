@@ -43,7 +43,7 @@ class CreateEventTest extends DatabaseTestCase
                 'description' => '説明',
                 'typeValue' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 0,
+                'statusValue' => 1,
                 'isDisplay' => true,
                 'venueIds' => [$venueId],
                 'mediaIds' => [$mediaId],
@@ -53,7 +53,7 @@ class CreateEventTest extends DatabaseTestCase
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
-            ->assertJsonPath('event.statusValue', 0)
+            ->assertJsonPath('event.statusValue', 1)
             ->assertJsonPath('event.venues.0.venueId', $venueId)
             ->assertJsonPath('event.media.0.mediaId', $mediaId)
             ->assertJsonPath('event.performances.0.songId', $songId)
@@ -74,7 +74,7 @@ class CreateEventTest extends DatabaseTestCase
                 'description' => '',
                 'typeValue' => 3,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 0,
+                'statusValue' => 1,
                 'isDisplay' => true,
                 'venueIds' => [],
                 'mediaIds' => [],
@@ -115,7 +115,7 @@ class CreateEventTest extends DatabaseTestCase
                 'description' => '',
                 'typeValue' => 1,
                 'schedule' => ['startOn' => null, 'endOn' => null],
-                'statusValue' => 0,
+                'statusValue' => 1,
                 'isDisplay' => true,
                 'venueIds' => [],
                 'mediaIds' => [],
@@ -137,7 +137,7 @@ class CreateEventTest extends DatabaseTestCase
                 'description' => '',
                 'typeValue' => 1,
                 'schedule' => ['startOn' => null, 'endOn' => '2026-10-03'],
-                'statusValue' => 0,
+                'statusValue' => 1,
                 'isDisplay' => true,
                 'venueIds' => [],
                 'mediaIds' => [],

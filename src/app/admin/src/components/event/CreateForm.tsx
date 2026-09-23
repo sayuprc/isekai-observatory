@@ -13,7 +13,7 @@ export const CreateForm = () => {
     event.preventDefault();
     setSaving(true);
     setError(null);
-    const response = await client.api.events.post({ title: title(), description: '', typeValue: type(), schedule: { startOn: date() || null, endOn: null }, statusValue: 0, isDisplay: true, venueIds: [], mediaIds: [], sources: [], performances: [], setlist: [] });
+    const response = await client.api.events.post({ title: title(), description: '', typeValue: type(), schedule: { startOn: date() || null, endOn: null }, statusValue: 1, isDisplay: true, venueIds: [], mediaIds: [], sources: [], performances: [], setlist: [] });
     setSaving(false);
     if (response.error || !response.data) {
       setError('保存に失敗しました');
