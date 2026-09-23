@@ -8,7 +8,6 @@ use Emonkak\Orm\SelectBuilder;
 use Event\Domain\Criteria\EventSearchCriteria;
 use Event\Domain\Models\Event;
 use Event\Domain\Models\EventRepositoryInterface;
-use Event\Domain\Models\EventScheduleType;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Override;
@@ -23,7 +22,7 @@ readonly class EventRepository implements EventRepositoryInterface
 
     /** @var list<string> */
     private const array COLUMNS = [
-        'event_id', 'title', 'description', 'type', 'schedule_type', 'start_on', 'end_on', 'status', 'is_display',
+        'event_id', 'title', 'description', 'type', 'start_on', 'end_on', 'status', 'is_display',
     ];
 
     public function __construct(
@@ -97,13 +96,13 @@ readonly class EventRepository implements EventRepositoryInterface
 
         $data = $event->toArray();
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['event_id', 'title', 'description', 'type', 'schedule_type', 'start_on', 'end_on', 'status', 'is_display', 'created_at', 'updated_at'])
+            ->into(self::TABLE, ['event_id', 'title', 'description', 'type', 'start_on', 'end_on', 'status', 'is_display', 'created_at', 'updated_at'])
             ->values([
-                $binEventId, $data['title'], $data['description'], $data['type'], $data['schedule_type'], $data['start_on'], $data['end_on'],
+                $binEventId, $data['title'], $data['description'], $data['type'], $data['start_on'], $data['end_on'],
                 $data['status'], $data['is_display'], $now, $now,
             ])
             ->build()
-            ->append('ON DUPLICATE KEY UPDATE `title` = VALUES(`title`), `description` = VALUES(`description`), `type` = VALUES(`type`), `schedule_type` = VALUES(`schedule_type`), `start_on` = VALUES(`start_on`), `end_on` = VALUES(`end_on`), `status` = VALUES(`status`), `is_display` = VALUES(`is_display`), `updated_at` = VALUES(`updated_at`)')
+            ->append('ON DUPLICATE KEY UPDATE `title` = VALUES(`title`), `description` = VALUES(`description`), `type` = VALUES(`type`), `start_on` = VALUES(`start_on`), `end_on` = VALUES(`end_on`), `status` = VALUES(`status`), `is_display` = VALUES(`is_display`), `updated_at` = VALUES(`updated_at`)')
             ->execute($pdo);
 
         $venueRows = [];
@@ -200,10 +199,9 @@ readonly class EventRepository implements EventRepositoryInterface
             Row::string($row, 'title'),
             Row::string($row, 'description'),
             EventType::from(Row::int($row, 'type')),
-            EventScheduleType::from(Row::int($row, 'schedule_type')),
             Row::nullableString($row, 'start_on'),
             Row::nullableString($row, 'end_on'),
-            ($status = Row::nullableString($row, 'status')) === null ? null : EventStatus::from((int)$status),
+            EventStatus::from(Row::int($row, 'status')),
             Row::bool($row, 'is_display'),
         );
 
