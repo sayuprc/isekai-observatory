@@ -14,7 +14,6 @@ readonly class SongListItem
      * @param array<string>                  $arrangers
      * @param array<SongMediaSummary>        $media
      * @param array<SongReleaseGroupSummary> $releaseGroups
-     * @param array<SongPerformanceHistory>  $performances
      */
     public function __construct(
         public string $songId,
@@ -26,7 +25,6 @@ readonly class SongListItem
         public array $arrangers,
         public array $media,
         public array $releaseGroups,
-        public array $performances,
         public int $orderNo,
     ) {
     }

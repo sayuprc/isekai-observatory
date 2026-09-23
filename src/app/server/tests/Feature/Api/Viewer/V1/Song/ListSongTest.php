@@ -191,7 +191,6 @@ class ListSongTest extends DatabaseTestCase
                                 'publishedAt' => '2024-03-01T12:00:00+09:00',
                             ],
                         ],
-                        'performances' => [],
                         'releaseGroups' => [],
                     ],
                 ],
@@ -246,7 +245,6 @@ class ListSongTest extends DatabaseTestCase
                                 'publishedAt' => '2024-05-01T18:30:00+09:00',
                             ],
                         ],
-                        'performances' => [],
                         'releaseGroups' => [
                             [
                                 'releaseGroupId' => $visibleReleaseGroupId,
