@@ -35,7 +35,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * EventSource Class Doc Comment
  *
  * @category Class
- * @description 活動出典
+ * @description イベント出典
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -334,7 +334,7 @@ class EventSource implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets display_name
      *
-     * @param string $display_name 活動の出典表示名
+     * @param string $display_name イベントの出典表示名
      *
      * @return self
      */
@@ -366,7 +366,7 @@ class EventSource implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets url
      *
-     * @param string $url 活動の出典URL
+     * @param string $url イベントの出典URL
      *
      * @return self
      */

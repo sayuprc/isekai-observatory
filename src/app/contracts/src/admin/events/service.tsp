@@ -9,7 +9,7 @@ using Http;
 
 namespace IsekaiObservatory.Admin;
 
-@doc("活動検索のソート条件")
+@doc("イベント検索のソート条件")
 enum EventSearchSortBy {
   schedule: "schedule",
   title: "title",
@@ -19,7 +19,7 @@ enum EventSearchSortBy {
 @route("/events")
 @useAuth(BearerAuth)
 interface EventService {
-  @doc("活動検索API")
+  @doc("イベント検索API")
   @route("/search")
   searchEvents(
     @query title?: string,
@@ -32,7 +32,7 @@ interface EventService {
     @query("per_page") perPage?: PerPage = PerPage.twentyFive,
   ): Ok<EventSearchResponse> | Unauthorized | Forbidden | ServerError;
 
-  @doc("活動取得API")
+  @doc("イベント取得API")
   getEvent(@path eventId: uuid):
     | Ok<EventGetResponse>
     | Unauthorized
@@ -41,7 +41,7 @@ interface EventService {
     | Unprocessable
     | ServerError;
 
-  @doc("活動作成API")
+  @doc("イベント作成API")
   createEvent(@body request: EventCreateRequest):
     | Ok<EventCreateResponse>
     | BadRequest
@@ -50,7 +50,7 @@ interface EventService {
     | Unprocessable
     | ServerError;
 
-  @doc("活動更新API")
+  @doc("イベント更新API")
   @put
   updateEvent(@path eventId: uuid, @body request: EventUpdateRequest):
     | Ok<EventUpdateResponse>
@@ -61,7 +61,7 @@ interface EventService {
     | Unprocessable
     | ServerError;
 
-  @doc("活動削除API")
+  @doc("イベント削除API")
   @delete
   deleteEvent(@path eventId: uuid):
     | NoContent

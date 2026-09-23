@@ -130,7 +130,7 @@ export const authenticateServiceRegisterStart = <ThrowOnError extends boolean = 
 });
 
 /**
- * 活動作成API
+ * イベント作成API
  */
 export const eventServiceCreateEvent = <ThrowOnError extends boolean = false>(options: Options<EventServiceCreateEventData, ThrowOnError>): RequestResult<EventServiceCreateEventResponses, EventServiceCreateEventErrors, ThrowOnError> => (options.client ?? client).post<EventServiceCreateEventResponses, EventServiceCreateEventErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -143,7 +143,7 @@ export const eventServiceCreateEvent = <ThrowOnError extends boolean = false>(op
 });
 
 /**
- * 活動検索API
+ * イベント検索API
  */
 export const eventServiceSearchEvents = <ThrowOnError extends boolean = false>(options?: Options<EventServiceSearchEventsData, ThrowOnError>): RequestResult<EventServiceSearchEventsResponses, EventServiceSearchEventsErrors, ThrowOnError> => (options?.client ?? client).get<EventServiceSearchEventsResponses, EventServiceSearchEventsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -152,7 +152,7 @@ export const eventServiceSearchEvents = <ThrowOnError extends boolean = false>(o
 });
 
 /**
- * 活動削除API
+ * イベント削除API
  */
 export const eventServiceDeleteEvent = <ThrowOnError extends boolean = false>(options: Options<EventServiceDeleteEventData, ThrowOnError>): RequestResult<EventServiceDeleteEventResponses, EventServiceDeleteEventErrors, ThrowOnError> => (options.client ?? client).delete<EventServiceDeleteEventResponses, EventServiceDeleteEventErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -161,7 +161,7 @@ export const eventServiceDeleteEvent = <ThrowOnError extends boolean = false>(op
 });
 
 /**
- * 活動取得API
+ * イベント取得API
  */
 export const eventServiceGetEvent = <ThrowOnError extends boolean = false>(options: Options<EventServiceGetEventData, ThrowOnError>): RequestResult<EventServiceGetEventResponses, EventServiceGetEventErrors, ThrowOnError> => (options.client ?? client).get<EventServiceGetEventResponses, EventServiceGetEventErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -170,7 +170,7 @@ export const eventServiceGetEvent = <ThrowOnError extends boolean = false>(optio
 });
 
 /**
- * 活動更新API
+ * イベント更新API
  */
 export const eventServiceUpdateEvent = <ThrowOnError extends boolean = false>(options: Options<EventServiceUpdateEventData, ThrowOnError>): RequestResult<EventServiceUpdateEventResponses, EventServiceUpdateEventErrors, ThrowOnError> => (options.client ?? client).put<EventServiceUpdateEventResponses, EventServiceUpdateEventErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],

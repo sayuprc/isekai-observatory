@@ -91,7 +91,7 @@ export type ErrorResponse = {
 };
 
 /**
- * 活動
+ * イベント
  */
 export type Event = {
     eventId: EventId;
@@ -136,12 +136,12 @@ export type EventSearchResponse = {
 };
 
 /**
- * 活動検索のソート条件
+ * イベント検索のソート条件
  */
 export type EventSearchSortBy = 'schedule' | 'title';
 
 /**
- * 活動出典
+ * イベント出典
  */
 export type EventSource = {
     displayName: EventSourceName;
@@ -150,12 +150,12 @@ export type EventSource = {
 };
 
 /**
- * 活動の開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+ * イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
  */
 export type EventStatusValue = 0 | 1 | 2;
 
 /**
- * 活動一覧の 1 行分
+ * イベント一覧の 1 行分
  */
 export type EventSummary = {
     eventId: EventId;
@@ -167,7 +167,7 @@ export type EventSummary = {
 };
 
 /**
- * 活動種別
+ * イベント種別
  */
 export type EventTypeValue = 1 | 2 | 3 | 99;
 
@@ -196,7 +196,7 @@ export type GenerateRecoveryCodesResponse = {
 export type IsekaiObservatoryAdminVersion = 'v1';
 
 /**
- * 活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+ * イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
  */
 export type IsekaiObservatoryPackagesEventEventSchedule = {
     startOn: EventOn | null;
@@ -307,7 +307,7 @@ export type Medium = {
 export type PerPage = 25 | 50 | 100;
 
 /**
- * 活動に紐づく楽曲披露
+ * イベントに紐づく楽曲披露
  */
 export type PerformancePerson = {
     personId: PersonId;
@@ -673,7 +673,7 @@ export type SongLinkedMedia = {
 };
 
 /**
- * 活動に紐づく楽曲披露
+ * イベントに紐づく楽曲披露
  */
 export type SongPerformance = {
     performanceId: Uuid;
@@ -897,32 +897,32 @@ export type Description = string;
 export type Email = string;
 
 /**
- * 活動説明
+ * イベント説明
  */
 export type EventDescription = string;
 
 /**
- * 活動ID
+ * イベントID
  */
 export type EventId = string;
 
 /**
- * 活動日
+ * イベント日
  */
 export type EventOn = string;
 
 /**
- * 活動の出典表示名
+ * イベントの出典表示名
  */
 export type EventSourceName = string;
 
 /**
- * 活動の出典URL
+ * イベントの出典URL
  */
 export type EventSourceUrl = string;
 
 /**
- * 活動タイトル
+ * イベントタイトル
  */
 export type EventTitle = string;
 
