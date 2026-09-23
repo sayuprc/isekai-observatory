@@ -20,7 +20,9 @@ readonly class GetUseCase
     public function handle(GetInputData $inputData): GetOutputData
     {
         $this->authorizer->authorize(Permission::ReadEvent);
+
         $event = $this->repository->find($inputData->eventId);
+
         if ($event === null) {
             throw new ResourceNotFoundException('Event', $inputData->eventId);
         }

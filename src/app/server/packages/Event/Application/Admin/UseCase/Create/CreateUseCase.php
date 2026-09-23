@@ -29,7 +29,7 @@ readonly class CreateUseCase
     {
         $this->authorizer->authorize(Permission::WriteEvent);
 
-        $output = $this->transaction->scope(function () use ($inputData): CreateOutputData {
+        return $this->transaction->scope(function () use ($inputData): CreateOutputData {
             $event = $this->integrityService->prepareForCreate([
                 'title' => $inputData->title,
                 'description' => $inputData->description,
@@ -48,7 +48,5 @@ readonly class CreateUseCase
 
             return new CreateOutputData($event);
         });
-
-        return new CreateOutputData($this->repository->find($output->event->eventId) ?? $output->event);
     }
 }
