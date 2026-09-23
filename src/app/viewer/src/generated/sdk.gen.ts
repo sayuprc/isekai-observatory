@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { EventServiceListEventsData, EventServiceListEventsErrors, EventServiceListEventsResponses, MediaServiceListMediaData, MediaServiceListMediaErrors, MediaServiceListMediaResponses, ReleaseGroupServiceListReleaseGroupsData, ReleaseGroupServiceListReleaseGroupsErrors, ReleaseGroupServiceListReleaseGroupsResponses, SiteStatsServiceGetSiteStatsData, SiteStatsServiceGetSiteStatsErrors, SiteStatsServiceGetSiteStatsResponses, SongServiceListSongsData, SongServiceListSongsErrors, SongServiceListSongsResponses } from './types.gen';
+import type { MediaServiceListMediaData, MediaServiceListMediaErrors, MediaServiceListMediaResponses, ReleaseGroupServiceListReleaseGroupsData, ReleaseGroupServiceListReleaseGroupsErrors, ReleaseGroupServiceListReleaseGroupsResponses, SiteStatsServiceGetSiteStatsData, SiteStatsServiceGetSiteStatsErrors, SiteStatsServiceGetSiteStatsResponses, SongServiceListSongsData, SongServiceListSongsErrors, SongServiceListSongsResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -17,11 +17,6 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
      */
     meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
-
-/**
- * 公開活動一覧取得API
- */
-export const eventServiceListEvents = <ThrowOnError extends boolean = false>(options?: Options<EventServiceListEventsData, ThrowOnError>): RequestResult<EventServiceListEventsResponses, EventServiceListEventsErrors, ThrowOnError> => (options?.client ?? client).get<EventServiceListEventsResponses, EventServiceListEventsErrors, ThrowOnError>({ url: '/events', ...options });
 
 /**
  * メディア一覧取得API
