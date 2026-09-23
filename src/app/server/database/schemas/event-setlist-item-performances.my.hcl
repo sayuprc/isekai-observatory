@@ -1,18 +1,22 @@
 table "event_setlist_item_performances" {
-  schema = schema.db
+  schema  = schema.db
+  comment = "セットリスト項目の楽曲披露"
 
   column "setlist_item_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "セットリスト項目ID"
   }
   column "performance_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "楽曲披露ID"
   }
   column "order_no" {
     null     = false
     type     = int
     unsigned = true
+    comment  = "表示順"
   }
 
   primary_key {

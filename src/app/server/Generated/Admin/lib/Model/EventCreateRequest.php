@@ -409,7 +409,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets title
      *
-     * @param string $title 活動タイトル
+     * @param string $title イベントタイトル
      *
      * @return self
      */
@@ -441,7 +441,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets description
      *
-     * @param string $description 活動説明
+     * @param string $description イベント説明
      *
      * @return self
      */
