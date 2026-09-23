@@ -15,7 +15,7 @@ import { SITE_DESCRIPTION } from '../shared/site';
 const latestReleaseGroup = await releaseGroupContentRepository.latest();
 const latestSong = await songContentRepository.latest();
 const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap(medium => medium.tracks) ?? [];
-const upcomingEvents = (await eventContentRepository.all()).filter(event => event.statusValue === null && eventDate(event) !== null);
+const upcomingEvents = (await eventContentRepository.all()).filter(event => event.statusValue === 0 && eventDate(event) !== null);
 
 const siteStats = await siteStatsRepository.get();
 const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry.url) !== null)
