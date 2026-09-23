@@ -59,6 +59,8 @@ enum AuditTargetType: string
 
     case VENUE = 'Venue';
 
+    case EVENT = 'Event';
+
 }
 
 

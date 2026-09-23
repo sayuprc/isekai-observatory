@@ -55,6 +55,11 @@ class DeleteUseCaseTest extends TestCase
             ->andReturn($song)
             ->once();
 
+        $this->repository->shouldReceive('isUsed')
+            ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
+            ->andReturn(false)
+            ->once();
+
         $this->repository->shouldReceive('delete')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
             ->once();

@@ -74,6 +74,19 @@ readonly class VenueRepository implements VenueRepositoryInterface
     }
 
     #[Override]
+    public function isUsed(VenueId $venueId): bool
+    {
+        $count = Row::intValue(
+            $this->queryFactory->select()
+                ->from('event_venues')
+                ->where('venue_id', '=', $this->converter->toBin($venueId->value))
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
+        );
+
+        return $count > 0;
+    }
+
+    #[Override]
     public function save(Venue $venue): Venue
     {
         $now = now()->toDateTimeString();
