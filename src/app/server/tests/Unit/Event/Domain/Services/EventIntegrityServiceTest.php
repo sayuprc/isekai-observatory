@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Event\Domain\Services;
 
+use Event\Domain\Models\Event;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Event\Domain\Services\EventIntegrityService;
@@ -26,6 +27,8 @@ class EventIntegrityServiceTest extends TestCase
 
     private const string OTHER_PERFORMANCE_ID = 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD';
 
+    private const string VENUE_ID = 'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE';
+
     private MockInterface&UuidGeneratorInterface $generator;
 
     #[Override]
@@ -44,10 +47,12 @@ class EventIntegrityServiceTest extends TestCase
             ->andReturn(self::EVENT_ID)
             ->once();
 
-        $event = $this->getInstance()->prepareForCreate($this->input());
+        $event = $this->getInstance()->prepareForCreate(...$this->input(venueIds: [self::VENUE_ID]));
 
-        $this->assertSame(self::EVENT_ID, $event->eventId);
-        $this->assertSame('テストライブ', $event->title);
+        $this->assertSame(self::EVENT_ID, $event->eventId->value);
+        $this->assertSame('テストライブ', $event->title->value);
+        $this->assertSame(self::VENUE_ID, $event->venues[0]->venueId->value);
+        $this->assertSame(1, $event->venues[0]->orderNo->value);
     }
 
     #[Test]
@@ -55,13 +60,14 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->generator->shouldNotReceive('generate');
 
-        $event = $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
-            'performances' => [self::performance(self::PERFORMANCE_ID, 1)],
-            'setlist' => [self::setlistItem(1, '本編', [self::performance(self::PERFORMANCE_ID, 1)])],
-        ]));
+        $event = $this->prepareForUpdate(
+            performances: [self::performance(self::PERFORMANCE_ID, 1)],
+            setlist: [self::setlistItem(1, '本編', [self::PERFORMANCE_ID])],
+        );
 
-        $this->assertSame(self::EVENT_ID, $event->eventId);
-        $this->assertSame(self::PERFORMANCE_ID, $event->setlist[0]['performances'][0]['performance_id']);
+        $this->assertSame(self::EVENT_ID, $event->eventId->value);
+        $this->assertSame(self::SONG_ID, $event->performances[0]->songId->value);
+        $this->assertSame(self::PERFORMANCE_ID, $event->setlist[0]->performanceIds[0]->value);
     }
 
     #[Test]
@@ -69,10 +75,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
-            'typeValue' => EventType::Exhibition->value,
-            'setlist' => [self::setlistItem(1, '展示作品', [])],
-        ]));
+        $this->prepareForUpdate(type: EventType::Exhibition->value, setlist: [self::setlistItem(1, '展示作品', [])]);
     }
 
     /**
@@ -95,15 +98,15 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['statusValue' => $status->value, ...$contents]));
+        $this->prepareForUpdate(...[...$contents, 'status' => $status->value]);
     }
 
     #[Test]
     public function acceptsCancelledEventWithoutPerformancesAndSetlist(): void
     {
-        $this->expectNotToPerformAssertions();
+        $event = $this->prepareForUpdate(status: EventStatus::Cancelled->value);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['statusValue' => EventStatus::Cancelled->value]));
+        $this->assertSame(EventStatus::Cancelled, $event->status);
     }
 
     #[Test]
@@ -111,7 +114,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['schedule' => ['startOn' => null, 'endOn' => '2026-10-03']]));
+        $this->prepareForUpdate(schedule: ['startOn' => null, 'endOn' => '2026-10-03']);
     }
 
     #[Test]
@@ -119,7 +122,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['schedule' => ['startOn' => '2026-10-03', 'endOn' => '2026-10-01']]));
+        $this->prepareForUpdate(schedule: ['startOn' => '2026-10-03', 'endOn' => '2026-10-01']);
     }
 
     #[Test]
@@ -127,8 +130,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $venueId = 'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE';
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['venueIds' => [$venueId, $venueId]]));
+        $this->prepareForUpdate(venueIds: [self::VENUE_ID, self::VENUE_ID]);
     }
 
     #[Test]
@@ -136,7 +138,7 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input(['setlist' => [self::setlistItem(1, null, [])]]));
+        $this->prepareForUpdate(setlist: [self::setlistItem(1, null, [])]);
     }
 
     #[Test]
@@ -144,10 +146,10 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
-            'performances' => [self::performance(self::PERFORMANCE_ID, 1)],
-            'setlist' => [self::setlistItem(1, null, [self::performance(self::OTHER_PERFORMANCE_ID, 1)])],
-        ]));
+        $this->prepareForUpdate(
+            performances: [self::performance(self::PERFORMANCE_ID, 1)],
+            setlist: [self::setlistItem(1, null, [self::OTHER_PERFORMANCE_ID])],
+        );
     }
 
     #[Test]
@@ -155,52 +157,84 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->prepareForUpdate(self::EVENT_ID, $this->input([
-            'performances' => [self::performance(self::PERFORMANCE_ID, 1)],
-            'setlist' => [
-                self::setlistItem(1, null, [self::performance(self::PERFORMANCE_ID, 1)]),
-                self::setlistItem(2, null, [self::performance(self::PERFORMANCE_ID, 1)]),
+        $this->prepareForUpdate(
+            performances: [self::performance(self::PERFORMANCE_ID, 1)],
+            setlist: [
+                self::setlistItem(1, null, [self::PERFORMANCE_ID]),
+                self::setlistItem(2, null, [self::PERFORMANCE_ID]),
             ],
-        ]));
+        );
     }
 
     /**
-     * @param array<string, mixed> $overrides
-     *
-     * @return array<string, mixed>
+     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
+     * @param list<string>                                                                                                                                    $venueIds
+     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
      */
-    private function input(array $overrides = []): array
-    {
+    private function prepareForUpdate(
+        int $type = EventType::Live->value,
+        array $schedule = ['startOn' => '2026-10-01', 'endOn' => null],
+        int $status = EventStatus::Normal->value,
+        array $venueIds = [],
+        array $performances = [],
+        array $setlist = [],
+    ): Event {
+        return $this->getInstance()->prepareForUpdate(self::EVENT_ID, ...$this->input($type, $schedule, $status, $venueIds, $performances, $setlist));
+    }
+
+    /**
+     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
+     * @param list<string>                                                                                                                                    $venueIds
+     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     *
+     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venueIds: list<string>, mediaIds: list<string>, sources: list<array{displayName: string, url: string, orderNo: int}>, performances: list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}>, setlist: list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>}
+     */
+    private function input(
+        int $type = EventType::Live->value,
+        array $schedule = ['startOn' => '2026-10-01', 'endOn' => null],
+        int $status = EventStatus::Normal->value,
+        array $venueIds = [],
+        array $performances = [],
+        array $setlist = [],
+    ): array {
         return [
             'title' => 'テストライブ',
             'description' => '',
-            'typeValue' => EventType::Live->value,
-            'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-            'statusValue' => EventStatus::Normal->value,
+            'type' => $type,
+            'schedule' => $schedule,
+            'status' => $status,
             'isDisplay' => true,
-            'venueIds' => [],
+            'venueIds' => $venueIds,
             'mediaIds' => [],
             'sources' => [],
-            'performances' => [],
-            'setlist' => [],
-            ...$overrides,
+            'performances' => $performances,
+            'setlist' => $setlist,
         ];
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}
+     */
     private static function performance(string $performanceId, int $orderNo): array
     {
-        return ['performanceId' => $performanceId, 'songId' => self::SONG_ID, 'songTitle' => '披露曲', 'orderNo' => $orderNo, 'coVocalists' => []];
+        return ['performanceId' => $performanceId, 'songId' => self::SONG_ID, 'orderNo' => $orderNo, 'coVocalists' => []];
     }
 
     /**
-     * @param list<array<string, mixed>> $performances
+     * @param list<string> $performanceIds
      *
-     * @return array<string, mixed>
+     * @return array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}
      */
-    private static function setlistItem(int $orderNo, ?string $label, array $performances): array
+    private static function setlistItem(int $orderNo, ?string $label, array $performanceIds): array
     {
-        return ['setlistItemId' => sprintf('FFFFFFFF-FFFF-FFFF-FFFF-%012d', $orderNo), 'orderNo' => $orderNo, 'label' => $label, 'performances' => $performances];
+        return [
+            'setlistItemId' => sprintf('FFFFFFFF-FFFF-FFFF-FFFF-%012d', $orderNo),
+            'orderNo' => $orderNo,
+            'label' => $label,
+            'performances' => array_map(static fn (string $id): array => ['performanceId' => $id], $performanceIds),
+        ];
     }
 
     private function getInstance(): EventIntegrityService
