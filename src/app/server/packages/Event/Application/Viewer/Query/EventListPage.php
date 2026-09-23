@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Event\Application\Viewer\UseCase\List;
+namespace Event\Application\Viewer\Query;
 
-use Event\Application\Viewer\Query\EventListItem;
-
-readonly class ListOutputData
+readonly class EventListPage
 {
     /**
      * @param array<EventListItem> $events
