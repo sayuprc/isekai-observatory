@@ -48,8 +48,8 @@ class CreateEventTest extends DatabaseTestCase
                 'venueIds' => [$venueId],
                 'mediaIds' => [$mediaId],
                 'sources' => [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
-                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'isDisplay' => true, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'isDisplay' => true, 'coVocalists' => []]]]],
+                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
+                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]]]],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
@@ -81,6 +81,51 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '展示作品', 'performances' => []]],
+            ])
+            ->assertStatus(400)
+            ->assertJsonPath('code', 'business_rule_violation');
+    }
+
+    #[Test]
+    public function rejectsPerformancesForCancelledEvent(): void
+    {
+        $songId = $this->generateUuid();
+        $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
+
+        $this->withAuth()
+            ->postJson(route(EventRouteMap::Create), [
+                'title' => '中止されたライブ',
+                'description' => '',
+                'typeValue' => 1,
+                'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+                'statusValue' => 3,
+                'isDisplay' => true,
+                'venueIds' => [],
+                'mediaIds' => [],
+                'sources' => [],
+                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]],
+                'setlist' => [],
+            ])
+            ->assertStatus(400)
+            ->assertJsonPath('code', 'business_rule_violation');
+    }
+
+    #[Test]
+    public function rejectsSetlistForPostponedEvent(): void
+    {
+        $this->withAuth()
+            ->postJson(route(EventRouteMap::Create), [
+                'title' => '延期されたライブ',
+                'description' => '',
+                'typeValue' => 1,
+                'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+                'statusValue' => 2,
+                'isDisplay' => true,
+                'venueIds' => [],
+                'mediaIds' => [],
+                'sources' => [],
+                'performances' => [],
+                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'オープニング', 'performances' => []]],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');

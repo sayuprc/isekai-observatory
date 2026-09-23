@@ -6,6 +6,7 @@ namespace Event\Domain\Services;
 
 use DateTimeImmutable;
 use Event\Domain\Models\Event;
+use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Exception;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
@@ -22,6 +23,13 @@ readonly class EventIntegrityService
 
         if (! in_array($event->type, [EventType::Live, EventType::Stream], true) && $event->setlist !== []) {
             throw new BusinessRuleViolationException('ライブまたは配信以外のイベントにはセットリストを設定できません');
+        }
+
+        if (
+            in_array($event->status, [EventStatus::Postponed, EventStatus::Cancelled], true)
+            && ($event->performances !== [] || $event->setlist !== [])
+        ) {
+            throw new BusinessRuleViolationException('延期または中止されたイベントには楽曲披露とセットリストを設定できません');
         }
 
         $this->assertUnique(array_column($event->venues, 'venue_id'), '開催先');

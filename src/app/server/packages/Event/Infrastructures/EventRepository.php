@@ -131,11 +131,11 @@ readonly class EventRepository implements EventRepositoryInterface
         foreach ($performances as $performance) {
             $performanceRows[] = [
                 $this->converter->toBin($performance['performance_id']), $binEventId,
-                $this->converter->toBin($performance['song_id']), $performance['order_no'], $performance['is_display'], $now, $now,
+                $this->converter->toBin($performance['song_id']), $performance['order_no'], $now, $now,
             ];
         }
         if ($performanceRows !== []) {
-            $this->queryFactory->insert()->into('song_performances', ['performance_id', 'event_id', 'song_id', 'order_no', 'is_display', 'created_at', 'updated_at'])->values(...$performanceRows)->execute($pdo);
+            $this->queryFactory->insert()->into('song_performances', ['performance_id', 'event_id', 'song_id', 'order_no', 'created_at', 'updated_at'])->values(...$performanceRows)->execute($pdo);
         }
 
         $personRows = [];
@@ -260,10 +260,10 @@ readonly class EventRepository implements EventRepositoryInterface
         return array_map(static fn (array $row): array => ['name' => Row::string($row, 'name'), 'url' => Row::string($row, 'url'), 'order_no' => Row::int($row, 'order_no')], $this->queryFactory->fetchAll($this->queryFactory->select()->from('event_sources')->withSelect(['name', 'url', 'order_no'])->where('event_id', '=', $binEventId)->orderBy('order_no')));
     }
 
-    /** @return list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> */
+    /** @return list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> */
     private function loadPerformances(string $binEventId): array
     {
-        $rows = $this->queryFactory->fetchAll($this->queryFactory->select()->from('song_performances')->withSelect(['performance_id', 'song_id', 'order_no', 'is_display'])->where('event_id', '=', $binEventId)->orderBy('order_no'));
+        $rows = $this->queryFactory->fetchAll($this->queryFactory->select()->from('song_performances')->withSelect(['performance_id', 'song_id', 'order_no'])->where('event_id', '=', $binEventId)->orderBy('order_no'));
         $result = [];
         foreach ($rows as $row) {
             $songId = Row::string($row, 'song_id');
@@ -278,27 +278,27 @@ readonly class EventRepository implements EventRepositoryInterface
                 }
                 $coVocalists[] = ['person_id' => $this->converter->toUuid($personId), 'name' => Row::string($personRows[0], 'name'), 'credit_name' => Row::nullableString($person, 'credit_name'), 'order_no' => Row::int($person, 'order_no')];
             }
-            $result[] = ['performance_id' => $this->converter->toUuid(Row::string($row, 'performance_id')), 'song_id' => $this->converter->toUuid($songId), 'song_title' => $songRows === [] ? '' : Row::string($songRows[0], 'title'), 'order_no' => Row::int($row, 'order_no'), 'is_display' => Row::bool($row, 'is_display'), 'song_is_display' => $songRows !== [] && Row::bool($songRows[0], 'is_display'), 'co_vocalists' => $coVocalists];
+            $result[] = ['performance_id' => $this->converter->toUuid(Row::string($row, 'performance_id')), 'song_id' => $this->converter->toUuid($songId), 'song_title' => $songRows === [] ? '' : Row::string($songRows[0], 'title'), 'order_no' => Row::int($row, 'order_no'), 'song_is_display' => $songRows !== [] && Row::bool($songRows[0], 'is_display'), 'co_vocalists' => $coVocalists];
         }
 
         return $result;
     }
 
     /**
-     * @param list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> $performances
+     * @param list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> $performances
      *
-     * @return list<array{setlist_item_id: string, order_no: int, label: ?string, performances: list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>}>
+     * @return list<array{setlist_item_id: string, order_no: int, label: ?string, performances: list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>}>
      */
     private function loadSetlist(string $binEventId, array $performances): array
     {
-        /** @var array<string, array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> $byId */
+        /** @var array<string, array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> $byId */
         $byId = array_column($performances, null, 'performance_id');
         $items = $this->queryFactory->fetchAll($this->queryFactory->select()->from('event_setlist_items')->withSelect(['setlist_item_id', 'order_no', 'label'])->where('event_id', '=', $binEventId)->orderBy('order_no'));
         $result = [];
         foreach ($items as $item) {
             $itemId = Row::string($item, 'setlist_item_id');
             $links = $this->queryFactory->fetchAll($this->queryFactory->select()->from('event_setlist_item_performances')->withSelect(['performance_id'])->where('setlist_item_id', '=', $itemId)->orderBy('order_no'));
-            /** @var list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> $itemPerformances */
+            /** @var list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> $itemPerformances */
             $itemPerformances = [];
             foreach ($links as $link) {
                 $id = $this->converter->toUuid(Row::string($link, 'performance_id'));
@@ -312,7 +312,7 @@ readonly class EventRepository implements EventRepositoryInterface
         return $result;
     }
 
-    /** @return list<array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> */
+    /** @return list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}> */
     private function allPerformances(Event $event): array
     {
         $all = [];

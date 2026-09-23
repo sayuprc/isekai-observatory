@@ -460,3 +460,5 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
+
+
