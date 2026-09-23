@@ -29,18 +29,18 @@ readonly class DeleteUseCase
         $this->authorizer->authorize(Permission::WriteEvent);
 
         $this->transaction->scope(function () use ($inputData): void {
-            $event = $this->repository->find($inputData->eventId);
+            $event = $this->repository->find(new EventId($inputData->eventId));
 
             if ($event === null) {
                 throw new ResourceNotFoundException('Event', $inputData->eventId);
             }
 
-            $this->repository->delete($inputData->eventId);
+            $this->repository->delete($event->eventId);
 
             $this->recorder->record(
                 AuditAction::Delete,
                 AuditTargetType::Event,
-                new EventId($event->eventId),
+                $event->eventId,
                 $event->toArray(),
             );
         });

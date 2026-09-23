@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin\V1\Event;
 
-use Event\Domain\Models\Event;
 use Media\Domain\Models\MediaType;
 use Media\Route\MediaRouteMap;
 use Person\Route\PersonRouteMap;
@@ -77,19 +76,12 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
         $this->storeMedia($this->createMedia($mediaId, '配信', 'https://example.com/stream', MediaType::LiveStream, true));
-        $this->storeEvents(Event::fromInput($this->generateUuid(), [
-            'title' => '参照活動',
-            'description' => '',
-            'typeValue' => 1,
-            'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-            'statusValue' => 1,
-            'isDisplay' => true,
-            'venueIds' => [$venueId],
-            'mediaIds' => [$mediaId],
-            'sources' => [],
-            'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => null, 'orderNo' => 1]]]],
-            'setlist' => [],
-        ]));
+        $this->storeEvents($this->createEvent(
+            $this->generateUuid(),
+            venues: [['venueId' => $venueId, 'orderNo' => 1]],
+            media: [['mediaId' => $mediaId, 'orderNo' => 1]],
+            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'orderNo' => 1]]]],
+        ));
 
         return [$songId, $personId, $venueId, $mediaId];
     }

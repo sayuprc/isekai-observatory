@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Event\Application\Admin\UseCase\Create;
 
-use Event\Domain\Models\Event;
+use Event\Application\Admin\Assemble\AssembledEvent;
 
 readonly class CreateOutputData
 {
-    public function __construct(public Event $event)
+    public function __construct(public AssembledEvent $event)
     {
     }
 }

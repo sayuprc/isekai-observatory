@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin\V1\Event;
 
-use Event\Domain\Models\Event;
 use Event\Route\EventRouteMap;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
@@ -79,17 +78,5 @@ class UpdateEventTest extends DatabaseTestCase
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
-    }
-
-    private function createEvent(string $eventId): Event
-    {
-        return Event::fromInput($eventId, [
-            'title' => 'テストライブ',
-            'description' => '',
-            'typeValue' => 1,
-            'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-            'statusValue' => 1,
-            'isDisplay' => true,
-        ]);
     }
 }
