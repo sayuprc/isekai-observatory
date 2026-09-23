@@ -1,6 +1,6 @@
 <?php
 /**
- * PermissionValue
+ * EventScheduleTypeValue
  *
  * PHP version 8.1
  *
@@ -30,47 +30,23 @@ namespace OpenAPI\Admin\Client\Model;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * PermissionValue Class Doc Comment
+ * EventScheduleTypeValue Class Doc Comment
  *
  * @category Class
- * @description 権限の値
+ * @description 活動の開催時期
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-enum PermissionValue: string
+enum EventScheduleTypeValue: int
 {
     /**
      * Possible values of this enum
      */
-    case READ_ADMIN_USER = 'read_admin_user';
+    case NUMBER_1 = 1;
 
-    case WRITE_ADMIN_USER = 'write_admin_user';
+    case NUMBER_2 = 2;
 
-    case READ_PERSON = 'read_person';
-
-    case WRITE_PERSON = 'write_person';
-
-    case READ_SONG = 'read_song';
-
-    case WRITE_SONG = 'write_song';
-
-    case READ_MEDIA = 'read_media';
-
-    case WRITE_MEDIA = 'write_media';
-
-    case READ_RELEASE = 'read_release';
-
-    case WRITE_RELEASE = 'write_release';
-
-    case READ_VENUE = 'read_venue';
-
-    case WRITE_VENUE = 'write_venue';
-
-    case READ_EVENT = 'read_event';
-
-    case WRITE_EVENT = 'write_event';
+    case NUMBER_3 = 3;
 
 }
-
-
