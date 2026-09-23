@@ -12,5 +12,5 @@ export function eventTypeName(value: Event['typeValue']): string {
 }
 
 export function eventStatusName(value: Event['statusValue']): string | null {
-  return value === 1 ? '延期' : value === 2 ? '中止' : null;
+  return value === 2 ? '延期' : value === 3 ? '中止' : null;
 }
