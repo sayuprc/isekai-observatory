@@ -169,16 +169,16 @@ readonly class EventRepository implements EventRepositoryInterface
 
     private function applyCriteria(SelectBuilder $query, EventSearchCriteria $criteria): SelectBuilder
     {
-        if ($criteria->title !== null && $criteria->title !== '') {
+        if (! is_null($criteria->title) && $criteria->title !== '') {
             $query = $query->where('title_lower', 'LIKE', '%' . SqlHelper::escapeLike(mb_strtolower($criteria->title)) . '%');
         }
-        if ($criteria->type !== null) {
+        if (! is_null($criteria->type)) {
             $query = $query->where('type', '=', $criteria->type);
         }
-        if ($criteria->status !== null) {
+        if (! is_null($criteria->status)) {
             $query = $query->where('status', '=', $criteria->status);
         }
-        if ($criteria->isDisplay !== null) {
+        if (! is_null($criteria->isDisplay)) {
             $query = $query->where('is_display', '=', $criteria->isDisplay);
         }
 

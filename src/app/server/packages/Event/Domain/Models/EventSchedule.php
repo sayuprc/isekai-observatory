@@ -14,8 +14,8 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
 readonly class EventSchedule
 {
     public function __construct(
-        public ?EventOn $startOn,
-        public ?EventOn $endOn,
+        public ?ImmutableDate $startOn,
+        public ?ImmutableDate $endOn,
     ) {
     }
 
@@ -24,13 +24,13 @@ readonly class EventSchedule
      */
     public static function fromArray(?string $startOn, ?string $endOn): self
     {
-        $schedule = new self(self::toEventOn($startOn), self::toEventOn($endOn));
+        $schedule = new self(self::toDate($startOn), self::toDate($endOn));
 
-        if ($schedule->startOn === null && $schedule->endOn !== null) {
+        if (is_null($schedule->startOn) && ! is_null($schedule->endOn)) {
             throw new BusinessRuleViolationException('開催終了日だけを指定できません');
         }
 
-        if ($schedule->startOn !== null && $schedule->endOn !== null && $schedule->startOn->value > $schedule->endOn->value) {
+        if (! is_null($schedule->startOn) && ! is_null($schedule->endOn) && $schedule->startOn > $schedule->endOn) {
             throw new BusinessRuleViolationException('開催終了日は開始日以降を指定してください');
         }
 
@@ -40,8 +40,8 @@ readonly class EventSchedule
     public static function reconstruct(?string $startOn, ?string $endOn): self
     {
         return new self(
-            $startOn === null ? null : new EventOn(new ImmutableDate($startOn)),
-            $endOn === null ? null : new EventOn(new ImmutableDate($endOn)),
+            is_null($startOn) ? null : new ImmutableDate($startOn),
+            is_null($endOn) ? null : new ImmutableDate($endOn),
         );
     }
 
@@ -51,22 +51,22 @@ readonly class EventSchedule
     public function toArray(): array
     {
         return [
-            'start_on' => $this->startOn?->value->format('Y-m-d'),
-            'end_on' => $this->endOn?->value->format('Y-m-d'),
+            'start_on' => $this->startOn?->format('Y-m-d'),
+            'end_on' => $this->endOn?->format('Y-m-d'),
         ];
     }
 
     /**
      * @throws BusinessRuleViolationException
      */
-    private static function toEventOn(?string $value): ?EventOn
+    private static function toDate(?string $value): ?ImmutableDate
     {
-        if ($value === null) {
+        if (is_null($value)) {
             return null;
         }
 
         try {
-            return new EventOn(new ImmutableDate($value));
+            return new ImmutableDate($value);
         } catch (DateMalformedStringException) {
             throw new BusinessRuleViolationException('開催時期の日付形式が不正です');
         }
