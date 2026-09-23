@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Event\Domain\Services;
 
-use DateTimeImmutable;
 use Event\Domain\Models\Event;
+use Event\Domain\Models\EventDescription;
+use Event\Domain\Models\EventId;
+use Event\Domain\Models\EventSchedule;
 use Event\Domain\Models\EventStatus;
+use Event\Domain\Models\EventTitle;
 use Event\Domain\Models\EventType;
-use Exception;
+use Event\Domain\Models\Media\EventMediaLinks;
+use Event\Domain\Models\Performances\SongPerformances;
+use Event\Domain\Models\Setlist\Setlist;
+use Event\Domain\Models\Sources\EventSources;
+use Event\Domain\Models\Venues\EventVenueLinks;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 
@@ -22,104 +29,138 @@ readonly class EventIntegrityService
     {
     }
 
-    /** @param array<string, mixed> $data */
-    public function prepareForCreate(array $data): Event
-    {
-        return $this->build($this->generator->generate(), $data);
+    /**
+     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
+     * @param list<string>                                                                                                                                    $venueIds
+     * @param list<string>                                                                                                                                    $mediaIds
+     * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
+     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     *
+     * @throws BusinessRuleViolationException
+     */
+    public function prepareForCreate(
+        string $title,
+        string $description,
+        int $type,
+        array $schedule,
+        int $status,
+        bool $isDisplay,
+        array $venueIds,
+        array $mediaIds,
+        array $sources,
+        array $performances,
+        array $setlist,
+    ): Event {
+        return $this->build($this->generator->generate(), $title, $description, $type, $schedule, $status, $isDisplay, $venueIds, $mediaIds, $sources, $performances, $setlist);
     }
 
-    /** @param array<string, mixed> $data */
-    public function prepareForUpdate(string $eventId, array $data): Event
-    {
-        return $this->build($eventId, $data);
+    /**
+     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
+     * @param list<string>                                                                                                                                    $venueIds
+     * @param list<string>                                                                                                                                    $mediaIds
+     * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
+     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     *
+     * @throws BusinessRuleViolationException
+     */
+    public function prepareForUpdate(
+        string $eventId,
+        string $title,
+        string $description,
+        int $type,
+        array $schedule,
+        int $status,
+        bool $isDisplay,
+        array $venueIds,
+        array $mediaIds,
+        array $sources,
+        array $performances,
+        array $setlist,
+    ): Event {
+        return $this->build($eventId, $title, $description, $type, $schedule, $status, $isDisplay, $venueIds, $mediaIds, $sources, $performances, $setlist);
     }
 
-    /** @param array<string, mixed> $data */
-    private function build(string $eventId, array $data): Event
-    {
-        $event = Event::fromInput($eventId, $data);
-        $this->validate($event);
+    /**
+     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
+     * @param list<string>                                                                                                                                    $venueIds
+     * @param list<string>                                                                                                                                    $mediaIds
+     * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
+     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     *
+     * @throws BusinessRuleViolationException
+     */
+    private function build(
+        string $eventId,
+        string $title,
+        string $description,
+        int $type,
+        array $schedule,
+        int $status,
+        bool $isDisplay,
+        array $venueIds,
+        array $mediaIds,
+        array $sources,
+        array $performances,
+        array $setlist,
+    ): Event {
+        $event = new Event(
+            new EventId($eventId),
+            new EventTitle($title),
+            new EventDescription($description),
+            EventType::from($type),
+            EventSchedule::fromArray($schedule['startOn'], $schedule['endOn']),
+            EventStatus::from($status),
+            $isDisplay,
+            EventVenueLinks::fromArray($venueIds),
+            EventMediaLinks::fromArray($mediaIds),
+            EventSources::fromArray($sources),
+            SongPerformances::fromArray($performances),
+            Setlist::fromArray(array_map(
+                static fn (array $item): array => [
+                    'setlistItemId' => $item['setlistItemId'],
+                    'orderNo' => $item['orderNo'],
+                    'label' => $item['label'],
+                    'performanceIds' => array_column($item['performances'], 'performanceId'),
+                ],
+                $setlist,
+            )),
+        );
+
+        $this->assertSetlistAllowed($event);
+        $this->assertSetlistReferencesPerformances($event);
 
         return $event;
     }
 
-    private function validate(Event $event): void
+    /**
+     * @throws BusinessRuleViolationException
+     */
+    private function assertSetlistAllowed(Event $event): void
     {
-        $this->validateSchedule($event);
-
-        if (! in_array($event->type, [EventType::Live, EventType::Stream], true) && $event->setlist !== []) {
+        if (! in_array($event->type, [EventType::Live, EventType::Stream], true) && count($event->setlist) > 0) {
             throw new BusinessRuleViolationException('ライブまたは配信以外のイベントにはセットリストを設定できません');
         }
 
         if (
             in_array($event->status, [EventStatus::Postponed, EventStatus::Cancelled], true)
-            && ($event->performances !== [] || $event->setlist !== [])
+            && (count($event->performances) > 0 || count($event->setlist) > 0)
         ) {
             throw new BusinessRuleViolationException('延期または中止されたイベントには楽曲披露とセットリストを設定できません');
         }
-
-        $this->assertUnique(array_column($event->venues, 'venue_id'), '開催先');
-        $this->assertUnique(array_column($event->venues, 'order_no'), '開催先の順序');
-        $this->assertUnique(array_column($event->media, 'media_id'), 'メディア');
-        $this->assertUnique(array_column($event->media, 'order_no'), 'メディアの順序');
-        $this->assertUnique(array_column($event->sources, 'url'), '出典URL');
-        $this->assertUnique(array_column($event->sources, 'order_no'), '出典の順序');
-        $this->assertUnique(array_column($event->performances, 'performance_id'), '楽曲披露');
-        $this->assertUnique(array_column($event->performances, 'order_no'), '楽曲披露の順序');
-        $this->assertUnique(array_column($event->setlist, 'setlist_item_id'), 'セットリスト項目');
-        $this->assertUnique(array_column($event->setlist, 'order_no'), 'セットリストの順序');
-
-        foreach ($event->performances as $performance) {
-            $this->assertUnique(array_column($performance['co_vocalists'], 'person_id'), '楽曲披露の共演者');
-            $this->assertUnique(array_column($performance['co_vocalists'], 'order_no'), '楽曲披露の共演者順序');
-        }
-
-        $performanceIds = array_column($event->performances, 'performance_id');
-        $referencedPerformanceIds = [];
-        foreach ($event->setlist as $item) {
-            if ($item['label'] === null && $item['performances'] === []) {
-                throw new BusinessRuleViolationException('セットリスト項目には表示名または楽曲披露を指定してください');
-            }
-
-            foreach ($item['performances'] as $performance) {
-                if (! in_array($performance['performance_id'], $performanceIds, true)) {
-                    throw new BusinessRuleViolationException('セットリストが存在しない楽曲披露を参照しています');
-                }
-                if (in_array($performance['performance_id'], $referencedPerformanceIds, true)) {
-                    throw new BusinessRuleViolationException('同じ楽曲披露を複数のセットリスト項目から参照できません');
-                }
-                $referencedPerformanceIds[] = $performance['performance_id'];
-            }
-        }
     }
 
-    private function validateSchedule(Event $event): void
+    /**
+     * @throws BusinessRuleViolationException
+     */
+    private function assertSetlistReferencesPerformances(Event $event): void
     {
-        if ($event->startOn === null && $event->endOn !== null) {
-            throw new BusinessRuleViolationException('開催終了日だけを指定できません');
-        }
-
-        if ($event->endOn !== null && $event->startOn > $event->endOn) {
-            throw new BusinessRuleViolationException('開催終了日は開始日以降を指定してください');
-        }
-
-        // 契約で形式検証済みだが、CLI や内部呼び出しでも壊れた日付を永続化しない。
-        foreach ([$event->startOn, $event->endOn] as $value) {
-            if ($value !== null) {
-                try {
-                    new DateTimeImmutable($value);
-                } catch (Exception) {
-                    throw new BusinessRuleViolationException('開催時期の日付形式が不正です');
-                }
+        foreach ($event->setlist->referencedPerformanceIds() as $performanceId) {
+            if (! $event->performances->contains($performanceId)) {
+                throw new BusinessRuleViolationException('セットリストが存在しない楽曲披露を参照しています');
             }
-        }
-    }
-
-    /** @param list<int|string> $values */
-    private function assertUnique(array $values, string $label): void
-    {
-        if (count($values) !== count(array_unique($values))) {
-            throw new BusinessRuleViolationException("{$label}を重複して登録できません");
         }
     }
 }
