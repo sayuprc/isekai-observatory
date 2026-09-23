@@ -13,9 +13,9 @@ interface EventRepositoryInterface
 
     public function maxPage(EventSearchCriteria $criteria): int;
 
-    public function find(string $eventId): ?Event;
+    public function find(EventId $eventId): ?Event;
 
     public function save(Event $event): Event;
 
-    public function delete(string $eventId): void;
+    public function delete(EventId $eventId): void;
 }
