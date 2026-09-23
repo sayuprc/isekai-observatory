@@ -6,6 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Event;
 
 use Event\Application\Admin\UseCase\Search\SearchOutputData;
 use Illuminate\Http\JsonResponse;
+use OpenAPI\Admin\Client\Model\EventSearchResponse;
 
 class SearchPresenter
 {
@@ -16,10 +17,9 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            [
-                'events' => array_map($this->converter->toSummary(...), $outputData->events),
-                'maxPage' => $outputData->maxPage,
-            ],
+            new EventSearchResponse()
+                ->setEvents(array_map($this->converter->toOpenApiEventSummary(...), $outputData->events))
+                ->setMaxPage($outputData->maxPage),
             200,
         );
     }
