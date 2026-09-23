@@ -137,7 +137,7 @@ class Event
         foreach (self::asArray($value) as $performance) {
             $performanceData = self::asArray($performance);
             $result[] = [
-                'performance_id' => self::stringValue(self::at($performanceData, 'performanceId')) ?: self::uuid(),
+                'performance_id' => self::stringValue(self::at($performanceData, 'performanceId')),
                 'song_id' => self::stringValue(self::at($performanceData, 'songId')),
                 'song_title' => self::stringValue(self::at($performanceData, 'songTitle')),
                 'order_no' => self::intValue(self::at($performanceData, 'orderNo'), count($result) + 1),
@@ -158,7 +158,7 @@ class Event
         foreach (self::asArray($value) as $item) {
             $itemData = self::asArray($item);
             $result[] = [
-                'setlist_item_id' => self::stringValue(self::at($itemData, 'setlistItemId')) ?: self::uuid(),
+                'setlist_item_id' => self::stringValue(self::at($itemData, 'setlistItemId')),
                 'order_no' => self::intValue(self::at($itemData, 'orderNo'), count($result) + 1),
                 'label' => self::nullableString(self::at($itemData, 'label')),
                 'performances' => self::performances(self::at($itemData, 'performances')),
@@ -211,14 +211,5 @@ class Event
         }
 
         return $result;
-    }
-
-    private static function uuid(): string
-    {
-        $bytes = random_bytes(16);
-        $bytes[6] = chr((ord($bytes[6]) & 0x0f) | 0x40);
-        $bytes[8] = chr((ord($bytes[8]) & 0x3f) | 0x80);
-
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($bytes), 4));
     }
 }

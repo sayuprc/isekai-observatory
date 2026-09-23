@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Event\Application\Admin\UseCase\Create;
 
 use AdminUser\Domain\Models\Permission;
-use Event\Domain\Models\Event;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
 use Event\Domain\Services\EventIntegrityService;
-use Illuminate\Support\Str;
 use Support\Contracts\TransactionInterface;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
@@ -32,7 +30,7 @@ readonly class CreateUseCase
         $this->authorizer->authorize(Permission::WriteEvent);
 
         $output = $this->transaction->scope(function () use ($inputData): CreateOutputData {
-            $event = Event::fromInput((string)Str::uuid(), [
+            $event = $this->integrityService->prepareForCreate([
                 'title' => $inputData->title,
                 'description' => $inputData->description,
                 'typeValue' => $inputData->typeValue,
@@ -45,7 +43,6 @@ readonly class CreateUseCase
                 'performances' => $inputData->performances,
                 'setlist' => $inputData->setlist,
             ]);
-            $this->integrityService->validate($event);
             $this->repository->save($event);
             $this->recorder->record(AuditAction::Create, AuditTargetType::Event, new EventId($event->eventId), $event->toArray());
 
