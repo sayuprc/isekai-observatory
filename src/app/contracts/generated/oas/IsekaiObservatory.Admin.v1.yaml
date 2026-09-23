@@ -4571,7 +4571,6 @@ components:
         - songTitle
         - orderNo
         - coVocalists
-        - isDisplay
       properties:
         performanceId:
           $ref: '#/components/schemas/uuid'
@@ -4585,8 +4584,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PerformancePerson'
-        isDisplay:
-          type: boolean
       description: イベントに紐づく楽曲披露
     SongPerson:
       type: object

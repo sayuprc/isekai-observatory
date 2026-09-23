@@ -33,6 +33,9 @@
 - SongPerformance は Setlist 項目に属さなくてもよいが、最大 1 項目からだけ参照される
 - Setlist は判明分だけ登録でき、完全／一部の区分を持たない
 - EventType を Live / Stream から Exhibition / Other へ変える場合、Setlist が残っていれば拒否する
+- Postponed / Cancelled の Event は SongPerformance と Setlist を持たない
+  状態を Postponed / Cancelled にする保存で SongPerformance または Setlist が残っていれば拒否する
+- SongPerformance の公開可否は所属する Event の `isDisplay` に従い、SongPerformance ごとには持たない
 - Admin の作成・更新は Venue、EventSource、Media、SongPerformance、Setlist を含む Event 集約全体を原子的に保存する
 - `ReadEvent` / `WriteEvent` で操作を認可し、作成・更新・削除を Event 対象で監査記録する
 - Viewer: 公開 Event の詳細を含む cursor 一覧。個別 get は持たない

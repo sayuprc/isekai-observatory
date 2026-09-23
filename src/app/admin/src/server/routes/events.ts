@@ -16,7 +16,7 @@ const eventScheduleSchema = t.Object({
   endOn: nullableString(),
 });
 const performancePersonSchema = t.Object({ personId: t.String(), name: t.String(), creditName: nullableString(), orderNo: t.Number() });
-const songPerformanceSchema = t.Object({ performanceId: t.String(), songId: t.String(), songTitle: t.String(), orderNo: t.Number(), coVocalists: t.Array(performancePersonSchema), isDisplay: t.Boolean() });
+const songPerformanceSchema = t.Object({ performanceId: t.String(), songId: t.String(), songTitle: t.String(), orderNo: t.Number(), coVocalists: t.Array(performancePersonSchema) });
 const eventBodySchema = t.Object({
   title: t.String({ minLength: 1, maxLength: 255 }),
   description: t.String(),
