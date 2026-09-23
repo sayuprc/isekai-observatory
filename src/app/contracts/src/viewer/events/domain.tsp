@@ -56,7 +56,7 @@ model Event {
   description: eventDescription;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue | null;
+  statusValue: EventStatusValue;
   venues: EventVenueSummary[];
   media: EventMediaSummary[];
   sources: EventSource[];

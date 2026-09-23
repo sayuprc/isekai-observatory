@@ -12,7 +12,6 @@ import { authGuard } from '../middleware';
 
 const nullableString = () => t.Union([t.String(), t.Null()]);
 const eventScheduleSchema = t.Object({
-  type: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]),
   startOn: nullableString(),
   endOn: nullableString(),
 });
@@ -23,7 +22,7 @@ const eventBodySchema = t.Object({
   description: t.String(),
   typeValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(99)]),
   schedule: eventScheduleSchema,
-  statusValue: t.Union([t.Literal(1), t.Literal(2), t.Null()]),
+  statusValue: t.Union([t.Literal(0), t.Literal(1), t.Literal(2)]),
   isDisplay: t.Boolean(),
   venueIds: t.Array(t.String()),
   mediaIds: t.Array(t.String()),
@@ -34,7 +33,7 @@ const eventBodySchema = t.Object({
 
 export const events = new Elysia({ prefix: '/events' })
   .use(authGuard)
-  .get('/search', async ({ query, authSession }) => withAuthRetry(authSession, async client => resolveApiResponse(await eventServiceSearchEvents({ client, query: { title: query.title || undefined, type: query.type ? Number(query.type) as 1 | 2 | 3 | 99 : undefined, status: query.status ? Number(query.status) as 1 | 2 : undefined, is_display: query.is_display === '' ? undefined : query.is_display === 'true', sort: (query.sort ?? 'schedule') as 'schedule' | 'title', order: (query.order ?? 'asc') as 'asc' | 'desc', page: query.page ?? 1, per_page: query.per_page ?? 25 } }))), {
+  .get('/search', async ({ query, authSession }) => withAuthRetry(authSession, async client => resolveApiResponse(await eventServiceSearchEvents({ client, query: { title: query.title || undefined, type: query.type ? Number(query.type) as 1 | 2 | 3 | 99 : undefined, status: query.status !== undefined && query.status !== '' ? Number(query.status) as 0 | 1 | 2 : undefined, is_display: query.is_display === '' ? undefined : query.is_display === 'true', sort: (query.sort ?? 'schedule') as 'schedule' | 'title', order: (query.order ?? 'asc') as 'asc' | 'desc', page: query.page ?? 1, per_page: query.per_page ?? 25 } }))), {
     query: t.Object({ title: t.Optional(t.String()), type: t.Optional(t.String()), status: t.Optional(t.String()), is_display: t.Optional(t.Union([t.Literal('true'), t.Literal('false'), t.Literal('')])), sort: t.Optional(t.Union([t.Literal('schedule'), t.Literal('title')])), order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])), page: t.Optional(t.Number()), per_page: t.Optional(t.Number()) }),
   })
   .get('/:eventId', async ({ params: { eventId }, authSession }) => withAuthRetry(authSession, async client => resolveApiResponse(await eventServiceGetEvent({ client, path: { eventId } }))), { params: t.Object({ eventId: t.String() }) })
