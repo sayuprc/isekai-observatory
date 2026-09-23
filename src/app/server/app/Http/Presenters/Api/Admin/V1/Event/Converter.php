@@ -4,55 +4,129 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Event;
 
-use DateTimeImmutable;
-use DateTimeZone;
+use DateTime;
 use Event\Domain\Models\Event;
 use Media\Domain\Models\MediaType;
+use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
+use OpenAPI\Admin\Client\Model\EventSource as OpenApiEventSource;
+use OpenAPI\Admin\Client\Model\EventStatusValue;
+use OpenAPI\Admin\Client\Model\EventSummary as OpenApiEventSummary;
+use OpenAPI\Admin\Client\Model\EventTypeValue;
+use OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as OpenApiEventSchedule;
+use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
+use OpenAPI\Admin\Client\Model\MediaType as OpenApiMediaType;
+use OpenAPI\Admin\Client\Model\MediaTypeValue;
+use OpenAPI\Admin\Client\Model\PerformancePerson as OpenApiPerformancePerson;
+use OpenAPI\Admin\Client\Model\SetlistItem as OpenApiSetlistItem;
+use OpenAPI\Admin\Client\Model\SongPerformance as OpenApiSongPerformance;
+use OpenAPI\Admin\Client\Model\Venue as OpenApiVenue;
+use OpenAPI\Admin\Client\Model\VenueKind as OpenApiVenueKind;
+use OpenAPI\Admin\Client\Model\VenueKindValue;
 use Venue\Domain\Models\VenueKind;
 
 class Converter
 {
-    /** @return array<string, mixed> */
-    public function toSummary(Event $event): array
+    public function toOpenApiEventSummary(Event $event): OpenApiEventSummary
     {
-        return ['eventId' => $event->eventId, 'title' => $event->title, 'typeValue' => $event->type->value, 'schedule' => $this->toSchedule($event), 'statusValue' => $event->status->value, 'isDisplay' => $event->isDisplay];
+        return new OpenApiEventSummary()
+            ->setEventId($event->eventId)
+            ->setTitle($event->title)
+            ->setTypeValue(EventTypeValue::from($event->type->value))
+            ->setSchedule($this->toOpenApiSchedule($event))
+            ->setStatusValue(EventStatusValue::from($event->status->value))
+            ->setIsDisplay($event->isDisplay);
     }
 
-    /** @return array<string, mixed> */
-    public function toEvent(Event $event): array
+    public function toOpenApiEvent(Event $event): OpenApiEvent
     {
-        return [
-            'eventId' => $event->eventId, 'title' => $event->title, 'description' => $event->description, 'typeValue' => $event->type->value,
-            'schedule' => $this->toSchedule($event), 'statusValue' => $event->status->value, 'isDisplay' => $event->isDisplay,
-            'venues' => array_map(static function (array $venue): array {
-                $kind = VenueKind::from($venue['kind']);
-
-                return ['venueId' => $venue['venue_id'], 'name' => $venue['name'], 'kind' => ['name' => $kind->getName(), 'value' => $kind->value]];
-            }, $event->venues),
-            'media' => array_map(static function (array $media): array {
-                $type = MediaType::from($media['type']);
-
-                return ['mediaId' => $media['media_id'], 'title' => $media['title'], 'url' => $media['url'], 'publishedAt' => new DateTimeImmutable($media['published_at'])->setTimezone(new DateTimeZone(date_default_timezone_get()))->format(DATE_ATOM), 'type' => ['name' => $type->getName(), 'value' => $type->value], 'isDisplay' => $media['is_display']];
-            }, $event->media),
-            'sources' => array_map(static fn (array $source): array => ['displayName' => $source['name'], 'url' => $source['url'], 'orderNo' => $source['order_no']], $event->sources),
-            'performances' => array_map($this->toPerformance(...), $event->performances),
-            'setlist' => array_map(fn (array $item): array => ['setlistItemId' => $item['setlist_item_id'], 'orderNo' => $item['order_no'], 'label' => $item['label'], 'performances' => array_map($this->toPerformance(...), $item['performances'])], $event->setlist),
-        ];
+        return new OpenApiEvent()
+            ->setEventId($event->eventId)
+            ->setTitle($event->title)
+            ->setDescription($event->description)
+            ->setTypeValue(EventTypeValue::from($event->type->value))
+            ->setSchedule($this->toOpenApiSchedule($event))
+            ->setStatusValue(EventStatusValue::from($event->status->value))
+            ->setIsDisplay($event->isDisplay)
+            ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
+            ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
+            ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
+            ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
+            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
     }
 
-    /**
-     * @param array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>} $performance
-     *
-     * @return array{performanceId: string, songId: string, songTitle: string, orderNo: int, coVocalists: list<array{personId: string, name: string, creditName: ?string, orderNo: int}>}
-     */
-    private function toPerformance(array $performance): array
+    private function toOpenApiSchedule(Event $event): OpenApiEventSchedule
     {
-        return ['performanceId' => $performance['performance_id'], 'songId' => $performance['song_id'], 'songTitle' => $performance['song_title'], 'orderNo' => $performance['order_no'], 'coVocalists' => array_map(static fn (array $person): array => ['personId' => $person['person_id'], 'name' => $person['name'], 'creditName' => $person['credit_name'], 'orderNo' => $person['order_no']], $performance['co_vocalists'])];
+        return new OpenApiEventSchedule([
+            'start_on' => is_null($event->startOn) ? null : new DateTime($event->startOn),
+            'end_on' => is_null($event->endOn) ? null : new DateTime($event->endOn),
+        ]);
     }
 
-    /** @return array{startOn: ?string, endOn: ?string} */
-    private function toSchedule(Event $event): array
+    /** @param array{venue_id: string, name: string, kind: int, order_no: int} $venue */
+    private function toOpenApiVenue(array $venue): OpenApiVenue
     {
-        return $event->schedule();
+        $kind = VenueKind::from($venue['kind']);
+
+        return new OpenApiVenue()
+            ->setVenueId($venue['venue_id'])
+            ->setName($venue['name'])
+            ->setKind(
+                new OpenApiVenueKind()
+                    ->setName($kind->getName())
+                    ->setValue(VenueKindValue::from($kind->value)),
+            );
+    }
+
+    /** @param array{media_id: string, title: string, url: string, published_at: string, type: int, is_display: bool, order_no: int} $media */
+    private function toOpenApiMedia(array $media): OpenApiMedia
+    {
+        $type = MediaType::from($media['type']);
+
+        return new OpenApiMedia()
+            ->setMediaId($media['media_id'])
+            ->setTitle($media['title'])
+            ->setUrl($media['url'])
+            ->setPublishedAt(new DateTime($media['published_at']))
+            ->setType(
+                new OpenApiMediaType()
+                    ->setName($type->getName())
+                    ->setValue(MediaTypeValue::from($type->value)),
+            )
+            ->setIsDisplay($media['is_display']);
+    }
+
+    /** @param array{name: string, url: string, order_no: int} $source */
+    private function toOpenApiSource(array $source): OpenApiEventSource
+    {
+        return new OpenApiEventSource()
+            ->setDisplayName($source['name'])
+            ->setUrl($source['url'])
+            ->setOrderNo($source['order_no']);
+    }
+
+    /** @param array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>} $performance */
+    private function toOpenApiPerformance(array $performance): OpenApiSongPerformance
+    {
+        return new OpenApiSongPerformance()
+            ->setPerformanceId($performance['performance_id'])
+            ->setSongId($performance['song_id'])
+            ->setSongTitle($performance['song_title'])
+            ->setOrderNo($performance['order_no'])
+            ->setCoVocalists(array_map(
+                static fn (array $person): OpenApiPerformancePerson => new OpenApiPerformancePerson(['credit_name' => $person['credit_name']])
+                    ->setPersonId($person['person_id'])
+                    ->setName($person['name'])
+                    ->setOrderNo($person['order_no']),
+                $performance['co_vocalists'],
+            ));
+    }
+
+    /** @param array{setlist_item_id: string, order_no: int, label: ?string, performances: list<array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>}>} $item */
+    private function toOpenApiSetlistItem(array $item): OpenApiSetlistItem
+    {
+        return new OpenApiSetlistItem(['label' => $item['label']])
+            ->setSetlistItemId($item['setlist_item_id'])
+            ->setOrderNo($item['order_no'])
+            ->setPerformances(array_map($this->toOpenApiPerformance(...), $item['performances']));
     }
 }
