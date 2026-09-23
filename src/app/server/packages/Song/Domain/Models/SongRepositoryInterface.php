@@ -12,6 +12,8 @@ interface SongRepositoryInterface
 
     public function isPersonUsed(PersonId $personId): bool;
 
+    public function isUsed(SongId $songId): bool;
+
     public function save(Song $song): Song;
 
     public function delete(SongId $songId): void;
