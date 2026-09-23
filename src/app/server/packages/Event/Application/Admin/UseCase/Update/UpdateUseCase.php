@@ -35,7 +35,19 @@ readonly class UpdateUseCase
             if ($this->repository->find($inputData->eventId) === null) {
                 throw new ResourceNotFoundException('Event', $inputData->eventId);
             }
-            $event = Event::fromInput($inputData->eventId, $inputData->data);
+            $event = Event::fromInput($inputData->eventId, [
+                'title' => $inputData->title,
+                'description' => $inputData->description,
+                'typeValue' => $inputData->typeValue,
+                'schedule' => $inputData->schedule,
+                'statusValue' => $inputData->statusValue,
+                'isDisplay' => $inputData->isDisplay,
+                'venueIds' => $inputData->venueIds,
+                'mediaIds' => $inputData->mediaIds,
+                'sources' => $inputData->sources,
+                'performances' => $inputData->performances,
+                'setlist' => $inputData->setlist,
+            ]);
             $this->integrityService->validate($event);
             $this->repository->save($event);
             $this->recorder->record(AuditAction::Update, AuditTargetType::Event, new EventId($event->eventId), $event->toArray());
