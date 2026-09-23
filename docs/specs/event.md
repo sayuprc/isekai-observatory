@@ -5,11 +5,10 @@
 ## 用語
 
 - **Event (イベント)**: ヰ世界情緒による、または本人が公式に参加する、一回の開催または連続した開催期間
-- **Event** の主要フィールド: `eventId` / `title` / `description` / `type` / `schedule` / `status?` / `isDisplay`
+- **Event** の主要フィールド: `eventId` / `title` / `description` / `type` / `schedule` / `status` / `isDisplay`
 - **EventType**: Live / Stream / Exhibition / Other。開催方法ではなく Event 全体の主目的を表す
-- **EventSchedule**: Undated / Date / DateRange の判別可能な構造。時刻とタイムゾーンは持たない
-  Date は開始日、DateRange は開始日と終了日を持つ。詳細な時刻は Event の説明に記載する
-- **EventStatus**: Postponed / Cancelled のみ。通常時、予定、開催済みを表す値は持たない
+- **EventSchedule**: `startOn` / `endOn` で開催時期を表す。両方 null は日付未定、`startOn` のみは単日、両方指定は期間。`endOn` のみは許容しない。時刻とタイムゾーンは持たず、詳細な時刻は Event の説明に記載する
+- **EventStatus**: Normal / Postponed / Cancelled。予定、開催済みを表す値は持たない
 - **EventSource**: `displayName` / `url` / `orderNo`。用途を固定 enum で分類しない
 - **SongPerformance (楽曲披露)**: 本人が Event 内で一つの Song を一回披露した事実
 - **Setlist**: Live または Stream で判明している演目を `orderNo` 順に並べた一覧

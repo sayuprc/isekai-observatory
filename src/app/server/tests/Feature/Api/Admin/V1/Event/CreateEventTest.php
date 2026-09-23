@@ -42,8 +42,8 @@ class CreateEventTest extends DatabaseTestCase
                 'title' => 'テストライブ',
                 'description' => '説明',
                 'typeValue' => 1,
-                'schedule' => ['type' => 2, 'startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => null,
+                'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+                'statusValue' => 0,
                 'isDisplay' => true,
                 'venueIds' => [$venueId],
                 'mediaIds' => [$mediaId],
@@ -53,6 +53,7 @@ class CreateEventTest extends DatabaseTestCase
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
+            ->assertJsonPath('event.statusValue', 0)
             ->assertJsonPath('event.venues.0.venueId', $venueId)
             ->assertJsonPath('event.media.0.mediaId', $mediaId)
             ->assertJsonPath('event.performances.0.songId', $songId)
@@ -72,14 +73,77 @@ class CreateEventTest extends DatabaseTestCase
                 'title' => '展示',
                 'description' => '',
                 'typeValue' => 3,
-                'schedule' => ['type' => 2, 'startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => null,
+                'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+                'statusValue' => 0,
                 'isDisplay' => true,
                 'venueIds' => [],
                 'mediaIds' => [],
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '展示作品', 'performances' => []]],
+            ])
+            ->assertStatus(400)
+            ->assertJsonPath('code', 'business_rule_violation');
+    }
+
+    #[Test]
+    public function rejectsNullStatus(): void
+    {
+        $this->withAuth()
+            ->postJson(route(EventRouteMap::Create), [
+                'title' => '状態なしのイベント',
+                'description' => '',
+                'typeValue' => 1,
+                'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+                'statusValue' => null,
+                'isDisplay' => true,
+                'venueIds' => [],
+                'mediaIds' => [],
+                'sources' => [],
+                'performances' => [],
+                'setlist' => [],
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function canCreateEventWithUndatedSchedule(): void
+    {
+        $this->withAuth()
+            ->postJson(route(EventRouteMap::Create), [
+                'title' => '日付未定のイベント',
+                'description' => '',
+                'typeValue' => 1,
+                'schedule' => ['startOn' => null, 'endOn' => null],
+                'statusValue' => 0,
+                'isDisplay' => true,
+                'venueIds' => [],
+                'mediaIds' => [],
+                'sources' => [],
+                'performances' => [],
+                'setlist' => [],
+            ])
+            ->assertStatus(200)
+            ->assertJsonPath('event.schedule.startOn', null)
+            ->assertJsonPath('event.schedule.endOn', null);
+    }
+
+    #[Test]
+    public function rejectsEndDateWithoutStartDate(): void
+    {
+        $this->withAuth()
+            ->postJson(route(EventRouteMap::Create), [
+                'title' => '終了日だけのイベント',
+                'description' => '',
+                'typeValue' => 1,
+                'schedule' => ['startOn' => null, 'endOn' => '2026-10-03'],
+                'statusValue' => 0,
+                'isDisplay' => true,
+                'venueIds' => [],
+                'mediaIds' => [],
+                'sources' => [],
+                'performances' => [],
+                'setlist' => [],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');

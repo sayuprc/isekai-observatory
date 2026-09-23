@@ -24,7 +24,7 @@ model EventCreateRequest {
   description: eventDescription;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue | null;
+  statusValue: EventStatusValue;
   isDisplay: boolean;
   venueIds: uuid[];
   mediaIds: mediaId[];
@@ -42,7 +42,7 @@ model EventUpdateRequest {
   description: eventDescription;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue | null;
+  statusValue: EventStatusValue;
   isDisplay: boolean;
   venueIds: uuid[];
   mediaIds: mediaId[];

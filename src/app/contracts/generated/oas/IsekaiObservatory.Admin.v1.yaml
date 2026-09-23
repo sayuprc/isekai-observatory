@@ -3273,9 +3273,7 @@ components:
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
         statusValue:
-          anyOf:
-            - $ref: '#/components/schemas/EventStatusValue'
-            - type: 'null'
+          $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
         venues:
@@ -3323,9 +3321,7 @@ components:
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
         statusValue:
-          anyOf:
-            - $ref: '#/components/schemas/EventStatusValue'
-            - type: 'null'
+          $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
         venueIds:
@@ -3362,14 +3358,6 @@ components:
       properties:
         event:
           $ref: '#/components/schemas/Event'
-    EventScheduleTypeValue:
-      type: integer
-      format: int32
-      enum:
-        - 1
-        - 2
-        - 3
-      description: 活動の開催時期
     EventSearchResponse:
       type: object
       required:
@@ -3407,9 +3395,10 @@ components:
       type: integer
       format: int32
       enum:
+        - 0
         - 1
         - 2
-      description: 活動の開催状態。通常開催は値を持たず、延期・中止のみ表現する
+      description: 活動の開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
     EventSummary:
       type: object
       required:
@@ -3429,9 +3418,7 @@ components:
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
         statusValue:
-          anyOf:
-            - $ref: '#/components/schemas/EventStatusValue'
-            - type: 'null'
+          $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
       description: 活動一覧の 1 行分
@@ -3468,9 +3455,7 @@ components:
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
         statusValue:
-          anyOf:
-            - $ref: '#/components/schemas/EventStatusValue'
-            - type: 'null'
+          $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
         venueIds:
@@ -3516,12 +3501,9 @@ components:
     IsekaiObservatory.Packages.Event.EventSchedule:
       type: object
       required:
-        - type
         - startOn
         - endOn
       properties:
-        type:
-          $ref: '#/components/schemas/EventScheduleTypeValue'
         startOn:
           anyOf:
             - $ref: '#/components/schemas/eventOn'
@@ -3530,7 +3512,7 @@ components:
           anyOf:
             - $ref: '#/components/schemas/eventOn'
             - type: 'null'
-      description: 活動の開催時期。type に応じた項目のみを設定する
+      description: 活動の開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
     LoginFinishRequest:
       type: object
       required:
