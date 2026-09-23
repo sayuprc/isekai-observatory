@@ -1,36 +1,43 @@
 table "song_performances" {
   schema  = schema.db
-  comment = "活動での楽曲披露"
+  comment = "イベントでの楽曲披露"
 
   column "performance_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "楽曲披露ID"
   }
   column "event_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "イベントID"
   }
   column "song_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "楽曲ID"
   }
   column "order_no" {
     null     = false
     type     = int
     unsigned = true
+    comment  = "表示順"
   }
   column "is_display" {
     null    = false
     type    = bool
     default = true
+    comment = "表示するか"
   }
   column "created_at" {
-    null = false
-    type = datetime
+    null    = false
+    type    = datetime
+    comment = "作成日時"
   }
   column "updated_at" {
-    null = false
-    type = datetime
+    null    = false
+    type    = datetime
+    comment = "更新日時"
   }
 
   primary_key {

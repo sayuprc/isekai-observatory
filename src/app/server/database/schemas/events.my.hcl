@@ -5,7 +5,7 @@ table "events" {
   column "event_id" {
     null    = false
     type    = binary(16)
-    comment = "活動ID"
+    comment = "イベントID"
   }
   column "title" {
     null    = false
@@ -30,7 +30,7 @@ table "events" {
     null     = false
     type     = tinyint
     unsigned = true
-    comment  = "活動種別"
+    comment  = "イベント種別"
   }
   column "start_on" {
     null    = true
