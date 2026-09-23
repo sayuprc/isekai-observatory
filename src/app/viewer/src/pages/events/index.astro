@@ -1,0 +1,37 @@
+---
+import EntryStatus from '../../components/viewer/EntryStatus';
+import FilterBar from '../../components/viewer/FilterBar';
+import SectionHead from '../../components/viewer/SectionHead.astro';
+import { eventContentRepository } from '../../features/events/content';
+import { eventDate, eventStatusName, eventTypeName } from '../../features/events/types';
+import Layout from '../../layouts/Layout.astro';
+
+const events = await eventContentRepository.all();
+---
+<Layout pageTitle="イベント" pageDescription="ヰ世界情緒のライブ、配信、個展などのイベント記録">
+  <section class="shell page-section">
+    <SectionHead title="イベント" level={1} />
+    <FilterBar
+      client:idle
+      filters={[
+        { value: 'all', label: 'すべて' },
+        { value: '1', label: 'ライブ' },
+        { value: '2', label: '配信' },
+        { value: '3', label: '個展' },
+        { value: '99', label: 'その他' },
+      ]}
+      entrySelector="[data-event-entry]"
+      categoryAttrs={['eventType']}
+      searchAttr="eventSearch"
+      searchPlaceholder="タイトル・年・開催先を検索..."
+    />
+    <EntryStatus client:idle entrySelector="[data-event-entry]" emptySelector="[data-event-empty]" initialCount={events.length} />
+    <div class="entry-empty entry-empty-panel" data-event-empty hidden>
+      <div class="entry-empty-title">該当するイベントがありません</div>
+      <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
+    </div>
+    <div class="entry-list">
+      {events.map(event => <article class="entry-list-item" data-event-entry data-event-type={event.typeValue} data-event-search={`${event.title} ${eventDate(event) ?? ''} ${event.venues.map(venue => venue.name).join(' ')}`.toLowerCase()}><div class="eyebrow">{eventTypeName(event.typeValue)}{eventStatusName(event.statusValue) ? ` — ${eventStatusName(event.statusValue)}` : ''}</div><h2 class="entry-list-title"><a href={`/events/${event.eventId}`}>{event.title}</a></h2><p>{eventDate(event) ?? '開催時期未定'}</p></article>)}
+    </div>
+  </section>
+</Layout>
