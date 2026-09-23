@@ -9,6 +9,7 @@ use Event\Domain\Models\Event;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Exception;
+use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 
 /**
@@ -17,7 +18,32 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
  */
 readonly class EventIntegrityService
 {
-    public function validate(Event $event): void
+    public function __construct(private UuidGeneratorInterface $generator)
+    {
+    }
+
+    /** @param array<string, mixed> $data */
+    public function prepareForCreate(array $data): Event
+    {
+        return $this->build($this->generator->generate(), $data);
+    }
+
+    /** @param array<string, mixed> $data */
+    public function prepareForUpdate(string $eventId, array $data): Event
+    {
+        return $this->build($eventId, $data);
+    }
+
+    /** @param array<string, mixed> $data */
+    private function build(string $eventId, array $data): Event
+    {
+        $event = Event::fromInput($eventId, $data);
+        $this->validate($event);
+
+        return $event;
+    }
+
+    private function validate(Event $event): void
     {
         $this->validateSchedule($event);
 
