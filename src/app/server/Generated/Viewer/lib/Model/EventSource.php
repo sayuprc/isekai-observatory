@@ -333,7 +333,7 @@ class EventSource implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets display_name
      *
-     * @param string $display_name 活動の出典表示名
+     * @param string $display_name イベントの出典表示名
      *
      * @return self
      */
@@ -365,7 +365,7 @@ class EventSource implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets url
      *
-     * @param string $url 活動の出典URL
+     * @param string $url イベントの出典URL
      *
      * @return self
      */
