@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Viewer\V1\Event;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use Event\Application\Viewer\UseCase\List\ListOutputData;
 use Event\Domain\Models\Event;
 use Illuminate\Http\JsonResponse;
