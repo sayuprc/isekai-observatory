@@ -1,6 +1,6 @@
 <?php
 /**
- * SongListItem
+ * EventMediaSummary
  *
  * PHP version 8.1
  *
@@ -32,7 +32,7 @@ use \ArrayAccess;
 use \OpenAPI\Viewer\Client\ObjectSerializer;
 
 /**
- * SongListItem Class Doc Comment
+ * EventMediaSummary Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
@@ -40,7 +40,7 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
+class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +49,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongListItem';
+    protected static $openAPIModelName = 'EventMediaSummary';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,17 +57,11 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'song_id' => 'string',
+        'media_id' => 'string',
         'title' => 'string',
-        'description' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\SongType',
-        'counts' => '\OpenAPI\Viewer\Client\Model\SongRelationCounts',
-        'lyricists' => 'string[]',
-        'composers' => 'string[]',
-        'arrangers' => 'string[]',
-        'media' => '\OpenAPI\Viewer\Client\Model\SongMediaSummary[]',
-        'release_groups' => '\OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[]',
-        'performances' => '\OpenAPI\Viewer\Client\Model\SongPerformanceHistory[]'
+        'url' => 'string',
+        'published_at' => '\DateTime',
+        'type' => '\OpenAPI\Viewer\Client\Model\MediaType'
     ];
 
     /**
@@ -78,17 +72,11 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'song_id' => 'uuid',
+        'media_id' => 'uuid',
         'title' => null,
-        'description' => null,
-        'type' => null,
-        'counts' => null,
-        'lyricists' => null,
-        'composers' => null,
-        'arrangers' => null,
-        'media' => null,
-        'release_groups' => null,
-        'performances' => null
+        'url' => 'uri',
+        'published_at' => 'date-time',
+        'type' => null
     ];
 
     /**
@@ -97,17 +85,11 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'song_id' => false,
+        'media_id' => false,
         'title' => false,
-        'description' => false,
-        'type' => false,
-        'counts' => false,
-        'lyricists' => false,
-        'composers' => false,
-        'arrangers' => false,
-        'media' => false,
-        'release_groups' => false,
-        'performances' => false
+        'url' => false,
+        'published_at' => false,
+        'type' => false
     ];
 
     /**
@@ -196,17 +178,11 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'song_id' => 'songId',
+        'media_id' => 'mediaId',
         'title' => 'title',
-        'description' => 'description',
-        'type' => 'type',
-        'counts' => 'counts',
-        'lyricists' => 'lyricists',
-        'composers' => 'composers',
-        'arrangers' => 'arrangers',
-        'media' => 'media',
-        'release_groups' => 'releaseGroups',
-        'performances' => 'performances'
+        'url' => 'url',
+        'published_at' => 'publishedAt',
+        'type' => 'type'
     ];
 
     /**
@@ -215,17 +191,11 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'song_id' => 'setSongId',
+        'media_id' => 'setMediaId',
         'title' => 'setTitle',
-        'description' => 'setDescription',
-        'type' => 'setType',
-        'counts' => 'setCounts',
-        'lyricists' => 'setLyricists',
-        'composers' => 'setComposers',
-        'arrangers' => 'setArrangers',
-        'media' => 'setMedia',
-        'release_groups' => 'setReleaseGroups',
-        'performances' => 'setPerformances'
+        'url' => 'setUrl',
+        'published_at' => 'setPublishedAt',
+        'type' => 'setType'
     ];
 
     /**
@@ -234,17 +204,11 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'song_id' => 'getSongId',
+        'media_id' => 'getMediaId',
         'title' => 'getTitle',
-        'description' => 'getDescription',
-        'type' => 'getType',
-        'counts' => 'getCounts',
-        'lyricists' => 'getLyricists',
-        'composers' => 'getComposers',
-        'arrangers' => 'getArrangers',
-        'media' => 'getMedia',
-        'release_groups' => 'getReleaseGroups',
-        'performances' => 'getPerformances'
+        'url' => 'getUrl',
+        'published_at' => 'getPublishedAt',
+        'type' => 'getType'
     ];
 
     /**
@@ -304,17 +268,11 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('song_id', $data ?? [], null);
+        $this->setIfExists('media_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('published_at', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('counts', $data ?? [], null);
-        $this->setIfExists('lyricists', $data ?? [], null);
-        $this->setIfExists('composers', $data ?? [], null);
-        $this->setIfExists('arrangers', $data ?? [], null);
-        $this->setIfExists('media', $data ?? [], null);
-        $this->setIfExists('release_groups', $data ?? [], null);
-        $this->setIfExists('performances', $data ?? [], null);
     }
 
     /**
@@ -344,8 +302,8 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['song_id'] === null) {
-            $invalidProperties[] = "'song_id' can't be null";
+        if ($this->container['media_id'] === null) {
+            $invalidProperties[] = "'media_id' can't be null";
         }
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
@@ -354,32 +312,14 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['description'] === null) {
-            $invalidProperties[] = "'description' can't be null";
+        if ($this->container['url'] === null) {
+            $invalidProperties[] = "'url' can't be null";
+        }
+        if ($this->container['published_at'] === null) {
+            $invalidProperties[] = "'published_at' can't be null";
         }
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";
-        }
-        if ($this->container['counts'] === null) {
-            $invalidProperties[] = "'counts' can't be null";
-        }
-        if ($this->container['lyricists'] === null) {
-            $invalidProperties[] = "'lyricists' can't be null";
-        }
-        if ($this->container['composers'] === null) {
-            $invalidProperties[] = "'composers' can't be null";
-        }
-        if ($this->container['arrangers'] === null) {
-            $invalidProperties[] = "'arrangers' can't be null";
-        }
-        if ($this->container['media'] === null) {
-            $invalidProperties[] = "'media' can't be null";
-        }
-        if ($this->container['release_groups'] === null) {
-            $invalidProperties[] = "'release_groups' can't be null";
-        }
-        if ($this->container['performances'] === null) {
-            $invalidProperties[] = "'performances' can't be null";
         }
         return $invalidProperties;
     }
@@ -397,28 +337,28 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets song_id
+     * Gets media_id
      *
      * @return string
      */
-    public function getSongId()
+    public function getMediaId()
     {
-        return $this->container['song_id'];
+        return $this->container['media_id'];
     }
 
     /**
-     * Sets song_id
+     * Sets media_id
      *
-     * @param string $song_id 楽曲ID
+     * @param string $media_id メディアID
      *
      * @return self
      */
-    public function setSongId($song_id)
+    public function setMediaId($media_id)
     {
-        if (is_null($song_id)) {
-            throw new \InvalidArgumentException('non-nullable song_id cannot be null');
+        if (is_null($media_id)) {
+            throw new \InvalidArgumentException('non-nullable media_id cannot be null');
         }
-        $this->container['song_id'] = $song_id;
+        $this->container['media_id'] = $media_id;
 
         return $this;
     }
@@ -436,7 +376,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets title
      *
-     * @param string $title 楽曲名
+     * @param string $title メディアタイトル
      *
      * @return self
      */
@@ -447,7 +387,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling SongListItem., must be bigger than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $title when calling EventMediaSummary., must be bigger than or equal to 1.');
         }
 
         $this->container['title'] = $title;
@@ -456,28 +396,55 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets description
+     * Gets url
      *
      * @return string
      */
-    public function getDescription()
+    public function getUrl()
     {
-        return $this->container['description'];
+        return $this->container['url'];
     }
 
     /**
-     * Sets description
+     * Sets url
      *
-     * @param string $description 楽曲の説明
+     * @param string $url メディアURL
      *
      * @return self
      */
-    public function setDescription($description)
+    public function setUrl($url)
     {
-        if (is_null($description)) {
-            throw new \InvalidArgumentException('non-nullable description cannot be null');
+        if (is_null($url)) {
+            throw new \InvalidArgumentException('non-nullable url cannot be null');
         }
-        $this->container['description'] = $description;
+        $this->container['url'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Gets published_at
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt()
+    {
+        return $this->container['published_at'];
+    }
+
+    /**
+     * Sets published_at
+     *
+     * @param \DateTime $published_at 公開日時
+     *
+     * @return self
+     */
+    public function setPublishedAt($published_at)
+    {
+        if (is_null($published_at)) {
+            throw new \InvalidArgumentException('non-nullable published_at cannot be null');
+        }
+        $this->container['published_at'] = $published_at;
 
         return $this;
     }
@@ -485,7 +452,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongType
+     * @return \OpenAPI\Viewer\Client\Model\MediaType
      */
     public function getType()
     {
@@ -495,7 +462,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongType $type type
+     * @param \OpenAPI\Viewer\Client\Model\MediaType $type type
      *
      * @return self
      */
@@ -505,195 +472,6 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
         $this->container['type'] = $type;
-
-        return $this;
-    }
-
-    /**
-     * Gets counts
-     *
-     * @return \OpenAPI\Viewer\Client\Model\SongRelationCounts
-     */
-    public function getCounts()
-    {
-        return $this->container['counts'];
-    }
-
-    /**
-     * Sets counts
-     *
-     * @param \OpenAPI\Viewer\Client\Model\SongRelationCounts $counts counts
-     *
-     * @return self
-     */
-    public function setCounts($counts)
-    {
-        if (is_null($counts)) {
-            throw new \InvalidArgumentException('non-nullable counts cannot be null');
-        }
-        $this->container['counts'] = $counts;
-
-        return $this;
-    }
-
-    /**
-     * Gets lyricists
-     *
-     * @return string[]
-     */
-    public function getLyricists()
-    {
-        return $this->container['lyricists'];
-    }
-
-    /**
-     * Sets lyricists
-     *
-     * @param string[] $lyricists lyricists
-     *
-     * @return self
-     */
-    public function setLyricists($lyricists)
-    {
-        if (is_null($lyricists)) {
-            throw new \InvalidArgumentException('non-nullable lyricists cannot be null');
-        }
-        $this->container['lyricists'] = $lyricists;
-
-        return $this;
-    }
-
-    /**
-     * Gets composers
-     *
-     * @return string[]
-     */
-    public function getComposers()
-    {
-        return $this->container['composers'];
-    }
-
-    /**
-     * Sets composers
-     *
-     * @param string[] $composers composers
-     *
-     * @return self
-     */
-    public function setComposers($composers)
-    {
-        if (is_null($composers)) {
-            throw new \InvalidArgumentException('non-nullable composers cannot be null');
-        }
-        $this->container['composers'] = $composers;
-
-        return $this;
-    }
-
-    /**
-     * Gets arrangers
-     *
-     * @return string[]
-     */
-    public function getArrangers()
-    {
-        return $this->container['arrangers'];
-    }
-
-    /**
-     * Sets arrangers
-     *
-     * @param string[] $arrangers arrangers
-     *
-     * @return self
-     */
-    public function setArrangers($arrangers)
-    {
-        if (is_null($arrangers)) {
-            throw new \InvalidArgumentException('non-nullable arrangers cannot be null');
-        }
-        $this->container['arrangers'] = $arrangers;
-
-        return $this;
-    }
-
-    /**
-     * Gets media
-     *
-     * @return \OpenAPI\Viewer\Client\Model\SongMediaSummary[]
-     */
-    public function getMedia()
-    {
-        return $this->container['media'];
-    }
-
-    /**
-     * Sets media
-     *
-     * @param \OpenAPI\Viewer\Client\Model\SongMediaSummary[] $media media
-     *
-     * @return self
-     */
-    public function setMedia($media)
-    {
-        if (is_null($media)) {
-            throw new \InvalidArgumentException('non-nullable media cannot be null');
-        }
-        $this->container['media'] = $media;
-
-        return $this;
-    }
-
-    /**
-     * Gets release_groups
-     *
-     * @return \OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[]
-     */
-    public function getReleaseGroups()
-    {
-        return $this->container['release_groups'];
-    }
-
-    /**
-     * Sets release_groups
-     *
-     * @param \OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary[] $release_groups 収録先の公開リリースグループ(最古発売日の降順)
-     *
-     * @return self
-     */
-    public function setReleaseGroups($release_groups)
-    {
-        if (is_null($release_groups)) {
-            throw new \InvalidArgumentException('non-nullable release_groups cannot be null');
-        }
-        $this->container['release_groups'] = $release_groups;
-
-        return $this;
-    }
-
-    /**
-     * Gets performances
-     *
-     * @return \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[]
-     */
-    public function getPerformances()
-    {
-        return $this->container['performances'];
-    }
-
-    /**
-     * Sets performances
-     *
-     * @param \OpenAPI\Viewer\Client\Model\SongPerformanceHistory[] $performances 公開活動での披露履歴(開催時期の新しい順)
-     *
-     * @return self
-     */
-    public function setPerformances($performances)
-    {
-        if (is_null($performances)) {
-            throw new \InvalidArgumentException('non-nullable performances cannot be null');
-        }
-        $this->container['performances'] = $performances;
 
         return $this;
     }
@@ -787,5 +565,3 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-
