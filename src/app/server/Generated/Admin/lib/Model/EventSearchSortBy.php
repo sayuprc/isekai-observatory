@@ -1,6 +1,6 @@
 <?php
 /**
- * PermissionValue
+ * EventSearchSortBy
  *
  * PHP version 8.1
  *
@@ -30,46 +30,22 @@ namespace OpenAPI\Admin\Client\Model;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * PermissionValue Class Doc Comment
+ * EventSearchSortBy Class Doc Comment
  *
  * @category Class
- * @description 権限の値
+ * @description イベント検索のソート条件
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-enum PermissionValue: string
+enum EventSearchSortBy: string
 {
     /**
      * Possible values of this enum
      */
-    case READ_ADMIN_USER = 'read_admin_user';
+    case SCHEDULE = 'schedule';
 
-    case WRITE_ADMIN_USER = 'write_admin_user';
-
-    case READ_PERSON = 'read_person';
-
-    case WRITE_PERSON = 'write_person';
-
-    case READ_SONG = 'read_song';
-
-    case WRITE_SONG = 'write_song';
-
-    case READ_MEDIA = 'read_media';
-
-    case WRITE_MEDIA = 'write_media';
-
-    case READ_RELEASE = 'read_release';
-
-    case WRITE_RELEASE = 'write_release';
-
-    case READ_VENUE = 'read_venue';
-
-    case WRITE_VENUE = 'write_venue';
-
-    case READ_EVENT = 'read_event';
-
-    case WRITE_EVENT = 'write_event';
+    case TITLE = 'title';
 
 }
 
