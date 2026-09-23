@@ -6,6 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Event;
 
 use Event\Application\Admin\UseCase\Update\UpdateOutputData;
 use Illuminate\Http\JsonResponse;
+use OpenAPI\Admin\Client\Model\EventUpdateResponse;
 
 class UpdatePresenter
 {
@@ -15,6 +16,9 @@ class UpdatePresenter
 
     public function present(UpdateOutputData $outputData): JsonResponse
     {
-        return response()->json(['event' => $this->converter->toEvent($outputData->event)], 200);
+        return response()->json(
+            new EventUpdateResponse()->setEvent($this->converter->toOpenApiEvent($outputData->event)),
+            200,
+        );
     }
 }
