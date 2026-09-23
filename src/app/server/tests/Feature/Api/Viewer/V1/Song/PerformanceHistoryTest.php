@@ -36,7 +36,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
             'venueIds' => [],
             'mediaIds' => [],
             'sources' => [],
-            'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'isDisplay' => true, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => null, 'orderNo' => 1]]]],
+            'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => null, 'orderNo' => 1]]]],
             'setlist' => [],
         ]));
 
@@ -46,5 +46,30 @@ class PerformanceHistoryTest extends DatabaseTestCase
             ->assertJsonPath('songs.0.performances.0.eventId', $eventId)
             ->assertJsonPath('songs.0.performances.0.eventTitle', '披露ライブ')
             ->assertJsonPath('songs.0.performances.0.coVocalistNames.0', '共演者');
+    }
+
+    #[Test]
+    public function hidesPerformanceOfPrivateEvent(): void
+    {
+        $songId = $this->generateUuid();
+        $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
+        $this->storeEvents(Event::fromInput($this->generateUuid(), [
+            'title' => '非公開ライブ',
+            'description' => '',
+            'typeValue' => 1,
+            'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+            'statusValue' => 1,
+            'isDisplay' => false,
+            'venueIds' => [],
+            'mediaIds' => [],
+            'sources' => [],
+            'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]],
+            'setlist' => [],
+        ]));
+
+        $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->assertStatus(200)
+            ->assertJsonPath('songs.0.songId', $songId)
+            ->assertJsonCount(0, 'songs.0.performances');
     }
 }

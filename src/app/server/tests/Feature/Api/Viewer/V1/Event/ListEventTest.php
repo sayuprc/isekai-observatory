@@ -116,10 +116,10 @@ class ListEventTest extends DatabaseTestCase
             'mediaIds' => [$visibleMediaId, $hiddenMediaId],
             'sources' => [['displayName' => '公式', 'url' => 'https://example.com/event', 'orderNo' => 1]],
             'performances' => [
-                ['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'songTitle' => '公開楽曲', 'orderNo' => 1, 'isDisplay' => true, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => null, 'orderNo' => 1]]],
-                ['performanceId' => $hiddenPerformanceId, 'songId' => $hiddenSongId, 'songTitle' => '非公開楽曲', 'orderNo' => 2, 'isDisplay' => true, 'coVocalists' => []],
+                ['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'songTitle' => '公開楽曲', 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => null, 'orderNo' => 1]]],
+                ['performanceId' => $hiddenPerformanceId, 'songId' => $hiddenSongId, 'songTitle' => '非公開楽曲', 'orderNo' => 2, 'coVocalists' => []],
             ],
-            'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performances' => [['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'songTitle' => '公開楽曲', 'orderNo' => 1, 'isDisplay' => true, 'coVocalists' => []]]]],
+            'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performances' => [['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'songTitle' => '公開楽曲', 'orderNo' => 1, 'coVocalists' => []]]]],
         ]);
     }
 }
