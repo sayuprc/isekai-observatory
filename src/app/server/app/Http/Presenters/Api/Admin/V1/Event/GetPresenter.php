@@ -6,6 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Event;
 
 use Event\Application\Admin\UseCase\Get\GetOutputData;
 use Illuminate\Http\JsonResponse;
+use OpenAPI\Admin\Client\Model\EventGetResponse;
 
 class GetPresenter
 {
@@ -15,6 +16,9 @@ class GetPresenter
 
     public function present(GetOutputData $outputData): JsonResponse
     {
-        return response()->json(['event' => $this->converter->toEvent($outputData->event)], 200);
+        return response()->json(
+            new EventGetResponse()->setEvent($this->converter->toOpenApiEvent($outputData->event)),
+            200,
+        );
     }
 }
