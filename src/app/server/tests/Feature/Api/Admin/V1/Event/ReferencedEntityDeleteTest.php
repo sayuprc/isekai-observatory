@@ -82,7 +82,7 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
             'description' => '',
             'typeValue' => 1,
             'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-            'statusValue' => 0,
+            'statusValue' => 1,
             'isDisplay' => true,
             'venueIds' => [$venueId],
             'mediaIds' => [$mediaId],
