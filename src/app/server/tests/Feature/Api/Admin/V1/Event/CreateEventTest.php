@@ -48,16 +48,21 @@ class CreateEventTest extends DatabaseTestCase
                 'venueIds' => [$venueId],
                 'mediaIds' => [$mediaId],
                 'sources' => [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
-                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'name' => '共演者', 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
+                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => 'クライアントが送った曲名', 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'name' => 'クライアントが送った名前', 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]]]],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
             ->assertJsonPath('event.statusValue', 1)
             ->assertJsonPath('event.venues.0.venueId', $venueId)
+            ->assertJsonPath('event.venues.0.name', '会場')
             ->assertJsonPath('event.media.0.mediaId', $mediaId)
+            ->assertJsonPath('event.media.0.title', '配信アーカイブ')
             ->assertJsonPath('event.performances.0.songId', $songId)
-            ->assertJsonPath('event.performances.0.coVocalists.0.creditName', 'ゲスト');
+            ->assertJsonPath('event.performances.0.songTitle', '披露曲')
+            ->assertJsonPath('event.performances.0.coVocalists.0.name', '共演者')
+            ->assertJsonPath('event.performances.0.coVocalists.0.creditName', 'ゲスト')
+            ->assertJsonPath('event.setlist.0.performances.0.songTitle', '披露曲');
 
         $eventId = $response->json('event.eventId');
         $this->assertIsString($eventId);

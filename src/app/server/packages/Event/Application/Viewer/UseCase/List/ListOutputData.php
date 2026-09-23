@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Event\Application\Viewer\UseCase\List;
 
-use Event\Domain\Models\Event;
+use Event\Application\Viewer\Query\EventListItem;
 
 readonly class ListOutputData
 {
-    /** @param list<Event> $events */
+    /**
+     * @param array<EventListItem> $events
+     */
     public function __construct(
         public array $events,
         public ?string $nextCursor,

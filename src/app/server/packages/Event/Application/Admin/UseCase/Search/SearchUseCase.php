@@ -20,7 +20,17 @@ readonly class SearchUseCase
     public function handle(SearchInputData $inputData): SearchOutputData
     {
         $this->authorizer->authorize(Permission::ReadEvent);
-        $criteria = new EventSearchCriteria($inputData->title, $inputData->type, $inputData->status, $inputData->isDisplay, $inputData->sort, $inputData->order, $inputData->page, $inputData->perPage);
+
+        $criteria = new EventSearchCriteria(
+            $inputData->title,
+            $inputData->type,
+            $inputData->status,
+            $inputData->isDisplay,
+            $inputData->sort,
+            $inputData->order,
+            $inputData->page,
+            $inputData->perPage,
+        );
 
         return new SearchOutputData($this->repository->search($criteria), $this->repository->maxPage($criteria));
     }
