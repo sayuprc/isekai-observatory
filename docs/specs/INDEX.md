@@ -12,6 +12,7 @@ API の形状は TypeSpec (`src/app/contracts`) が Source of Truth である
 | `media.md` | 公式 Media |
 | `person.md` | 人物マスタ |
 | `venue.md` | 現地・オンラインの開催先マスタ |
+| `event.md` | 活動 (Event)、楽曲披露、セットリスト |
 | `admin-auth.md` | 管理認証 (passkey / 招待 / 復旧) |
 
 長くなったドメインはファイルを分割してよい

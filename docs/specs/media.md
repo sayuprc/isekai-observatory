@@ -20,7 +20,7 @@
 
 - platform / thumbnail を DB・契約・Admin API に持たない
 - 権利者画像を自前ホストしない。YouTube サムネはプラットフォーム CDN の直参照のみ
-- 楽曲に紐づいている Media は削除できない
+- 楽曲または Event に紐づいている Media は削除できない
 - Viewer に `isDisplay` を出さない
 
 ## 主な関係
@@ -32,4 +32,5 @@ classDiagram
     独立集約
   }
   Song "N" --> "M" Media : リンク所有
+  Event "N" --> "M" Media : リンク所有
 ```
