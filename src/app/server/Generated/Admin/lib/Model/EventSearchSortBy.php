@@ -33,7 +33,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * EventSearchSortBy Class Doc Comment
  *
  * @category Class
- * @description 活動検索のソート条件
+ * @description イベント検索のソート条件
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

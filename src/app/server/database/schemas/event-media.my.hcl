@@ -1,18 +1,22 @@
 table "event_media" {
-  schema = schema.db
+  schema  = schema.db
+  comment = "イベントメディア関連"
 
   column "event_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "イベントID"
   }
   column "media_id" {
-    null = false
-    type = binary(16)
+    null    = false
+    type    = binary(16)
+    comment = "メディアID"
   }
   column "order_no" {
     null     = false
     type     = int
     unsigned = true
+    comment  = "表示順"
   }
 
   primary_key {
