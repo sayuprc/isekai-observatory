@@ -35,7 +35,6 @@ model SongPerformance {
   songTitle: title;
   orderNo: orderNo;
   coVocalists: PerformancePerson[];
-  isDisplay: boolean;
 }
 
 @doc("セットリストの 1 項目")

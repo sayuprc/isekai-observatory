@@ -45,13 +45,13 @@ class ListPresenter
     }
 
     /**
-     * @param array{performance_id: string, song_id: string, song_title: string, order_no: int, is_display: bool, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>} $performance
+     * @param array{performance_id: string, song_id: string, song_title: string, order_no: int, song_is_display: bool, co_vocalists: list<array{person_id: string, name: string, credit_name: ?string, order_no: int}>} $performance
      *
      * @return array{performanceId: string, songId: ?string, songTitle: string, coVocalists: list<array{personId: string, name: string, creditName: ?string, orderNo: int}>}
      */
     private function toPerformance(array $performance): array
     {
-        return ['performanceId' => $performance['performance_id'], 'songId' => $performance['is_display'] && $performance['song_is_display'] ? $performance['song_id'] : null, 'songTitle' => $performance['song_title'], 'coVocalists' => array_map(static fn (array $person): array => ['personId' => $person['person_id'], 'name' => $person['name'], 'creditName' => $person['credit_name'], 'orderNo' => $person['order_no']], $performance['co_vocalists'])];
+        return ['performanceId' => $performance['performance_id'], 'songId' => $performance['song_is_display'] ? $performance['song_id'] : null, 'songTitle' => $performance['song_title'], 'coVocalists' => array_map(static fn (array $person): array => ['personId' => $person['person_id'], 'name' => $person['name'], 'creditName' => $person['credit_name'], 'orderNo' => $person['order_no']], $performance['co_vocalists'])];
     }
 
     /** @return array{startOn: ?string, endOn: ?string} */

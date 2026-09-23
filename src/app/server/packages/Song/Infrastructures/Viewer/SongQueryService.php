@@ -315,7 +315,6 @@ readonly class SongQueryService implements SongQueryServiceInterface
                 ->from('song_performances')
                 ->join('events', 'song_performances.event_id = events.event_id')
                 ->where('song_performances.song_id', 'IN', $binSongIds)
-                ->where('song_performances.is_display', '=', true)
                 ->where('events.is_display', '=', true)
                 ->orderBy('events.start_on', 'desc'),
         );

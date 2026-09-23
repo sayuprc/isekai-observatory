@@ -681,7 +681,6 @@ export type SongPerformance = {
     songTitle: Title;
     orderNo: OrderNo;
     coVocalists: Array<PerformancePerson>;
-    isDisplay: boolean;
 };
 
 export type SongPerson = {
