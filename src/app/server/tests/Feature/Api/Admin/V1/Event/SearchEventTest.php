@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin\V1\Event;
 
-use Event\Domain\Models\Event;
+use Event\Domain\Models\EventStatus;
 use Event\Route\EventRouteMap;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
+use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
 
 class SearchEventTest extends DatabaseTestCase
 {
+    use EntityFactory;
     use EntityStore;
     use WithAuth;
 
@@ -21,9 +23,9 @@ class SearchEventTest extends DatabaseTestCase
     {
         $normalId = $this->generateUuid();
         $this->storeEvents(
-            $this->createEvent($normalId, '通常のライブ', 1, true),
-            $this->createEvent($this->generateUuid(), '中止のライブ', 3, true),
-            $this->createEvent($this->generateUuid(), '非公開のライブ', 1, false),
+            $this->createEvent($normalId, title: '通常のライブ'),
+            $this->createEvent($this->generateUuid(), title: '中止のライブ', status: EventStatus::Cancelled),
+            $this->createEvent($this->generateUuid(), title: '非公開のライブ', isDisplay: false),
         );
 
         $this->withAuth()
@@ -32,17 +34,5 @@ class SearchEventTest extends DatabaseTestCase
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $normalId)
             ->assertJsonPath('maxPage', 1);
-    }
-
-    private function createEvent(string $eventId, string $title, int $statusValue, bool $isDisplay): Event
-    {
-        return Event::fromInput($eventId, [
-            'title' => $title,
-            'description' => '',
-            'typeValue' => 1,
-            'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-            'statusValue' => $statusValue,
-            'isDisplay' => $isDisplay,
-        ]);
     }
 }
