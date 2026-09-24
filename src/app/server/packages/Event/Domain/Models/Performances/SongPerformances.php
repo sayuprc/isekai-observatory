@@ -11,11 +11,13 @@ use Support\Domain\ValueObjects\OrderNo;
 
 /**
  * @extends ImmutableCollection<int, SongPerformance>
+ *
+ * @phpstan-type SongPerformanceInput array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}
  */
 readonly class SongPerformances extends ImmutableCollection
 {
     /**
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $items
+     * @param list<SongPerformanceInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -29,6 +31,7 @@ readonly class SongPerformances extends ImmutableCollection
             throw new BusinessRuleViolationException('楽曲披露の順序を重複して登録できません');
         }
 
+        // 共演者も fromArray で検証するため、reconstruct には委ねない
         return new self(array_map(
             static fn (array $item): SongPerformance => new SongPerformance(
                 new PerformanceId($item['performanceId']),
@@ -41,7 +44,7 @@ readonly class SongPerformances extends ImmutableCollection
     }
 
     /**
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $items
+     * @param list<SongPerformanceInput> $items
      */
     public static function reconstruct(array $items): self
     {

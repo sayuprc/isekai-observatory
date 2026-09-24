@@ -22,6 +22,10 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
 /**
  * Event 集約内でしか判断できない不変条件を検証する。
  * 外部集約の存在確認は FK に委ね、ここでは関係の形だけを扱う。
+ *
+ * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
  */
 readonly class EventIntegrityService
 {
@@ -30,12 +34,12 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
-     * @param list<string>                                                                                                                                    $venueIds
-     * @param list<string>                                                                                                                                    $mediaIds
-     * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param array{startOn: ?string, endOn: ?string} $schedule
+     * @param list<string>                            $venueIds
+     * @param list<string>                            $mediaIds
+     * @param list<EventSourceInput>                  $sources
+     * @param list<SongPerformanceInput>              $performances
+     * @param list<SetlistItemInput>                  $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -52,16 +56,29 @@ readonly class EventIntegrityService
         array $performances,
         array $setlist,
     ): Event {
-        return $this->build($this->generator->generate(), $title, $description, $type, $schedule, $status, $isDisplay, $venueIds, $mediaIds, $sources, $performances, $setlist);
+        return $this->build(
+            $this->generator->generate(),
+            $title,
+            $description,
+            $type,
+            $schedule,
+            $status,
+            $isDisplay,
+            $venueIds,
+            $mediaIds,
+            $sources,
+            $performances,
+            $setlist,
+        );
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
-     * @param list<string>                                                                                                                                    $venueIds
-     * @param list<string>                                                                                                                                    $mediaIds
-     * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param array{startOn: ?string, endOn: ?string} $schedule
+     * @param list<string>                            $venueIds
+     * @param list<string>                            $mediaIds
+     * @param list<EventSourceInput>                  $sources
+     * @param list<SongPerformanceInput>              $performances
+     * @param list<SetlistItemInput>                  $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -79,16 +96,29 @@ readonly class EventIntegrityService
         array $performances,
         array $setlist,
     ): Event {
-        return $this->build($eventId, $title, $description, $type, $schedule, $status, $isDisplay, $venueIds, $mediaIds, $sources, $performances, $setlist);
+        return $this->build(
+            $eventId,
+            $title,
+            $description,
+            $type,
+            $schedule,
+            $status,
+            $isDisplay,
+            $venueIds,
+            $mediaIds,
+            $sources,
+            $performances,
+            $setlist,
+        );
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
-     * @param list<string>                                                                                                                                    $venueIds
-     * @param list<string>                                                                                                                                    $mediaIds
-     * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param array{startOn: ?string, endOn: ?string} $schedule
+     * @param list<string>                            $venueIds
+     * @param list<string>                            $mediaIds
+     * @param list<EventSourceInput>                  $sources
+     * @param list<SongPerformanceInput>              $performances
+     * @param list<SetlistItemInput>                  $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -118,15 +148,7 @@ readonly class EventIntegrityService
             EventMediaLinks::fromArray($mediaIds),
             EventSources::fromArray($sources),
             SongPerformances::fromArray($performances),
-            Setlist::fromArray(array_map(
-                static fn (array $item): array => [
-                    'setlistItemId' => $item['setlistItemId'],
-                    'orderNo' => $item['orderNo'],
-                    'label' => $item['label'],
-                    'performanceIds' => array_column($item['performances'], 'performanceId'),
-                ],
-                $setlist,
-            )),
+            Setlist::fromArray($setlist),
         );
 
         $this->assertSetlistAllowed($event);

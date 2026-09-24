@@ -12,7 +12,7 @@ use Event\Application\Admin\Assemble\AssembledPerformance;
 use Event\Application\Admin\Assemble\AssembledSetlistItem;
 use Event\Application\Admin\Assemble\AssembledSource;
 use Event\Application\Admin\Assemble\AssembledVenue;
-use Event\Domain\Models\Event;
+use Event\Application\Admin\Query\EventSummary;
 use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Admin\Client\Model\EventSource as OpenApiEventSource;
 use OpenAPI\Admin\Client\Model\EventStatusValue;
@@ -31,17 +31,14 @@ use OpenAPI\Admin\Client\Model\VenueKindValue;
 
 class Converter
 {
-    public function toOpenApiEventSummary(Event $event): OpenApiEventSummary
+    public function toOpenApiEventSummary(EventSummary $event): OpenApiEventSummary
     {
         return new OpenApiEventSummary()
-            ->setEventId($event->eventId->value)
-            ->setTitle($event->title->value)
-            ->setTypeValue(EventTypeValue::from($event->type->value))
-            ->setSchedule(new OpenApiEventSchedule([
-                'start_on' => is_null($event->schedule->startOn) ? null : DateTime::createFromImmutable($event->schedule->startOn),
-                'end_on' => is_null($event->schedule->endOn) ? null : DateTime::createFromImmutable($event->schedule->endOn),
-            ]))
-            ->setStatusValue(EventStatusValue::from($event->status->value))
+            ->setEventId($event->eventId)
+            ->setTitle($event->title)
+            ->setTypeValue(EventTypeValue::from($event->typeValue))
+            ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
+            ->setStatusValue(EventStatusValue::from($event->statusValue))
             ->setIsDisplay($event->isDisplay);
     }
 
@@ -52,10 +49,7 @@ class Converter
             ->setTitle($event->title)
             ->setDescription($event->description)
             ->setTypeValue(EventTypeValue::from($event->typeValue))
-            ->setSchedule(new OpenApiEventSchedule([
-                'start_on' => is_null($event->startOn) ? null : new DateTime($event->startOn),
-                'end_on' => is_null($event->endOn) ? null : new DateTime($event->endOn),
-            ]))
+            ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
             ->setStatusValue(EventStatusValue::from($event->statusValue))
             ->setIsDisplay($event->isDisplay)
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
@@ -63,6 +57,14 @@ class Converter
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
             ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
+    }
+
+    private function toOpenApiSchedule(?string $startOn, ?string $endOn): OpenApiEventSchedule
+    {
+        return new OpenApiEventSchedule([
+            'start_on' => is_null($startOn) ? null : new DateTime($startOn),
+            'end_on' => is_null($endOn) ? null : new DateTime($endOn),
+        ]);
     }
 
     private function toOpenApiVenue(AssembledVenue $venue): OpenApiVenue

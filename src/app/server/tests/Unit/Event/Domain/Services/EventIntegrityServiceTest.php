@@ -17,6 +17,11 @@ use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Tests\TestCase;
 
+/**
+ * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ */
 class EventIntegrityServiceTest extends TestCase
 {
     private const string EVENT_ID = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
@@ -167,10 +172,10 @@ class EventIntegrityServiceTest extends TestCase
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
-     * @param list<string>                                                                                                                                    $venueIds
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param array{startOn: ?string, endOn: ?string} $schedule
+     * @param list<string>                            $venueIds
+     * @param list<SongPerformanceInput>              $performances
+     * @param list<SetlistItemInput>                  $setlist
      */
     private function prepareForUpdate(
         int $type = EventType::Live->value,
@@ -184,12 +189,12 @@ class EventIntegrityServiceTest extends TestCase
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
-     * @param list<string>                                                                                                                                    $venueIds
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param array{startOn: ?string, endOn: ?string} $schedule
+     * @param list<string>                            $venueIds
+     * @param list<SongPerformanceInput>              $performances
+     * @param list<SetlistItemInput>                  $setlist
      *
-     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venueIds: list<string>, mediaIds: list<string>, sources: list<array{displayName: string, url: string, orderNo: int}>, performances: list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}>, setlist: list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>}
+     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venueIds: list<string>, mediaIds: list<string>, sources: list<EventSourceInput>, performances: list<SongPerformanceInput>, setlist: list<SetlistItemInput>}
      */
     private function input(
         int $type = EventType::Live->value,
@@ -215,7 +220,7 @@ class EventIntegrityServiceTest extends TestCase
     }
 
     /**
-     * @return array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}
+     * @return SongPerformanceInput
      */
     private static function performance(string $performanceId, int $orderNo): array
     {
@@ -225,7 +230,7 @@ class EventIntegrityServiceTest extends TestCase
     /**
      * @param list<string> $performanceIds
      *
-     * @return array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}
+     * @return SetlistItemInput
      */
     private static function setlistItem(int $orderNo, ?string $label, array $performanceIds): array
     {
@@ -233,7 +238,7 @@ class EventIntegrityServiceTest extends TestCase
             'setlistItemId' => sprintf('FFFFFFFF-FFFF-FFFF-FFFF-%012d', $orderNo),
             'orderNo' => $orderNo,
             'label' => $label,
-            'performances' => array_map(static fn (string $id): array => ['performanceId' => $id], $performanceIds),
+            'performanceIds' => $performanceIds,
         ];
     }
 

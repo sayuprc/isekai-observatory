@@ -32,6 +32,19 @@ scalar eventSourceUrl extends string;
 @friendlyName("eventOn")
 scalar eventOn extends string;
 
+@doc("楽曲披露ID")
+@friendlyName("performanceId")
+scalar performanceId extends uuid;
+
+@doc("セットリスト項目ID")
+@friendlyName("setlistItemId")
+scalar setlistItemId extends uuid;
+
+@doc("セットリスト項目の表示名")
+@minLength(1)
+@friendlyName("setlistLabel")
+scalar setlistLabel extends string;
+
 @doc("共演者としてのクレジット名")
 @minLength(1)
 @friendlyName("performanceCreditName")

@@ -51,7 +51,9 @@ const songs = await songContentRepository.all();
               class="song-grid-card"
               data-song-entry
               data-song-category={song.type.value}
-              data-song-search={`${song.title} ${song.lyricists.join(' ')} ${song.composers.join(' ')} ${song.arrangers.join(' ')}`.toLowerCase()}
+              data-song-search={[song.title, ...song.lyricists, ...song.composers, ...song.arrangers]
+                .join(' ')
+                .toLowerCase()}
             >
               <SongTile
                 songId={song.songId}

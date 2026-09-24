@@ -20,7 +20,7 @@ model EventSource {
   orderNo: orderNo;
 }
 
-@doc("イベントに紐づく楽曲披露")
+@doc("楽曲披露の共演者")
 model PerformancePerson {
   personId: personId;
   name: personName;
@@ -30,7 +30,7 @@ model PerformancePerson {
 
 @doc("イベントに紐づく楽曲披露")
 model SongPerformance {
-  performanceId: uuid;
+  performanceId: performanceId;
   songId: songId;
   songTitle: title;
   orderNo: orderNo;
@@ -39,9 +39,9 @@ model SongPerformance {
 
 @doc("セットリストの 1 項目")
 model SetlistItem {
-  setlistItemId: uuid;
+  setlistItemId: setlistItemId;
   orderNo: orderNo;
-  label: string | null;
+  label: setlistLabel | null;
   performances: SongPerformance[];
 }
 
