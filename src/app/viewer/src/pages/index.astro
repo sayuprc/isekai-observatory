@@ -1,5 +1,5 @@
 ---
-import EventCard from '../components/viewer/EventCard.astro';
+import EventRow from '../components/viewer/EventRow.astro';
 import SectionHead from '../components/viewer/SectionHead.astro';
 import SongTile from '../components/viewer/SongTile.astro';
 import TrackChip from '../components/viewer/TrackChip.astro';
@@ -51,23 +51,6 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
 
   <div class="shell home-feature-row">
     {
-      upcomingEvents.length > 0 && (
-        <section class="home-feature" data-upcoming-section hidden>
-          <SectionHead title="今後の予定" />
-          <ol class="event-home-list">
-            {
-              upcomingEvents.map(event => (
-                <li data-upcoming-event data-start={event.schedule.startOn}>
-                  <EventCard event={event} upcoming />
-                </li>
-              ))
-            }
-          </ol>
-          <a class="btn feature-more" href="/events">イベント一覧 →</a>
-        </section>
-      )
-    }
-    {
       latestSong && (
         <section class="home-feature">
           <SectionHead title="最新楽曲" />
@@ -117,6 +100,24 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
             </div>
             <a class="btn feature-more" href={`/releases/${latestReleaseGroup.releaseGroupId}`}>リリース詳細 →</a>
           </div>
+        </section>
+      )
+    }
+
+    {
+      upcomingEvents.length > 0 && (
+        <section class="home-feature home-feature-wide" data-upcoming-section hidden>
+          <SectionHead title="今後の予定" />
+          <ol class="event-home-list">
+            {
+              upcomingEvents.map(event => (
+                <li data-upcoming-event data-start={event.schedule.startOn}>
+                  <EventRow event={event} withYear />
+                </li>
+              ))
+            }
+          </ol>
+          <a class="btn feature-more" href="/events">イベント一覧 →</a>
         </section>
       )
     }

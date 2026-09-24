@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { groupEvents, upcomingEvents } from './group';
-import { eventDateColumn, eventShortDate, type Event } from './types';
+import { eventDateColumn, type Event } from './types';
 
 const event = (title: string, startOn: string | null, endOn: string | null = null): Event => ({
   eventId: title,
@@ -67,7 +67,11 @@ describe('イベントの日付表示', () => {
     expect(eventDateColumn(event('未定', null))).toBeNull();
   });
 
-  it('ホームのカードは年付きで出す', () => {
-    expect(eventShortDate(event('期間', '2024-08-07', '2024-08-09'))).toBe('2024.08.07 – 2024.08.09');
+  it('年見出しのないホームでは開始日に年を付ける', () => {
+    expect(eventDateColumn(event('単日', '2024-08-07'), true)).toEqual({ main: '2024.08.07', sub: '水' });
+    expect(eventDateColumn(event('期間', '2024-08-07', '2024-08-09'), true)).toEqual({
+      main: '2024.08.07',
+      sub: '– 08.09',
+    });
   });
 });
