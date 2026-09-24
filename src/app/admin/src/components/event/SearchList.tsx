@@ -12,7 +12,8 @@ const formatSchedule = (schedule: { startOn: string | null; endOn: string | null
     return '未定';
   }
   const startOn = normalizeDateValue(schedule.startOn);
-  return schedule.endOn ? `${startOn}〜${normalizeDateValue(schedule.endOn)}` : startOn;
+  const endOn = schedule.endOn ? normalizeDateValue(schedule.endOn) : null;
+  return endOn && endOn !== startOn ? `${startOn}〜${endOn}` : startOn;
 };
 
 export const SearchList = () => {
