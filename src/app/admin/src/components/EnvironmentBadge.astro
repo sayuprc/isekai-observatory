@@ -7,7 +7,9 @@ const badges: Record<string, { label: string; className: string }> = {
   staging: { label: 'STG', className: 'badge-warning' },
 };
 
-const badge = APP_ENV === 'production' ? null : (badges[APP_ENV] ?? { label: APP_ENV.toUpperCase(), className: 'badge-error' });
+const badge = APP_ENV === 'production'
+  ? null
+  : (badges[APP_ENV] ?? { label: APP_ENV.toUpperCase(), className: 'badge-error' });
 ---
 
 {badge && (

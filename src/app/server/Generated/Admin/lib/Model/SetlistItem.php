@@ -309,6 +309,10 @@ class SetlistItem implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['label'] === null) {
             $invalidProperties[] = "'label' can't be null";
         }
+        if ((mb_strlen($this->container['label']) < 1)) {
+            $invalidProperties[] = "invalid value for 'label', the character length must be bigger than or equal to 1.";
+        }
+
         if ($this->container['performances'] === null) {
             $invalidProperties[] = "'performances' can't be null";
         }
@@ -340,7 +344,7 @@ class SetlistItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets setlist_item_id
      *
-     * @param string $setlist_item_id UUID v4
+     * @param string $setlist_item_id セットリスト項目ID
      *
      * @return self
      */
@@ -399,7 +403,7 @@ class SetlistItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets label
      *
-     * @param string $label label
+     * @param string $label セットリスト項目の表示名
      *
      * @return self
      */
@@ -415,6 +419,11 @@ class SetlistItem implements ModelInterface, ArrayAccess, \JsonSerializable
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
+        if (!is_null($label) && (mb_strlen($label) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $label when calling SetlistItem., must be bigger than or equal to 1.');
+        }
+
         $this->container['label'] = $label;
 
         return $this;

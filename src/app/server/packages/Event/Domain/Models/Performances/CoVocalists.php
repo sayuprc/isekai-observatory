@@ -11,11 +11,13 @@ use Support\Domain\ValueObjects\OrderNo;
 
 /**
  * @extends ImmutableCollection<int, CoVocalist>
+ *
+ * @phpstan-type CoVocalistInput array{personId: string, creditName: ?string, orderNo: int}
  */
 readonly class CoVocalists extends ImmutableCollection
 {
     /**
-     * @param list<array{personId: string, creditName: ?string, orderNo: int}> $items
+     * @param list<CoVocalistInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -33,7 +35,7 @@ readonly class CoVocalists extends ImmutableCollection
     }
 
     /**
-     * @param list<array{personId: string, creditName: ?string, orderNo: int}> $items
+     * @param list<CoVocalistInput> $items
      */
     public static function reconstruct(array $items): self
     {
