@@ -66,7 +66,7 @@ export type AuditLogSummary = {
 /**
  * 監査ログの対象種別
  */
-export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'Release' | 'ReleaseGroup' | 'Song' | 'SongTag' | 'Venue';
+export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'Release' | 'ReleaseGroup' | 'Song' | 'SongTag' | 'Venue' | 'Event';
 
 /**
  * エラー分類を表す機械可読なコード
@@ -90,11 +90,118 @@ export type ErrorResponse = {
     details?: Array<ErrorDetail>;
 };
 
+/**
+ * イベント
+ */
+export type Event = {
+    eventId: EventId;
+    title: EventTitle;
+    description: EventDescription;
+    typeValue: EventTypeValue;
+    schedule: IsekaiObservatoryPackagesEventEventSchedule;
+    statusValue: EventStatusValue;
+    isDisplay: boolean;
+    venues: Array<Venue>;
+    media: Array<Media>;
+    sources: Array<EventSource>;
+    performances: Array<SongPerformance>;
+    setlist: Array<SetlistItem>;
+};
+
+export type EventCreateRequest = {
+    title: EventTitle;
+    description: EventDescription;
+    typeValue: EventTypeValue;
+    schedule: IsekaiObservatoryPackagesEventEventSchedule;
+    statusValue: EventStatusValue;
+    isDisplay: boolean;
+    venueIds: Array<Uuid>;
+    mediaIds: Array<MediaId>;
+    sources: Array<EventSource>;
+    performances: Array<SongPerformance>;
+    setlist: Array<SetlistItem>;
+};
+
+export type EventCreateResponse = {
+    event: Event;
+};
+
+export type EventGetResponse = {
+    event: Event;
+};
+
+export type EventSearchResponse = {
+    events: Array<EventSummary>;
+    maxPage: number;
+};
+
+/**
+ * イベント検索のソート条件
+ */
+export type EventSearchSortBy = 'schedule' | 'title';
+
+/**
+ * イベント出典
+ */
+export type EventSource = {
+    displayName: EventSourceName;
+    url: EventSourceUrl;
+    orderNo: OrderNo;
+};
+
+/**
+ * イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+ */
+export type EventStatusValue = 1 | 2 | 3;
+
+/**
+ * イベント一覧の 1 行分
+ */
+export type EventSummary = {
+    eventId: EventId;
+    title: EventTitle;
+    typeValue: EventTypeValue;
+    schedule: IsekaiObservatoryPackagesEventEventSchedule;
+    statusValue: EventStatusValue;
+    isDisplay: boolean;
+};
+
+/**
+ * イベント種別
+ */
+export type EventTypeValue = 1 | 2 | 3 | 99;
+
+export type EventUpdateRequest = {
+    title: EventTitle;
+    description: EventDescription;
+    typeValue: EventTypeValue;
+    schedule: IsekaiObservatoryPackagesEventEventSchedule;
+    statusValue: EventStatusValue;
+    isDisplay: boolean;
+    venueIds: Array<Uuid>;
+    mediaIds: Array<MediaId>;
+    sources: Array<EventSource>;
+    performances: Array<SongPerformance>;
+    setlist: Array<SetlistItem>;
+};
+
+export type EventUpdateResponse = {
+    event: Event;
+};
+
 export type GenerateRecoveryCodesResponse = {
     recoveryCodes: Array<RecoveryCode>;
 };
 
 export type IsekaiObservatoryAdminVersion = 'v1';
+
+/**
+ * イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+ */
+export type IsekaiObservatoryPackagesEventEventSchedule = {
+    startOn: EventOn | null;
+    endOn: EventOn | null;
+};
 
 export type LoginFinishRequest = {
     authCeremonyId: AuthCeremonyId;
@@ -199,6 +306,16 @@ export type Medium = {
  */
 export type PerPage = 25 | 50 | 100;
 
+/**
+ * イベントに紐づく楽曲披露
+ */
+export type PerformancePerson = {
+    personId: PersonId;
+    name: PersonName;
+    creditName: PerformanceCreditName | null;
+    orderNo: OrderNo;
+};
+
 export type Permission = {
     name: PermissionName;
     value: PermissionValue;
@@ -207,7 +324,7 @@ export type Permission = {
 /**
  * 権限の値
  */
-export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_media' | 'write_media' | 'read_release' | 'write_release' | 'read_venue' | 'write_venue';
+export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_media' | 'write_media' | 'read_release' | 'write_release' | 'read_venue' | 'write_venue' | 'read_event' | 'write_event';
 
 export type Person = {
     personId: PersonId;
@@ -498,6 +615,16 @@ export type Role = {
  */
 export type RoleValue = 1 | 2 | 3;
 
+/**
+ * セットリストの 1 項目
+ */
+export type SetlistItem = {
+    setlistItemId: Uuid;
+    orderNo: OrderNo;
+    label: string | null;
+    performances: Array<SongPerformance>;
+};
+
 export type Song = {
     songId: SongId;
     title: Title;
@@ -543,6 +670,17 @@ export type SongLinkedMedia = {
     type: MediaType;
     isDisplay: boolean;
     orderNo: OrderNo;
+};
+
+/**
+ * イベントに紐づく楽曲披露
+ */
+export type SongPerformance = {
+    performanceId: Uuid;
+    songId: SongId;
+    songTitle: Title;
+    orderNo: OrderNo;
+    coVocalists: Array<PerformancePerson>;
 };
 
 export type SongPerson = {
@@ -758,6 +896,36 @@ export type Description = string;
 export type Email = string;
 
 /**
+ * イベント説明
+ */
+export type EventDescription = string;
+
+/**
+ * イベントID
+ */
+export type EventId = string;
+
+/**
+ * イベント日
+ */
+export type EventOn = string;
+
+/**
+ * イベントの出典表示名
+ */
+export type EventSourceName = string;
+
+/**
+ * イベントの出典URL
+ */
+export type EventSourceUrl = string;
+
+/**
+ * イベントタイトル
+ */
+export type EventTitle = string;
+
+/**
  * 歌詞リンク
  */
 export type LyricsLink = string;
@@ -811,6 +979,11 @@ export type OrderNo = number;
  * ページ番号
  */
 export type Page = number;
+
+/**
+ * 共演者としてのクレジット名
+ */
+export type PerformanceCreditName = string;
 
 /**
  * 権限名
@@ -1375,6 +1548,266 @@ export type AuthenticateServiceRegisterStartResponses = {
 };
 
 export type AuthenticateServiceRegisterStartResponse = AuthenticateServiceRegisterStartResponses[keyof AuthenticateServiceRegisterStartResponses];
+
+export type EventServiceCreateEventData = {
+    body: EventCreateRequest;
+    path?: never;
+    query?: never;
+    url: '/events';
+};
+
+export type EventServiceCreateEventErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type EventServiceCreateEventError = EventServiceCreateEventErrors[keyof EventServiceCreateEventErrors];
+
+export type EventServiceCreateEventResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: EventCreateResponse;
+};
+
+export type EventServiceCreateEventResponse = EventServiceCreateEventResponses[keyof EventServiceCreateEventResponses];
+
+export type EventServiceSearchEventsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        title?: string;
+        type?: EventTypeValue;
+        status?: EventStatusValue;
+        is_display?: boolean;
+        sort?: EventSearchSortBy;
+        order?: SortOrder;
+        page?: Page;
+        per_page?: PerPage;
+    };
+    url: '/events/search';
+};
+
+export type EventServiceSearchEventsErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type EventServiceSearchEventsError = EventServiceSearchEventsErrors[keyof EventServiceSearchEventsErrors];
+
+export type EventServiceSearchEventsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: EventSearchResponse;
+};
+
+export type EventServiceSearchEventsResponse = EventServiceSearchEventsResponses[keyof EventServiceSearchEventsResponses];
+
+export type EventServiceDeleteEventData = {
+    body?: never;
+    path: {
+        eventId: Uuid;
+    };
+    query?: never;
+    url: '/events/{eventId}';
+};
+
+export type EventServiceDeleteEventErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type EventServiceDeleteEventError = EventServiceDeleteEventErrors[keyof EventServiceDeleteEventErrors];
+
+export type EventServiceDeleteEventResponses = {
+    /**
+     * There is no content to send for this request, but the headers may be useful.
+     */
+    204: void;
+};
+
+export type EventServiceDeleteEventResponse = EventServiceDeleteEventResponses[keyof EventServiceDeleteEventResponses];
+
+export type EventServiceGetEventData = {
+    body?: never;
+    path: {
+        eventId: Uuid;
+    };
+    query?: never;
+    url: '/events/{eventId}';
+};
+
+export type EventServiceGetEventErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type EventServiceGetEventError = EventServiceGetEventErrors[keyof EventServiceGetEventErrors];
+
+export type EventServiceGetEventResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: EventGetResponse;
+};
+
+export type EventServiceGetEventResponse = EventServiceGetEventResponses[keyof EventServiceGetEventResponses];
+
+export type EventServiceUpdateEventData = {
+    body: EventUpdateRequest;
+    path: {
+        eventId: Uuid;
+    };
+    query?: never;
+    url: '/events/{eventId}';
+};
+
+export type EventServiceUpdateEventErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type EventServiceUpdateEventError = EventServiceUpdateEventErrors[keyof EventServiceUpdateEventErrors];
+
+export type EventServiceUpdateEventResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: EventUpdateResponse;
+};
+
+export type EventServiceUpdateEventResponse = EventServiceUpdateEventResponses[keyof EventServiceUpdateEventResponses];
 
 export type MediaServiceCreateMediaData = {
     body: MediaCreateRequest;

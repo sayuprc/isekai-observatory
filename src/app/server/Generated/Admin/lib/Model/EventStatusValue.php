@@ -1,6 +1,6 @@
 <?php
 /**
- * PermissionValue
+ * EventStatusValue
  *
  * PHP version 8.1
  *
@@ -30,46 +30,24 @@ namespace OpenAPI\Admin\Client\Model;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * PermissionValue Class Doc Comment
+ * EventStatusValue Class Doc Comment
  *
  * @category Class
- * @description 権限の値
+ * @description イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-enum PermissionValue: string
+enum EventStatusValue: int
 {
     /**
      * Possible values of this enum
      */
-    case READ_ADMIN_USER = 'read_admin_user';
+    case NUMBER_1 = 1;
 
-    case WRITE_ADMIN_USER = 'write_admin_user';
+    case NUMBER_2 = 2;
 
-    case READ_PERSON = 'read_person';
-
-    case WRITE_PERSON = 'write_person';
-
-    case READ_SONG = 'read_song';
-
-    case WRITE_SONG = 'write_song';
-
-    case READ_MEDIA = 'read_media';
-
-    case WRITE_MEDIA = 'write_media';
-
-    case READ_RELEASE = 'read_release';
-
-    case WRITE_RELEASE = 'write_release';
-
-    case READ_VENUE = 'read_venue';
-
-    case WRITE_VENUE = 'write_venue';
-
-    case READ_EVENT = 'read_event';
-
-    case WRITE_EVENT = 'write_event';
+    case NUMBER_3 = 3;
 
 }
 
