@@ -195,7 +195,7 @@ class EventApi
                     );
             }
 
-
+            
 
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
@@ -234,7 +234,7 @@ class EventApi
                     $e->setResponseObject($data);
                     throw $e;
             }
-
+        
 
             throw $e;
         }
@@ -331,7 +331,7 @@ class EventApi
         if ($limit !== null && $limit < 1) {
             throw new \InvalidArgumentException('invalid value for "$limit" when calling EventApi.eventServiceListEvents, must be bigger than or equal to 1.');
         }
-
+        
 
         $resourcePath = '/events';
         $formParams = [];
