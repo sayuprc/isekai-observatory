@@ -1,22 +1,32 @@
 ---
+import EntryGroupStatus from '../../components/viewer/EntryGroupStatus';
 import EntryStatus from '../../components/viewer/EntryStatus';
+import EventCard from '../../components/viewer/EventCard.astro';
 import FilterBar from '../../components/viewer/FilterBar';
 import SectionHead from '../../components/viewer/SectionHead.astro';
 import { eventContentRepository } from '../../features/events/content';
-import { eventDate, eventStatusName, eventTypeName } from '../../features/events/types';
+import type { Event } from '../../features/events/types';
+import { eventDate, eventTypeName } from '../../features/events/types';
 import Layout from '../../layouts/Layout.astro';
 
-const events = await eventContentRepository.all();
-const eyebrow = (event: (typeof events)[number]) => {
-  const statusName = eventStatusName(event.statusValue);
-  return `${eventTypeName(event.typeValue)}${statusName ? ` — ${statusName}` : ''}`;
-};
-const searchText = (event: (typeof events)[number]) =>
-  `${event.title} ${eventDate(event) ?? ''} ${event.venues.map(venue => venue.name).join(' ')}`.toLowerCase();
+const { upcoming, undated, pastByYear } = await eventContentRepository.grouped();
+const groups: { key: string; label: string; isYear: boolean; events: Event[]; upcoming?: boolean }[] = [
+  { key: 'upcoming', label: '今後の予定', isYear: false, events: upcoming, upcoming: true },
+  { key: 'undated', label: '日付未定', isYear: false, events: undated },
+  ...pastByYear.map(({ year, events }) => ({ key: year, label: year, isYear: true, events })),
+].filter(group => group.events.length > 0);
+const total = upcoming.length + undated.length + pastByYear.reduce((sum, group) => sum + group.events.length, 0);
+
+const searchText = (event: Event) =>
+  [event.title, eventTypeName(event.typeValue), eventDate(event) ?? '', ...event.venues.map(venue => venue.name)]
+    .join(' ')
+    .toLowerCase();
 ---
+
 <Layout pageTitle="イベント" pageDescription="ヰ世界情緒のライブ、配信、個展などのイベント記録">
   <section class="shell page-section">
     <SectionHead title="イベント" level={1} />
+
     <FilterBar
       client:idle
       filters={[
@@ -31,31 +41,49 @@ const searchText = (event: (typeof events)[number]) =>
       searchAttr="eventSearch"
       searchPlaceholder="タイトル・年・開催先を検索..."
     />
+
     <EntryStatus
       client:idle
       entrySelector="[data-event-entry]"
       emptySelector="[data-event-empty]"
-      initialCount={events.length}
+      initialCount={total}
     />
+
+    <EntryGroupStatus
+      client:idle
+      entrySelector="[data-event-entry]"
+      groupSelector="[data-event-group]"
+      countSelector="[data-event-group-count]"
+      unit="件"
+    />
+
     <div class="entry-empty entry-empty-panel" data-event-empty hidden>
       <div class="entry-empty-title">該当するイベントがありません</div>
       <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
     </div>
-    <div class="entry-list">
-      {
-        events.map(event => (
-          <article
-            class="entry-list-item"
-            data-event-entry
-            data-event-type={event.typeValue}
-            data-event-search={searchText(event)}
-          >
-            <div class="eyebrow">{eyebrow(event)}</div>
-            <h2 class="entry-list-title"><a href={`/events/${event.eventId}`}>{event.title}</a></h2>
-            <p>{eventDate(event) ?? '開催時期未定'}</p>
-          </article>
-        ))
-      }
-    </div>
+
+    {
+      groups.map(group => (
+        <section class="event-group" data-event-group>
+          <div class="event-group-head">
+            <div class:list={['event-group-label', { 'event-group-label-year': group.isYear }]}>{group.label}</div>
+            <div class="event-group-count" data-event-group-count>{group.events.length}件</div>
+          </div>
+          <ol class="event-group-list">
+            {
+              group.events.map(event => (
+                <li
+                  data-event-entry
+                  data-event-type={String(event.typeValue)}
+                  data-event-search={searchText(event)}
+                >
+                  <EventCard event={event} withYear={!group.isYear} upcoming={group.upcoming} />
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+      ))
+    }
   </section>
 </Layout>

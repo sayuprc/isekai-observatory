@@ -1,0 +1,167 @@
+---
+import type { Event } from '../../../features/events/types';
+import { eventDate, eventStatusName, eventTypeName } from '../../../features/events/types';
+import DetailSectionHead from './DetailSectionHead.astro';
+import MediaChip from './MediaChip.astro';
+
+interface Props {
+  event: Event;
+}
+
+type Performance = Event['performances'][number];
+
+const { event } = Astro.props;
+const date = eventDate(event) ?? '開催時期未定';
+const statusName = eventStatusName(event.statusValue);
+const infoItems = [
+  { label: '開催時期', value: date },
+  { label: '種別', value: eventTypeName(event.typeValue) },
+  { label: '開催先', value: event.venues.map(venue => venue.name).join(' / ') || '-' },
+];
+
+const coVocalistText = (performance: Performance): string | null =>
+  performance.coVocalists.length > 0
+    ? `共演: ${performance.coVocalists.map(person => person.creditName ?? person.name).join(' / ')}`
+    : null;
+const performances = event.performances.map(performance => ({ ...performance, note: coVocalistText(performance) }));
+
+// 表示名があれば主表示にし、披露曲は補足に回す。メドレーは曲名を / でつなぐ
+const setlistItems = event.setlist.map((item) => {
+  const titles = item.performances.map(performance => performance.songTitle).join(' / ');
+  const linkable = item.performances.length === 1 ? item.performances[0] : undefined;
+
+  return {
+    index: String(item.orderNo).padStart(2, '0'),
+    main: item.label ?? titles,
+    sub: item.label && titles ? titles : null,
+    href: linkable?.songId ? `/songs/${linkable.songId}` : null,
+  };
+});
+
+const hostname = (url: string): string => {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return url;
+  }
+};
+---
+
+<div class="detail-page-content event-detail-content" data-share-title={event.title}>
+  <div class="event-detail-meta">
+    <span class="label-mono">{date} · {eventTypeName(event.typeValue)}</span>
+    {statusName && <span class="event-detail-status">{statusName}</span>}
+  </div>
+  <h1 class="detail-title">{event.title}</h1>
+  {event.description && <p class="detail-description event-detail-description">{event.description}</p>}
+
+  <DetailSectionHead title="開催情報" />
+  <dl class="song-credit-grid">
+    {
+      infoItems.map(item => (
+        <div class="song-credit-item">
+          <dt class="song-credit-label">{item.label}</dt>
+          <dd class="song-credit-value">{item.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  {
+    setlistItems.length > 0 && (
+      <>
+        <DetailSectionHead title="セットリスト" count={setlistItems.length} />
+        <div class="rel-list event-setlist">
+          {
+            setlistItems.map(item => (
+              item.href
+                ? (
+                    <a class="rel-chip" href={item.href}>
+                      <span class="detail-index">{item.index}</span>
+                      <div class="rel-copy">
+                        <div class="rel-main">{item.main}</div>
+                        {item.sub && <div class="label-mono rel-sub">{item.sub}</div>}
+                      </div>
+                      <span class="rel-arrow">→</span>
+                    </a>
+                  )
+                : (
+                    <div class="rel-chip" data-unlinked>
+                      <span class="detail-index">{item.index}</span>
+                      <div class="rel-copy">
+                        <div class="rel-main">{item.main}</div>
+                        {item.sub && <div class="label-mono rel-sub">{item.sub}</div>}
+                      </div>
+                    </div>
+                  )
+            ))
+          }
+        </div>
+      </>
+    )
+  }
+
+  {
+    performances.length > 0 && (
+      <>
+        <DetailSectionHead title="楽曲披露" count={performances.length} />
+        <div class="rel-list">
+          {
+            performances.map(performance => (
+              performance.songId
+                ? (
+                    <a class="rel-chip" href={`/songs/${performance.songId}`}>
+                      <div class="rel-copy">
+                        <div class="rel-main">{performance.songTitle}</div>
+                        {performance.note && <div class="label-mono rel-sub">{performance.note}</div>}
+                      </div>
+                      <span class="rel-arrow rel-arrow-muted">→</span>
+                    </a>
+                  )
+                : (
+                    <div class="rel-chip" data-unlinked>
+                      <div class="rel-copy">
+                        <div class="rel-main">{performance.songTitle}</div>
+                        {performance.note && <div class="label-mono rel-sub">{performance.note}</div>}
+                      </div>
+                    </div>
+                  )
+            ))
+          }
+        </div>
+      </>
+    )
+  }
+
+  {
+    event.media.length > 0 && (
+      <>
+        <DetailSectionHead title="関連メディア" count={event.media.length} />
+        <div class="rel-list">
+          {event.media.map(media => <MediaChip media={media} />)}
+        </div>
+      </>
+    )
+  }
+
+  {
+    event.sources.length > 0 && (
+      <>
+        <DetailSectionHead title="出典" count={event.sources.length} />
+        <div class="rel-list">
+          {
+            event.sources.map(source => (
+              <a class="rel-chip" href={source.url} target="_blank" rel="noopener noreferrer">
+                <div class="rel-copy">
+                  <div class="rel-main">{source.displayName}</div>
+                  <div class="label-mono rel-sub">{hostname(source.url)}</div>
+                </div>
+                <span class="rel-arrow rel-arrow-muted">↗</span>
+              </a>
+            ))
+          }
+        </div>
+      </>
+    )
+  }
+</div>

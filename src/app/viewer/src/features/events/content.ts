@@ -1,30 +1,15 @@
 import { eventRepository } from './api.js';
+import { groupEvents, type EventGroups } from './group.js';
 import type { Event } from './types.js';
 
-const sortEvents = (events: Event[]): Event[] => {
-  const now = Date.now();
-  const timestamp = (event: Event): number | null => {
-    const value = event.schedule.startOn;
-    if (!value) return null;
-    const parsed = new Date(value).getTime();
-    return Number.isNaN(parsed) ? null : parsed;
-  };
-
-  return [...events].sort((left, right) => {
-    const leftTime = timestamp(left);
-    const rightTime = timestamp(right);
-    if (leftTime === null && rightTime === null) return left.title.localeCompare(right.title, 'ja');
-    if (leftTime === null) return -1;
-    if (rightTime === null) return 1;
-    const leftFuture = leftTime >= now;
-    const rightFuture = rightTime >= now;
-    if (leftFuture !== rightFuture) return leftFuture ? -1 : 1;
-    return leftFuture ? leftTime - rightTime : rightTime - leftTime;
-  });
-};
+// SSG のビルド日を基準にする。日付は日本時間の YYYY-MM-DD で比べる
+const today = (): string => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(new Date());
 
 export const eventContentRepository = {
   async all(): Promise<Event[]> {
-    return sortEvents(await eventRepository.all());
+    return eventRepository.all();
+  },
+  async grouped(): Promise<EventGroups> {
+    return groupEvents(await eventRepository.all(), today());
   },
 };

@@ -1,6 +1,6 @@
 ---
+import EventDetailContent from '../../components/viewer/details/EventDetailContent.astro';
 import { eventContentRepository } from '../../features/events/content';
-import { eventDate, eventStatusName, eventTypeName } from '../../features/events/types';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -8,78 +8,15 @@ export async function getStaticPaths() {
 }
 
 const { event } = Astro.props;
-const statusName = eventStatusName(event.statusValue);
-const eyebrow = `${eventTypeName(event.typeValue)}${statusName ? ` — ${statusName}` : ''}`;
-const coVocalistNames = (performance: (typeof event.performances)[number]) =>
-  performance.coVocalists.map(person => person.creditName ?? person.name).join(' / ');
+const pageDescription = event.description || `ヰ世界情緒のイベント「${event.title}」の記録`;
 ---
+
 <Layout
   pageTitle={event.title}
-  pageDescription={event.description || `${event.title}のイベント記録`}
+  pageDescription={pageDescription}
   breadcrumbs={[{ label: 'イベント', href: '/events' }, { label: event.title, href: null }]}
 >
   <section class="shell page-section detail-page">
-    <div class="eyebrow">{eyebrow}</div>
-    <h1 class="page-title">{event.title}</h1>
-    <p>{eventDate(event) ?? '開催時期未定'}</p>
-    {event.description && <p class="feature-summary">{event.description}</p>}
-    {event.venues.length > 0 && <p>開催先: {event.venues.map(venue => venue.name).join('、')}</p>}
-    {
-      event.sources.length > 0 && (
-        <section class="detail-block">
-          <h2>出典</h2>
-          <ul>
-            {
-              event.sources.map(source => (
-                <li><a href={source.url} rel="noreferrer">{source.displayName}</a></li>
-              ))
-            }
-          </ul>
-        </section>
-      )
-    }
-    {
-      event.media.length > 0 && (
-        <section class="detail-block">
-          <h2>関連メディア</h2>
-          <ul>
-            {event.media.map(media => <li><a href={`/media/${media.mediaId}`}>{media.title}</a></li>)}
-          </ul>
-        </section>
-      )
-    }
-    {
-      event.setlist.length > 0 && (
-        <section class="detail-block">
-          <h2>セットリスト</h2>
-          <ol>
-            {
-              event.setlist.map(item => (
-                <li>{item.label ?? item.performances.map(performance => performance.songTitle).join(' / ')}</li>
-              ))
-            }
-          </ol>
-        </section>
-      )
-    }
-    {
-      event.performances.length > 0 && (
-        <section class="detail-block">
-          <h2>楽曲披露</h2>
-          <ul>
-            {
-              event.performances.map(performance => (
-                <li>
-                  {performance.songId
-                    ? <a href={`/songs/${performance.songId}`}>{performance.songTitle}</a>
-                    : performance.songTitle}{performance.coVocalists.length > 0
-                      && <span>（共演: {coVocalistNames(performance)}）</span>}
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-      )
-    }
+    <EventDetailContent event={event} />
   </section>
 </Layout>

@@ -21,8 +21,13 @@ export const navLinks: readonly NavLink[] = [
   },
   {
     href: '/events',
-    label: '活動',
-    iconPaths: ['M5 12h14', 'M12 5v14'],
+    label: 'イベント',
+    iconPaths: [
+      'M8 2v4',
+      'M16 2v4',
+      'M3 10h18',
+      'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z',
+    ],
   },
   // 未提供ページの雛形。公開時にアイコンを決めてコメントを外す
   // { href: '/media', label: 'メディア', iconPaths: [] },
