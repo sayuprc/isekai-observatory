@@ -1,6 +1,7 @@
 import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
 import type { EventSearchSortBy, EventStatusValue, EventTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
+import { normalizeDateValue } from '../../utils/date';
 import { ListState } from '../ListState';
 
 const typeName: Record<number, string> = { 1: 'ライブ', 2: '配信', 3: '個展', 99: 'その他' };
@@ -36,7 +37,7 @@ export const SearchList = () => {
         <button class="btn btn-primary btn-sm" type="submit">検索</button>
       </form>
       <div class="mb-4 flex justify-end"><a href="/events/create" class="btn btn-primary btn-sm">新規作成</a></div>
-      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100"><table class="table table-zebra"><thead><tr><th>タイトル</th><th>種別</th><th>開催時期</th><th>状態</th></tr></thead><tbody><Switch><Match when={data.loading}><ListState state="loading" colSpan={4} /></Match><Match when={fetchError()}>{message => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}</Match><Match when={data() && data()!.events.length === 0}><ListState state="empty" colSpan={4} /></Match><Match when={data()}>{result => <For each={result().events}>{event => <tr><td><a class="link link-hover" href={`/events/${event.eventId}`}>{event.title}</a></td><td>{typeName[event.typeValue] ?? 'その他'}</td><td>{event.schedule.startOn ? `${event.schedule.startOn}${event.schedule.endOn ? `〜${event.schedule.endOn}` : ''}` : '未定'}</td><td>{statusName[event.statusValue]}</td></tr>}</For>}</Match></Switch></tbody></table></div>
+      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100"><table class="table table-zebra"><thead><tr><th>タイトル</th><th>種別</th><th>開催時期</th><th>状態</th></tr></thead><tbody><Switch><Match when={data.loading}><ListState state="loading" colSpan={4} /></Match><Match when={fetchError()}>{message => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}</Match><Match when={data() && data()!.events.length === 0}><ListState state="empty" colSpan={4} /></Match><Match when={data()}>{result => <For each={result().events}>{event => <tr><td><a class="link link-hover" href={`/events/${event.eventId}`}>{event.title}</a></td><td>{typeName[event.typeValue] ?? 'その他'}</td><td>{event.schedule.startOn ? `${normalizeDateValue(event.schedule.startOn)}${event.schedule.endOn ? `〜${normalizeDateValue(event.schedule.endOn)}` : ''}` : '未定'}</td><td>{statusName[event.statusValue]}</td></tr>}</For>}</Match></Switch></tbody></table></div>
       <Show when={data() && data()!.maxPage > 1}><p class="mt-2 text-sm text-base-content/60">複数ページあります。検索条件を絞り込んでください。</p></Show>
     </>
   );
