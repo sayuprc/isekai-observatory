@@ -20,8 +20,6 @@ readonly class EventSources extends ImmutableCollection
      */
     public static function fromArray(array $items): self
     {
-        $sources = self::reconstruct($items);
-
         if (count($items) !== count(array_unique(array_column($items, 'url')))) {
             throw new BusinessRuleViolationException('出典URLを重複して登録できません');
         }
@@ -30,7 +28,7 @@ readonly class EventSources extends ImmutableCollection
             throw new BusinessRuleViolationException('出典の順序を重複して登録できません');
         }
 
-        return $sources;
+        return self::reconstruct($items);
     }
 
     /**
