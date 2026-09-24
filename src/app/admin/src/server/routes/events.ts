@@ -6,6 +6,7 @@ import {
   eventServiceSearchEvents,
   eventServiceUpdateEvent,
 } from '../../generated';
+import type { EventSearchSortBy, EventStatusValue, EventTypeValue, PerPage, SortOrder } from '../../generated';
 import { withAuthRetry } from '../client';
 import { resolveApiResponse } from '../errors';
 import { authGuard } from '../middleware';
@@ -62,13 +63,13 @@ export const events = new Elysia({ prefix: '/events' })
             client,
             query: {
               title: query.title || undefined,
-              type: query.type ? Number(query.type) as 1 | 2 | 3 | 99 : undefined,
-              status: query.status !== undefined && query.status !== '' ? Number(query.status) as 1 | 2 | 3 : undefined,
+              type: query.type ? Number(query.type) as EventTypeValue : undefined,
+              status: query.status ? Number(query.status) as EventStatusValue : undefined,
               is_display: query.is_display,
-              sort: (query.sort ?? 'schedule') as 'schedule' | 'title',
-              order: (query.order ?? 'asc') as 'asc' | 'desc',
+              sort: (query.sort ?? 'schedule') as EventSearchSortBy,
+              order: (query.order ?? 'asc') as SortOrder,
               page: query.page ?? 1,
-              per_page: query.per_page ?? 25,
+              per_page: (query.per_page ?? 25) as PerPage,
             },
           }),
         );
@@ -77,8 +78,8 @@ export const events = new Elysia({ prefix: '/events' })
     {
       query: t.Object({
         title: t.Optional(t.String()),
-        type: t.Optional(t.String()),
-        status: t.Optional(t.String()),
+        type: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('99'), t.Literal('')])),
+        status: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('')])),
         is_display: t.Optional(t.Boolean()),
         sort: t.Optional(t.Union([t.Literal('schedule'), t.Literal('title')])),
         order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),
@@ -100,7 +101,7 @@ export const events = new Elysia({ prefix: '/events' })
     '/',
     async ({ body, authSession }) => {
       return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await eventServiceCreateEvent({ client, body: body as never }));
+        return resolveApiResponse(await eventServiceCreateEvent({ client, body }));
       });
     },
     { body: eventBodySchema },
@@ -109,7 +110,7 @@ export const events = new Elysia({ prefix: '/events' })
     '/:eventId',
     async ({ params: { eventId }, body, authSession }) => {
       return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await eventServiceUpdateEvent({ client, path: { eventId }, body: body as never }));
+        return resolveApiResponse(await eventServiceUpdateEvent({ client, path: { eventId }, body }));
       });
     },
     {
