@@ -38,6 +38,7 @@ namespace IsekaiObservatory.Viewer;
           color: "#4a5a78",
         }
       ],
+      performances: #[],
     }
   ],
   nextCursor: "eyJvcmRlck5vIjoxLCJzb25nSWQiOiIzY2Q0MmMwOS1mZjNjLTRjZDItOTEzZi1hMjc5YzRlYTg5YjQifQ==",
