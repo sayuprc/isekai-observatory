@@ -1,23 +1,12 @@
-import { Match, Switch, createResource, createSignal } from 'solid-js';
-import type { Event, EventStatusValue, EventTypeValue } from '../../generated';
+import { Match, Switch, createResource } from 'solid-js';
+import type { Event } from '../../generated';
 import { client } from '../../utils/client';
-import { normalizeDateValue } from '../../utils/date';
 import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS, allowsPerformances, allowsSetlist } from './event-options';
-import {
-  toPerformanceForms,
-  toPerformancesPayload,
-  toSetlistItemForms,
-  toSetlistPayload,
-  validateSetlistItems,
-  type PerformanceForm,
-  type SetlistItemForm,
-} from './performance-form';
-import { PerformanceEditor } from './PerformanceEditor';
-import { SetlistEditor } from './SetlistEditor';
+import { createEventForm } from './event-form';
+import { EventFormFields } from './EventFormFields';
 
 interface DetailViewProps {
   eventId: string;
@@ -79,43 +68,24 @@ const EditableForm = (props: EditableFormProps) => {
   const { formError, clearErrors, handleError, setFormError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const event = props.data.event;
-  const [typeValue, setTypeValue] = createSignal<EventTypeValue>(event.typeValue);
-  const [statusValue, setStatusValue] = createSignal<EventStatusValue>(event.statusValue);
-  const [performances, setPerformances] = createSignal<PerformanceForm[]>(toPerformanceForms(event.performances));
-  const [setlist, setSetlist] = createSignal<SetlistItemForm[]>(toSetlistItemForms(event.setlist));
+  const form = createEventForm(event);
 
-  const save = withSubmitting(async (submitEvent: globalThis.Event) => {
+  const save = withSubmitting(async (submitEvent: SubmitEvent) => {
     submitEvent.preventDefault();
     clearErrors();
-    const form = submitEvent.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
-    const nextType = Number(formData.get('typeValue') ?? typeValue()) as EventTypeValue;
-    const nextStatus = Number(formData.get('statusValue') ?? statusValue()) as EventStatusValue;
-    const nextPerformances = allowsPerformances(nextStatus) ? performances() : [];
-    const nextSetlist = allowsPerformances(nextStatus) && allowsSetlist(nextType) ? setlist() : [];
-    const setlistError = validateSetlistItems(nextSetlist);
-    if (setlistError) {
-      setFormError(setlistError);
+    const validationError = form.validate();
+    if (validationError) {
+      setFormError(validationError);
       return;
     }
 
-    const schedule = {
-      startOn: formData.get('startOn')?.toString() || null,
-      endOn: formData.get('endOn')?.toString() || null,
-    };
-    const { data, error, status } = await client.api.events({ eventId: event.eventId }).put({
-      title: formData.get('title')?.toString() ?? '',
-      description: formData.get('description')?.toString() ?? '',
-      typeValue: nextType,
-      schedule,
-      statusValue: nextStatus,
-      isDisplay: formData.get('isDisplay') === 'true',
-      venueIds: event.venues.map(venue => venue.venueId),
-      mediaIds: event.media.map(media => media.mediaId),
-      sources: event.sources,
-      performances: toPerformancesPayload(nextPerformances),
-      setlist: toSetlistPayload(nextSetlist, nextPerformances),
-    });
+    const { data, error, status } = await client.api.events({ eventId: event.eventId }).put(
+      form.toRequestBody({
+        venueIds: event.venues.map(venue => venue.venueId),
+        mediaIds: event.media.map(media => media.mediaId),
+        sources: event.sources,
+      }),
+    );
     if (data) {
       setFlash('更新しました');
       window.location.href = getListUrl();
@@ -141,111 +111,7 @@ const EditableForm = (props: EditableFormProps) => {
       <FormError message={formError()} onClose={clearErrors} />
       <div class="max-w-4xl space-y-6">
         <form class="space-y-6" onSubmit={save}>
-          <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-            <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
-            <label class="label" for="title">タイトル</label>
-            <input id="title" name="title" class="input w-full" required maxLength={255} value={event.title} />
-            <label class="label mt-4" for="description">説明</label>
-            <textarea id="description" name="description" class="textarea w-full" rows={4}>
-              {event.description ?? ''}
-            </textarea>
-            <div class="grid gap-4 md:grid-cols-2">
-              <div>
-                <label class="label" for="typeValue">種別</label>
-                <select
-                  id="typeValue"
-                  name="typeValue"
-                  class="select w-full"
-                  value={typeValue()}
-                  onChange={(e) => {
-                    const next = Number(e.currentTarget.value) as EventTypeValue;
-                    setTypeValue(next);
-                    if (!allowsSetlist(next)) {
-                      setSetlist([]);
-                    }
-                  }}
-                >
-                  {EVENT_TYPE_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
-                </select>
-              </div>
-              <div>
-                <label class="label" for="statusValue">状態</label>
-                <select
-                  id="statusValue"
-                  name="statusValue"
-                  class="select w-full"
-                  value={statusValue()}
-                  onChange={(e) => {
-                    const next = Number(e.currentTarget.value) as EventStatusValue;
-                    setStatusValue(next);
-                    if (!allowsPerformances(next)) {
-                      setPerformances([]);
-                      setSetlist([]);
-                    }
-                  }}
-                >
-                  {EVENT_STATUS_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
-                </select>
-              </div>
-            </div>
-            <div class="grid gap-4 md:grid-cols-2">
-              <div>
-                <label class="label" for="startOn">開始日</label>
-                <input
-                  id="startOn"
-                  name="startOn"
-                  type="date"
-                  class="input w-full"
-                  value={normalizeDateValue(event.schedule.startOn)}
-                />
-              </div>
-              <div>
-                <label class="label" for="endOn">終了日</label>
-                <input
-                  id="endOn"
-                  name="endOn"
-                  type="date"
-                  class="input w-full"
-                  value={normalizeDateValue(event.schedule.endOn)}
-                />
-              </div>
-            </div>
-            <p class="mt-2 text-sm text-base-content/60">両方空は日付未定、開始日のみは単日、両方指定は期間です</p>
-            <div class="grid gap-4 md:grid-cols-2">
-              <div>
-                <label class="label" for="isDisplay">表示設定</label>
-                <select id="isDisplay" name="isDisplay" class="select w-full">
-                  <option value="true" selected={event.isDisplay}>表示する</option>
-                  <option value="false" selected={!event.isDisplay}>表示しない</option>
-                </select>
-              </div>
-            </div>
-          </fieldset>
-
-          <PerformanceEditor
-            performances={performances()}
-            onChange={(updater) => {
-              setPerformances((prev) => {
-                const next = updater(prev);
-                const ids = new Set(next.map(performance => performance.performanceId));
-                setSetlist(items =>
-                  items.map(item => ({
-                    ...item,
-                    performanceIds: item.performanceIds.filter(id => ids.has(id)),
-                  })));
-                return next;
-              });
-            }}
-            disabled={!allowsPerformances(statusValue())}
-          />
-          <SetlistEditor
-            setlist={setlist()}
-            performances={performances()}
-            onChange={updater => setSetlist(updater)}
-            disabled={!allowsPerformances(statusValue())}
-            hidden={!allowsSetlist(typeValue())}
-          />
-
+          <EventFormFields form={form} />
           <div class="flex justify-end">
             <button type="submit" class="btn btn-primary" disabled={isSubmitting()}>
               {isSubmitting() ? '更新中...' : '更新'}
