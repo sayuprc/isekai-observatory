@@ -3,9 +3,7 @@ import type { EventStatusValue, EventTypeValue, SortOrder } from '../../generate
 import { client } from '../../utils/client';
 import { normalizeDateValue } from '../../utils/date';
 import { ListState } from '../ListState';
-
-const typeName: Record<number, string> = { 1: 'ライブ', 2: '配信', 3: '個展', 99: 'その他' };
-const statusName: Record<EventStatusValue, string> = { 1: '通常', 2: '延期', 3: '中止' };
+import { EVENT_STATUS_LABELS, EVENT_STATUS_OPTIONS, EVENT_TYPE_LABELS, EVENT_TYPE_OPTIONS } from './event-options';
 
 const formatSchedule = (schedule: { startOn: string | null; endOn: string | null }): string => {
   if (!schedule.startOn) {
@@ -71,10 +69,7 @@ export const SearchList = () => {
             onChange={e => setType(e.currentTarget.value as '' | `${EventTypeValue}`)}
           >
             <option value="">すべて</option>
-            <option value="1">ライブ</option>
-            <option value="2">配信</option>
-            <option value="3">個展</option>
-            <option value="99">その他</option>
+            {EVENT_TYPE_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
           </select>
         </fieldset>
         <fieldset class="fieldset">
@@ -86,9 +81,7 @@ export const SearchList = () => {
             onChange={e => setStatus(e.currentTarget.value as '' | `${EventStatusValue}`)}
           >
             <option value="">すべて</option>
-            <option value="1">通常</option>
-            <option value="2">延期</option>
-            <option value="3">中止</option>
+            {EVENT_STATUS_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
           </select>
         </fieldset>
         <button class="btn btn-primary btn-sm" type="submit">検索</button>
@@ -125,9 +118,9 @@ export const SearchList = () => {
                         <td>
                           <a class="link link-hover" href={`/events/${event.eventId}`}>{event.title}</a>
                         </td>
-                        <td>{typeName[event.typeValue] ?? 'その他'}</td>
+                        <td>{EVENT_TYPE_LABELS[event.typeValue]}</td>
                         <td>{formatSchedule(event.schedule)}</td>
-                        <td>{statusName[event.statusValue]}</td>
+                        <td>{EVENT_STATUS_LABELS[event.statusValue]}</td>
                       </tr>
                     )}
                   </For>

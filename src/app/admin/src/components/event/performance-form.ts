@@ -66,10 +66,6 @@ export const toSetlistPayload = (
   }));
 };
 
-export const allowsSetlist = (typeValue: number): boolean => typeValue === 1 || typeValue === 2;
-
-export const allowsPerformances = (statusValue: number): boolean => statusValue === 1;
-
 export const validateSetlistItems = (setlist: SetlistItemForm[]): string | null => {
   for (const [index, item] of setlist.entries()) {
     if (item.label.trim() === '' && item.performanceIds.length === 0) {

@@ -3,9 +3,8 @@ import type { EventStatusValue, EventTypeValue } from '../../generated';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
 import { FormError } from '../FormError';
+import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS, allowsPerformances, allowsSetlist } from './event-options';
 import {
-  allowsPerformances,
-  allowsSetlist,
   toPerformancesPayload,
   toSetlistPayload,
   validateSetlistItems,
@@ -14,13 +13,6 @@ import {
 } from './performance-form';
 import { PerformanceEditor } from './PerformanceEditor';
 import { SetlistEditor } from './SetlistEditor';
-
-const EVENT_TYPES: Array<{ value: EventTypeValue; label: string }> = [
-  { value: 1, label: 'ライブ' },
-  { value: 2, label: '配信' },
-  { value: 3, label: '個展' },
-  { value: 99, label: 'その他' },
-];
 
 export const CreateForm = () => {
   const { formError, clearErrors, setFormError } = createFormErrors();
@@ -109,7 +101,7 @@ export const CreateForm = () => {
                 }
               }}
             >
-              {EVENT_TYPES.map(option => <option value={option.value}>{option.label}</option>)}
+              {EVENT_TYPE_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
             </select>
           </div>
           <div>
@@ -127,9 +119,7 @@ export const CreateForm = () => {
                 }
               }}
             >
-              <option value="1">通常</option>
-              <option value="2">延期</option>
-              <option value="3">中止</option>
+              {EVENT_STATUS_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
             </select>
           </div>
         </div>
