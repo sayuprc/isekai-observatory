@@ -52,7 +52,20 @@ readonly class EventIntegrityService
         array $performances,
         array $setlist,
     ): Event {
-        return $this->build($this->generator->generate(), $title, $description, $type, $schedule, $status, $isDisplay, $venueIds, $mediaIds, $sources, $performances, $setlist);
+        return $this->build(
+            $this->generator->generate(),
+            $title,
+            $description,
+            $type,
+            $schedule,
+            $status,
+            $isDisplay,
+            $venueIds,
+            $mediaIds,
+            $sources,
+            $performances,
+            $setlist,
+        );
     }
 
     /**
@@ -79,7 +92,20 @@ readonly class EventIntegrityService
         array $performances,
         array $setlist,
     ): Event {
-        return $this->build($eventId, $title, $description, $type, $schedule, $status, $isDisplay, $venueIds, $mediaIds, $sources, $performances, $setlist);
+        return $this->build(
+            $eventId,
+            $title,
+            $description,
+            $type,
+            $schedule,
+            $status,
+            $isDisplay,
+            $venueIds,
+            $mediaIds,
+            $sources,
+            $performances,
+            $setlist,
+        );
     }
 
     /**
