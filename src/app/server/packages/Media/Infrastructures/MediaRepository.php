@@ -72,14 +72,21 @@ readonly class MediaRepository implements MediaRepositoryInterface
     #[Override]
     public function isUsed(MediaId $mediaId): bool
     {
+        $binMediaId = $this->converter->toBin($mediaId->value);
         $count = Row::intValue(
             $this->queryFactory->select()
                 ->from('song_media_links')
-                ->where('media_id', '=', $this->converter->toBin($mediaId->value))
+                ->where('media_id', '=', $binMediaId)
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
+        );
+        $eventCount = Row::intValue(
+            $this->queryFactory->select()
+                ->from('event_media')
+                ->where('media_id', '=', $binMediaId)
                 ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
         );
 
-        return $count > 0;
+        return $count > 0 || $eventCount > 0;
     }
 
     #[Override]
