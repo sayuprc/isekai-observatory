@@ -2291,6 +2291,100 @@ body.drawer-lock {
   border-radius: 4px;
 }
 
+/* セットリストは楽曲披露を入れ込んだ番号付きの 1 列リスト。メドレーは 1 項目に複数の曲を並べる */
+
+.event-setlist {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.event-setlist-item {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.event-setlist-item:last-child {
+  border-bottom: 0;
+}
+
+.event-setlist-item-loose {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.event-setlist-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.event-setlist-label {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* 本人が歌唱しない演目は曲と区別して控えめに出す */
+
+.event-setlist-item[data-label-only] .event-setlist-label {
+  color: var(--fg-muted);
+}
+
+.event-setlist-songs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.event-setlist-label + .event-setlist-songs {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.event-setlist-song {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+
+.event-setlist-song-title {
+  font-size: 16px;
+  line-height: 1.6;
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+a.event-setlist-song-title {
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+a.event-setlist-song-title::after {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  content: "→";
+}
+
+a.event-setlist-song-title:hover {
+  color: var(--accent-strong);
+}
+
+.event-setlist-song-note {
+  font-size: 11px;
+}
+
 /* 説明は改行可能なプレーンテキストなので、改行をそのまま表示する */
 
 .event-detail-description {

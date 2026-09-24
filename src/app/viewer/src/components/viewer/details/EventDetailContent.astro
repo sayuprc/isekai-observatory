@@ -2,6 +2,7 @@
 import type { Event } from '../../../features/events/types';
 import { eventDate, eventStatusName, eventTypeName } from '../../../features/events/types';
 import DetailSectionHead from './DetailSectionHead.astro';
+import EventSetlistSongs from './EventSetlistSongs.astro';
 import MediaChip from './MediaChip.astro';
 
 interface Props {
@@ -23,20 +24,21 @@ const coVocalistText = (performance: Performance): string | null =>
   performance.coVocalists.length > 0
     ? `共演: ${performance.coVocalists.map(person => person.creditName ?? person.name).join(' / ')}`
     : null;
-const performances = event.performances.map(performance => ({ ...performance, note: coVocalistText(performance) }));
-
-// 表示名があれば主表示にし、披露曲は補足に回す。メドレーは曲名を / でつなぐ
-const setlistItems = event.setlist.map((item) => {
-  const titles = item.performances.map(performance => performance.songTitle).join(' / ');
-  const linkable = item.performances.length === 1 ? item.performances[0] : undefined;
-
-  return {
-    index: String(item.orderNo).padStart(2, '0'),
-    main: item.label ?? titles,
-    sub: item.label && titles ? titles : null,
-    href: linkable?.songId ? `/songs/${linkable.songId}` : null,
-  };
+const toSong = (performance: Performance) => ({
+  title: performance.songTitle,
+  href: performance.songId ? `/songs/${performance.songId}` : null,
+  note: coVocalistText(performance),
 });
+
+// セットリストの項目に楽曲披露を入れ込み、どの項目からも参照されない披露だけを別に出す
+const setlistItems = event.setlist.map(item => ({
+  index: String(item.orderNo).padStart(2, '0'),
+  label: item.label,
+  songs: item.performances.map(toSong),
+}));
+const referencedIds = new Set(event.setlist.flatMap(item => item.performances.map(p => p.performanceId)));
+const looseSongs = event.performances.filter(p => !referencedIds.has(p.performanceId)).map(toSong);
+const looseTitle = setlistItems.length > 0 ? 'セットリスト外の楽曲披露' : '楽曲披露';
 
 const hostname = (url: string): string => {
   try {
@@ -71,63 +73,31 @@ const hostname = (url: string): string => {
     setlistItems.length > 0 && (
       <>
         <DetailSectionHead title="セットリスト" count={setlistItems.length} />
-        <div class="rel-list event-setlist">
+        <ol class="event-setlist">
           {
             setlistItems.map(item => (
-              item.href
-                ? (
-                    <a class="rel-chip" href={item.href}>
-                      <span class="detail-index">{item.index}</span>
-                      <div class="rel-copy">
-                        <div class="rel-main">{item.main}</div>
-                        {item.sub && <div class="label-mono rel-sub">{item.sub}</div>}
-                      </div>
-                      <span class="rel-arrow">→</span>
-                    </a>
-                  )
-                : (
-                    <div class="rel-chip" data-unlinked>
-                      <span class="detail-index">{item.index}</span>
-                      <div class="rel-copy">
-                        <div class="rel-main">{item.main}</div>
-                        {item.sub && <div class="label-mono rel-sub">{item.sub}</div>}
-                      </div>
-                    </div>
-                  )
+              <li class="event-setlist-item" data-label-only={item.songs.length === 0 ? '' : undefined}>
+                <span class="detail-index">{item.index}</span>
+                <div class="event-setlist-body">
+                  {item.label && <div class="event-setlist-label">{item.label}</div>}
+                  {item.songs.length > 0 && <EventSetlistSongs songs={item.songs} />}
+                </div>
+              </li>
             ))
           }
-        </div>
+        </ol>
       </>
     )
   }
 
   {
-    performances.length > 0 && (
+    looseSongs.length > 0 && (
       <>
-        <DetailSectionHead title="楽曲披露" count={performances.length} />
-        <div class="rel-list">
-          {
-            performances.map(performance => (
-              performance.songId
-                ? (
-                    <a class="rel-chip" href={`/songs/${performance.songId}`}>
-                      <div class="rel-copy">
-                        <div class="rel-main">{performance.songTitle}</div>
-                        {performance.note && <div class="label-mono rel-sub">{performance.note}</div>}
-                      </div>
-                      <span class="rel-arrow rel-arrow-muted">→</span>
-                    </a>
-                  )
-                : (
-                    <div class="rel-chip" data-unlinked>
-                      <div class="rel-copy">
-                        <div class="rel-main">{performance.songTitle}</div>
-                        {performance.note && <div class="label-mono rel-sub">{performance.note}</div>}
-                      </div>
-                    </div>
-                  )
-            ))
-          }
+        <DetailSectionHead title={looseTitle} count={looseSongs.length} />
+        <div class="event-setlist">
+          <div class="event-setlist-item event-setlist-item-loose">
+            <EventSetlistSongs songs={looseSongs} />
+          </div>
         </div>
       </>
     )
