@@ -1,5 +1,5 @@
 import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
-import type { EventSearchSortBy, EventStatusValue, EventTypeValue, SortOrder } from '../../generated';
+import type { EventStatusValue, EventTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
 import { normalizeDateValue } from '../../utils/date';
 import { ListState } from '../ListState';
@@ -18,8 +18,8 @@ const formatSchedule = (schedule: { startOn: string | null; endOn: string | null
 
 export const SearchList = () => {
   const [title, setTitle] = createSignal('');
-  const [type, setType] = createSignal('');
-  const [status, setStatus] = createSignal('');
+  const [type, setType] = createSignal<'' | `${EventTypeValue}`>('');
+  const [status, setStatus] = createSignal<'' | `${EventStatusValue}`>('');
   const [fetchError, setFetchError] = createSignal<string | null>(null);
   const [data, { refetch }] = createResource(
     () => ({ title: title(), type: type(), status: status(), order: 'asc' as SortOrder }),
@@ -28,9 +28,9 @@ export const SearchList = () => {
       const response = await client.api.events.search.get({
         query: {
           title: params.title || undefined,
-          type: params.type ? Number(params.type) as EventTypeValue : undefined,
-          status: params.status !== '' ? Number(params.status) as EventStatusValue : undefined,
-          sort: 'schedule' as EventSearchSortBy,
+          type: params.type,
+          status: params.status,
+          sort: 'schedule',
           order: params.order,
           page: 1,
           per_page: 100,
@@ -68,7 +68,7 @@ export const SearchList = () => {
             id="event-type"
             class="select select-bordered select-sm"
             value={type()}
-            onChange={e => setType(e.currentTarget.value)}
+            onChange={e => setType(e.currentTarget.value as '' | `${EventTypeValue}`)}
           >
             <option value="">すべて</option>
             <option value="1">ライブ</option>
@@ -83,7 +83,7 @@ export const SearchList = () => {
             id="event-status"
             class="select select-bordered select-sm"
             value={status()}
-            onChange={e => setStatus(e.currentTarget.value)}
+            onChange={e => setStatus(e.currentTarget.value as '' | `${EventStatusValue}`)}
           >
             <option value="">すべて</option>
             <option value="1">通常</option>
