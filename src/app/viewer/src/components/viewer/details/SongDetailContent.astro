@@ -124,7 +124,9 @@ const formatPerformanceDate = (value: Song['performances'][number]): string =>
                 }
                 <div class="rel-copy">
                   <div class="rel-main">{entry.title}</div>
-                  <div class="label-mono rel-sub">{formatPublishedAt(entry.publishedAt)} · {mediaPlatformLabel(entry.url)} · {entry.type.name}</div>
+                  <div class="label-mono rel-sub">
+                    {formatPublishedAt(entry.publishedAt)} · {mediaPlatformLabel(entry.url)} · {entry.type.name}
+                  </div>
                 </div>
                 <span class="rel-arrow rel-arrow-muted">→</span>
               </a>

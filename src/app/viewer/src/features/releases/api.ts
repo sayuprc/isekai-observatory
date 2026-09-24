@@ -12,7 +12,9 @@ async function all(): Promise<ReleaseGroup[]> {
       });
 
       if (!data) {
-        throw new Error(`releaseGroupServiceListReleaseGroups failed: HTTP ${response.status} ${JSON.stringify(error)}`);
+        throw new Error(
+          `releaseGroupServiceListReleaseGroups failed: HTTP ${response.status} ${JSON.stringify(error)}`,
+        );
       }
 
       return data;

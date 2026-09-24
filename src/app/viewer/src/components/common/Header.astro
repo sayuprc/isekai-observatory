@@ -44,8 +44,26 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
     </div>
     <div class="nav-utils">
       <div class="theme-picker" data-theme-picker>
-        <button class="theme-trigger" type="button" title="衣装テーマを選ぶ" aria-haspopup="dialog" aria-expanded="false" data-theme-trigger>
-          <svg class="hanger-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button
+          class="theme-trigger"
+          type="button"
+          title="衣装テーマを選ぶ"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          data-theme-trigger
+        >
+          <svg
+            class="hanger-icon"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
             <path d="M12 8.5C12 7 13 6 14 6C15 6 15.8 6.7 15.8 7.6" />
             <circle cx="12" cy="9.2" r="0.9" />
             <path d="M12 10.1L3.5 16.2C3 16.6 3.3 17.5 4 17.5H20C20.7 17.5 21 16.6 20.5 16.2L12 10.1Z" />
@@ -104,7 +122,14 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
     const currentSubLabel = picker.querySelector<HTMLElement>('[data-theme-current-en]');
     const options = [...picker.querySelectorAll<HTMLButtonElement>('[data-palette-option]')];
 
-    if (trigger === null || overlay === null || pop === null || currentLabel === null || currentSubLabel === null || options.length === 0) {
+    if (
+      trigger === null
+      || overlay === null
+      || pop === null
+      || currentLabel === null
+      || currentSubLabel === null
+      || options.length === 0
+    ) {
       return;
     }
 

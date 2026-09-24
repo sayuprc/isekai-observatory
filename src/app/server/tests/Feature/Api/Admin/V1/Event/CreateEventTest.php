@@ -48,8 +48,8 @@ class CreateEventTest extends DatabaseTestCase
                 'venueIds' => [$venueId],
                 'mediaIds' => [$mediaId],
                 'sources' => [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
-                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => 'クライアントが送った曲名', 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'name' => 'クライアントが送った名前', 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]]]],
+                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
+                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
@@ -85,7 +85,7 @@ class CreateEventTest extends DatabaseTestCase
                 'mediaIds' => [],
                 'sources' => [],
                 'performances' => [],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '展示作品', 'performances' => []]],
+                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '展示作品', 'performanceIds' => []]],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
@@ -108,7 +108,7 @@ class CreateEventTest extends DatabaseTestCase
                 'venueIds' => [],
                 'mediaIds' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]],
+                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
                 'setlist' => [],
             ])
             ->assertStatus(400)
@@ -130,7 +130,7 @@ class CreateEventTest extends DatabaseTestCase
                 'mediaIds' => [],
                 'sources' => [],
                 'performances' => [],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'オープニング', 'performances' => []]],
+                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'オープニング', 'performanceIds' => []]],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');

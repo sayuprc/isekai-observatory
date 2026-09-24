@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Event\Application\Admin\UseCase\Search;
 
 use AdminUser\Domain\Models\Permission;
+use Event\Application\Admin\Query\EventSearchQueryServiceInterface;
 use Event\Domain\Criteria\EventSearchCriteria;
-use Event\Domain\Models\EventRepositoryInterface;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Support\Optional\Arg;
@@ -18,7 +18,7 @@ readonly class SearchUseCase
 {
     public function __construct(
         private UseCaseAuthorizer $authorizer,
-        private EventRepositoryInterface $repository,
+        private EventSearchQueryServiceInterface $queryService,
     ) {
     }
 
@@ -45,6 +45,6 @@ readonly class SearchUseCase
             $inputData->perPage,
         );
 
-        return new SearchOutputData($this->repository->search($criteria), $this->repository->maxPage($criteria));
+        return new SearchOutputData($this->queryService->search($criteria), $this->queryService->maxPage($criteria));
     }
 }

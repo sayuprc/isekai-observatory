@@ -42,8 +42,8 @@ class UpdateEventTest extends DatabaseTestCase
                 'venueIds' => [],
                 'mediaIds' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]]]],
+                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
+                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performanceIds' => [$performanceId]]],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.eventId', $eventId)
@@ -73,7 +73,7 @@ class UpdateEventTest extends DatabaseTestCase
                 'venueIds' => [],
                 'mediaIds' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'songTitle' => '披露曲', 'orderNo' => 1, 'coVocalists' => []]],
+                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
                 'setlist' => [],
             ])
             ->assertStatus(400)
