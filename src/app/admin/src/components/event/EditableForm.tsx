@@ -6,9 +6,8 @@ import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
+import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS, allowsPerformances, allowsSetlist } from './event-options';
 import {
-  allowsPerformances,
-  allowsSetlist,
   toPerformanceForms,
   toPerformancesPayload,
   toSetlistItemForms,
@@ -29,13 +28,6 @@ interface EditableFormProps {
 }
 
 type FetchState = { status: 'ok'; data: { event: Event } } | { status: 'forbidden' } | { status: 'error' };
-
-const EVENT_TYPES: Array<{ value: EventTypeValue; label: string }> = [
-  { value: 1, label: 'ライブ' },
-  { value: 2, label: '配信' },
-  { value: 3, label: '個展' },
-  { value: 99, label: 'その他' },
-];
 
 const getListUrl = () => '/events';
 
@@ -173,7 +165,7 @@ const EditableForm = (props: EditableFormProps) => {
                     }
                   }}
                 >
-                  {EVENT_TYPES.map(option => <option value={option.value}>{option.label}</option>)}
+                  {EVENT_TYPE_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
                 </select>
               </div>
               <div>
@@ -192,9 +184,7 @@ const EditableForm = (props: EditableFormProps) => {
                     }
                   }}
                 >
-                  <option value="1">通常</option>
-                  <option value="2">延期</option>
-                  <option value="3">中止</option>
+                  {EVENT_STATUS_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
                 </select>
               </div>
             </div>
