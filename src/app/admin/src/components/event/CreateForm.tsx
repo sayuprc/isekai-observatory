@@ -79,9 +79,21 @@ export const CreateForm = () => {
       <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
         <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
         <label class="label" for="title">タイトル</label>
-        <input id="title" class="input w-full" required value={title()} onInput={e => setTitle(e.currentTarget.value)} />
+        <input
+          id="title"
+          class="input w-full"
+          required
+          value={title()}
+          onInput={e => setTitle(e.currentTarget.value)}
+        />
         <label class="label mt-4" for="description">説明</label>
-        <textarea id="description" class="textarea w-full" rows={4} value={description()} onInput={e => setDescription(e.currentTarget.value)} />
+        <textarea
+          id="description"
+          class="textarea w-full"
+          rows={4}
+          value={description()}
+          onInput={e => setDescription(e.currentTarget.value)}
+        />
         <div class="grid gap-4 md:grid-cols-2">
           <div>
             <label class="label" for="type">種別</label>
@@ -124,17 +136,34 @@ export const CreateForm = () => {
         <div class="grid gap-4 md:grid-cols-2">
           <div>
             <label class="label" for="startOn">開始日</label>
-            <input id="startOn" type="date" class="input w-full" value={startOn()} onInput={e => setStartOn(e.currentTarget.value)} />
+            <input
+              id="startOn"
+              type="date"
+              class="input w-full"
+              value={startOn()}
+              onInput={e => setStartOn(e.currentTarget.value)}
+            />
           </div>
           <div>
             <label class="label" for="endOn">終了日</label>
-            <input id="endOn" type="date" class="input w-full" value={endOn()} onInput={e => setEndOn(e.currentTarget.value)} />
+            <input
+              id="endOn"
+              type="date"
+              class="input w-full"
+              value={endOn()}
+              onInput={e => setEndOn(e.currentTarget.value)}
+            />
           </div>
         </div>
         <p class="mt-2 text-sm text-base-content/60">両方空は日付未定、開始日のみは単日、両方指定は期間です</p>
         <div>
           <label class="label" for="isDisplay">表示設定</label>
-          <select id="isDisplay" class="select w-full" value={String(isDisplay())} onChange={e => setIsDisplay(e.currentTarget.value === 'true')}>
+          <select
+            id="isDisplay"
+            class="select w-full"
+            value={String(isDisplay())}
+            onChange={e => setIsDisplay(e.currentTarget.value === 'true')}
+          >
             <option value="true">表示する</option>
             <option value="false">表示しない</option>
           </select>
