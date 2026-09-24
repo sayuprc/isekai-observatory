@@ -58,10 +58,10 @@ class EventAssembler
             $event->status->value,
             $event->isDisplay,
             $event->venues->toGeneric()->map(
-                static fn (EventVenueLink $link): AssembledVenue => self::toAssembledVenue($venueMap[$link->venueId->value] ?? null),
+                fn (EventVenueLink $link): AssembledVenue => $this->toAssembledVenue($venueMap[$link->venueId->value] ?? null),
             )->toArray(),
             $event->media->toGeneric()->map(
-                static fn (EventMediaLink $link): AssembledMedia => self::toAssembledMedia($mediaMap[$link->mediaId->value] ?? null),
+                fn (EventMediaLink $link): AssembledMedia => $this->toAssembledMedia($mediaMap[$link->mediaId->value] ?? null),
             )->toArray(),
             $event->sources->toGeneric()->map(
                 static fn (EventSource $source): AssembledSource => new AssembledSource($source->displayName->value, $source->url->value, $source->orderNo->value),
@@ -138,7 +138,7 @@ class EventAssembler
         return $personMap;
     }
 
-    private static function toAssembledVenue(?Venue $venue): AssembledVenue
+    private function toAssembledVenue(?Venue $venue): AssembledVenue
     {
         // Event が成立している時点で参照先の開催先は存在する
         assert($venue instanceof Venue);
@@ -146,7 +146,7 @@ class EventAssembler
         return new AssembledVenue($venue->venueId->value, $venue->name->value, $venue->kind->getName(), $venue->kind->value);
     }
 
-    private static function toAssembledMedia(?Media $media): AssembledMedia
+    private function toAssembledMedia(?Media $media): AssembledMedia
     {
         // Event が成立している時点で参照先の Media は存在する
         assert($media instanceof Media);
