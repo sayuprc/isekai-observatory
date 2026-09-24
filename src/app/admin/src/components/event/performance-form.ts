@@ -40,6 +40,50 @@ export const toSetlistItemForms = (setlist: SetlistItem[]): SetlistItemForm[] =>
     performanceIds: item.performances.map(performance => performance.performanceId),
   }));
 
+export const addPerformance = (
+  performances: PerformanceForm[],
+  song: { songId: string; title: string },
+): PerformanceForm[] => [
+  ...performances,
+  { performanceId: newId(), songId: song.songId, songTitle: song.title, coVocalists: [] },
+];
+
+const updateCoVocalists = (
+  performances: PerformanceForm[],
+  performanceIndex: number,
+  updater: (coVocalists: CoVocalistForm[]) => CoVocalistForm[],
+): PerformanceForm[] =>
+  performances.map((performance, index) =>
+    index === performanceIndex ? { ...performance, coVocalists: updater(performance.coVocalists) } : performance);
+
+// 同じ披露に同一人物を重複して追加しない
+export const addCoVocalist = (
+  performances: PerformanceForm[],
+  performanceIndex: number,
+  person: { personId: string; name: string },
+): PerformanceForm[] =>
+  updateCoVocalists(performances, performanceIndex, coVocalists =>
+    coVocalists.some(item => item.personId === person.personId)
+      ? coVocalists
+      : [...coVocalists, { personId: person.personId, name: person.name, creditName: '' }]);
+
+export const setCreditName = (
+  performances: PerformanceForm[],
+  performanceIndex: number,
+  personIndex: number,
+  creditName: string,
+): PerformanceForm[] =>
+  updateCoVocalists(performances, performanceIndex, coVocalists =>
+    coVocalists.map((person, index) => (index === personIndex ? { ...person, creditName } : person)));
+
+export const removeCoVocalist = (
+  performances: PerformanceForm[],
+  performanceIndex: number,
+  personIndex: number,
+): PerformanceForm[] =>
+  updateCoVocalists(performances, performanceIndex, coVocalists =>
+    coVocalists.filter((_, index) => index !== personIndex));
+
 export const toPerformancesPayload = (performances: PerformanceForm[]): RequestSongPerformance[] =>
   performances.map((performance, index) => ({
     performanceId: performance.performanceId,
