@@ -35,4 +35,23 @@ class SearchEventTest extends DatabaseTestCase
             ->assertJsonPath('events.0.eventId', $normalId)
             ->assertJsonPath('maxPage', 1);
     }
+
+    #[Test]
+    public function canSearchByTitleSortedByTitleDesc(): void
+    {
+        $firstId = $this->generateUuid();
+        $secondId = $this->generateUuid();
+        $this->storeEvents(
+            $this->createEvent($firstId, title: 'あのライブ'),
+            $this->createEvent($secondId, title: 'いのライブ'),
+            $this->createEvent($this->generateUuid(), title: '配信'),
+        );
+
+        $this->withAuth()
+            ->getJson(route(EventRouteMap::Search, ['title' => 'ライブ', 'sort' => 'title', 'order' => 'desc']))
+            ->assertStatus(200)
+            ->assertJsonCount(2, 'events')
+            ->assertJsonPath('events.0.eventId', $secondId)
+            ->assertJsonPath('events.1.eventId', $firstId);
+    }
 }

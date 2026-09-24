@@ -7,6 +7,7 @@ namespace Event\Infrastructures;
 use Emonkak\Database\PDOInterface;
 use Emonkak\Orm\SelectBuilder;
 use Event\Domain\Criteria\EventSearchCriteria;
+use Event\Domain\Criteria\Sort;
 use Event\Domain\Models\Event;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
@@ -35,7 +36,10 @@ readonly class EventRepository implements EventRepositoryInterface
     public function search(EventSearchCriteria $criteria): array
     {
         $offset = ($criteria->page - 1) * $criteria->perPage->value;
-        $sort = $criteria->sort === 'title' ? 'title_lower' : 'start_on';
+        $sort = match ($criteria->sort) {
+            Sort::Schedule => 'start_on',
+            Sort::Title => 'title_lower',
+        };
         $rows = $this->queryFactory->fetchAll(
             $this->applyCriteria($this->queryFactory->select()->from(self::TABLE), $criteria)
                 ->withSelect(self::COLUMNS)
@@ -169,17 +173,17 @@ readonly class EventRepository implements EventRepositoryInterface
 
     private function applyCriteria(SelectBuilder $query, EventSearchCriteria $criteria): SelectBuilder
     {
-        if (! is_null($criteria->title) && $criteria->title !== '') {
-            $query = $query->where('title_lower', 'LIKE', '%' . SqlHelper::escapeLike(mb_strtolower($criteria->title)) . '%');
+        if ($criteria->title->isPresent()) {
+            $query = $query->where('title_lower', 'LIKE', '%' . SqlHelper::escapeLike(mb_strtolower($criteria->title->get())) . '%');
         }
-        if (! is_null($criteria->type)) {
-            $query = $query->where('type', '=', $criteria->type);
+        if ($criteria->type->isPresent()) {
+            $query = $query->where('type', '=', $criteria->type->get()->value);
         }
-        if (! is_null($criteria->status)) {
-            $query = $query->where('status', '=', $criteria->status);
+        if ($criteria->status->isPresent()) {
+            $query = $query->where('status', '=', $criteria->status->get()->value);
         }
-        if (! is_null($criteria->isDisplay)) {
-            $query = $query->where('is_display', '=', $criteria->isDisplay);
+        if ($criteria->isDisplay->isPresent()) {
+            $query = $query->where('is_display', '=', $criteria->isDisplay->get());
         }
 
         return $query;
