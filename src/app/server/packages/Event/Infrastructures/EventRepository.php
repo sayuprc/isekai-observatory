@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Event\Infrastructures;
 
 use Emonkak\Database\PDOInterface;
-use Emonkak\Orm\SelectBuilder;
-use Event\Domain\Criteria\EventSearchCriteria;
-use Event\Domain\Criteria\Sort;
 use Event\Domain\Models\Event;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
@@ -15,7 +12,6 @@ use Override;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
-use Support\Infrastructures\Database\SqlHelper;
 
 readonly class EventRepository implements EventRepositoryInterface
 {
@@ -30,34 +26,6 @@ readonly class EventRepository implements EventRepositoryInterface
         private QueryFactory $queryFactory,
         private UuidConverterInterface $converter,
     ) {
-    }
-
-    #[Override]
-    public function search(EventSearchCriteria $criteria): array
-    {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-        $sort = match ($criteria->sort) {
-            Sort::Schedule => 'start_on',
-            Sort::Title => 'title_lower',
-        };
-        $rows = $this->queryFactory->fetchAll(
-            $this->applyCriteria($this->queryFactory->select()->from(self::TABLE), $criteria)
-                ->withSelect(self::COLUMNS)
-                ->orderBy($sort, $criteria->order->value)
-                ->orderBy('event_id')
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
-        );
-
-        return array_map($this->hydrate(...), $rows);
-    }
-
-    #[Override]
-    public function maxPage(EventSearchCriteria $criteria): int
-    {
-        $count = Row::intValue($this->applyCriteria($this->queryFactory->select()->from(self::TABLE), $criteria)->aggregate($this->queryFactory->pdo(), 'COUNT(*)'));
-
-        return (int)ceil($count / $criteria->perPage->value);
     }
 
     #[Override]
@@ -169,24 +137,6 @@ readonly class EventRepository implements EventRepositoryInterface
         if ($rows !== []) {
             $this->queryFactory->insert()->into($table, $columns)->values(...$rows)->execute($pdo);
         }
-    }
-
-    private function applyCriteria(SelectBuilder $query, EventSearchCriteria $criteria): SelectBuilder
-    {
-        if ($criteria->title->isPresent()) {
-            $query = $query->where('title_lower', 'LIKE', '%' . SqlHelper::escapeLike(mb_strtolower($criteria->title->get())) . '%');
-        }
-        if ($criteria->type->isPresent()) {
-            $query = $query->where('type', '=', $criteria->type->get()->value);
-        }
-        if ($criteria->status->isPresent()) {
-            $query = $query->where('status', '=', $criteria->status->get()->value);
-        }
-        if ($criteria->isDisplay->isPresent()) {
-            $query = $query->where('is_display', '=', $criteria->isDisplay->get());
-        }
-
-        return $query;
     }
 
     /** @param array<string, mixed> $row */

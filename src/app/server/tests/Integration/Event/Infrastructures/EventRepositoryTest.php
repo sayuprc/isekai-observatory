@@ -4,19 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Event\Infrastructures;
 
-use Event\Domain\Criteria\EventSearchCriteria;
-use Event\Domain\Criteria\Sort;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventStatus;
-use Event\Domain\Models\EventType;
 use Event\Infrastructures\EventRepository;
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
-use Support\Domain\SearchCriteria\Order;
-use Support\Domain\SearchCriteria\PerPage;
-use Support\Optional\None;
-use Support\Optional\Some;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
@@ -101,34 +94,6 @@ class EventRepositoryTest extends DatabaseTestCase
         $this->assertDatabaseCount('event_sources', 0);
         $this->assertDatabaseCount('song_performances', 0);
         $this->assertDatabaseCount('event_setlist_items', 0);
-    }
-
-    #[Test]
-    public function searchFiltersByStatusAndDisplay(): void
-    {
-        $normal = $this->createEvent($this->generateUuid());
-        $this->getInstance()->save($normal);
-        $this->getInstance()->save($this->createEvent($this->generateUuid(), status: EventStatus::Cancelled));
-        $this->getInstance()->save($this->createEvent($this->generateUuid(), isDisplay: false));
-
-        $criteria = new EventSearchCriteria(new None(), new Some(EventType::Live), new Some(EventStatus::Normal), new Some(true));
-
-        $this->assertEquals([$normal], $this->getInstance()->search($criteria));
-        $this->assertSame(1, $this->getInstance()->maxPage($criteria));
-    }
-
-    #[Test]
-    public function searchByTitleSortedByTitleDesc(): void
-    {
-        $first = $this->createEvent($this->generateUuid(), title: 'あのライブ');
-        $second = $this->createEvent($this->generateUuid(), title: 'いのライブ');
-        $this->getInstance()->save($first);
-        $this->getInstance()->save($second);
-        $this->getInstance()->save($this->createEvent($this->generateUuid(), title: '配信'));
-
-        $criteria = new EventSearchCriteria(new Some('ライブ'), new None(), new None(), new None(), Sort::Title, Order::Desc, 1, PerPage::TwentyFive);
-
-        $this->assertEquals([$second, $first], $this->getInstance()->search($criteria));
     }
 
     private function getInstance(): EventRepository
