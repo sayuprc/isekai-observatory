@@ -1,3 +1,4 @@
+import { Show } from 'solid-js';
 import type { EventStatusValue, EventTypeValue } from '../../generated';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
@@ -97,12 +98,13 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
       onChange={props.form.updatePerformances}
       disabled={!props.form.canEditPerformances()}
     />
-    <SetlistEditor
-      setlist={props.form.setlist()}
-      performances={props.form.performances()}
-      onChange={props.form.updateSetlist}
-      disabled={!props.form.canEditPerformances()}
-      hidden={!props.form.canEditSetlist()}
-    />
+    <Show when={props.form.canEditSetlist()}>
+      <SetlistEditor
+        setlist={props.form.setlist()}
+        performances={props.form.performances()}
+        onChange={props.form.updateSetlist}
+        disabled={!props.form.canEditPerformances()}
+      />
+    </Show>
   </>
 );
