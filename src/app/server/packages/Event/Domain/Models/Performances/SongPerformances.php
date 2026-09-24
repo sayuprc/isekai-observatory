@@ -29,6 +29,7 @@ readonly class SongPerformances extends ImmutableCollection
             throw new BusinessRuleViolationException('楽曲披露の順序を重複して登録できません');
         }
 
+        // 共演者も fromArray で検証するため、reconstruct には委ねない
         return new self(array_map(
             static fn (array $item): SongPerformance => new SongPerformance(
                 new PerformanceId($item['performanceId']),
