@@ -74,6 +74,41 @@ class SongRepositoryTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function findByIdsWithChildren(): void
+    {
+        $person = $this->createPerson($this->generateUuid(), '人物', 1);
+        $this->storePersons($person);
+
+        $withPerson = $this->createSong(
+            $this->generateUuid(),
+            '曲名1',
+            '説明',
+            SongType::Original,
+            true,
+            1,
+            [],
+            [['personId' => $person->personId->value, 'role' => 1, 'orderNo' => 1]],
+        );
+        $withoutPerson = $this->createSong($this->generateUuid(), '曲名2', '説明', SongType::Original, true, 2, [], []);
+        $notTarget = $this->createSong($this->generateUuid(), '曲名3', '説明', SongType::Original, true, 3, [], []);
+
+        $repository = $this->getInstance();
+        $repository->save($withPerson);
+        $repository->save($withoutPerson);
+        $repository->save($notTarget);
+
+        $found = $repository->findByIds($withPerson->songId, $withoutPerson->songId);
+
+        $this->assertEqualsCanonicalizing([$withPerson, $withoutPerson], $found);
+    }
+
+    #[Test]
+    public function findByIdsReturnsEmptyWhenNoIdsGiven(): void
+    {
+        $this->assertSame([], $this->getInstance()->findByIds());
+    }
+
+    #[Test]
     public function isPersonUsed(): void
     {
         $person = $this->createPerson($this->generateUuid(), '人物', 1);
