@@ -63,9 +63,21 @@ export const DetailView = (props: DetailViewProps) => {
 
   return (
     <Switch>
-      <Match when={resource.loading}><div class="flex items-center justify-center gap-3 py-10" role="status"><span class="loading loading-spinner loading-md" />読み込み中...</div></Match>
-      <Match when={resource()?.status === 'forbidden'}><div class="alert alert-error">イベントの閲覧権限がありません。</div></Match>
-      <Match when={resource.error || resource()?.status === 'error'}><div class="flex flex-col items-start gap-3"><p class="text-error">データの取得に失敗しました。</p><button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>再試行</button></div></Match>
+      <Match when={resource.loading}>
+        <div class="flex items-center justify-center gap-3 py-10" role="status">
+          <span class="loading loading-spinner loading-md" />
+          読み込み中...
+        </div>
+      </Match>
+      <Match when={resource()?.status === 'forbidden'}>
+        <div class="alert alert-error">イベントの閲覧権限がありません。</div>
+      </Match>
+      <Match when={resource.error || resource()?.status === 'error'}>
+        <div class="flex flex-col items-start gap-3">
+          <p class="text-error">データの取得に失敗しました。</p>
+          <button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>再試行</button>
+        </div>
+      </Match>
       <Match when={loadedData()}>{data => <EditableForm data={data()} />}</Match>
     </Switch>
   );
@@ -142,7 +154,9 @@ const EditableForm = (props: EditableFormProps) => {
             <label class="label" for="title">タイトル</label>
             <input id="title" name="title" class="input w-full" required maxLength={255} value={event.title} />
             <label class="label mt-4" for="description">説明</label>
-            <textarea id="description" name="description" class="textarea w-full" rows={4}>{event.description ?? ''}</textarea>
+            <textarea id="description" name="description" class="textarea w-full" rows={4}>
+              {event.description ?? ''}
+            </textarea>
             <div class="grid gap-4 md:grid-cols-2">
               <div>
                 <label class="label" for="typeValue">種別</label>
@@ -185,12 +199,36 @@ const EditableForm = (props: EditableFormProps) => {
               </div>
             </div>
             <div class="grid gap-4 md:grid-cols-2">
-              <div><label class="label" for="startOn">開始日</label><input id="startOn" name="startOn" type="date" class="input w-full" value={normalizeDateValue(event.schedule.startOn)} /></div>
-              <div><label class="label" for="endOn">終了日</label><input id="endOn" name="endOn" type="date" class="input w-full" value={normalizeDateValue(event.schedule.endOn)} /></div>
+              <div>
+                <label class="label" for="startOn">開始日</label>
+                <input
+                  id="startOn"
+                  name="startOn"
+                  type="date"
+                  class="input w-full"
+                  value={normalizeDateValue(event.schedule.startOn)}
+                />
+              </div>
+              <div>
+                <label class="label" for="endOn">終了日</label>
+                <input
+                  id="endOn"
+                  name="endOn"
+                  type="date"
+                  class="input w-full"
+                  value={normalizeDateValue(event.schedule.endOn)}
+                />
+              </div>
             </div>
             <p class="mt-2 text-sm text-base-content/60">両方空は日付未定、開始日のみは単日、両方指定は期間です</p>
             <div class="grid gap-4 md:grid-cols-2">
-              <div><label class="label" for="isDisplay">表示設定</label><select id="isDisplay" name="isDisplay" class="select w-full"><option value="true" selected={event.isDisplay}>表示する</option><option value="false" selected={!event.isDisplay}>表示しない</option></select></div>
+              <div>
+                <label class="label" for="isDisplay">表示設定</label>
+                <select id="isDisplay" name="isDisplay" class="select w-full">
+                  <option value="true" selected={event.isDisplay}>表示する</option>
+                  <option value="false" selected={!event.isDisplay}>表示しない</option>
+                </select>
+              </div>
             </div>
           </fieldset>
 
@@ -227,7 +265,11 @@ const EditableForm = (props: EditableFormProps) => {
         <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
           <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
           <p class="mt-1 text-sm text-base-content/60">この操作は取り消せません。</p>
-          <div class="mt-4"><button type="button" onClick={remove} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>このイベントを削除する</button></div>
+          <div class="mt-4">
+            <button type="button" onClick={remove} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>
+              このイベントを削除する
+            </button>
+          </div>
         </fieldset>
       </div>
     </>

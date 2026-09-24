@@ -204,7 +204,11 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
                     >
                       ↓
                     </button>
-                    <button type="button" class="btn btn-outline btn-error btn-xs" onClick={() => removePerformance(index)}>
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-error btn-xs"
+                      onClick={() => removePerformance(index)}
+                    >
                       削除
                     </button>
                   </div>
