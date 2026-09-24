@@ -6,13 +6,15 @@ namespace Song\Application\Viewer\Query;
 
 readonly class SongPerformanceHistory
 {
-    /** @param array{startOn: ?string, endOn: ?string} $schedule */
+    /**
+     * @param array{startOn: ?string, endOn: ?string} $schedule
+     * @param list<string>                            $coVocalistNames
+     */
     public function __construct(
         public string $eventId,
         public string $eventTitle,
         public int $typeValue,
         public array $schedule,
-        /** @var list<string> */
         public array $coVocalistNames = [],
     ) {
     }

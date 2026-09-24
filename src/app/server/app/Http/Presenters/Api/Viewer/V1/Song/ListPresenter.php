@@ -86,11 +86,11 @@ class ListPresenter
     private function toOpenApiPerformanceHistory(SongPerformanceHistory $performance): OpenApiSongPerformanceHistory
     {
         $schedule = $performance->schedule;
-        $scheduleModel = new IsekaiObservatoryPackagesEventEventSchedule()
-            /** @phpstan-ignore-next-line */
-            ->setStartOn($schedule['startOn'] === null ? null : new DateTime($schedule['startOn']))
-            /** @phpstan-ignore-next-line */
-            ->setEndOn($schedule['endOn'] === null ? null : new DateTime($schedule['endOn']));
+
+        $scheduleModel = new IsekaiObservatoryPackagesEventEventSchedule([
+            'start_on' => $schedule['startOn'] === null ? null : new DateTime($schedule['startOn']),
+            'end_on' => $schedule['endOn'] === null ? null : new DateTime($schedule['endOn']),
+        ]);
 
         return new OpenApiSongPerformanceHistory()
             ->setEventId($performance->eventId)
