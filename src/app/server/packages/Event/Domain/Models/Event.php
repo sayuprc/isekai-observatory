@@ -10,6 +10,11 @@ use Event\Domain\Models\Setlist\Setlist;
 use Event\Domain\Models\Sources\EventSources;
 use Event\Domain\Models\Venues\EventVenueLinks;
 
+/**
+ * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ */
 readonly class Event
 {
     public function __construct(
@@ -29,11 +34,11 @@ readonly class Event
     }
 
     /**
-     * @param list<array{venueId: string, orderNo: int}>                                                                                                      $venues
-     * @param list<array{mediaId: string, orderNo: int}>                                                                                                      $media
-     * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
-     * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}>                                                  $setlist
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<array{mediaId: string, orderNo: int}> $media
+     * @param list<EventSourceInput>                     $sources
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
      */
     public static function reconstruct(
         string $eventId,

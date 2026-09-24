@@ -13,6 +13,11 @@ use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
 
+/**
+ * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ */
 readonly class EventRepository implements EventRepositoryInterface
 {
     private const string TABLE = 'events';
@@ -299,7 +304,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{displayName: string, url: string, orderNo: int}> */
+    /** @return list<EventSourceInput> */
     private function loadSources(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -320,7 +325,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> */
+    /** @return list<SongPerformanceInput> */
     private function loadPerformances(string $binEventId): array
     {
         $performanceRows = $this->queryFactory->fetchAll(
@@ -365,7 +370,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}> */
+    /** @return list<SetlistItemInput> */
     private function loadSetlist(string $binEventId): array
     {
         $itemRows = $this->queryFactory->fetchAll(
