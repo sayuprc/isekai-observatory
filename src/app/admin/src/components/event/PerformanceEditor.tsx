@@ -262,19 +262,25 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
       <div class="mt-6 grid gap-4 lg:grid-cols-2">
         <div class="rounded-box border border-base-300 bg-base-100 p-4">
           <p class="mb-2 text-sm font-semibold">楽曲を追加</p>
-          <form class="flex gap-2" onSubmit={searchSongs}>
+          <div class="flex gap-2">
             <input
               type="text"
               class="input input-bordered input-sm min-w-0 flex-1"
               placeholder="楽曲名で検索"
               value={searchTitle()}
               onInput={e => setSearchTitle(e.currentTarget.value)}
+              onKeyDown={e => e.key === 'Enter' && searchSongs(e)}
               disabled={props.disabled}
             />
-            <button type="submit" class="btn btn-primary btn-sm" disabled={props.disabled || isSearching()}>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              disabled={props.disabled || isSearching()}
+              onClick={searchSongs}
+            >
               {isSearching() ? '検索中' : '検索'}
             </button>
-          </form>
+          </div>
           <Show when={searchError()}>{message => <p class="mt-2 text-sm text-error">{message()}</p>}</Show>
           <Show when={hasSearched() && !searchError() && searchResults().length === 0}>
             <p class="mt-2 text-sm text-base-content/60">該当する楽曲がありません</p>
@@ -303,23 +309,25 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
           <p class="mb-2 text-xs text-base-content/60">
             対象: 楽曲披露 {props.performances.length === 0 ? 'なし' : personTargetIndex() + 1}
           </p>
-          <form class="flex gap-2" onSubmit={searchPersons}>
+          <div class="flex gap-2">
             <input
               type="text"
               class="input input-bordered input-sm min-w-0 flex-1"
               placeholder="人物名で検索"
               value={personQuery()}
               onInput={e => setPersonQuery(e.currentTarget.value)}
+              onKeyDown={e => e.key === 'Enter' && searchPersons(e)}
               disabled={props.disabled || props.performances.length === 0}
             />
             <button
-              type="submit"
+              type="button"
               class="btn btn-primary btn-sm"
               disabled={props.disabled || props.performances.length === 0 || personSearching()}
+              onClick={searchPersons}
             >
               {personSearching() ? '検索中' : '検索'}
             </button>
-          </form>
+          </div>
           <Show when={personError()}>{message => <p class="mt-2 text-sm text-error">{message()}</p>}</Show>
           <ul class="mt-3 max-h-48 space-y-1 overflow-y-auto">
             <For each={personResults()}>
