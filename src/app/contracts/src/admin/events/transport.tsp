@@ -2,6 +2,7 @@ import "../../shared";
 import "../../packages/event";
 import "../../packages/media";
 import "../../packages/song";
+import "../venues";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Event;
@@ -26,11 +27,11 @@ model EventCreateRequest {
   schedule: EventSchedule;
   statusValue: EventStatusValue;
   isDisplay: boolean;
-  venueIds: uuid[];
+  venueIds: venueId[];
   mediaIds: mediaId[];
   sources: EventSource[];
-  performances: SongPerformance[];
-  setlist: SetlistItem[];
+  performances: RequestSongPerformance[];
+  setlist: RequestSetlistItem[];
 }
 
 model EventCreateResponse {
@@ -44,13 +45,25 @@ model EventUpdateRequest {
   schedule: EventSchedule;
   statusValue: EventStatusValue;
   isDisplay: boolean;
-  venueIds: uuid[];
+  venueIds: venueId[];
   mediaIds: mediaId[];
   sources: EventSource[];
-  performances: SongPerformance[];
-  setlist: SetlistItem[];
+  performances: RequestSongPerformance[];
+  setlist: RequestSetlistItem[];
 }
 
 model EventUpdateResponse {
   event: Event;
+}
+
+model RequestPerformancePerson is PickProperties<PerformancePerson, "personId" | "creditName" | "orderNo">;
+
+model RequestSongPerformance {
+  ...PickProperties<SongPerformance, "performanceId" | "songId" | "orderNo">;
+  coVocalists: RequestPerformancePerson[];
+}
+
+model RequestSetlistItem {
+  ...PickProperties<SetlistItem, "setlistItemId" | "orderNo" | "label">;
+  performanceIds: performanceId[];
 }

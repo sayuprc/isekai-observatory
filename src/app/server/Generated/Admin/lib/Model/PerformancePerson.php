@@ -35,7 +35,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * PerformancePerson Class Doc Comment
  *
  * @category Class
- * @description イベントに紐づく楽曲披露
+ * @description 楽曲披露の共演者
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

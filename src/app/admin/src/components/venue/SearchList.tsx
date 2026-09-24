@@ -135,11 +135,21 @@ export const SearchList = () => {
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
         <fieldset class="fieldset">
           <label class="fieldset-label" for="name">開催先名</label>
-          <input id="name" class="input input-bordered input-sm" value={inputName()} onInput={e => setInputName(e.currentTarget.value)} placeholder="開催先名で検索" />
+          <input
+            id="name"
+            class="input input-bordered input-sm"
+            value={inputName()}
+            onInput={e => setInputName(e.currentTarget.value)}
+            placeholder="開催先名で検索"
+          />
         </fieldset>
         <fieldset class="fieldset">
           <label class="fieldset-label" for="kind">種別</label>
-          <select id="kind" class="select select-bordered select-sm" onChange={e => setInputKind(e.currentTarget.value as KindFilter)}>
+          <select
+            id="kind"
+            class="select select-bordered select-sm"
+            onChange={e => setInputKind(e.currentTarget.value as KindFilter)}
+          >
             <option value="" selected={inputKind() === ''}>すべて</option>
             <option value="1" selected={inputKind() === '1'}>現地</option>
             <option value="2" selected={inputKind() === '2'}>オンライン</option>
@@ -147,41 +157,73 @@ export const SearchList = () => {
         </fieldset>
         <fieldset class="fieldset">
           <label class="fieldset-label" for="sort">ソート項目</label>
-          <select id="sort" class="select select-bordered select-sm" onChange={e => setInputSort(e.currentTarget.value as SortBy)}>
+          <select
+            id="sort"
+            class="select select-bordered select-sm"
+            onChange={e => setInputSort(e.currentTarget.value as SortBy)}
+          >
             <option value="name" selected={inputSort() === 'name'}>開催先名</option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
           <label class="fieldset-label" for="order">並び順</label>
-          <select id="order" class="select select-bordered select-sm" onChange={e => setInputOrder(e.currentTarget.value as SortOrder)}>
+          <select
+            id="order"
+            class="select select-bordered select-sm"
+            onChange={e => setInputOrder(e.currentTarget.value as SortOrder)}
+          >
             <option value="asc" selected={inputOrder() === 'asc'}>昇順</option>
             <option value="desc" selected={inputOrder() === 'desc'}>降順</option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
           <label class="fieldset-label" for="perPage">表示件数</label>
-          <select id="perPage" class="select select-bordered select-sm" onChange={e => setInputPerPage(Number(e.currentTarget.value) as PerPage)}>
+          <select
+            id="perPage"
+            class="select select-bordered select-sm"
+            onChange={e => setInputPerPage(Number(e.currentTarget.value) as PerPage)}
+          >
             <For each={PER_PAGE_OPTIONS}>{n => <option value={n} selected={inputPerPage() === n}>{n}件</option>}</For>
           </select>
         </fieldset>
         <button type="submit" class="btn btn-primary btn-sm mb-1">検索</button>
         <button type="button" class="btn btn-ghost btn-sm mb-1" onClick={handleReset}>リセット</button>
       </form>
-      <div class="mb-4 flex justify-end"><a href="/venues/create" class="btn btn-primary btn-sm">新規作成</a></div>
+      <div class="mb-4 flex justify-end">
+        <a href="/venues/create" class="btn btn-primary btn-sm">新規作成</a>
+      </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
         <table class="table table-sm table-zebra md:table-md">
-          <thead><tr><th>開催先名</th><th>種別</th></tr></thead>
+          <thead>
+            <tr>
+              <th>開催先名</th>
+              <th>種別</th>
+            </tr>
+          </thead>
           <tbody>
             <Switch>
-              <Match when={data.loading}><ListState state="loading" colSpan={2} /></Match>
-              <Match when={fetchError()}>{message => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}</Match>
-              <Match when={data() && data()!.venues.length === 0}><ListState state="empty" colSpan={2} /></Match>
+              <Match when={data.loading}>
+                <ListState state="loading" colSpan={2} />
+              </Match>
+              <Match when={fetchError()}>
+                {message => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
+              </Match>
+              <Match when={data() && data()!.venues.length === 0}>
+                <ListState state="empty" colSpan={2} />
+              </Match>
               <Match when={data()}>
                 {result => (
                   <For each={result().venues}>
                     {venue => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
-                        <td><a class="link link-hover font-medium" href={`/venues/${venue.venueId}?back=${encodeURIComponent(window.location.search)}`}>{venue.name}</a></td>
+                        <td>
+                          <a
+                            class="link link-hover font-medium"
+                            href={`/venues/${venue.venueId}?back=${encodeURIComponent(window.location.search)}`}
+                          >
+                            {venue.name}
+                          </a>
+                        </td>
                         <td>{venue.kind.name}</td>
                       </tr>
                     )}

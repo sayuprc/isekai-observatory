@@ -10,18 +10,18 @@ use Support\Domain\ValueObjects\OrderNo;
 
 /**
  * @extends ImmutableCollection<int, EventSource>
+ *
+ * @phpstan-type EventSourceInput array{displayName: string, url: string, orderNo: int}
  */
 readonly class EventSources extends ImmutableCollection
 {
     /**
-     * @param list<array{displayName: string, url: string, orderNo: int}> $items
+     * @param list<EventSourceInput> $items
      *
      * @throws BusinessRuleViolationException
      */
     public static function fromArray(array $items): self
     {
-        $sources = self::reconstruct($items);
-
         if (count($items) !== count(array_unique(array_column($items, 'url')))) {
             throw new BusinessRuleViolationException('出典URLを重複して登録できません');
         }
@@ -30,11 +30,11 @@ readonly class EventSources extends ImmutableCollection
             throw new BusinessRuleViolationException('出典の順序を重複して登録できません');
         }
 
-        return $sources;
+        return self::reconstruct($items);
     }
 
     /**
-     * @param list<array{displayName: string, url: string, orderNo: int}> $items
+     * @param list<EventSourceInput> $items
      */
     public static function reconstruct(array $items): self
     {

@@ -66,8 +66,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'venue_ids' => 'string[]',
         'media_ids' => 'string[]',
         'sources' => '\OpenAPI\Admin\Client\Model\EventSource[]',
-        'performances' => '\OpenAPI\Admin\Client\Model\SongPerformance[]',
-        'setlist' => '\OpenAPI\Admin\Client\Model\SetlistItem[]'
+        'performances' => '\OpenAPI\Admin\Client\Model\RequestSongPerformance[]',
+        'setlist' => '\OpenAPI\Admin\Client\Model\RequestSetlistItem[]'
     ];
 
     /**
@@ -647,7 +647,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets performances
      *
-     * @return \OpenAPI\Admin\Client\Model\SongPerformance[]
+     * @return \OpenAPI\Admin\Client\Model\RequestSongPerformance[]
      */
     public function getPerformances()
     {
@@ -657,7 +657,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets performances
      *
-     * @param \OpenAPI\Admin\Client\Model\SongPerformance[] $performances performances
+     * @param \OpenAPI\Admin\Client\Model\RequestSongPerformance[] $performances performances
      *
      * @return self
      */
@@ -674,7 +674,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets setlist
      *
-     * @return \OpenAPI\Admin\Client\Model\SetlistItem[]
+     * @return \OpenAPI\Admin\Client\Model\RequestSetlistItem[]
      */
     public function getSetlist()
     {
@@ -684,7 +684,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets setlist
      *
-     * @param \OpenAPI\Admin\Client\Model\SetlistItem[] $setlist setlist
+     * @param \OpenAPI\Admin\Client\Model\RequestSetlistItem[] $setlist setlist
      *
      * @return self
      */
