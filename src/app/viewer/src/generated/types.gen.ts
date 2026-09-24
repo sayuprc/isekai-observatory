@@ -26,6 +26,63 @@ export type ErrorResponse = {
     details?: Array<ErrorDetail>;
 };
 
+export type Event = {
+    eventId: EventId;
+    title: EventTitle;
+    description: EventDescription;
+    typeValue: EventTypeValue;
+    schedule: IsekaiObservatoryPackagesEventEventSchedule;
+    statusValue: EventStatusValue;
+    venues: Array<EventVenueSummary>;
+    media: Array<EventMediaSummary>;
+    sources: Array<EventSource>;
+    performances: Array<SongPerformance>;
+    setlist: Array<SetlistItem>;
+};
+
+export type EventListResponse = {
+    events: Array<Event>;
+    nextCursor?: Cursor;
+};
+
+export type EventMediaSummary = {
+    mediaId: MediaId;
+    title: MediaTitle;
+    url: MediaUrl;
+    publishedAt: MediaPublishedAt;
+    type: MediaType;
+};
+
+export type EventSource = {
+    displayName: EventSourceName;
+    url: EventSourceUrl;
+    orderNo: OrderNo;
+};
+
+/**
+ * イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+ */
+export type EventStatusValue = 1 | 2 | 3;
+
+/**
+ * イベント種別
+ */
+export type EventTypeValue = 1 | 2 | 3 | 99;
+
+export type EventVenueSummary = {
+    venueId: Uuid;
+    name: string;
+    kindName: string;
+};
+
+/**
+ * イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+ */
+export type IsekaiObservatoryPackagesEventEventSchedule = {
+    startOn: EventOn | null;
+    endOn: EventOn | null;
+};
+
 export type IsekaiObservatoryViewerVersion = 'v1';
 
 export type MediaListItem = {
@@ -68,6 +125,13 @@ export type MediaType = {
  * メディア種別の値
  */
 export type MediaTypeValue = 1 | 2 | 3 | 4 | 5 | 99;
+
+export type PerformancePerson = {
+    personId: Uuid;
+    name: string;
+    creditName: PerformanceCreditName | null;
+    orderNo: OrderNo;
+};
 
 export type ReleaseFormat = {
     name: string;
@@ -145,6 +209,12 @@ export type ReleaseTrackItem = {
     isDisplay: boolean;
 };
 
+export type SetlistItem = {
+    orderNo: OrderNo;
+    label: string | null;
+    performances: Array<SongPerformance>;
+};
+
 export type SiteStatsResponse = {
     /**
      * 公開対象楽曲数
@@ -170,6 +240,10 @@ export type SongListItem = {
      * 収録先の公開リリースグループ(最古発売日の降順)
      */
     releaseGroups: Array<SongReleaseGroupSummary>;
+    /**
+     * 公開イベントでの披露履歴(開催時期の新しい順)
+     */
+    performances: Array<SongPerformanceHistory>;
 };
 
 export type SongListResponse = {
@@ -186,6 +260,24 @@ export type SongMediaSummary = {
     type: MediaType;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
+};
+
+export type SongPerformance = {
+    performanceId: Uuid;
+    songId: SongId | null;
+    songTitle: Title;
+    coVocalists: Array<PerformancePerson>;
+};
+
+/**
+ * 楽曲が公開イベントで披露された履歴
+ */
+export type SongPerformanceHistory = {
+    eventId: EventId;
+    eventTitle: EventTitle;
+    typeValue: EventTypeValue;
+    schedule: IsekaiObservatoryPackagesEventEventSchedule;
+    coVocalistNames: Array<string>;
 };
 
 export type SongRelationCounts = {
@@ -241,6 +333,36 @@ export type Cursor = string;
 export type Description = string;
 
 /**
+ * イベント説明
+ */
+export type EventDescription = string;
+
+/**
+ * イベントID
+ */
+export type EventId = string;
+
+/**
+ * イベント日
+ */
+export type EventOn = string;
+
+/**
+ * イベントの出典表示名
+ */
+export type EventSourceName = string;
+
+/**
+ * イベントの出典URL
+ */
+export type EventSourceUrl = string;
+
+/**
+ * イベントタイトル
+ */
+export type EventTitle = string;
+
+/**
  * 1 度に取得する件数
  */
 export type Limit = number;
@@ -274,6 +396,11 @@ export type MediaUrl = string;
  * 表示順
  */
 export type OrderNo = number;
+
+/**
+ * 共演者としてのクレジット名
+ */
+export type PerformanceCreditName = string;
 
 /**
  * リリースグループID
@@ -319,6 +446,34 @@ export type Title = string;
  * UUID v4
  */
 export type Uuid = string;
+
+export type EventServiceListEventsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        cursor?: Cursor;
+        limit?: Limit;
+    };
+    url: '/events';
+};
+
+export type EventServiceListEventsErrors = {
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+};
+
+export type EventServiceListEventsError = EventServiceListEventsErrors[keyof EventServiceListEventsErrors];
+
+export type EventServiceListEventsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: EventListResponse;
+};
+
+export type EventServiceListEventsResponse = EventServiceListEventsResponses[keyof EventServiceListEventsResponses];
 
 export type MediaServiceListMediaData = {
     body?: never;
