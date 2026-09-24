@@ -1,6 +1,6 @@
 <?php
 /**
- * SongPerformance
+ * RequestSongPerformance
  *
  * PHP version 8.1
  *
@@ -32,16 +32,15 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * SongPerformance Class Doc Comment
+ * RequestSongPerformance Class Doc Comment
  *
  * @category Class
- * @description イベントに紐づく楽曲披露
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
+class RequestSongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongPerformance';
+    protected static $openAPIModelName = 'RequestSongPerformance';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +59,8 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'performance_id' => 'string',
         'song_id' => 'string',
-        'song_title' => 'string',
         'order_no' => 'int',
-        'co_vocalists' => '\OpenAPI\Admin\Client\Model\PerformancePerson[]'
+        'co_vocalists' => '\OpenAPI\Admin\Client\Model\RequestPerformancePerson[]'
     ];
 
     /**
@@ -75,7 +73,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'performance_id' => 'uuid',
         'song_id' => 'uuid',
-        'song_title' => null,
         'order_no' => 'int32',
         'co_vocalists' => null
     ];
@@ -88,7 +85,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'performance_id' => false,
         'song_id' => false,
-        'song_title' => false,
         'order_no' => false,
         'co_vocalists' => false
     ];
@@ -181,7 +177,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'performance_id' => 'performanceId',
         'song_id' => 'songId',
-        'song_title' => 'songTitle',
         'order_no' => 'orderNo',
         'co_vocalists' => 'coVocalists'
     ];
@@ -194,7 +189,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'performance_id' => 'setPerformanceId',
         'song_id' => 'setSongId',
-        'song_title' => 'setSongTitle',
         'order_no' => 'setOrderNo',
         'co_vocalists' => 'setCoVocalists'
     ];
@@ -207,7 +201,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'performance_id' => 'getPerformanceId',
         'song_id' => 'getSongId',
-        'song_title' => 'getSongTitle',
         'order_no' => 'getOrderNo',
         'co_vocalists' => 'getCoVocalists'
     ];
@@ -271,7 +264,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('performance_id', $data ?? [], null);
         $this->setIfExists('song_id', $data ?? [], null);
-        $this->setIfExists('song_title', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
         $this->setIfExists('co_vocalists', $data ?? [], null);
     }
@@ -309,13 +301,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['song_id'] === null) {
             $invalidProperties[] = "'song_id' can't be null";
         }
-        if ($this->container['song_title'] === null) {
-            $invalidProperties[] = "'song_title' can't be null";
-        }
-        if ((mb_strlen($this->container['song_title']) < 1)) {
-            $invalidProperties[] = "invalid value for 'song_title', the character length must be bigger than or equal to 1.";
-        }
-
         if ($this->container['order_no'] === null) {
             $invalidProperties[] = "'order_no' can't be null";
         }
@@ -396,38 +381,6 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets song_title
-     *
-     * @return string
-     */
-    public function getSongTitle()
-    {
-        return $this->container['song_title'];
-    }
-
-    /**
-     * Sets song_title
-     *
-     * @param string $song_title 楽曲名
-     *
-     * @return self
-     */
-    public function setSongTitle($song_title)
-    {
-        if (is_null($song_title)) {
-            throw new \InvalidArgumentException('non-nullable song_title cannot be null');
-        }
-
-        if ((mb_strlen($song_title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $song_title when calling SongPerformance., must be bigger than or equal to 1.');
-        }
-
-        $this->container['song_title'] = $song_title;
-
-        return $this;
-    }
-
-    /**
      * Gets order_no
      *
      * @return int
@@ -451,7 +404,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         if (($order_no < 1)) {
-            throw new \InvalidArgumentException('invalid value for $order_no when calling SongPerformance., must be bigger than or equal to 1.');
+            throw new \InvalidArgumentException('invalid value for $order_no when calling RequestSongPerformance., must be bigger than or equal to 1.');
         }
 
         $this->container['order_no'] = $order_no;
@@ -462,7 +415,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets co_vocalists
      *
-     * @return \OpenAPI\Admin\Client\Model\PerformancePerson[]
+     * @return \OpenAPI\Admin\Client\Model\RequestPerformancePerson[]
      */
     public function getCoVocalists()
     {
@@ -472,7 +425,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets co_vocalists
      *
-     * @param \OpenAPI\Admin\Client\Model\PerformancePerson[] $co_vocalists co_vocalists
+     * @param \OpenAPI\Admin\Client\Model\RequestPerformancePerson[] $co_vocalists co_vocalists
      *
      * @return self
      */

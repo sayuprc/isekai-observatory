@@ -115,11 +115,11 @@ export type EventCreateRequest = {
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue;
     isDisplay: boolean;
-    venueIds: Array<Uuid>;
+    venueIds: Array<VenueId>;
     mediaIds: Array<MediaId>;
     sources: Array<EventSource>;
-    performances: Array<SongPerformance>;
-    setlist: Array<SetlistItem>;
+    performances: Array<RequestSongPerformance>;
+    setlist: Array<RequestSetlistItem>;
 };
 
 export type EventCreateResponse = {
@@ -178,11 +178,11 @@ export type EventUpdateRequest = {
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue;
     isDisplay: boolean;
-    venueIds: Array<Uuid>;
+    venueIds: Array<VenueId>;
     mediaIds: Array<MediaId>;
     sources: Array<EventSource>;
-    performances: Array<SongPerformance>;
-    setlist: Array<SetlistItem>;
+    performances: Array<RequestSongPerformance>;
+    setlist: Array<RequestSetlistItem>;
 };
 
 export type EventUpdateResponse = {
@@ -307,7 +307,7 @@ export type Medium = {
 export type PerPage = 25 | 50 | 100;
 
 /**
- * イベントに紐づく楽曲披露
+ * 楽曲披露の共演者
  */
 export type PerformancePerson = {
     personId: PersonId;
@@ -584,9 +584,32 @@ export type ReleaseUpdateResponse = {
     release: Release;
 };
 
+/**
+ * The template for picking properties.
+ */
+export type RequestPerformancePerson = {
+    personId: PersonId;
+    creditName: PerformanceCreditName | null;
+    orderNo: OrderNo;
+};
+
+export type RequestSetlistItem = {
+    setlistItemId: SetlistItemId;
+    orderNo: OrderNo;
+    label: SetlistLabel | null;
+    performanceIds: Array<PerformanceId>;
+};
+
 export type RequestSongMediaLink = {
     mediaId: MediaId;
     orderNo: OrderNo;
+};
+
+export type RequestSongPerformance = {
+    performanceId: PerformanceId;
+    songId: SongId;
+    orderNo: OrderNo;
+    coVocalists: Array<RequestPerformancePerson>;
 };
 
 /**
@@ -619,9 +642,9 @@ export type RoleValue = 1 | 2 | 3;
  * セットリストの 1 項目
  */
 export type SetlistItem = {
-    setlistItemId: Uuid;
+    setlistItemId: SetlistItemId;
     orderNo: OrderNo;
-    label: string | null;
+    label: SetlistLabel | null;
     performances: Array<SongPerformance>;
 };
 
@@ -676,7 +699,7 @@ export type SongLinkedMedia = {
  * イベントに紐づく楽曲披露
  */
 export type SongPerformance = {
-    performanceId: Uuid;
+    performanceId: PerformanceId;
     songId: SongId;
     songTitle: Title;
     orderNo: OrderNo;
@@ -986,6 +1009,11 @@ export type Page = number;
 export type PerformanceCreditName = string;
 
 /**
+ * 楽曲披露ID
+ */
+export type PerformanceId = string;
+
+/**
  * 権限名
  */
 export type PermissionName = string;
@@ -1049,6 +1077,16 @@ export type ReleasedOn = string;
  * 役割名
  */
 export type RoleName = string;
+
+/**
+ * セットリスト項目ID
+ */
+export type SetlistItemId = string;
+
+/**
+ * セットリスト項目の表示名
+ */
+export type SetlistLabel = string;
 
 /**
  * 楽曲ID

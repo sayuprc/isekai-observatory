@@ -170,7 +170,7 @@ class EventIntegrityServiceTest extends TestCase
      * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
      * @param list<string>                                                                                                                                    $venueIds
      * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}>                                                  $setlist
      */
     private function prepareForUpdate(
         int $type = EventType::Live->value,
@@ -187,9 +187,9 @@ class EventIntegrityServiceTest extends TestCase
      * @param array{startOn: ?string, endOn: ?string}                                                                                                         $schedule
      * @param list<string>                                                                                                                                    $venueIds
      * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}>                                                  $setlist
      *
-     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venueIds: list<string>, mediaIds: list<string>, sources: list<array{displayName: string, url: string, orderNo: int}>, performances: list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}>, setlist: list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>}
+     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venueIds: list<string>, mediaIds: list<string>, sources: list<array{displayName: string, url: string, orderNo: int}>, performances: list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}>, setlist: list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}>}
      */
     private function input(
         int $type = EventType::Live->value,
@@ -225,7 +225,7 @@ class EventIntegrityServiceTest extends TestCase
     /**
      * @param list<string> $performanceIds
      *
-     * @return array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}
+     * @return array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}
      */
     private static function setlistItem(int $orderNo, ?string $label, array $performanceIds): array
     {
@@ -233,7 +233,7 @@ class EventIntegrityServiceTest extends TestCase
             'setlistItemId' => sprintf('FFFFFFFF-FFFF-FFFF-FFFF-%012d', $orderNo),
             'orderNo' => $orderNo,
             'label' => $label,
-            'performances' => array_map(static fn (string $id): array => ['performanceId' => $id], $performanceIds),
+            'performanceIds' => $performanceIds,
         ];
     }
 
