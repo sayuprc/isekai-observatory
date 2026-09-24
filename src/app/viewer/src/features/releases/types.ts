@@ -1,4 +1,10 @@
-import type { ReleaseFormat, ReleaseGroupListItem, ReleaseListItem, ReleaseMediumItem, ReleaseTrackItem } from '../../generated/types.gen.js';
+import type {
+  ReleaseFormat,
+  ReleaseGroupListItem,
+  ReleaseListItem,
+  ReleaseMediumItem,
+  ReleaseTrackItem,
+} from '../../generated/types.gen.js';
 
 export type ReleaseGroup = ReleaseGroupListItem;
 

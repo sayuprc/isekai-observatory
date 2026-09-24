@@ -66,7 +66,8 @@ const normalizeDateDisplayValue = (value: unknown): string => {
 
 const buildDetailHref = (releaseGroupId: string): string => {
   const back = typeof window === 'undefined' ? '' : window.location.search;
-  return back ? `/release-groups/${releaseGroupId}?back=${encodeURIComponent(back)}` : `/release-groups/${releaseGroupId}`;
+  const path = `/release-groups/${releaseGroupId}`;
+  return back ? `${path}?back=${encodeURIComponent(back)}` : path;
 };
 
 export const SearchList = () => {

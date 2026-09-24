@@ -43,10 +43,20 @@ export const DetailView = (props: DetailViewProps) => {
 
   return (
     <Switch>
-      <Match when={resource.loading}><div class="flex items-center justify-center gap-3 py-10" role="status"><span class="loading loading-spinner loading-md" />読み込み中...</div></Match>
-      <Match when={resource()?.status === 'forbidden'}><div class="alert alert-error">開催先の閲覧権限がありません。</div></Match>
+      <Match when={resource.loading}>
+        <div class="flex items-center justify-center gap-3 py-10" role="status">
+          <span class="loading loading-spinner loading-md" />
+          読み込み中...
+        </div>
+      </Match>
+      <Match when={resource()?.status === 'forbidden'}>
+        <div class="alert alert-error">開催先の閲覧権限がありません。</div>
+      </Match>
       <Match when={resource.error || resource()?.status === 'error'}>
-        <div class="flex flex-col items-start gap-3"><p class="text-error">データの取得に失敗しました。</p><button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>再試行</button></div>
+        <div class="flex flex-col items-start gap-3">
+          <p class="text-error">データの取得に失敗しました。</p>
+          <button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>再試行</button>
+        </div>
       </Match>
       <Match when={loadedData()}>{data => <EditableForm data={data()} />}</Match>
     </Switch>
@@ -126,20 +136,42 @@ const EditableForm = (props: EditableFormProps) => {
           <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
             <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
             <label class="label" for="name">開催先名</label>
-            <input id="name" type="text" class="input w-full" name="name" required maxLength={255} value={props.data.venue.name} classList={{ 'input-error': !!getFieldError('name') }} />
+            <input
+              id="name"
+              type="text"
+              class="input w-full"
+              name="name"
+              required
+              maxLength={255}
+              value={props.data.venue.name}
+              classList={{ 'input-error': !!getFieldError('name') }}
+            />
             <Show when={getFieldError('name')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
             <label class="label mt-4" for="kind">種別</label>
             <select id="kind" name="kind" class="select w-full" required>
               <option value="1" selected={props.data.venue.kind.value === 1}>現地</option>
               <option value="2" selected={props.data.venue.kind.value === 2}>オンライン</option>
             </select>
-            <div class="mt-6 flex justify-end"><button type="button" onClick={handleUpdate} class="btn btn-primary" disabled={isSubmitting()}>{isSubmitting() ? '更新中...' : '更新'}</button></div>
+            <div class="mt-6 flex justify-end">
+              <button type="button" onClick={handleUpdate} class="btn btn-primary" disabled={isSubmitting()}>
+                {isSubmitting() ? '更新中...' : '更新'}
+              </button>
+            </div>
           </fieldset>
         </form>
         <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
           <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
           <p class="mt-1 text-sm text-base-content/60">この操作は取り消せません。</p>
-          <div class="mt-4"><button type="button" onClick={handleDelete} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>{isSubmitting() ? '削除中...' : 'この開催先を削除する'}</button></div>
+          <div class="mt-4">
+            <button
+              type="button"
+              onClick={handleDelete}
+              class="btn btn-outline btn-error btn-sm"
+              disabled={isSubmitting()}
+            >
+              {isSubmitting() ? '削除中...' : 'この開催先を削除する'}
+            </button>
+          </div>
         </fieldset>
       </div>
     </>
