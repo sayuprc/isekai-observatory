@@ -2,7 +2,7 @@ import { Show, createEffect, createMemo, createSignal, on, onMount } from 'solid
 import { kindLabel } from '../../shared/labels';
 import { SITE_TITLE } from '../../shared/site';
 
-type DrawerKind = 'song' | 'release' | 'media';
+type DrawerKind = 'song' | 'release' | 'media' | 'event';
 
 interface DrawerTarget {
   id: string;
@@ -21,6 +21,7 @@ const resolveDrawerTarget = (pathname: string): DrawerTarget | null => {
     { kind: 'song' as const, prefix: '/songs/' },
     { kind: 'release' as const, prefix: '/releases/' },
     { kind: 'media' as const, prefix: '/media/' },
+    { kind: 'event' as const, prefix: '/events/' },
   ];
 
   for (const pattern of patterns) {
