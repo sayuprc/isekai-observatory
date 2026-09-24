@@ -19,8 +19,14 @@ const creditItems = [
 const formatPublishedAt = (value: string): string =>
   new Date(value).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
-const formatPerformanceDate = (value: Song['performances'][number]): string =>
-  value.schedule.startOn ? `${value.schedule.startOn}${value.schedule.endOn ? `〜${value.schedule.endOn}` : ''}` : '開催時期未定';
+const formatPerformanceDate = (value: Song['performances'][number]): string => {
+  const { startOn, endOn } = value.schedule;
+  if (!startOn) return '開催時期未定';
+  return endOn ? `${startOn}〜${endOn}` : startOn;
+};
+
+const formatPerformers = (value: Song['performances'][number]): string =>
+  value.coVocalistNames.length > 0 ? `共演: ${value.coVocalistNames.join(' / ')}` : 'ヰ世界情緒';
 ---
 
 <div class="detail-page-content song-detail-content" data-share-title={song.title}>
@@ -51,7 +57,7 @@ const formatPerformanceDate = (value: Song['performances'][number]): string =>
                 <div class="rel-copy">
                   <div class="rel-main">{performance.eventTitle}</div>
                   <div class="label-mono rel-sub">
-                    {formatPerformanceDate(performance)} · {performance.coVocalistNames.length > 0 ? `共演: ${performance.coVocalistNames.join(' / ')}` : 'ヰ世界情緒'}
+                    {formatPerformanceDate(performance)} · {formatPerformers(performance)}
                   </div>
                 </div>
                 <span class="rel-arrow rel-arrow-muted">→</span>

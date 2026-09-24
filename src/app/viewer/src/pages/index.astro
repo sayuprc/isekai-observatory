@@ -15,7 +15,8 @@ import { SITE_DESCRIPTION } from '../shared/site';
 const latestReleaseGroup = await releaseGroupContentRepository.latest();
 const latestSong = await songContentRepository.latest();
 const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap(medium => medium.tracks) ?? [];
-const upcomingEvents = (await eventContentRepository.all()).filter(event => event.statusValue === 1 && eventDate(event) !== null);
+const upcomingEvents = (await eventContentRepository.all())
+  .filter(event => event.statusValue === 1 && eventDate(event) !== null);
 
 const siteStats = await siteStatsRepository.get();
 const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry.url) !== null)
@@ -49,7 +50,25 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
   </section>
 
   <div class="shell home-feature-row">
-    {upcomingEvents.length > 0 && <section class="home-feature" data-upcoming-section hidden><SectionHead title="今後の予定" /><div class="entry-list">{upcomingEvents.map(event => <article class="entry-list-item" data-upcoming-event data-start={eventDate(event)}><div class="eyebrow">{eventTypeName(event.typeValue)} — {eventDate(event)}</div><h3 class="feature-title"><a href={`/events/${event.eventId}`}>{event.title}</a></h3>{eventStatusName(event.statusValue) && <p>{eventStatusName(event.statusValue)}</p>}</article>)}</div><a class="btn feature-more" href="/events">イベント一覧 →</a></section>}
+    {
+      upcomingEvents.length > 0 && (
+        <section class="home-feature" data-upcoming-section hidden>
+          <SectionHead title="今後の予定" />
+          <div class="entry-list">
+            {
+              upcomingEvents.map(event => (
+                <article class="entry-list-item" data-upcoming-event data-start={eventDate(event)}>
+                  <div class="eyebrow">{eventTypeName(event.typeValue)} — {eventDate(event)}</div>
+                  <h3 class="feature-title"><a href={`/events/${event.eventId}`}>{event.title}</a></h3>
+                  {eventStatusName(event.statusValue) && <p>{eventStatusName(event.statusValue)}</p>}
+                </article>
+              ))
+            }
+          </div>
+          <a class="btn feature-more" href="/events">イベント一覧 →</a>
+        </section>
+      )
+    }
     {
       latestSong && (
         <section class="home-feature">
@@ -110,12 +129,13 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
   const section = document.querySelector<HTMLElement>('[data-upcoming-section]');
   if (section) {
     const entries = [...section.querySelectorAll<HTMLElement>('[data-upcoming-event]')];
+    const startTime = (entry: HTMLElement): number => new Date(entry.dataset.start ?? '').getTime();
     const future = entries
       .filter((entry) => {
-        const value = entry.dataset.start;
-        return value !== undefined && !Number.isNaN(new Date(value).getTime()) && new Date(value).getTime() >= Date.now();
+        const time = startTime(entry);
+        return !Number.isNaN(time) && time >= Date.now();
       })
-      .sort((left, right) => new Date(left.dataset.start ?? '').getTime() - new Date(right.dataset.start ?? '').getTime())
+      .sort((left, right) => startTime(left) - startTime(right))
       .slice(0, 3);
     entries.forEach((entry) => {
       entry.hidden = !future.includes(entry);
