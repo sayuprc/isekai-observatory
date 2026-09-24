@@ -75,7 +75,9 @@ const years = [...new Set(releaseGroups.map(releaseGroup => releaseGroup.firstRe
                     <li
                       data-release-entry
                       data-release-type={String(releaseGroup.type.value)}
-                      data-release-search={`${releaseGroup.title} ${releaseGroup.type.name} ${trackTitles.join(' ')}`.toLowerCase()}
+                      data-release-search={[releaseGroup.title, releaseGroup.type.name, ...trackTitles]
+                        .join(' ')
+                        .toLowerCase()}
                     >
                       <a
                         href={`/releases/${releaseGroup.releaseGroupId}`}
@@ -84,7 +86,9 @@ const years = [...new Set(releaseGroups.map(releaseGroup => releaseGroup.firstRe
                       >
                         <span class="release-row-title">{releaseGroup.title}</span>
                         <span class="release-row-type">{releaseGroup.type.name}</span>
-                        <span class="label-mono release-row-date">{releaseGroup.firstReleasedOn.slice(5).replace('-', '.')}</span>
+                        <span class="label-mono release-row-date">
+                          {releaseGroup.firstReleasedOn.slice(5).replace('-', '.')}
+                        </span>
                       </a>
                     </li>
                   );

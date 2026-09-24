@@ -331,8 +331,10 @@ export const EditableForm = (props: EditableFormProps) => {
                     class="select select-bordered w-full"
                     name="typeValue"
                     value={typeValue()}
-                    onChange={e =>
-                      setTypeValue(e.currentTarget.value === '' ? '' : (Number(e.currentTarget.value) as SongTypeValue))}
+                    onChange={(e) => {
+                      const value = e.currentTarget.value;
+                      setTypeValue(value === '' ? '' : (Number(value) as SongTypeValue));
+                    }}
                     required
                     classList={{ 'select-error': !!getFieldError('typeValue') }}
                   >

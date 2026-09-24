@@ -63,7 +63,10 @@ const featured = videos[0];
                 data-media-kind="video"
               >
                 <a href={`/media/${featured.id}`}>
-                  <MVThumb color={featured.color} label={`NOW PLAYING — ${mediaTypeLabel(featured.type).toUpperCase()}`} />
+                  <MVThumb
+                    color={featured.color}
+                    label={`NOW PLAYING — ${mediaTypeLabel(featured.type).toUpperCase()}`}
+                  />
                 </a>
                 <div class="media-featured-copy">
                   <div class="label-mono">FEATURED · {featured.date}</div>
@@ -150,7 +153,9 @@ const featured = videos[0];
                   <MVThumb color={entry.color} />
                 </div>
                 <div>
-                  <div class="label-mono">{entry.date} · {mediaTypeLabel(entry.type)}{entry.views ? ` · ${entry.views}` : ''}</div>
+                  <div class="label-mono">
+                    {entry.date} · {mediaTypeLabel(entry.type)}{entry.views ? ` · ${entry.views}` : ''}
+                  </div>
                   <div class="media-card-title">{entry.title ?? entry.text}</div>
                   <div class="media-card-tags">
                     {Q.songsOfMedia(entry.id).map(song => <span class="pill">楽曲 · {song.title}</span>)}

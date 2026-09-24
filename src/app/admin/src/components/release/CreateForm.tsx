@@ -151,7 +151,9 @@ export const CreateForm = () => {
           </div>
         </Match>
         <Match when={loadedInitialValues()}>
-          {initialValues => <ReleaseCreateForm releaseGroupId={params.releaseGroupId} initialValues={initialValues()} />}
+          {initialValues => (
+            <ReleaseCreateForm releaseGroupId={params.releaseGroupId} initialValues={initialValues()} />
+          )}
         </Match>
       </Switch>
     </Show>
