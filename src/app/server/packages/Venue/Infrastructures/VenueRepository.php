@@ -74,6 +74,23 @@ readonly class VenueRepository implements VenueRepositoryInterface
     }
 
     #[Override]
+    public function findByIds(VenueId ...$venueIds): array
+    {
+        if ($venueIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(self::COLUMNS)
+                ->from(self::TABLE)
+                ->where('venue_id', 'IN', array_map(fn (VenueId $venueId): string => $this->converter->toBin($venueId->value), $venueIds)),
+        );
+
+        return array_map($this->hydrate(...), $rows);
+    }
+
+    #[Override]
     public function isUsed(VenueId $venueId): bool
     {
         $count = Row::intValue(

@@ -10,6 +10,11 @@ interface SongRepositoryInterface
 {
     public function find(SongId $songId): ?Song;
 
+    /**
+     * @return list<Song>
+     */
+    public function findByIds(SongId ...$songIds): array;
+
     public function isPersonUsed(PersonId $personId): bool;
 
     public function isUsed(SongId $songId): bool;
