@@ -7,16 +7,30 @@ export function eventDate(event: Event): string | null {
   return event.schedule.endOn ? `${event.schedule.startOn}〜${event.schedule.endOn}` : event.schedule.startOn;
 }
 
-// 一覧カード向けの短い日付。年見出しの下では年を省く
-export function eventShortDate(event: Event, withYear: boolean): string {
+// ホームのカード向けの短い日付
+export function eventShortDate(event: Event): string {
   const { startOn, endOn } = event.schedule;
   if (!startOn) return '日付未定';
 
-  const format = (value: string, year: boolean) => (year ? value : value.slice(5)).replaceAll('-', '.');
-  if (!endOn) return format(startOn, withYear);
+  const format = (value: string) => value.replaceAll('-', '.');
+  return endOn ? `${format(startOn)} – ${format(endOn)}` : format(startOn);
+}
 
-  const crossesYear = startOn.slice(0, 4) !== endOn.slice(0, 4);
-  return `${format(startOn, withYear || crossesYear)} – ${format(endOn, withYear || crossesYear)}`;
+const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
+
+// 一覧の日付列。年は見出しに出すので月日だけにし、単日は曜日、期間は終了日を添える
+export function eventDateColumn(event: Event): { main: string; sub: string } | null {
+  const { startOn, endOn } = event.schedule;
+  if (!startOn) return null;
+
+  const monthDay = (value: string) => value.slice(5).replace('-', '.');
+  if (endOn) {
+    const sameYear = startOn.slice(0, 4) === endOn.slice(0, 4);
+    return { main: monthDay(startOn), sub: `– ${sameYear ? monthDay(endOn) : endOn.replaceAll('-', '.')}` };
+  }
+
+  const weekday = WEEKDAYS[new Date(`${startOn}T12:00:00Z`).getUTCDay()] ?? '';
+  return { main: monthDay(startOn), sub: weekday };
 }
 
 export function eventTypeName(value: Event['typeValue']): string {

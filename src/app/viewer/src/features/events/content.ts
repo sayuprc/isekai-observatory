@@ -1,5 +1,5 @@
 import { eventRepository } from './api.js';
-import { groupEvents, type EventGroups } from './group.js';
+import { groupEvents, upcomingEvents, type EventGroups } from './group.js';
 import type { Event } from './types.js';
 
 // SSG のビルド日を基準にする。日付は日本時間の YYYY-MM-DD で比べる
@@ -10,6 +10,9 @@ export const eventContentRepository = {
     return eventRepository.all();
   },
   async grouped(): Promise<EventGroups> {
-    return groupEvents(await eventRepository.all(), today());
+    return groupEvents(await eventRepository.all());
+  },
+  async upcoming(): Promise<Event[]> {
+    return upcomingEvents(await eventRepository.all(), today());
   },
 };

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { groupEvents } from './group';
-import { eventShortDate, type Event } from './types';
+import { groupEvents, upcomingEvents } from './group';
+import { eventDateColumn, eventShortDate, type Event } from './types';
 
 const event = (title: string, startOn: string | null, endOn: string | null = null): Event => ({
   eventId: title,
@@ -18,45 +18,56 @@ const event = (title: string, startOn: string | null, endOn: string | null = nul
 
 const titles = (events: Event[]) => events.map(item => item.title);
 
-describe('イベントの一覧グループ', () => {
-  const events = [
-    event('過去2025-03', '2025-03-01'),
-    event('予定2026-12', '2026-12-01'),
-    event('未定B', null),
-    event('当日', '2026-09-24'),
-    event('過去2024', '2024-08-07'),
-    event('未定A', null),
-    event('過去2025-11', '2025-11-01'),
-  ];
-  const groups = groupEvents(events, '2026-09-24');
+const events = [
+  event('2025-03', '2025-03-01'),
+  event('2026-12', '2026-12-01'),
+  event('未定B', null),
+  event('2026-09', '2026-09-24'),
+  event('2024-08', '2024-08-07'),
+  event('未定A', null),
+  event('2025-11', '2025-11-01'),
+];
 
-  it('当日以降を今後の予定として日付昇順に並べる', () => {
-    expect(titles(groups.upcoming)).toEqual(['当日', '予定2026-12']);
-  });
+describe('イベント一覧のグループ', () => {
+  const groups = groupEvents(events);
 
   it('日付未定を別枠にする', () => {
     expect(titles(groups.undated)).toEqual(['未定A', '未定B']);
   });
 
-  it('過去を年ごとに日付降順で並べる', () => {
-    expect(groups.pastByYear.map(group => [group.year, titles(group.events)])).toEqual([
-      ['2025', ['過去2025-11', '過去2025-03']],
-      ['2024', ['過去2024']],
+  it('未来と過去を区別せず、年ごとに新しい順で並べる', () => {
+    expect(groups.byYear.map(group => [group.year, titles(group.events)])).toEqual([
+      ['2026', ['2026-12', '2026-09']],
+      ['2025', ['2025-11', '2025-03']],
+      ['2024', ['2024-08']],
     ]);
   });
 });
 
-describe('イベントカードの日付', () => {
-  it('年見出しの下では年を省く', () => {
-    expect(eventShortDate(event('単日', '2024-08-07'), false)).toBe('08.07');
-    expect(eventShortDate(event('期間', '2024-08-07', '2024-08-09'), false)).toBe('08.07 – 08.09');
+describe('ホームの今後の予定', () => {
+  it('基準日以降を日付昇順で返す', () => {
+    expect(titles(upcomingEvents(events, '2026-09-24'))).toEqual(['2026-09', '2026-12']);
+  });
+});
+
+describe('イベントの日付表示', () => {
+  it('一覧の単日は月日と曜日を出す', () => {
+    expect(eventDateColumn(event('単日', '2024-08-07'))).toEqual({ main: '08.07', sub: '水' });
   });
 
-  it('年をまたぐ期間は年を省かない', () => {
-    expect(eventShortDate(event('年跨ぎ', '2024-12-31', '2025-01-01'), false)).toBe('2024.12.31 – 2025.01.01');
+  it('一覧の期間は終了日を添え、年をまたぐときは年も出す', () => {
+    expect(eventDateColumn(event('期間', '2024-08-07', '2024-08-09'))).toEqual({ main: '08.07', sub: '– 08.09' });
+    expect(eventDateColumn(event('年跨ぎ', '2024-12-31', '2025-01-01'))).toEqual({
+      main: '12.31',
+      sub: '– 2025.01.01',
+    });
   });
 
-  it('日付未定を表示する', () => {
-    expect(eventShortDate(event('未定', null), true)).toBe('日付未定');
+  it('一覧の日付未定は日付列を出さない', () => {
+    expect(eventDateColumn(event('未定', null))).toBeNull();
+  });
+
+  it('ホームのカードは年付きで出す', () => {
+    expect(eventShortDate(event('期間', '2024-08-07', '2024-08-09'))).toBe('2024.08.07 – 2024.08.09');
   });
 });

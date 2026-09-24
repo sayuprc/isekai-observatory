@@ -1,7 +1,7 @@
 ---
 import EntryGroupStatus from '../../components/viewer/EntryGroupStatus';
 import EntryStatus from '../../components/viewer/EntryStatus';
-import EventCard from '../../components/viewer/EventCard.astro';
+import EventRow from '../../components/viewer/EventRow.astro';
 import FilterBar from '../../components/viewer/FilterBar';
 import SectionHead from '../../components/viewer/SectionHead.astro';
 import { eventContentRepository } from '../../features/events/content';
@@ -9,13 +9,12 @@ import type { Event } from '../../features/events/types';
 import { eventDate, eventTypeName } from '../../features/events/types';
 import Layout from '../../layouts/Layout.astro';
 
-const { upcoming, undated, pastByYear } = await eventContentRepository.grouped();
-const groups: { key: string; label: string; isYear: boolean; events: Event[]; upcoming?: boolean }[] = [
-  { key: 'upcoming', label: '今後の予定', isYear: false, events: upcoming, upcoming: true },
-  { key: 'undated', label: '日付未定', isYear: false, events: undated },
-  ...pastByYear.map(({ year, events }) => ({ key: year, label: year, isYear: true, events })),
-].filter(group => group.events.length > 0);
-const total = upcoming.length + undated.length + pastByYear.reduce((sum, group) => sum + group.events.length, 0);
+const { undated, byYear } = await eventContentRepository.grouped();
+const groups = [
+  ...(undated.length > 0 ? [{ label: '日付未定', isYear: false, events: undated }] : []),
+  ...byYear.map(({ year, events }) => ({ label: year, isYear: true, events })),
+];
+const total = groups.reduce((sum, group) => sum + group.events.length, 0);
 
 const searchText = (event: Event) =>
   [event.title, eventTypeName(event.typeValue), eventDate(event) ?? '', ...event.venues.map(venue => venue.name)]
@@ -65,10 +64,10 @@ const searchText = (event: Event) =>
     {
       groups.map(group => (
         <section class="event-group" data-event-group>
-          <div class="event-group-head">
-            <div class:list={['event-group-label', { 'event-group-label-year': group.isYear }]}>{group.label}</div>
-            <div class="event-group-count" data-event-group-count>{group.events.length}件</div>
-          </div>
+          <h2 class:list={['event-group-label', { 'event-group-label-year': group.isYear }]}>
+            {group.label}
+            <span class="event-group-count" data-event-group-count>{group.events.length}件</span>
+          </h2>
           <ol class="event-group-list">
             {
               group.events.map(event => (
@@ -77,7 +76,7 @@ const searchText = (event: Event) =>
                   data-event-type={String(event.typeValue)}
                   data-event-search={searchText(event)}
                 >
-                  <EventCard event={event} withYear={!group.isYear} upcoming={group.upcoming} />
+                  <EventRow event={event} />
                 </li>
               ))
             }

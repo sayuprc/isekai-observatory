@@ -1,0 +1,28 @@
+---
+import type { Event } from '../../features/events/types';
+import { eventDateColumn, eventStatusName, eventTypeName } from '../../features/events/types';
+
+interface Props {
+  event: Event;
+}
+
+const { event } = Astro.props;
+const date = eventDateColumn(event);
+const statusName = eventStatusName(event.statusValue);
+const venueNames = event.venues.map(venue => venue.name).join(' / ');
+---
+
+<a href={`/events/${event.eventId}`} class="event-line" data-inactive={statusName ? '' : undefined}>
+  <span class="event-line-date">
+    <span class="event-line-date-main">{date?.main ?? '— —'}</span>
+    {date && <span class="event-line-date-sub">{date.sub}</span>}
+  </span>
+  <span class="event-line-type">{eventTypeName(event.typeValue)}</span>
+  <span class="event-line-body">
+    <span class="event-line-title">
+      {event.title}{statusName && <span class="event-line-status">{statusName}</span>}
+    </span>
+    {venueNames && <span class="event-line-venue">{venueNames}</span>}
+  </span>
+  <span class="event-line-arrow" aria-hidden="true">→</span>
+</a>

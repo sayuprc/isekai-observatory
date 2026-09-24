@@ -4,11 +4,10 @@ import { eventShortDate, eventStatusName, eventTypeName } from '../../features/e
 
 interface Props {
   event: Event;
-  withYear: boolean;
   upcoming?: boolean;
 }
 
-const { event, withYear, upcoming = false } = Astro.props;
+const { event, upcoming = false } = Astro.props;
 const statusName = eventStatusName(event.statusValue);
 const venueNames = event.venues.map(venue => venue.name).join('・');
 ---
@@ -19,7 +18,7 @@ const venueNames = event.venues.map(venue => venue.name).join('・');
   data-upcoming={upcoming ? '' : undefined}
   data-inactive={statusName ? '' : undefined}
 >
-  <span class="label-mono event-row-date">{eventShortDate(event, withYear)}</span>
+  <span class="label-mono event-row-date">{eventShortDate(event)}</span>
   <span class="event-row-badges">
     {statusName && <span class="event-row-status">{statusName}</span>}
     <span class="event-row-type">{eventTypeName(event.typeValue)}</span>

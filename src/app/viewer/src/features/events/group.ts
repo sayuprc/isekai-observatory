@@ -1,28 +1,28 @@
 import type { Event } from './types.js';
 
 export type EventGroups = {
-  upcoming: Event[];
   undated: Event[];
-  pastByYear: { year: string; events: Event[] }[];
+  byYear: { year: string; events: Event[] }[];
 };
 
 const byStartOn = (left: Event, right: Event): number =>
   (left.schedule.startOn ?? '').localeCompare(right.schedule.startOn ?? '');
 
-// 今後の予定は日付昇順、日付未定は別枠、過去は年ごとに日付降順で並べる
-export const groupEvents = (events: Event[], base: string): EventGroups => {
-  const dated = events.filter(event => event.schedule.startOn !== null);
-  const upcoming = dated.filter(event => (event.schedule.startOn ?? '') >= base).sort(byStartOn);
-  const past = dated
-    .filter(event => (event.schedule.startOn ?? '') < base)
+// 一覧は日付未定を別枠にし、残りは未来・過去を区別せず年ごとに新しい順で並べる
+export const groupEvents = (events: Event[]): EventGroups => {
+  const dated = events
+    .filter(event => event.schedule.startOn !== null)
     .sort((left, right) => byStartOn(right, left));
-  const years = [...new Set(past.map(event => (event.schedule.startOn ?? '').slice(0, 4)))];
+  const years = [...new Set(dated.map(event => (event.schedule.startOn ?? '').slice(0, 4)))];
 
   return {
-    upcoming,
     undated: events
       .filter(event => event.schedule.startOn === null)
       .sort((left, right) => left.title.localeCompare(right.title, 'ja')),
-    pastByYear: years.map(year => ({ year, events: past.filter(event => event.schedule.startOn?.startsWith(year)) })),
+    byYear: years.map(year => ({ year, events: dated.filter(event => event.schedule.startOn?.startsWith(year)) })),
   };
 };
+
+// ホームの今後の予定の候補。基準日以降を日付昇順で返し、表示の最終判断はブラウザ側に任せる
+export const upcomingEvents = (events: Event[], base: string): Event[] =>
+  events.filter(event => (event.schedule.startOn ?? '') >= base).sort(byStartOn);
