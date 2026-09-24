@@ -1,0 +1,30 @@
+---
+paths:
+  - "src/notification/discord-notifier/**"
+---
+
+# Discord Notifier 規約
+
+## 実行環境
+
+- MoonBit toolchain (`moon`) を使う
+- 共有タスクの入口には `mise` を使う
+
+## 構成
+
+- `parse.mbt`: Pub/Sub envelope / アプリ通知 / Cloud Build / Cloud Run Job 失敗 LogEntry の正規化
+- `config.mbt`: env からの action -> channel 振り分け
+- `dedup.mbt`: cloud_build started のプロセスローカル重複抑止
+- `discord.mbt`: embeds に status 既定色を付けて Webhook POST
+- `handle.mbt` / `server.mbt`: HTTP 配線
+
+## 実装規約
+
+- 業務処理は持たない。振り分けは環境変数で行う
+- アプリ通知 JSON の契約は `src/notification/contract/README.md` を Source of Truth とする
+- 起動・環境変数・Cloud Build 正規化の詳細は `src/notification/discord-notifier/README.md` を参照する
+
+## 検証
+
+- `mise run discord-notifier:check`
+- 編集の最後に `moon info && moon fmt` を回す
