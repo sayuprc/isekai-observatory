@@ -1,6 +1,6 @@
 <?php
 /**
- * SongPerformance
+ * RequestSetlistItem
  *
  * PHP version 8.1
  *
@@ -32,16 +32,15 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * SongPerformance Class Doc Comment
+ * RequestSetlistItem Class Doc Comment
  *
  * @category Class
- * @description イベントに紐づく楽曲披露
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
+class RequestSetlistItem implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongPerformance';
+    protected static $openAPIModelName = 'RequestSetlistItem';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,11 +57,10 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'performance_id' => 'string',
-        'song_id' => 'string',
-        'song_title' => 'string',
+        'setlist_item_id' => 'string',
         'order_no' => 'int',
-        'co_vocalists' => '\OpenAPI\Admin\Client\Model\PerformancePerson[]'
+        'label' => 'string',
+        'performance_ids' => 'string[]'
     ];
 
     /**
@@ -73,11 +71,10 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'performance_id' => 'uuid',
-        'song_id' => 'uuid',
-        'song_title' => null,
+        'setlist_item_id' => 'uuid',
         'order_no' => 'int32',
-        'co_vocalists' => null
+        'label' => null,
+        'performance_ids' => 'uuid'
     ];
 
     /**
@@ -86,11 +83,10 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'performance_id' => false,
-        'song_id' => false,
-        'song_title' => false,
+        'setlist_item_id' => false,
         'order_no' => false,
-        'co_vocalists' => false
+        'label' => true,
+        'performance_ids' => false
     ];
 
     /**
@@ -179,11 +175,10 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'performance_id' => 'performanceId',
-        'song_id' => 'songId',
-        'song_title' => 'songTitle',
+        'setlist_item_id' => 'setlistItemId',
         'order_no' => 'orderNo',
-        'co_vocalists' => 'coVocalists'
+        'label' => 'label',
+        'performance_ids' => 'performanceIds'
     ];
 
     /**
@@ -192,11 +187,10 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'performance_id' => 'setPerformanceId',
-        'song_id' => 'setSongId',
-        'song_title' => 'setSongTitle',
+        'setlist_item_id' => 'setSetlistItemId',
         'order_no' => 'setOrderNo',
-        'co_vocalists' => 'setCoVocalists'
+        'label' => 'setLabel',
+        'performance_ids' => 'setPerformanceIds'
     ];
 
     /**
@@ -205,11 +199,10 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'performance_id' => 'getPerformanceId',
-        'song_id' => 'getSongId',
-        'song_title' => 'getSongTitle',
+        'setlist_item_id' => 'getSetlistItemId',
         'order_no' => 'getOrderNo',
-        'co_vocalists' => 'getCoVocalists'
+        'label' => 'getLabel',
+        'performance_ids' => 'getPerformanceIds'
     ];
 
     /**
@@ -269,11 +262,10 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('performance_id', $data ?? [], null);
-        $this->setIfExists('song_id', $data ?? [], null);
-        $this->setIfExists('song_title', $data ?? [], null);
+        $this->setIfExists('setlist_item_id', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
-        $this->setIfExists('co_vocalists', $data ?? [], null);
+        $this->setIfExists('label', $data ?? [], null);
+        $this->setIfExists('performance_ids', $data ?? [], null);
     }
 
     /**
@@ -303,19 +295,9 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['performance_id'] === null) {
-            $invalidProperties[] = "'performance_id' can't be null";
+        if ($this->container['setlist_item_id'] === null) {
+            $invalidProperties[] = "'setlist_item_id' can't be null";
         }
-        if ($this->container['song_id'] === null) {
-            $invalidProperties[] = "'song_id' can't be null";
-        }
-        if ($this->container['song_title'] === null) {
-            $invalidProperties[] = "'song_title' can't be null";
-        }
-        if ((mb_strlen($this->container['song_title']) < 1)) {
-            $invalidProperties[] = "invalid value for 'song_title', the character length must be bigger than or equal to 1.";
-        }
-
         if ($this->container['order_no'] === null) {
             $invalidProperties[] = "'order_no' can't be null";
         }
@@ -323,8 +305,15 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
-        if ($this->container['co_vocalists'] === null) {
-            $invalidProperties[] = "'co_vocalists' can't be null";
+        if ($this->container['label'] === null) {
+            $invalidProperties[] = "'label' can't be null";
+        }
+        if ((mb_strlen($this->container['label']) < 1)) {
+            $invalidProperties[] = "invalid value for 'label', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['performance_ids'] === null) {
+            $invalidProperties[] = "'performance_ids' can't be null";
         }
         return $invalidProperties;
     }
@@ -342,87 +331,28 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets performance_id
+     * Gets setlist_item_id
      *
      * @return string
      */
-    public function getPerformanceId()
+    public function getSetlistItemId()
     {
-        return $this->container['performance_id'];
+        return $this->container['setlist_item_id'];
     }
 
     /**
-     * Sets performance_id
+     * Sets setlist_item_id
      *
-     * @param string $performance_id 楽曲披露ID
+     * @param string $setlist_item_id セットリスト項目ID
      *
      * @return self
      */
-    public function setPerformanceId($performance_id)
+    public function setSetlistItemId($setlist_item_id)
     {
-        if (is_null($performance_id)) {
-            throw new \InvalidArgumentException('non-nullable performance_id cannot be null');
+        if (is_null($setlist_item_id)) {
+            throw new \InvalidArgumentException('non-nullable setlist_item_id cannot be null');
         }
-        $this->container['performance_id'] = $performance_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets song_id
-     *
-     * @return string
-     */
-    public function getSongId()
-    {
-        return $this->container['song_id'];
-    }
-
-    /**
-     * Sets song_id
-     *
-     * @param string $song_id 楽曲ID
-     *
-     * @return self
-     */
-    public function setSongId($song_id)
-    {
-        if (is_null($song_id)) {
-            throw new \InvalidArgumentException('non-nullable song_id cannot be null');
-        }
-        $this->container['song_id'] = $song_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets song_title
-     *
-     * @return string
-     */
-    public function getSongTitle()
-    {
-        return $this->container['song_title'];
-    }
-
-    /**
-     * Sets song_title
-     *
-     * @param string $song_title 楽曲名
-     *
-     * @return self
-     */
-    public function setSongTitle($song_title)
-    {
-        if (is_null($song_title)) {
-            throw new \InvalidArgumentException('non-nullable song_title cannot be null');
-        }
-
-        if ((mb_strlen($song_title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $song_title when calling SongPerformance., must be bigger than or equal to 1.');
-        }
-
-        $this->container['song_title'] = $song_title;
+        $this->container['setlist_item_id'] = $setlist_item_id;
 
         return $this;
     }
@@ -451,7 +381,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         if (($order_no < 1)) {
-            throw new \InvalidArgumentException('invalid value for $order_no when calling SongPerformance., must be bigger than or equal to 1.');
+            throw new \InvalidArgumentException('invalid value for $order_no when calling RequestSetlistItem., must be bigger than or equal to 1.');
         }
 
         $this->container['order_no'] = $order_no;
@@ -460,28 +390,67 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets co_vocalists
+     * Gets label
      *
-     * @return \OpenAPI\Admin\Client\Model\PerformancePerson[]
+     * @return string
      */
-    public function getCoVocalists()
+    public function getLabel()
     {
-        return $this->container['co_vocalists'];
+        return $this->container['label'];
     }
 
     /**
-     * Sets co_vocalists
+     * Sets label
      *
-     * @param \OpenAPI\Admin\Client\Model\PerformancePerson[] $co_vocalists co_vocalists
+     * @param string $label セットリスト項目の表示名
      *
      * @return self
      */
-    public function setCoVocalists($co_vocalists)
+    public function setLabel($label)
     {
-        if (is_null($co_vocalists)) {
-            throw new \InvalidArgumentException('non-nullable co_vocalists cannot be null');
+        if (is_null($label)) {
+            array_push($this->openAPINullablesSetToNull, 'label');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('label', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['co_vocalists'] = $co_vocalists;
+
+        if (!is_null($label) && (mb_strlen($label) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $label when calling RequestSetlistItem., must be bigger than or equal to 1.');
+        }
+
+        $this->container['label'] = $label;
+
+        return $this;
+    }
+
+    /**
+     * Gets performance_ids
+     *
+     * @return string[]
+     */
+    public function getPerformanceIds()
+    {
+        return $this->container['performance_ids'];
+    }
+
+    /**
+     * Sets performance_ids
+     *
+     * @param string[] $performance_ids performance_ids
+     *
+     * @return self
+     */
+    public function setPerformanceIds($performance_ids)
+    {
+        if (is_null($performance_ids)) {
+            throw new \InvalidArgumentException('non-nullable performance_ids cannot be null');
+        }
+        $this->container['performance_ids'] = $performance_ids;
 
         return $this;
     }

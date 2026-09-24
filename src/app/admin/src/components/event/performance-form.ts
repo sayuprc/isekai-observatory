@@ -1,4 +1,4 @@
-import type { SetlistItem, SongPerformance } from '../../generated';
+import type { RequestSetlistItem, RequestSongPerformance, SetlistItem, SongPerformance } from '../../generated';
 
 export type CoVocalistForm = {
   personId: string;
@@ -40,15 +40,13 @@ export const toSetlistItemForms = (setlist: SetlistItem[]): SetlistItemForm[] =>
     performanceIds: item.performances.map(performance => performance.performanceId),
   }));
 
-export const toPerformancesPayload = (performances: PerformanceForm[]): SongPerformance[] =>
+export const toPerformancesPayload = (performances: PerformanceForm[]): RequestSongPerformance[] =>
   performances.map((performance, index) => ({
     performanceId: performance.performanceId,
     songId: performance.songId,
-    songTitle: performance.songTitle,
     orderNo: index + 1,
     coVocalists: performance.coVocalists.map((person, personIndex) => ({
       personId: person.personId,
-      name: person.name,
       creditName: person.creditName.trim() === '' ? null : person.creditName.trim(),
       orderNo: personIndex + 1,
     })),
@@ -57,23 +55,14 @@ export const toPerformancesPayload = (performances: PerformanceForm[]): SongPerf
 export const toSetlistPayload = (
   setlist: SetlistItemForm[],
   performances: PerformanceForm[],
-): SetlistItem[] => {
-  const byId = new Map(performances.map(performance => [performance.performanceId, performance]));
-  const performancePayload = toPerformancesPayload(performances);
-  const payloadById = new Map(performancePayload.map(performance => [performance.performanceId, performance]));
+): RequestSetlistItem[] => {
+  const performanceIds = new Set(performances.map(performance => performance.performanceId));
 
   return setlist.map((item, index) => ({
     setlistItemId: item.setlistItemId,
     orderNo: index + 1,
     label: item.label.trim() === '' ? null : item.label.trim(),
-    performances: item.performanceIds.flatMap((performanceId) => {
-      if (!byId.has(performanceId)) {
-        return [];
-      }
-
-      const performance = payloadById.get(performanceId);
-      return performance ? [performance] : [];
-    }),
+    performanceIds: item.performanceIds.filter(performanceId => performanceIds.has(performanceId)),
   }));
 };
 

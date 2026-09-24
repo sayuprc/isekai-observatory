@@ -35,7 +35,7 @@ readonly class EventIntegrityService
      * @param list<string>                                                                                                                                    $mediaIds
      * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
      * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}>                                                  $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -74,7 +74,7 @@ readonly class EventIntegrityService
      * @param list<string>                                                                                                                                    $mediaIds
      * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
      * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}>                                                  $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -114,7 +114,7 @@ readonly class EventIntegrityService
      * @param list<string>                                                                                                                                    $mediaIds
      * @param list<array{displayName: string, url: string, orderNo: int}>                                                                                     $sources
      * @param list<array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}> $performances
-     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performances: list<array{performanceId: string}>}>                              $setlist
+     * @param list<array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}>                                                  $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -144,15 +144,7 @@ readonly class EventIntegrityService
             EventMediaLinks::fromArray($mediaIds),
             EventSources::fromArray($sources),
             SongPerformances::fromArray($performances),
-            Setlist::fromArray(array_map(
-                static fn (array $item): array => [
-                    'setlistItemId' => $item['setlistItemId'],
-                    'orderNo' => $item['orderNo'],
-                    'label' => $item['label'],
-                    'performanceIds' => array_column($item['performances'], 'performanceId'),
-                ],
-                $setlist,
-            )),
+            Setlist::fromArray($setlist),
         );
 
         $this->assertSetlistAllowed($event);

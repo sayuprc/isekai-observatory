@@ -3327,7 +3327,7 @@ components:
         venueIds:
           type: array
           items:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
         mediaIds:
           type: array
           items:
@@ -3339,11 +3339,11 @@ components:
         performances:
           type: array
           items:
-            $ref: '#/components/schemas/SongPerformance'
+            $ref: '#/components/schemas/RequestSongPerformance'
         setlist:
           type: array
           items:
-            $ref: '#/components/schemas/SetlistItem'
+            $ref: '#/components/schemas/RequestSetlistItem'
     EventCreateResponse:
       type: object
       required:
@@ -3461,7 +3461,7 @@ components:
         venueIds:
           type: array
           items:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
         mediaIds:
           type: array
           items:
@@ -3473,11 +3473,11 @@ components:
         performances:
           type: array
           items:
-            $ref: '#/components/schemas/SongPerformance'
+            $ref: '#/components/schemas/RequestSongPerformance'
         setlist:
           type: array
           items:
-            $ref: '#/components/schemas/SetlistItem'
+            $ref: '#/components/schemas/RequestSetlistItem'
     EventUpdateResponse:
       type: object
       required:
@@ -3744,7 +3744,7 @@ components:
             - type: 'null'
         orderNo:
           $ref: '#/components/schemas/orderNo'
-      description: イベントに紐づく楽曲披露
+      description: 楽曲披露の共演者
     Permission:
       type: object
       required:
@@ -4320,6 +4320,42 @@ components:
       properties:
         release:
           $ref: '#/components/schemas/Release'
+    RequestPerformancePerson:
+      type: object
+      required:
+        - personId
+        - creditName
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        creditName:
+          anyOf:
+            - $ref: '#/components/schemas/performanceCreditName'
+            - type: 'null'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: The template for picking properties.
+    RequestSetlistItem:
+      type: object
+      required:
+        - setlistItemId
+        - orderNo
+        - label
+        - performanceIds
+      properties:
+        setlistItemId:
+          $ref: '#/components/schemas/setlistItemId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        label:
+          anyOf:
+            - $ref: '#/components/schemas/setlistLabel'
+            - type: 'null'
+        performanceIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/performanceId'
     RequestSongMediaLink:
       type: object
       required:
@@ -4330,6 +4366,24 @@ components:
           $ref: '#/components/schemas/mediaId'
         orderNo:
           $ref: '#/components/schemas/orderNo'
+    RequestSongPerformance:
+      type: object
+      required:
+        - performanceId
+        - songId
+        - orderNo
+        - coVocalists
+      properties:
+        performanceId:
+          $ref: '#/components/schemas/performanceId'
+        songId:
+          $ref: '#/components/schemas/songId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        coVocalists:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestPerformancePerson'
     RequestSongPerson:
       type: object
       required:
@@ -4382,12 +4436,12 @@ components:
         - performances
       properties:
         setlistItemId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/setlistItemId'
         orderNo:
           $ref: '#/components/schemas/orderNo'
         label:
           anyOf:
-            - type: string
+            - $ref: '#/components/schemas/setlistLabel'
             - type: 'null'
         performances:
           type: array
@@ -4573,7 +4627,7 @@ components:
         - coVocalists
       properties:
         performanceId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/performanceId'
         songId:
           $ref: '#/components/schemas/songId'
         songTitle:
@@ -5051,6 +5105,10 @@ components:
       type: string
       minLength: 1
       description: 共演者としてのクレジット名
+    performanceId:
+      type: string
+      format: uuid
+      description: 楽曲披露ID
     permissionName:
       type: string
       minLength: 1
@@ -5102,6 +5160,14 @@ components:
       type: string
       minLength: 1
       description: 役割名
+    setlistItemId:
+      type: string
+      format: uuid
+      description: セットリスト項目ID
+    setlistLabel:
+      type: string
+      minLength: 1
+      description: セットリスト項目の表示名
     songId:
       type: string
       format: uuid
