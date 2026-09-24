@@ -18,7 +18,13 @@ interface EditableFormProps {
 
 type FetchState = { status: 'ok'; data: { event: Event } } | { status: 'forbidden' } | { status: 'error' };
 
-const getListUrl = () => '/events';
+// 一覧から渡された検索条件を引き継ぐ。パスは固定し、クエリだけを採用する
+const getListUrl = () => {
+  const back = new URLSearchParams(window.location.search).get('back') ?? '';
+  if (!back.startsWith('?')) return '/events';
+  const query = new URLSearchParams(back.slice(1)).toString();
+  return query ? `/events?${query}` : '/events';
+};
 
 export const DetailView = (props: DetailViewProps) => {
   const listUrl = getListUrl();
