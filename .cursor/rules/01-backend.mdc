@@ -32,9 +32,6 @@ globs: "src/app/server/**"
   - 一度 VO になった値は primitive に戻さず VO のまま流す。境界の検証は一度きり
 - API 契約が変わる変更は `src/app/contracts` を起点に考える
 - `src/app/server/Generated/` は手動編集しない
-- `@phpstan-type` の型エイリアス名は `_` 始まりの lowerCamelCase (`_lowerCamel`) にする。例: `@phpstan-type _songMedia array{mediaId: string, orderNo: int}`
-  - クラス名や組み込み型と見分けられ、名前の衝突も避けられる
-  - PHPStan のカスタムルール `Tools\PHPStan\Rules\TypeAliasNamingRule` が検査する (`typeAlias.naming`)
 
 ## テスト
 
