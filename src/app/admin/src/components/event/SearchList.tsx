@@ -23,11 +23,13 @@ const SORT_OPTIONS: Array<{ value: EventSearchSortBy; label: string }> = [
 
 type TypeFilter = '' | `${EventTypeValue}`;
 type StatusFilter = '' | `${EventStatusValue}`;
+type DisplayFilter = '' | 'true' | 'false';
 
 type SearchParams = {
   title: string;
   type: TypeFilter;
   status: StatusFilter;
+  isDisplay: DisplayFilter;
   sort: EventSearchSortBy;
   order: SortOrder;
   page: number;
@@ -38,6 +40,7 @@ const DEFAULT_PARAMS: SearchParams = {
   title: '',
   type: '',
   status: '',
+  isDisplay: '',
   sort: 'schedule',
   order: 'asc',
   page: 1,
@@ -54,6 +57,7 @@ const getInitialParams = (): SearchParams => {
     title: query.get('title') ?? '',
     type: pick(query.get('type'), EVENT_TYPE_OPTIONS.map(option => `${option.value}` as const), ''),
     status: pick(query.get('status'), EVENT_STATUS_OPTIONS.map(option => `${option.value}` as const), ''),
+    isDisplay: pick(query.get('is_display'), ['true', 'false'] as const, ''),
     sort: pick(query.get('sort'), SORT_OPTIONS.map(option => option.value), DEFAULT_PARAMS.sort),
     order: pick(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
     page: Math.max(1, Number(query.get('page')) || 1),
@@ -66,6 +70,7 @@ const updateUrl = (params: SearchParams) => {
   if (params.title) query.set('title', params.title);
   if (params.type) query.set('type', params.type);
   if (params.status) query.set('status', params.status);
+  if (params.isDisplay) query.set('is_display', params.isDisplay);
   query.set('sort', params.sort);
   query.set('order', params.order);
   query.set('page', String(params.page));
@@ -94,6 +99,7 @@ export const SearchList = () => {
         title: current.title || undefined,
         type: current.type,
         status: current.status,
+        is_display: current.isDisplay === '' ? undefined : current.isDisplay === 'true',
         sort: current.sort,
         order: current.order,
         page: current.page,
@@ -166,6 +172,19 @@ export const SearchList = () => {
           </select>
         </fieldset>
         <fieldset class="fieldset">
+          <label class="fieldset-label" for="event-is-display">表示設定</label>
+          <select
+            id="event-is-display"
+            class="select select-bordered select-sm"
+            value={input().isDisplay}
+            onChange={e => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
+          >
+            <option value="">すべて</option>
+            <option value="true">表示する</option>
+            <option value="false">表示しない</option>
+          </select>
+        </fieldset>
+        <fieldset class="fieldset">
           <label class="fieldset-label" for="event-sort">ソート項目</label>
           <select
             id="event-sort"
@@ -213,18 +232,19 @@ export const SearchList = () => {
               <th>種別</th>
               <th>開催時期</th>
               <th>状態</th>
+              <th>表示設定</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={4} />
+                <ListState state="loading" colSpan={5} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
+                {message => <ListState state="error" colSpan={5} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.events.length === 0}>
-                <ListState state="empty" colSpan={4} />
+                <ListState state="empty" colSpan={5} />
               </Match>
               <Match when={data()}>
                 {result => (
@@ -242,6 +262,13 @@ export const SearchList = () => {
                         <td>{event.type.name}</td>
                         <td>{formatSchedule(event.schedule)}</td>
                         <td>{event.status.name}</td>
+                        <td>
+                          <span
+                            class={`badge badge-sm ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
+                          >
+                            {event.isDisplay ? '表示する' : '表示しない'}
+                          </span>
+                        </td>
                       </tr>
                     )}
                   </For>

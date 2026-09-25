@@ -21,8 +21,11 @@ const AuditTargetTypeSchema = t.Union([
   t.Literal('Media'),
   t.Literal('Person'),
   t.Literal('Release'),
+  t.Literal('ReleaseGroup'),
   t.Literal('Song'),
   t.Literal('SongTag'),
+  t.Literal('Venue'),
+  t.Literal('Event'),
 ]);
 
 export const auditLogs = new Elysia({ prefix: '/audit-logs' })
