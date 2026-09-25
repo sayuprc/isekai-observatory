@@ -12,12 +12,12 @@ use Support\Domain\ValueObjects\OrderNo;
 /**
  * @extends ImmutableCollection<int, SetlistItem>
  *
- * @phpstan-type SetlistItemInput array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}
+ * @phpstan-type _setlistItemInput array{setlistItemId: string, orderNo: int, label: ?string, performanceIds: list<string>}
  */
 readonly class Setlist extends ImmutableCollection
 {
     /**
-     * @param list<SetlistItemInput> $items
+     * @param list<_setlistItemInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -46,7 +46,7 @@ readonly class Setlist extends ImmutableCollection
     }
 
     /**
-     * @param list<SetlistItemInput> $items
+     * @param list<_setlistItemInput> $items
      */
     public static function reconstruct(array $items): self
     {

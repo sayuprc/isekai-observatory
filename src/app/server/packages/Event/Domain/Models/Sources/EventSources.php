@@ -11,12 +11,12 @@ use Support\Domain\ValueObjects\OrderNo;
 /**
  * @extends ImmutableCollection<int, EventSource>
  *
- * @phpstan-type EventSourceInput array{displayName: string, url: string, orderNo: int}
+ * @phpstan-type _eventSourceInput array{displayName: string, url: string, orderNo: int}
  */
 readonly class EventSources extends ImmutableCollection
 {
     /**
-     * @param list<EventSourceInput> $items
+     * @param list<_eventSourceInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -34,7 +34,7 @@ readonly class EventSources extends ImmutableCollection
     }
 
     /**
-     * @param list<EventSourceInput> $items
+     * @param list<_eventSourceInput> $items
      */
     public static function reconstruct(array $items): self
     {

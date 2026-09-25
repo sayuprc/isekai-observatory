@@ -62,18 +62,18 @@ use Venue\Domain\Models\VenueKind;
 use Venue\Domain\Models\VenueName;
 
 /**
- * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
- * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
- * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ * @phpstan-import-type _songPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type _setlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type _eventSourceInput from \Event\Domain\Models\Sources\EventSources
  */
 trait EntityFactory
 {
     /**
      * @param list<array{venueId: string, orderNo: int}> $venues
      * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<EventSourceInput>                     $sources
-     * @param list<SongPerformanceInput>                 $performances
-     * @param list<SetlistItemInput>                     $setlist
+     * @param list<_eventSourceInput>                    $sources
+     * @param list<_songPerformanceInput>                $performances
+     * @param list<_setlistItemInput>                    $setlist
      */
     protected function createEvent(
         string $eventId,
