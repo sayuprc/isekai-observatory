@@ -1,6 +1,7 @@
 import { Index, Show } from 'solid-js';
 import { createSortable, reorderItems } from '../sortable';
 import type { SourceForm } from './event-links';
+import { ListItemActions } from './ListItemActions';
 
 interface SourceEditorProps {
   sources: SourceForm[];
@@ -8,9 +9,10 @@ interface SourceEditorProps {
 }
 
 export const SourceEditor = (props: SourceEditorProps) => {
-  const sortable = createSortable((_scope, fromIndex, toIndex) => {
+  const moveItem = (fromIndex: number, toIndex: number) => {
     props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
-  });
+  };
+  const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
   const update = (index: number, patch: Partial<SourceForm>) => {
     props.onChange(prev => prev.map((source, i) => (i === index ? { ...source, ...patch } : source)));
@@ -60,33 +62,13 @@ export const SourceEditor = (props: SourceEditorProps) => {
                       onInput={e => update(index, { url: e.currentTarget.value })}
                     />
                   </div>
-                  <div class="flex gap-2">
-                    <button
-                      type="button"
-                      class="btn btn-ghost btn-xs"
-                      aria-label={`出典${index + 1}を上へ移動`}
-                      disabled={index === 0}
-                      onClick={() => props.onChange(prev => reorderItems(prev, index, index - 1))}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-ghost btn-xs"
-                      aria-label={`出典${index + 1}を下へ移動`}
-                      disabled={index === props.sources.length - 1}
-                      onClick={() => props.onChange(prev => reorderItems(prev, index, index + 1))}
-                    >
-                      ↓
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline btn-error btn-xs"
-                      onClick={() => props.onChange(prev => prev.filter((_, i) => i !== index))}
-                    >
-                      削除
-                    </button>
-                  </div>
+                  <ListItemActions
+                    label={`出典${index + 1}`}
+                    index={index}
+                    length={props.sources.length}
+                    onMove={moveItem}
+                    onRemove={() => props.onChange(prev => prev.filter((_, i) => i !== index))}
+                  />
                 </div>
               </li>
             )}

@@ -59,7 +59,7 @@ class ListEventTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $eventId)
-            ->assertJsonPath('events.0.statusValue', 1)
+            ->assertJsonPath('events.0.status.value', 1)
             ->assertJsonPath('events.0.venues.0.name', '会場')
             ->assertJsonPath('events.0.media.0.mediaId', $visibleMediaId)
             ->assertJsonCount(1, 'events.0.media')

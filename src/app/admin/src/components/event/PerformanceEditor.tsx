@@ -1,9 +1,10 @@
 import { Index, Show, createSignal } from 'solid-js';
 import type { Person, SongSummary } from '../../generated';
 import { client } from '../../utils/client';
+import { createKeywordSearch } from '../keyword-search';
+import { KeywordSearchPanel } from '../KeywordSearchPanel';
 import { createSortable, reorderItems } from '../sortable';
-import { createKeywordSearch } from './keyword-search';
-import { KeywordSearchPanel } from './KeywordSearchPanel';
+import { ListItemActions } from './ListItemActions';
 import {
   addCoVocalist,
   addPerformance,
@@ -21,9 +22,10 @@ interface PerformanceEditorProps {
 const SEARCH_PER_PAGE = 25;
 
 export const PerformanceEditor = (props: PerformanceEditorProps) => {
-  const sortable = createSortable((_scope, fromIndex, toIndex) => {
+  const moveItem = (fromIndex: number, toIndex: number) => {
     props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
-  });
+  };
+  const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
   const [personTargetIndex, setPersonTargetIndex] = createSignal(0);
 
   const songSearch = createKeywordSearch<SongSummary>({
@@ -84,31 +86,13 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
                       {performance().songTitle}
                     </a>
                   </div>
-                  <div class="flex gap-2">
-                    <button
-                      type="button"
-                      class="btn btn-ghost btn-xs"
-                      disabled={index === 0}
-                      onClick={() => props.onChange(prev => reorderItems(prev, index, index - 1))}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-ghost btn-xs"
-                      disabled={index === props.performances.length - 1}
-                      onClick={() => props.onChange(prev => reorderItems(prev, index, index + 1))}
-                    >
-                      ↓
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline btn-error btn-xs"
-                      onClick={() => removePerformance(index)}
-                    >
-                      削除
-                    </button>
-                  </div>
+                  <ListItemActions
+                    label={`楽曲披露${index + 1}`}
+                    index={index}
+                    length={props.performances.length}
+                    onMove={moveItem}
+                    onRemove={() => removePerformance(index)}
+                  />
                 </div>
 
                 <div class="mt-3 space-y-2">

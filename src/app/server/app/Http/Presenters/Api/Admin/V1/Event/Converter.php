@@ -13,10 +13,14 @@ use Event\Application\Admin\Assemble\AssembledSetlistItem;
 use Event\Application\Admin\Assemble\AssembledSource;
 use Event\Application\Admin\Assemble\AssembledVenue;
 use Event\Application\Admin\Query\EventSummary;
+use Event\Domain\Models\EventStatus;
+use Event\Domain\Models\EventType;
 use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Admin\Client\Model\EventSource as OpenApiEventSource;
+use OpenAPI\Admin\Client\Model\EventStatus as OpenApiEventStatus;
 use OpenAPI\Admin\Client\Model\EventStatusValue;
 use OpenAPI\Admin\Client\Model\EventSummary as OpenApiEventSummary;
+use OpenAPI\Admin\Client\Model\EventType as OpenApiEventType;
 use OpenAPI\Admin\Client\Model\EventTypeValue;
 use OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as OpenApiEventSchedule;
 use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
@@ -36,9 +40,9 @@ class Converter
         return new OpenApiEventSummary()
             ->setEventId($event->eventId)
             ->setTitle($event->title)
-            ->setTypeValue(EventTypeValue::from($event->typeValue))
+            ->setType($this->toOpenApiType($event->type))
             ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
-            ->setStatusValue(EventStatusValue::from($event->statusValue))
+            ->setStatus($this->toOpenApiStatus($event->status))
             ->setIsDisplay($event->isDisplay);
     }
 
@@ -48,15 +52,29 @@ class Converter
             ->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
-            ->setTypeValue(EventTypeValue::from($event->typeValue))
+            ->setType($this->toOpenApiType($event->type))
             ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
-            ->setStatusValue(EventStatusValue::from($event->statusValue))
+            ->setStatus($this->toOpenApiStatus($event->status))
             ->setIsDisplay($event->isDisplay)
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
             ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
             ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
+    }
+
+    private function toOpenApiType(EventType $type): OpenApiEventType
+    {
+        return new OpenApiEventType()
+            ->setName($type->getName())
+            ->setValue(EventTypeValue::from($type->value));
+    }
+
+    private function toOpenApiStatus(EventStatus $status): OpenApiEventStatus
+    {
+        return new OpenApiEventStatus()
+            ->setName($status->getName())
+            ->setValue(EventStatusValue::from($status->value));
     }
 
     private function toOpenApiSchedule(?string $startOn, ?string $endOn): OpenApiEventSchedule

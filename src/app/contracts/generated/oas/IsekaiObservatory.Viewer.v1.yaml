@@ -201,9 +201,9 @@ components:
         - eventId
         - title
         - description
-        - typeValue
+        - type
         - schedule
-        - statusValue
+        - status
         - venues
         - media
         - sources
@@ -216,12 +216,12 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
-        typeValue:
-          $ref: '#/components/schemas/EventTypeValue'
+        type:
+          $ref: '#/components/schemas/EventType'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
-        statusValue:
-          $ref: '#/components/schemas/EventStatusValue'
+        status:
+          $ref: '#/components/schemas/EventStatus'
         venues:
           type: array
           items:
@@ -285,6 +285,19 @@ components:
           $ref: '#/components/schemas/eventSourceUrl'
         orderNo:
           $ref: '#/components/schemas/orderNo'
+    EventStatus:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          $ref: '#/components/schemas/eventStatusName'
+        value:
+          $ref: '#/components/schemas/EventStatusValue'
+      examples:
+        - name: 通常
+          value: 1
     EventStatusValue:
       type: integer
       format: int32
@@ -293,6 +306,19 @@ components:
         - 2
         - 3
       description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+    EventType:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          $ref: '#/components/schemas/eventTypeName'
+        value:
+          $ref: '#/components/schemas/EventTypeValue'
+      examples:
+        - name: ライブ
+          value: 1
     EventTypeValue:
       type: integer
       format: int32
@@ -981,10 +1007,18 @@ components:
       type: string
       format: uri
       description: イベントの出典URL
+    eventStatusName:
+      type: string
+      minLength: 1
+      description: イベントの開催状態名
     eventTitle:
       type: string
       minLength: 1
       description: イベントタイトル
+    eventTypeName:
+      type: string
+      minLength: 1
+      description: イベント種別名
     limit:
       type: integer
       format: int32

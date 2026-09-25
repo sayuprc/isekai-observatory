@@ -27,8 +27,8 @@ model EventCreateRequest {
   schedule: EventSchedule;
   statusValue: EventStatusValue;
   isDisplay: boolean;
-  venueIds: venueId[];
-  mediaIds: mediaId[];
+  venues: RequestEventVenueLink[];
+  media: RequestEventMediaLink[];
   sources: EventSource[];
   performances: RequestSongPerformance[];
   setlist: RequestSetlistItem[];
@@ -45,8 +45,8 @@ model EventUpdateRequest {
   schedule: EventSchedule;
   statusValue: EventStatusValue;
   isDisplay: boolean;
-  venueIds: venueId[];
-  mediaIds: mediaId[];
+  venues: RequestEventVenueLink[];
+  media: RequestEventMediaLink[];
   sources: EventSource[];
   performances: RequestSongPerformance[];
   setlist: RequestSetlistItem[];
@@ -54,6 +54,16 @@ model EventUpdateRequest {
 
 model EventUpdateResponse {
   event: Event;
+}
+
+model RequestEventVenueLink {
+  venueId: venueId;
+  orderNo: orderNo;
+}
+
+model RequestEventMediaLink {
+  mediaId: mediaId;
+  orderNo: orderNo;
 }
 
 model RequestPerformancePerson is PickProperties<PerformancePerson, "personId" | "creditName" | "orderNo">;

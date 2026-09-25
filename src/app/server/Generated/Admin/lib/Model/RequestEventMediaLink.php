@@ -1,6 +1,6 @@
 <?php
 /**
- * EventSummary
+ * RequestEventMediaLink
  *
  * PHP version 8.1
  *
@@ -32,16 +32,15 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * EventSummary Class Doc Comment
+ * RequestEventMediaLink Class Doc Comment
  *
  * @category Class
- * @description イベント一覧の 1 行分
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
+class RequestEventMediaLink implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'EventSummary';
+    protected static $openAPIModelName = 'RequestEventMediaLink';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,12 +57,8 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'event_id' => 'string',
-        'title' => 'string',
-        'type' => '\OpenAPI\Admin\Client\Model\EventType',
-        'schedule' => '\OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
-        'status' => '\OpenAPI\Admin\Client\Model\EventStatus',
-        'is_display' => 'bool'
+        'media_id' => 'string',
+        'order_no' => 'int'
     ];
 
     /**
@@ -74,12 +69,8 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'event_id' => 'uuid',
-        'title' => null,
-        'type' => null,
-        'schedule' => null,
-        'status' => null,
-        'is_display' => null
+        'media_id' => 'uuid',
+        'order_no' => 'int32'
     ];
 
     /**
@@ -88,12 +79,8 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'event_id' => false,
-        'title' => false,
-        'type' => false,
-        'schedule' => false,
-        'status' => false,
-        'is_display' => false
+        'media_id' => false,
+        'order_no' => false
     ];
 
     /**
@@ -182,12 +169,8 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'event_id' => 'eventId',
-        'title' => 'title',
-        'type' => 'type',
-        'schedule' => 'schedule',
-        'status' => 'status',
-        'is_display' => 'isDisplay'
+        'media_id' => 'mediaId',
+        'order_no' => 'orderNo'
     ];
 
     /**
@@ -196,12 +179,8 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'event_id' => 'setEventId',
-        'title' => 'setTitle',
-        'type' => 'setType',
-        'schedule' => 'setSchedule',
-        'status' => 'setStatus',
-        'is_display' => 'setIsDisplay'
+        'media_id' => 'setMediaId',
+        'order_no' => 'setOrderNo'
     ];
 
     /**
@@ -210,12 +189,8 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'event_id' => 'getEventId',
-        'title' => 'getTitle',
-        'type' => 'getType',
-        'schedule' => 'getSchedule',
-        'status' => 'getStatus',
-        'is_display' => 'getIsDisplay'
+        'media_id' => 'getMediaId',
+        'order_no' => 'getOrderNo'
     ];
 
     /**
@@ -275,12 +250,8 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('event_id', $data ?? [], null);
-        $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('schedule', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('is_display', $data ?? [], null);
+        $this->setIfExists('media_id', $data ?? [], null);
+        $this->setIfExists('order_no', $data ?? [], null);
     }
 
     /**
@@ -310,28 +281,16 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['event_id'] === null) {
-            $invalidProperties[] = "'event_id' can't be null";
+        if ($this->container['media_id'] === null) {
+            $invalidProperties[] = "'media_id' can't be null";
         }
-        if ($this->container['title'] === null) {
-            $invalidProperties[] = "'title' can't be null";
+        if ($this->container['order_no'] === null) {
+            $invalidProperties[] = "'order_no' can't be null";
         }
-        if ((mb_strlen($this->container['title']) < 1)) {
-            $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
+        if (($this->container['order_no'] < 1)) {
+            $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
-        }
-        if ($this->container['schedule'] === null) {
-            $invalidProperties[] = "'schedule' can't be null";
-        }
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
-        }
-        if ($this->container['is_display'] === null) {
-            $invalidProperties[] = "'is_display' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -348,168 +307,60 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets event_id
+     * Gets media_id
      *
      * @return string
      */
-    public function getEventId()
+    public function getMediaId()
     {
-        return $this->container['event_id'];
+        return $this->container['media_id'];
     }
 
     /**
-     * Sets event_id
+     * Sets media_id
      *
-     * @param string $event_id イベントID
+     * @param string $media_id メディアID
      *
      * @return self
      */
-    public function setEventId($event_id)
+    public function setMediaId($media_id)
     {
-        if (is_null($event_id)) {
-            throw new \InvalidArgumentException('non-nullable event_id cannot be null');
+        if (is_null($media_id)) {
+            throw new \InvalidArgumentException('non-nullable media_id cannot be null');
         }
-        $this->container['event_id'] = $event_id;
+        $this->container['media_id'] = $media_id;
 
         return $this;
     }
 
     /**
-     * Gets title
+     * Gets order_no
      *
-     * @return string
+     * @return int
      */
-    public function getTitle()
+    public function getOrderNo()
     {
-        return $this->container['title'];
+        return $this->container['order_no'];
     }
 
     /**
-     * Sets title
+     * Sets order_no
      *
-     * @param string $title イベントタイトル
+     * @param int $order_no 表示順
      *
      * @return self
      */
-    public function setTitle($title)
+    public function setOrderNo($order_no)
     {
-        if (is_null($title)) {
-            throw new \InvalidArgumentException('non-nullable title cannot be null');
+        if (is_null($order_no)) {
+            throw new \InvalidArgumentException('non-nullable order_no cannot be null');
         }
 
-        if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling EventSummary., must be bigger than or equal to 1.');
+        if (($order_no < 1)) {
+            throw new \InvalidArgumentException('invalid value for $order_no when calling RequestEventMediaLink., must be bigger than or equal to 1.');
         }
 
-        $this->container['title'] = $title;
-
-        return $this;
-    }
-
-    /**
-     * Gets type
-     *
-     * @return \OpenAPI\Admin\Client\Model\EventType
-     */
-    public function getType()
-    {
-        return $this->container['type'];
-    }
-
-    /**
-     * Sets type
-     *
-     * @param \OpenAPI\Admin\Client\Model\EventType $type type
-     *
-     * @return self
-     */
-    public function setType($type)
-    {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
-        }
-        $this->container['type'] = $type;
-
-        return $this;
-    }
-
-    /**
-     * Gets schedule
-     *
-     * @return \OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule
-     */
-    public function getSchedule()
-    {
-        return $this->container['schedule'];
-    }
-
-    /**
-     * Sets schedule
-     *
-     * @param \OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule $schedule schedule
-     *
-     * @return self
-     */
-    public function setSchedule($schedule)
-    {
-        if (is_null($schedule)) {
-            throw new \InvalidArgumentException('non-nullable schedule cannot be null');
-        }
-        $this->container['schedule'] = $schedule;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
-     *
-     * @return \OpenAPI\Admin\Client\Model\EventStatus
-     */
-    public function getStatus()
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param \OpenAPI\Admin\Client\Model\EventStatus $status status
-     *
-     * @return self
-     */
-    public function setStatus($status)
-    {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets is_display
-     *
-     * @return bool
-     */
-    public function getIsDisplay()
-    {
-        return $this->container['is_display'];
-    }
-
-    /**
-     * Sets is_display
-     *
-     * @param bool $is_display is_display
-     *
-     * @return self
-     */
-    public function setIsDisplay($is_display)
-    {
-        if (is_null($is_display)) {
-            throw new \InvalidArgumentException('non-nullable is_display cannot be null');
-        }
-        $this->container['is_display'] = $is_display;
+        $this->container['order_no'] = $order_no;
 
         return $this;
     }

@@ -1,5 +1,6 @@
 import { For, Index, Show } from 'solid-js';
 import { createSortable, reorderItems } from '../sortable';
+import { ListItemActions } from './ListItemActions';
 import { newId, type PerformanceForm, type SetlistItemForm } from './performance-form';
 
 interface SetlistEditorProps {
@@ -10,9 +11,10 @@ interface SetlistEditorProps {
 }
 
 export const SetlistEditor = (props: SetlistEditorProps) => {
-  const sortable = createSortable((_scope, fromIndex, toIndex) => {
+  const moveItem = (fromIndex: number, toIndex: number) => {
     props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
-  });
+  };
+  const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
   const referencedIds = () => new Set(props.setlist.flatMap(item => item.performanceIds));
 
@@ -89,27 +91,13 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
                       />
                     </div>
                   </div>
-                  <div class="flex gap-2">
-                    <button
-                      type="button"
-                      class="btn btn-ghost btn-xs"
-                      disabled={index === 0}
-                      onClick={() => props.onChange(prev => reorderItems(prev, index, index - 1))}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-ghost btn-xs"
-                      disabled={index === props.setlist.length - 1}
-                      onClick={() => props.onChange(prev => reorderItems(prev, index, index + 1))}
-                    >
-                      ↓
-                    </button>
-                    <button type="button" class="btn btn-outline btn-error btn-xs" onClick={() => removeItem(index)}>
-                      削除
-                    </button>
-                  </div>
+                  <ListItemActions
+                    label={`セットリスト${index + 1}`}
+                    index={index}
+                    length={props.setlist.length}
+                    onMove={moveItem}
+                    onRemove={() => removeItem(index)}
+                  />
                 </div>
 
                 <div class="mt-3">

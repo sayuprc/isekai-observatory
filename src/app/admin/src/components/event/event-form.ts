@@ -28,8 +28,8 @@ export const createEventForm = (event?: Event) => {
   const [description, setDescription] = createSignal(event?.description ?? '');
   const [startOn, setStartOn] = createSignal(normalizeDateValue(event?.schedule.startOn));
   const [endOn, setEndOn] = createSignal(normalizeDateValue(event?.schedule.endOn));
-  const [typeValue, setTypeValue] = createSignal<EventTypeValue>(event?.typeValue ?? 1);
-  const [statusValue, setStatusValue] = createSignal<EventStatusValue>(event?.statusValue ?? 1);
+  const [typeValue, setTypeValue] = createSignal<EventTypeValue>(event?.type.value ?? 1);
+  const [statusValue, setStatusValue] = createSignal<EventStatusValue>(event?.status.value ?? 1);
   const [isDisplay, setIsDisplay] = createSignal(event?.isDisplay ?? true);
   const [performances, setPerformances] = createSignal<PerformanceForm[]>(
     toPerformanceForms(event?.performances ?? []),
@@ -72,18 +72,6 @@ export const createEventForm = (event?: Event) => {
       })));
   };
 
-  const updateSetlist = (updater: (prev: SetlistItemForm[]) => SetlistItemForm[]) => {
-    setSetlist(updater);
-  };
-
-  const updateVenues = (updater: (prev: VenueEntry[]) => VenueEntry[]) => {
-    setVenues(updater);
-  };
-
-  const updateSources = (updater: (prev: SourceForm[]) => SourceForm[]) => {
-    setSources(updater);
-  };
-
   const validate = (): string | null => validateSetlistItems(setlist()) ?? validateSources(sources());
 
   const toRequestBody = (): EventRequestBody => ({
@@ -96,8 +84,8 @@ export const createEventForm = (event?: Event) => {
     },
     statusValue: statusValue(),
     isDisplay: isDisplay(),
-    venueIds: venues().map(venue => venue.venueId),
-    mediaIds: mediaEntries().map(media => media.mediaId),
+    venues: venues().map((venue, index) => ({ venueId: venue.venueId, orderNo: index + 1 })),
+    media: mediaEntries().map((media, index) => ({ mediaId: media.mediaId, orderNo: index + 1 })),
     sources: toSourcesPayload(sources()),
     performances: toPerformancesPayload(performances()),
     setlist: toSetlistPayload(setlist(), performances()),
@@ -121,15 +109,15 @@ export const createEventForm = (event?: Event) => {
     performances,
     updatePerformances,
     setlist,
-    updateSetlist,
+    setSetlist,
     venues,
-    updateVenues,
+    setVenues,
     mediaEntries,
     setMediaEntries,
     availableMedia,
     setAvailableMedia,
     sources,
-    updateSources,
+    setSources,
     canEditPerformances,
     canEditSetlist,
     validate,

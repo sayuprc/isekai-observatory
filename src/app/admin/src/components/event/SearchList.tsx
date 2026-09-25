@@ -4,7 +4,7 @@ import { client } from '../../utils/client';
 import { normalizeDateValue } from '../../utils/date';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
-import { EVENT_STATUS_LABELS, EVENT_STATUS_OPTIONS, EVENT_TYPE_LABELS, EVENT_TYPE_OPTIONS } from './event-options';
+import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
 
 const formatSchedule = (schedule: { startOn: string | null; endOn: string | null }): string => {
   if (!schedule.startOn) {
@@ -239,9 +239,9 @@ export const SearchList = () => {
                             {event.title}
                           </a>
                         </td>
-                        <td>{EVENT_TYPE_LABELS[event.typeValue]}</td>
+                        <td>{event.type.name}</td>
                         <td>{formatSchedule(event.schedule)}</td>
-                        <td>{EVENT_STATUS_LABELS[event.statusValue]}</td>
+                        <td>{event.status.name}</td>
                       </tr>
                     )}
                   </For>

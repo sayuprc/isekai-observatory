@@ -52,10 +52,10 @@ class EventAssembler
             $event->eventId->value,
             $event->title->value,
             $event->description->value,
-            $event->type->value,
+            $event->type,
             $event->schedule->startOn?->format('Y-m-d'),
             $event->schedule->endOn?->format('Y-m-d'),
-            $event->status->value,
+            $event->status,
             $event->isDisplay,
             $event->venues->toGeneric()->map(
                 fn (EventVenueLink $link): AssembledVenue => $this->toAssembledVenue($venueMap[$link->venueId->value] ?? null),

@@ -1,10 +1,11 @@
 import { Index, Show } from 'solid-js';
 import type { Venue } from '../../generated';
 import { client } from '../../utils/client';
+import { createKeywordSearch } from '../keyword-search';
+import { KeywordSearchPanel } from '../KeywordSearchPanel';
 import { createSortable, reorderItems } from '../sortable';
 import { addVenue, type VenueEntry } from './event-links';
-import { createKeywordSearch } from './keyword-search';
-import { KeywordSearchPanel } from './KeywordSearchPanel';
+import { ListItemActions } from './ListItemActions';
 
 interface VenueEditorProps {
   venues: VenueEntry[];
@@ -12,9 +13,10 @@ interface VenueEditorProps {
 }
 
 export const VenueEditor = (props: VenueEditorProps) => {
-  const sortable = createSortable((_scope, fromIndex, toIndex) => {
+  const moveItem = (fromIndex: number, toIndex: number) => {
     props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
-  });
+  };
+  const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
   const venueSearch = createKeywordSearch<Venue>({
     emptyKeywordMessage: '開催先名を入力してください',
@@ -52,33 +54,13 @@ export const VenueEditor = (props: VenueEditorProps) => {
                   <span class="truncate font-medium">{venue().name}</span>
                   <span class="badge badge-ghost badge-sm">{venue().kindName}</span>
                 </div>
-                <div class="flex gap-2">
-                  <button
-                    type="button"
-                    class="btn btn-ghost btn-xs"
-                    aria-label={`${venue().name}を上へ移動`}
-                    disabled={index === 0}
-                    onClick={() => props.onChange(prev => reorderItems(prev, index, index - 1))}
-                  >
-                    ↑
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-ghost btn-xs"
-                    aria-label={`${venue().name}を下へ移動`}
-                    disabled={index === props.venues.length - 1}
-                    onClick={() => props.onChange(prev => reorderItems(prev, index, index + 1))}
-                  >
-                    ↓
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline btn-error btn-xs"
-                    onClick={() => props.onChange(prev => prev.filter((_, i) => i !== index))}
-                  >
-                    削除
-                  </button>
-                </div>
+                <ListItemActions
+                  label={venue().name}
+                  index={index}
+                  length={props.venues.length}
+                  onMove={moveItem}
+                  onRemove={() => props.onChange(prev => prev.filter((_, i) => i !== index))}
+                />
               </li>
             )}
           </Index>

@@ -96,7 +96,7 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
       </div>
     </fieldset>
 
-    <VenueEditor venues={props.form.venues()} onChange={props.form.updateVenues} />
+    <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
 
     <PerformanceEditor
       performances={props.form.performances()}
@@ -107,7 +107,7 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
       <SetlistEditor
         setlist={props.form.setlist()}
         performances={props.form.performances()}
-        onChange={props.form.updateSetlist}
+        onChange={props.form.setSetlist}
         disabled={!props.form.canEditPerformances()}
       />
     </Show>
@@ -118,6 +118,6 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
       availableMedia={props.form.availableMedia}
       setAvailableMedia={props.form.setAvailableMedia}
     />
-    <SourceEditor sources={props.form.sources()} onChange={props.form.updateSources} />
+    <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
   </>
 );

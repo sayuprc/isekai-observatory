@@ -37,7 +37,7 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
         $criteria = new EventSearchCriteria(new None(), new Some(EventType::Live), new Some(EventStatus::Normal), new Some(true));
 
         $this->assertEquals(
-            [new EventSummary($eventId, 'テストライブ', EventType::Live->value, '2026-10-01', '2026-10-02', EventStatus::Normal->value, true)],
+            [new EventSummary($eventId, 'テストライブ', EventType::Live, '2026-10-01', '2026-10-02', EventStatus::Normal, true)],
             $this->getInstance()->search($criteria),
         );
         $this->assertSame(1, $this->getInstance()->maxPage($criteria));

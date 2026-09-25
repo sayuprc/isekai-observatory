@@ -1,6 +1,6 @@
 ---
 import type { Event } from '../../features/events/types';
-import { eventDateColumn, eventStatusName, eventTypeName } from '../../features/events/types';
+import { eventDateColumn, eventStatusName } from '../../features/events/types';
 
 interface Props {
   event: Event;
@@ -9,7 +9,7 @@ interface Props {
 
 const { event, withYear = false } = Astro.props;
 const date = eventDateColumn(event, withYear);
-const statusName = eventStatusName(event.statusValue);
+const statusName = eventStatusName(event.status);
 const venueNames = event.venues.map(venue => venue.name).join(' / ');
 ---
 
@@ -22,7 +22,7 @@ const venueNames = event.venues.map(venue => venue.name).join(' / ');
     <span class="event-line-date-main">{date?.main ?? '— —'}</span>
     {date && <span class="event-line-date-sub">{date.sub}</span>}
   </span>
-  <span class="event-line-type">{eventTypeName(event.typeValue)}</span>
+  <span class="event-line-type">{event.type.name}</span>
   <span class="event-line-body">
     <span class="event-line-title">
       {event.title}{statusName && <span class="event-line-status">{statusName}</span>}
