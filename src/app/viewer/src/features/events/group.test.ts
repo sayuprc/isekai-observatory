@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { groupEvents, upcomingEvents } from './group';
-import { eventDateColumn, type Event } from './types';
+import { eventDateColumn, eventDetailDate, type Event } from './types';
 
 const event = (title: string, startOn: string | null, endOn: string | null = null): Event => ({
   eventId: title,
@@ -73,5 +73,19 @@ describe('イベントの日付表示', () => {
       main: '2024.08.07',
       sub: '– 08.09',
     });
+  });
+});
+
+describe('イベント詳細の開催時期', () => {
+  it('単日は年月日と曜日を出す', () => {
+    expect(eventDetailDate(event('単日', '2024-08-07'))).toBe('2024.08.07 (水)');
+  });
+
+  it('期間は開始日と終了日をつなぐ', () => {
+    expect(eventDetailDate(event('期間', '2026-10-10', '2026-10-16'))).toBe('2026.10.10 (土) 〜 2026.10.16 (金)');
+  });
+
+  it('日付未定は値を持たない', () => {
+    expect(eventDetailDate(event('未定', null))).toBeNull();
   });
 });
