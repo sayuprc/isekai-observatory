@@ -300,6 +300,7 @@ components:
         - 1
         - 2
         - 3
+        - 4
         - 99
       description: イベント種別
     EventVenueSummary:

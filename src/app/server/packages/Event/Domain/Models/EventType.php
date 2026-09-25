@@ -12,5 +12,7 @@ enum EventType: int
 
     case Exhibition = 3;
 
+    case Radio = 4;
+
     case Other = 99;
 }

@@ -6,7 +6,8 @@
 
 - **Event (イベント)**: ヰ世界情緒による、または本人が公式に参加する、一回の開催または連続した開催期間
 - **Event** の主要フィールド: `eventId` / `title` / `description` / `type` / `schedule` / `status` / `isDisplay`
-- **EventType**: Live / Stream / Exhibition / Other。開催方法ではなく Event 全体の主目的を表す
+- **EventType**: Live / Stream / Exhibition / Radio / Other。開催方法ではなく Event 全体の主目的を表す
+  冠番組は番組を 1 件の Event として扱い、放送開始日を開催時期に入れる。放送回ごとの Event や番組の概念は持たない
 - **EventSchedule**: `startOn` / `endOn` で開催時期を表す。両方 null は日付未定、`startOn` のみは単日、両方指定は期間。`endOn` のみは許容しない。時刻とタイムゾーンは持たず、詳細な時刻は Event の説明に記載する
 - **EventStatus**: Normal / Postponed / Cancelled。予定、開催済みを表す値は持たない
 - **EventSource**: `displayName` / `url` / `orderNo`。用途を固定 enum で分類しない
@@ -32,7 +33,7 @@
   - 本人が歌唱しない演目などを表す表示名を持つ
 - SongPerformance は Setlist 項目に属さなくてもよいが、最大 1 項目からだけ参照される
 - Setlist は判明分だけ登録でき、完全／一部の区分を持たない
-- EventType を Live / Stream から Exhibition / Other へ変える場合、Setlist が残っていれば拒否する
+- EventType を Live / Stream から Exhibition / Radio / Other へ変える場合、Setlist が残っていれば拒否する
 - Postponed / Cancelled の Event は SongPerformance と Setlist を持たない
   状態を Postponed / Cancelled にする保存で SongPerformance または Setlist が残っていれば拒否する
 - SongPerformance の公開可否は所属する Event の `isDisplay` に従い、SongPerformance ごとには持たない
@@ -52,7 +53,7 @@
 - Event の予定／開催済み状態を永続化しない。現在日時を理由に状態を自動更新しない
 - Event の時刻やタイムゾーンを構造化データとして保存しない。必要な時刻情報は説明に記載する
 - EventSeries、主催者、Event 単位の出演者、団体マスタを持たない
-- Setlist を Exhibition / Other に持たせない
+- Setlist を Exhibition / Radio / Other に持たせない
 - 共演者に演奏者を含めない。本人が歌唱しない演目を SongPerformance にしない
 - EventSource の用途分類、本文、画像を保存しない
 - 権利者画像を保存・配信しない

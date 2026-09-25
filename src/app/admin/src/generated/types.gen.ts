@@ -169,7 +169,7 @@ export type EventSummary = {
 /**
  * イベント種別
  */
-export type EventTypeValue = 1 | 2 | 3 | 99;
+export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 
 export type EventUpdateRequest = {
     title: EventTitle;

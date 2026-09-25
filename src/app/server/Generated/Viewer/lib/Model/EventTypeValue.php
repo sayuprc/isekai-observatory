@@ -49,6 +49,8 @@ enum EventTypeValue: int
 
     case NUMBER_3 = 3;
 
+    case NUMBER_4 = 4;
+
     case NUMBER_99 = 99;
 
 }

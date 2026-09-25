@@ -40,7 +40,7 @@ export function eventDateColumn(event: Event, withYear = false): { main: string;
 }
 
 export function eventTypeName(value: Event['typeValue']): string {
-  return ({ 1: 'ライブ', 2: '配信', 3: '個展', 99: 'その他' })[value] ?? 'その他';
+  return ({ 1: 'ライブ', 2: '配信', 3: '個展', 4: 'ラジオ', 99: 'その他' })[value] ?? 'その他';
 }
 
 export function eventStatusName(value: Event['statusValue']): string | null {
