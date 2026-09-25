@@ -29,8 +29,11 @@ const TARGET_TYPE_OPTIONS = [
   'Media',
   'Person',
   'Release',
+  'ReleaseGroup',
   'Song',
   'SongTag',
+  'Venue',
+  'Event',
 ] as const satisfies readonly TargetType[];
 
 const ACTION_LABEL: Record<Action, string> = {
@@ -49,8 +52,11 @@ const TARGET_TYPE_LABEL: Record<TargetType, string> = {
   Media: 'メディア',
   Person: '人物',
   Release: 'リリース',
+  ReleaseGroup: 'リリースグループ',
   Song: '楽曲',
   SongTag: '楽曲タグ',
+  Venue: '開催先',
+  Event: 'イベント',
 };
 
 interface Params {
