@@ -17,7 +17,16 @@ const defaultRules = {
   '@stylistic/jsx-one-expression-per-line': [
     'error',
     {
-      allow: 'single-line',
+      allow: 'non-jsx',
+    },
+  ],
+  '@stylistic/max-len': [
+    'error',
+    {
+      code: 120,
+      ignoreUrls: true,
+      // SVG の path や Tailwind の class など、分割できない文字列だけの行は除外する
+      ignorePattern: String.raw`^\s*([\w:-]+\s*=\s*)?(['"]).*\2[,;]?\s*/?>?$`,
     },
   ],
   '@stylistic/brace-style': ['error', '1tbs'],

@@ -17,6 +17,13 @@ interface VenueRepositoryInterface
 
     public function find(VenueId $venueId): ?Venue;
 
+    /**
+     * @return list<Venue>
+     */
+    public function findByIds(VenueId ...$venueIds): array;
+
+    public function isUsed(VenueId $venueId): bool;
+
     public function save(Venue $venue): Venue;
 
     public function delete(VenueId $venueId): void;

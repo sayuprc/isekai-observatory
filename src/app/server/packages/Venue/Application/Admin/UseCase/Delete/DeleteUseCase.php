@@ -6,6 +6,7 @@ namespace Venue\Application\Admin\UseCase\Delete;
 
 use AdminUser\Domain\Models\Permission;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -34,6 +35,9 @@ readonly class DeleteUseCase
 
             if (is_null($venue)) {
                 throw new ResourceNotFoundException('Venue', $venueId->value);
+            }
+            if ($this->repository->isUsed($venueId)) {
+                throw new BusinessRuleViolationException('この開催先はイベントに使用されているため削除できません');
             }
 
             $this->repository->delete($venueId);

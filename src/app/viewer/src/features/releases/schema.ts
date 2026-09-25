@@ -6,5 +6,6 @@ export type ReleaseGroupCollectionItem = ReleaseGroup & {
 };
 
 export const releaseGroupCollectionItemSchema = z.custom<ReleaseGroupCollectionItem>(
-  (val: unknown) => typeof val === 'object' && val !== null && typeof (val as ReleaseGroupCollectionItem).index === 'number',
+  (val: unknown) =>
+    typeof val === 'object' && val !== null && typeof (val as ReleaseGroupCollectionItem).index === 'number',
 );

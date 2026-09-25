@@ -29,6 +29,7 @@ enum AuditTargetType {
   song: "Song",
   songTag: "SongTag",
   venue: "Venue",
+  event: "Event",
 }
 
 @doc("監査ログ一覧の 1 行分")

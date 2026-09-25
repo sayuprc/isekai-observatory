@@ -12,6 +12,7 @@ use Song\Application\Viewer\Query\SongListCursor;
 use Song\Application\Viewer\Query\SongListItem;
 use Song\Application\Viewer\Query\SongListPage;
 use Song\Application\Viewer\Query\SongMediaSummary;
+use Song\Application\Viewer\Query\SongPerformanceHistory;
 use Song\Application\Viewer\Query\SongQueryServiceInterface;
 use Song\Application\Viewer\Query\SongReleaseGroupSummary;
 use Song\Domain\Models\Persons\SongPersonRole;
@@ -62,9 +63,10 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $personsBySong = $this->loadPersons($binSongIds);
         $mediaBySong = $this->loadMedia($binSongIds);
         $releaseGroupsBySong = $this->loadReleaseGroups($binSongIds);
+        $performancesBySong = $this->loadPerformances($binSongIds);
 
         $songs = array_map(
-            function (array $songRow) use ($personsBySong, $mediaBySong, $releaseGroupsBySong): SongListItem {
+            function (array $songRow) use ($personsBySong, $mediaBySong, $releaseGroupsBySong, $performancesBySong): SongListItem {
                 $binSongId = Row::string($songRow, 'song_id');
                 $personRows = $personsBySong[$binSongId] ?? [];
                 $mediaRows = $mediaBySong[$binSongId] ?? [];
@@ -79,6 +81,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
                     $this->personNamesByRole($personRows, SongPersonRole::Arranger),
                     array_map($this->toMediaSummary(...), $mediaRows),
                     $releaseGroupsBySong[$binSongId] ?? [],
+                    $performancesBySong[$binSongId] ?? [],
                     Row::int($songRow, 'order_no'),
                 );
             },
@@ -293,5 +296,77 @@ readonly class SongQueryService implements SongQueryServiceInterface
             Row::string($mediaRow, 'url'),
             new DateTimeImmutable(Row::string($mediaRow, 'published_at')),
         );
+    }
+
+    /**
+     * @param list<string> $binSongIds
+     *
+     * @return array<string, list<SongPerformanceHistory>>
+     */
+    private function loadPerformances(array $binSongIds): array
+    {
+        if ($binSongIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['song_performances.song_id', 'song_performances.performance_id', 'events.event_id', 'events.title', 'events.type', 'events.start_on', 'events.end_on'])
+                ->from('song_performances')
+                ->join('events', 'song_performances.event_id = events.event_id')
+                ->where('song_performances.song_id', 'IN', $binSongIds)
+                ->where('events.is_display', '=', true)
+                ->orderBy('events.start_on', 'desc'),
+        );
+
+        $performanceIds = array_map(static fn (array $row): string => Row::string($row, 'performance_id'), $rows);
+        $coVocalistsByPerformance = $this->loadCoVocalists($performanceIds);
+        $grouped = [];
+        foreach ($rows as $row) {
+            $binSongId = Row::string($row, 'song_id');
+            $performanceId = Row::string($row, 'performance_id');
+            $grouped[$binSongId][] = new SongPerformanceHistory(
+                $this->converter->toUuid(Row::string($row, 'event_id')),
+                Row::string($row, 'title'),
+                Row::int($row, 'type'),
+                [
+                    'startOn' => Row::nullableString($row, 'start_on'),
+                    'endOn' => Row::nullableString($row, 'end_on'),
+                ],
+                $coVocalistsByPerformance[$performanceId] ?? [],
+            );
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param list<string> $performanceIds
+     *
+     * @return array<string, list<string>>
+     */
+    private function loadCoVocalists(array $performanceIds): array
+    {
+        if ($performanceIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['song_performance_persons.performance_id', 'song_performance_persons.credit_name', 'persons.name'])
+                ->from('song_performance_persons')
+                ->join('persons', 'song_performance_persons.person_id = persons.person_id')
+                ->where('song_performance_persons.performance_id', 'IN', $performanceIds)
+                ->orderBy('song_performance_persons.order_no'),
+        );
+
+        $grouped = [];
+        foreach ($rows as $row) {
+            $performanceId = Row::string($row, 'performance_id');
+            $creditName = Row::nullableString($row, 'credit_name');
+            $grouped[$performanceId][] = $creditName ?? Row::string($row, 'name');
+        }
+
+        return $grouped;
     }
 }

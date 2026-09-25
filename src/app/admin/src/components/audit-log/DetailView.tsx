@@ -1,4 +1,5 @@
 import { createResource, Match, Show, Switch } from 'solid-js';
+import type { AuditTargetType } from '../../generated';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
 
@@ -12,14 +13,18 @@ const ACTION_LABEL: Record<string, string> = {
   recovery_code_use: 'リカバリーコード使用',
 };
 
+// 生成型に対象種別が増えたらコンパイルエラーで気付けるよう、網羅性を satisfies で検査する
 const TARGET_TYPE_LABEL: Record<string, string> = {
   AdminUser: '管理ユーザー',
   Media: 'メディア',
   Person: '人物',
   Release: 'リリース',
+  ReleaseGroup: 'リリースグループ',
   Song: '楽曲',
   SongTag: '楽曲タグ',
-};
+  Venue: '開催先',
+  Event: 'イベント',
+} satisfies Record<AuditTargetType, string>;
 
 interface Props {
   auditLogId: string;
