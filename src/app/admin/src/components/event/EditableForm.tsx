@@ -85,13 +85,7 @@ const EditableForm = (props: EditableFormProps) => {
       return;
     }
 
-    const { data, error, status } = await client.api.events({ eventId: event.eventId }).put(
-      form.toRequestBody({
-        venueIds: event.venues.map(venue => venue.venueId),
-        mediaIds: event.media.map(media => media.mediaId),
-        sources: event.sources,
-      }),
-    );
+    const { data, error, status } = await client.api.events({ eventId: event.eventId }).put(form.toRequestBody());
     if (data) {
       setFlash('更新しました');
       window.location.href = getListUrl();

@@ -1,9 +1,12 @@
 import { Show } from 'solid-js';
 import type { EventStatusValue, EventTypeValue } from '../../generated';
+import { MediaSection } from '../media/MediaSection';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
 import { PerformanceEditor } from './PerformanceEditor';
 import { SetlistEditor } from './SetlistEditor';
+import { SourceEditor } from './SourceEditor';
+import { VenueEditor } from './VenueEditor';
 
 interface EventFormFieldsProps {
   form: EventFormState;
@@ -93,6 +96,8 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
       </div>
     </fieldset>
 
+    <VenueEditor venues={props.form.venues()} onChange={props.form.updateVenues} />
+
     <PerformanceEditor
       performances={props.form.performances()}
       onChange={props.form.updatePerformances}
@@ -106,5 +111,13 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
         disabled={!props.form.canEditPerformances()}
       />
     </Show>
+
+    <MediaSection
+      entries={props.form.mediaEntries}
+      setEntries={props.form.setMediaEntries}
+      availableMedia={props.form.availableMedia}
+      setAvailableMedia={props.form.setAvailableMedia}
+    />
+    <SourceEditor sources={props.form.sources()} onChange={props.form.updateSources} />
   </>
 );
