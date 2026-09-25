@@ -15,24 +15,21 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class EventMediaLinks extends ImmutableCollection
 {
     /**
-     * 並び順は指定順で採番する
-     *
-     * @param list<string> $mediaIds
+     * @param list<array{mediaId: string, orderNo: int}> $items
      *
      * @throws BusinessRuleViolationException
      */
-    public static function fromArray(array $mediaIds): self
+    public static function fromArray(array $items): self
     {
-        if (count($mediaIds) !== count(array_unique($mediaIds))) {
+        if (count($items) !== count(array_unique(array_column($items, 'mediaId')))) {
             throw new BusinessRuleViolationException('メディアを重複して登録できません');
         }
 
-        $links = [];
-        foreach ($mediaIds as $index => $mediaId) {
-            $links[] = new EventMediaLink(new MediaId($mediaId), new OrderNo($index + 1));
+        if (count($items) !== count(array_unique(array_column($items, 'orderNo')))) {
+            throw new BusinessRuleViolationException('メディアの順序を重複して登録できません');
         }
 
-        return new self($links);
+        return self::reconstruct($items);
     }
 
     /**

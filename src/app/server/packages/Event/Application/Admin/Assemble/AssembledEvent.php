@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Event\Application\Admin\Assemble;
 
+use Event\Domain\Models\EventStatus;
+use Event\Domain\Models\EventType;
+
 readonly class AssembledEvent
 {
     /**
@@ -17,10 +20,10 @@ readonly class AssembledEvent
         public string $eventId,
         public string $title,
         public string $description,
-        public int $typeValue,
+        public EventType $type,
         public ?string $startOn,
         public ?string $endOn,
-        public int $statusValue,
+        public EventStatus $status,
         public bool $isDisplay,
         public array $venues,
         public array $media,

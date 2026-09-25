@@ -27,6 +27,14 @@ const songPerformanceSchema = t.Object({
   orderNo: t.Number(),
   coVocalists: t.Array(performancePersonSchema),
 });
+const eventVenueLinkSchema = t.Object({
+  venueId: t.String(),
+  orderNo: t.Number(),
+});
+const eventMediaLinkSchema = t.Object({
+  mediaId: t.String(),
+  orderNo: t.Number(),
+});
 const eventSourceSchema = t.Object({
   displayName: t.String({ minLength: 1 }),
   url: t.String({ minLength: 1 }),
@@ -45,8 +53,8 @@ const eventBodySchema = t.Object({
   schedule: eventScheduleSchema,
   statusValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]),
   isDisplay: t.Boolean(),
-  venueIds: t.Array(t.String()),
-  mediaIds: t.Array(t.String()),
+  venues: t.Array(eventVenueLinkSchema),
+  media: t.Array(eventMediaLinkSchema),
   sources: t.Array(eventSourceSchema),
   performances: t.Array(songPerformanceSchema),
   setlist: t.Array(setlistItemSchema),

@@ -15,24 +15,21 @@ use Venue\Domain\Models\VenueId;
 readonly class EventVenueLinks extends ImmutableCollection
 {
     /**
-     * 並び順は指定順で採番する
-     *
-     * @param list<string> $venueIds
+     * @param list<array{venueId: string, orderNo: int}> $items
      *
      * @throws BusinessRuleViolationException
      */
-    public static function fromArray(array $venueIds): self
+    public static function fromArray(array $items): self
     {
-        if (count($venueIds) !== count(array_unique($venueIds))) {
+        if (count($items) !== count(array_unique(array_column($items, 'venueId')))) {
             throw new BusinessRuleViolationException('開催先を重複して登録できません');
         }
 
-        $links = [];
-        foreach ($venueIds as $index => $venueId) {
-            $links[] = new EventVenueLink(new VenueId($venueId), new OrderNo($index + 1));
+        if (count($items) !== count(array_unique(array_column($items, 'orderNo')))) {
+            throw new BusinessRuleViolationException('開催先の順序を重複して登録できません');
         }
 
-        return new self($links);
+        return self::reconstruct($items);
     }
 
     /**

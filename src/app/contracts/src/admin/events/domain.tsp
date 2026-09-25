@@ -50,9 +50,9 @@ model Event {
   eventId: eventId;
   title: eventTitle;
   description: eventDescription;
-  typeValue: EventTypeValue;
+  type: EventType;
   schedule: EventSchedule;
-  statusValue: EventStatusValue;
+  status: EventStatus;
   isDisplay: boolean;
   venues: Venue[];
   media: Media[];
@@ -65,8 +65,8 @@ model Event {
 model EventSummary {
   eventId: eventId;
   title: eventTitle;
-  typeValue: EventTypeValue;
+  type: EventType;
   schedule: EventSchedule;
-  statusValue: EventStatusValue;
+  status: EventStatus;
   isDisplay: boolean;
 }

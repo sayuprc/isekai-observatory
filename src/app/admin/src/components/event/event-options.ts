@@ -1,24 +1,19 @@
 import type { EventStatusValue, EventTypeValue } from '../../generated';
 
-export const EVENT_TYPE_LABELS: Record<EventTypeValue, string> = {
-  1: 'ライブ',
-  2: '配信',
-  3: '個展',
-  4: 'ラジオ',
-  99: 'その他',
-};
+// フォームの選択肢。登録済みイベントの表示名は API の name を使う
+export const EVENT_TYPE_OPTIONS: { value: EventTypeValue; label: string }[] = [
+  { value: 1, label: 'ライブ' },
+  { value: 2, label: '配信' },
+  { value: 3, label: '個展' },
+  { value: 4, label: 'ラジオ' },
+  { value: 99, label: 'その他' },
+];
 
-export const EVENT_STATUS_LABELS: Record<EventStatusValue, string> = {
-  1: '通常',
-  2: '延期',
-  3: '中止',
-};
-
-const EVENT_TYPE_VALUES: EventTypeValue[] = [1, 2, 3, 4, 99];
-const EVENT_STATUS_VALUES: EventStatusValue[] = [1, 2, 3];
-
-export const EVENT_TYPE_OPTIONS = EVENT_TYPE_VALUES.map(value => ({ value, label: EVENT_TYPE_LABELS[value] }));
-export const EVENT_STATUS_OPTIONS = EVENT_STATUS_VALUES.map(value => ({ value, label: EVENT_STATUS_LABELS[value] }));
+export const EVENT_STATUS_OPTIONS: { value: EventStatusValue; label: string }[] = [
+  { value: 1, label: '通常' },
+  { value: 2, label: '延期' },
+  { value: 3, label: '中止' },
+];
 
 // セットリストはライブと配信だけが持てる
 export const allowsSetlist = (typeValue: EventTypeValue): boolean => typeValue === 1 || typeValue === 2;

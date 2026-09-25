@@ -6,9 +6,9 @@ const event = (title: string, startOn: string | null, endOn: string | null = nul
   eventId: title,
   title,
   description: '',
-  typeValue: 1,
+  type: { name: 'ライブ', value: 1 },
   schedule: { startOn, endOn },
-  statusValue: 1,
+  status: { name: '通常', value: 1 },
   venues: [],
   media: [],
   sources: [],
@@ -78,11 +78,11 @@ describe('イベントの日付表示', () => {
 
 describe('イベント詳細の開催時期', () => {
   it('単日は年月日と曜日を出す', () => {
-    expect(eventDetailDate(event('単日', '2024-08-07'))).toBe('2024.08.07 (水)');
+    expect(eventDetailDate(event('単日', '2024-08-07'))).toEqual(['2024.08.07 (水)']);
   });
 
   it('期間は開始日と終了日をつなぐ', () => {
-    expect(eventDetailDate(event('期間', '2026-10-10', '2026-10-16'))).toBe('2026.10.10 (土) 〜 2026.10.16 (金)');
+    expect(eventDetailDate(event('期間', '2026-10-10', '2026-10-16'))).toEqual(['2026.10.10 (土)', '2026.10.16 (金)']);
   });
 
   it('日付未定は値を持たない', () => {

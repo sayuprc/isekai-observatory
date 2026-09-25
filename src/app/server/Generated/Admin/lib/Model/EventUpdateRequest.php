@@ -63,8 +63,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'schedule' => '\OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
         'status_value' => '\OpenAPI\Admin\Client\Model\EventStatusValue',
         'is_display' => 'bool',
-        'venue_ids' => 'string[]',
-        'media_ids' => 'string[]',
+        'venues' => '\OpenAPI\Admin\Client\Model\RequestEventVenueLink[]',
+        'media' => '\OpenAPI\Admin\Client\Model\RequestEventMediaLink[]',
         'sources' => '\OpenAPI\Admin\Client\Model\EventSource[]',
         'performances' => '\OpenAPI\Admin\Client\Model\RequestSongPerformance[]',
         'setlist' => '\OpenAPI\Admin\Client\Model\RequestSetlistItem[]'
@@ -84,8 +84,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'schedule' => null,
         'status_value' => null,
         'is_display' => null,
-        'venue_ids' => 'uuid',
-        'media_ids' => 'uuid',
+        'venues' => null,
+        'media' => null,
         'sources' => null,
         'performances' => null,
         'setlist' => null
@@ -103,8 +103,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'schedule' => false,
         'status_value' => false,
         'is_display' => false,
-        'venue_ids' => false,
-        'media_ids' => false,
+        'venues' => false,
+        'media' => false,
         'sources' => false,
         'performances' => false,
         'setlist' => false
@@ -202,8 +202,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'schedule' => 'schedule',
         'status_value' => 'statusValue',
         'is_display' => 'isDisplay',
-        'venue_ids' => 'venueIds',
-        'media_ids' => 'mediaIds',
+        'venues' => 'venues',
+        'media' => 'media',
         'sources' => 'sources',
         'performances' => 'performances',
         'setlist' => 'setlist'
@@ -221,8 +221,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'schedule' => 'setSchedule',
         'status_value' => 'setStatusValue',
         'is_display' => 'setIsDisplay',
-        'venue_ids' => 'setVenueIds',
-        'media_ids' => 'setMediaIds',
+        'venues' => 'setVenues',
+        'media' => 'setMedia',
         'sources' => 'setSources',
         'performances' => 'setPerformances',
         'setlist' => 'setSetlist'
@@ -240,8 +240,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'schedule' => 'getSchedule',
         'status_value' => 'getStatusValue',
         'is_display' => 'getIsDisplay',
-        'venue_ids' => 'getVenueIds',
-        'media_ids' => 'getMediaIds',
+        'venues' => 'getVenues',
+        'media' => 'getMedia',
         'sources' => 'getSources',
         'performances' => 'getPerformances',
         'setlist' => 'getSetlist'
@@ -310,8 +310,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         $this->setIfExists('schedule', $data ?? [], null);
         $this->setIfExists('status_value', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
-        $this->setIfExists('venue_ids', $data ?? [], null);
-        $this->setIfExists('media_ids', $data ?? [], null);
+        $this->setIfExists('venues', $data ?? [], null);
+        $this->setIfExists('media', $data ?? [], null);
         $this->setIfExists('sources', $data ?? [], null);
         $this->setIfExists('performances', $data ?? [], null);
         $this->setIfExists('setlist', $data ?? [], null);
@@ -366,11 +366,11 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
         }
-        if ($this->container['venue_ids'] === null) {
-            $invalidProperties[] = "'venue_ids' can't be null";
+        if ($this->container['venues'] === null) {
+            $invalidProperties[] = "'venues' can't be null";
         }
-        if ($this->container['media_ids'] === null) {
-            $invalidProperties[] = "'media_ids' can't be null";
+        if ($this->container['media'] === null) {
+            $invalidProperties[] = "'media' can't be null";
         }
         if ($this->container['sources'] === null) {
             $invalidProperties[] = "'sources' can't be null";
@@ -564,55 +564,55 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     }
 
     /**
-     * Gets venue_ids
+     * Gets venues
      *
-     * @return string[]
+     * @return \OpenAPI\Admin\Client\Model\RequestEventVenueLink[]
      */
-    public function getVenueIds()
+    public function getVenues()
     {
-        return $this->container['venue_ids'];
+        return $this->container['venues'];
     }
 
     /**
-     * Sets venue_ids
+     * Sets venues
      *
-     * @param string[] $venue_ids venue_ids
+     * @param \OpenAPI\Admin\Client\Model\RequestEventVenueLink[] $venues venues
      *
      * @return self
      */
-    public function setVenueIds($venue_ids)
+    public function setVenues($venues)
     {
-        if (is_null($venue_ids)) {
-            throw new \InvalidArgumentException('non-nullable venue_ids cannot be null');
+        if (is_null($venues)) {
+            throw new \InvalidArgumentException('non-nullable venues cannot be null');
         }
-        $this->container['venue_ids'] = $venue_ids;
+        $this->container['venues'] = $venues;
 
         return $this;
     }
 
     /**
-     * Gets media_ids
+     * Gets media
      *
-     * @return string[]
+     * @return \OpenAPI\Admin\Client\Model\RequestEventMediaLink[]
      */
-    public function getMediaIds()
+    public function getMedia()
     {
-        return $this->container['media_ids'];
+        return $this->container['media'];
     }
 
     /**
-     * Sets media_ids
+     * Sets media
      *
-     * @param string[] $media_ids media_ids
+     * @param \OpenAPI\Admin\Client\Model\RequestEventMediaLink[] $media media
      *
      * @return self
      */
-    public function setMediaIds($media_ids)
+    public function setMedia($media)
     {
-        if (is_null($media_ids)) {
-            throw new \InvalidArgumentException('non-nullable media_ids cannot be null');
+        if (is_null($media)) {
+            throw new \InvalidArgumentException('non-nullable media cannot be null');
         }
-        $this->container['media_ids'] = $media_ids;
+        $this->container['media'] = $media;
 
         return $this;
     }

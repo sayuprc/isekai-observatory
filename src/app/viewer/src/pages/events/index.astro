@@ -6,7 +6,7 @@ import FilterBar from '../../components/viewer/FilterBar';
 import SectionHead from '../../components/viewer/SectionHead.astro';
 import { eventContentRepository } from '../../features/events/content';
 import type { Event } from '../../features/events/types';
-import { eventDate, eventTypeName } from '../../features/events/types';
+import { eventDate } from '../../features/events/types';
 import Layout from '../../layouts/Layout.astro';
 
 const { undated, byYear } = await eventContentRepository.grouped();
@@ -17,7 +17,7 @@ const groups = [
 const total = groups.reduce((sum, group) => sum + group.events.length, 0);
 
 const searchText = (event: Event) =>
-  [event.title, eventTypeName(event.typeValue), eventDate(event) ?? '', ...event.venues.map(venue => venue.name)]
+  [event.title, event.type.name, eventDate(event) ?? '', ...event.venues.map(venue => venue.name)]
     .join(' ')
     .toLowerCase();
 ---
@@ -74,7 +74,7 @@ const searchText = (event: Event) =>
               group.events.map(event => (
                 <li
                   data-event-entry
-                  data-event-type={String(event.typeValue)}
+                  data-event-type={String(event.type.value)}
                   data-event-search={searchText(event)}
                 >
                   <EventRow event={event} />

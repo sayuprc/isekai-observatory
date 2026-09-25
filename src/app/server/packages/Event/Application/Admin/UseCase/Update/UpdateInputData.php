@@ -12,12 +12,12 @@ namespace Event\Application\Admin\UseCase\Update;
 readonly class UpdateInputData
 {
     /**
-     * @param array{startOn: ?string, endOn: ?string} $schedule
-     * @param list<string>                            $venueIds
-     * @param list<string>                            $mediaIds
-     * @param list<EventSourceInput>                  $sources
-     * @param list<SongPerformanceInput>              $performances
-     * @param list<SetlistItemInput>                  $setlist
+     * @param array{startOn: ?string, endOn: ?string}    $schedule
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<array{mediaId: string, orderNo: int}> $media
+     * @param list<EventSourceInput>                     $sources
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
      */
     public function __construct(
         public string $eventId,
@@ -27,8 +27,8 @@ readonly class UpdateInputData
         public array $schedule,
         public int $statusValue,
         public bool $isDisplay,
-        public array $venueIds,
-        public array $mediaIds,
+        public array $venues,
+        public array $media,
         public array $sources,
         public array $performances,
         public array $setlist,

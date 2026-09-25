@@ -9,6 +9,8 @@ use Event\Application\Admin\Query\EventSearchQueryServiceInterface;
 use Event\Application\Admin\Query\EventSummary;
 use Event\Domain\Criteria\EventSearchCriteria;
 use Event\Domain\Criteria\Sort;
+use Event\Domain\Models\EventStatus;
+use Event\Domain\Models\EventType;
 use Override;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
@@ -45,10 +47,10 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
             fn (array $row): EventSummary => new EventSummary(
                 $this->converter->toUuid(Row::string($row, 'event_id')),
                 Row::string($row, 'title'),
-                Row::int($row, 'type'),
+                EventType::from(Row::int($row, 'type')),
                 Row::nullableString($row, 'start_on'),
                 Row::nullableString($row, 'end_on'),
-                Row::int($row, 'status'),
+                EventStatus::from(Row::int($row, 'status')),
                 Row::bool($row, 'is_display'),
             ),
             $rows,

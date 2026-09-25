@@ -54,9 +54,9 @@ model Event {
   eventId: eventId;
   title: eventTitle;
   description: eventDescription;
-  typeValue: EventTypeValue;
+  type: EventType;
   schedule: EventSchedule;
-  statusValue: EventStatusValue;
+  status: EventStatus;
   venues: EventVenueSummary[];
   media: EventMediaSummary[];
   sources: EventSource[];

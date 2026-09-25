@@ -3252,9 +3252,9 @@ components:
         - eventId
         - title
         - description
-        - typeValue
+        - type
         - schedule
-        - statusValue
+        - status
         - isDisplay
         - venues
         - media
@@ -3268,12 +3268,12 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
-        typeValue:
-          $ref: '#/components/schemas/EventTypeValue'
+        type:
+          $ref: '#/components/schemas/EventType'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
-        statusValue:
-          $ref: '#/components/schemas/EventStatusValue'
+        status:
+          $ref: '#/components/schemas/EventStatus'
         isDisplay:
           type: boolean
         venues:
@@ -3306,8 +3306,8 @@ components:
         - schedule
         - statusValue
         - isDisplay
-        - venueIds
-        - mediaIds
+        - venues
+        - media
         - sources
         - performances
         - setlist
@@ -3324,14 +3324,14 @@ components:
           $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
-        venueIds:
+        venues:
           type: array
           items:
-            $ref: '#/components/schemas/venueId'
-        mediaIds:
+            $ref: '#/components/schemas/RequestEventVenueLink'
+        media:
           type: array
           items:
-            $ref: '#/components/schemas/mediaId'
+            $ref: '#/components/schemas/RequestEventMediaLink'
         sources:
           type: array
           items:
@@ -3391,6 +3391,19 @@ components:
         orderNo:
           $ref: '#/components/schemas/orderNo'
       description: イベント出典
+    EventStatus:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          $ref: '#/components/schemas/eventStatusName'
+        value:
+          $ref: '#/components/schemas/EventStatusValue'
+      examples:
+        - name: 通常
+          value: 1
     EventStatusValue:
       type: integer
       format: int32
@@ -3404,24 +3417,37 @@ components:
       required:
         - eventId
         - title
-        - typeValue
+        - type
         - schedule
-        - statusValue
+        - status
         - isDisplay
       properties:
         eventId:
           $ref: '#/components/schemas/eventId'
         title:
           $ref: '#/components/schemas/eventTitle'
-        typeValue:
-          $ref: '#/components/schemas/EventTypeValue'
+        type:
+          $ref: '#/components/schemas/EventType'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
-        statusValue:
-          $ref: '#/components/schemas/EventStatusValue'
+        status:
+          $ref: '#/components/schemas/EventStatus'
         isDisplay:
           type: boolean
       description: イベント一覧の 1 行分
+    EventType:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          $ref: '#/components/schemas/eventTypeName'
+        value:
+          $ref: '#/components/schemas/EventTypeValue'
+      examples:
+        - name: ライブ
+          value: 1
     EventTypeValue:
       type: integer
       format: int32
@@ -3441,8 +3467,8 @@ components:
         - schedule
         - statusValue
         - isDisplay
-        - venueIds
-        - mediaIds
+        - venues
+        - media
         - sources
         - performances
         - setlist
@@ -3459,14 +3485,14 @@ components:
           $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
-        venueIds:
+        venues:
           type: array
           items:
-            $ref: '#/components/schemas/venueId'
-        mediaIds:
+            $ref: '#/components/schemas/RequestEventVenueLink'
+        media:
           type: array
           items:
-            $ref: '#/components/schemas/mediaId'
+            $ref: '#/components/schemas/RequestEventMediaLink'
         sources:
           type: array
           items:
@@ -4321,6 +4347,26 @@ components:
       properties:
         release:
           $ref: '#/components/schemas/Release'
+    RequestEventMediaLink:
+      type: object
+      required:
+        - mediaId
+        - orderNo
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    RequestEventVenueLink:
+      type: object
+      required:
+        - venueId
+        - orderNo
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
     RequestPerformancePerson:
       type: object
       required:
@@ -5052,10 +5098,18 @@ components:
       type: string
       format: uri
       description: イベントの出典URL
+    eventStatusName:
+      type: string
+      minLength: 1
+      description: イベントの開催状態名
     eventTitle:
       type: string
       minLength: 1
       description: イベントタイトル
+    eventTypeName:
+      type: string
+      minLength: 1
+      description: イベント種別名
     lyricsLink:
       type: string
       format: uri

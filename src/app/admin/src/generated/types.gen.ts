@@ -97,9 +97,9 @@ export type Event = {
     eventId: EventId;
     title: EventTitle;
     description: EventDescription;
-    typeValue: EventTypeValue;
+    type: EventType;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    statusValue: EventStatusValue;
+    status: EventStatus;
     isDisplay: boolean;
     venues: Array<Venue>;
     media: Array<Media>;
@@ -115,8 +115,8 @@ export type EventCreateRequest = {
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue;
     isDisplay: boolean;
-    venueIds: Array<VenueId>;
-    mediaIds: Array<MediaId>;
+    venues: Array<RequestEventVenueLink>;
+    media: Array<RequestEventMediaLink>;
     sources: Array<EventSource>;
     performances: Array<RequestSongPerformance>;
     setlist: Array<RequestSetlistItem>;
@@ -149,6 +149,11 @@ export type EventSource = {
     orderNo: OrderNo;
 };
 
+export type EventStatus = {
+    name: EventStatusName;
+    value: EventStatusValue;
+};
+
 /**
  * イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
  */
@@ -160,10 +165,15 @@ export type EventStatusValue = 1 | 2 | 3;
 export type EventSummary = {
     eventId: EventId;
     title: EventTitle;
-    typeValue: EventTypeValue;
+    type: EventType;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    statusValue: EventStatusValue;
+    status: EventStatus;
     isDisplay: boolean;
+};
+
+export type EventType = {
+    name: EventTypeName;
+    value: EventTypeValue;
 };
 
 /**
@@ -178,8 +188,8 @@ export type EventUpdateRequest = {
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     statusValue: EventStatusValue;
     isDisplay: boolean;
-    venueIds: Array<VenueId>;
-    mediaIds: Array<MediaId>;
+    venues: Array<RequestEventVenueLink>;
+    media: Array<RequestEventMediaLink>;
     sources: Array<EventSource>;
     performances: Array<RequestSongPerformance>;
     setlist: Array<RequestSetlistItem>;
@@ -584,6 +594,16 @@ export type ReleaseUpdateResponse = {
     release: Release;
 };
 
+export type RequestEventMediaLink = {
+    mediaId: MediaId;
+    orderNo: OrderNo;
+};
+
+export type RequestEventVenueLink = {
+    venueId: VenueId;
+    orderNo: OrderNo;
+};
+
 /**
  * The template for picking properties.
  */
@@ -944,9 +964,19 @@ export type EventSourceName = string;
 export type EventSourceUrl = string;
 
 /**
+ * イベントの開催状態名
+ */
+export type EventStatusName = string;
+
+/**
  * イベントタイトル
  */
 export type EventTitle = string;
+
+/**
+ * イベント種別名
+ */
+export type EventTypeName = string;
 
 /**
  * 歌詞リンク

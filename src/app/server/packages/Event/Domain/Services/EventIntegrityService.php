@@ -34,12 +34,12 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string} $schedule
-     * @param list<string>                            $venueIds
-     * @param list<string>                            $mediaIds
-     * @param list<EventSourceInput>                  $sources
-     * @param list<SongPerformanceInput>              $performances
-     * @param list<SetlistItemInput>                  $setlist
+     * @param array{startOn: ?string, endOn: ?string}    $schedule
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<array{mediaId: string, orderNo: int}> $media
+     * @param list<EventSourceInput>                     $sources
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -50,8 +50,8 @@ readonly class EventIntegrityService
         array $schedule,
         int $status,
         bool $isDisplay,
-        array $venueIds,
-        array $mediaIds,
+        array $venues,
+        array $media,
         array $sources,
         array $performances,
         array $setlist,
@@ -64,8 +64,8 @@ readonly class EventIntegrityService
             $schedule,
             $status,
             $isDisplay,
-            $venueIds,
-            $mediaIds,
+            $venues,
+            $media,
             $sources,
             $performances,
             $setlist,
@@ -73,12 +73,12 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string} $schedule
-     * @param list<string>                            $venueIds
-     * @param list<string>                            $mediaIds
-     * @param list<EventSourceInput>                  $sources
-     * @param list<SongPerformanceInput>              $performances
-     * @param list<SetlistItemInput>                  $setlist
+     * @param array{startOn: ?string, endOn: ?string}    $schedule
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<array{mediaId: string, orderNo: int}> $media
+     * @param list<EventSourceInput>                     $sources
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -90,8 +90,8 @@ readonly class EventIntegrityService
         array $schedule,
         int $status,
         bool $isDisplay,
-        array $venueIds,
-        array $mediaIds,
+        array $venues,
+        array $media,
         array $sources,
         array $performances,
         array $setlist,
@@ -104,8 +104,8 @@ readonly class EventIntegrityService
             $schedule,
             $status,
             $isDisplay,
-            $venueIds,
-            $mediaIds,
+            $venues,
+            $media,
             $sources,
             $performances,
             $setlist,
@@ -113,12 +113,12 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string} $schedule
-     * @param list<string>                            $venueIds
-     * @param list<string>                            $mediaIds
-     * @param list<EventSourceInput>                  $sources
-     * @param list<SongPerformanceInput>              $performances
-     * @param list<SetlistItemInput>                  $setlist
+     * @param array{startOn: ?string, endOn: ?string}    $schedule
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<array{mediaId: string, orderNo: int}> $media
+     * @param list<EventSourceInput>                     $sources
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -130,8 +130,8 @@ readonly class EventIntegrityService
         array $schedule,
         int $status,
         bool $isDisplay,
-        array $venueIds,
-        array $mediaIds,
+        array $venues,
+        array $media,
         array $sources,
         array $performances,
         array $setlist,
@@ -144,8 +144,8 @@ readonly class EventIntegrityService
             EventSchedule::fromArray($schedule['startOn'], $schedule['endOn']),
             EventStatus::from($status),
             $isDisplay,
-            EventVenueLinks::fromArray($venueIds),
-            EventMediaLinks::fromArray($mediaIds),
+            EventVenueLinks::fromArray($venues),
+            EventMediaLinks::fromArray($media),
             EventSources::fromArray($sources),
             SongPerformances::fromArray($performances),
             Setlist::fromArray($setlist),
@@ -162,14 +162,11 @@ readonly class EventIntegrityService
      */
     private function assertSetlistAllowed(Event $event): void
     {
-        if (! in_array($event->type, [EventType::Live, EventType::Stream], true) && count($event->setlist) > 0) {
+        if (! $event->type->allowsSetlist() && count($event->setlist) > 0) {
             throw new BusinessRuleViolationException('ライブまたは配信以外のイベントにはセットリストを設定できません');
         }
 
-        if (
-            in_array($event->status, [EventStatus::Postponed, EventStatus::Cancelled], true)
-            && (count($event->performances) > 0 || count($event->setlist) > 0)
-        ) {
+        if (! $event->status->allowsPerformances() && (count($event->performances) > 0 || count($event->setlist) > 0)) {
             throw new BusinessRuleViolationException('延期または中止されたイベントには楽曲披露とセットリストを設定できません');
         }
     }

@@ -1,6 +1,6 @@
 ---
 import type { Event } from '../../../features/events/types';
-import { eventDetailDate, eventStatusName, eventTypeName } from '../../../features/events/types';
+import { eventDetailDate, eventStatusName } from '../../../features/events/types';
 import DetailSectionHead from './DetailSectionHead.astro';
 import EventSetlistSongs from './EventSetlistSongs.astro';
 import MediaChip from './MediaChip.astro';
@@ -12,11 +12,11 @@ interface Props {
 type Performance = Event['performances'][number];
 
 const { event } = Astro.props;
-const statusName = eventStatusName(event.statusValue);
+const statusName = eventStatusName(event.status);
 // 種別は見出しのバッジに出すので、開催情報には開催時期と開催先だけを並べる
 // 期間の開始日と終了日は、それぞれ途中で折り返さないよう分けて持つ
 const facts = [
-  { label: '開催時期', parts: (eventDetailDate(event) ?? '開催時期未定').split(' 〜 '), separator: ' 〜 ' },
+  { label: '開催時期', parts: eventDetailDate(event) ?? ['開催時期未定'], separator: ' 〜 ' },
   { label: '開催先', parts: [event.venues.map(venue => venue.name).join(' / ') || '-'], separator: '' },
 ];
 
@@ -51,7 +51,7 @@ const hostname = (url: string): string => {
 
 <div class="detail-page-content event-detail-content" data-share-title={event.title}>
   <div class="event-detail-meta">
-    <span class="label-mono">{eventTypeName(event.typeValue)}</span>
+    <span class="label-mono">{event.type.name}</span>
     {statusName && <span class="event-detail-status">{statusName}</span>}
   </div>
   <h1 class="detail-title">{event.title}</h1>

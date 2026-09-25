@@ -18,7 +18,9 @@ use OpenAPI\Viewer\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Viewer\Client\Model\EventListResponse;
 use OpenAPI\Viewer\Client\Model\EventMediaSummary as OpenApiEventMediaSummary;
 use OpenAPI\Viewer\Client\Model\EventSource as OpenApiEventSource;
+use OpenAPI\Viewer\Client\Model\EventStatus as OpenApiEventStatus;
 use OpenAPI\Viewer\Client\Model\EventStatusValue;
+use OpenAPI\Viewer\Client\Model\EventType as OpenApiEventType;
 use OpenAPI\Viewer\Client\Model\EventTypeValue;
 use OpenAPI\Viewer\Client\Model\EventVenueSummary as OpenApiEventVenueSummary;
 use OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as OpenApiEventSchedule;
@@ -45,12 +47,12 @@ class ListPresenter
             ->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
-            ->setTypeValue(EventTypeValue::from($event->type->value))
+            ->setType(new OpenApiEventType()->setName($event->type->getName())->setValue(EventTypeValue::from($event->type->value)))
             ->setSchedule(new OpenApiEventSchedule([
                 'start_on' => is_null($event->startOn) ? null : new DateTime($event->startOn),
                 'end_on' => is_null($event->endOn) ? null : new DateTime($event->endOn),
             ]))
-            ->setStatusValue(EventStatusValue::from($event->status->value))
+            ->setStatus(new OpenApiEventStatus()->setName($event->status->getName())->setValue(EventStatusValue::from($event->status->value)))
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
             ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))

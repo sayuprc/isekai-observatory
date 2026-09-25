@@ -34,6 +34,8 @@ class EventIntegrityServiceTest extends TestCase
 
     private const string VENUE_ID = 'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE';
 
+    private const string OTHER_VENUE_ID = '99999999-9999-9999-9999-999999999999';
+
     private MockInterface&UuidGeneratorInterface $generator;
 
     #[Override]
@@ -52,7 +54,7 @@ class EventIntegrityServiceTest extends TestCase
             ->andReturn(self::EVENT_ID)
             ->once();
 
-        $event = $this->getInstance()->prepareForCreate(...$this->input(venueIds: [self::VENUE_ID]));
+        $event = $this->getInstance()->prepareForCreate(...$this->input(venues: [['venueId' => self::VENUE_ID, 'orderNo' => 1]]));
 
         $this->assertSame(self::EVENT_ID, $event->eventId->value);
         $this->assertSame('テストライブ', $event->title->value);
@@ -143,7 +145,15 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->prepareForUpdate(venueIds: [self::VENUE_ID, self::VENUE_ID]);
+        $this->prepareForUpdate(venues: [['venueId' => self::VENUE_ID, 'orderNo' => 1], ['venueId' => self::VENUE_ID, 'orderNo' => 2]]);
+    }
+
+    #[Test]
+    public function rejectsDuplicatedVenueOrder(): void
+    {
+        $this->expectException(BusinessRuleViolationException::class);
+
+        $this->prepareForUpdate(venues: [['venueId' => self::VENUE_ID, 'orderNo' => 1], ['venueId' => self::OTHER_VENUE_ID, 'orderNo' => 1]]);
     }
 
     #[Test]
@@ -180,35 +190,35 @@ class EventIntegrityServiceTest extends TestCase
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string} $schedule
-     * @param list<string>                            $venueIds
-     * @param list<SongPerformanceInput>              $performances
-     * @param list<SetlistItemInput>                  $setlist
+     * @param array{startOn: ?string, endOn: ?string}    $schedule
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
      */
     private function prepareForUpdate(
         int $type = EventType::Live->value,
         array $schedule = ['startOn' => '2026-10-01', 'endOn' => null],
         int $status = EventStatus::Normal->value,
-        array $venueIds = [],
+        array $venues = [],
         array $performances = [],
         array $setlist = [],
     ): Event {
-        return $this->getInstance()->prepareForUpdate(self::EVENT_ID, ...$this->input($type, $schedule, $status, $venueIds, $performances, $setlist));
+        return $this->getInstance()->prepareForUpdate(self::EVENT_ID, ...$this->input($type, $schedule, $status, $venues, $performances, $setlist));
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string} $schedule
-     * @param list<string>                            $venueIds
-     * @param list<SongPerformanceInput>              $performances
-     * @param list<SetlistItemInput>                  $setlist
+     * @param array{startOn: ?string, endOn: ?string}    $schedule
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
      *
-     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venueIds: list<string>, mediaIds: list<string>, sources: list<EventSourceInput>, performances: list<SongPerformanceInput>, setlist: list<SetlistItemInput>}
+     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venues: list<array{venueId: string, orderNo: int}>, media: list<array{mediaId: string, orderNo: int}>, sources: list<EventSourceInput>, performances: list<SongPerformanceInput>, setlist: list<SetlistItemInput>}
      */
     private function input(
         int $type = EventType::Live->value,
         array $schedule = ['startOn' => '2026-10-01', 'endOn' => null],
         int $status = EventStatus::Normal->value,
-        array $venueIds = [],
+        array $venues = [],
         array $performances = [],
         array $setlist = [],
     ): array {
@@ -219,8 +229,8 @@ class EventIntegrityServiceTest extends TestCase
             'schedule' => $schedule,
             'status' => $status,
             'isDisplay' => true,
-            'venueIds' => $venueIds,
-            'mediaIds' => [],
+            'venues' => $venues,
+            'media' => [],
             'sources' => [],
             'performances' => $performances,
             'setlist' => $setlist,
