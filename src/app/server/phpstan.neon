@@ -9,3 +9,6 @@ parameters:
     - packages
 
   level: 10
+
+rules:
+  - Tools\PHPStan\Rules\TypeAliasNamingRule
