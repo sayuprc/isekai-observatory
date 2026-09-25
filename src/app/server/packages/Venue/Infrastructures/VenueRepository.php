@@ -70,7 +70,7 @@ readonly class VenueRepository implements VenueRepositoryInterface
 
         $row = $rows[0] ?? null;
 
-        return is_null($row) ? null : $this->hydrate($row);
+        return $row === null ? null : $this->hydrate($row);
     }
 
     #[Override]

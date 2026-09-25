@@ -80,8 +80,8 @@ class Converter
     private function toOpenApiSchedule(?string $startOn, ?string $endOn): OpenApiEventSchedule
     {
         return new OpenApiEventSchedule([
-            'start_on' => is_null($startOn) ? null : new DateTime($startOn),
-            'end_on' => is_null($endOn) ? null : new DateTime($endOn),
+            'start_on' => $startOn === null ? null : new DateTime($startOn),
+            'end_on' => $endOn === null ? null : new DateTime($endOn),
         ]);
     }
 

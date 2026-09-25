@@ -26,8 +26,8 @@ readonly class Tracks extends ImmutableCollection
 
         foreach ($items as $item) {
             $track = Track::create(
-                is_null($item['songId']) ? null : new SongId($item['songId']),
-                is_null($item['title']) ? null : new TrackTitle($item['title']),
+                $item['songId'] === null ? null : new SongId($item['songId']),
+                $item['title'] === null ? null : new TrackTitle($item['title']),
                 new OrderNo($item['trackNo']),
             );
 

@@ -33,7 +33,7 @@ readonly class GenerateRecoveryCodesUseCase
     {
         $adminUser = $this->authContext->get();
 
-        if (is_null($adminUser)) {
+        if ($adminUser === null) {
             throw new UnauthenticatedException();
         }
 

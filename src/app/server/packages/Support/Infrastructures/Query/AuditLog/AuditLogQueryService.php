@@ -75,7 +75,7 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
 
         $row = $rows[0] ?? null;
 
-        if (is_null($row)) {
+        if ($row === null) {
             return null;
         }
 

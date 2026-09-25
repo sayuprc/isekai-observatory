@@ -18,8 +18,8 @@ final readonly class Field
         ?string $value = null,
         private bool $inline = false,
     ) {
-        $this->name = is_null($name) ? null : mb_trim($name);
-        $this->value = is_null($value) ? null : mb_trim($value);
+        $this->name = $name === null ? null : mb_trim($name);
+        $this->value = $value === null ? null : mb_trim($value);
     }
 
     /**
@@ -31,11 +31,11 @@ final readonly class Field
             'inline' => $this->inline,
         ];
 
-        if (! is_null($this->name) && $this->name !== '') {
+        if ($this->name !== null && $this->name !== '') {
             $array['name'] = $this->name;
         }
 
-        if (! is_null($this->value) && $this->value !== '') {
+        if ($this->value !== null && $this->value !== '') {
             $array['value'] = $this->value;
         }
 

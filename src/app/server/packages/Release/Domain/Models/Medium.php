@@ -22,7 +22,7 @@ readonly class Medium
     {
         return new self(
             new OrderNo($position),
-            is_null($name) ? null : new MediumName($name),
+            $name === null ? null : new MediumName($name),
             Tracks::reconstruct($tracks),
         );
     }

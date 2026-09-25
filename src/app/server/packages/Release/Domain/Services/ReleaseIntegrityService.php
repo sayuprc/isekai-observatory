@@ -90,7 +90,7 @@ class ReleaseIntegrityService
     ): Release {
         $release = $this->build($releaseId, $releaseGroupId, $name, $releasedOn, $description, $color, $isDisplay, $orderNo, $formatValues, $media);
 
-        if (is_null($this->releaseGroupRepository->find($release->releaseGroupId))) {
+        if ($this->releaseGroupRepository->find($release->releaseGroupId) === null) {
             throw new BusinessRuleViolationException('指定されたリリースグループが存在しません。');
         }
 
@@ -136,11 +136,11 @@ class ReleaseIntegrityService
         foreach ($media as $medium) {
             foreach ($medium->tracks as $track) {
                 // タイトルのみトラックは Song 集約を参照しない
-                if (is_null($track->songId)) {
+                if ($track->songId === null) {
                     continue;
                 }
 
-                if (is_null($this->songRepository->find($track->songId))) {
+                if ($this->songRepository->find($track->songId) === null) {
                     return false;
                 }
             }

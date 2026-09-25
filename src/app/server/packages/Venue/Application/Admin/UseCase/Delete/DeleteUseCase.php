@@ -33,7 +33,7 @@ readonly class DeleteUseCase
         $this->transaction->scope(function () use ($venueId): void {
             $venue = $this->repository->find($venueId);
 
-            if (is_null($venue)) {
+            if ($venue === null) {
                 throw new ResourceNotFoundException('Venue', $venueId->value);
             }
             if ($this->repository->isUsed($venueId)) {

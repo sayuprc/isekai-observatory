@@ -49,8 +49,8 @@ class ListPresenter
             ->setDescription($event->description)
             ->setType(new OpenApiEventType()->setName($event->type->getName())->setValue(EventTypeValue::from($event->type->value)))
             ->setSchedule(new OpenApiEventSchedule([
-                'start_on' => is_null($event->startOn) ? null : new DateTime($event->startOn),
-                'end_on' => is_null($event->endOn) ? null : new DateTime($event->endOn),
+                'start_on' => $event->startOn === null ? null : new DateTime($event->startOn),
+                'end_on' => $event->endOn === null ? null : new DateTime($event->endOn),
             ]))
             ->setStatus(new OpenApiEventStatus()->setName($event->status->getName())->setValue(EventStatusValue::from($event->status->value)))
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))

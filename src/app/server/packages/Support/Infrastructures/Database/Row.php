@@ -35,7 +35,7 @@ final class Row
     {
         $value = $row[$key] ?? null;
 
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 
@@ -75,7 +75,7 @@ final class Row
     {
         $value = $row[$key] ?? null;
 
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 

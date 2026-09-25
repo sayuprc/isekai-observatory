@@ -90,7 +90,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $lastSongRow = $hasNextPage && $pageRows !== [] ? $pageRows[count($pageRows) - 1] : null;
 
-        $nextCursor = is_null($lastSongRow)
+        $nextCursor = $lastSongRow === null
             ? null
             : SongListCursor::encode(
                 Row::int($lastSongRow, 'order_no'),
@@ -225,7 +225,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
             $firstRelease = $firstReleaseByGroup[$binGroupId] ?? null;
 
-            if (is_null($firstRelease)) {
+            if ($firstRelease === null) {
                 continue;
             }
 

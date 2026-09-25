@@ -24,7 +24,7 @@ readonly class GetUseCase
 
         $personId = new PersonId($inputData->personId);
 
-        if (is_null($found = $this->repository->find($personId))) {
+        if (($found = $this->repository->find($personId)) === null) {
             throw new ResourceNotFoundException('Person', $personId->value);
         }
 

@@ -26,7 +26,7 @@ readonly class GetUseCase
 
         $mediaId = new MediaId($inputData->mediaId);
 
-        if (is_null($found = $this->repository->find($mediaId))) {
+        if (($found = $this->repository->find($mediaId)) === null) {
             throw new ResourceNotFoundException('Media', $mediaId->value);
         }
 

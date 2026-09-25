@@ -47,7 +47,7 @@ readonly class ReleaseDetailQueryService implements ReleaseDetailQueryServiceInt
                 return new ReleaseReferencedSong(
                     Row::int($row, 'position'),
                     Row::int($row, 'track_no'),
-                    is_null($binSongId) ? null : $this->converter->toUuid($binSongId),
+                    $binSongId === null ? null : $this->converter->toUuid($binSongId),
                     Row::string($row, 'title'),
                 );
             },

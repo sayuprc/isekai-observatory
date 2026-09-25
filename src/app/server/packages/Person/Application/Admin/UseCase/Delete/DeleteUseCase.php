@@ -36,7 +36,7 @@ readonly class DeleteUseCase
         $this->transaction->scope(function () use ($personId): void {
             $person = $this->repository->find($personId);
 
-            if (is_null($person)) {
+            if ($person === null) {
                 throw new ResourceNotFoundException('Person', $personId->value);
             }
 

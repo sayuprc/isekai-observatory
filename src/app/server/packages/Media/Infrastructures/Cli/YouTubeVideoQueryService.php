@@ -41,7 +41,7 @@ readonly class YouTubeVideoQueryService implements YouTubeVideoQueryServiceInter
 
         $channel = $response->getItems()[0] ?? null;
 
-        if (is_null($channel)) {
+        if ($channel === null) {
             return null;
         }
 

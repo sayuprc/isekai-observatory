@@ -44,7 +44,7 @@ class InviteCommand extends Command
 
         foreach ($permissions as $permission) {
             $result = Permission::tryFrom($permission);
-            if (is_null($result)) {
+            if ($result === null) {
                 $this->error("不正な権限です: {$permission}");
 
                 return Command::FAILURE;

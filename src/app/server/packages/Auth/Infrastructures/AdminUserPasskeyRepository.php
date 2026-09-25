@@ -69,7 +69,7 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
 
         $row = $rows[0] ?? null;
 
-        return is_null($row) ? null : $this->hydrate($row);
+        return $row === null ? null : $this->hydrate($row);
     }
 
     #[Override]
@@ -86,7 +86,7 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
 
         $row = $rows[0] ?? null;
 
-        return is_null($row) ? null : $this->hydrate($row);
+        return $row === null ? null : $this->hydrate($row);
     }
 
     #[Override]
@@ -104,7 +104,7 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
 
         $row = $rows[0] ?? null;
 
-        return is_null($row) ? null : $this->hydrate($row);
+        return $row === null ? null : $this->hydrate($row);
     }
 
     #[Override]
@@ -207,7 +207,7 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
             Row::nullableBool($row, 'backup_state'),
             Row::int($row, 'sign_count'),
             new DateTimeImmutable(Row::string($row, 'created_at')),
-            is_null($lastUsedAt) ? null : new DateTimeImmutable($lastUsedAt),
+            $lastUsedAt === null ? null : new DateTimeImmutable($lastUsedAt),
         );
     }
 

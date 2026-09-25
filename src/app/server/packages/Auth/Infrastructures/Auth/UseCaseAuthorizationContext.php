@@ -18,7 +18,7 @@ readonly class UseCaseAuthorizationContext implements AuthorizationContextInterf
     {
         $user = $this->context->get();
 
-        if (is_null($user)) {
+        if ($user === null) {
             return null;
         }
 

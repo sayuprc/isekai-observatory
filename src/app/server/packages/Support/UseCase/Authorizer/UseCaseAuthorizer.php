@@ -24,7 +24,7 @@ readonly class UseCaseAuthorizer
     {
         $user = $this->context->currentUser();
 
-        if (is_null($user)) {
+        if ($user === null) {
             throw new UnauthenticatedException();
         }
 

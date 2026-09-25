@@ -33,7 +33,7 @@ readonly class UpdateUseCase
         $releaseId = new ReleaseId($inputData->releaseId);
 
         return $this->transaction->scope(function () use ($inputData, $releaseId): UpdateOutputData {
-            if (is_null($found = $this->repository->find($releaseId))) {
+            if (($found = $this->repository->find($releaseId)) === null) {
                 throw new ResourceNotFoundException('Release', $releaseId->value);
             }
 

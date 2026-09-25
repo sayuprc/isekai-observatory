@@ -24,7 +24,7 @@ readonly class UpdateYouTubeChannelUseCase
         return $this->transaction->scope(function () use ($inputData): UpdateYouTubeChannelOutputData {
             $channelId = new YouTubeChannelId($inputData->channelId);
 
-            if (is_null($this->repository->find($channelId))) {
+            if ($this->repository->find($channelId) === null) {
                 throw new BusinessRuleViolationException(sprintf('登録されていないチャンネルです "%s"', $channelId->value));
             }
 

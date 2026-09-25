@@ -43,7 +43,7 @@ readonly class RefreshUseCase
 
             $refreshToken = $this->refreshTokenRepository->findActive($refreshTokenId);
 
-            if (is_null($refreshToken)) {
+            if ($refreshToken === null) {
                 throw new UnauthenticatedException();
             }
 

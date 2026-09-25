@@ -44,13 +44,13 @@ readonly class LoginFinishUseCase
     {
         $state = $this->ceremonyStore->pull($inputData->authCeremonyId);
 
-        if (is_null($state) || $state->type !== PasskeyCeremonyType::Login) {
+        if ($state === null || $state->type !== PasskeyCeremonyType::Login) {
             throw new UnauthenticatedException();
         }
 
         $credentialId = $this->passkeyAuthenticator->credentialId($inputData->credential);
 
-        if (is_null($credentialId)) {
+        if ($credentialId === null) {
             throw new UnauthenticatedException();
         }
 
@@ -69,7 +69,7 @@ readonly class LoginFinishUseCase
     ): LoginFinishOutputData {
         $passkey = $this->passkeyRepository->findByAdminUserIdAndCredentialIdForUpdate($state->adminUserId, $credentialId);
 
-        if (is_null($passkey)) {
+        if ($passkey === null) {
             throw new UnauthenticatedException();
         }
 

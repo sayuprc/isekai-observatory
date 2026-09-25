@@ -49,7 +49,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
         $releaseRow = $releaseRows[0] ?? null;
 
-        if (is_null($releaseRow)) {
+        if ($releaseRow === null) {
             return null;
         }
 
@@ -139,7 +139,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
                     $binReleaseId,
                     $medium['position'],
                     $track['track_no'],
-                    is_null($track['song_id']) ? null : $this->converter->toBin($track['song_id']),
+                    $track['song_id'] === null ? null : $this->converter->toBin($track['song_id']),
                     $track['title'],
                 ];
             }
@@ -218,7 +218,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             $binSongId = Row::nullableString($trackRow, 'song_id');
 
             $tracksByPosition[Row::int($trackRow, 'position')][] = [
-                'songId' => is_null($binSongId) ? null : $this->converter->toUuid($binSongId),
+                'songId' => $binSongId === null ? null : $this->converter->toUuid($binSongId),
                 'title' => Row::nullableString($trackRow, 'title'),
                 'trackNo' => Row::int($trackRow, 'track_no'),
             ];

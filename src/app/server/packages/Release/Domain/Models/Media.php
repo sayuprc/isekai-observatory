@@ -28,7 +28,7 @@ readonly class Media extends ImmutableCollection
 
             $medium = new Medium(
                 new OrderNo($item['position']),
-                is_null($normalizedName) ? null : new MediumName($normalizedName),
+                $normalizedName === null ? null : new MediumName($normalizedName),
                 Tracks::fromArray($item['tracks']),
             );
 
@@ -74,7 +74,7 @@ readonly class Media extends ImmutableCollection
 
     private static function normalizeName(?string $name): ?string
     {
-        if (is_null($name)) {
+        if ($name === null) {
             return null;
         }
 

@@ -26,7 +26,7 @@ readonly class GetUseCase
 
         $songId = new SongId($inputData->songId);
 
-        if (is_null($found = $this->repository->find($songId))) {
+        if (($found = $this->repository->find($songId)) === null) {
             throw new ResourceNotFoundException('楽曲', $songId->value);
         }
 

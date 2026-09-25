@@ -31,7 +31,7 @@ class PersonIntegrityService
             $this->repository->getMaxOrderNo() + 10,
         );
 
-        if (! is_null($this->repository->findByName($person->name))) {
+        if ($this->repository->findByName($person->name) !== null) {
             throw new BusinessRuleViolationException(sprintf('すでに使われている名前です "%s"', $name));
         }
 
@@ -45,7 +45,7 @@ class PersonIntegrityService
     {
         $person = $this->build($personId, $name, $orderNo);
 
-        if (! is_null($found = $this->repository->findByName($person->name)) && ! $found->equals($person)) {
+        if (($found = $this->repository->findByName($person->name)) !== null && ! $found->equals($person)) {
             throw new BusinessRuleViolationException(sprintf('すでに使われている名前です "%s"', $name));
         }
 

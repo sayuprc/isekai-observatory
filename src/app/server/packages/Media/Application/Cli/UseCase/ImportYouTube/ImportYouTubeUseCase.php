@@ -55,7 +55,7 @@ readonly class ImportYouTubeUseCase
     {
         $videos = $this->videoQueryService->fetchUploadedVideos($channel->channelId);
 
-        if (is_null($videos)) {
+        if ($videos === null) {
             return ChannelImportResult::channelNotFound($channel);
         }
 
@@ -65,7 +65,7 @@ readonly class ImportYouTubeUseCase
             $url = new MediaUrl($video->url);
 
             // 動画は新しい順に取得されるため、保存済みの動画に到達した時点で以降は取り込み済みとみなす
-            if (! is_null($this->mediaRepository->findByUrl($url))) {
+            if ($this->mediaRepository->findByUrl($url) !== null) {
                 break;
             }
 

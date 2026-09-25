@@ -40,10 +40,10 @@ readonly class RecoveryStartUseCase
         $adminUserId = $this->uuidGenerator->generate();
         $recoveryCodeId = null;
 
-        if (! is_null($adminUser)) {
+        if ($adminUser !== null) {
             $recoveryCode = $this->verifyService->verify($inputData->plainCode, $adminUser->adminUserId);
 
-            if (! is_null($recoveryCode)) {
+            if ($recoveryCode !== null) {
                 $adminUserId = $adminUser->adminUserId->value;
                 $recoveryCodeId = $recoveryCode->recoveryCodeId->value;
             }

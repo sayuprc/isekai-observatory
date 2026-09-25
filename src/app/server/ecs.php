@@ -59,6 +59,7 @@ return ECSConfig::configure()
         \PhpCsFixer\Fixer\Import\NoUnusedImportsFixer::class,
 
         \PhpCsFixer\Fixer\LanguageConstruct\ExplicitIndirectVariableFixer::class,
+        \PhpCsFixer\Fixer\LanguageConstruct\IsNullFixer::class,
         \PhpCsFixer\Fixer\LanguageConstruct\NullableTypeDeclarationFixer::class,
         \PhpCsFixer\Fixer\LanguageConstruct\SingleSpaceAroundConstructFixer::class,
 
@@ -141,6 +142,11 @@ return ECSConfig::configure()
             'match',
             'parameters',
         ],
+    ])
+    ->withConfiguredRule(\PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer::class, [
+        'equal' => false,
+        'identical' => false,
+        'less_and_greater' => null,
     ])
     ->withConfiguredRule(\PhpCsFixer\Fixer\FunctionNotation\MethodArgumentSpaceFixer::class, [
         'attribute_placement' => 'standalone',

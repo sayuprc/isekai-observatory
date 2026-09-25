@@ -79,7 +79,7 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
 
         $lastMedia = $hasNextPage && $media !== [] ? $media[count($media) - 1] : null;
 
-        $nextCursor = is_null($lastMedia)
+        $nextCursor = $lastMedia === null
             ? null
             : MediaListCursor::encode($lastMedia->publishedAt->format('Y-m-d H:i:s'), $lastMedia->mediaId);
 

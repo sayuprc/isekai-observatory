@@ -31,7 +31,7 @@ readonly class DeleteUseCase
         $this->transaction->scope(function () use ($inputData): void {
             $event = $this->repository->find(new EventId($inputData->eventId));
 
-            if (is_null($event)) {
+            if ($event === null) {
                 throw new ResourceNotFoundException('Event', $inputData->eventId);
             }
 

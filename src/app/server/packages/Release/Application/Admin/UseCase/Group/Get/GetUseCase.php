@@ -26,7 +26,7 @@ readonly class GetUseCase
 
         $releaseGroupId = new ReleaseGroupId($inputData->releaseGroupId);
 
-        if (is_null($found = $this->repository->find($releaseGroupId))) {
+        if (($found = $this->repository->find($releaseGroupId)) === null) {
             throw new ResourceNotFoundException('ReleaseGroup', $releaseGroupId->value);
         }
 

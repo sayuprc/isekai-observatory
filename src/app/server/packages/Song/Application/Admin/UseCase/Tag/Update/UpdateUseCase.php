@@ -33,7 +33,7 @@ readonly class UpdateUseCase
         $songTagId = new SongTagId($inputData->songTagId);
 
         return $this->transaction->scope(function () use ($inputData, $songTagId): UpdateOutputData {
-            if (is_null($this->repository->find($songTagId))) {
+            if ($this->repository->find($songTagId) === null) {
                 throw new ResourceNotFoundException('SongTag', $songTagId->value);
             }
 

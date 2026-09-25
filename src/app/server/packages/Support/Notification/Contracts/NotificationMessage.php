@@ -20,9 +20,9 @@ final readonly class NotificationMessage
         ?string $content = null,
         private array $embeds = [],
     ) {
-        $this->content = is_null($content) ? null : mb_trim($content);
+        $this->content = $content === null ? null : mb_trim($content);
 
-        if ((is_null($this->content) || $this->content === '') && count($this->embeds) === 0) {
+        if (($this->content === null || $this->content === '') && count($this->embeds) === 0) {
             throw new LogicException('$content か $embeds のどちらか一方は必須です');
         }
     }
@@ -34,7 +34,7 @@ final readonly class NotificationMessage
             'status' => $this->status->value,
         ];
 
-        if (! is_null($this->content) && $this->content !== '') {
+        if ($this->content !== null && $this->content !== '') {
             $array['content'] = $this->content;
         }
 

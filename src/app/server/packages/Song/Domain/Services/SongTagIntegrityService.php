@@ -32,7 +32,7 @@ class SongTagIntegrityService
             $this->repository->getMaxOrderNo() + 10,
         );
 
-        if (! is_null($this->repository->findByName($tag->name))) {
+        if ($this->repository->findByName($tag->name) !== null) {
             throw new BusinessRuleViolationException(sprintf('すでに使われている名前です "%s"', $name));
         }
 
@@ -46,7 +46,7 @@ class SongTagIntegrityService
     {
         $tag = $this->build($songTagId, $name, $orderNo);
 
-        if (! is_null($found = $this->repository->findByName($tag->name)) && ! $found->equals($tag)) {
+        if (($found = $this->repository->findByName($tag->name)) !== null && ! $found->equals($tag)) {
             throw new BusinessRuleViolationException(sprintf('すでに使われている名前です "%s"', $name));
         }
 

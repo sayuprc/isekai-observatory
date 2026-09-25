@@ -30,7 +30,7 @@ readonly class ReleaseFormats extends ImmutableCollection
         foreach ($values as $value) {
             $format = ReleaseFormat::tryFrom($value);
 
-            if (is_null($format)) {
+            if ($format === null) {
                 throw new InvalidDomainException("不正な提供形態です: {$value}");
             }
 

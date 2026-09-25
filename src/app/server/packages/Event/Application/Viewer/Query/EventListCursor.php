@@ -35,7 +35,7 @@ final class EventListCursor
             ! is_array($data)
             || ! array_key_exists('startOn', $data)
             || ! isset($data['eventId'])
-            || ! (is_null($data['startOn']) || is_string($data['startOn']))
+            || ! ($data['startOn'] === null || is_string($data['startOn']))
             || ! is_string($data['eventId'])
         ) {
             throw new InvalidArgumentException('Invalid cursor.');

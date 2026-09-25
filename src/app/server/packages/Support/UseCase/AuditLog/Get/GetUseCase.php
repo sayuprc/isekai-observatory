@@ -23,7 +23,7 @@ readonly class GetUseCase
 
         $found = $this->query->find($inputData->auditLogId);
 
-        if (is_null($found)) {
+        if ($found === null) {
             throw new ResourceNotFoundException('監査ログ', $inputData->auditLogId);
         }
 
