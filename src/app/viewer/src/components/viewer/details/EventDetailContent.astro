@@ -1,6 +1,6 @@
 ---
 import type { Event } from '../../../features/events/types';
-import { eventDate, eventStatusName, eventTypeName } from '../../../features/events/types';
+import { eventDetailDate, eventStatusName, eventTypeName } from '../../../features/events/types';
 import DetailSectionHead from './DetailSectionHead.astro';
 import EventSetlistSongs from './EventSetlistSongs.astro';
 import MediaChip from './MediaChip.astro';
@@ -12,12 +12,12 @@ interface Props {
 type Performance = Event['performances'][number];
 
 const { event } = Astro.props;
-const date = eventDate(event) ?? '開催時期未定';
 const statusName = eventStatusName(event.statusValue);
-const infoItems = [
-  { label: '開催時期', value: date },
-  { label: '種別', value: eventTypeName(event.typeValue) },
-  { label: '開催先', value: event.venues.map(venue => venue.name).join(' / ') || '-' },
+// 種別は見出しのバッジに出すので、開催情報には開催時期と開催先だけを並べる
+// 期間の開始日と終了日は、それぞれ途中で折り返さないよう分けて持つ
+const facts = [
+  { label: '開催時期', parts: (eventDetailDate(event) ?? '開催時期未定').split(' 〜 '), separator: ' 〜 ' },
+  { label: '開催先', parts: [event.venues.map(venue => venue.name).join(' / ') || '-'], separator: '' },
 ];
 
 const coVocalistText = (performance: Performance): string | null =>
@@ -51,19 +51,25 @@ const hostname = (url: string): string => {
 
 <div class="detail-page-content event-detail-content" data-share-title={event.title}>
   <div class="event-detail-meta">
-    <span class="label-mono">{date} · {eventTypeName(event.typeValue)}</span>
+    <span class="label-mono">{eventTypeName(event.typeValue)}</span>
     {statusName && <span class="event-detail-status">{statusName}</span>}
   </div>
   <h1 class="detail-title">{event.title}</h1>
   {event.description && <p class="detail-description event-detail-description">{event.description}</p>}
 
-  <DetailSectionHead title="開催情報" />
-  <dl class="song-credit-grid">
+  <dl class="event-detail-facts">
     {
-      infoItems.map(item => (
-        <div class="song-credit-item">
-          <dt class="song-credit-label">{item.label}</dt>
-          <dd class="song-credit-value">{item.value}</dd>
+      facts.map(fact => (
+        <div class="event-detail-fact">
+          <dt class="event-detail-fact-label">{fact.label}</dt>
+          <dd class="event-detail-fact-value">
+            {fact.parts.map((part, index) => (
+              <>
+                {index > 0 && fact.separator}
+                <span class="event-detail-fact-part">{part}</span>
+              </>
+            ))}
+          </dd>
         </div>
       ))
     }

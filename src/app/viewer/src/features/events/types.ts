@@ -9,6 +9,17 @@ export function eventDate(event: Event): string | null {
 
 const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 
+const weekdayOf = (value: string): string => WEEKDAYS[new Date(`${value}T12:00:00Z`).getUTCDay()] ?? '';
+
+// 詳細の開催時期。年月日と曜日を出し、期間は開始日と終了日を 〜 でつなぐ
+export function eventDetailDate(event: Event): string | null {
+  const { startOn, endOn } = event.schedule;
+  if (!startOn) return null;
+
+  const format = (value: string) => `${value.replaceAll('-', '.')} (${weekdayOf(value)})`;
+  return endOn ? `${format(startOn)} 〜 ${format(endOn)}` : format(startOn);
+}
+
 // 一覧の日付列。単日は曜日、期間は終了日を添える
 // 年は一覧では見出しに出すので省き、年見出しのないホームでは付ける
 export function eventDateColumn(event: Event, withYear = false): { main: string; sub: string } | null {
@@ -25,8 +36,7 @@ export function eventDateColumn(event: Event, withYear = false): { main: string;
     return { main, sub: `– ${sameYear ? monthDay(endOn) : dotted(endOn)}` };
   }
 
-  const weekday = WEEKDAYS[new Date(`${startOn}T12:00:00Z`).getUTCDay()] ?? '';
-  return { main, sub: weekday };
+  return { main, sub: weekdayOf(startOn) };
 }
 
 export function eventTypeName(value: Event['typeValue']): string {
