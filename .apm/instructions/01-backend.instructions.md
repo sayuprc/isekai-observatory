@@ -35,6 +35,7 @@ applyTo: 'src/app/server/**'
 - `src/app/server/Generated/` は手動編集しない
 - `@phpstan-type` の型エイリアス名は `_` 始まりの lowerCamelCase (`_lowerCamel`) にする。例: `@phpstan-type _songMedia array{mediaId: string, orderNo: int}`
   - クラス名や組み込み型と見分けられ、名前の衝突も避けられる
+  - PHPStan のカスタムルール `Tools\PHPStan\Rules\TypeAliasNamingRule` が検査する (`typeAlias.naming`)
 
 ## テスト
 
