@@ -13,8 +13,9 @@ import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
+import { MediaSection, toMediaEntry, type MediaEntry } from '../media/MediaSection';
 import { SearchableSelect } from '../SearchableSelect';
-import { buildSongMediaRequest, MediaSection, toMediaEntry, type MediaEntry } from './MediaSection';
+import { buildSongMediaRequest } from './media-request';
 import { toRequestSongPersons, type PersonSelections, type SelectedPerson } from './person-selection';
 import { PersonSearchSection } from './PersonSearchSection';
 
@@ -331,8 +332,10 @@ export const EditableForm = (props: EditableFormProps) => {
                     class="select select-bordered w-full"
                     name="typeValue"
                     value={typeValue()}
-                    onChange={e =>
-                      setTypeValue(e.currentTarget.value === '' ? '' : (Number(e.currentTarget.value) as SongTypeValue))}
+                    onChange={(e) => {
+                      const value = e.currentTarget.value;
+                      setTypeValue(value === '' ? '' : (Number(value) as SongTypeValue));
+                    }}
                     required
                     classList={{ 'select-error': !!getFieldError('typeValue') }}
                   >

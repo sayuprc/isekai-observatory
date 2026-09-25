@@ -39,55 +39,94 @@ readonly class SongRepository implements SongRepositoryInterface
     #[Override]
     public function find(SongId $songId): ?Song
     {
-        $binSongId = $this->converter->toBin($songId->value);
+        return $this->findByIds($songId)[0] ?? null;
+    }
+
+    #[Override]
+    public function findByIds(SongId ...$songIds): array
+    {
+        if ($songIds === []) {
+            return [];
+        }
+
+        $binSongIds = array_map(fn (SongId $songId): string => $this->converter->toBin($songId->value), $songIds);
 
         $songRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
                 ->withSelect(self::SONG_COLUMNS)
                 ->from('songs')
-                ->where('song_id', '=', $binSongId)
-                ->limit(1),
+                ->where('song_id', 'IN', $binSongIds),
         );
 
-        $songRow = $songRows[0] ?? null;
-
-        if (is_null($songRow)) {
-            return null;
+        if ($songRows === []) {
+            return [];
         }
 
-        $personRows = $this->queryFactory->fetchAll(
+        $personRows = $this->groupBySongId($this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['person_id', 'role', 'order_no'])
+                ->withSelect(['song_id', 'person_id', 'role', 'order_no'])
                 ->from('song_persons')
-                ->where('song_id', '=', $binSongId)
+                ->where('song_id', 'IN', $binSongIds)
                 ->orderBy('order_no'),
-        );
+        ));
 
-        $taggingRows = $this->queryFactory->fetchAll(
+        $taggingRows = $this->groupBySongId($this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_tag_id'])
+                ->withSelect(['song_id', 'song_tag_id'])
                 ->from('song_taggings')
-                ->where('song_id', '=', $binSongId),
-        );
+                ->where('song_id', 'IN', $binSongIds),
+        ));
 
-        $mediaRows = $this->queryFactory->fetchAll(
+        $mediaRows = $this->groupBySongId($this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['media_id', 'order_no'])
+                ->withSelect(['song_id', 'media_id', 'order_no'])
                 ->from('song_media_links')
-                ->where('song_id', '=', $binSongId)
+                ->where('song_id', 'IN', $binSongIds)
                 ->orderBy('order_no'),
-        );
+        ));
 
-        return $this->hydrate($songRow, $personRows, $taggingRows, $mediaRows);
+        return array_map(
+            function (array $songRow) use ($personRows, $taggingRows, $mediaRows): Song {
+                $binSongId = Row::string($songRow, 'song_id');
+
+                return $this->hydrate(
+                    $songRow,
+                    $personRows[$binSongId] ?? [],
+                    $taggingRows[$binSongId] ?? [],
+                    $mediaRows[$binSongId] ?? [],
+                );
+            },
+            $songRows,
+        );
     }
 
     #[Override]
     public function isPersonUsed(PersonId $personId): bool
     {
-        $count = Row::intValue(
+        $personBinId = $this->converter->toBin($personId->value);
+        $songPersonCount = Row::intValue(
             $this->queryFactory->select()
                 ->from('song_persons')
-                ->where('person_id', '=', $this->converter->toBin($personId->value))
+                ->where('person_id', '=', $personBinId)
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
+        );
+        $performancePersonCount = Row::intValue(
+            $this->queryFactory->select()
+                ->from('song_performance_persons')
+                ->where('person_id', '=', $personBinId)
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
+        );
+
+        return $songPersonCount > 0 || $performancePersonCount > 0;
+    }
+
+    #[Override]
+    public function isUsed(SongId $songId): bool
+    {
+        $count = Row::intValue(
+            $this->queryFactory->select()
+                ->from('song_performances')
+                ->where('song_id', '=', $this->converter->toBin($songId->value))
                 ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
         );
 
@@ -237,6 +276,21 @@ readonly class SongRepository implements SongRepositoryInterface
             ->into('song_media_links', ['song_id', 'media_id', 'order_no'])
             ->values(...$rows)
             ->execute($this->queryFactory->pdo());
+    }
+
+    /**
+     * @param list<array<string, mixed>> $rows
+     *
+     * @return array<string, list<array<string, mixed>>>
+     */
+    private function groupBySongId(array $rows): array
+    {
+        $grouped = [];
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'song_id')][] = $row;
+        }
+
+        return $grouped;
     }
 
     /**

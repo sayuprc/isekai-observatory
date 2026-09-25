@@ -1,0 +1,22 @@
+---
+interface Props {
+  songs: { title: string; href: string | null; note: string | null }[];
+}
+
+const { songs } = Astro.props;
+---
+
+<ul class="event-setlist-songs">
+  {
+    songs.map(song => (
+      <li class="event-setlist-song">
+        {
+          song.href
+            ? <a class="event-setlist-song-title" href={song.href}>{song.title}</a>
+            : <span class="event-setlist-song-title">{song.title}</span>
+        }
+        {song.note && <span class="label-mono event-setlist-song-note">{song.note}</span>}
+      </li>
+    ))
+  }
+</ul>

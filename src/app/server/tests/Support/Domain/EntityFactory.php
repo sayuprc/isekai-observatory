@@ -16,6 +16,9 @@ use Auth\Domain\Models\Token\RefreshToken\RefreshToken;
 use Auth\Domain\Models\Token\RefreshToken\RefreshTokenId;
 use DateTimeImmutable;
 use DateType\ImmutableDate;
+use Event\Domain\Models\Event;
+use Event\Domain\Models\EventStatus;
+use Event\Domain\Models\EventType;
 use Media\Domain\Models\Media;
 use Media\Domain\Models\MediaId;
 use Media\Domain\Models\MediaPublishedAt;
@@ -58,8 +61,51 @@ use Venue\Domain\Models\VenueId;
 use Venue\Domain\Models\VenueKind;
 use Venue\Domain\Models\VenueName;
 
+/**
+ * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ */
 trait EntityFactory
 {
+    /**
+     * @param list<array{venueId: string, orderNo: int}> $venues
+     * @param list<array{mediaId: string, orderNo: int}> $media
+     * @param list<EventSourceInput>                     $sources
+     * @param list<SongPerformanceInput>                 $performances
+     * @param list<SetlistItemInput>                     $setlist
+     */
+    protected function createEvent(
+        string $eventId,
+        string $title = 'テストライブ',
+        EventType $type = EventType::Live,
+        ?string $startOn = '2026-10-01',
+        ?string $endOn = null,
+        EventStatus $status = EventStatus::Normal,
+        bool $isDisplay = true,
+        array $venues = [],
+        array $media = [],
+        array $sources = [],
+        array $performances = [],
+        array $setlist = [],
+    ): Event {
+        return Event::reconstruct(
+            $eventId,
+            $title,
+            '',
+            $type->value,
+            $startOn,
+            $endOn,
+            $status->value,
+            $isDisplay,
+            $venues,
+            $media,
+            $sources,
+            $performances,
+            $setlist,
+        );
+    }
+
     protected function createVenue(string $venueId, string $name, VenueKind $kind): Venue
     {
         return new Venue(new VenueId($venueId), new VenueName($name), $kind);

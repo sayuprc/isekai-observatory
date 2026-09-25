@@ -1,10 +1,12 @@
 import "../../shared";
 import "../../packages/media";
+import "../../packages/event";
 import "../../packages/song";
 import "../releases/domain.tsp";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Media;
+using IsekaiObservatory.Packages.Event;
 using IsekaiObservatory.Packages.Song;
 
 namespace IsekaiObservatory.Viewer;
@@ -15,6 +17,15 @@ model SongRelationCounts {
 
   @doc("関連メディア数")
   mediaCount: int32;
+}
+
+@doc("楽曲が公開イベントで披露された履歴")
+model SongPerformanceHistory {
+  eventId: eventId;
+  eventTitle: eventTitle;
+  typeValue: EventTypeValue;
+  schedule: EventSchedule;
+  coVocalistNames: string[];
 }
 
 @example(#{
@@ -44,6 +55,7 @@ model SongRelationCounts {
       color: "#4a5a78",
     }
   ],
+  performances: #[],
 })
 model SongListItem {
   songId: songId;
@@ -58,6 +70,9 @@ model SongListItem {
 
   @doc("収録先の公開リリースグループ(最古発売日の降順)")
   releaseGroups: SongReleaseGroupSummary[];
+
+  @doc("公開イベントでの披露履歴(開催時期の新しい順)")
+  performances: SongPerformanceHistory[];
 }
 
 @doc("楽曲が収録されている公開リリースグループの概要")
