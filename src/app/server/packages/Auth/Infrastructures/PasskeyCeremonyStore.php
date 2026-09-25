@@ -49,7 +49,7 @@ readonly class PasskeyCeremonyStore implements PasskeyCeremonyStoreInterface
             return null;
         }
 
-        if (is_null($payload)) {
+        if ($payload === null) {
             return null;
         }
 

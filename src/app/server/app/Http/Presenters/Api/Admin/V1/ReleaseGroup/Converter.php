@@ -30,7 +30,7 @@ class Converter
     public function toOpenApiSummary(ReleaseGroupSummary $summary): OpenApiReleaseGroupSummary
     {
         return new OpenApiReleaseGroupSummary([
-            'first_released_on' => is_null($summary->firstReleasedOn) ? null : new DateTime($summary->firstReleasedOn),
+            'first_released_on' => $summary->firstReleasedOn === null ? null : new DateTime($summary->firstReleasedOn),
         ])
             ->setReleaseGroupId($summary->releaseGroupId)
             ->setTitle($summary->title)

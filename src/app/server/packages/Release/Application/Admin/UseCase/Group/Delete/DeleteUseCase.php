@@ -35,7 +35,7 @@ readonly class DeleteUseCase
         $this->transaction->scope(function () use ($releaseGroupId): void {
             $releaseGroup = $this->repository->find($releaseGroupId);
 
-            if (is_null($releaseGroup)) {
+            if ($releaseGroup === null) {
                 return;
             }
 

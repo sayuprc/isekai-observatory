@@ -45,7 +45,7 @@ class MediaIntegrityService
             $isDisplay,
         );
 
-        if (! is_null($this->repository->findByUrl($media->url))) {
+        if ($this->repository->findByUrl($media->url) !== null) {
             throw new BusinessRuleViolationException('同じURLのメディアが既に存在します');
         }
 
@@ -74,7 +74,7 @@ class MediaIntegrityService
 
         $found = $this->repository->findByUrl($media->url);
 
-        if (! is_null($found) && ! $found->equals($media)) {
+        if ($found !== null && ! $found->equals($media)) {
             throw new BusinessRuleViolationException('同じURLのメディアが既に存在します');
         }
 

@@ -37,7 +37,7 @@ readonly class RegisterStartUseCase
 
         $token = $this->consumeService->verify($inputData->plainToken, $email);
 
-        if (is_null($token)) {
+        if ($token === null) {
             throw new BusinessRuleViolationException(self::FAILED_MESSAGE);
         }
 

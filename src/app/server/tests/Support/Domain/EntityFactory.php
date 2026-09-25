@@ -179,7 +179,7 @@ trait EntityFactory
             new SongId($songId),
             new Title($title),
             new Description($description),
-            is_null($lyricsLink) ? null : new LyricsLink($lyricsLink),
+            $lyricsLink === null ? null : new LyricsLink($lyricsLink),
             $type,
             $isDisplay,
             new OrderNo($orderNo),

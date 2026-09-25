@@ -52,11 +52,11 @@ readonly class RecoveryFinishUseCase
     {
         $state = $this->ceremonyStore->pull($inputData->authCeremonyId);
 
-        if (is_null($state) || $state->type !== PasskeyCeremonyType::Recovery) {
+        if ($state === null || $state->type !== PasskeyCeremonyType::Recovery) {
             throw new UnauthenticatedException();
         }
 
-        if (is_null($state->name)) {
+        if ($state->name === null) {
             throw new UnauthenticatedException();
         }
 
@@ -83,7 +83,7 @@ readonly class RecoveryFinishUseCase
         // 束縛される。ダミー id のときは実在ユーザーが存在しないため find は null となり失敗する
         $adminUser = $this->adminUserRepository->find(new AdminUserId($state->adminUserId));
 
-        if (is_null($adminUser) || is_null($state->recoveryCodeId)) {
+        if ($adminUser === null || $state->recoveryCodeId === null) {
             throw new UnauthenticatedException();
         }
 
@@ -93,7 +93,7 @@ readonly class RecoveryFinishUseCase
             $adminUser->adminUserId,
         );
 
-        if (is_null($recoveryCode)) {
+        if ($recoveryCode === null) {
             throw new UnauthenticatedException();
         }
 

@@ -41,7 +41,7 @@ readonly class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 
         $row = $rows[0] ?? null;
 
-        if (is_null($row)) {
+        if ($row === null) {
             return null;
         }
 

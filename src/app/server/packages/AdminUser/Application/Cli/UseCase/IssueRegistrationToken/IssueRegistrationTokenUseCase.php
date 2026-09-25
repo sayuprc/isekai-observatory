@@ -30,7 +30,7 @@ readonly class IssueRegistrationTokenUseCase
             $role = Role::fromValue($inputData->role);
             $permissions = Permissions::fromArray($inputData->permissions);
 
-            if (! is_null($this->adminUserRepository->findByEmail($email))) {
+            if ($this->adminUserRepository->findByEmail($email) !== null) {
                 throw new BusinessRuleViolationException(sprintf('すでに使われているメールアドレスです "%s"', $inputData->email));
             }
 

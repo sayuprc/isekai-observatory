@@ -28,11 +28,11 @@ readonly class GetUseCase
 
         $releaseId = new ReleaseId($inputData->releaseId);
 
-        if (is_null($found = $this->repository->find($releaseId))) {
+        if (($found = $this->repository->find($releaseId)) === null) {
             throw new ResourceNotFoundException('Release', $releaseId->value);
         }
 
-        if (is_null($group = $this->groupRepository->find($found->releaseGroupId))) {
+        if (($group = $this->groupRepository->find($found->releaseGroupId)) === null) {
             throw new ResourceNotFoundException('ReleaseGroup', $found->releaseGroupId->value);
         }
 

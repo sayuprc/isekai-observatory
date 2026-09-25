@@ -92,7 +92,7 @@ abstract class OpenApiValidator
     private function resolveOperationAddress(Request $request): OperationAddress
     {
         $route = $request->route();
-        $path = is_null($route) ? ltrim($request->getPathInfo(), '/') : $route->uri();
+        $path = $route === null ? ltrim($request->getPathInfo(), '/') : $route->uri();
         $path = preg_replace($this->getRoutePrefixPattern(), '', $path) ?? $path;
 
         return new OperationAddress('/' . ltrim($path, '/'), strtolower($request->getMethod()));
@@ -133,7 +133,7 @@ abstract class OpenApiValidator
     {
         $breadcrumb = $exception->dataBreadCrumb();
 
-        if (is_null($breadcrumb)) {
+        if ($breadcrumb === null) {
             return ['', '予期せぬエラー'];
         }
 

@@ -32,7 +32,7 @@ readonly class DeleteUseCase
         $this->transaction->scope(function () use ($releaseId): void {
             $release = $this->repository->find($releaseId);
 
-            if (is_null($release)) {
+            if ($release === null) {
                 return;
             }
 

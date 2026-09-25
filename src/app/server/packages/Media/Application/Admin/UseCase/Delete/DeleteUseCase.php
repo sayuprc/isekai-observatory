@@ -33,7 +33,7 @@ readonly class DeleteUseCase
         $this->transaction->scope(function () use ($mediaId): void {
             $media = $this->repository->find($mediaId);
 
-            if (is_null($media)) {
+            if ($media === null) {
                 return;
             }
 

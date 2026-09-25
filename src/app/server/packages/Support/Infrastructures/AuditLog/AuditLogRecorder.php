@@ -41,7 +41,7 @@ readonly class AuditLogRecorder implements AuditLogRecorderInterface
     ): void {
         $resolvedActor = $actorId ?? $this->authContext->get()?->adminUserId;
 
-        if (is_null($resolvedActor)) {
+        if ($resolvedActor === null) {
             throw new LogicException('audit log の actor が解決できません');
         }
 

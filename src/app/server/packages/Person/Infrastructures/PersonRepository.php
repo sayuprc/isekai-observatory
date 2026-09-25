@@ -88,7 +88,7 @@ readonly class PersonRepository implements PersonRepositoryInterface
 
         $row = $rows[0] ?? null;
 
-        return is_null($row) ? null : $this->hydrate($row);
+        return $row === null ? null : $this->hydrate($row);
     }
 
     #[Override]
@@ -123,7 +123,7 @@ readonly class PersonRepository implements PersonRepositoryInterface
 
         $row = $rows[0] ?? null;
 
-        return is_null($row) ? null : $this->hydrate($row);
+        return $row === null ? null : $this->hydrate($row);
     }
 
     #[Override]

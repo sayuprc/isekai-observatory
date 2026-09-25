@@ -26,11 +26,11 @@ readonly class EventSchedule
     {
         $schedule = new self(self::toDate($startOn), self::toDate($endOn));
 
-        if (is_null($schedule->startOn) && ! is_null($schedule->endOn)) {
+        if ($schedule->startOn === null && $schedule->endOn !== null) {
             throw new BusinessRuleViolationException('開催終了日だけを指定できません');
         }
 
-        if (! is_null($schedule->startOn) && ! is_null($schedule->endOn) && $schedule->startOn > $schedule->endOn) {
+        if ($schedule->startOn !== null && $schedule->endOn !== null && $schedule->startOn > $schedule->endOn) {
             throw new BusinessRuleViolationException('開催終了日は開始日以降を指定してください');
         }
 
@@ -40,8 +40,8 @@ readonly class EventSchedule
     public static function reconstruct(?string $startOn, ?string $endOn): self
     {
         return new self(
-            is_null($startOn) ? null : new ImmutableDate($startOn),
-            is_null($endOn) ? null : new ImmutableDate($endOn),
+            $startOn === null ? null : new ImmutableDate($startOn),
+            $endOn === null ? null : new ImmutableDate($endOn),
         );
     }
 
@@ -61,7 +61,7 @@ readonly class EventSchedule
      */
     private static function toDate(?string $value): ?ImmutableDate
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 

@@ -95,7 +95,7 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
 
         $row = $rows[0] ?? null;
 
-        return is_null($row) ? null : $this->hydrate($row);
+        return $row === null ? null : $this->hydrate($row);
     }
 
     #[Override]
@@ -143,7 +143,7 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
             $this->converter->toUuid(Row::string($row, 'admin_user_id')),
             Row::string($row, 'code'),
             Row::int($row, 'status'),
-            is_null($usedAt) ? null : new DateTimeImmutable($usedAt),
+            $usedAt === null ? null : new DateTimeImmutable($usedAt),
         );
     }
 }

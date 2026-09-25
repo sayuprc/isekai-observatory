@@ -33,7 +33,7 @@ readonly class UpdateUseCase
         $mediaId = new MediaId($inputData->mediaId);
 
         return $this->transaction->scope(function () use ($inputData, $mediaId): UpdateOutputData {
-            if (is_null($this->repository->find($mediaId))) {
+            if ($this->repository->find($mediaId) === null) {
                 throw new ResourceNotFoundException('Media', $mediaId->value);
             }
 

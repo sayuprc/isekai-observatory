@@ -30,7 +30,7 @@ readonly class Track
      */
     public static function create(?SongId $songId, ?TrackTitle $title, OrderNo $trackNo): self
     {
-        if (is_null($songId) && is_null($title)) {
+        if ($songId === null && $title === null) {
             throw new BusinessRuleViolationException('収録曲には楽曲かタイトルの少なくとも一方を指定してください。');
         }
 
@@ -40,8 +40,8 @@ readonly class Track
     public static function reconstruct(?string $songId, ?string $title, int $trackNo): self
     {
         return new self(
-            is_null($songId) ? null : new SongId($songId),
-            is_null($title) ? null : new TrackTitle($title),
+            $songId === null ? null : new SongId($songId),
+            $title === null ? null : new TrackTitle($title),
             new OrderNo($trackNo),
         );
     }

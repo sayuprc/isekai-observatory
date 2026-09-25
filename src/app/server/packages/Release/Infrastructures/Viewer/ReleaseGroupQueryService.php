@@ -92,7 +92,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
 
         $lastRow = $hasNextPage && $pageRows !== [] ? $pageRows[count($pageRows) - 1] : null;
 
-        $nextCursor = is_null($lastRow)
+        $nextCursor = $lastRow === null
             ? null
             : ReleaseGroupListCursor::encode(
                 Row::int($lastRow, 'order_no'),
@@ -222,9 +222,9 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             // タイトルのみトラックは songs が結合されないため isDisplay: false(リンクなし表示)とする
             $tracksByMedium[Row::string($row, 'release_id')][Row::int($row, 'position')][] = new ReleaseTrackItem(
                 Row::int($row, 'track_no'),
-                is_null($binSongId) ? null : $this->converter->toUuid($binSongId),
+                $binSongId === null ? null : $this->converter->toUuid($binSongId),
                 Row::string($row, 'title'),
-                is_null($binSongId) ? false : Row::bool($row, 'is_display'),
+                $binSongId === null ? false : Row::bool($row, 'is_display'),
             );
         }
 

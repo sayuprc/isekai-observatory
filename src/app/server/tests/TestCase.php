@@ -32,7 +32,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function privilegedContext(): AuthContext
     {
-        if (! is_null($this->privilegedAuthContext)) {
+        if ($this->privilegedAuthContext !== null) {
             return $this->privilegedAuthContext;
         }
 
@@ -53,7 +53,7 @@ abstract class TestCase extends BaseTestCase
         if (in_array(DatabaseTransactions::class, class_uses_recursive(static::class), true)) {
             $repository = $this->app->make(AdminUserRepositoryInterface::class);
 
-            if (is_null($repository->find($user->adminUserId))) {
+            if ($repository->find($user->adminUserId) === null) {
                 $repository->register($user);
             }
         }

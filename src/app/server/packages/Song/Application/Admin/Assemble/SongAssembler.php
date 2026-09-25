@@ -66,7 +66,7 @@ class SongAssembler
         $toAssembled = static function (SongPerson $person) use ($personMap): AssembledPerson {
             $found = $personMap[$person->personId->value] ?? null;
             // Song Entity が成立している時点で $found が null になることはない
-            assert(! is_null($found));
+            assert($found !== null);
 
             return new AssembledPerson(
                 $person->personId->value,
@@ -78,7 +78,7 @@ class SongAssembler
         $toAssembledTag = static function (SongTagReference $tag) use ($songTagMap): AssembledTag {
             $found = $songTagMap[$tag->songTagId->value] ?? null;
             // Song Entity が成立している時点で $found が null になることはない
-            assert(! is_null($found));
+            assert($found !== null);
 
             return new AssembledTag(
                 $tag->songTagId->value,

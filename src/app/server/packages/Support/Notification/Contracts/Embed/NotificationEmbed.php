@@ -29,9 +29,9 @@ readonly class NotificationEmbed
         private ?DateTimeInterface $timestamp = null,
         private array $fields = [],
     ) {
-        $this->title = is_null($title) ? null : mb_trim($title);
-        $this->description = is_null($description) ? null : mb_trim($description);
-        $this->url = is_null($url) ? null : mb_trim($url);
+        $this->title = $title === null ? null : mb_trim($title);
+        $this->description = $description === null ? null : mb_trim($description);
+        $this->url = $url === null ? null : mb_trim($url);
     }
 
     /**
@@ -41,23 +41,23 @@ readonly class NotificationEmbed
     {
         $array = [];
 
-        if (! is_null($this->title) && $this->title !== '') {
+        if ($this->title !== null && $this->title !== '') {
             $array['title'] = $this->title;
         }
 
-        if (! is_null($this->description) && $this->description !== '') {
+        if ($this->description !== null && $this->description !== '') {
             $array['description'] = $this->description;
         }
 
-        if (! is_null($this->url) && $this->url !== '') {
+        if ($this->url !== null && $this->url !== '') {
             $array['url'] = $this->url;
         }
 
-        if (! is_null($this->color)) {
+        if ($this->color !== null) {
             $array['color'] = $this->color->value;
         }
 
-        if (! is_null($this->timestamp)) {
+        if ($this->timestamp !== null) {
             $array['timestamp'] = $this->timestamp->format('c');
         }
 

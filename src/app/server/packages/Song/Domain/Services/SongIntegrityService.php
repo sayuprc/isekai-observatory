@@ -167,7 +167,7 @@ class SongIntegrityService
     {
         $normalized = $this->normalizeOptionalString($value);
 
-        return is_null($normalized) ? null : new LyricsLink($normalized);
+        return $normalized === null ? null : new LyricsLink($normalized);
     }
 
     private function existsPersons(SongPersons $persons): bool
@@ -225,7 +225,7 @@ class SongIntegrityService
 
     private function normalizeOptionalString(?string $value): ?string
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 

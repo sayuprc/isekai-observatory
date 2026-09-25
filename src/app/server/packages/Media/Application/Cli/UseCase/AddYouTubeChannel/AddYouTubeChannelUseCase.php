@@ -24,7 +24,7 @@ readonly class AddYouTubeChannelUseCase
         return $this->transaction->scope(function () use ($inputData): AddYouTubeChannelOutputData {
             $channel = new YouTubeChannel(new YouTubeChannelId($inputData->channelId), new YouTubeChannelName($inputData->name));
 
-            if (! is_null($this->repository->find($channel->channelId))) {
+            if ($this->repository->find($channel->channelId) !== null) {
                 throw new BusinessRuleViolationException(sprintf('すでに登録されているチャンネルです "%s"', $channel->channelId->value));
             }
 

@@ -47,7 +47,7 @@ readonly class Song
             new SongId($songId),
             new Title($title),
             new Description($description),
-            is_null($lyricsLink) ? null : new LyricsLink($lyricsLink),
+            $lyricsLink === null ? null : new LyricsLink($lyricsLink),
             SongType::from($type),
             $isDisplay,
             new OrderNo($orderNo),

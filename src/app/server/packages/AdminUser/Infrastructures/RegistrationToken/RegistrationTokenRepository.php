@@ -87,7 +87,7 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
 
         $row = $rows[0] ?? null;
 
-        if (is_null($row)) {
+        if ($row === null) {
             return null;
         }
 

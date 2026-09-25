@@ -32,7 +32,7 @@ readonly class UpdateUseCase
         $venueId = new VenueId($inputData->venueId);
 
         return $this->transaction->scope(function () use ($inputData, $venueId): UpdateOutputData {
-            if (is_null($this->repository->find($venueId))) {
+            if ($this->repository->find($venueId) === null) {
                 throw new ResourceNotFoundException('Venue', $venueId->value);
             }
 

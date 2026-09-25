@@ -24,7 +24,7 @@ readonly class GetUseCase
         $venueId = new VenueId($inputData->venueId);
         $venue = $this->repository->find($venueId);
 
-        if (is_null($venue)) {
+        if ($venue === null) {
             throw new ResourceNotFoundException('Venue', $venueId->value);
         }
 

@@ -57,11 +57,11 @@ readonly class RegisterFinishUseCase
     {
         $state = $this->ceremonyStore->pull($inputData->authCeremonyId);
 
-        if (is_null($state) || $state->type !== PasskeyCeremonyType::Register) {
+        if ($state === null || $state->type !== PasskeyCeremonyType::Register) {
             throw new BusinessRuleViolationException(self::FAILED_MESSAGE);
         }
 
-        if (is_null($state->name)) {
+        if ($state->name === null) {
             throw new BusinessRuleViolationException(self::FAILED_MESSAGE);
         }
 
@@ -92,7 +92,7 @@ readonly class RegisterFinishUseCase
 
         $token = $this->consumeService->verify($plainToken, $email);
 
-        if (is_null($token)) {
+        if ($token === null) {
             throw new BusinessRuleViolationException(self::FAILED_MESSAGE);
         }
 

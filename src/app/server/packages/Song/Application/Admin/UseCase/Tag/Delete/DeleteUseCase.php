@@ -33,7 +33,7 @@ readonly class DeleteUseCase
         $this->transaction->scope(function () use ($songTagId): void {
             $tag = $this->repository->find($songTagId);
 
-            if (is_null($tag)) {
+            if ($tag === null) {
                 return;
             }
 

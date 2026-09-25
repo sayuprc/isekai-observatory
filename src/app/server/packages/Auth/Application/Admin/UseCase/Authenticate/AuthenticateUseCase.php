@@ -28,20 +28,20 @@ readonly class AuthenticateUseCase
     {
         $payload = $this->jwtHandler->verify($inputData->accessToken);
 
-        if (is_null($payload)) {
+        if ($payload === null) {
             throw new UnauthenticatedException();
         }
 
         // jti は自前で署名した JWT 由来のため、形式不正は不変条件違反として扱う
         $refreshToken = $this->refreshTokenRepository->findActive(new RefreshTokenId($payload->jti));
 
-        if (is_null($refreshToken)) {
+        if ($refreshToken === null) {
             throw new UnauthenticatedException();
         }
 
         $user = $this->userRepository->find($refreshToken->adminUserId);
 
-        if (is_null($user)) {
+        if ($user === null) {
             throw new UnauthenticatedException();
         }
 
