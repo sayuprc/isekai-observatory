@@ -19,7 +19,7 @@ use Symfony\Component\Yaml\Yaml;
  * League validator は fail-fast で 1 件しか報告できないため、invalid と判定された
  * リクエストのエラー詳細化にのみ使う。通過判定そのものは League に委ねる
  *
- * @phpstan-import-type leaf from BodyErrorFormatter
+ * @phpstan-import-type _leaf from BodyErrorFormatter
  */
 final class BodyErrorCollector
 {
@@ -70,7 +70,7 @@ final class BodyErrorCollector
             return [];
         }
 
-        /** @var array<leaf> $leaves */
+        /** @var array<_leaf> $leaves */
         $leaves = [];
         $this->flatten($error, $leaves);
 
@@ -102,7 +102,7 @@ final class BodyErrorCollector
     /**
      * エラーツリーを葉の (field パス, keyword, args) へ潰す
      *
-     * @param array<leaf> $leaves
+     * @param array<_leaf> $leaves
      */
     private function flatten(ValidationError $error, array &$leaves): void
     {
