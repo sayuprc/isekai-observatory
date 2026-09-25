@@ -1,5 +1,5 @@
 import { createSignal, For, Show, type Accessor, type Setter } from 'solid-js';
-import type { Media, MediaTypeValue, RequestSongMediaLink, SongLinkedMedia } from '../../generated';
+import type { Media, MediaTypeValue } from '../../generated';
 import { client } from '../../utils/client';
 import { createSortable, reorderItems } from '../sortable';
 
@@ -49,19 +49,13 @@ const toErrorMessage = (error: unknown, fallback: string) => {
   return fallback;
 };
 
-export const toMediaEntry = (item: SongLinkedMedia | Media): MediaEntry => ({
+export const toMediaEntry = (item: Pick<Media, 'mediaId' | 'title' | 'url' | 'type' | 'isDisplay'>): MediaEntry => ({
   mediaId: item.mediaId,
   title: item.title,
   url: item.url,
   typeName: item.type.name,
   isDisplay: item.isDisplay,
 });
-
-export const buildSongMediaRequest = (entries: MediaEntry[]): RequestSongMediaLink[] =>
-  entries.map((entry, index) => ({
-    mediaId: entry.mediaId,
-    orderNo: index + 1,
-  }));
 
 export const MediaSection = (props: Props) => {
   const reorderEntries = (fromIndex: number, toIndex: number) => {
@@ -498,16 +492,16 @@ export const MediaSection = (props: Props) => {
             <For each={props.entries()}>
               {(entry, index) => (
                 <div
-                  {...sortable.dropTargetProps('song-media', index())}
+                  {...sortable.dropTargetProps('media', index())}
                   class="rounded-box border border-base-300 bg-base-100 p-4 transition-colors"
                   classList={{
-                    'opacity-50': sortable.isDragging('song-media', index()),
-                    'border-primary bg-primary/5': sortable.isDropTarget('song-media', index()),
+                    'opacity-50': sortable.isDragging('media', index()),
+                    'border-primary bg-primary/5': sortable.isDropTarget('media', index()),
                   }}
                 >
                   <div class="flex flex-wrap items-start justify-between gap-3">
                     <div class="flex min-w-0 items-start gap-2">
-                      <button {...sortable.dragHandleProps('song-media', index(), entry.title)}>⠿</button>
+                      <button {...sortable.dragHandleProps('media', index(), entry.title)}>⠿</button>
                       <div class="min-w-0">
                         <p class="font-medium">{entry.title}</p>
                         <p class="text-xs text-base-content/60">{entry.typeName}</p>

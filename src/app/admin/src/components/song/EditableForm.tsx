@@ -13,8 +13,9 @@ import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
+import { MediaSection, toMediaEntry, type MediaEntry } from '../media/MediaSection';
 import { SearchableSelect } from '../SearchableSelect';
-import { buildSongMediaRequest, MediaSection, toMediaEntry, type MediaEntry } from './MediaSection';
+import { buildSongMediaRequest } from './media-request';
 import { toRequestSongPersons, type PersonSelections, type SelectedPerson } from './person-selection';
 import { PersonSearchSection } from './PersonSearchSection';
 

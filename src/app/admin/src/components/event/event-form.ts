@@ -1,6 +1,15 @@
 import { createSignal } from 'solid-js';
-import type { Event, EventCreateRequest, EventStatusValue, EventTypeValue } from '../../generated';
+import type { Event, EventCreateRequest, EventStatusValue, EventTypeValue, Media } from '../../generated';
 import { normalizeDateValue } from '../../utils/date';
+import { toMediaEntry, type MediaEntry } from '../media/MediaSection';
+import {
+  toSourceForms,
+  toSourcesPayload,
+  toVenueEntry,
+  validateSources,
+  type SourceForm,
+  type VenueEntry,
+} from './event-links';
 import { allowsPerformances, allowsSetlist } from './event-options';
 import {
   toPerformanceForms,
@@ -14,8 +23,6 @@ import {
 
 export type EventRequestBody = EventCreateRequest;
 
-type EventLinks = Pick<EventRequestBody, 'venueIds' | 'mediaIds' | 'sources'>;
-
 export const createEventForm = (event?: Event) => {
   const [title, setTitle] = createSignal(event?.title ?? '');
   const [description, setDescription] = createSignal(event?.description ?? '');
@@ -28,6 +35,11 @@ export const createEventForm = (event?: Event) => {
     toPerformanceForms(event?.performances ?? []),
   );
   const [setlist, setSetlist] = createSignal<SetlistItemForm[]>(toSetlistItemForms(event?.setlist ?? []));
+  const [venues, setVenues] = createSignal<VenueEntry[]>((event?.venues ?? []).map(toVenueEntry));
+  const [mediaEntries, setMediaEntries] = createSignal<MediaEntry[]>((event?.media ?? []).map(toMediaEntry));
+  // MediaSection が重複候補の判定に使う、既知の Media の一覧
+  const [availableMedia, setAvailableMedia] = createSignal<Media[]>(event?.media ?? []);
+  const [sources, setSources] = createSignal<SourceForm[]>(toSourceForms(event?.sources ?? []));
 
   const canEditPerformances = () => allowsPerformances(statusValue());
   const canEditSetlist = () => allowsSetlist(typeValue());
@@ -64,9 +76,17 @@ export const createEventForm = (event?: Event) => {
     setSetlist(updater);
   };
 
-  const validate = (): string | null => validateSetlistItems(setlist());
+  const updateVenues = (updater: (prev: VenueEntry[]) => VenueEntry[]) => {
+    setVenues(updater);
+  };
 
-  const toRequestBody = (links: EventLinks): EventRequestBody => ({
+  const updateSources = (updater: (prev: SourceForm[]) => SourceForm[]) => {
+    setSources(updater);
+  };
+
+  const validate = (): string | null => validateSetlistItems(setlist()) ?? validateSources(sources());
+
+  const toRequestBody = (): EventRequestBody => ({
     title: title(),
     description: description(),
     typeValue: typeValue(),
@@ -76,7 +96,9 @@ export const createEventForm = (event?: Event) => {
     },
     statusValue: statusValue(),
     isDisplay: isDisplay(),
-    ...links,
+    venueIds: venues().map(venue => venue.venueId),
+    mediaIds: mediaEntries().map(media => media.mediaId),
+    sources: toSourcesPayload(sources()),
     performances: toPerformancesPayload(performances()),
     setlist: toSetlistPayload(setlist(), performances()),
   });
@@ -100,6 +122,14 @@ export const createEventForm = (event?: Event) => {
     updatePerformances,
     setlist,
     updateSetlist,
+    venues,
+    updateVenues,
+    mediaEntries,
+    setMediaEntries,
+    availableMedia,
+    setAvailableMedia,
+    sources,
+    updateSources,
     canEditPerformances,
     canEditSetlist,
     validate,

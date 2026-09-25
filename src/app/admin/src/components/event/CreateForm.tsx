@@ -19,9 +19,7 @@ export const CreateForm = () => {
       return;
     }
 
-    const { data, error, status } = await client.api.events.post(
-      form.toRequestBody({ venueIds: [], mediaIds: [], sources: [] }),
-    );
+    const { data, error, status } = await client.api.events.post(form.toRequestBody());
     if (data) {
       window.location.href = `/events/${data.event.eventId}`;
       return;
