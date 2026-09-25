@@ -7,12 +7,12 @@ namespace App\Http\OpenApi;
 /**
  * 収集した違反の葉を 422 details の field パス => メッセージ列へ整形する (ADR-0014)
  *
- * @phpstan-type leaf array{path: string, keyword: string, args: array<string, mixed>}
+ * @phpstan-type _leaf array{path: string, keyword: string, args: array<string, mixed>}
  */
 final class BodyErrorFormatter
 {
     /**
-     * @param array<leaf> $leaves
+     * @param array<_leaf> $leaves
      *
      * @return array<string, array<string>>
      */
@@ -42,7 +42,7 @@ final class BodyErrorFormatter
     }
 
     /**
-     * @param leaf $leaf
+     * @param _leaf $leaf
      *
      * @return array<string>
      */
@@ -58,7 +58,7 @@ final class BodyErrorFormatter
     }
 
     /**
-     * @param leaf $leaf
+     * @param _leaf $leaf
      */
     private function isNullBranchMismatch(array $leaf): bool
     {
@@ -66,7 +66,7 @@ final class BodyErrorFormatter
     }
 
     /**
-     * @param array<leaf> $leaves
+     * @param array<_leaf> $leaves
      */
     private function hasOtherLeafAt(array $leaves, string $path): bool
     {

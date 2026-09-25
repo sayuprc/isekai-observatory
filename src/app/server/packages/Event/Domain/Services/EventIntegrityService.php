@@ -23,9 +23,9 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
  * Event 集約内でしか判断できない不変条件を検証する。
  * 外部集約の存在確認は FK に委ね、ここでは関係の形だけを扱う。
  *
- * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
- * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
- * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ * @phpstan-import-type _songPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type _setlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type _eventSourceInput from \Event\Domain\Models\Sources\EventSources
  */
 readonly class EventIntegrityService
 {
@@ -37,9 +37,9 @@ readonly class EventIntegrityService
      * @param array{startOn: ?string, endOn: ?string}    $schedule
      * @param list<array{venueId: string, orderNo: int}> $venues
      * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<EventSourceInput>                     $sources
-     * @param list<SongPerformanceInput>                 $performances
-     * @param list<SetlistItemInput>                     $setlist
+     * @param list<_eventSourceInput>                    $sources
+     * @param list<_songPerformanceInput>                $performances
+     * @param list<_setlistItemInput>                    $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -76,9 +76,9 @@ readonly class EventIntegrityService
      * @param array{startOn: ?string, endOn: ?string}    $schedule
      * @param list<array{venueId: string, orderNo: int}> $venues
      * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<EventSourceInput>                     $sources
-     * @param list<SongPerformanceInput>                 $performances
-     * @param list<SetlistItemInput>                     $setlist
+     * @param list<_eventSourceInput>                    $sources
+     * @param list<_songPerformanceInput>                $performances
+     * @param list<_setlistItemInput>                    $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -116,9 +116,9 @@ readonly class EventIntegrityService
      * @param array{startOn: ?string, endOn: ?string}    $schedule
      * @param list<array{venueId: string, orderNo: int}> $venues
      * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<EventSourceInput>                     $sources
-     * @param list<SongPerformanceInput>                 $performances
-     * @param list<SetlistItemInput>                     $setlist
+     * @param list<_eventSourceInput>                    $sources
+     * @param list<_songPerformanceInput>                $performances
+     * @param list<_setlistItemInput>                    $setlist
      *
      * @throws BusinessRuleViolationException
      */

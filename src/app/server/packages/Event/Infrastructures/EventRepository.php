@@ -14,9 +14,9 @@ use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
 
 /**
- * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
- * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
- * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ * @phpstan-import-type _songPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type _setlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type _eventSourceInput from \Event\Domain\Models\Sources\EventSources
  */
 readonly class EventRepository implements EventRepositoryInterface
 {
@@ -304,7 +304,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<EventSourceInput> */
+    /** @return list<_eventSourceInput> */
     private function loadSources(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -325,7 +325,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<SongPerformanceInput> */
+    /** @return list<_songPerformanceInput> */
     private function loadPerformances(string $binEventId): array
     {
         $performanceRows = $this->queryFactory->fetchAll(
@@ -370,7 +370,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<SetlistItemInput> */
+    /** @return list<_setlistItemInput> */
     private function loadSetlist(string $binEventId): array
     {
         $itemRows = $this->queryFactory->fetchAll(

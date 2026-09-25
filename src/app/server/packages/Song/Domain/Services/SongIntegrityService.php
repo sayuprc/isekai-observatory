@@ -22,9 +22,9 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\ValueObjects\OrderNo;
 
 /**
- * @phpstan-type person array{personId: string, role: int, orderNo: int}
- * @phpstan-type songTag array{songTagId: string}
- * @phpstan-type songMedia array{mediaId: string, orderNo: int}
+ * @phpstan-type _person array{personId: string, role: int, orderNo: int}
+ * @phpstan-type _songTag array{songTagId: string}
+ * @phpstan-type _songMedia array{mediaId: string, orderNo: int}
  */
 class SongIntegrityService
 {
@@ -38,9 +38,9 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<songTag>   $tags
-     * @param list<person>    $persons
-     * @param list<songMedia> $media
+     * @param list<_songTag>   $tags
+     * @param list<_person>    $persons
+     * @param list<_songMedia> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -74,9 +74,9 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<songTag>   $tags
-     * @param list<person>    $persons
-     * @param list<songMedia> $media
+     * @param list<_songTag>   $tags
+     * @param list<_person>    $persons
+     * @param list<_songMedia> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -111,9 +111,9 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<person>    $persons
-     * @param list<songTag>   $tags
-     * @param list<songMedia> $media
+     * @param list<_person>    $persons
+     * @param list<_songTag>   $tags
+     * @param list<_songMedia> $media
      *
      * @return array{0: SongPersons, 1: SongTagReferences, 2: SongMediaLinks}
      */

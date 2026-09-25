@@ -18,9 +18,9 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Tests\TestCase;
 
 /**
- * @phpstan-import-type SongPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
- * @phpstan-import-type SetlistItemInput from \Event\Domain\Models\Setlist\Setlist
- * @phpstan-import-type EventSourceInput from \Event\Domain\Models\Sources\EventSources
+ * @phpstan-import-type _songPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
+ * @phpstan-import-type _setlistItemInput from \Event\Domain\Models\Setlist\Setlist
+ * @phpstan-import-type _eventSourceInput from \Event\Domain\Models\Sources\EventSources
  */
 class EventIntegrityServiceTest extends TestCase
 {
@@ -192,8 +192,8 @@ class EventIntegrityServiceTest extends TestCase
     /**
      * @param array{startOn: ?string, endOn: ?string}    $schedule
      * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<SongPerformanceInput>                 $performances
-     * @param list<SetlistItemInput>                     $setlist
+     * @param list<_songPerformanceInput>                $performances
+     * @param list<_setlistItemInput>                    $setlist
      */
     private function prepareForUpdate(
         int $type = EventType::Live->value,
@@ -209,10 +209,10 @@ class EventIntegrityServiceTest extends TestCase
     /**
      * @param array{startOn: ?string, endOn: ?string}    $schedule
      * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<SongPerformanceInput>                 $performances
-     * @param list<SetlistItemInput>                     $setlist
+     * @param list<_songPerformanceInput>                $performances
+     * @param list<_setlistItemInput>                    $setlist
      *
-     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venues: list<array{venueId: string, orderNo: int}>, media: list<array{mediaId: string, orderNo: int}>, sources: list<EventSourceInput>, performances: list<SongPerformanceInput>, setlist: list<SetlistItemInput>}
+     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venues: list<array{venueId: string, orderNo: int}>, media: list<array{mediaId: string, orderNo: int}>, sources: list<_eventSourceInput>, performances: list<_songPerformanceInput>, setlist: list<_setlistItemInput>}
      */
     private function input(
         int $type = EventType::Live->value,
@@ -238,7 +238,7 @@ class EventIntegrityServiceTest extends TestCase
     }
 
     /**
-     * @return SongPerformanceInput
+     * @return _songPerformanceInput
      */
     private static function performance(string $performanceId, int $orderNo): array
     {
@@ -248,7 +248,7 @@ class EventIntegrityServiceTest extends TestCase
     /**
      * @param list<string> $performanceIds
      *
-     * @return SetlistItemInput
+     * @return _setlistItemInput
      */
     private static function setlistItem(int $orderNo, ?string $label, array $performanceIds): array
     {

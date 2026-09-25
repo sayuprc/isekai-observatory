@@ -12,12 +12,12 @@ use Support\Domain\ValueObjects\OrderNo;
 /**
  * @extends ImmutableCollection<int, SongPerformance>
  *
- * @phpstan-type SongPerformanceInput array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}
+ * @phpstan-type _songPerformanceInput array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}
  */
 readonly class SongPerformances extends ImmutableCollection
 {
     /**
-     * @param list<SongPerformanceInput> $items
+     * @param list<_songPerformanceInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -44,7 +44,7 @@ readonly class SongPerformances extends ImmutableCollection
     }
 
     /**
-     * @param list<SongPerformanceInput> $items
+     * @param list<_songPerformanceInput> $items
      */
     public static function reconstruct(array $items): self
     {
