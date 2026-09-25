@@ -1,7 +1,9 @@
 ---
+import EventRow from '../components/viewer/EventRow.astro';
 import SectionHead from '../components/viewer/SectionHead.astro';
 import SongTile from '../components/viewer/SongTile.astro';
 import TrackChip from '../components/viewer/TrackChip.astro';
+import { eventContentRepository } from '../features/events/content';
 import { YOUTUBE_THUMBNAIL_ORIGIN, youtubeThumbnailFromUrl } from '../features/media/labels';
 import { releaseGroupContentRepository } from '../features/releases/content';
 import { representativeColor } from '../features/releases/types';
@@ -13,6 +15,8 @@ import { SITE_DESCRIPTION } from '../shared/site';
 const latestReleaseGroup = await releaseGroupContentRepository.latest();
 const latestSong = await songContentRepository.latest();
 const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap(medium => medium.tracks) ?? [];
+// 延期・中止は除く。どれを出すかはブラウザ上の現在日付で下のスクリプトが決める
+const upcomingEvents = (await eventContentRepository.upcoming()).filter(event => event.statusValue === 1);
 
 const siteStats = await siteStatsRepository.get();
 const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry.url) !== null)
@@ -99,5 +103,42 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
         </section>
       )
     }
+
+    {
+      upcomingEvents.length > 0 && (
+        <section class="home-feature home-feature-wide" data-upcoming-section hidden>
+          <SectionHead title="今後の予定" />
+          <ol class="event-home-list">
+            {
+              upcomingEvents.map(event => (
+                <li data-upcoming-event data-start={event.schedule.startOn}>
+                  <EventRow event={event} withYear />
+                </li>
+              ))
+            }
+          </ol>
+          <a class="btn feature-more" href="/events">イベント一覧 →</a>
+        </section>
+      )
+    }
   </div>
 </Layout>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-upcoming-section]');
+  if (section) {
+    const entries = [...section.querySelectorAll<HTMLElement>('[data-upcoming-event]')];
+    const startTime = (entry: HTMLElement): number => new Date(entry.dataset.start ?? '').getTime();
+    const future = entries
+      .filter((entry) => {
+        const time = startTime(entry);
+        return !Number.isNaN(time) && time >= Date.now();
+      })
+      .sort((left, right) => startTime(left) - startTime(right))
+      .slice(0, 3);
+    entries.forEach((entry) => {
+      entry.hidden = !future.includes(entry);
+    });
+    section.hidden = future.length === 0;
+  }
+</script>

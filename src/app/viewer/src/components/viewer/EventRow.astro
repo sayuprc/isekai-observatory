@@ -1,0 +1,33 @@
+---
+import type { Event } from '../../features/events/types';
+import { eventDateColumn, eventStatusName, eventTypeName } from '../../features/events/types';
+
+interface Props {
+  event: Event;
+  withYear?: boolean;
+}
+
+const { event, withYear = false } = Astro.props;
+const date = eventDateColumn(event, withYear);
+const statusName = eventStatusName(event.statusValue);
+const venueNames = event.venues.map(venue => venue.name).join(' / ');
+---
+
+<a
+  href={`/events/${event.eventId}`}
+  class:list={['event-line', { 'event-line-with-year': withYear }]}
+  data-inactive={statusName ? '' : undefined}
+>
+  <span class="event-line-date">
+    <span class="event-line-date-main">{date?.main ?? '— —'}</span>
+    {date && <span class="event-line-date-sub">{date.sub}</span>}
+  </span>
+  <span class="event-line-type">{eventTypeName(event.typeValue)}</span>
+  <span class="event-line-body">
+    <span class="event-line-title">
+      {event.title}{statusName && <span class="event-line-status">{statusName}</span>}
+    </span>
+    {venueNames && <span class="event-line-venue">{venueNames}</span>}
+  </span>
+  <span class="event-line-arrow" aria-hidden="true">→</span>
+</a>

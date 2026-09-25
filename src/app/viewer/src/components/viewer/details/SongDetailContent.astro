@@ -1,7 +1,7 @@
 ---
-import { mediaPlatformLabel, youtubeThumbnailFromUrl, youtubeThumbnailSrcset } from '../../../features/media/labels';
 import type { Song } from '../../../features/songs/types';
 import DetailSectionHead from './DetailSectionHead.astro';
+import MediaChip from './MediaChip.astro';
 
 interface Props {
   song: Song;
@@ -16,8 +16,14 @@ const creditItems = [
   { label: '編曲', names: song.arrangers },
 ].map(item => item.names.length > 0 ? item : { ...item, names: ['-'] });
 
-const formatPublishedAt = (value: string): string =>
-  new Date(value).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+const formatPerformanceDate = (value: Song['performances'][number]): string => {
+  const { startOn, endOn } = value.schedule;
+  if (!startOn) return '開催時期未定';
+  return endOn ? `${startOn}〜${endOn}` : startOn;
+};
+
+const formatPerformers = (value: Song['performances'][number]): string =>
+  value.coVocalistNames.length > 0 ? `共演: ${value.coVocalistNames.join(' / ')}` : 'ヰ世界情緒';
 ---
 
 <div class="detail-page-content song-detail-content" data-share-title={song.title}>
@@ -36,6 +42,29 @@ const formatPublishedAt = (value: string): string =>
       ))
     }
   </dl>
+
+  {
+    song.performances.length > 0 && (
+      <>
+        <DetailSectionHead title="披露されたイベント" count={song.performances.length} />
+        <div class="rel-list">
+          {
+            song.performances.map(performance => (
+              <a class="rel-chip" href={`/events/${performance.eventId}`}>
+                <div class="rel-copy">
+                  <div class="rel-main">{performance.eventTitle}</div>
+                  <div class="label-mono rel-sub">
+                    {formatPerformanceDate(performance)} · {formatPerformers(performance)}
+                  </div>
+                </div>
+                <span class="rel-arrow rel-arrow-muted">→</span>
+              </a>
+            ))
+          }
+        </div>
+      </>
+    )
+  }
 
   {
     releaseGroups.length > 0 && (
@@ -68,44 +97,7 @@ const formatPublishedAt = (value: string): string =>
       <>
         <DetailSectionHead title="関連メディア" count={media.length} />
         <div class="rel-list">
-          {media.map((entry) => {
-            // プラットフォームとサムネイルは状態として保持せず url から導出する
-            const thumbnailUrl = youtubeThumbnailFromUrl(entry.url);
-            const platformName = mediaPlatformLabel(entry.url);
-
-            return (
-              <a class="rel-chip" href={`/media/${entry.mediaId}`}>
-                {
-                  thumbnailUrl
-                    ? (
-                        <img
-                          class="rel-thumb"
-                          src={thumbnailUrl}
-                          srcset={youtubeThumbnailSrcset(thumbnailUrl)}
-                          sizes="96px"
-                          width="96"
-                          height="54"
-                          loading="lazy"
-                          decoding="async"
-                          alt={entry.title}
-                        />
-                      )
-                    : (
-                        <div class="rel-thumb rel-thumb-placeholder">
-                          <span class="rel-thumb-placeholder-label">{platformName}</span>
-                        </div>
-                      )
-                }
-                <div class="rel-copy">
-                  <div class="rel-main">{entry.title}</div>
-                  <div class="label-mono rel-sub">
-                    {formatPublishedAt(entry.publishedAt)} · {mediaPlatformLabel(entry.url)} · {entry.type.name}
-                  </div>
-                </div>
-                <span class="rel-arrow rel-arrow-muted">→</span>
-              </a>
-            );
-          })}
+          {media.map(entry => <MediaChip media={entry} />)}
         </div>
       </>
     )

@@ -1992,6 +1992,301 @@ body.drawer-lock {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--release-color) 20%, transparent);
 }
 
+/* ---------- イベント一覧 (年ごとの年表) ---------- */
+
+.event-group {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+}
+
+/* リリース一覧と同じく、絞り込みで 1 件も残らなかったグループは畳む */
+
+.event-group:not(:has([data-event-entry]:not([data-viewer-filter-match="false"]))) {
+  display: none;
+}
+
+.event-group-label {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.event-group-label-year {
+  font-family: Spectral, serif;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.event-group-count {
+  display: block;
+  margin-top: 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--fg-muted);
+}
+
+.event-group-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.event-line {
+  display: grid;
+  grid-template-columns: 104px 64px minmax(0, 1fr) 24px;
+  gap: 20px;
+  align-items: center;
+  padding: 20px 16px;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.2s ease;
+}
+
+.event-line-date {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.event-line-date-main {
+  font-size: 20px;
+  letter-spacing: 0.04em;
+}
+
+.event-line-date-sub {
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.event-line-type {
+  justify-self: start;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+.event-line-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.event-line-title {
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.event-line-status {
+  display: inline-block;
+  padding: 1px 8px;
+  margin-left: 10px;
+  font-size: 11px;
+  vertical-align: middle;
+}
+
+.event-line-venue {
+  font-size: 13px;
+  color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+
+/* 延期・中止は元の開催日の位置に残しつつ、タイトルを抑えて通常の予定と区別する */
+
+.event-line[data-inactive] .event-line-title {
+  color: var(--fg-muted);
+}
+
+.event-line-arrow {
+  color: var(--fg-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+@media (hover: hover) {
+
+  .event-line:hover {
+    background: var(--bg-elev);
+  }
+
+  .event-line:hover .event-line-arrow {
+    color: var(--accent-strong);
+    transform: translateX(3px);
+  }
+}
+
+.event-line:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: -2px;
+}
+
+/* ---------- ホームの今後の予定 ---------- */
+
+/* 最新楽曲・最新リリースの下で 1 行を占有し、一覧と同じ行リストで並べる */
+
+.home-feature-wide {
+  grid-column: 1 / -1;
+}
+
+.event-home-list {
+  padding: 0;
+  margin: 0 0 24px;
+  list-style: none;
+}
+
+/* 年見出しがないので開始日に年を付ける分、日付列を広げる */
+
+.event-line-with-year {
+  grid-template-columns: 140px 64px minmax(0, 1fr) 24px;
+}
+
+.event-line-status,
+.event-detail-status {
+  color: var(--accent-strong);
+  background: var(--accent-faint);
+  border: 1px solid var(--accent-strong);
+  border-radius: 20px;
+}
+
+/* ---------- イベント詳細 ---------- */
+
+.event-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.event-detail-meta > .label-mono {
+  display: inline-block;
+  padding: 6px 12px;
+  line-height: 1.8;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+}
+
+.event-detail-status {
+  padding: 6px 12px;
+  font-size: 12px;
+  line-height: 1.8;
+  border: 1px solid;
+  border-radius: 4px;
+}
+
+/* セットリストは楽曲披露を入れ込んだ番号付きの 1 列リスト。メドレーは 1 項目に複数の曲を並べる */
+
+.event-setlist {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.event-setlist-item {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.event-setlist-item:last-child {
+  border-bottom: 0;
+}
+
+.event-setlist-item-loose {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.event-setlist-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.event-setlist-label {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* 本人が歌唱しない演目は曲と区別して控えめに出す */
+
+.event-setlist-item[data-label-only] .event-setlist-label {
+  color: var(--fg-muted);
+}
+
+.event-setlist-songs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.event-setlist-label + .event-setlist-songs {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.event-setlist-song {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+
+.event-setlist-song-title {
+  font-size: 16px;
+  line-height: 1.6;
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+a.event-setlist-song-title {
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+a.event-setlist-song-title::after {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  content: "→";
+}
+
+a.event-setlist-song-title:hover {
+  color: var(--accent-strong);
+}
+
+.event-setlist-song-note {
+  font-size: 11px;
+}
+
+/* 説明は改行可能なプレーンテキストなので、改行をそのまま表示する */
+
+.event-detail-description {
+  white-space: pre-line;
+}
+
 @keyframes viewer-card-in {
 
   from {
@@ -2820,7 +3115,8 @@ body.drawer-lock {
     grid-template-columns: 1fr;
   }
 
-  .release-year {
+  .release-year,
+  .event-group {
     grid-template-columns: 1fr;
     gap: 20px;
   }
@@ -2828,6 +3124,10 @@ body.drawer-lock {
   .release-year-head {
     flex-direction: row;
     align-items: baseline;
+  }
+
+  .event-group-label {
+    position: static;
   }
 
   .song-grid {
@@ -2942,6 +3242,32 @@ body.drawer-lock {
   .release-year-list {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .event-line {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 8px 14px;
+    padding: 16px 4px;
+  }
+
+  .event-line-date {
+    grid-row: span 2;
+  }
+
+  .event-line-with-year {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .event-line-with-year .event-line-date-main {
+    font-size: 15px;
+  }
+
+  .event-line-type {
+    grid-column: 2;
+  }
+
+  .event-line-arrow {
+    display: none;
   }
 
   .release-row {
@@ -3084,7 +3410,8 @@ body.drawer-lock {
   .song-grid-card,
   .release-row,
   .release-row::before,
-  .release-row::after {
+  .release-row::after,
+  .event-line-arrow {
     transform: none;
     transition: none;
   }
