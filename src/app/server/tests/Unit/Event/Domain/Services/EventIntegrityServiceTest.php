@@ -83,6 +83,14 @@ class EventIntegrityServiceTest extends TestCase
         $this->prepareForUpdate(type: EventType::Exhibition->value, setlist: [self::setlistItem(1, '展示作品', [])]);
     }
 
+    #[Test]
+    public function rejectsSetlistForRadio(): void
+    {
+        $this->expectException(BusinessRuleViolationException::class);
+
+        $this->prepareForUpdate(type: EventType::Radio->value, setlist: [self::setlistItem(1, 'オープニングトーク', [])]);
+    }
+
     /**
      * @return iterable<string, array{EventStatus, array<string, mixed>}>
      */

@@ -22,7 +22,7 @@ const searchText = (event: Event) =>
     .toLowerCase();
 ---
 
-<Layout pageTitle="イベント" pageDescription="ヰ世界情緒のライブ、配信、個展などのイベント記録">
+<Layout pageTitle="イベント" pageDescription="ヰ世界情緒のライブ、配信、個展、ラジオなどのイベント記録">
   <section class="shell page-section">
     <SectionHead title="イベント" level={1} />
 
@@ -33,6 +33,7 @@ const searchText = (event: Event) =>
         { value: '1', label: 'ライブ' },
         { value: '2', label: '配信' },
         { value: '3', label: '個展' },
+        { value: '4', label: 'ラジオ' },
         { value: '99', label: 'その他' },
       ]}
       entrySelector="[data-event-entry]"

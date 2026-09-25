@@ -67,7 +67,7 @@ export type EventStatusValue = 1 | 2 | 3;
 /**
  * イベント種別
  */
-export type EventTypeValue = 1 | 2 | 3 | 99;
+export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 
 export type EventVenueSummary = {
     venueId: Uuid;

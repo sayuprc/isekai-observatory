@@ -56,6 +56,7 @@ enum EventTypeValue {
   Live: 1,
   Stream: 2,
   Exhibition: 3,
+  Radio: 4,
   Other: 99,
 }
 

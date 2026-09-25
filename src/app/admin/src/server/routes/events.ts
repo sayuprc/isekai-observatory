@@ -41,7 +41,7 @@ const setlistItemSchema = t.Object({
 const eventBodySchema = t.Object({
   title: t.String({ minLength: 1, maxLength: 255 }),
   description: t.String(),
-  typeValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(99)]),
+  typeValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(4), t.Literal(99)]),
   schedule: eventScheduleSchema,
   statusValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]),
   isDisplay: t.Boolean(),
@@ -78,7 +78,9 @@ export const events = new Elysia({ prefix: '/events' })
     {
       query: t.Object({
         title: t.Optional(t.String()),
-        type: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('99'), t.Literal('')])),
+        type: t.Optional(
+          t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('4'), t.Literal('99'), t.Literal('')]),
+        ),
         status: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('')])),
         is_display: t.Optional(t.Boolean()),
         sort: t.Optional(t.Union([t.Literal('schedule'), t.Literal('title')])),

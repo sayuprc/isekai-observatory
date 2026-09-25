@@ -4,6 +4,7 @@ export const EVENT_TYPE_LABELS: Record<EventTypeValue, string> = {
   1: 'ライブ',
   2: '配信',
   3: '個展',
+  4: 'ラジオ',
   99: 'その他',
 };
 
@@ -13,7 +14,7 @@ export const EVENT_STATUS_LABELS: Record<EventStatusValue, string> = {
   3: '中止',
 };
 
-const EVENT_TYPE_VALUES: EventTypeValue[] = [1, 2, 3, 99];
+const EVENT_TYPE_VALUES: EventTypeValue[] = [1, 2, 3, 4, 99];
 const EVENT_STATUS_VALUES: EventStatusValue[] = [1, 2, 3];
 
 export const EVENT_TYPE_OPTIONS = EVENT_TYPE_VALUES.map(value => ({ value, label: EVENT_TYPE_LABELS[value] }));
