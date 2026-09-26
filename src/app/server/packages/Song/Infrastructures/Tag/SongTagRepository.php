@@ -45,16 +45,16 @@ readonly class SongTagRepository implements SongTagRepositoryInterface
     #[Override]
     public function search(SongTagSearchCriteria $criteria): array
     {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-
         $rows = $this->queryFactory->fetchAll(
-            $this->applyNameFilter(
-                $this->queryFactory->select()->withSelect(self::COLUMNS)->from(self::TABLE),
-                $criteria,
-            )
-                ->orderBy($criteria->sort->value, $criteria->order->value)
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate(
+                $this->applyNameFilter(
+                    $this->queryFactory->select()->withSelect(self::COLUMNS)->from(self::TABLE),
+                    $criteria,
+                )
+                    ->orderBy($criteria->sort->value, $criteria->order->value),
+                $criteria->page,
+                $criteria->perPage,
+            ),
         );
 
         return array_map($this->hydrate(...), $rows);
@@ -63,12 +63,10 @@ readonly class SongTagRepository implements SongTagRepositoryInterface
     #[Override]
     public function maxPage(SongTagSearchCriteria $criteria): int
     {
-        $count = Row::intValue(
-            $this->applyNameFilter($this->queryFactory->select()->from(self::TABLE), $criteria)
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
+        return $this->queryFactory->maxPage(
+            $this->applyNameFilter($this->queryFactory->select()->from(self::TABLE), $criteria),
+            $criteria->perPage,
         );
-
-        return (int)ceil($count / $criteria->perPage->value);
     }
 
     #[Override]
@@ -185,7 +183,7 @@ readonly class SongTagRepository implements SongTagRepositoryInterface
         return $query->where(
             'name_lower',
             'LIKE',
-            '%' . SqlHelper::escapeLike(mb_strtolower($criteria->name->get())) . '%',
+            SqlHelper::containsPattern(mb_strtolower($criteria->name->get())),
         );
     }
 

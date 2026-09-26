@@ -29,14 +29,14 @@ readonly class SongQueryService implements SongQueryServiceInterface
     #[Override]
     public function search(SongSearchCriteria $criteria): array
     {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-
         $rows = $this->queryFactory->fetchAll(
-            $this->buildQuery($criteria)
-                ->withSelect(self::COLUMNS)
-                ->orderBy($criteria->sort->value, $criteria->order->value)
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate(
+                $this->buildQuery($criteria)
+                    ->withSelect(self::COLUMNS)
+                    ->orderBy($criteria->sort->value, $criteria->order->value),
+                $criteria->page,
+                $criteria->perPage,
+            ),
         );
 
         return array_map($this->hydrate(...), $rows);
@@ -45,9 +45,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
     #[Override]
     public function maxPage(SongSearchCriteria $criteria): int
     {
-        $count = Row::intValue($this->buildQuery($criteria)->aggregate($this->queryFactory->pdo(), 'COUNT(*)'));
-
-        return (int)ceil($count / $criteria->perPage->value);
+        return $this->queryFactory->maxPage($this->buildQuery($criteria), $criteria->perPage);
     }
 
     private function buildQuery(SongSearchCriteria $criteria): SelectBuilder
@@ -58,7 +56,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $query = $query->where(
                 'title_lower',
                 'LIKE',
-                '%' . SqlHelper::escapeLike(mb_strtolower($criteria->title->get())) . '%',
+                SqlHelper::containsPattern(mb_strtolower($criteria->title->get())),
             );
         }
 

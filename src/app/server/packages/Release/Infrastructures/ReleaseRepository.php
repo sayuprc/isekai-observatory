@@ -78,15 +78,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
         $now = now()->toDateTimeString();
 
         // 提供形態・媒体・収録曲は洗い替えする(収録曲は FK CASCADE で媒体と一緒に消える)
-        $this->queryFactory->delete()
-            ->from(self::FORMAT_TABLE)
-            ->where('release_id', '=', $binReleaseId)
-            ->execute($this->queryFactory->pdo());
-
-        $this->queryFactory->delete()
-            ->from(self::MEDIA_TABLE)
-            ->where('release_id', '=', $binReleaseId)
-            ->execute($this->queryFactory->pdo());
+        $this->queryFactory->deleteFromTables([self::FORMAT_TABLE, self::MEDIA_TABLE], 'release_id', $binReleaseId);
 
         $this->queryFactory->insert()
             ->into(self::TABLE, ['release_id', 'release_group_id', 'name', 'released_on', 'description', 'color', 'is_display', 'order_no', 'created_at', 'updated_at'])
@@ -116,17 +108,11 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             )
             ->execute($this->queryFactory->pdo());
 
-        $formatRows = array_map(
-            static fn (int $format): array => [$binReleaseId, $format],
-            $data['formats'],
+        $this->queryFactory->insertRows(
+            self::FORMAT_TABLE,
+            ['release_id', 'format'],
+            array_map(static fn (int $format): array => [$binReleaseId, $format], $data['formats']),
         );
-
-        if ($formatRows !== []) {
-            $this->queryFactory->insert()
-                ->into(self::FORMAT_TABLE, ['release_id', 'format'])
-                ->values(...$formatRows)
-                ->execute($this->queryFactory->pdo());
-        }
 
         $mediumRows = [];
         $trackRows = [];
@@ -145,19 +131,12 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             }
         }
 
-        if ($mediumRows !== []) {
-            $this->queryFactory->insert()
-                ->into(self::MEDIA_TABLE, ['release_id', 'position', 'name'])
-                ->values(...$mediumRows)
-                ->execute($this->queryFactory->pdo());
-        }
-
-        if ($trackRows !== []) {
-            $this->queryFactory->insert()
-                ->into(self::TRACK_TABLE, ['release_id', 'position', 'track_no', 'song_id', 'title'])
-                ->values(...$trackRows)
-                ->execute($this->queryFactory->pdo());
-        }
+        $this->queryFactory->insertRows(self::MEDIA_TABLE, ['release_id', 'position', 'name'], $mediumRows);
+        $this->queryFactory->insertRows(
+            self::TRACK_TABLE,
+            ['release_id', 'position', 'track_no', 'song_id', 'title'],
+            $trackRows,
+        );
 
         return $release;
     }

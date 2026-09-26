@@ -5,36 +5,25 @@ declare(strict_types=1);
 namespace Media\Application\Viewer\Query;
 
 use InvalidArgumentException;
+use Support\Pagination\KeysetCursor;
 
 final class MediaListCursor
 {
     public static function encode(string $publishedAt, string $mediaId): string
     {
-        return base64_encode(
-            (string)json_encode(
-                [
-                    'publishedAt' => $publishedAt,
-                    'mediaId' => $mediaId,
-                ],
-                JSON_THROW_ON_ERROR,
-            ),
-        );
+        return KeysetCursor::encode([
+            'publishedAt' => $publishedAt,
+            'mediaId' => $mediaId,
+        ]);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public static function decode(string $value): DecodedMediaListCursor
     {
-        $decoded = base64_decode($value, true);
+        $cursor = KeysetCursor::decode($value);
 
-        if ($decoded === false) {
-            throw new InvalidArgumentException('Invalid cursor.');
-        }
-
-        $data = json_decode($decoded, true, flags: JSON_THROW_ON_ERROR);
-
-        if (! is_array($data) || ! isset($data['publishedAt'], $data['mediaId']) || ! is_string($data['publishedAt']) || ! is_string($data['mediaId'])) {
-            throw new InvalidArgumentException('Invalid cursor.');
-        }
-
-        return new DecodedMediaListCursor($data['publishedAt'], $data['mediaId']);
+        return new DecodedMediaListCursor($cursor->string('publishedAt'), $cursor->string('mediaId'));
     }
 }

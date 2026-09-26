@@ -33,15 +33,15 @@ readonly class VenueRepository implements VenueRepositoryInterface
     #[Override]
     public function search(VenueSearchCriteria $criteria): array
     {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-
         $rows = $this->queryFactory->fetchAll(
-            $this->buildSearchQuery($criteria)
-                ->withSelect(self::COLUMNS)
-                ->orderBy($criteria->sort->value, $criteria->order->value)
-                ->orderBy('venue_id')
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate(
+                $this->buildSearchQuery($criteria)
+                    ->withSelect(self::COLUMNS)
+                    ->orderBy($criteria->sort->value, $criteria->order->value)
+                    ->orderBy('venue_id'),
+                $criteria->page,
+                $criteria->perPage,
+            ),
         );
 
         return array_map($this->hydrate(...), $rows);
@@ -50,11 +50,7 @@ readonly class VenueRepository implements VenueRepositoryInterface
     #[Override]
     public function maxPage(VenueSearchCriteria $criteria): int
     {
-        $count = Row::intValue(
-            $this->buildSearchQuery($criteria)->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
-
-        return (int)ceil($count / $criteria->perPage->value);
+        return $this->queryFactory->maxPage($this->buildSearchQuery($criteria), $criteria->perPage);
     }
 
     #[Override]
@@ -146,7 +142,7 @@ readonly class VenueRepository implements VenueRepositoryInterface
             $query = $query->where(
                 'name_lower',
                 'LIKE',
-                '%' . SqlHelper::escapeLike(mb_strtolower($criteria->name->get())) . '%',
+                SqlHelper::containsPattern(mb_strtolower($criteria->name->get())),
             );
         }
 

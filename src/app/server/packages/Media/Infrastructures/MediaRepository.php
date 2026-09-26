@@ -92,14 +92,14 @@ readonly class MediaRepository implements MediaRepositoryInterface
     #[Override]
     public function search(MediaSearchCriteria $criteria): array
     {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-
         $rows = $this->queryFactory->fetchAll(
-            $this->buildSearchQuery($criteria)
-                ->withSelect(self::COLUMNS)
-                ->orderBy($criteria->sort->value, $criteria->order->value)
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate(
+                $this->buildSearchQuery($criteria)
+                    ->withSelect(self::COLUMNS)
+                    ->orderBy($criteria->sort->value, $criteria->order->value),
+                $criteria->page,
+                $criteria->perPage,
+            ),
         );
 
         return array_map($this->hydrate(...), $rows);
@@ -108,9 +108,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
     #[Override]
     public function maxPage(MediaSearchCriteria $criteria): int
     {
-        $count = Row::intValue($this->buildSearchQuery($criteria)->aggregate($this->queryFactory->pdo(), 'COUNT(*)'));
-
-        return (int)ceil($count / $criteria->perPage->value);
+        return $this->queryFactory->maxPage($this->buildSearchQuery($criteria), $criteria->perPage);
     }
 
     #[Override]
@@ -191,7 +189,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
             $query = $query->where(
                 'title',
                 'LIKE',
-                '%' . SqlHelper::escapeLike($criteria->title->get()) . '%',
+                SqlHelper::containsPattern($criteria->title->get()),
             );
         }
 

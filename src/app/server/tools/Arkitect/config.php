@@ -24,6 +24,7 @@ return [
     new Define(SupportComponent::Contracts),
     new Define(SupportComponent::Optional),
     new Define(SupportComponent::Collection),
+    new Define(SupportComponent::Pagination),
     new Define(SupportComponent::UseCase, [
         SupportComponent::UseCase,
         AdminUserComponent::Domain,
@@ -123,6 +124,7 @@ return [
     new Define(SongComponent::Query, [
         SongComponent::Domain,
         MediaComponent::Domain,
+        SupportComponent::Pagination,
     ]),
     new Define(SongComponent::Assemble, [
         SongComponent::Domain,

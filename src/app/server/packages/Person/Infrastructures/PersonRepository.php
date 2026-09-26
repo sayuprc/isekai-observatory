@@ -50,13 +50,12 @@ readonly class PersonRepository implements PersonRepositoryInterface
             $criteria,
         );
 
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-
         $rows = $this->queryFactory->fetchAll(
-            $query
-                ->orderBy($criteria->sort->value, $criteria->order->value)
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate(
+                $query->orderBy($criteria->sort->value, $criteria->order->value),
+                $criteria->page,
+                $criteria->perPage,
+            ),
         );
 
         return array_map($this->hydrate(...), $rows);
@@ -70,9 +69,7 @@ readonly class PersonRepository implements PersonRepositoryInterface
             $criteria,
         );
 
-        $count = Row::intValue($query->aggregate($this->queryFactory->pdo(), 'COUNT(*)'));
-
-        return (int)ceil($count / $criteria->perPage->value);
+        return $this->queryFactory->maxPage($query, $criteria->perPage);
     }
 
     #[Override]
@@ -177,7 +174,7 @@ readonly class PersonRepository implements PersonRepositoryInterface
         return $query->where(
             'name_lower',
             'LIKE',
-            '%' . SqlHelper::escapeLike(mb_strtolower($criteria->name->get())) . '%',
+            SqlHelper::containsPattern(mb_strtolower($criteria->name->get())),
         );
     }
 
