@@ -122,8 +122,6 @@
   overflow-wrap: anywhere;
 }
 
-/* 詳細ページのセクション見出し */
-
 .detail-section-head {
   display: flex;
   gap: 16px;

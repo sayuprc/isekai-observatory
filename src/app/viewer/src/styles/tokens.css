@@ -1,28 +1,6 @@
 /* デザイントークンとテーマごとの配色 (themes.ts の THEMES と対応する) */
 
-:root {
-  --bg: #0e0e10;
-  --bg-elev: #151518;
-  --bg-elev-2: #1c1c21;
-  --fg: #f4f4f5;
-  --fg-muted: #939395;
-  --fg-faint: #808082;
-  --line: #353537;
-  --line-soft: #232325;
-  --accent: #d31b28;
-  --accent-strong: #dd4d57;
-  --accent-faint: #451217;
-  --accent-contrast: #fff;
-  --accent-2: #fff;
-  --accent-2-strong: #fff;
-  --accent-2-faint: #515153;
-  --special: #989899;
-  --special-strong: #bababc;
-  --special-faint: #535355;
-  --paper: #1c1c21;
-  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-}
-
+:root,
 [data-palette="anemone-1"] {
   --bg: #0e0e10;
   --bg-elev: #151518;

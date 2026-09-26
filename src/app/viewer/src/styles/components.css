@@ -1,7 +1,5 @@
 /* セクション見出し・ボタン・バッジ・絞り込みなど複数ページで使う部品 */
 
-/* セクションヘッダー */
-
 .section-head {
   display: flex;
   gap: 32px;
@@ -27,15 +25,11 @@
   letter-spacing: 0.08em;
 }
 
-/* カード共通 */
-
 .card {
   background: var(--bg-elev);
   border: 1px solid var(--line);
   transition: all 0.3s ease;
 }
-
-/* ボタン */
 
 .btn {
   display: inline-flex;
@@ -57,8 +51,6 @@
   background: color-mix(in oklab, var(--accent) 10%, transparent);
   border-color: var(--accent);
 }
-
-/* ピル / バッジ */
 
 .pill {
   display: inline-flex;
@@ -122,8 +114,6 @@
   border: 1px solid var(--line);
 }
 
-/* セグメンテッドコントロール */
-
 .seg {
   display: inline-flex;
   gap: 4px;
@@ -179,8 +169,6 @@
   background: color-mix(in oklab, var(--fg) 5%, transparent);
 }
 
-/* image-slot 共通 */
-
 image-slot {
   color: var(--fg-faint);
   background: var(--bg-elev-2);
@@ -191,8 +179,6 @@ image-slot {
 image-slot:hover {
   border-color: var(--accent);
 }
-
-/* 罫線とディテール */
 
 .hairline {
   height: 1px;

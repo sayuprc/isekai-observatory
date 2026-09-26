@@ -1,7 +1,5 @@
 /* 詳細ドロワー (DetailDrawer) の枠組みと、ドロワー内で詳細本文を詰める上書き */
 
-/* ─── Detail Panel ─── */
-
 /* ドロワー表示中は背面ページをスクロールさせない */
 
 body.drawer-lock {
@@ -132,7 +130,8 @@ body.drawer-lock {
   grid-template-columns: 1fr;
 }
 
-.detail-panel .song-detail-content .detail-title-en {
+.detail-panel .song-detail-content .detail-title-en,
+.detail-panel .release-detail-content .detail-title-en {
   display: block;
   margin-top: 6px;
 }
@@ -149,9 +148,4 @@ body.drawer-lock {
 
 .detail-panel .media-detail-content .mv-thumb {
   max-width: 280px;
-}
-
-.detail-panel .release-detail-content .detail-title-en {
-  display: block;
-  margin-top: 6px;
 }

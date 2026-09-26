@@ -101,16 +101,6 @@ body {
   outline-offset: 2px;
 }
 
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible,
-[tabindex]:not([tabindex="-1"]):focus-visible {
-  outline: 2px solid var(--accent-strong);
-  outline-offset: 2px;
-}
-
 .font-en {
   font-family: "EB Garamond", serif;
   letter-spacing: 0.02em;
@@ -132,8 +122,6 @@ textarea:focus-visible,
   color: var(--fg-muted);
   letter-spacing: 0.06em;
 }
-
-/* スクロールバー */
 
 ::-webkit-scrollbar {
   width: 10px;
