@@ -403,7 +403,7 @@ bun run generate:api
 description = "Viewer の formatter を実行し、フォーマットを自動修正する"
 dir = "src/app/viewer"
 run = [
-  "bun run biome:format",
+  "bun run prettier:format",
   "bun run eslint:fix",
   "bun run stylelint:fix",
 ]
@@ -411,7 +411,7 @@ run = [
 [tasks."viewer:format:check"]
 description = "Viewer の formatter をチェックする"
 dir = "src/app/viewer"
-run = "bun run biome:format:check"
+run = "bun run prettier:format:check"
 
 [tasks."viewer:lint"]
 description = "Viewer の linter を実行する"
@@ -446,7 +446,7 @@ depends = ["viewer:format"]
 description = "Viewer の formatter check / linter を直列で実行する"
 dir = "src/app/viewer"
 run = [
-  "bun run biome:format:check",
+  "bun run prettier:format:check",
   "bun run eslint:check",
   "bun run stylelint:check",
 ]
