@@ -1,11 +1,5 @@
 import { createResource, createSignal, For, Match, Show, Switch } from 'solid-js';
-import type {
-  Media,
-  RequestSongPerson,
-  SongTag,
-  SongType,
-  SongTypeValue,
-} from '../../generated';
+import type { Media, RequestSongPerson, SongTag, SongType, SongTypeValue } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
@@ -76,7 +70,7 @@ export const CreateView = () => {
           </button>
         </div>
       </Match>
-      <Match when={loadedData()}>{data => <CreateForm data={data()} />}</Match>
+      <Match when={loadedData()}>{(data) => <CreateForm data={data()} />}</Match>
     </Switch>
   );
 };
@@ -102,7 +96,7 @@ export const CreateForm = (props: CreateFormProps) => {
   };
 
   const removeTagEntry = (index: number) => {
-    setTags(prev => prev.filter((_, i) => i !== index));
+    setTags((prev) => prev.filter((_, i) => i !== index));
   };
 
   const addTagEntry = (songTagId: string) => {
@@ -110,7 +104,7 @@ export const CreateForm = (props: CreateFormProps) => {
       return;
     }
 
-    setTags(prev => (prev.some(entry => entry.songTagId === songTagId) ? prev : [...prev, { songTagId }]));
+    setTags((prev) => (prev.some((entry) => entry.songTagId === songTagId) ? prev : [...prev, { songTagId }]));
     setTagPickerValue('');
   };
 
@@ -148,16 +142,16 @@ export const CreateForm = (props: CreateFormProps) => {
   });
 
   const tagOptions = () => {
-    const selectedTagIds = new Set(tags().map(entry => entry.songTagId));
+    const selectedTagIds = new Set(tags().map((entry) => entry.songTagId));
 
     return availableTags()
-      .filter(tag => !selectedTagIds.has(tag.songTagId))
-      .map(tag => ({ value: tag.songTagId, label: tag.name }));
+      .filter((tag) => !selectedTagIds.has(tag.songTagId))
+      .map((tag) => ({ value: tag.songTagId, label: tag.name }));
   };
 
   const selectedTags = () =>
     tags()
-      .map(entry => availableTags().find(tag => tag.songTagId === entry.songTagId))
+      .map((entry) => availableTags().find((tag) => tag.songTagId === entry.songTagId))
       .filter((tag): tag is SongTag => tag !== undefined);
 
   const TagList = () => (
@@ -167,7 +161,7 @@ export const CreateForm = (props: CreateFormProps) => {
         <SearchableSelect
           options={tagOptions()}
           value={tagPickerValue()}
-          onChange={value => addTagEntry(value)}
+          onChange={(value) => addTagEntry(value)}
           placeholder="楽曲タグを検索して追加..."
         />
         <p class="text-xs text-base-content/60">選択したタグは下に追加されます。</p>
@@ -217,7 +211,7 @@ export const CreateForm = (props: CreateFormProps) => {
                   classList={{ 'input-error': !!getFieldError('title') }}
                 />
                 <Show when={getFieldError('title')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -227,18 +221,19 @@ export const CreateForm = (props: CreateFormProps) => {
                   class="select select-bordered w-full"
                   name="typeValue"
                   value={typeValue()}
-                  onChange={e =>
-                    setTypeValue(e.currentTarget.value === '' ? '' : (Number(e.currentTarget.value) as SongTypeValue))}
+                  onChange={(e) =>
+                    setTypeValue(e.currentTarget.value === '' ? '' : (Number(e.currentTarget.value) as SongTypeValue))
+                  }
                   required
                   classList={{ 'select-error': !!getFieldError('typeValue') }}
                 >
                   <option value="" disabled>
                     選択してください
                   </option>
-                  <For each={types()}>{type => <option value={type.value}>{type.name}</option>}</For>
+                  <For each={types()}>{(type) => <option value={type.value}>{type.name}</option>}</For>
                 </select>
                 <Show when={getFieldError('typeValue')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -251,7 +246,7 @@ export const CreateForm = (props: CreateFormProps) => {
                   classList={{ 'input-error': !!getFieldError('description') }}
                 />
                 <Show when={getFieldError('description')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -265,7 +260,7 @@ export const CreateForm = (props: CreateFormProps) => {
                   classList={{ 'input-error': !!getFieldError('lyricsLink') }}
                 />
                 <Show when={getFieldError('lyricsLink')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 

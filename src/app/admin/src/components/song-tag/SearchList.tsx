@@ -53,7 +53,7 @@ export const SearchList = () => {
     toQuery,
   });
 
-  const { data, refetch, fetchError } = createSearchResource(params, current =>
+  const { data, refetch, fetchError } = createSearchResource(params, (current) =>
     client.api['song-tags'].search.get({
       query: {
         name: current.name,
@@ -77,7 +77,7 @@ export const SearchList = () => {
             id="name"
             name="name"
             value={input().name}
-            onInput={e => updateInput({ name: e.currentTarget.value })}
+            onInput={(e) => updateInput({ name: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="楽曲タグ名で検索"
           />
@@ -90,7 +90,7 @@ export const SearchList = () => {
             id="sort"
             name="sort"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ sort: e.currentTarget.value as Sort })}
+            onChange={(e) => updateInput({ sort: e.currentTarget.value as Sort })}
           >
             <option value="order_no" selected={input().sort === 'order_no'}>
               表示順
@@ -108,7 +108,7 @@ export const SearchList = () => {
             id="order"
             name="order"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ order: e.currentTarget.value as SortOrder })}
+            onChange={(e) => updateInput({ order: e.currentTarget.value as SortOrder })}
           >
             <option value="asc" selected={input().order === 'asc'}>
               昇順
@@ -126,10 +126,10 @@ export const SearchList = () => {
             id="perPage"
             name="perPage"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
+            onChange={(e) => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
-              {n => (
+              {(n) => (
                 <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
@@ -163,15 +163,15 @@ export const SearchList = () => {
                 <ListState state="loading" colSpan={2} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.tags.length === 0}>
                 <ListState state="empty" colSpan={2} message="条件に一致する楽曲タグはありません。" />
               </Match>
               <Match when={data()}>
-                {result => (
+                {(result) => (
                   <For each={result().tags}>
-                    {tag => (
+                    {(tag) => (
                       <tr class="hover:bg-primary/30 focus-within:bg-primary/30 transition-colors">
                         <td>
                           <a

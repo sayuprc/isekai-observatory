@@ -45,14 +45,14 @@ const decodeBase64Url = (value: string): ArrayBuffer => {
   const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
   const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4);
   const binary = atob(padded);
-  const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
 
   return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
 };
 
 const encodeBase64Url = (value: ArrayBuffer | Uint8Array): string => {
   const bytes = value instanceof Uint8Array ? value : new Uint8Array(value);
-  const binary = Array.from(bytes, byte => String.fromCharCode(byte)).join('');
+  const binary = Array.from(bytes, (byte) => String.fromCharCode(byte)).join('');
 
   return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/u, '');
 };

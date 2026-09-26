@@ -32,7 +32,7 @@ export const auditLogs = new Elysia({ prefix: '/audit-logs' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         auditLogServiceSearchAuditLogs({
           client,
           query: {
@@ -45,7 +45,8 @@ export const auditLogs = new Elysia({ prefix: '/audit-logs' })
             page: query.page ?? 1,
             per_page: (query.per_page ?? 50) as PerPage,
           },
-        }));
+        }),
+      );
     },
     {
       query: t.Object({
@@ -63,8 +64,7 @@ export const auditLogs = new Elysia({ prefix: '/audit-logs' })
   .get(
     '/:auditLogId',
     async ({ params: { auditLogId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        auditLogServiceGetAuditLog({ client, path: { auditLogId } }));
+      return requestWithAuth(authSession, (client) => auditLogServiceGetAuditLog({ client, path: { auditLogId } }));
     },
     {
       params: t.Object({

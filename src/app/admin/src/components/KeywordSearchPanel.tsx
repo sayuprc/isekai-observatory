@@ -22,8 +22,8 @@ export const KeywordSearchPanel = <T extends object>(props: KeywordSearchPanelPr
         class="input input-bordered input-sm min-w-0 flex-1"
         placeholder={props.placeholder}
         value={props.search.keyword()}
-        onInput={e => props.search.setKeyword(e.currentTarget.value)}
-        onKeyDown={e => e.key === 'Enter' && props.search.search(e)}
+        onInput={(e) => props.search.setKeyword(e.currentTarget.value)}
+        onKeyDown={(e) => e.key === 'Enter' && props.search.search(e)}
         disabled={props.disabled}
       />
       <button
@@ -35,18 +35,20 @@ export const KeywordSearchPanel = <T extends object>(props: KeywordSearchPanelPr
         {props.search.isSearching() ? '検索中' : '検索'}
       </button>
     </div>
-    <Show when={props.search.error()}>{message => <p class="mt-2 text-sm text-error">{message()}</p>}</Show>
+    <Show when={props.search.error()}>{(message) => <p class="mt-2 text-sm text-error">{message()}</p>}</Show>
     <Show
-      when={props.emptyResultMessage
+      when={
+        props.emptyResultMessage
         && props.search.hasSearched()
         && !props.search.error()
-        && props.search.results().length === 0}
+        && props.search.results().length === 0
+      }
     >
       <p class="mt-2 text-sm text-base-content/60">{props.emptyResultMessage}</p>
     </Show>
     <ul class="mt-3 max-h-48 space-y-1 overflow-y-auto">
       <For each={props.search.results()}>
-        {item => (
+        {(item) => (
           <li class="flex items-center justify-between gap-2 rounded px-2 py-1 hover:bg-base-200">
             <span class="truncate text-sm">{props.itemLabel(item)}</span>
             <button

@@ -22,14 +22,14 @@ export type MediumForm = {
 /** API レスポンスからフォーム状態を組み立てる(参照トラックの楽曲名は収録曲 read model から引く) */
 export const toMediumForms = (data: ReleaseGetResponse): MediumForm[] => {
   const titleBySongId = new Map(
-    data.songs.flatMap(song => (song.songId !== null ? [[song.songId, song.title] as const] : [])),
+    data.songs.flatMap((song) => (song.songId !== null ? [[song.songId, song.title] as const] : [])),
   );
 
-  return data.release.media.map(medium => ({
+  return data.release.media.map((medium) => ({
     name: medium.name ?? '',
-    tracks: medium.tracks.map(track => ({
+    tracks: medium.tracks.map((track) => ({
       songId: track.songId,
-      songTitle: track.songId !== null ? titleBySongId.get(track.songId) ?? track.songId : null,
+      songTitle: track.songId !== null ? (titleBySongId.get(track.songId) ?? track.songId) : null,
       title: track.title ?? '',
     })),
   }));
@@ -84,7 +84,7 @@ const TrackActions = (props: TrackActionsProps) => (
       ↓
     </button>
     <Show when={props.songId}>
-      {songId => (
+      {(songId) => (
         <a href={`/songs/${songId()}`} class="btn btn-ghost btn-xs">
           楽曲を見る
         </a>
@@ -104,14 +104,14 @@ interface MediaEditorProps {
 
 export const MediaEditor = (props: MediaEditorProps) => {
   const reorderMedia = (fromIndex: number, toIndex: number) => {
-    props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
+    props.onChange((prev) => reorderItems(prev, fromIndex, toIndex));
   };
   const reorderTracks = (mediumIndex: number, fromIndex: number, toIndex: number) => {
-    props.onChange(prev => prev.map((medium, index) => (
-      index === mediumIndex
-        ? { ...medium, tracks: reorderItems(medium.tracks, fromIndex, toIndex) }
-        : medium
-    )));
+    props.onChange((prev) =>
+      prev.map((medium, index) =>
+        index === mediumIndex ? { ...medium, tracks: reorderItems(medium.tracks, fromIndex, toIndex) } : medium,
+      ),
+    );
   };
   const mediaSortable = createSortable((_scope, fromIndex, toIndex) => reorderMedia(fromIndex, toIndex));
   const trackSortable = createSortable<number>(reorderTracks);
@@ -124,16 +124,16 @@ export const MediaEditor = (props: MediaEditorProps) => {
   const [targetMediumIndex, setTargetMediumIndex] = createSignal(0);
 
   const addMedium = () => {
-    props.onChange(prev => [...prev, { name: '', tracks: [] }]);
+    props.onChange((prev) => [...prev, { name: '', tracks: [] }]);
   };
 
   const removeMedium = (index: number) => {
-    props.onChange(prev => prev.filter((_, i) => i !== index));
+    props.onChange((prev) => prev.filter((_, i) => i !== index));
     setTargetMediumIndex(0);
   };
 
   const setMediumName = (index: number, name: string) => {
-    props.onChange(prev => prev.map((medium, i) => (i === index ? { ...medium, name } : medium)));
+    props.onChange((prev) => prev.map((medium, i) => (i === index ? { ...medium, name } : medium)));
   };
 
   const appendTrack = (track: TrackForm) => {
@@ -143,8 +143,9 @@ export const MediaEditor = (props: MediaEditorProps) => {
       return;
     }
 
-    props.onChange(prev =>
-      prev.map((medium, i) => (i === index ? { ...medium, tracks: [...medium.tracks, track] } : medium)));
+    props.onChange((prev) =>
+      prev.map((medium, i) => (i === index ? { ...medium, tracks: [...medium.tracks, track] } : medium)),
+    );
   };
 
   const addTrack = (song: SongSummary) => {
@@ -163,21 +164,21 @@ export const MediaEditor = (props: MediaEditorProps) => {
   };
 
   const setTrackTitle = (mediumIndex: number, trackIndex: number, title: string) => {
-    props.onChange(prev =>
+    props.onChange((prev) =>
       prev.map((medium, i) =>
         i === mediumIndex
           ? { ...medium, tracks: medium.tracks.map((track, j) => (j === trackIndex ? { ...track, title } : track)) }
           : medium,
-      ));
+      ),
+    );
   };
 
   const removeTrack = (mediumIndex: number, trackIndex: number) => {
-    props.onChange(prev =>
+    props.onChange((prev) =>
       prev.map((medium, i) =>
-        i === mediumIndex
-          ? { ...medium, tracks: medium.tracks.filter((_, j) => j !== trackIndex) }
-          : medium,
-      ));
+        i === mediumIndex ? { ...medium, tracks: medium.tracks.filter((_, j) => j !== trackIndex) } : medium,
+      ),
+    );
   };
 
   const handleSongSearch = async (e: Event) => {
@@ -227,7 +228,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
   return (
     <fieldset class="rounded-box border border-base-300 bg-base-200 p-6">
       <legend class="px-2 text-sm font-semibold text-base-content/70">媒体と収録楽曲</legend>
-      <Show when={props.fieldError}>{message => <p class="mb-4 text-sm text-error">{message()}</p>}</Show>
+      <Show when={props.fieldError}>{(message) => <p class="mb-4 text-sm text-error">{message()}</p>}</Show>
       <div class="space-y-6">
         <Show
           when={props.media.length > 0}
@@ -258,7 +259,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                         type="text"
                         class="input input-bordered input-sm"
                         value={medium().name}
-                        onInput={e => setMediumName(mediumIndex, e.currentTarget.value)}
+                        onInput={(e) => setMediumName(mediumIndex, e.currentTarget.value)}
                         placeholder="CD1 / Blu-ray など"
                       />
                     </div>
@@ -324,8 +325,8 @@ export const MediaEditor = (props: MediaEditorProps) => {
                               type="text"
                               class="input input-bordered input-sm mt-2 w-full"
                               value={track().title}
-                              onInput={e => setTrackTitle(mediumIndex, trackIndex, e.currentTarget.value)}
-                              placeholder={track().songId !== null ? track().songTitle ?? '' : 'トラック名を入力'}
+                              onInput={(e) => setTrackTitle(mediumIndex, trackIndex, e.currentTarget.value)}
+                              placeholder={track().songId !== null ? (track().songTitle ?? '') : 'トラック名を入力'}
                             />
                             <div class="mt-2">
                               <TrackActions
@@ -384,8 +385,10 @@ export const MediaEditor = (props: MediaEditorProps) => {
                                     type="text"
                                     class="input input-bordered input-sm w-full min-w-48"
                                     value={track().title}
-                                    onInput={e => setTrackTitle(mediumIndex, trackIndex, e.currentTarget.value)}
-                                    placeholder={track().songId !== null ? track().songTitle ?? '' : 'トラック名を入力'}
+                                    onInput={(e) => setTrackTitle(mediumIndex, trackIndex, e.currentTarget.value)}
+                                    placeholder={
+                                      track().songId !== null ? (track().songTitle ?? '') : 'トラック名を入力'
+                                    }
                                   />
                                 </td>
                                 <td>
@@ -430,14 +433,12 @@ export const MediaEditor = (props: MediaEditorProps) => {
                 <select
                   class="select select-bordered select-sm"
                   value={String(Math.min(targetMediumIndex(), props.media.length - 1))}
-                  onChange={e => setTargetMediumIndex(Number(e.currentTarget.value))}
+                  onChange={(e) => setTargetMediumIndex(Number(e.currentTarget.value))}
                 >
                   <Index each={props.media}>
                     {(medium, index) => (
                       <option value={index}>
-                        媒体
-                        {' '}
-                        {index + 1}
+                        媒体 {index + 1}
                         {medium().name.trim() !== '' ? `(${medium().name.trim()})` : ''}
                       </option>
                     )}
@@ -450,7 +451,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                   type="text"
                   class="input input-bordered w-full"
                   value={searchTitle()}
-                  onInput={e => setSearchTitle(e.currentTarget.value)}
+                  onInput={(e) => setSearchTitle(e.currentTarget.value)}
                   placeholder="楽曲名で検索"
                 />
               </div>
@@ -459,18 +460,18 @@ export const MediaEditor = (props: MediaEditorProps) => {
               </button>
             </div>
 
-            <Show when={searchError()}>{message => <p class="mt-3 text-sm text-error">{message()}</p>}</Show>
+            <Show when={searchError()}>{(message) => <p class="mt-3 text-sm text-error">{message()}</p>}</Show>
 
             <Show when={hasSearched()}>
               <ul class="mt-4 rounded-box border border-base-300 bg-base-100 md:hidden">
                 <Show
                   when={searchResults().length > 0}
-                  fallback={(
+                  fallback={
                     <li class="p-3 text-center text-sm text-base-content/60">条件に一致する楽曲はありません。</li>
-                  )}
+                  }
                 >
                   <For each={searchResults()}>
-                    {song => (
+                    {(song) => (
                       <li class="flex items-center justify-between gap-3 border-b border-base-300 p-3 last:border-b-0">
                         <div class="min-w-0">
                           <p class="truncate text-sm font-medium">{song.title}</p>
@@ -501,26 +502,22 @@ export const MediaEditor = (props: MediaEditorProps) => {
                   <tbody>
                     <Show
                       when={searchResults().length > 0}
-                      fallback={(
+                      fallback={
                         <tr>
                           <td colSpan={4} class="text-center text-sm text-base-content/60">
                             条件に一致する楽曲はありません。
                           </td>
                         </tr>
-                      )}
+                      }
                     >
                       <For each={searchResults()}>
-                        {song => (
+                        {(song) => (
                           <tr>
                             <td>{song.title}</td>
                             <td>{song.type.name}</td>
                             <td>{song.isDisplay ? '表示する' : '表示しない'}</td>
                             <td class="text-right">
-                              <button
-                                type="button"
-                                class="btn btn-primary btn-xs"
-                                onClick={() => addTrack(song)}
-                              >
+                              <button type="button" class="btn btn-primary btn-xs" onClick={() => addTrack(song)}>
                                 追加
                               </button>
                             </td>
@@ -543,7 +540,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                   type="text"
                   class="input input-bordered w-full"
                   value={manualTitle()}
-                  onInput={e => setManualTitle(e.currentTarget.value)}
+                  onInput={(e) => setManualTitle(e.currentTarget.value)}
                   placeholder="タイトルを直接入力"
                 />
               </div>

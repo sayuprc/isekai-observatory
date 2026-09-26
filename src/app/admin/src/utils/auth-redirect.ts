@@ -18,7 +18,7 @@ export const isAuthRequiredPath = (pathname: string): boolean => {
     return false;
   }
 
-  if (PUBLIC_ROUTE_PREFIXES.some(prefix => pathname.startsWith(prefix))) {
+  if (PUBLIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return false;
   }
 

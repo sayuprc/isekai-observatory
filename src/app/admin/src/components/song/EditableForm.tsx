@@ -1,13 +1,5 @@
 import { createResource, createSignal, For, Match, Show, Switch } from 'solid-js';
-import type {
-  Media,
-  RequestSongPerson,
-  Song,
-  SongPerson,
-  SongTag,
-  SongType,
-  SongTypeValue,
-} from '../../generated';
+import type { Media, RequestSongPerson, Song, SongPerson, SongTag, SongType, SongTypeValue } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
@@ -97,7 +89,7 @@ export const DetailView = (props: DetailViewProps) => {
           </button>
         </div>
       </Match>
-      <Match when={loadedData()}>{data => <EditableForm data={data()} />}</Match>
+      <Match when={loadedData()}>{(data) => <EditableForm data={data()} />}</Match>
     </Switch>
   );
 };
@@ -111,7 +103,7 @@ export const EditableForm = (props: EditableFormProps) => {
   const initialAvailableMedia = (() => {
     const items = [...props.data.media];
     for (const item of props.data.song.media) {
-      if (!items.some(media => media.mediaId === item.mediaId)) {
+      if (!items.some((media) => media.mediaId === item.mediaId)) {
         items.push({
           mediaId: item.mediaId,
           title: item.title,
@@ -126,15 +118,17 @@ export const EditableForm = (props: EditableFormProps) => {
   })();
 
   const toSelectedPersons = (items: SongPerson[] | undefined): SelectedPerson[] =>
-    (items ?? []).map(item => ({ personId: item.personId, name: item.name }));
+    (items ?? []).map((item) => ({ personId: item.personId, name: item.name }));
 
   const persons = props.data.song.persons;
   const [personSelections, setPersonSelections] = createSignal<PersonSelections>({
-    1: toSelectedPersons(persons.filter(person => person.role === 1)),
-    2: toSelectedPersons(persons.filter(person => person.role === 2)),
-    3: toSelectedPersons(persons.filter(person => person.role === 3)),
+    1: toSelectedPersons(persons.filter((person) => person.role === 1)),
+    2: toSelectedPersons(persons.filter((person) => person.role === 2)),
+    3: toSelectedPersons(persons.filter((person) => person.role === 3)),
   });
-  const [tags, setTags] = createSignal<SongTagEntry[]>(props.data.song.tags.map(tag => ({ songTagId: tag.songTagId })));
+  const [tags, setTags] = createSignal<SongTagEntry[]>(
+    props.data.song.tags.map((tag) => ({ songTagId: tag.songTagId })),
+  );
   const [availableMedia, setAvailableMedia] = createSignal<Media[]>(initialAvailableMedia);
   const [mediaEntries, setMediaEntries] = createSignal<MediaEntry[]>(props.data.song.media.map(toMediaEntry));
   const [tagPickerValue, setTagPickerValue] = createSignal('');
@@ -149,7 +143,7 @@ export const EditableForm = (props: EditableFormProps) => {
   };
 
   const removeTagEntry = (index: number) => {
-    setTags(prev => prev.filter((_, i) => i !== index));
+    setTags((prev) => prev.filter((_, i) => i !== index));
   };
 
   const addTagEntry = (songTagId: string) => {
@@ -157,7 +151,7 @@ export const EditableForm = (props: EditableFormProps) => {
       return;
     }
 
-    setTags(prev => (prev.some(entry => entry.songTagId === songTagId) ? prev : [...prev, { songTagId }]));
+    setTags((prev) => (prev.some((entry) => entry.songTagId === songTagId) ? prev : [...prev, { songTagId }]));
     setTagPickerValue('');
   };
 
@@ -238,16 +232,16 @@ export const EditableForm = (props: EditableFormProps) => {
   });
 
   const tagOptions = () => {
-    const selectedTagIds = new Set(tags().map(entry => entry.songTagId));
+    const selectedTagIds = new Set(tags().map((entry) => entry.songTagId));
 
     return availableTags
-      .filter(tag => !selectedTagIds.has(tag.songTagId))
-      .map(tag => ({ value: tag.songTagId, label: tag.name }));
+      .filter((tag) => !selectedTagIds.has(tag.songTagId))
+      .map((tag) => ({ value: tag.songTagId, label: tag.name }));
   };
 
   const selectedTags = () =>
     tags()
-      .map(entry => availableTags.find(tag => tag.songTagId === entry.songTagId))
+      .map((entry) => availableTags.find((tag) => tag.songTagId === entry.songTagId))
       .filter((tag): tag is SongTag => tag !== undefined);
 
   const TagList = () => (
@@ -257,7 +251,7 @@ export const EditableForm = (props: EditableFormProps) => {
         <SearchableSelect
           options={tagOptions()}
           value={tagPickerValue()}
-          onChange={value => addTagEntry(value)}
+          onChange={(value) => addTagEntry(value)}
           placeholder="楽曲タグを検索して追加..."
         />
         <p class="text-xs text-base-content/60">選択したタグは下に追加されます。</p>
@@ -309,7 +303,7 @@ export const EditableForm = (props: EditableFormProps) => {
                     classList={{ 'input-error': !!getFieldError('title') }}
                   />
                   <Show when={getFieldError('title')}>
-                    {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                    {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                   </Show>
                 </div>
 
@@ -329,10 +323,10 @@ export const EditableForm = (props: EditableFormProps) => {
                     <option value="" disabled>
                       選択してください
                     </option>
-                    <For each={types}>{type => <option value={type.value}>{type.name}</option>}</For>
+                    <For each={types}>{(type) => <option value={type.value}>{type.name}</option>}</For>
                   </select>
                   <Show when={getFieldError('typeValue')}>
-                    {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                    {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                   </Show>
                 </div>
 
@@ -346,7 +340,7 @@ export const EditableForm = (props: EditableFormProps) => {
                     classList={{ 'input-error': !!getFieldError('description') }}
                   />
                   <Show when={getFieldError('description')}>
-                    {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                    {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                   </Show>
                 </div>
 
@@ -361,7 +355,7 @@ export const EditableForm = (props: EditableFormProps) => {
                     classList={{ 'input-error': !!getFieldError('lyricsLink') }}
                   />
                   <Show when={getFieldError('lyricsLink')}>
-                    {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                    {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                   </Show>
                 </div>
 

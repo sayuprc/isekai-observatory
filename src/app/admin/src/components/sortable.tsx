@@ -9,13 +9,7 @@ type Position<TScope extends SortableScope> = {
 };
 
 export function reorderItems<T>(items: readonly T[], fromIndex: number, toIndex: number): T[] {
-  if (
-    fromIndex === toIndex
-    || fromIndex < 0
-    || toIndex < 0
-    || fromIndex >= items.length
-    || toIndex >= items.length
-  ) {
+  if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= items.length || toIndex >= items.length) {
     return [...items];
   }
 

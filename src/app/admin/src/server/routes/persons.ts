@@ -15,7 +15,7 @@ export const persons = new Elysia({ prefix: '/persons' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         personServiceSearchPersons({
           client,
           query: {
@@ -25,7 +25,8 @@ export const persons = new Elysia({ prefix: '/persons' })
             page: query.page ?? 1,
             per_page: (query.per_page ?? 25) as PerPage,
           },
-        }));
+        }),
+      );
     },
     {
       query: t.Object({
@@ -40,8 +41,7 @@ export const persons = new Elysia({ prefix: '/persons' })
   .get(
     '/:personId',
     async ({ params: { personId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        personServiceGetPerson({ client, path: { personId } }));
+      return requestWithAuth(authSession, (client) => personServiceGetPerson({ client, path: { personId } }));
     },
     {
       params: t.Object({
@@ -52,8 +52,7 @@ export const persons = new Elysia({ prefix: '/persons' })
   .post(
     '/',
     async ({ body: { name }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        personServiceCreatePerson({ client, body: { name } }));
+      return requestWithAuth(authSession, (client) => personServiceCreatePerson({ client, body: { name } }));
     },
     {
       body: t.Object({
@@ -64,8 +63,9 @@ export const persons = new Elysia({ prefix: '/persons' })
   .put(
     '/:personId',
     async ({ params: { personId }, body: { name, orderNo }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        personServiceUpdatePerson({ client, path: { personId }, body: { name, orderNo } }));
+      return requestWithAuth(authSession, (client) =>
+        personServiceUpdatePerson({ client, path: { personId }, body: { name, orderNo } }),
+      );
     },
     {
       params: t.Object({
@@ -81,7 +81,7 @@ export const persons = new Elysia({ prefix: '/persons' })
     '/:personId',
     async ({ params: { personId }, authSession }) => {
       // 削除は本文を返さない
-      await requestWithAuth(authSession, client => personServiceDeletePerson({ client, path: { personId } }));
+      await requestWithAuth(authSession, (client) => personServiceDeletePerson({ client, path: { personId } }));
     },
     {
       params: t.Object({

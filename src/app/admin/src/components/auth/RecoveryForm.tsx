@@ -69,7 +69,7 @@ export const RecoveryForm = () => {
           required
           classList={{ 'input-error': !!getFieldError('email') }}
         />
-        <Show when={getFieldError('email')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+        <Show when={getFieldError('email')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
 
         <label class="label">リカバリーコード</label>
         <input
@@ -80,12 +80,12 @@ export const RecoveryForm = () => {
           classList={{ 'input-error': !!getFieldError('recoveryCode') }}
         />
         <Show when={getFieldError('recoveryCode')}>
-          {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+          {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
         </Show>
 
         <label class="label">新しいパスキー名</label>
         <input type="text" class="input" name="name" required classList={{ 'input-error': !!getFieldError('name') }} />
-        <Show when={getFieldError('name')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+        <Show when={getFieldError('name')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
 
         <button class="btn btn-primary mt-4" disabled={isSubmitting()}>
           {isSubmitting() ? 'リカバリー中...' : 'リカバリー'}

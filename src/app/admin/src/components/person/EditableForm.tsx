@@ -78,7 +78,7 @@ export const DetailView = (props: DetailViewProps) => {
           </button>
         </div>
       </Match>
-      <Match when={loadedData()}>{data => <EditableForm data={data()} />}</Match>
+      <Match when={loadedData()}>{(data) => <EditableForm data={data()} />}</Match>
     </Switch>
   );
 };
@@ -172,7 +172,7 @@ const EditableForm = (props: EditableFormProps) => {
               value={props.data.person.name}
               classList={{ 'input-error': !!getFieldError('name') }}
             />
-            <Show when={getFieldError('name')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+            <Show when={getFieldError('name')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
 
             <label class="label">表示順</label>
             <input
@@ -184,7 +184,9 @@ const EditableForm = (props: EditableFormProps) => {
               value={props.data.person.orderNo}
               classList={{ 'input-error': !!getFieldError('orderNo') }}
             />
-            <Show when={getFieldError('orderNo')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+            <Show when={getFieldError('orderNo')}>
+              {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
+            </Show>
 
             <div class="mt-6 flex justify-end">
               <button onClick={handleUpdate} class="btn btn-primary" disabled={isSubmitting()}>

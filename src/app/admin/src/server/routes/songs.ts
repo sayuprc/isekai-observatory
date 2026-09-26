@@ -106,8 +106,7 @@ export const songs = new Elysia({ prefix: '/songs' })
   .get(
     '/:songId',
     async ({ params: { songId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        songServiceGetSong({ client, path: { songId } }));
+      return requestWithAuth(authSession, (client) => songServiceGetSong({ client, path: { songId } }));
     },
     {
       params: t.Object({
@@ -118,7 +117,7 @@ export const songs = new Elysia({ prefix: '/songs' })
   .post(
     '/',
     async ({ body: { title, description, lyricsLink, typeValue, isDisplay, persons, tags, media }, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         songServiceCreateSong({
           client,
           body: {
@@ -131,7 +130,8 @@ export const songs = new Elysia({ prefix: '/songs' })
             tags,
             media,
           },
-        }));
+        }),
+      );
     },
     {
       body: t.Object({
@@ -153,7 +153,7 @@ export const songs = new Elysia({ prefix: '/songs' })
       body: { title, description, lyricsLink, typeValue, isDisplay, orderNo, persons, tags, media },
       authSession,
     }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         songServiceUpdateSong({
           client,
           path: { songId },
@@ -168,7 +168,8 @@ export const songs = new Elysia({ prefix: '/songs' })
             tags,
             media,
           },
-        }));
+        }),
+      );
     },
     {
       params: t.Object({
@@ -191,7 +192,7 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId',
     async ({ params: { songId }, authSession }) => {
       // 削除は本文を返さない
-      await requestWithAuth(authSession, client => songServiceDeleteSong({ client, path: { songId } }));
+      await requestWithAuth(authSession, (client) => songServiceDeleteSong({ client, path: { songId } }));
     },
     {
       params: t.Object({

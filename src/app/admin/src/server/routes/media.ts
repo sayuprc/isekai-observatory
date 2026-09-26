@@ -25,7 +25,7 @@ export const media = new Elysia({ prefix: '/media' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         mediaServiceSearchMedia({
           client,
           query: {
@@ -37,7 +37,8 @@ export const media = new Elysia({ prefix: '/media' })
             page: query.page ?? 1,
             per_page: (query.per_page ?? 25) as PerPage,
           },
-        }));
+        }),
+      );
     },
     {
       query: t.Object({
@@ -56,8 +57,7 @@ export const media = new Elysia({ prefix: '/media' })
   .get(
     '/:mediaId',
     async ({ params: { mediaId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        mediaServiceGetMedia({ client, path: { mediaId } }));
+      return requestWithAuth(authSession, (client) => mediaServiceGetMedia({ client, path: { mediaId } }));
     },
     {
       params: t.Object({
@@ -68,7 +68,7 @@ export const media = new Elysia({ prefix: '/media' })
   .post(
     '/',
     async ({ body: { title, url, publishedAt, typeValue, isDisplay }, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         mediaServiceCreateMedia({
           client,
           body: {
@@ -78,7 +78,8 @@ export const media = new Elysia({ prefix: '/media' })
             typeValue: typeValue as MediaTypeValue,
             isDisplay,
           },
-        }));
+        }),
+      );
     },
     {
       body: t.Object({
@@ -92,12 +93,8 @@ export const media = new Elysia({ prefix: '/media' })
   )
   .put(
     '/:mediaId',
-    async ({
-      params: { mediaId },
-      body: { title, url, publishedAt, typeValue, isDisplay },
-      authSession,
-    }) => {
-      return requestWithAuth(authSession, client =>
+    async ({ params: { mediaId }, body: { title, url, publishedAt, typeValue, isDisplay }, authSession }) => {
+      return requestWithAuth(authSession, (client) =>
         mediaServiceUpdateMedia({
           client,
           path: { mediaId },
@@ -108,7 +105,8 @@ export const media = new Elysia({ prefix: '/media' })
             typeValue: typeValue as MediaTypeValue,
             isDisplay,
           },
-        }));
+        }),
+      );
     },
     {
       params: t.Object({
@@ -126,11 +124,12 @@ export const media = new Elysia({ prefix: '/media' })
   .delete(
     '/:mediaId',
     async ({ params: { mediaId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         mediaServiceDeleteMedia({
           client,
           path: { mediaId },
-        }));
+        }),
+      );
     },
     {
       params: t.Object({

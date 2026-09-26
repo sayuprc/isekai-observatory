@@ -131,7 +131,7 @@ export const SearchList = () => {
 
   const { data, refetch, fetchError } = createSearchResource(
     params,
-    current =>
+    (current) =>
       client.api['audit-logs'].search.get({
         query: {
           from: toIsoOrEmpty(current.from) || undefined,
@@ -159,7 +159,7 @@ export const SearchList = () => {
             id="from"
             name="from"
             value={input().from}
-            onInput={e => updateInput({ from: e.currentTarget.value })}
+            onInput={(e) => updateInput({ from: e.currentTarget.value })}
             class="input input-bordered input-sm"
           />
         </fieldset>
@@ -172,7 +172,7 @@ export const SearchList = () => {
             id="to"
             name="to"
             value={input().to}
-            onInput={e => updateInput({ to: e.currentTarget.value })}
+            onInput={(e) => updateInput({ to: e.currentTarget.value })}
             class="input input-bordered input-sm"
           />
         </fieldset>
@@ -184,14 +184,15 @@ export const SearchList = () => {
             id="action"
             name="action"
             class="select select-bordered select-sm"
-            onChange={e =>
-              updateInput({ action: e.currentTarget.value === '' ? undefined : (e.currentTarget.value as Action) })}
+            onChange={(e) =>
+              updateInput({ action: e.currentTarget.value === '' ? undefined : (e.currentTarget.value as Action) })
+            }
           >
             <option value="" selected={input().action === undefined}>
               すべて
             </option>
             <For each={ACTION_OPTIONS}>
-              {a => (
+              {(a) => (
                 <option value={a} selected={input().action === a}>
                   {ACTION_LABEL[a]}
                 </option>
@@ -207,16 +208,17 @@ export const SearchList = () => {
             id="target_type"
             name="target_type"
             class="select select-bordered select-sm"
-            onChange={e =>
+            onChange={(e) =>
               updateInput({
                 targetType: e.currentTarget.value === '' ? undefined : (e.currentTarget.value as TargetType),
-              })}
+              })
+            }
           >
             <option value="" selected={input().targetType === undefined}>
               すべて
             </option>
             <For each={TARGET_TYPE_OPTIONS}>
-              {t => (
+              {(t) => (
                 <option value={t} selected={input().targetType === t}>
                   {TARGET_TYPE_LABEL[t]}
                 </option>
@@ -233,7 +235,7 @@ export const SearchList = () => {
             id="target_id"
             name="target_id"
             value={input().targetId}
-            onInput={e => updateInput({ targetId: e.currentTarget.value })}
+            onInput={(e) => updateInput({ targetId: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="UUID"
           />
@@ -247,7 +249,7 @@ export const SearchList = () => {
             id="admin_user_name"
             name="admin_user_name"
             value={input().adminUserName}
-            onInput={e => updateInput({ adminUserName: e.currentTarget.value })}
+            onInput={(e) => updateInput({ adminUserName: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="部分一致"
           />
@@ -260,10 +262,10 @@ export const SearchList = () => {
             id="per_page"
             name="per_page"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
+            onChange={(e) => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
-              {n => (
+              {(n) => (
                 <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
@@ -296,15 +298,15 @@ export const SearchList = () => {
                 <ListState state="loading" colSpan={6} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={6} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={6} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.auditLogs.length === 0}>
                 <ListState state="empty" colSpan={6} />
               </Match>
               <Match when={data()}>
-                {result => (
+                {(result) => (
                   <For each={result().auditLogs}>
-                    {log => (
+                    {(log) => (
                       <tr class="hover:bg-primary/30 focus-within:bg-primary/30 transition-colors">
                         <td>{formatter.format(new Date(log.createdAt))}</td>
                         <td>{log.adminUserName}</td>

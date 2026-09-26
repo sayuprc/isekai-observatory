@@ -56,7 +56,9 @@ export const CreateForm = () => {
       <div class="max-w-4xl space-y-6">
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
           <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
-          <label class="label" for="name">開催先名</label>
+          <label class="label" for="name">
+            開催先名
+          </label>
           <input
             id="name"
             type="text"
@@ -66,9 +68,11 @@ export const CreateForm = () => {
             maxLength={255}
             classList={{ 'input-error': !!getFieldError('name') }}
           />
-          <Show when={getFieldError('name')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+          <Show when={getFieldError('name')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
 
-          <label class="label mt-4" for="kind">種別</label>
+          <label class="label mt-4" for="kind">
+            種別
+          </label>
           <select id="kind" name="kind" class="select w-full" required>
             <option value="1">現地</option>
             <option value="2">オンライン</option>

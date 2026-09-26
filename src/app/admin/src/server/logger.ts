@@ -33,7 +33,7 @@ export const logger = pino({
   // Cloud Logging は pid / hostname を必要としないため落とす
   base: undefined,
   formatters: {
-    level: label => ({ severity: PINO_LEVEL_TO_SEVERITY[label] ?? 'DEFAULT' }),
+    level: (label) => ({ severity: PINO_LEVEL_TO_SEVERITY[label] ?? 'DEFAULT' }),
   },
   timestamp: () => `,"time":"${new Date().toISOString()}"`,
 });

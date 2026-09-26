@@ -147,16 +147,16 @@ export const LoginForm = (props: LoginFormProps) => {
       <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
         <label class="label">メールアドレス</label>
         <input
-          ref={el => emailInput = el}
+          ref={(el) => (emailInput = el)}
           type="email"
           class="input"
           name="email"
           autocomplete="username webauthn"
           required
-          onInput={event => setEmail(event.currentTarget.value)}
+          onInput={(event) => setEmail(event.currentTarget.value)}
           classList={{ 'input-error': !!getFieldError('email') }}
         />
-        <Show when={getFieldError('email')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+        <Show when={getFieldError('email')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
 
         <button class="btn btn-primary mt-4" disabled={isSubmitting()}>
           {isSubmitting() ? 'ログイン中...' : 'ログイン'}

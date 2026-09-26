@@ -23,7 +23,7 @@ const SEARCH_PER_PAGE = 25;
 
 export const PerformanceEditor = (props: PerformanceEditorProps) => {
   const moveItem = (fromIndex: number, toIndex: number) => {
-    props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
+    props.onChange((prev) => reorderItems(prev, fromIndex, toIndex));
   };
   const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
   const [personTargetIndex, setPersonTargetIndex] = createSignal(0);
@@ -49,11 +49,11 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
   });
 
   const removePerformance = (index: number) => {
-    props.onChange(prev => prev.filter((_, i) => i !== index));
+    props.onChange((prev) => prev.filter((_, i) => i !== index));
   };
 
   const changeCreditName = (performanceIndex: number, personIndex: number, creditName: string) => {
-    props.onChange(prev => setCreditName(prev, performanceIndex, personIndex, creditName));
+    props.onChange((prev) => setCreditName(prev, performanceIndex, personIndex, creditName));
   };
 
   return (
@@ -110,12 +110,12 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
                             class="input input-bordered input-xs w-40"
                             placeholder="クレジット名(任意)"
                             value={person().creditName}
-                            onInput={e => changeCreditName(index, personIndex, e.currentTarget.value)}
+                            onInput={(e) => changeCreditName(index, personIndex, e.currentTarget.value)}
                           />
                           <button
                             type="button"
                             class="btn btn-ghost btn-xs text-error"
-                            onClick={() => props.onChange(prev => removeCoVocalist(prev, index, personIndex))}
+                            onClick={() => props.onChange((prev) => removeCoVocalist(prev, index, personIndex))}
                           >
                             外す
                           </button>
@@ -123,11 +123,7 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
                       )}
                     </Index>
                   </Show>
-                  <button
-                    type="button"
-                    class="btn btn-ghost btn-xs"
-                    onClick={() => setPersonTargetIndex(index)}
-                  >
+                  <button type="button" class="btn btn-ghost btn-xs" onClick={() => setPersonTargetIndex(index)}>
                     この披露に共演者を追加する対象にする
                     <Show when={personTargetIndex() === index}>
                       <span class="badge badge-primary badge-xs ml-1">選択中</span>
@@ -145,8 +141,8 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
           title="楽曲を追加"
           placeholder="楽曲名で検索"
           search={songSearch}
-          itemLabel={song => song.title}
-          onAdd={song => props.onChange(prev => addPerformance(prev, song))}
+          itemLabel={(song) => song.title}
+          onAdd={(song) => props.onChange((prev) => addPerformance(prev, song))}
           disabled={props.disabled}
           emptyResultMessage="該当する楽曲がありません"
         />
@@ -154,8 +150,8 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
           title="共演者を追加"
           placeholder="人物名で検索"
           search={personSearch}
-          itemLabel={person => person.name}
-          onAdd={person => props.onChange(prev => addCoVocalist(prev, personTargetIndex(), person))}
+          itemLabel={(person) => person.name}
+          onAdd={(person) => props.onChange((prev) => addCoVocalist(prev, personTargetIndex(), person))}
           disabled={props.disabled || props.performances.length === 0}
         >
           <p class="mb-2 text-xs text-base-content/60">

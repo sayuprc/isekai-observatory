@@ -70,7 +70,11 @@ const DEFAULT_PARAMS: SearchParams = {
 
 const parseParams = (query: URLSearchParams): SearchParams => ({
   title: query.get('title') ?? '',
-  type: pickParam(query.get('type'), RELEASE_GROUP_TYPE_OPTIONS.map(option => option.value), ''),
+  type: pickParam(
+    query.get('type'),
+    RELEASE_GROUP_TYPE_OPTIONS.map((option) => option.value),
+    '',
+  ),
   isDisplay: pickParam(query.get('is_display'), ['true', 'false'] as const, ''),
   sort: pickParam(query.get('sort'), ['first_released_on', 'title'] as const, DEFAULT_PARAMS.sort),
   order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
@@ -95,7 +99,7 @@ export const SearchList = () => {
     toQuery,
   });
 
-  const { data, refetch, fetchError } = createSearchResource(params, current =>
+  const { data, refetch, fetchError } = createSearchResource(params, (current) =>
     client.api['release-groups'].search.get({
       query: {
         title: current.title,
@@ -121,7 +125,7 @@ export const SearchList = () => {
             id="title"
             name="title"
             value={input().title}
-            onInput={e => updateInput({ title: e.currentTarget.value })}
+            onInput={(e) => updateInput({ title: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="作品名で検索"
           />
@@ -134,10 +138,10 @@ export const SearchList = () => {
             id="type"
             name="type"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ type: e.currentTarget.value as '' | `${ReleaseGroupTypeValue}` })}
+            onChange={(e) => updateInput({ type: e.currentTarget.value as '' | `${ReleaseGroupTypeValue}` })}
           >
             <For each={RELEASE_GROUP_TYPE_OPTIONS}>
-              {option => (
+              {(option) => (
                 <option value={option.value} selected={input().type === option.value}>
                   {option.label}
                 </option>
@@ -153,7 +157,7 @@ export const SearchList = () => {
             id="isDisplay"
             name="isDisplay"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
+            onChange={(e) => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
           >
             <option value="" selected={input().isDisplay === ''}>
               すべて
@@ -174,7 +178,7 @@ export const SearchList = () => {
             id="sort"
             name="sort"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ sort: e.currentTarget.value as Sort })}
+            onChange={(e) => updateInput({ sort: e.currentTarget.value as Sort })}
           >
             <option value="first_released_on" selected={input().sort === 'first_released_on'}>
               初リリース日
@@ -192,7 +196,7 @@ export const SearchList = () => {
             id="order"
             name="order"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ order: e.currentTarget.value as Order })}
+            onChange={(e) => updateInput({ order: e.currentTarget.value as Order })}
           >
             <option value="desc" selected={input().order === 'desc'}>
               降順
@@ -210,10 +214,10 @@ export const SearchList = () => {
             id="perPage"
             name="perPage"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
+            onChange={(e) => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
-              {n => (
+              {(n) => (
                 <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
@@ -251,15 +255,15 @@ export const SearchList = () => {
                 <ListState state="loading" colSpan={4} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.releaseGroups.length === 0}>
                 <ListState state="empty" colSpan={4} message="条件に一致するリリースグループはありません。" />
               </Match>
               <Match when={data()}>
-                {result => (
+                {(result) => (
                   <For each={result().releaseGroups}>
-                    {releaseGroup => (
+                    {(releaseGroup) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td class="min-w-56">
                           <a href={buildDetailHref(releaseGroup.releaseGroupId)} class="link link-hover font-medium">
@@ -267,14 +271,11 @@ export const SearchList = () => {
                           </a>
                         </td>
                         <td class="whitespace-nowrap">
-                          {RELEASE_GROUP_TYPE_OPTIONS.find(
-                            option => option.value === String(releaseGroup.typeValue),
-                          )?.label ?? '不明'}
+                          {RELEASE_GROUP_TYPE_OPTIONS.find((option) => option.value === String(releaseGroup.typeValue))
+                            ?.label ?? '不明'}
                         </td>
                         <td class="whitespace-nowrap text-sm">
-                          {releaseGroup.firstReleasedOn
-                            ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn)
-                            : '—'}
+                          {releaseGroup.firstReleasedOn ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn) : '—'}
                         </td>
                         <td class="whitespace-nowrap">
                           <span

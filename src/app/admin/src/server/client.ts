@@ -128,4 +128,4 @@ export const withAuthRetry = createWithAuthRetry<Client>({
 export const requestWithAuth = <T>(
   authSession: AuthSession,
   request: (client: Client) => Promise<ApiResult<T>>,
-): Promise<T> => withAuthRetry(authSession, async client => resolveApiResponse(await request(client)));
+): Promise<T> => withAuthRetry(authSession, async (client) => resolveApiResponse(await request(client)));

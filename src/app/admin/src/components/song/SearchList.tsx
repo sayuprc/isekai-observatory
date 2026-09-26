@@ -71,7 +71,7 @@ export const SearchList = () => {
     toQuery,
   });
 
-  const { data, refetch, fetchError } = createSearchResource(params, current =>
+  const { data, refetch, fetchError } = createSearchResource(params, (current) =>
     client.api.songs.search.get({
       query: {
         title: current.title,
@@ -97,7 +97,7 @@ export const SearchList = () => {
             id="title"
             name="title"
             value={input().title}
-            onInput={e => updateInput({ title: e.currentTarget.value })}
+            onInput={(e) => updateInput({ title: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="楽曲名で検索"
           />
@@ -110,16 +110,17 @@ export const SearchList = () => {
             id="type"
             name="type"
             class="select select-bordered select-sm"
-            onChange={e =>
+            onChange={(e) =>
               updateInput({
                 type: e.currentTarget.value !== '' ? (e.currentTarget.value as SongSearchTypeValue) : undefined,
-              })}
+              })
+            }
           >
             <option value="" selected={input().type === undefined}>
               すべて
             </option>
             <For each={data()?.types ?? []}>
-              {t => (
+              {(t) => (
                 <option value={String(t.value)} selected={input().type === String(t.value)}>
                   {t.name}
                 </option>
@@ -135,8 +136,9 @@ export const SearchList = () => {
             id="isDisplay"
             name="isDisplay"
             class="select select-bordered select-sm"
-            onChange={e =>
-              updateInput({ isDisplay: e.currentTarget.value === '' ? undefined : e.currentTarget.value === 'true' })}
+            onChange={(e) =>
+              updateInput({ isDisplay: e.currentTarget.value === '' ? undefined : e.currentTarget.value === 'true' })
+            }
           >
             <option value="" selected={input().isDisplay === undefined}>
               すべて
@@ -157,7 +159,7 @@ export const SearchList = () => {
             id="sort"
             name="sort"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ sort: e.currentTarget.value as Sort })}
+            onChange={(e) => updateInput({ sort: e.currentTarget.value as Sort })}
           >
             <option value="order_no" selected={input().sort === 'order_no'}>
               表示順
@@ -175,7 +177,7 @@ export const SearchList = () => {
             id="order"
             name="order"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ order: e.currentTarget.value as Order })}
+            onChange={(e) => updateInput({ order: e.currentTarget.value as Order })}
           >
             <option value="asc" selected={input().order === 'asc'}>
               昇順
@@ -193,10 +195,10 @@ export const SearchList = () => {
             id="perPage"
             name="perPage"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
+            onChange={(e) => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
-              {n => (
+              {(n) => (
                 <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
@@ -232,15 +234,15 @@ export const SearchList = () => {
                 <ListState state="loading" colSpan={4} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.songs.length === 0}>
                 <ListState state="empty" colSpan={4} />
               </Match>
               <Match when={data()}>
-                {result => (
+                {(result) => (
                   <For each={result().songs}>
-                    {song => (
+                    {(song) => (
                       <tr class="hover:bg-primary/30 focus-within:bg-primary/30 transition-colors">
                         <td>
                           <a

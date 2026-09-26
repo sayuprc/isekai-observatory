@@ -15,14 +15,15 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .post(
     '/',
     async ({ body, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         releaseGroupServiceCreateReleaseGroup({
           client,
           body: {
             ...body,
             typeValue: body.typeValue as ReleaseGroupTypeValue,
           },
-        }));
+        }),
+      );
     },
     {
       body: t.Object({
@@ -37,7 +38,7 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         releaseGroupServiceSearchReleaseGroups({
           client,
           query: {
@@ -49,7 +50,8 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
             page: query.page ?? 1,
             per_page: (query.per_page ?? 25) as PerPage,
           },
-        }));
+        }),
+      );
     },
     {
       query: t.Object({
@@ -66,8 +68,9 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .get(
     '/:releaseGroupId',
     async ({ params: { releaseGroupId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        releaseGroupServiceGetReleaseGroup({ client, path: { releaseGroupId } }));
+      return requestWithAuth(authSession, (client) =>
+        releaseGroupServiceGetReleaseGroup({ client, path: { releaseGroupId } }),
+      );
     },
     {
       params: t.Object({
@@ -78,12 +81,13 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .put(
     '/:releaseGroupId',
     async ({ params: { releaseGroupId }, body, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         releaseGroupServiceUpdateReleaseGroup({
           client,
           path: { releaseGroupId },
           body,
-        }));
+        }),
+      );
     },
     {
       params: t.Object({
@@ -101,11 +105,12 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .delete(
     '/:releaseGroupId',
     async ({ params: { releaseGroupId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         releaseGroupServiceDeleteReleaseGroup({
           client,
           path: { releaseGroupId },
-        }));
+        }),
+      );
     },
     {
       params: t.Object({

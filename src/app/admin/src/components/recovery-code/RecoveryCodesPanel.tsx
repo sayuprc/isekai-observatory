@@ -60,7 +60,7 @@ export const RecoveryCodesPanel = () => {
             このコードは再表示できません。今すぐコピーまたはダウンロードして保管してください。
           </p>
           <ul class="grid grid-cols-2 gap-2 font-mono text-sm">
-            <For each={codes()}>{code => <li class="rounded bg-base-200 px-3 py-2">{code}</li>}</For>
+            <For each={codes()}>{(code) => <li class="rounded bg-base-200 px-3 py-2">{code}</li>}</For>
           </ul>
           <div class="mt-4 flex gap-2">
             <button class="btn btn-sm" onClick={copyAll}>

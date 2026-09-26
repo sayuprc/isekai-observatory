@@ -44,9 +44,9 @@ export const AdminUserList = () => {
               <ListState state="empty" colSpan={4} message="管理ユーザーはありません。" />
             </Match>
             <Match when={data()}>
-              {result => (
+              {(result) => (
                 <For each={result().adminUsers}>
-                  {adminUser => (
+                  {(adminUser) => (
                     <tr>
                       <td>{adminUser.name}</td>
                       <td>{adminUser.email}</td>

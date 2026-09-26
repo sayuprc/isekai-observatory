@@ -50,7 +50,7 @@ export const CreateForm = () => {
               required
               classList={{ 'input-error': !!getFieldError('name') }}
             />
-            <Show when={getFieldError('name')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+            <Show when={getFieldError('name')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
 
             <div class="mt-6 flex justify-end">
               <button class="btn btn-primary" disabled={isSubmitting()}>

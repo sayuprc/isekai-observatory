@@ -65,7 +65,7 @@ export const waitForSessionCredentialUpdate = async (
       return credential;
     }
 
-    await new Promise(resolve => setTimeout(resolve, REFRESH_WAIT_INTERVAL_MS));
+    await new Promise((resolve) => setTimeout(resolve, REFRESH_WAIT_INTERVAL_MS));
   }
 
   return getSessionCredential(sessionId);
