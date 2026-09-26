@@ -6,12 +6,9 @@ export default {
     'stylelint-config-html/astro',
     'stylelint-config-recess-order',
   ],
-  plugins: ['stylelint-order', '@stylistic/stylelint-plugin'],
+  plugins: ['stylelint-order'],
   rules: {
     'order/order': ['custom-properties', 'declarations'],
-    'rule-empty-line-before': ['always'],
-    '@stylistic/max-empty-lines': [1],
-    '@stylistic/no-empty-first-line': [true],
     'alpha-value-notation': null,
     'color-function-alias-notation': null,
     'color-function-notation': null,

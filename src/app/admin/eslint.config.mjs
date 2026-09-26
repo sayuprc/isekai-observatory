@@ -1,5 +1,5 @@
 import eslint from '@eslint/js';
-import stylistic from '@stylistic/eslint-plugin';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import eslintPluginAstro from 'eslint-plugin-astro';
 import { importX } from 'eslint-plugin-import-x';
 import tsEslint from 'typescript-eslint';
@@ -14,23 +14,6 @@ const defaultRules = {
       },
     },
   ],
-  '@stylistic/jsx-one-expression-per-line': [
-    'error',
-    {
-      allow: 'non-jsx',
-    },
-  ],
-  '@stylistic/max-len': [
-    'error',
-    {
-      code: 120,
-      ignoreUrls: true,
-      // SVG の path や Tailwind の class など、分割できない文字列だけの行は除外する
-      ignorePattern: String.raw`^\s*([\w:-]+\s*=\s*)?(['"]).*\2[,;]?\s*/?>?$`,
-    },
-  ],
-  '@stylistic/brace-style': ['error', '1tbs'],
-  '@stylistic/comma-dangle': ['error', 'always-multiline'],
   '@typescript-eslint/consistent-type-imports': [
     'error',
     {
@@ -42,17 +25,12 @@ const defaultRules = {
 export default [
   {
     plugins: {
-      '@stylistic': stylistic,
       'import-x': importX,
     },
   },
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
-  stylistic.configs.customize({
-    quotes: 'single',
-    semi: true,
-  }),
   {
     ignores: ['.astro/**', 'dist/**', 'src/generated/**'],
   },
@@ -60,10 +38,5 @@ export default [
     files: ['**/*.{js,mjs,ts,jsx,tsx,astro}'],
     rules: defaultRules,
   },
-  {
-    files: ['**/*.astro'],
-    rules: {
-      '@stylistic/jsx-one-expression-per-line': 'off',
-    },
-  },
+  eslintConfigPrettier,
 ];

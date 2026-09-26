@@ -31,8 +31,6 @@ catalogs:
   lint:
     "@biomejs/biome": 2.5.13
     "@eslint/js": 10.0.1
-    "@stylistic/eslint-plugin": 5.10.0
-    "@stylistic/stylelint-plugin": 5.3.0
     "@typescript-eslint/parser": 8.70.0
     eslint: 10.10.0
     eslint-plugin-astro: 3.1.0
