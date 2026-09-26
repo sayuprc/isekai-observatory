@@ -6,18 +6,25 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "biome:format": "biome format --write",
-    "biome:format:check": "biome format",
-    "biome:lint": "biome lint",
-    "format": "bun run biome:format",
-    "format:check": "bun run biome:format:check",
-    "lint:check": "bun run biome:lint"
+    "prettier:format": "prettier --write .",
+    "prettier:format:check": "prettier --check .",
+    "eslint:fix": "eslint --fix",
+    "eslint:check": "eslint",
+    "format": "bun run prettier:format",
+    "format:check": "bun run prettier:format:check",
+    "lint": "bun run eslint:fix",
+    "lint:check": "bun run eslint:check"
   },
   "dependencies": {
     "wrangler": "catalog:"
   },
   "devDependencies": {
-    "@biomejs/biome": "catalog:lint",
-    "typescript": "catalog:"
+    "@eslint/js": "catalog:lint",
+    "eslint": "catalog:lint",
+    "eslint-config-prettier": "catalog:lint",
+    "eslint-plugin-import-x": "catalog:lint",
+    "prettier": "catalog:lint",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:lint"
   }
 }

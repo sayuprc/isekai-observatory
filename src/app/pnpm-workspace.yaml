@@ -29,7 +29,6 @@ catalogs:
     daisyui: 5.7.37
     tailwindcss: 4.3.3
   lint:
-    "@biomejs/biome": 2.5.13
     "@eslint/js": 10.0.1
     "@typescript-eslint/parser": 8.70.0
     eslint: 10.10.0
