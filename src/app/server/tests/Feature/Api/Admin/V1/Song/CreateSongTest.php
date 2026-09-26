@@ -172,6 +172,26 @@ class CreateSongTest extends DatabaseTestCase
     #[Test]
     public function emptyParameters(): void
     {
-        $this->markTestSkipped('実装する');
+        $this->withAuth()
+            ->postJson(route(SongRouteMap::Create), [
+                'title' => '',
+                'description' => '',
+                'lyricsLink' => null,
+                'typeValue' => 0,
+                'isDisplay' => true,
+                'persons' => [],
+                'tags' => [],
+                'media' => [],
+            ])->assertStatus(422)
+            ->assertJson(
+                static fn (AssertableJson $json) => $json
+                    ->where('code', 'validation_failed')
+                    ->whereType('message', 'string')
+                    ->has('details', 2)
+                    ->where('details.0.field', 'title')
+                    ->whereType('details.0.message', 'string')
+                    ->where('details.1.field', 'typeValue')
+                    ->whereType('details.1.message', 'string'),
+            );
     }
 }

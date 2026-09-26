@@ -328,6 +328,35 @@ class UpdateSongTest extends DatabaseTestCase
     #[Test]
     public function emptyParameters(): void
     {
-        $this->markTestSkipped('TODO 実装する');
+        $songId = $this->generateUuid();
+
+        $this->app->make(SongRepository::class)->save(
+            $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
+        );
+
+        $this->withAuth()
+            ->putJson(route(SongRouteMap::Update, $songId), [
+                'title' => '',
+                'description' => '',
+                'lyricsLink' => null,
+                'typeValue' => 0,
+                'isDisplay' => true,
+                'orderNo' => 0,
+                'persons' => [],
+                'tags' => [],
+                'media' => [],
+            ])->assertStatus(422)
+            ->assertJson(
+                static fn (AssertableJson $json) => $json
+                    ->where('code', 'validation_failed')
+                    ->whereType('message', 'string')
+                    ->has('details', 3)
+                    ->where('details.0.field', 'title')
+                    ->whereType('details.0.message', 'string')
+                    ->where('details.1.field', 'typeValue')
+                    ->whereType('details.1.message', 'string')
+                    ->where('details.2.field', 'orderNo')
+                    ->whereType('details.2.message', 'string'),
+            );
     }
 }
