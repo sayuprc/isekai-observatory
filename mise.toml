@@ -337,8 +337,9 @@ run = [
 
 [tasks."admin:format:check"]
 description = "Admin の formatter をチェックする"
+usage = 'arg "[path]" var=#true help="Prettier のチェック対象パス (省略時は全体)"'
 dir = "src/app/admin"
-run = "bun run prettier:format:check"
+run = "bun x prettier --check ${usage_path:-.}"
 
 [tasks."admin:lint"]
 description = "Admin の linter を実行する"
