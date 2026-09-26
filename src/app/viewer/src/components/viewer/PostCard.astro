@@ -35,18 +35,20 @@ const platform = platformMeta[entry.platform as keyof typeof platformMeta] ?? pl
 <a href={`/media/${entry.id}`} class={`post-card ${compact ? 'post-card-compact' : ''}`}>
   <div class="post-card-head">
     <span class={`platform-badge ${platform.className}`}>{platform.mark}</span>
-    <span class="label-mono">{mediaTypeLabel(entry.type)} · {entry.date}</span>
+    <span class="label-mono">
+      {mediaTypeLabel(entry.type)} · {entry.date}
+    </span>
   </div>
   {entry.title && <div class="post-card-title">{entry.title}</div>}
   <div class="post-card-text">{entry.text}</div>
   {entry.hasImage && <div class="post-card-image" style={`--tile-color:${entry.color};`} />}
-  {
-    songs.length > 0 && (
-      <div class="media-card-tags">
-        {songs.map(song => <span class="pill">♪ {song.title}</span>)}
-      </div>
-    )
-  }
+  {songs.length > 0 && (
+    <div class="media-card-tags">
+      {songs.map((song) => (
+        <span class="pill">♪ {song.title}</span>
+      ))}
+    </div>
+  )}
   <div class="post-card-stats">
     {entry.likes && <span>♥ {entry.likes}</span>}
     {entry.reposts && <span>↻ {entry.reposts}</span>}

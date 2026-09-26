@@ -10,23 +10,19 @@ const { track } = Astro.props;
 const trackNo = String(track.trackNo).padStart(2, '0');
 ---
 
-{
-  isLinkableTrack(track)
-    ? (
-        <a class="rel-chip" href={`/songs/${track.songId}`}>
-          <span class="detail-index">{trackNo}</span>
-          <div class="rel-copy">
-            <div class="rel-main">{track.title}</div>
-          </div>
-          <span class="rel-arrow">→</span>
-        </a>
-      )
-    : (
-        <div class="rel-chip" data-unlinked>
-          <span class="detail-index">{trackNo}</span>
-          <div class="rel-copy">
-            <div class="rel-main">{track.title}</div>
-          </div>
-        </div>
-      )
-}
+{isLinkableTrack(track) ? (
+  <a class="rel-chip" href={`/songs/${track.songId}`}>
+    <span class="detail-index">{trackNo}</span>
+    <div class="rel-copy">
+      <div class="rel-main">{track.title}</div>
+    </div>
+    <span class="rel-arrow">→</span>
+  </a>
+) : (
+  <div class="rel-chip" data-unlinked>
+    <span class="detail-index">{trackNo}</span>
+    <div class="rel-copy">
+      <div class="rel-main">{track.title}</div>
+    </div>
+  </div>
+)}

@@ -6,18 +6,18 @@
    土台 → 部品 → ページ固有 → ページ固有の上書き → 画面幅ごとの上書きの順に並べ、並び替えるときはカスケードへの影響を確かめる
    policy と error は画面幅に依らず .page-section の余白を上書きするため、responsive より後に置く */
 
-@import url("./tokens.css");
-@import url("./base.css");
-@import url("./layout.css");
-@import url("./components.css");
-@import url("./detail.css");
-@import url("./pages/releases.css");
-@import url("./pages/events.css");
-@import url("./pages/songs.css");
-@import url("./pages/media.css");
-@import url("./pages/profile.css");
-@import url("./pages/home.css");
-@import url("./drawer.css");
-@import url("./responsive.css");
-@import url("./pages/policy.css");
-@import url("./pages/error.css");
+@import url('./tokens.css');
+@import url('./base.css');
+@import url('./layout.css');
+@import url('./components.css');
+@import url('./detail.css');
+@import url('./pages/releases.css');
+@import url('./pages/events.css');
+@import url('./pages/songs.css');
+@import url('./pages/media.css');
+@import url('./pages/profile.css');
+@import url('./pages/home.css');
+@import url('./drawer.css');
+@import url('./responsive.css');
+@import url('./pages/policy.css');
+@import url('./pages/error.css');

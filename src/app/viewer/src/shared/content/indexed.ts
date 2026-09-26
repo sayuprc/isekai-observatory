@@ -9,7 +9,7 @@ export const indexedSchema = <T>() =>
   );
 
 /** API から全件を取り、並び順を index に残してコレクションの要素にする */
-export const indexedLoader
-  = <T extends object>(fetchAll: () => Promise<T[]>, idOf: (item: T) => string) =>
-    async () =>
-      (await fetchAll()).map((item, index) => ({ id: idOf(item), ...item, index }));
+export const indexedLoader =
+  <T extends object>(fetchAll: () => Promise<T[]>, idOf: (item: T) => string) =>
+  async () =>
+    (await fetchAll()).map((item, index) => ({ id: idOf(item), ...item, index }));

@@ -38,7 +38,7 @@
 }
 
 .brand-mark {
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 19px;
   font-weight: 600;
   line-height: 1;
@@ -48,7 +48,7 @@
 }
 
 .brand-en {
-  font-family: "EB Garamond", serif;
+  font-family: 'EB Garamond', serif;
   font-size: 12px;
   font-style: italic;
   font-weight: 500;
@@ -78,15 +78,15 @@
   border-radius: 999px;
 }
 
-.env-badge[data-env="local"] {
+.env-badge[data-env='local'] {
   background: #16a34a;
 }
 
-.env-badge[data-env="development"] {
+.env-badge[data-env='development'] {
   background: #2563eb;
 }
 
-.env-badge[data-env="staging"] {
+.env-badge[data-env='staging'] {
   background: #d97706;
 }
 
@@ -101,21 +101,21 @@
   display: none;
 }
 
-[data-palette="anemone-2"] .brand-logo-dark,
-[data-palette="anemone-2"] .footer-logo-dark,
-[data-palette="nemophila-1"] .brand-logo-dark,
-[data-palette="nemophila-1"] .footer-logo-dark,
-[data-palette="sunflower-1"] .brand-logo-dark,
-[data-palette="sunflower-1"] .footer-logo-dark {
+[data-palette='anemone-2'] .brand-logo-dark,
+[data-palette='anemone-2'] .footer-logo-dark,
+[data-palette='nemophila-1'] .brand-logo-dark,
+[data-palette='nemophila-1'] .footer-logo-dark,
+[data-palette='sunflower-1'] .brand-logo-dark,
+[data-palette='sunflower-1'] .footer-logo-dark {
   display: none;
 }
 
-[data-palette="anemone-2"] .brand-logo-light,
-[data-palette="anemone-2"] .footer-logo-light,
-[data-palette="nemophila-1"] .brand-logo-light,
-[data-palette="nemophila-1"] .footer-logo-light,
-[data-palette="sunflower-1"] .brand-logo-light,
-[data-palette="sunflower-1"] .footer-logo-light {
+[data-palette='anemone-2'] .brand-logo-light,
+[data-palette='anemone-2'] .footer-logo-light,
+[data-palette='nemophila-1'] .brand-logo-light,
+[data-palette='nemophila-1'] .footer-logo-light,
+[data-palette='sunflower-1'] .brand-logo-light,
+[data-palette='sunflower-1'] .footer-logo-light {
   display: block;
 }
 
@@ -145,7 +145,7 @@
   gap: 4px;
   align-items: center;
   padding: 10px 0 calc(12px + env(safe-area-inset-bottom));
-  font-family: "Noto Serif JP", serif;
+  font-family: 'Noto Serif JP', serif;
   font-size: 10px;
   color: var(--fg-muted);
   letter-spacing: 0.08em;
@@ -167,7 +167,7 @@
 .nav-links a {
   position: relative;
   padding: 8px 18px;
-  font-family: "Noto Serif JP", serif;
+  font-family: 'Noto Serif JP', serif;
   font-size: 14px;
   color: var(--fg-muted);
   letter-spacing: 0.08em;
@@ -188,7 +188,7 @@
   left: 50%;
   width: 4px;
   height: 4px;
-  content: "";
+  content: '';
   background: var(--accent);
   border-radius: 50%;
   transform: translateX(-50%);
@@ -206,7 +206,7 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   color: var(--fg-muted);
   cursor: pointer;
@@ -231,7 +231,7 @@
   align-items: center;
   height: 36px;
   padding: 6px 14px 6px 8px;
-  font-family: "Noto Serif JP", serif;
+  font-family: 'Noto Serif JP', serif;
   color: var(--fg-muted);
   cursor: pointer;
   background: transparent;
@@ -267,7 +267,7 @@
 }
 
 .theme-trigger .label .jp {
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 12px;
   color: var(--fg);
   letter-spacing: 0.1em;
@@ -276,7 +276,7 @@
 
 .theme-trigger .label .en {
   margin-top: 2px;
-  font-family: "EB Garamond", serif;
+  font-family: 'EB Garamond', serif;
   font-size: 10px;
   font-style: italic;
   color: var(--fg-muted);
@@ -286,7 +286,7 @@
 
 .theme-trigger .caret {
   margin-left: 2px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   color: var(--fg-faint);
 }
@@ -320,14 +320,14 @@
 }
 
 .theme-pop-title {
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 14px;
   color: var(--fg);
   letter-spacing: 0.12em;
 }
 
 .theme-pop-title-en {
-  font-family: "EB Garamond", serif;
+  font-family: 'EB Garamond', serif;
   font-size: 11px;
   font-style: italic;
   color: var(--fg-muted);
@@ -371,7 +371,7 @@
 .theme-opt .meta .name {
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 13px;
   color: var(--fg);
   letter-spacing: 0.06em;
@@ -381,7 +381,7 @@
 .theme-opt .meta .sub {
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: "EB Garamond", serif;
+  font-family: 'EB Garamond', serif;
   font-size: 11px;
   font-style: italic;
   color: var(--fg-muted);
@@ -390,7 +390,7 @@
 
 .theme-opt .check {
   margin-left: auto;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   color: var(--accent-strong);
   opacity: 0;
@@ -421,7 +421,7 @@
 }
 
 .footer-brand-mark {
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 28px;
   color: var(--fg);
   letter-spacing: 0.1em;
@@ -437,7 +437,7 @@
 
 .footer-col-title {
   margin: 0 0 16px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   font-weight: 400;
   color: var(--fg-muted);
@@ -464,7 +464,7 @@
 }
 
 .footer-version {
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   color: var(--fg-muted);
   letter-spacing: 0.06em;
@@ -473,7 +473,6 @@
 /* ページ間遷移 */
 
 @keyframes page-in {
-
   from {
     opacity: 0;
     transform: translateY(8px);
@@ -507,7 +506,7 @@
 .breadcrumb-item + .breadcrumb-item::before {
   margin-right: 8px;
   color: var(--fg-faint);
-  content: "/";
+  content: '/';
 }
 
 .breadcrumb-link:hover {

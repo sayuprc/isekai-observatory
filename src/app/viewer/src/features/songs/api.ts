@@ -10,7 +10,7 @@ async function all(): Promise<Song[]> {
       const result = await songServiceListSongs({ client: apiClient, query: { limit, cursor } });
       return requireData('songServiceListSongs', result);
     },
-    data => ({ items: data.songs, nextCursor: data.nextCursor }),
+    (data) => ({ items: data.songs, nextCursor: data.nextCursor }),
   );
 }
 

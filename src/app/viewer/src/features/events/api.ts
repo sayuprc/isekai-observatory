@@ -10,7 +10,7 @@ async function all(): Promise<Event[]> {
       const result = await eventServiceListEvents({ client: apiClient, query: { limit, cursor } });
       return requireData('eventServiceListEvents', result);
     },
-    data => ({ items: data.events, nextCursor: data.nextCursor }),
+    (data) => ({ items: data.events, nextCursor: data.nextCursor }),
   );
 }
 

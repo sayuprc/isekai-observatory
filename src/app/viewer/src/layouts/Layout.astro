@@ -55,7 +55,9 @@ const trail: readonly BreadcrumbItem[] = breadcrumbs.length > 0 ? [{ label: 'ホ
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    {preconnect.map(origin => <link rel="preconnect" href={origin} />)}
+    {preconnect.map((origin) => (
+      <link rel="preconnect" href={origin} />
+    ))}
     <link rel="canonical" href={canonicalUrl} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="description" content={pageDescription} />
@@ -77,7 +79,7 @@ const trail: readonly BreadcrumbItem[] = breadcrumbs.length > 0 ? [{ label: 'ホ
       define:vars={{
         paletteKey: PALETTE_STORAGE_KEY,
         defaultPalette: DEFAULT_PALETTE,
-        validPalettes: THEMES.map(theme => theme.value),
+        validPalettes: THEMES.map((theme) => theme.value),
       }}
     >
       {
@@ -97,7 +99,9 @@ const trail: readonly BreadcrumbItem[] = breadcrumbs.length > 0 ? [{ label: 'ホ
       <div class="viewer-ambient-light"></div>
       <div class="viewer-ambient-wash"></div>
     </div>
-    <a class="skip-link" href="#main-content">メインコンテンツへスキップ</a>
+    <a class="skip-link" href="#main-content">
+      メインコンテンツへスキップ
+    </a>
     <Header currentPath={Astro.url.pathname} />
     <main id="main-content">
       {trail.length > 0 && <Breadcrumb items={trail} />}

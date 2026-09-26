@@ -3,8 +3,7 @@
 
 export const SITE_TITLE = 'ヰ世界観測所';
 
-export const SITE_DESCRIPTION
-  = 'ヰ世界情緒の楽曲・リリース情報を記録する非公式ファンサイトです';
+export const SITE_DESCRIPTION = 'ヰ世界情緒の楽曲・リリース情報を記録する非公式ファンサイトです';
 
 export type OgImage = {
   url: string;

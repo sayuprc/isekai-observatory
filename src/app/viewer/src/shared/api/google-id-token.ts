@@ -1,4 +1,5 @@
-const METADATA_IDENTITY_URL = 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity';
+const METADATA_IDENTITY_URL =
+  'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity';
 
 /**
  * 期限の 5 分前から新しい token を取り直す

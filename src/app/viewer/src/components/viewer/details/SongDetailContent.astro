@@ -15,7 +15,7 @@ const creditItems = [
   { label: '作詞', names: song.lyricists },
   { label: '作曲', names: song.composers },
   { label: '編曲', names: song.arrangers },
-].map(item => item.names.length > 0 ? item : { ...item, names: ['-'] });
+].map((item) => (item.names.length > 0 ? item : { ...item, names: ['-'] }));
 
 const formatPerformanceDate = (value: Song['performances'][number]): string => {
   const { startOn, endOn } = value.schedule;
@@ -30,79 +30,67 @@ const formatPerformers = (value: Song['performances'][number]): string =>
 <div class="detail-page-content song-detail-content" data-share-title={song.title}>
   <div class="label-mono">{song.type.name}</div>
   <h1 class="detail-title">{song.title}</h1>
-  <p class="detail-description" style="margin-top: 24px;">{song.description}</p>
+  <p class="detail-description" style="margin-top: 24px;">
+    {song.description}
+  </p>
 
   <DetailSectionHead title="クレジット" />
   <dl class="song-credit-grid">
-    {
-      creditItems.map(item => (
-        <div class="song-credit-item">
-          <dt class="song-credit-label">{item.label}</dt>
-          <dd class="song-credit-value">{item.names.join(' / ')}</dd>
-        </div>
-      ))
-    }
+    {creditItems.map((item) => (
+      <div class="song-credit-item">
+        <dt class="song-credit-label">{item.label}</dt>
+        <dd class="song-credit-value">{item.names.join(' / ')}</dd>
+      </div>
+    ))}
   </dl>
 
-  {
-    song.performances.length > 0 && (
-      <>
-        <DetailSectionHead title="披露されたイベント" count={song.performances.length} />
-        <div class="rel-list">
-          {
-            song.performances.map(performance => (
-              <a class="rel-chip" href={`/events/${performance.eventId}`}>
-                <div class="rel-copy">
-                  <div class="rel-main">{performance.eventTitle}</div>
-                  <div class="label-mono rel-sub">
-                    {formatPerformanceDate(performance)} · {formatPerformers(performance)}
-                  </div>
-                </div>
-                <span class="rel-arrow rel-arrow-muted">→</span>
-              </a>
-            ))
-          }
-        </div>
-      </>
-    )
-  }
+  {song.performances.length > 0 && (
+    <>
+      <DetailSectionHead title="披露されたイベント" count={song.performances.length} />
+      <div class="rel-list">
+        {song.performances.map((performance) => (
+          <a class="rel-chip" href={`/events/${performance.eventId}`}>
+            <div class="rel-copy">
+              <div class="rel-main">{performance.eventTitle}</div>
+              <div class="label-mono rel-sub">
+                {formatPerformanceDate(performance)} · {formatPerformers(performance)}
+              </div>
+            </div>
+            <span class="rel-arrow rel-arrow-muted">→</span>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
 
-  {
-    releaseGroups.length > 0 && (
-      <>
-        <DetailSectionHead title="収録リリース" count={releaseGroups.length} />
-        <div class="rel-list">
-          {
-            releaseGroups.map(releaseGroup => (
-              <a
-                class="rel-chip"
-                href={`/releases/${releaseGroup.releaseGroupId}`}
-                style={`--c:${releaseGroup.color};`}
-              >
-                <span class="rel-swatch" aria-hidden="true" />
-                <div class="rel-copy">
-                  <div class="rel-main">{releaseGroup.title}</div>
-                  <div class="label-mono rel-sub">
-                    {dottedDate(releaseGroup.firstReleasedOn)} · {releaseGroup.type.name}
-                  </div>
-                </div>
-                <span class="rel-arrow rel-arrow-muted">→</span>
-              </a>
-            ))
-          }
-        </div>
-      </>
-    )
-  }
+  {releaseGroups.length > 0 && (
+    <>
+      <DetailSectionHead title="収録リリース" count={releaseGroups.length} />
+      <div class="rel-list">
+        {releaseGroups.map((releaseGroup) => (
+          <a class="rel-chip" href={`/releases/${releaseGroup.releaseGroupId}`} style={`--c:${releaseGroup.color};`}>
+            <span class="rel-swatch" aria-hidden="true" />
+            <div class="rel-copy">
+              <div class="rel-main">{releaseGroup.title}</div>
+              <div class="label-mono rel-sub">
+                {dottedDate(releaseGroup.firstReleasedOn)} · {releaseGroup.type.name}
+              </div>
+            </div>
+            <span class="rel-arrow rel-arrow-muted">→</span>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
 
-  {
-    media.length > 0 && (
-      <>
-        <DetailSectionHead title="関連メディア" count={media.length} />
-        <div class="rel-list">
-          {media.map(entry => <MediaChip media={entry} />)}
-        </div>
-      </>
-    )
-  }
+  {media.length > 0 && (
+    <>
+      <DetailSectionHead title="関連メディア" count={media.length} />
+      <div class="rel-list">
+        {media.map((entry) => (
+          <MediaChip media={entry} />
+        ))}
+      </div>
+    </>
+  )}
 </div>

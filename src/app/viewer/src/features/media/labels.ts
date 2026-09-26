@@ -15,14 +15,14 @@ export function isPost(type: string): type is PostType {
 export function mediaTypeLabel(type: string): string {
   return (
     {
-      'mv': 'Music Video',
+      mv: 'Music Video',
       'live-clip': 'Live Clip',
-      'interview': 'Interview',
-      'short': 'Short',
-      'tweet': 'X / Twitter',
-      'instagram': 'Instagram',
+      interview: 'Interview',
+      short: 'Short',
+      tweet: 'X / Twitter',
+      instagram: 'Instagram',
       'youtube-community': 'YT Community',
-      'blog': 'Blog',
+      blog: 'Blog',
     }[type] ?? type
   );
 }

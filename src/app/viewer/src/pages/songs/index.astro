@@ -43,36 +43,36 @@ const songs = await songContentRepository.all();
         <div class="entry-empty-title">該当する楽曲がありません</div>
         <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
       </div>
-      {
-        songs.map((song, index) => {
-          return (
-            <a
-              href={`/songs/${song.songId}`}
-              class="song-grid-card"
-              data-song-entry
-              data-song-category={song.type.value}
-              data-song-search={[song.title, ...song.lyricists, ...song.composers, ...song.arrangers]
-                .join(' ')
-                .toLowerCase()}
-            >
-              <SongTile
-                songId={song.songId}
-                title={song.title}
-                index={index}
-                media={song.media}
-                releaseGroups={song.releaseGroups}
-                loading={index === 0 ? 'eager' : 'lazy'}
-              />
-              <div class="song-grid-body">
-                <div class="song-grid-meta">
-                  <span class="pill" data-song-type={song.type.value}>{song.type.name}</span>
-                </div>
-                <div class="song-grid-title">{song.title}</div>
+      {songs.map((song, index) => {
+        return (
+          <a
+            href={`/songs/${song.songId}`}
+            class="song-grid-card"
+            data-song-entry
+            data-song-category={song.type.value}
+            data-song-search={[song.title, ...song.lyricists, ...song.composers, ...song.arrangers]
+              .join(' ')
+              .toLowerCase()}
+          >
+            <SongTile
+              songId={song.songId}
+              title={song.title}
+              index={index}
+              media={song.media}
+              releaseGroups={song.releaseGroups}
+              loading={index === 0 ? 'eager' : 'lazy'}
+            />
+            <div class="song-grid-body">
+              <div class="song-grid-meta">
+                <span class="pill" data-song-type={song.type.value}>
+                  {song.type.name}
+                </span>
               </div>
-            </a>
-          );
-        })
-      }
+              <div class="song-grid-title">{song.title}</div>
+            </div>
+          </a>
+        );
+      })}
     </div>
   </section>
 </Layout>

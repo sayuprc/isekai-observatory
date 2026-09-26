@@ -11,22 +11,22 @@ import { indexedLoader, indexedSchema } from './shared/content/indexed';
 
 // 各一覧 API は build 中に 1 回だけ全件取得し、ページ間ではコレクションを共有する
 const songs = defineCollection({
-  loader: indexedLoader(songRepository.all, song => song.songId),
+  loader: indexedLoader(songRepository.all, (song) => song.songId),
   schema: indexedSchema<Song>(),
 });
 
 const releaseGroups = defineCollection({
-  loader: indexedLoader(releaseGroupRepository.all, releaseGroup => releaseGroup.releaseGroupId),
+  loader: indexedLoader(releaseGroupRepository.all, (releaseGroup) => releaseGroup.releaseGroupId),
   schema: indexedSchema<ReleaseGroup>(),
 });
 
 const media = defineCollection({
-  loader: indexedLoader(mediaRepository.all, mediaItem => mediaItem.mediaId),
+  loader: indexedLoader(mediaRepository.all, (mediaItem) => mediaItem.mediaId),
   schema: indexedSchema<Media>(),
 });
 
 const events = defineCollection({
-  loader: indexedLoader(eventRepository.all, event => event.eventId),
+  loader: indexedLoader(eventRepository.all, (event) => event.eventId),
   schema: indexedSchema<Event>(),
 });
 

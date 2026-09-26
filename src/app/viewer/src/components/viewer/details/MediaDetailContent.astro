@@ -18,26 +18,22 @@ const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
 
 <div class="detail-page-content media-detail-content" data-share-title={media.title}>
   <a class="media-detail-thumbnail-link" href={media.url} target="_blank" rel="noopener noreferrer">
-    {
-      thumbnailUrl
-        ? (
-            <img
-              class="media-detail-thumbnail"
-              src={thumbnailUrl}
-              srcset={youtubeThumbnailSrcset(thumbnailUrl)}
-              sizes="(max-width: 720px) 100vw, 640px"
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-              alt={media.title}
-            />
-          )
-        : (
-            <div class="media-detail-thumbnail media-detail-thumbnail-placeholder">
-              <span class="media-detail-thumbnail-placeholder-label">{platformName}</span>
-            </div>
-          )
-    }
+    {thumbnailUrl ? (
+      <img
+        class="media-detail-thumbnail"
+        src={thumbnailUrl}
+        srcset={youtubeThumbnailSrcset(thumbnailUrl)}
+        sizes="(max-width: 720px) 100vw, 640px"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        alt={media.title}
+      />
+    ) : (
+      <div class="media-detail-thumbnail media-detail-thumbnail-placeholder">
+        <span class="media-detail-thumbnail-placeholder-label">{platformName}</span>
+      </div>
+    )}
     <span class="media-detail-thumbnail-overlay">{platformName} で開く ↗</span>
   </a>
 
@@ -50,24 +46,20 @@ const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
   {/* API に description が無いため未提供セクションとして雛形を残す */}
   {/* {entry.description && <p class="detail-description" style="margin-top: 16px;">{entry.description}</p>} */}
 
-  {
-    songs.length > 0 && (
-      <>
-        <DetailSectionHead title="関連楽曲" count={songs.length} />
-        <div class="rel-list">
-          {
-            songs.map(song => (
-              <a class="rel-chip" href={`/songs/${song.songId}`}>
-                <div class="rel-copy">
-                  <div class="rel-main">{song.title}</div>
-                  <div class="label-mono rel-sub">{song.type.name}</div>
-                </div>
-                <span class="rel-arrow rel-arrow-muted">→</span>
-              </a>
-            ))
-          }
-        </div>
-      </>
-    )
-  }
+  {songs.length > 0 && (
+    <>
+      <DetailSectionHead title="関連楽曲" count={songs.length} />
+      <div class="rel-list">
+        {songs.map((song) => (
+          <a class="rel-chip" href={`/songs/${song.songId}`}>
+            <div class="rel-copy">
+              <div class="rel-main">{song.title}</div>
+              <div class="label-mono rel-sub">{song.type.name}</div>
+            </div>
+            <span class="rel-arrow rel-arrow-muted">→</span>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
 </div>

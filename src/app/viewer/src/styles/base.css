@@ -6,7 +6,7 @@
 
 html,
 body {
-  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.75;
@@ -78,7 +78,7 @@ body {
   left: 16px;
   z-index: 200;
   padding: 10px 18px;
-  font-family: "Noto Serif JP", serif;
+  font-family: 'Noto Serif JP', serif;
   font-size: 14px;
   color: var(--accent-contrast);
   letter-spacing: 0.06em;
@@ -102,12 +102,12 @@ body {
 }
 
 .font-en {
-  font-family: "EB Garamond", serif;
+  font-family: 'EB Garamond', serif;
   letter-spacing: 0.02em;
 }
 
 .eyebrow {
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   font-weight: 400;
   color: var(--fg-muted);
@@ -116,7 +116,7 @@ body {
 }
 
 .label-mono {
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   font-weight: 400;
   color: var(--fg-muted);

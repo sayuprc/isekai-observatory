@@ -1,7 +1,7 @@
 /* デザイントークンとテーマごとの配色 (themes.ts の THEMES と対応する) */
 
 :root,
-[data-palette="anemone-1"] {
+[data-palette='anemone-1'] {
   --bg: #0e0e10;
   --bg-elev: #151518;
   --bg-elev-2: #1c1c21;
@@ -24,7 +24,7 @@
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 
-[data-palette="anemone-2"] {
+[data-palette='anemone-2'] {
   --bg: #f3eeee;
   --bg-elev: #faf7f8;
   --bg-elev-2: #e2d9dc;
@@ -47,7 +47,7 @@
   --shadow: 0 20px 60px rgba(40, 40, 60, 0.07);
 }
 
-[data-palette="nemophila-1"] {
+[data-palette='nemophila-1'] {
   --bg: #f5f7fa;
   --bg-elev: #fff;
   --bg-elev-2: #d2e6ff;
@@ -70,7 +70,7 @@
   --shadow: 0 20px 60px rgba(40, 40, 60, 0.07);
 }
 
-[data-palette="nemophila-2"] {
+[data-palette='nemophila-2'] {
   --bg: #111318;
   --bg-elev: #1b1e26;
   --bg-elev-2: #1c2029;
@@ -93,7 +93,7 @@
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 
-[data-palette="sunflower-1"] {
+[data-palette='sunflower-1'] {
   --bg: #faf9f6;
   --bg-elev: #fff;
   --bg-elev-2: #fef9c3;
@@ -118,7 +118,7 @@
 
 /* sunflower-2 は現在 THEMES から外しているが将来再提供する予定のため配色定義を残す */
 
-[data-palette="sunflower-2"] {
+[data-palette='sunflower-2'] {
   --bg: #0f0f11;
   --bg-elev: #18181c;
   --bg-elev-2: #222227;
