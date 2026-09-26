@@ -31,4 +31,4 @@
 | ADR-0025 | accepted | 開催先は物理施設とオンライン配信プラットフォームを統合する | [api, admin, viewer] |
 | ADR-0026 | accepted | 開催単位は Event とし Activity 集約を導入しない | [api, admin, viewer] |
 | ADR-0027 | accepted | Event は時刻を保持せず日付で管理する | [api, admin, viewer] |
-| ADR-0028 | accepted | Viewer の整形は Prettier に任せ、ESLint と Stylelint は lint だけを担う | [viewer] |
+| ADR-0028 | accepted | Admin と Viewer の整形は Prettier に任せ、ESLint と Stylelint は lint だけを担う | [admin, viewer] |
