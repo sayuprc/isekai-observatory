@@ -10,5 +10,5 @@ namespace IsekaiObservatory.Viewer;
 @route("/media")
 interface MediaService {
   @doc("メディア一覧取得API")
-  listMedia(@query cursor?: cursor, @query limit?: limit): Ok<MediaListResponse> | InternalServerError;
+  listMedia(@query cursor?: cursor, @query limit?: limit): Ok<MediaListResponse> | BadRequest | InternalServerError;
 }

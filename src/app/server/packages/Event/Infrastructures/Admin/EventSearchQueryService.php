@@ -28,19 +28,20 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
     #[Override]
     public function search(EventSearchCriteria $criteria): array
     {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
         $sort = match ($criteria->sort) {
             Sort::Schedule => 'start_on',
             Sort::Title => 'title_lower',
         };
 
         $rows = $this->queryFactory->fetchAll(
-            $this->buildSearchQuery($criteria)
-                ->withSelect(['event_id', 'title', 'type', 'start_on', 'end_on', 'status', 'is_display'])
-                ->orderBy($sort, $criteria->order->value)
-                ->orderBy('event_id')
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate(
+                $this->buildSearchQuery($criteria)
+                    ->withSelect(['event_id', 'title', 'type', 'start_on', 'end_on', 'status', 'is_display'])
+                    ->orderBy($sort, $criteria->order->value)
+                    ->orderBy('event_id'),
+                $criteria->page,
+                $criteria->perPage,
+            ),
         );
 
         return array_map(
@@ -60,9 +61,7 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
     #[Override]
     public function maxPage(EventSearchCriteria $criteria): int
     {
-        $count = Row::intValue($this->buildSearchQuery($criteria)->aggregate($this->queryFactory->pdo(), 'COUNT(*)'));
-
-        return (int)ceil($count / $criteria->perPage->value);
+        return $this->queryFactory->maxPage($this->buildSearchQuery($criteria), $criteria->perPage);
     }
 
     private function buildSearchQuery(EventSearchCriteria $criteria): SelectBuilder
@@ -73,7 +72,7 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
             $query = $query->where(
                 'title_lower',
                 'LIKE',
-                '%' . SqlHelper::escapeLike(mb_strtolower($criteria->title->get())) . '%',
+                SqlHelper::containsPattern(mb_strtolower($criteria->title->get())),
             );
         }
 

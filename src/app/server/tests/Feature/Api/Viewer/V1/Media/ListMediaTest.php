@@ -7,6 +7,7 @@ namespace Tests\Feature\Api\Viewer\V1\Media;
 use DateTimeImmutable;
 use Media\Domain\Models\MediaType;
 use Media\Route\ViewerMediaRouteMap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
@@ -172,5 +173,29 @@ class ListMediaTest extends DatabaseTestCase
                     ],
                 ],
             ]);
+    }
+
+    #[Test]
+    #[DataProvider('provideInvalidCursors')]
+    public function rejectsInvalidCursor(string $cursor): void
+    {
+        $this->get(route(ViewerMediaRouteMap::List, ['cursor' => $cursor]))
+            ->assertStatus(400)
+            ->assertExactJson([
+                'code' => 'business_rule_violation',
+                'message' => 'カーソルが不正です。',
+            ]);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function provideInvalidCursors(): array
+    {
+        return [
+            'not base64' => ['***'],
+            'not json' => [base64_encode('not json')],
+            'missing keys' => [base64_encode('{}')],
+        ];
     }
 }

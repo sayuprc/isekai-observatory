@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Viewer\V1\Release;
 
 use DateType\ImmutableDate;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseFormat;
 use Release\Domain\Models\ReleaseGroupType;
@@ -341,5 +342,29 @@ class ListReleaseGroupTest extends DatabaseTestCase
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
             ->assertJsonMissingPath('nextCursor');
+    }
+
+    #[Test]
+    #[DataProvider('provideInvalidCursors')]
+    public function rejectsInvalidCursor(string $cursor): void
+    {
+        $this->get(route(ViewerReleaseGroupRouteMap::List, ['cursor' => $cursor]))
+            ->assertStatus(400)
+            ->assertExactJson([
+                'code' => 'business_rule_violation',
+                'message' => 'カーソルが不正です。',
+            ]);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function provideInvalidCursors(): array
+    {
+        return [
+            'not base64' => ['***'],
+            'not json' => [base64_encode('not json')],
+            'missing keys' => [base64_encode('{}')],
+        ];
     }
 }

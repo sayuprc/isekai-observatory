@@ -140,7 +140,7 @@ readonly class SongRepository implements SongRepositoryInterface
         $data = $song->toArray();
 
         // 子テーブルは洗い替えする
-        $this->deleteChildren($id);
+        $this->queryFactory->deleteFromTables(['song_persons', 'song_taggings', 'song_media_links'], 'song_id', $id);
 
         $now = now()->toDateTimeString();
 
@@ -170,9 +170,37 @@ readonly class SongRepository implements SongRepositoryInterface
             )
             ->execute($this->queryFactory->pdo());
 
-        $this->insertPersons($id, $data['persons']);
-        $this->insertTaggings($id, $data['tags']);
-        $this->insertMedia($id, $data['media']);
+        $this->queryFactory->insertRows(
+            'song_persons',
+            ['song_id', 'person_id', 'role', 'order_no'],
+            array_map(
+                fn (array $person): array => [
+                    $id,
+                    $this->converter->toBin($person['person_id']),
+                    $person['role'],
+                    $person['order_no'],
+                ],
+                $data['persons'],
+            ),
+        );
+
+        $this->queryFactory->insertRows(
+            'song_taggings',
+            ['song_id', 'song_tag_id'],
+            array_map(
+                fn (array $tag): array => [$id, $this->converter->toBin($tag['song_tag_id'])],
+                $data['tags'],
+            ),
+        );
+
+        $this->queryFactory->insertRows(
+            'song_media_links',
+            ['song_id', 'media_id', 'order_no'],
+            array_map(
+                fn (array $item): array => [$id, $this->converter->toBin($item['media_id']), $item['order_no']],
+                $data['media'],
+            ),
+        );
 
         return $this->find($song->songId) ?? $song;
     }
@@ -194,88 +222,6 @@ readonly class SongRepository implements SongRepositoryInterface
             ->aggregate($this->queryFactory->pdo(), 'MAX(order_no)');
 
         return Row::intValue($max);
-    }
-
-    private function deleteChildren(string $binSongId): void
-    {
-        foreach (['song_persons', 'song_taggings', 'song_media_links'] as $table) {
-            $this->queryFactory->delete()
-                ->from($table)
-                ->where('song_id', '=', $binSongId)
-                ->execute($this->queryFactory->pdo());
-        }
-    }
-
-    /**
-     * @param array<int, array{person_id: string, role: int, order_no: int}> $persons
-     */
-    private function insertPersons(string $binSongId, array $persons): void
-    {
-        if ($persons === []) {
-            return;
-        }
-
-        $rows = array_map(
-            fn (array $person): array => [
-                $binSongId,
-                $this->converter->toBin($person['person_id']),
-                $person['role'],
-                $person['order_no'],
-            ],
-            $persons,
-        );
-
-        $this->queryFactory->insert()
-            ->into('song_persons', ['song_id', 'person_id', 'role', 'order_no'])
-            ->values(...$rows)
-            ->execute($this->queryFactory->pdo());
-    }
-
-    /**
-     * @param array<int, array{song_tag_id: string}> $tags
-     */
-    private function insertTaggings(string $binSongId, array $tags): void
-    {
-        if ($tags === []) {
-            return;
-        }
-
-        $rows = array_map(
-            fn (array $tag): array => [
-                $binSongId,
-                $this->converter->toBin($tag['song_tag_id']),
-            ],
-            $tags,
-        );
-
-        $this->queryFactory->insert()
-            ->into('song_taggings', ['song_id', 'song_tag_id'])
-            ->values(...$rows)
-            ->execute($this->queryFactory->pdo());
-    }
-
-    /**
-     * @param array<int, array{media_id: string, order_no: int}> $media
-     */
-    private function insertMedia(string $binSongId, array $media): void
-    {
-        if ($media === []) {
-            return;
-        }
-
-        $rows = array_map(
-            fn (array $item): array => [
-                $binSongId,
-                $this->converter->toBin($item['media_id']),
-                $item['order_no'],
-            ],
-            $media,
-        );
-
-        $this->queryFactory->insert()
-            ->into('song_media_links', ['song_id', 'media_id', 'order_no'])
-            ->values(...$rows)
-            ->execute($this->queryFactory->pdo());
     }
 
     /**

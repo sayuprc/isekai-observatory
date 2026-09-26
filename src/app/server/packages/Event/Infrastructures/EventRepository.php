@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Event\Infrastructures;
 
-use Emonkak\Database\PDOInterface;
 use Event\Domain\Models\Event;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
@@ -57,13 +56,17 @@ readonly class EventRepository implements EventRepositoryInterface
     #[Override]
     public function save(Event $event): Event
     {
-        $pdo = $this->queryFactory->pdo();
         $binEventId = $this->converter->toBin($event->eventId->value);
         $now = now()->toDateTimeString();
         $data = $event->toArray();
 
         // 子テーブルは洗い替えする
-        $this->deleteChildren($pdo, $binEventId);
+        // 共演者とセットリスト項目の披露参照は、親の削除で CASCADE される
+        $this->queryFactory->deleteFromTables(
+            ['event_setlist_items', 'song_performances', 'event_sources', 'event_media', 'event_venues'],
+            'event_id',
+            $binEventId,
+        );
 
         $this->queryFactory->insert()
             ->into(self::TABLE, [...self::COLUMNS, 'created_at', 'updated_at'])
@@ -91,10 +94,9 @@ readonly class EventRepository implements EventRepositoryInterface
                 . '`is_display` = VALUES(`is_display`), '
                 . '`updated_at` = VALUES(`updated_at`)',
             )
-            ->execute($pdo);
+            ->execute($this->queryFactory->pdo());
 
-        $this->insertRows(
-            $pdo,
+        $this->queryFactory->insertRows(
             'event_venues',
             ['event_id', 'venue_id', 'order_no'],
             array_map(
@@ -107,8 +109,7 @@ readonly class EventRepository implements EventRepositoryInterface
             ),
         );
 
-        $this->insertRows(
-            $pdo,
+        $this->queryFactory->insertRows(
             'event_media',
             ['event_id', 'media_id', 'order_no'],
             array_map(
@@ -121,8 +122,7 @@ readonly class EventRepository implements EventRepositoryInterface
             ),
         );
 
-        $this->insertRows(
-            $pdo,
+        $this->queryFactory->insertRows(
             'event_sources',
             ['event_id', 'order_no', 'name', 'url'],
             array_map(
@@ -136,8 +136,7 @@ readonly class EventRepository implements EventRepositoryInterface
             ),
         );
 
-        $this->insertRows(
-            $pdo,
+        $this->queryFactory->insertRows(
             'song_performances',
             ['performance_id', 'event_id', 'song_id', 'order_no', 'created_at', 'updated_at'],
             array_map(
@@ -164,15 +163,13 @@ readonly class EventRepository implements EventRepositoryInterface
                 ];
             }
         }
-        $this->insertRows(
-            $pdo,
+        $this->queryFactory->insertRows(
             'song_performance_persons',
             ['performance_id', 'person_id', 'order_no', 'credit_name'],
             $performancePersonRows,
         );
 
-        $this->insertRows(
-            $pdo,
+        $this->queryFactory->insertRows(
             'event_setlist_items',
             ['setlist_item_id', 'event_id', 'order_no', 'label'],
             array_map(
@@ -196,8 +193,7 @@ readonly class EventRepository implements EventRepositoryInterface
                 ];
             }
         }
-        $this->insertRows(
-            $pdo,
+        $this->queryFactory->insertRows(
             'event_setlist_item_performances',
             ['setlist_item_id', 'performance_id', 'order_no'],
             $setlistPerformanceRows,
@@ -213,33 +209,6 @@ readonly class EventRepository implements EventRepositoryInterface
             ->from(self::TABLE)
             ->where('event_id', '=', $this->converter->toBin($eventId->value))
             ->execute($this->queryFactory->pdo());
-    }
-
-    private function deleteChildren(PDOInterface $pdo, string $binEventId): void
-    {
-        // 共演者とセットリスト項目の披露参照は、親の削除で CASCADE される
-        foreach (['event_setlist_items', 'song_performances', 'event_sources', 'event_media', 'event_venues'] as $table) {
-            $this->queryFactory->delete()
-                ->from($table)
-                ->where('event_id', '=', $binEventId)
-                ->execute($pdo);
-        }
-    }
-
-    /**
-     * @param list<string>      $columns
-     * @param list<list<mixed>> $rows
-     */
-    private function insertRows(PDOInterface $pdo, string $table, array $columns, array $rows): void
-    {
-        if ($rows === []) {
-            return;
-        }
-
-        $this->queryFactory->insert()
-            ->into($table, $columns)
-            ->values(...$rows)
-            ->execute($pdo);
     }
 
     /** @param array<string, mixed> $row */

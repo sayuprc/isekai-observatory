@@ -13,4 +13,14 @@ class SqlHelper
     {
         return addcslashes($keyword, '%_\\');
     }
+
+    /**
+     * 部分一致検索 (LIKE '%keyword%') のパターンを作る
+     *
+     * @pure
+     */
+    public static function containsPattern(string $keyword): string
+    {
+        return '%' . self::escapeLike($keyword) . '%';
+    }
 }

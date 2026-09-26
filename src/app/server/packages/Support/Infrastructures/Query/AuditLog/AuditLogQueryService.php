@@ -39,14 +39,14 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
     #[Override]
     public function search(AuditLogSearchCriteria $criteria): array
     {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-
         $rows = $this->queryFactory->fetchAll(
-            $this->buildQuery($criteria)
-                ->orderBy('audit_logs.created_at', 'desc')
-                ->orderBy('audit_logs.audit_log_id', 'desc')
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate(
+                $this->buildQuery($criteria)
+                    ->orderBy('audit_logs.created_at', 'desc')
+                    ->orderBy('audit_logs.audit_log_id', 'desc'),
+                $criteria->page,
+                $criteria->perPage,
+            ),
         );
 
         return array_map($this->hydrateSummary(...), $rows);
@@ -55,9 +55,7 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
     #[Override]
     public function maxPage(AuditLogSearchCriteria $criteria): int
     {
-        $count = Row::intValue($this->buildQuery($criteria)->aggregate($this->queryFactory->pdo(), 'COUNT(*)'));
-
-        return (int)ceil($count / $criteria->perPage->value);
+        return $this->queryFactory->maxPage($this->buildQuery($criteria), $criteria->perPage);
     }
 
     #[Override]
@@ -126,7 +124,7 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
             $query = $query->where(
                 'admin_users.name',
                 'LIKE',
-                '%' . SqlHelper::escapeLike($criteria->adminUserName->get()) . '%',
+                SqlHelper::containsPattern($criteria->adminUserName->get()),
             );
         }
 

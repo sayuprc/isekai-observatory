@@ -16,5 +16,7 @@ enum SupportComponent: string implements ComponentMap
 
     case Collection = 'Support\Collection\*';
 
+    case Pagination = 'Support\Pagination\*';
+
     case UseCase = 'Support\UseCase\*';
 }

@@ -4,37 +4,22 @@ declare(strict_types=1);
 
 namespace Song\Application\Viewer\Query;
 
-use InvalidArgumentException;
+use Support\Pagination\KeysetCursor;
 
 final class SongListCursor
 {
     public static function encode(int $orderNo, string $songId): string
     {
-        return base64_encode(
-            (string)json_encode(
-                [
-                    'orderNo' => $orderNo,
-                    'songId' => $songId,
-                ],
-                JSON_THROW_ON_ERROR,
-            ),
-        );
+        return KeysetCursor::encode([
+            'orderNo' => $orderNo,
+            'songId' => $songId,
+        ]);
     }
 
     public static function decode(string $value): DecodedSongListCursor
     {
-        $decoded = base64_decode($value, true);
+        $cursor = KeysetCursor::decode($value);
 
-        if ($decoded === false) {
-            throw new InvalidArgumentException('Invalid cursor.');
-        }
-
-        $data = json_decode($decoded, true, flags: JSON_THROW_ON_ERROR);
-
-        if (! is_array($data) || ! isset($data['orderNo'], $data['songId']) || ! is_int($data['orderNo']) || ! is_string($data['songId'])) {
-            throw new InvalidArgumentException('Invalid cursor.');
-        }
-
-        return new DecodedSongListCursor($data['orderNo'], $data['songId']);
+        return new DecodedSongListCursor($cursor->int('orderNo'), $cursor->string('songId'));
     }
 }

@@ -134,7 +134,7 @@ class SongApi
      *
      * @throws \OpenAPI\Viewer\Client\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \OpenAPI\Viewer\Client\Model\SongListResponse|\OpenAPI\Viewer\Client\Model\ErrorResponse
+     * @return \OpenAPI\Viewer\Client\Model\SongListResponse|\OpenAPI\Viewer\Client\Model\ErrorResponse|\OpenAPI\Viewer\Client\Model\ErrorResponse
      */
     public function songServiceListSongs($cursor = null, $limit = null, string $contentType = self::contentTypes['songServiceListSongs'][0])
     {
@@ -151,7 +151,7 @@ class SongApi
      *
      * @throws \OpenAPI\Viewer\Client\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \OpenAPI\Viewer\Client\Model\SongListResponse|\OpenAPI\Viewer\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \OpenAPI\Viewer\Client\Model\SongListResponse|\OpenAPI\Viewer\Client\Model\ErrorResponse|\OpenAPI\Viewer\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function songServiceListSongsWithHttpInfo($cursor = null, $limit = null, string $contentType = self::contentTypes['songServiceListSongs'][0])
     {
@@ -184,6 +184,12 @@ class SongApi
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Viewer\Client\Model\SongListResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\OpenAPI\Viewer\Client\Model\ErrorResponse',
                         $request,
                         $response,
                     );
@@ -221,6 +227,14 @@ class SongApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Viewer\Client\Model\SongListResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Viewer\Client\Model\ErrorResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);

@@ -85,4 +85,10 @@ class SqlHelperTest extends TestCase
 
         $this->assertSame($input, $result);
     }
+
+    #[Test]
+    public function containsPatternWrapsEscapedKeywordWithWildcards(): void
+    {
+        $this->assertSame('%a\%b\_c%', SqlHelper::containsPattern('a%b_c'));
+    }
 }

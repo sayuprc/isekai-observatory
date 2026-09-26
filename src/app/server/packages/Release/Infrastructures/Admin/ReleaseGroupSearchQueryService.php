@@ -27,8 +27,6 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
     #[Override]
     public function search(ReleaseGroupSearchCriteria $criteria): array
     {
-        $offset = ($criteria->page - 1) * $criteria->perPage->value;
-
         $query = $this->applyOrder(
             $this->buildSearchQuery($criteria)
                 ->withSelect([
@@ -51,9 +49,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
         );
 
         $rows = $this->queryFactory->fetchAll(
-            $query
-                ->limit($criteria->perPage->value)
-                ->offset($offset),
+            $this->queryFactory->paginate($query, $criteria->page, $criteria->perPage),
         );
 
         return array_map(
@@ -73,9 +69,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
     #[Override]
     public function maxPage(ReleaseGroupSearchCriteria $criteria): int
     {
-        $count = Row::intValue($this->buildSearchQuery($criteria)->aggregate($this->queryFactory->pdo(), 'COUNT(*)'));
-
-        return (int)ceil($count / $criteria->perPage->value);
+        return $this->queryFactory->maxPage($this->buildSearchQuery($criteria), $criteria->perPage);
     }
 
     private function buildSearchQuery(ReleaseGroupSearchCriteria $criteria): SelectBuilder
@@ -86,7 +80,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
             $query = $query->where(
                 'release_groups.title',
                 'LIKE',
-                '%' . SqlHelper::escapeLike($criteria->title->get()) . '%',
+                SqlHelper::containsPattern($criteria->title->get()),
             );
         }
 
