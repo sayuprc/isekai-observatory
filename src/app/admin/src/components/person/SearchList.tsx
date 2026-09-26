@@ -1,126 +1,69 @@
-import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { PersonSearchSortBy, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
+import {
+  PER_PAGE_OPTIONS,
+  createSearchResource,
+  createSearchState,
+  parsePage,
+  pickParam,
+} from '../../utils/search-list';
+import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
-const PER_PAGE_OPTIONS = [25, 50, 100] as const;
-type PerPage = (typeof PER_PAGE_OPTIONS)[number];
+type Sort = PersonSearchSortBy;
 
-const DEFAULT_PARAMS = {
+type SearchParams = {
+  name: string;
+  sort: Sort;
+  order: SortOrder;
+  page: number;
+  perPage: PerPage;
+};
+
+const DEFAULT_PARAMS: SearchParams = {
   name: '',
-  sort: 'order_no' as PersonSearchSortBy,
-  order: 'asc' as SortOrder,
+  sort: 'order_no',
+  order: 'asc',
   page: 1,
-  perPage: 25 as PerPage,
+  perPage: 25,
 };
 
-const getInitialParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  const perPageRaw = Number(params.get('per_page'));
+const parseParams = (query: URLSearchParams): SearchParams => ({
+  name: query.get('name') ?? '',
+  sort: pickParam(query.get('sort'), ['name', 'order_no'] as const, DEFAULT_PARAMS.sort),
+  order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
+  page: parsePage(query.get('page')),
+  perPage: pickParam(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
+});
 
-  return {
-    name: params.get('name') ?? DEFAULT_PARAMS.name,
-    sort: (params.get('sort') ?? DEFAULT_PARAMS.sort) as PersonSearchSortBy,
-    order: (params.get('order') ?? DEFAULT_PARAMS.order) as SortOrder,
-    page: Number(params.get('page') ?? String(DEFAULT_PARAMS.page)) || DEFAULT_PARAMS.page,
-    perPage: (PER_PAGE_OPTIONS.includes(perPageRaw as PerPage) ? perPageRaw : DEFAULT_PARAMS.perPage) as PerPage,
-  };
-};
+const toQuery = (params: SearchParams) => ({
+  name: params.name,
+  sort: params.sort,
+  order: params.order,
+  page: params.page,
+  per_page: params.perPage,
+});
 
 export const SearchList = () => {
-  const initial = getInitialParams();
+  const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
+    defaults: DEFAULT_PARAMS,
+    parse: parseParams,
+    toQuery,
+  });
 
-  const [name, setName] = createSignal(initial.name);
-  const [sort, setSort] = createSignal(initial.sort);
-  const [order, setOrder] = createSignal(initial.order);
-  const [page, setPage] = createSignal(initial.page);
-  const [perPage, setPerPage] = createSignal<PerPage>(initial.perPage);
-
-  const [inputName, setInputName] = createSignal(initial.name);
-  const [inputSort, setInputSort] = createSignal(initial.sort);
-  const [inputOrder, setInputOrder] = createSignal(initial.order);
-  const [inputPerPage, setInputPerPage] = createSignal<PerPage>(initial.perPage);
-
-  const updateUrl = (params: {
-    name: string;
-    sort: PersonSearchSortBy;
-    order: SortOrder;
-    page: number;
-    perPage: number;
-  }) => {
-    const searchParams = new URLSearchParams();
-    if (params.name) searchParams.set('name', params.name);
-    if (params.sort) searchParams.set('sort', params.sort);
-    if (params.order) searchParams.set('order', params.order);
-    searchParams.set('page', String(params.page));
-    searchParams.set('per_page', String(params.perPage));
-    history.pushState(null, '', `?${searchParams.toString()}`);
-  };
-
-  const [fetchError, setFetchError] = createSignal<string | null>(null);
-
-  const [data, { refetch }] = createResource(
-    () => ({ name: name(), sort: sort(), order: order(), page: page(), perPage: perPage() }),
-    async (params) => {
-      setFetchError(null);
-
-      const { data, status } = await client.api.persons.search.get({
-        query: {
-          name: params.name,
-          sort: params.sort,
-          order: params.order,
-          page: params.page,
-          per_page: params.perPage,
-        },
-      });
-
-      if (status === 401) {
-        window.location.href = '/auth/login';
-        return;
-      }
-
-      if (!data) {
-        setFetchError('データの取得に失敗しました。再度お試しください。');
-        return;
-      }
-
-      return data;
-    },
+  const { data, refetch, fetchError } = createSearchResource(params, current =>
+    client.api.persons.search.get({
+      query: {
+        name: current.name,
+        sort: current.sort,
+        order: current.order,
+        page: current.page,
+        per_page: current.perPage,
+      },
+    }),
   );
-
-  const handleSearch = (e: Event) => {
-    e.preventDefault();
-
-    const newPage = 1;
-
-    setName(inputName());
-    setSort(inputSort());
-    setOrder(inputOrder());
-    setPerPage(inputPerPage());
-    setPage(newPage);
-    updateUrl({ name: inputName(), sort: inputSort(), order: inputOrder(), page: newPage, perPage: inputPerPage() });
-  };
-
-  const handlePageChange = (nextPage: number) => {
-    setPage(nextPage);
-    updateUrl({ name: name(), sort: sort(), order: order(), page: nextPage, perPage: perPage() });
-  };
-
-  const handleReset = () => {
-    setInputName(DEFAULT_PARAMS.name);
-    setInputSort(DEFAULT_PARAMS.sort);
-    setInputOrder(DEFAULT_PARAMS.order);
-    setInputPerPage(DEFAULT_PARAMS.perPage);
-
-    setName(DEFAULT_PARAMS.name);
-    setSort(DEFAULT_PARAMS.sort);
-    setOrder(DEFAULT_PARAMS.order);
-    setPage(DEFAULT_PARAMS.page);
-    setPerPage(DEFAULT_PARAMS.perPage);
-
-    updateUrl(DEFAULT_PARAMS);
-  };
 
   return (
     <>
@@ -133,8 +76,8 @@ export const SearchList = () => {
             type="text"
             id="name"
             name="name"
-            value={inputName()}
-            onInput={e => setInputName(e.currentTarget.value)}
+            value={input().name}
+            onInput={e => updateInput({ name: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="人物名で検索"
           />
@@ -147,12 +90,12 @@ export const SearchList = () => {
             id="sort"
             name="sort"
             class="select select-bordered select-sm"
-            onChange={e => setInputSort(e.currentTarget.value as PersonSearchSortBy)}
+            onChange={e => updateInput({ sort: e.currentTarget.value as PersonSearchSortBy })}
           >
-            <option value="order_no" selected={inputSort() === 'order_no'}>
+            <option value="order_no" selected={input().sort === 'order_no'}>
               表示順
             </option>
-            <option value="name" selected={inputSort() === 'name'}>
+            <option value="name" selected={input().sort === 'name'}>
               人物名
             </option>
           </select>
@@ -165,12 +108,12 @@ export const SearchList = () => {
             id="order"
             name="order"
             class="select select-bordered select-sm"
-            onChange={e => setInputOrder(e.currentTarget.value as SortOrder)}
+            onChange={e => updateInput({ order: e.currentTarget.value as SortOrder })}
           >
-            <option value="asc" selected={inputOrder() === 'asc'}>
+            <option value="asc" selected={input().order === 'asc'}>
               昇順
             </option>
-            <option value="desc" selected={inputOrder() === 'desc'}>
+            <option value="desc" selected={input().order === 'desc'}>
               降順
             </option>
           </select>
@@ -183,11 +126,11 @@ export const SearchList = () => {
             id="perPage"
             name="perPage"
             class="select select-bordered select-sm"
-            onChange={e => setInputPerPage(Number(e.currentTarget.value) as PerPage)}
+            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
               {n => (
-                <option value={n} selected={inputPerPage() === n}>
+                <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
               )}
@@ -249,7 +192,7 @@ export const SearchList = () => {
         </table>
       </div>
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
-        <Pagination page={page()} maxPage={data()!.maxPage} onChange={handlePageChange} />
+        <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>
     </>
   );

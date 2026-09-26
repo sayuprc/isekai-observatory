@@ -1,6 +1,14 @@
-import { Show, createResource, createSignal, For, Match, Switch } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { SongSearchTypeValue, SongTypeValue } from '../../generated';
 import { client } from '../../utils/client';
+import {
+  PER_PAGE_OPTIONS,
+  createSearchResource,
+  createSearchState,
+  parsePage,
+  pickParam,
+} from '../../utils/search-list';
+import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -9,22 +17,10 @@ const SONG_TYPE_BADGE_CLASS: Record<SongTypeValue, string> = {
   2: 'badge-info',
 };
 
-const PER_PAGE_OPTIONS = [25, 50, 100] as const;
-type PerPage = (typeof PER_PAGE_OPTIONS)[number];
 type Sort = 'title' | 'order_no';
 type Order = 'asc' | 'desc';
 
-const DEFAULT_PARAMS = {
-  title: '',
-  type: undefined,
-  isDisplay: undefined,
-  sort: 'order_no' as Sort,
-  order: 'asc' as Order,
-  page: 1,
-  perPage: 25 as PerPage,
-};
-
-const getInitialParams = (): {
+type SearchParams = {
   title: string;
   type?: SongSearchTypeValue;
   isDisplay?: boolean;
@@ -32,160 +28,62 @@ const getInitialParams = (): {
   order: Order;
   page: number;
   perPage: PerPage;
-} => {
-  const params = new URLSearchParams(window.location.search);
-  const perPageRaw = Number(params.get('per_page'));
-  const isDisplayRaw = params.get('is_display');
-  const sort = params.get('sort');
-  const order = params.get('order');
-  const type = params.get('type');
+};
+
+const DEFAULT_PARAMS: SearchParams = {
+  title: '',
+  type: undefined,
+  isDisplay: undefined,
+  sort: 'order_no',
+  order: 'asc',
+  page: 1,
+  perPage: 25,
+};
+
+const parseParams = (query: URLSearchParams): SearchParams => {
+  const isDisplay = query.get('is_display');
 
   return {
-    title: params.get('title') ?? DEFAULT_PARAMS.title,
-    type: type === '1' || type === '2' ? type : undefined,
-    isDisplay: isDisplayRaw === 'true' ? true : isDisplayRaw === 'false' ? false : undefined,
-    sort: sort === 'title' || sort === 'order_no' ? sort : DEFAULT_PARAMS.sort,
-    order: order === 'asc' || order === 'desc' ? order : DEFAULT_PARAMS.order,
-    page: Number(params.get('page') ?? String(DEFAULT_PARAMS.page)) || DEFAULT_PARAMS.page,
-    perPage: (PER_PAGE_OPTIONS.includes(perPageRaw as PerPage) ? perPageRaw : DEFAULT_PARAMS.perPage) as PerPage,
+    title: query.get('title') ?? '',
+    type: pickParam<SongSearchTypeValue | ''>(query.get('type'), ['1', '2'], '') || undefined,
+    isDisplay: isDisplay === 'true' ? true : isDisplay === 'false' ? false : undefined,
+    sort: pickParam(query.get('sort'), ['title', 'order_no'] as const, DEFAULT_PARAMS.sort),
+    order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
+    page: parsePage(query.get('page')),
+    perPage: pickParam(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
   };
 };
 
+const toQuery = (params: SearchParams) => ({
+  title: params.title,
+  type: params.type,
+  is_display: params.isDisplay,
+  sort: params.sort,
+  order: params.order,
+  page: params.page,
+  per_page: params.perPage,
+});
+
 export const SearchList = () => {
-  const initial = getInitialParams();
+  const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
+    defaults: DEFAULT_PARAMS,
+    parse: parseParams,
+    toQuery,
+  });
 
-  const [title, setTitle] = createSignal(initial.title);
-  const [type, setType] = createSignal(initial.type);
-  const [isDisplay, setIsDisplay] = createSignal(initial.isDisplay);
-  const [sort, setSort] = createSignal<Sort>(initial.sort);
-  const [order, setOrder] = createSignal<Order>(initial.order);
-  const [page, setPage] = createSignal(initial.page);
-  const [perPage, setPerPage] = createSignal<PerPage>(initial.perPage);
-
-  // 検索フォームの一時入力値(Submit前)
-  const [inputTitle, setInputTitle] = createSignal(initial.title);
-  const [inputType, setInputType] = createSignal(initial.type);
-  const [inputIsDisplay, setInputIsDisplay] = createSignal(initial.isDisplay);
-  const [inputSort, setInputSort] = createSignal<Sort>(initial.sort);
-  const [inputOrder, setInputOrder] = createSignal<Order>(initial.order);
-  const [inputPerPage, setInputPerPage] = createSignal<PerPage>(initial.perPage);
-
-  const updateUrl = (params: {
-    title: string;
-    type?: SongSearchTypeValue;
-    isDisplay?: boolean;
-    sort: Sort;
-    order: Order;
-    page: number;
-    perPage: number;
-  }) => {
-    const searchParams = new URLSearchParams();
-    if (params.title) searchParams.set('title', params.title);
-    if (params.type) searchParams.set('type', String(params.type));
-    if (params.isDisplay !== undefined) searchParams.set('is_display', String(params.isDisplay));
-    if (params.sort) searchParams.set('sort', params.sort);
-    if (params.order) searchParams.set('order', params.order);
-    searchParams.set('page', String(params.page));
-    searchParams.set('per_page', String(params.perPage));
-    history.pushState(null, '', `?${searchParams.toString()}`);
-  };
-
-  const [fetchError, setFetchError] = createSignal<string | null>(null);
-
-  const [data, { refetch }] = createResource(
-    () => ({
-      title: title(),
-      type: type(),
-      isDisplay: isDisplay(),
-      sort: sort(),
-      order: order(),
-      page: page(),
-      perPage: perPage(),
+  const { data, refetch, fetchError } = createSearchResource(params, current =>
+    client.api.songs.search.get({
+      query: {
+        title: current.title,
+        type: current.type,
+        is_display: current.isDisplay,
+        sort: current.sort,
+        order: current.order,
+        page: current.page,
+        per_page: current.perPage,
+      },
     }),
-    async (params) => {
-      setFetchError(null);
-
-      const { data, status } = await client.api.songs.search.get({
-        query: {
-          title: params.title,
-          type: params.type,
-          is_display: params.isDisplay,
-          sort: params.sort,
-          order: params.order,
-          page: params.page,
-          per_page: params.perPage,
-        },
-      });
-
-      if (status === 401) {
-        window.location.href = '/auth/login';
-        return;
-      }
-
-      if (!data) {
-        setFetchError('データの取得に失敗しました。再度お試しください。');
-        return;
-      }
-
-      return data;
-    },
   );
-
-  const handleSearch = (e: Event) => {
-    e.preventDefault();
-
-    // 検索時は必ず 1 ページ目に戻る
-    const newPage = 1;
-
-    setTitle(inputTitle());
-    setType(inputType());
-    setIsDisplay(inputIsDisplay());
-    setSort(inputSort());
-    setOrder(inputOrder());
-    setPerPage(inputPerPage());
-    setPage(newPage);
-    updateUrl({
-      title: inputTitle(),
-      type: inputType(),
-      isDisplay: inputIsDisplay(),
-      sort: inputSort(),
-      order: inputOrder(),
-      page: newPage,
-      perPage: inputPerPage(),
-    });
-  };
-
-  const handlePageChange = (page: number) => {
-    setPage(page);
-    updateUrl({
-      title: title(),
-      type: type(),
-      isDisplay: isDisplay(),
-      sort: sort(),
-      order: order(),
-      page: page,
-      perPage: perPage(),
-    });
-  };
-
-  const handleReset = () => {
-    setInputTitle(DEFAULT_PARAMS.title);
-    setInputType(DEFAULT_PARAMS.type);
-    setInputIsDisplay(DEFAULT_PARAMS.isDisplay);
-    setInputSort(DEFAULT_PARAMS.sort);
-    setInputOrder(DEFAULT_PARAMS.order);
-    setInputPerPage(DEFAULT_PARAMS.perPage);
-
-    setTitle(DEFAULT_PARAMS.title);
-    setType(DEFAULT_PARAMS.type);
-    setIsDisplay(DEFAULT_PARAMS.isDisplay);
-    setSort(DEFAULT_PARAMS.sort);
-    setOrder(DEFAULT_PARAMS.order);
-    setPerPage(DEFAULT_PARAMS.perPage);
-    setPage(DEFAULT_PARAMS.page);
-
-    updateUrl(DEFAULT_PARAMS);
-  };
 
   return (
     <>
@@ -198,8 +96,8 @@ export const SearchList = () => {
             type="text"
             id="title"
             name="title"
-            value={inputTitle()}
-            onInput={e => setInputTitle(e.currentTarget.value)}
+            value={input().title}
+            onInput={e => updateInput({ title: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="楽曲名で検索"
           />
@@ -213,14 +111,16 @@ export const SearchList = () => {
             name="type"
             class="select select-bordered select-sm"
             onChange={e =>
-              setInputType(e.currentTarget.value !== '' ? (e.currentTarget.value as SongSearchTypeValue) : undefined)}
+              updateInput({
+                type: e.currentTarget.value !== '' ? (e.currentTarget.value as SongSearchTypeValue) : undefined,
+              })}
           >
-            <option value="" selected={inputType() === undefined}>
+            <option value="" selected={input().type === undefined}>
               すべて
             </option>
             <For each={data()?.types ?? []}>
               {t => (
-                <option value={String(t.value)} selected={inputType() === String(t.value)}>
+                <option value={String(t.value)} selected={input().type === String(t.value)}>
                   {t.name}
                 </option>
               )}
@@ -236,15 +136,15 @@ export const SearchList = () => {
             name="isDisplay"
             class="select select-bordered select-sm"
             onChange={e =>
-              setInputIsDisplay(e.currentTarget.value === '' ? undefined : e.currentTarget.value === 'true')}
+              updateInput({ isDisplay: e.currentTarget.value === '' ? undefined : e.currentTarget.value === 'true' })}
           >
-            <option value="" selected={inputIsDisplay() === undefined}>
+            <option value="" selected={input().isDisplay === undefined}>
               すべて
             </option>
-            <option value="true" selected={inputIsDisplay() === true}>
+            <option value="true" selected={input().isDisplay === true}>
               表示する
             </option>
-            <option value="false" selected={inputIsDisplay() === false}>
+            <option value="false" selected={input().isDisplay === false}>
               表示しない
             </option>
           </select>
@@ -257,12 +157,12 @@ export const SearchList = () => {
             id="sort"
             name="sort"
             class="select select-bordered select-sm"
-            onChange={e => setInputSort(e.currentTarget.value as Sort)}
+            onChange={e => updateInput({ sort: e.currentTarget.value as Sort })}
           >
-            <option value="order_no" selected={inputSort() === 'order_no'}>
+            <option value="order_no" selected={input().sort === 'order_no'}>
               表示順
             </option>
-            <option value="title" selected={inputSort() === 'title'}>
+            <option value="title" selected={input().sort === 'title'}>
               楽曲名
             </option>
           </select>
@@ -275,12 +175,12 @@ export const SearchList = () => {
             id="order"
             name="order"
             class="select select-bordered select-sm"
-            onChange={e => setInputOrder(e.currentTarget.value as Order)}
+            onChange={e => updateInput({ order: e.currentTarget.value as Order })}
           >
-            <option value="asc" selected={inputOrder() === 'asc'}>
+            <option value="asc" selected={input().order === 'asc'}>
               昇順
             </option>
-            <option value="desc" selected={inputOrder() === 'desc'}>
+            <option value="desc" selected={input().order === 'desc'}>
               降順
             </option>
           </select>
@@ -293,11 +193,11 @@ export const SearchList = () => {
             id="perPage"
             name="perPage"
             class="select select-bordered select-sm"
-            onChange={e => setInputPerPage(Number(e.currentTarget.value) as PerPage)}
+            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
               {n => (
-                <option value={n} selected={inputPerPage() === n}>
+                <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
               )}
@@ -371,7 +271,7 @@ export const SearchList = () => {
         </table>
       </div>
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
-        <Pagination page={page()} maxPage={data()!.maxPage} onChange={handlePageChange} />
+        <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>
     </>
   );
