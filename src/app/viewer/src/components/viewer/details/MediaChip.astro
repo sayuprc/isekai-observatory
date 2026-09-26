@@ -1,5 +1,6 @@
 ---
 import { mediaPlatformLabel, youtubeThumbnailFromUrl, youtubeThumbnailSrcset } from '../../../features/media/labels';
+import { dottedDateOfDateTime } from '../../../shared/date';
 
 interface Props {
   media: {
@@ -15,8 +16,7 @@ const { media } = Astro.props;
 // プラットフォームとサムネイルは状態として保持せず url から導出する
 const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
 const platformName = mediaPlatformLabel(media.url);
-const publishedAt = new Date(media.publishedAt)
-  .toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+const publishedAt = dottedDateOfDateTime(media.publishedAt);
 ---
 
 <a class="rel-chip" href={`/media/${media.mediaId}`}>

@@ -10,6 +10,7 @@ import { representativeColor } from '../features/releases/types';
 import { siteStatsRepository } from '../features/site-stats/api';
 import { songContentRepository } from '../features/songs/content';
 import Layout from '../layouts/Layout.astro';
+import { dottedDate } from '../shared/date';
 import { SITE_DESCRIPTION } from '../shared/site';
 
 const latestReleaseGroup = await releaseGroupContentRepository.latest();
@@ -88,7 +89,7 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
             class="feature-release"
             style={`--c:${representativeColor(latestReleaseGroup)};`}
           >
-            <div class="eyebrow">{latestReleaseGroup.type.name} — {latestReleaseGroup.firstReleasedOn}</div>
+            <div class="eyebrow">{latestReleaseGroup.type.name} — {dottedDate(latestReleaseGroup.firstReleasedOn)}</div>
             <h3 class="feature-title">
               <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>
             </h3>

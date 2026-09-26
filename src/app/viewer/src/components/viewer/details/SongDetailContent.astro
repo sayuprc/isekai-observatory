@@ -1,5 +1,6 @@
 ---
 import type { Song } from '../../../features/songs/types';
+import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import MediaChip from './MediaChip.astro';
 
@@ -19,7 +20,7 @@ const creditItems = [
 const formatPerformanceDate = (value: Song['performances'][number]): string => {
   const { startOn, endOn } = value.schedule;
   if (!startOn) return '開催時期未定';
-  return endOn ? `${startOn}〜${endOn}` : startOn;
+  return endOn ? `${dottedDate(startOn)}〜${dottedDate(endOn)}` : dottedDate(startOn);
 };
 
 const formatPerformers = (value: Song['performances'][number]): string =>
@@ -81,7 +82,9 @@ const formatPerformers = (value: Song['performances'][number]): string =>
                 <span class="rel-swatch" aria-hidden="true" />
                 <div class="rel-copy">
                   <div class="rel-main">{releaseGroup.title}</div>
-                  <div class="label-mono rel-sub">{releaseGroup.firstReleasedOn} · {releaseGroup.type.name}</div>
+                  <div class="label-mono rel-sub">
+                    {dottedDate(releaseGroup.firstReleasedOn)} · {releaseGroup.type.name}
+                  </div>
                 </div>
                 <span class="rel-arrow rel-arrow-muted">→</span>
               </a>

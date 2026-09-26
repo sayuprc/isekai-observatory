@@ -1,6 +1,7 @@
 ---
 import { mediaPlatformLabel, youtubeThumbnailFromUrl, youtubeThumbnailSrcset } from '../../../features/media/labels';
 import type { Media } from '../../../features/media/types';
+import { dottedDateOfDateTime } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 
 interface Props {
@@ -13,9 +14,6 @@ const songs = media.songs;
 // プラットフォームとサムネイルは状態として保持せず url から導出する
 const platformName = mediaPlatformLabel(media.url);
 const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
-
-const formatPublishedAt = (value: string): string =>
-  new Date(value).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
 ---
 
 <div class="detail-page-content media-detail-content" data-share-title={media.title}>
@@ -44,7 +42,7 @@ const formatPublishedAt = (value: string): string =>
   </a>
 
   <div class="label-mono">
-    {formatPublishedAt(media.publishedAt)} · {platformName} · {media.type.name}
+    {dottedDateOfDateTime(media.publishedAt)} · {platformName} · {media.type.name}
     {/* API に views が無いため未提供セクションとして雛形を残す */}
     {/* {entry.views ? ` · ${entry.views} views` : ''} */}
   </div>

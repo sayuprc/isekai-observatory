@@ -6,6 +6,7 @@ import SectionHead from '../../components/viewer/SectionHead.astro';
 import { releaseGroupContentRepository } from '../../features/releases/content';
 import { representativeColor } from '../../features/releases/types';
 import Layout from '../../layouts/Layout.astro';
+import { dottedDate } from '../../shared/date';
 
 // API は最古発売日の降順で返すので、年の区切りを入れるだけで並べ替えは不要
 const releaseGroups = await releaseGroupContentRepository.all();
@@ -87,7 +88,7 @@ const years = [...new Set(releaseGroups.map(releaseGroup => releaseGroup.firstRe
                         <span class="release-row-title">{releaseGroup.title}</span>
                         <span class="release-row-type">{releaseGroup.type.name}</span>
                         <span class="label-mono release-row-date">
-                          {releaseGroup.firstReleasedOn.slice(5).replace('-', '.')}
+                          {dottedDate(releaseGroup.firstReleasedOn.slice(5))}
                         </span>
                       </a>
                     </li>
