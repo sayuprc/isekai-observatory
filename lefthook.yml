@@ -24,6 +24,11 @@ pre-commit:
       glob: "src/app/**/*.{css,astro}"
       run: mise run admin:style -- {staged_files}
 
+    admin-format:
+      root: "src/app/admin/"
+      glob: "src/app/admin/**/*.{ts,tsx,js,mjs,astro,css,json,jsonc}"
+      run: ./node_modules/.bin/prettier --check {staged_files}
+
     contracts-format:
       root: "src/app/"
       glob: "contracts/src/**/*.tsp"
