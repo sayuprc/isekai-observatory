@@ -29,6 +29,16 @@ pre-commit:
       glob: "src/app/admin/**/*.{ts,tsx,js,mjs,astro,css,json,jsonc}"
       run: mise run admin:format:check -- {staged_files}
 
+    viewer-lint:
+      root: "src/app/viewer/"
+      glob: "src/app/viewer/**/*.{ts,tsx,js,jsx,mjs,astro}"
+      run: mise run viewer:lint
+
+    viewer-style:
+      root: "src/app/viewer/"
+      glob: "src/app/viewer/**/*.{css,astro}"
+      run: mise run viewer:style -- {staged_files}
+
     viewer-format:
       root: "src/app/viewer/"
       glob: "src/app/viewer/**/*.{ts,tsx,js,mjs,astro,css,json,jsonc}"
