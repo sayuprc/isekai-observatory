@@ -39,4 +39,4 @@
 - 画面幅を変えて見たか
 - フォーカス移動やフォームエラー表示が破綻していないか
 - loading / error / empty の分岐が見えるか
-- `cd src/app && bun --filter admin lint:check` や `cd src/app && bun --filter <package> build` を確認したか
+- `mise run admin:check` / `mise run viewer:check` や `cd src/app && bun --filter <package> build` を確認したか
