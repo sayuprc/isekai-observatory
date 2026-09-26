@@ -1,5 +1,6 @@
 ---
 import type { ReleaseGroup } from '../../../features/releases/types';
+import { dottedDate } from '../../../shared/date';
 import ReleaseVersionBody from './ReleaseVersionBody.astro';
 
 interface Props {
@@ -11,7 +12,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
 ---
 
 <div class="detail-page-content release-detail-content" data-share-title={releaseGroup.title}>
-  <div class="label-mono">{releaseGroup.firstReleasedOn} · {releaseGroup.type.name}</div>
+  <div class="label-mono">{dottedDate(releaseGroup.firstReleasedOn)} · {releaseGroup.type.name}</div>
   <h1 class="detail-title">{releaseGroup.title}</h1>
   {releaseGroup.description && <p class="detail-description" style="margin-top: 16px;">{releaseGroup.description}</p>}
 
@@ -21,7 +22,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
         ? (
             <section class="release-version release-version-single">
               <div class="release-version-meta">
-                <span class="label-mono">{release.releasedOn}</span>
+                <span class="label-mono">{dottedDate(release.releasedOn)}</span>
                 <span class="label-mono">{release.formats.map(format => format.name).join('・')}</span>
               </div>
               <div class="release-version-body">
@@ -33,7 +34,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
             <details class="release-version" open={index === 0}>
               <summary class="release-version-summary">
                 <div class="release-version-heading">
-                  <span class="label-mono">{release.releasedOn}</span>
+                  <span class="label-mono">{dottedDate(release.releasedOn)}</span>
                   {release.name !== '' && <span class="release-version-name">{release.name}</span>}
                 </div>
                 <span class="label-mono">
