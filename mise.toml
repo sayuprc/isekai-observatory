@@ -411,8 +411,9 @@ run = [
 
 [tasks."viewer:format:check"]
 description = "Viewer の formatter をチェックする"
+usage = 'arg "[path]" var=#true help="Prettier のチェック対象パス (省略時は全体)"'
 dir = "src/app/viewer"
-run = "bun run prettier:format:check"
+run = "bun x prettier --check ${usage_path:-.}"
 
 [tasks."viewer:lint"]
 description = "Viewer の linter を実行する"
