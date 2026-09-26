@@ -1,10 +1,10 @@
 import { getCollection } from 'astro:content';
 import { allFromCollection, latestFromCollection, sortByIndex, stripIndex } from '../../shared/content/collection';
-import type { ReleaseGroupCollectionItem } from './schema';
+import type { Indexed } from '../../shared/content/indexed';
 import type { ReleaseGroup } from './types';
 
 async function entries() {
-  return sortByIndex<ReleaseGroupCollectionItem>(await getCollection('releaseGroups'));
+  return sortByIndex<Indexed<ReleaseGroup>>(await getCollection('releaseGroups'));
 }
 
 type ReleaseGroupCollectionEntry = Awaited<ReturnType<typeof entries>>[number];
@@ -14,11 +14,11 @@ function fromEntry(entry: ReleaseGroupCollectionEntry): ReleaseGroup {
 }
 
 async function all(): Promise<ReleaseGroup[]> {
-  return allFromCollection<ReleaseGroupCollectionItem>(await getCollection('releaseGroups'));
+  return allFromCollection<Indexed<ReleaseGroup>>(await getCollection('releaseGroups'));
 }
 
 async function latest(): Promise<ReleaseGroup | null> {
-  return latestFromCollection<ReleaseGroupCollectionItem>(await getCollection('releaseGroups'), 'first');
+  return latestFromCollection<Indexed<ReleaseGroup>>(await getCollection('releaseGroups'), 'first');
 }
 
 export const releaseGroupContentRepository = {
