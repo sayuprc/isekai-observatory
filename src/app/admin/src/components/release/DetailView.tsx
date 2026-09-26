@@ -1,5 +1,6 @@
 import { Match, Show, Switch, createResource, createSignal } from 'solid-js';
 import type { ReleaseFormatValue, ReleaseGetResponse } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
@@ -52,7 +53,7 @@ export const DetailView = (props: DetailViewProps) => {
     const { data, status } = await client.api.releases({ releaseId: props.releaseId }).get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
 

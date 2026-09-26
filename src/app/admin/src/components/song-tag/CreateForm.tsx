@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
@@ -9,8 +10,7 @@ export const CreateForm = () => {
   const { formError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
 
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-  const listHref = `/song-tags${back}`;
+  const listHref = getListUrl('/song-tags');
 
   const handleSubmit = withSubmitting(async (e: Event) => {
     e.preventDefault();

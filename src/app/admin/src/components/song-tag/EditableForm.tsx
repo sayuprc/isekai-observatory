@@ -1,7 +1,9 @@
 import { createResource, Match, Show, Switch } from 'solid-js';
 import type { SongTag } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
@@ -25,29 +27,14 @@ interface FetchErrorState {
 
 type FetchState = FetchOkState | FetchErrorState;
 
-const getListUrl = () => {
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-  const listQuery = (() => {
-    if (!back.startsWith('?')) return '';
-    try {
-      const q = new URLSearchParams(back.slice(1)).toString();
-      return q ? `?${q}` : '';
-    } catch {
-      return '';
-    }
-  })();
-
-  return `/song-tags${listQuery}`;
-};
-
 export const DetailView = (props: DetailViewProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/song-tags');
 
   const [resource, { refetch }] = createResource(async (): Promise<FetchState> => {
     const { data, status } = await client.api['song-tags']({ songTagId: props.songTagId }).get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
 
@@ -97,7 +84,7 @@ export const DetailView = (props: DetailViewProps) => {
 };
 
 export const EditableForm = (props: EditableFormProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/song-tags');
 
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();

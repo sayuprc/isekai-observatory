@@ -8,8 +8,10 @@ import type {
   SongType,
   SongTypeValue,
 } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
@@ -44,29 +46,14 @@ interface FetchErrorState {
 
 type FetchState = FetchOkState | FetchErrorState;
 
-const getListUrl = () => {
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-  const listQuery = (() => {
-    if (!back.startsWith('?')) return '';
-    try {
-      const q = new URLSearchParams(back.slice(1)).toString();
-      return q ? `?${q}` : '';
-    } catch {
-      return '';
-    }
-  })();
-
-  return `/songs${listQuery}`;
-};
-
 export const DetailView = (props: DetailViewProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/songs');
 
   const [resource, { refetch }] = createResource(async (): Promise<FetchState> => {
     const { data, status } = await client.api.songs({ songId: props.songId })['edit-form'].get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
 
@@ -116,7 +103,7 @@ export const DetailView = (props: DetailViewProps) => {
 };
 
 export const EditableForm = (props: EditableFormProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/songs');
 
   const types = props.data.types;
   const [typeValue, setTypeValue] = createSignal<SongTypeValue | ''>(props.data.song.type.value);

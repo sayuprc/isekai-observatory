@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js';
+import { redirectToLogin } from '../utils/auth-redirect';
 
 interface KeywordSearchOptions<T> {
   emptyKeywordMessage: string;
@@ -29,7 +30,7 @@ export const createKeywordSearch = <T>(options: KeywordSearchOptions<T>) => {
     setIsSearching(false);
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return;
     }
 

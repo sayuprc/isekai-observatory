@@ -1,5 +1,6 @@
 import { Match, Show, Switch, createResource, createSignal } from 'solid-js';
 import type { ReleaseFormatValue } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
@@ -91,7 +92,7 @@ export const CreateForm = () => {
     const { data, status } = await client.api.releases({ releaseId: params.sourceReleaseId }).get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
 

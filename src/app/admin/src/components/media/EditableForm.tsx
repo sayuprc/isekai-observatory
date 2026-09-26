@@ -1,8 +1,10 @@
 import { createResource, Match, Show, Switch } from 'solid-js';
 import type { Media, MediaReferencedSong, MediaTypeValue } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { normalizeDateTimeInputValue } from '../../utils/date';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
@@ -35,29 +37,14 @@ interface FetchErrorState {
 
 type FetchState = FetchOkState | FetchErrorState;
 
-const getListUrl = () => {
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-  const listQuery = (() => {
-    if (!back.startsWith('?')) return '';
-    try {
-      const query = new URLSearchParams(back.slice(1)).toString();
-      return query ? `?${query}` : '';
-    } catch {
-      return '';
-    }
-  })();
-
-  return `/media${listQuery}`;
-};
-
 export const DetailView = (props: DetailViewProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/media');
 
   const [resource, { refetch }] = createResource(async (): Promise<FetchState> => {
     const { data, status } = await client.api.media({ mediaId: props.mediaId }).get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
 
@@ -107,7 +94,7 @@ export const DetailView = (props: DetailViewProps) => {
 };
 
 const EditableForm = (props: EditableFormProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/media');
 
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();

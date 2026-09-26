@@ -5,8 +5,10 @@ import type {
   ReleaseGroupReferencedRelease,
   ReleaseGroupTypeValue,
 } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
@@ -102,33 +104,14 @@ const normalizeDateValue = (value: unknown): string => {
   return Number.isNaN(parsed.getTime()) ? '' : parsed.toISOString().slice(0, 10);
 };
 
-const getListUrl = () => {
-  if (typeof window === 'undefined') {
-    return '/release-groups';
-  }
-
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-
-  if (!back.startsWith('?')) {
-    return '/release-groups';
-  }
-
-  try {
-    const query = new URLSearchParams(back.slice(1)).toString();
-    return query ? `/release-groups?${query}` : '/release-groups';
-  } catch {
-    return '/release-groups';
-  }
-};
-
 export const DetailView = (props: DetailViewProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/release-groups');
 
   const [resource, { refetch }] = createResource(async (): Promise<FetchState> => {
     const { data, status } = await client.api['release-groups']({ releaseGroupId: props.releaseGroupId }).get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
 
@@ -178,7 +161,7 @@ export const DetailView = (props: DetailViewProps) => {
 };
 
 const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/release-groups');
   const releaseGroupId = props.data.releaseGroup.releaseGroupId;
 
   const [title, setTitle] = createSignal(props.data.releaseGroup.title);

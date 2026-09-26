@@ -1,4 +1,5 @@
 import { createResource, For, Match, Switch } from 'solid-js';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
 import { ListState } from '../ListState';
@@ -8,7 +9,7 @@ export const AdminUserList = () => {
     const { data, status } = await client.api['admin-users'].get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return;
     }
 
