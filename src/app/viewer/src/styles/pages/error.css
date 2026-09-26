@@ -1,0 +1,35 @@
+/* エラーページ (404) */
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 96px;
+  padding-bottom: 96px;
+  text-align: center;
+}
+
+.error-code {
+  font-size: 56px;
+  line-height: 1;
+  color: var(--fg-faint);
+  letter-spacing: 0.12em;
+}
+
+.error-title {
+  margin: 24px 0 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--fg);
+  letter-spacing: 0.08em;
+}
+
+.error-description {
+  max-width: 560px;
+  margin: 16px 0 0;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--fg-muted);
+}

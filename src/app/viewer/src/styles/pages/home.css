@@ -1,0 +1,307 @@
+/* ホーム (hero・最新楽曲・最新リリース・今後の予定) */
+
+/* hero: 観測台帳スタイル。数字は記録行として直立で置き、accent は CTA のみに使う */
+
+.hero-data {
+  position: relative;
+  padding: 104px 0 72px;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.hero-data::after {
+  display: none;
+}
+
+.hero-mark.hero-mark-data {
+  font-size: clamp(38px, 5.8vw, 76px);
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+}
+
+.hero-tagline {
+  max-width: 650px;
+  margin-inline: auto;
+  margin-top: 24px;
+  font-size: 15px;
+  line-height: 2;
+  color: var(--fg-muted);
+  letter-spacing: 0.12em;
+}
+
+.hero-ledger {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 36px;
+  max-width: 780px;
+  margin: 56px auto 0;
+  text-align: center;
+}
+
+.hero-ledger-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: center;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+
+.hero-ledger-label {
+  flex-basis: 100%;
+  font-family: "Noto Serif JP", serif;
+  font-size: 12px;
+  color: var(--fg-muted);
+  letter-spacing: 0.16em;
+}
+
+.hero-ledger-leader {
+  display: none;
+}
+
+.hero-ledger-value {
+  font-family: Spectral, serif;
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 500;
+  color: var(--fg);
+  letter-spacing: 0.04em;
+}
+
+.hero-ledger-link {
+  text-decoration: none;
+}
+
+/* タップ可能であることをホバー無しでも示すため矢印を常時表示する */
+
+.hero-ledger-link .hero-ledger-value::after {
+  display: inline-block;
+  margin-left: 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--fg-muted);
+  content: "→";
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.hero-ledger-link:hover .hero-ledger-label {
+  color: var(--accent-2);
+}
+
+.hero-ledger-link:hover .hero-ledger-value::after {
+  color: var(--accent-2);
+  transform: translateX(3px);
+}
+
+.hero-mark {
+  margin: 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: clamp(56px, 9vw, 128px);
+  line-height: 1;
+  letter-spacing: 0.18em;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.hero-data .hero-actions {
+  justify-content: center;
+  margin-top: 64px;
+}
+
+.feature-grid-link {
+  --feature-art-size: 320px;
+
+  display: grid;
+  grid-template-columns: var(--feature-art-size) 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.feature-art-link {
+  display: block;
+}
+
+.feature-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 最新リリース: 大きな色面は置かず、左ボーダーで代表色を示す */
+
+.feature-release {
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  padding-left: 16px;
+  border-left: 3px solid var(--c);
+}
+
+/* 最新楽曲: サムネ縦幅に本文を揃え、収まらない分はフェード */
+
+.feature-grid-link:has(.feature-art-link) .feature-body {
+  height: var(--feature-art-size);
+}
+
+.feature-track-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 16px;
+  align-content: start;
+  min-height: 0;
+  max-height: 280px;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
+}
+
+.feature-more {
+  align-self: flex-start;
+  margin-top: 16px;
+}
+
+.feature-title {
+  margin: 12px 0 6px;
+  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-size: 40px;
+  letter-spacing: 0.06em;
+}
+
+/* ホームの最新楽曲と最新リリースを横並びにして、空いていた右半分を使い切る */
+
+.home-feature-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  align-items: stretch;
+}
+
+/* 2 カラムに割れない幅ではカードを中央に置き、右側だけが空く状態を作らない
+   見出しの罫線もカードと同じ幅で終わらせる */
+
+.home-feature .section-head {
+  width: 100%;
+  padding: 0 0 22px;
+  margin: 0 0 26px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.home-feature .section-head h2 {
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+.home-feature .feature-grid-link {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 26px;
+  width: 100%;
+  max-width: none;
+}
+
+.home-feature .feature-art-link {
+  width: 100%;
+  max-width: none;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.home-feature .feature-grid-link:has(.feature-art-link) .feature-body {
+  flex: 1;
+  height: auto;
+}
+
+/* 本文が狭くなるので、見出しと収録曲リストをその幅に収まる形に落とす */
+
+.home-feature .feature-title {
+  margin: 12px 0 20px;
+  font-size: clamp(26px, 2.6vw, 38px);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.home-feature .release-medium {
+  margin-bottom: 0;
+}
+
+.home-feature .feature-track-list {
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-height: 330px;
+  padding: 2px 8px 2px 0;
+  margin: 8px 0 28px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  mask-image: none;
+}
+
+.home-feature .feature-summary-fill {
+  flex: none;
+  overflow: visible;
+  mask-image: none;
+}
+
+.home-feature {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 32px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.home-feature .feature-summary {
+  margin-bottom: 24px;
+  font-size: 13px;
+  line-height: 2;
+}
+
+.home-feature .eyebrow {
+  font-family: "JetBrains Mono", "Noto Serif JP", serif;
+  font-size: 11px;
+  line-height: 1.8;
+  letter-spacing: 0.08em;
+}
+
+.home-feature .feature-release {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  padding: 24px 0 0;
+  border: 0;
+  border-top: 4px solid var(--c);
+}
+
+.home-feature .feature-more {
+  align-self: stretch;
+  justify-content: space-between;
+  padding: 14px 18px;
+  margin-top: auto;
+  font-size: 12px;
+  text-align: center;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+
+.home-feature .feature-more:hover {
+  color: var(--fg);
+  background: var(--accent-faint);
+  border-color: var(--accent-strong);
+}
+
+/* ---------- ホームの今後の予定 ---------- */
+
+/* 最新楽曲・最新リリースの下で 1 行を占有し、一覧と同じ行リストで並べる */
+
+.home-feature-wide {
+  grid-column: 1 / -1;
+}

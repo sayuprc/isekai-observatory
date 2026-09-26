@@ -1,0 +1,274 @@
+/* セクション見出し・ボタン・バッジ・絞り込みなど複数ページで使う部品 */
+
+.section-head {
+  display: flex;
+  gap: 32px;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 24px 0 28px;
+  margin-bottom: 36px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-head-left {
+  display: flex;
+  align-items: baseline;
+}
+
+.section-title {
+  margin: 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--fg);
+  letter-spacing: 0.08em;
+}
+
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  transition: all 0.3s ease;
+}
+
+.btn {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 22px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 13px;
+  color: var(--fg);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--line);
+  transition: all 0.25s ease;
+}
+
+.btn:hover {
+  background: color-mix(in oklab, var(--accent) 10%, transparent);
+  border-color: var(--accent);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--fg-muted);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+/* 楽曲種別バッジ: オリジナルはアクセント、カバーは中間色で一目で区別する */
+
+.pill[data-song-type="1"] {
+  color: var(--accent-strong);
+  background: color-mix(in oklab, var(--accent) 20%, transparent);
+  border-color: transparent;
+}
+
+.pill[data-song-type="2"] {
+  color: var(--fg-muted);
+  background: color-mix(in oklab, var(--fg) 10%, transparent);
+  border-color: color-mix(in oklab, var(--fg) 24%, transparent);
+}
+
+/* リリース種別バッジ: アルバムはアクセント、シングルは第 2 アクセント、EP は中間色で区別する
+   その他 (99) はデフォルトの中立ピルのまま */
+
+.pill[data-release-type="2"] {
+  color: var(--accent-strong);
+  background: color-mix(in oklab, var(--accent) 20%, transparent);
+  border-color: transparent;
+}
+
+.pill[data-release-type="1"] {
+  color: var(--accent-2-strong);
+  background: color-mix(in oklab, var(--accent-2) 20%, transparent);
+  border-color: transparent;
+}
+
+.pill[data-release-type="3"] {
+  color: var(--fg-muted);
+  background: color-mix(in oklab, var(--fg) 10%, transparent);
+  border-color: color-mix(in oklab, var(--fg) 24%, transparent);
+}
+
+/* フォーマットチップ: 種別バッジと並べても紛れないよう角形で小さく抑える */
+
+.format-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--fg-muted);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  border: 1px solid var(--line);
+}
+
+.seg {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.seg button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 38px;
+  padding: 0;
+  color: var(--fg-muted);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.16s ease;
+}
+
+.seg button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.seg button .seg-fill {
+  opacity: 0.28;
+  fill: currentcolor;
+  stroke: none;
+}
+
+.seg button.is-active {
+  color: var(--accent-strong);
+  background: color-mix(in oklab, var(--accent) 18%, var(--bg-elev-2));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+.seg button:active {
+  transform: translateY(1px);
+}
+
+.seg button:not(.is-active):hover {
+  color: var(--fg);
+  background: color-mix(in oklab, var(--fg) 5%, transparent);
+}
+
+image-slot {
+  color: var(--fg-faint);
+  background: var(--bg-elev-2);
+  border: 1px dashed var(--line);
+  transition: border-color 0.25s ease;
+}
+
+image-slot:hover {
+  border-color: var(--accent);
+}
+
+.hairline {
+  height: 1px;
+  margin: 0;
+  background: var(--line);
+  border: none;
+}
+
+.viewer-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  max-width: 100%;
+  margin-bottom: 32px;
+}
+
+.viewer-filters .btn.is-active {
+  color: var(--accent-strong);
+  background: color-mix(in oklab, var(--accent) 18%, transparent);
+  border-color: var(--accent);
+}
+
+.viewer-filters-spacer {
+  flex: 1;
+}
+
+.viewer-search {
+  min-width: 280px;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 8px 16px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 13px;
+  color: var(--fg);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.viewer-search:focus {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 12%, transparent);
+}
+
+.viewer-search:focus-visible {
+  border-color: var(--accent-strong);
+}
+
+.entry-status {
+  margin-bottom: 12px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.entry-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px;
+  text-align: center;
+  background: color-mix(in oklab, var(--bg-elev) 72%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+
+.entry-empty-panel {
+  grid-column: 1 / -1;
+  justify-content: center;
+  min-height: 180px;
+  border: 1px solid var(--line);
+}
+
+.entry-empty[hidden] {
+  display: none;
+}
+
+.entry-empty-title {
+  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.entry-empty-description {
+  margin-top: 6px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}

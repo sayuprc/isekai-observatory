@@ -2,7 +2,7 @@
  * Web フォント定義
  *
  * self-host して HTML → CSS → Google Fonts の CSS → woff2 という直列の取得を 1 段短くする
- * 読み込むのは viewer.css で実際に指定しているバリアントだけに絞る
+ * 読み込むのは styles/ 配下の CSS で実際に指定しているバリアントだけに絞る
  * 日本語 2 ファミリーは unicode-range で分割された CSS を選び、必要な字形の分だけ転送させる
  */
 

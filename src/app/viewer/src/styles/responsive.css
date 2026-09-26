@@ -1,0 +1,413 @@
+/* 画面幅と動きの設定に応じた上書き */
+
+/* ブレークポイントは max-width を降順に並べ、狭い側の指定が後勝ちになるようにする */
+
+@media (width <= 1280px) {
+
+  .profile-grid,
+  .media-featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .media-card-grid,
+  .recent-posts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .media-mosaic {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 164px;
+  }
+
+}
+
+@media (width <= 1100px) and (width > 900px) {
+
+  .song-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (width <= 960px) {
+
+  .shell,
+  .nav-inner {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .media-card-grid,
+  .recent-posts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .media-mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 148px;
+  }
+
+  .media-list-row {
+    grid-template-columns: 1fr;
+  }
+
+  .chronology-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer-filters-spacer {
+    display: none;
+  }
+
+  .viewer-search {
+    flex-basis: 100%;
+    order: 10;
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-data .hero-actions {
+    margin-top: 48px;
+  }
+
+  .section-head,
+  .section-head-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (width <= 900px) {
+
+  .home-feature-row {
+    grid-template-columns: 1fr;
+  }
+
+  .release-year,
+  .event-group {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .release-year-head {
+    flex-direction: row;
+    align-items: baseline;
+  }
+
+  .event-group-label {
+    position: static;
+  }
+
+  .song-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .detail-page-content > .rel-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (width <= 720px) {
+
+  .viewer-ambient-light {
+    right: -420px;
+  }
+
+  .viewer-ambient-wash {
+    left: -440px;
+  }
+
+  .hero-data {
+    padding: 64px 0 48px;
+  }
+
+  .hero-ledger {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .hero-ledger-label {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+
+  .hero-ledger-value {
+    font-size: 20px;
+  }
+
+  .hero-tagline {
+    font-size: 13px;
+  }
+
+  .page-section {
+    padding-top: 40px;
+  }
+
+  .home-feature {
+    padding: 24px;
+  }
+
+  .song-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-page > .detail-page-content {
+    padding: 24px 18px;
+  }
+
+  .detail-page-content .detail-title {
+    font-size: 28px;
+  }
+
+  .song-credit-grid,
+  .detail-panel .song-credit-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .song-credit-item {
+    padding: 18px;
+  }
+
+  .detail-page-content .rel-chip {
+    gap: 12px;
+    padding: 14px 10px;
+  }
+
+  .detail-page-content .rel-thumb {
+    width: 72px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .release-version {
+    padding: 18px 14px;
+  }
+
+  .release-version-summary {
+    grid-template-columns: minmax(0, 1fr) 16px;
+    gap: 12px;
+  }
+
+  .release-version-summary > .label-mono {
+    grid-row: 2;
+  }
+
+  .release-version-summary::after {
+    grid-area: 1 / 2;
+  }
+
+  .detail-panel {
+    width: 100%;
+  }
+
+  .detail-body {
+    padding: 24px 20px 48px;
+  }
+
+  .release-year-list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .event-line {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 8px 14px;
+    padding: 16px 4px;
+  }
+
+  .event-line-date {
+    grid-row: span 2;
+  }
+
+  .event-line-with-year {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .event-line-with-year .event-line-date-main {
+    font-size: 15px;
+  }
+
+  .event-line-type {
+    grid-column: 2;
+  }
+
+  .event-line-arrow {
+    display: none;
+  }
+
+  .release-row {
+    min-height: 150px;
+    padding: 20px 24px;
+  }
+
+  .release-row-title {
+    font-size: 20px;
+  }
+
+  .release-row-type,
+  .release-row-date {
+    display: block;
+  }
+
+  /* リンクはボトムナビへ移動するためヘッダーからは消す */
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-utils {
+    margin-left: auto;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+
+  /* ボトムナビでフッター末尾が隠れないようにする */
+
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
+
+  .theme-trigger {
+    justify-content: center;
+    width: 40px;
+    padding: 0;
+  }
+
+  .theme-trigger .label,
+  .theme-trigger .caret {
+    display: none;
+  }
+
+  .theme-pop {
+    position: fixed;
+    top: 64px;
+    right: 20px;
+    left: 20px;
+    width: auto;
+  }
+
+  .media-card-grid,
+  .recent-posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .media-mosaic {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 132px;
+  }
+
+  .media-list-row {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+
+  .media-list-row > :first-child,
+  .media-list-row > :last-child,
+  .media-list-row .label-mono {
+    display: none;
+  }
+
+  /* 横並びだと本文が狭くなりすぎるので縦積みにし、サムネ縦幅への本文固定を外す */
+
+  .feature-grid-link {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-grid-link:has(.feature-art-link) .feature-body {
+    height: auto;
+  }
+
+  .feature-track-list {
+    grid-template-columns: 1fr;
+    max-height: 320px;
+  }
+
+  .detail-head {
+    padding: 16px 20px;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-grid > :first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (width <= 420px) {
+
+  .brand-text {
+    display: none;
+  }
+
+  .hero-mark.hero-mark-data {
+    font-size: clamp(40px, 13vw, 52px);
+    letter-spacing: 0.08em;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chronology-grid,
+  .chronology-grid-mock {
+    grid-template-columns: 72px 1fr;
+    gap: 18px 20px;
+  }
+
+  .chronology-grid > :nth-child(odd),
+  .chronology-grid-mock > :nth-child(odd) {
+    padding-right: 18px;
+    font-size: 28px;
+  }
+
+  .media-mosaic {
+    grid-auto-rows: 116px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .song-grid-card,
+  .release-row,
+  .release-row::before,
+  .release-row::after,
+  .event-line-arrow {
+    transform: none;
+    transition: none;
+  }
+
+  .song-grid-card::after {
+    transition: none;
+  }
+
+  .detail-page-content .rel-chip,
+  .release-version-body-shell,
+  .release-version-summary::after {
+    transition: none;
+  }
+
+  .detail-page-content .rel-chip[href]:hover {
+    transform: none;
+  }
+
+  .detail-overlay,
+  .detail-panel {
+    animation: none;
+  }
+}
