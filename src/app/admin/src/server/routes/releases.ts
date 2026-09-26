@@ -5,8 +5,7 @@ import {
   releaseServiceGetRelease,
   releaseServiceUpdateRelease,
 } from '../../generated';
-import { withAuthRetry } from '../client';
-import { resolveApiResponse } from '../errors';
+import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
 const formatValuesSchema = t.Array(t.Numeric(), { minItems: 1 });
@@ -30,9 +29,8 @@ export const releases = new Elysia({ prefix: '/releases' })
   .post(
     '/',
     async ({ body, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await releaseServiceCreateRelease({ client, body }));
-      });
+      return requestWithAuth(authSession, client =>
+        releaseServiceCreateRelease({ client, body }));
     },
     {
       body: t.Object({
@@ -51,9 +49,8 @@ export const releases = new Elysia({ prefix: '/releases' })
   .get(
     '/:releaseId',
     async ({ params: { releaseId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await releaseServiceGetRelease({ client, path: { releaseId } }));
-      });
+      return requestWithAuth(authSession, client =>
+        releaseServiceGetRelease({ client, path: { releaseId } }));
     },
     {
       params: t.Object({
@@ -64,15 +61,12 @@ export const releases = new Elysia({ prefix: '/releases' })
   .put(
     '/:releaseId',
     async ({ params: { releaseId }, body, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await releaseServiceUpdateRelease({
-            client,
-            path: { releaseId },
-            body,
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        releaseServiceUpdateRelease({
+          client,
+          path: { releaseId },
+          body,
+        }));
     },
     {
       params: t.Object({
@@ -93,14 +87,11 @@ export const releases = new Elysia({ prefix: '/releases' })
   .delete(
     '/:releaseId',
     async ({ params: { releaseId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await releaseServiceDeleteRelease({
-            client,
-            path: { releaseId },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        releaseServiceDeleteRelease({
+          client,
+          path: { releaseId },
+        }));
     },
     {
       params: t.Object({

@@ -1,11 +1,11 @@
 import { Show } from 'solid-js';
 import type { VenueKindValue } from '../../generated';
+import { validateVenueName } from '../../schemas/venue';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-import { validateVenueName } from './validation';
 
 type Payload = { name: string; kind: VenueKindValue };
 

@@ -7,7 +7,14 @@ export class ApiError extends Error {
   }
 }
 
-export const resolveApiResponse = <T>(result: { data?: T; error?: unknown; response: Response }): T => {
+export type ApiResult<T> = { data?: T; error?: unknown; response?: Response };
+
+export const resolveApiResponse = <T>(result: ApiResult<T>): T => {
+  // 通信自体が失敗して response がない場合は、元の例外を想定外エラーとしてそのまま投げる
+  if (!result.response) {
+    throw result.error;
+  }
+
   if (result.response.ok) {
     return result.data as T;
   }

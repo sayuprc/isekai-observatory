@@ -7,8 +7,7 @@ import {
   personServiceUpdatePerson,
 } from '../../generated';
 import type { PerPage, PersonSearchSortBy, SortOrder } from '../../generated';
-import { withAuthRetry } from '../client';
-import { resolveApiResponse } from '../errors';
+import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
 export const persons = new Elysia({ prefix: '/persons' })
@@ -16,20 +15,17 @@ export const persons = new Elysia({ prefix: '/persons' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await personServiceSearchPersons({
-            client,
-            query: {
-              name: query.name || undefined,
-              sort: (query.sort ?? 'order_no') as PersonSearchSortBy,
-              order: (query.order ?? 'asc') as SortOrder,
-              page: query.page ?? 1,
-              per_page: (query.per_page ?? 25) as PerPage,
-            },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        personServiceSearchPersons({
+          client,
+          query: {
+            name: query.name || undefined,
+            sort: (query.sort ?? 'order_no') as PersonSearchSortBy,
+            order: (query.order ?? 'asc') as SortOrder,
+            page: query.page ?? 1,
+            per_page: (query.per_page ?? 25) as PerPage,
+          },
+        }));
     },
     {
       query: t.Object({
@@ -44,9 +40,8 @@ export const persons = new Elysia({ prefix: '/persons' })
   .get(
     '/:personId',
     async ({ params: { personId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await personServiceGetPerson({ client, path: { personId } }));
-      });
+      return requestWithAuth(authSession, client =>
+        personServiceGetPerson({ client, path: { personId } }));
     },
     {
       params: t.Object({
@@ -57,9 +52,8 @@ export const persons = new Elysia({ prefix: '/persons' })
   .post(
     '/',
     async ({ body: { name }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await personServiceCreatePerson({ client, body: { name } }));
-      });
+      return requestWithAuth(authSession, client =>
+        personServiceCreatePerson({ client, body: { name } }));
     },
     {
       body: t.Object({
@@ -70,11 +64,8 @@ export const persons = new Elysia({ prefix: '/persons' })
   .put(
     '/:personId',
     async ({ params: { personId }, body: { name, orderNo }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await personServiceUpdatePerson({ client, path: { personId }, body: { name, orderNo } }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        personServiceUpdatePerson({ client, path: { personId }, body: { name, orderNo } }));
     },
     {
       params: t.Object({
@@ -89,9 +80,8 @@ export const persons = new Elysia({ prefix: '/persons' })
   .delete(
     '/:personId',
     async ({ params: { personId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        resolveApiResponse(await personServiceDeletePerson({ client, path: { personId } }));
-      });
+      // 削除は本文を返さない
+      await requestWithAuth(authSession, client => personServiceDeletePerson({ client, path: { personId } }));
     },
     {
       params: t.Object({

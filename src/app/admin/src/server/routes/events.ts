@@ -7,8 +7,7 @@ import {
   eventServiceUpdateEvent,
 } from '../../generated';
 import type { EventSearchSortBy, EventStatusValue, EventTypeValue, PerPage, SortOrder } from '../../generated';
-import { withAuthRetry } from '../client';
-import { resolveApiResponse } from '../errors';
+import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
 const nullableString = () => t.Union([t.String(), t.Null()]);
@@ -65,23 +64,20 @@ export const events = new Elysia({ prefix: '/events' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await eventServiceSearchEvents({
-            client,
-            query: {
-              title: query.title || undefined,
-              type: query.type ? Number(query.type) as EventTypeValue : undefined,
-              status: query.status ? Number(query.status) as EventStatusValue : undefined,
-              is_display: query.is_display,
-              sort: (query.sort ?? 'schedule') as EventSearchSortBy,
-              order: (query.order ?? 'asc') as SortOrder,
-              page: query.page ?? 1,
-              per_page: (query.per_page ?? 25) as PerPage,
-            },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        eventServiceSearchEvents({
+          client,
+          query: {
+            title: query.title || undefined,
+            type: query.type ? Number(query.type) as EventTypeValue : undefined,
+            status: query.status ? Number(query.status) as EventStatusValue : undefined,
+            is_display: query.is_display,
+            sort: (query.sort ?? 'schedule') as EventSearchSortBy,
+            order: (query.order ?? 'asc') as SortOrder,
+            page: query.page ?? 1,
+            per_page: (query.per_page ?? 25) as PerPage,
+          },
+        }));
     },
     {
       query: t.Object({
@@ -101,27 +97,24 @@ export const events = new Elysia({ prefix: '/events' })
   .get(
     '/:eventId',
     async ({ params: { eventId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await eventServiceGetEvent({ client, path: { eventId } }));
-      });
+      return requestWithAuth(authSession, client =>
+        eventServiceGetEvent({ client, path: { eventId } }));
     },
     { params: t.Object({ eventId: t.String() }) },
   )
   .post(
     '/',
     async ({ body, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await eventServiceCreateEvent({ client, body }));
-      });
+      return requestWithAuth(authSession, client =>
+        eventServiceCreateEvent({ client, body }));
     },
     { body: eventBodySchema },
   )
   .put(
     '/:eventId',
     async ({ params: { eventId }, body, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await eventServiceUpdateEvent({ client, path: { eventId }, body }));
-      });
+      return requestWithAuth(authSession, client =>
+        eventServiceUpdateEvent({ client, path: { eventId }, body }));
     },
     {
       params: t.Object({ eventId: t.String() }),
@@ -131,9 +124,8 @@ export const events = new Elysia({ prefix: '/events' })
   .delete(
     '/:eventId',
     async ({ params: { eventId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await eventServiceDeleteEvent({ client, path: { eventId } }));
-      });
+      return requestWithAuth(authSession, client =>
+        eventServiceDeleteEvent({ client, path: { eventId } }));
     },
     { params: t.Object({ eventId: t.String() }) },
   );

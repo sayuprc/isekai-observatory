@@ -7,29 +7,21 @@ import {
   venueServiceUpdateVenue,
 } from '../../generated';
 import type { PerPage, SortOrder, VenueKindValue, VenueSearchSortBy } from '../../generated';
-import { withAuthRetry } from '../client';
-import { ApiError, resolveApiResponse } from '../errors';
+import { validateVenueName } from '../../schemas/venue';
+import { requestWithAuth } from '../client';
+import { ApiError } from '../errors';
 import { authGuard } from '../middleware';
 
 const venueNameSchema = t.String({ minLength: 1, maxLength: 255 });
 
-const validateVenueName = (name: string): void => {
-  if (name.trim().normalize('NFC').length === 0) {
-    throw new ApiError(422, {
-      code: 'validation_failed',
-      message: '入力内容に誤りがあります',
-      details: [{ field: 'name', message: '開催先名を入力してください' }],
-    });
-  }
+const assertVenueName = (name: string): void => {
+  const message = validateVenueName(name);
 
-  if ([...name].some((character) => {
-    const codePoint = character.codePointAt(0) ?? 0;
-    return codePoint <= 0x1f || codePoint === 0x7f;
-  })) {
+  if (message) {
     throw new ApiError(422, {
       code: 'validation_failed',
       message: '入力内容に誤りがあります',
-      details: [{ field: 'name', message: '開催先名に改行や制御文字は含められません' }],
+      details: [{ field: 'name', message }],
     });
   }
 };
@@ -39,21 +31,18 @@ export const venues = new Elysia({ prefix: '/venues' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await venueServiceSearchVenues({
-            client,
-            query: {
-              name: query.name || undefined,
-              kind: query.kind ? Number(query.kind) as VenueKindValue : undefined,
-              sort: (query.sort ?? 'name') as VenueSearchSortBy,
-              order: (query.order ?? 'asc') as SortOrder,
-              page: query.page ?? 1,
-              per_page: (query.per_page ?? 25) as PerPage,
-            },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        venueServiceSearchVenues({
+          client,
+          query: {
+            name: query.name || undefined,
+            kind: query.kind ? Number(query.kind) as VenueKindValue : undefined,
+            sort: (query.sort ?? 'name') as VenueSearchSortBy,
+            order: (query.order ?? 'asc') as SortOrder,
+            page: query.page ?? 1,
+            per_page: (query.per_page ?? 25) as PerPage,
+          },
+        }));
     },
     {
       query: t.Object({
@@ -69,20 +58,18 @@ export const venues = new Elysia({ prefix: '/venues' })
   .get(
     '/:venueId',
     async ({ params: { venueId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await venueServiceGetVenue({ client, path: { venueId } }));
-      });
+      return requestWithAuth(authSession, client =>
+        venueServiceGetVenue({ client, path: { venueId } }));
     },
     { params: t.Object({ venueId: t.String() }) },
   )
   .post(
     '/',
     async ({ body, authSession }) => {
-      validateVenueName(body.name);
+      assertVenueName(body.name);
 
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await venueServiceCreateVenue({ client, body }));
-      });
+      return requestWithAuth(authSession, client =>
+        venueServiceCreateVenue({ client, body }));
     },
     {
       body: t.Object({
@@ -94,11 +81,10 @@ export const venues = new Elysia({ prefix: '/venues' })
   .put(
     '/:venueId',
     async ({ params: { venueId }, body, authSession }) => {
-      validateVenueName(body.name);
+      assertVenueName(body.name);
 
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await venueServiceUpdateVenue({ client, path: { venueId }, body }));
-      });
+      return requestWithAuth(authSession, client =>
+        venueServiceUpdateVenue({ client, path: { venueId }, body }));
     },
     {
       params: t.Object({ venueId: t.String() }),
@@ -111,9 +97,8 @@ export const venues = new Elysia({ prefix: '/venues' })
   .delete(
     '/:venueId',
     async ({ params: { venueId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await venueServiceDeleteVenue({ client, path: { venueId } }));
-      });
+      return requestWithAuth(authSession, client =>
+        venueServiceDeleteVenue({ client, path: { venueId } }));
     },
     { params: t.Object({ venueId: t.String() }) },
   );

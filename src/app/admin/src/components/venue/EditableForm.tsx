@@ -1,5 +1,6 @@
 import { Match, Show, Switch, createResource } from 'solid-js';
 import type { Venue, VenueKindValue } from '../../generated';
+import { validateVenueName } from '../../schemas/venue';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
@@ -7,7 +8,6 @@ import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-import { validateVenueName } from './validation';
 
 interface DetailViewProps { venueId: string }
 interface EditableFormProps { data: { venue: Venue } }
