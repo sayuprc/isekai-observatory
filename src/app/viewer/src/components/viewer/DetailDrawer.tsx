@@ -427,7 +427,7 @@ export const DetailDrawer = () => {
             onClick={(event) => event.stopPropagation()}
           >
             <div class="detail-head">
-              <div style={{ display: 'flex', 'align-items': 'center', gap: '12px' }}>
+              <div style={{ 'display': 'flex', 'align-items': 'center', 'gap': '12px' }}>
                 <Show when={stack().length > 1}>
                   <button class="icon-btn" type="button" onClick={goBack} title="戻る" aria-label="戻る">
                     <span aria-hidden="true">←</span>

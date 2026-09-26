@@ -2,6 +2,7 @@
 export default {
   printWidth: 120,
   singleQuote: true,
+  quoteProps: 'consistent',
   experimentalOperatorPosition: 'start',
   plugins: ['prettier-plugin-astro'],
   overrides: [
