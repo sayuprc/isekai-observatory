@@ -1,14 +1,14 @@
 import { getCollection } from 'astro:content';
 import { allFromCollection, latestFromCollection } from '../../shared/content/collection';
-import type { SongCollectionItem } from './schema';
+import type { Indexed } from '../../shared/content/indexed';
 import type { Song } from './types';
 
 async function all(): Promise<Song[]> {
-  return allFromCollection<SongCollectionItem>(await getCollection('songs'));
+  return allFromCollection<Indexed<Song>>(await getCollection('songs'));
 }
 
 async function latest(): Promise<Song | null> {
-  return latestFromCollection<SongCollectionItem>(await getCollection('songs'), 'first');
+  return latestFromCollection<Indexed<Song>>(await getCollection('songs'), 'first');
 }
 
 export const songContentRepository = {
