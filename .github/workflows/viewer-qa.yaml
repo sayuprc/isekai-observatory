@@ -125,7 +125,7 @@ jobs:
         run: mise run viewer:lint
 
   typecheck:
-    name: TypeScript
+    name: TypeCheck
 
     runs-on: ubuntu-latest
 
@@ -150,7 +150,7 @@ jobs:
       - name: Install packages
         run: mise run pnpm:install
 
-      - name: Run TypeScript Check
+      - name: Run TypeCheck
         run: mise run viewer:typecheck
 
   style:
