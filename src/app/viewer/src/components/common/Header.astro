@@ -169,7 +169,7 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
     };
 
     trigger.addEventListener('click', () => {
-      setOpen(pop.hidden);
+      setOpen(pop.hidden !== false);
     });
 
     overlay.addEventListener('click', () => close(false));

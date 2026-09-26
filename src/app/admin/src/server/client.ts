@@ -14,18 +14,22 @@ const apiUrl = API_URL + '/admin/v1';
  * Authorization はアプリの JWT が使うため、Google ID token は
  * Cloud Run が予約している X-Serverless-Authorization ヘッダで送る
  */
-const fetchWithServerlessAuth: typeof fetch = async (input, init) => {
-  const idToken = await getGoogleIdToken(API_URL);
+const fetchWithServerlessAuth: typeof fetch = Object.assign(
+  async (input: RequestInfo | URL, init?: RequestInit) => {
+    const idToken = await getGoogleIdToken(API_URL);
 
-  if (idToken === null) {
-    return fetch(input, init);
-  }
+    if (idToken === null) {
+      return fetch(input, init);
+    }
 
-  const request = new Request(input, init);
-  request.headers.set('X-Serverless-Authorization', `Bearer ${idToken}`);
+    const request = new Request(input, init);
+    request.headers.set('X-Serverless-Authorization', `Bearer ${idToken}`);
 
-  return fetch(request);
-};
+    return fetch(request);
+  },
+  // Bun の typeof fetch は preconnect を要求するため、素の fetch へ委譲する
+  { preconnect: fetch.preconnect },
+);
 
 export const createAuthClient = (credential: Credential) => {
   return createClient(
