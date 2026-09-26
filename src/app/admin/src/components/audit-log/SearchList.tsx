@@ -1,12 +1,17 @@
-import { Show, createResource, createSignal, For, Match, Switch } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { AuditAction, AuditTargetType } from '../../generated';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
+import {
+  PER_PAGE_OPTIONS,
+  createSearchResource,
+  createSearchState,
+  parsePage,
+  pickParam,
+} from '../../utils/search-list';
+import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
-
-const PER_PAGE_OPTIONS = [25, 50, 100] as const;
-type PerPage = (typeof PER_PAGE_OPTIONS)[number];
 
 type Action = AuditAction;
 type TargetType = AuditTargetType;
@@ -81,30 +86,27 @@ const DEFAULT_PARAMS: Params = {
   perPage: 50,
 };
 
-const isAction = (value: string | null): value is Action => {
-  return value !== null && (ACTION_OPTIONS as readonly string[]).includes(value);
-};
+const parseParams = (query: URLSearchParams): Params => ({
+  from: query.get('from') ?? '',
+  to: query.get('to') ?? '',
+  action: pickParam<Action | ''>(query.get('action'), ACTION_OPTIONS, '') || undefined,
+  targetType: pickParam<TargetType | ''>(query.get('target_type'), TARGET_TYPE_OPTIONS, '') || undefined,
+  targetId: query.get('target_id') ?? '',
+  adminUserName: query.get('admin_user_name') ?? '',
+  page: parsePage(query.get('page')),
+  perPage: pickParam(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
+});
 
-const isTargetType = (value: string | null): value is TargetType => {
-  return value !== null && (TARGET_TYPE_OPTIONS as readonly string[]).includes(value);
-};
-
-const getInitialParams = (): Params => {
-  const params = new URLSearchParams(window.location.search);
-  const perPageRaw = Number(params.get('per_page'));
-  const action = params.get('action');
-  const targetType = params.get('target_type');
-  return {
-    from: params.get('from') ?? DEFAULT_PARAMS.from,
-    to: params.get('to') ?? DEFAULT_PARAMS.to,
-    action: isAction(action) ? action : undefined,
-    targetType: isTargetType(targetType) ? targetType : undefined,
-    targetId: params.get('target_id') ?? DEFAULT_PARAMS.targetId,
-    adminUserName: params.get('admin_user_name') ?? DEFAULT_PARAMS.adminUserName,
-    page: Number(params.get('page') ?? String(DEFAULT_PARAMS.page)) || DEFAULT_PARAMS.page,
-    perPage: (PER_PAGE_OPTIONS.includes(perPageRaw as PerPage) ? perPageRaw : DEFAULT_PARAMS.perPage) as PerPage,
-  };
-};
+const toQuery = (params: Params) => ({
+  from: params.from,
+  to: params.to,
+  action: params.action,
+  target_type: params.targetType,
+  target_id: params.targetId,
+  admin_user_name: params.adminUserName,
+  page: params.page,
+  per_page: params.perPage,
+});
 
 const toIsoOrEmpty = (localDateTime: string): string => {
   if (!localDateTime) {
@@ -121,145 +123,29 @@ const toIsoOrEmpty = (localDateTime: string): string => {
 };
 
 export const SearchList = () => {
-  const initial = getInitialParams();
+  const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
+    defaults: DEFAULT_PARAMS,
+    parse: parseParams,
+    toQuery,
+  });
 
-  const [from, setFrom] = createSignal(initial.from);
-  const [to, setTo] = createSignal(initial.to);
-  const [action, setAction] = createSignal<Action | undefined>(initial.action);
-  const [targetType, setTargetType] = createSignal<TargetType | undefined>(initial.targetType);
-  const [targetId, setTargetId] = createSignal(initial.targetId);
-  const [adminUserName, setAdminUserName] = createSignal(initial.adminUserName);
-  const [page, setPage] = createSignal(initial.page);
-  const [perPage, setPerPage] = createSignal<PerPage>(initial.perPage);
-
-  const [inputFrom, setInputFrom] = createSignal(initial.from);
-  const [inputTo, setInputTo] = createSignal(initial.to);
-  const [inputAction, setInputAction] = createSignal<Action | undefined>(initial.action);
-  const [inputTargetType, setInputTargetType] = createSignal<TargetType | undefined>(initial.targetType);
-  const [inputTargetId, setInputTargetId] = createSignal(initial.targetId);
-  const [inputAdminUserName, setInputAdminUserName] = createSignal(initial.adminUserName);
-  const [inputPerPage, setInputPerPage] = createSignal<PerPage>(initial.perPage);
-
-  const updateUrl = (params: Params) => {
-    const searchParams = new URLSearchParams();
-    if (params.from) searchParams.set('from', params.from);
-    if (params.to) searchParams.set('to', params.to);
-    if (params.action) searchParams.set('action', params.action);
-    if (params.targetType) searchParams.set('target_type', params.targetType);
-    if (params.targetId) searchParams.set('target_id', params.targetId);
-    if (params.adminUserName) searchParams.set('admin_user_name', params.adminUserName);
-    searchParams.set('page', String(params.page));
-    searchParams.set('per_page', String(params.perPage));
-    history.pushState(null, '', `?${searchParams.toString()}`);
-  };
-
-  const [fetchError, setFetchError] = createSignal<string | null>(null);
-
-  const [data, { refetch }] = createResource(
-    () => ({
-      from: from(),
-      to: to(),
-      action: action(),
-      targetType: targetType(),
-      targetId: targetId(),
-      adminUserName: adminUserName(),
-      page: page(),
-      perPage: perPage(),
-    }),
-    async (params) => {
-      setFetchError(null);
-
-      const { data, status } = await client.api['audit-logs'].search.get({
+  const { data, refetch, fetchError } = createSearchResource(
+    params,
+    current =>
+      client.api['audit-logs'].search.get({
         query: {
-          from: toIsoOrEmpty(params.from) || undefined,
-          to: toIsoOrEmpty(params.to) || undefined,
-          action: params.action,
-          target_type: params.targetType,
-          target_id: params.targetId || undefined,
-          admin_user_name: params.adminUserName || undefined,
-          page: params.page,
-          per_page: params.perPage,
+          from: toIsoOrEmpty(current.from) || undefined,
+          to: toIsoOrEmpty(current.to) || undefined,
+          action: current.action,
+          target_type: current.targetType,
+          target_id: current.targetId || undefined,
+          admin_user_name: current.adminUserName || undefined,
+          page: current.page,
+          per_page: current.perPage,
         },
-      });
-
-      if (status === 401) {
-        window.location.href = '/auth/login';
-        return;
-      }
-
-      if (status === 403) {
-        setFetchError('監査ログの閲覧権限がありません。');
-        return;
-      }
-
-      if (!data) {
-        setFetchError('データの取得に失敗しました。再度お試しください。');
-        return;
-      }
-
-      return data;
-    },
+      }),
+    { forbiddenMessage: '監査ログの閲覧権限がありません。' },
   );
-
-  const handleSearch = (e: Event) => {
-    e.preventDefault();
-
-    const newPage = 1;
-
-    setFrom(inputFrom());
-    setTo(inputTo());
-    setAction(inputAction());
-    setTargetType(inputTargetType());
-    setTargetId(inputTargetId());
-    setAdminUserName(inputAdminUserName());
-    setPerPage(inputPerPage());
-    setPage(newPage);
-    updateUrl({
-      from: inputFrom(),
-      to: inputTo(),
-      action: inputAction(),
-      targetType: inputTargetType(),
-      targetId: inputTargetId(),
-      adminUserName: inputAdminUserName(),
-      page: newPage,
-      perPage: inputPerPage(),
-    });
-  };
-
-  const handlePageChange = (next: number) => {
-    setPage(next);
-    updateUrl({
-      from: from(),
-      to: to(),
-      action: action(),
-      targetType: targetType(),
-      targetId: targetId(),
-      adminUserName: adminUserName(),
-      page: next,
-      perPage: perPage(),
-    });
-  };
-
-  const handleReset = () => {
-    setInputFrom(DEFAULT_PARAMS.from);
-    setInputTo(DEFAULT_PARAMS.to);
-    setInputAction(DEFAULT_PARAMS.action);
-    setInputTargetType(DEFAULT_PARAMS.targetType);
-    setInputTargetId(DEFAULT_PARAMS.targetId);
-    setInputAdminUserName(DEFAULT_PARAMS.adminUserName);
-    setInputPerPage(DEFAULT_PARAMS.perPage);
-
-    setFrom(DEFAULT_PARAMS.from);
-    setTo(DEFAULT_PARAMS.to);
-    setAction(DEFAULT_PARAMS.action);
-    setTargetType(DEFAULT_PARAMS.targetType);
-    setTargetId(DEFAULT_PARAMS.targetId);
-    setAdminUserName(DEFAULT_PARAMS.adminUserName);
-    setPerPage(DEFAULT_PARAMS.perPage);
-    setPage(DEFAULT_PARAMS.page);
-
-    updateUrl(DEFAULT_PARAMS);
-  };
 
   return (
     <>
@@ -272,8 +158,8 @@ export const SearchList = () => {
             type="datetime-local"
             id="from"
             name="from"
-            value={inputFrom()}
-            onInput={e => setInputFrom(e.currentTarget.value)}
+            value={input().from}
+            onInput={e => updateInput({ from: e.currentTarget.value })}
             class="input input-bordered input-sm"
           />
         </fieldset>
@@ -285,8 +171,8 @@ export const SearchList = () => {
             type="datetime-local"
             id="to"
             name="to"
-            value={inputTo()}
-            onInput={e => setInputTo(e.currentTarget.value)}
+            value={input().to}
+            onInput={e => updateInput({ to: e.currentTarget.value })}
             class="input input-bordered input-sm"
           />
         </fieldset>
@@ -298,14 +184,15 @@ export const SearchList = () => {
             id="action"
             name="action"
             class="select select-bordered select-sm"
-            onChange={e => setInputAction(e.currentTarget.value === '' ? undefined : (e.currentTarget.value as Action))}
+            onChange={e =>
+              updateInput({ action: e.currentTarget.value === '' ? undefined : (e.currentTarget.value as Action) })}
           >
-            <option value="" selected={inputAction() === undefined}>
+            <option value="" selected={input().action === undefined}>
               すべて
             </option>
             <For each={ACTION_OPTIONS}>
               {a => (
-                <option value={a} selected={inputAction() === a}>
+                <option value={a} selected={input().action === a}>
                   {ACTION_LABEL[a]}
                 </option>
               )}
@@ -321,14 +208,16 @@ export const SearchList = () => {
             name="target_type"
             class="select select-bordered select-sm"
             onChange={e =>
-              setInputTargetType(e.currentTarget.value === '' ? undefined : (e.currentTarget.value as TargetType))}
+              updateInput({
+                targetType: e.currentTarget.value === '' ? undefined : (e.currentTarget.value as TargetType),
+              })}
           >
-            <option value="" selected={inputTargetType() === undefined}>
+            <option value="" selected={input().targetType === undefined}>
               すべて
             </option>
             <For each={TARGET_TYPE_OPTIONS}>
               {t => (
-                <option value={t} selected={inputTargetType() === t}>
+                <option value={t} selected={input().targetType === t}>
                   {TARGET_TYPE_LABEL[t]}
                 </option>
               )}
@@ -343,8 +232,8 @@ export const SearchList = () => {
             type="text"
             id="target_id"
             name="target_id"
-            value={inputTargetId()}
-            onInput={e => setInputTargetId(e.currentTarget.value)}
+            value={input().targetId}
+            onInput={e => updateInput({ targetId: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="UUID"
           />
@@ -357,8 +246,8 @@ export const SearchList = () => {
             type="text"
             id="admin_user_name"
             name="admin_user_name"
-            value={inputAdminUserName()}
-            onInput={e => setInputAdminUserName(e.currentTarget.value)}
+            value={input().adminUserName}
+            onInput={e => updateInput({ adminUserName: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="部分一致"
           />
@@ -371,11 +260,11 @@ export const SearchList = () => {
             id="per_page"
             name="per_page"
             class="select select-bordered select-sm"
-            onChange={e => setInputPerPage(Number(e.currentTarget.value) as PerPage)}
+            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
               {n => (
-                <option value={n} selected={inputPerPage() === n}>
+                <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
               )}
@@ -440,7 +329,7 @@ export const SearchList = () => {
         </table>
       </div>
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
-        <Pagination page={page()} maxPage={data()!.maxPage} onChange={handlePageChange} />
+        <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>
     </>
   );

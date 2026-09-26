@@ -3,6 +3,7 @@ import { createClient, createConfig } from '../generated/client';
 import type { Client } from '../generated/client';
 import { authenticateServiceRefresh } from '../generated/index';
 import { ApiError, resolveApiResponse } from './errors';
+import type { ApiResult } from './errors';
 import { getGoogleIdToken } from './google-id-token';
 import type { AuthSession, Credential } from './types';
 
@@ -122,3 +123,9 @@ export const withAuthRetry = createWithAuthRetry<Client>({
   createClient: createAuthClient,
   refreshAccessToken,
 });
+
+/** 認証付きで上流 API を 1 回呼び、失敗レスポンスは ApiError として投げる */
+export const requestWithAuth = <T>(
+  authSession: AuthSession,
+  request: (client: Client) => Promise<ApiResult<T>>,
+): Promise<T> => withAuthRetry(authSession, async client => resolveApiResponse(await request(client)));

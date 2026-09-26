@@ -1,4 +1,5 @@
 import { createResource, For, Match, Switch } from 'solid-js';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { ListState } from '../ListState';
 
@@ -7,7 +8,7 @@ export const SongTypeList = () => {
     const { data, status } = await client.api['song-types'].get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return;
     }
 

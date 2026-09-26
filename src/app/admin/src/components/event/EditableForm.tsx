@@ -1,7 +1,9 @@
 import { Match, Switch, createResource } from 'solid-js';
 import type { Event } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
@@ -19,19 +21,12 @@ interface EditableFormProps {
 type FetchState = { status: 'ok'; data: { event: Event } } | { status: 'forbidden' } | { status: 'error' };
 
 // 一覧から渡された検索条件を引き継ぐ。パスは固定し、クエリだけを採用する
-const getListUrl = () => {
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-  if (!back.startsWith('?')) return '/events';
-  const query = new URLSearchParams(back.slice(1)).toString();
-  return query ? `/events?${query}` : '/events';
-};
-
 export const DetailView = (props: DetailViewProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/events');
   const [resource, { refetch }] = createResource(async (): Promise<FetchState> => {
     const { data, status } = await client.api.events({ eventId: props.eventId }).get();
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
     if (status === 403) return { status: 'forbidden' };
@@ -88,7 +83,7 @@ const EditableForm = (props: EditableFormProps) => {
     const { data, error, status } = await client.api.events({ eventId: event.eventId }).put(form.toRequestBody());
     if (data) {
       setFlash('更新しました');
-      window.location.href = getListUrl();
+      window.location.href = getListUrl('/events');
       return;
     }
     handleError(status, error);
@@ -102,12 +97,12 @@ const EditableForm = (props: EditableFormProps) => {
       return;
     }
     setFlash('削除しました');
-    window.location.href = getListUrl();
+    window.location.href = getListUrl('/events');
   });
 
   return (
     <>
-      <a href={getListUrl()} class="btn btn-ghost btn-sm mb-4">← 一覧に戻る</a>
+      <a href={getListUrl('/events')} class="btn btn-ghost btn-sm mb-4">← 一覧に戻る</a>
       <FormError message={formError()} onClose={clearErrors} />
       <div class="max-w-4xl space-y-6">
         <form class="space-y-6" onSubmit={save}>

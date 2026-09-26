@@ -1,30 +1,25 @@
 import { Match, Show, Switch, createResource } from 'solid-js';
 import type { Venue, VenueKindValue } from '../../generated';
+import { validateVenueName } from '../../schemas/venue';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-import { validateVenueName } from './validation';
 
 interface DetailViewProps { venueId: string }
 interface EditableFormProps { data: { venue: Venue } }
 type FetchState = { status: 'ok'; data: { venue: Venue } } | { status: 'forbidden' } | { status: 'error' };
 type Payload = { name: string; kind: VenueKindValue };
 
-const getListUrl = () => {
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-  if (!back.startsWith('?')) return '/venues';
-  const query = new URLSearchParams(back.slice(1)).toString();
-  return query ? `/venues?${query}` : '/venues';
-};
-
 export const DetailView = (props: DetailViewProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/venues');
   const [resource, { refetch }] = createResource(async (): Promise<FetchState> => {
     const { data, status } = await client.api.venues({ venueId: props.venueId }).get();
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
     if (status === 403) return { status: 'forbidden' };
@@ -64,7 +59,7 @@ export const DetailView = (props: DetailViewProps) => {
 };
 
 const EditableForm = (props: EditableFormProps) => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/venues');
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const venueId = props.data.venue.venueId;

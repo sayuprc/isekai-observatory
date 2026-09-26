@@ -1,7 +1,9 @@
 import { createResource, Match, Show, Switch } from 'solid-js';
 import type { AuditTargetType } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
+import { getListUrl } from '../../utils/list-url';
 
 const ACTION_LABEL: Record<string, string> = {
   create: '作成',
@@ -45,17 +47,7 @@ interface FetchState {
 }
 
 export const DetailView = (props: Props) => {
-  const listUrl = () => {
-    if (typeof window === 'undefined') return '/audit-logs';
-    const back = new URLSearchParams(window.location.search).get('back') ?? '';
-    if (!back.startsWith('?')) return '/audit-logs';
-    try {
-      const q = new URLSearchParams(back.slice(1)).toString();
-      return q ? `/audit-logs?${q}` : '/audit-logs';
-    } catch {
-      return '/audit-logs';
-    }
-  };
+  const listUrl = () => getListUrl('/audit-logs');
 
   const [resource, { refetch }] = createResource<FetchState, string>(
     () => props.auditLogId,
@@ -63,7 +55,7 @@ export const DetailView = (props: Props) => {
       const { data, status } = await client.api['audit-logs']({ auditLogId: id }).get();
 
       if (status === 401) {
-        window.location.href = '/auth/login';
+        redirectToLogin();
         return { status: 'error' as const };
       }
 

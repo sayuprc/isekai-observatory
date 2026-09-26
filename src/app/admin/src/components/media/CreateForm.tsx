@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 import type { MediaTypeValue } from '../../generated';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
+import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
@@ -15,23 +16,8 @@ const MEDIA_TYPE_OPTIONS: Array<{ value: MediaTypeValue; label: string }> = [
   { value: 99, label: 'その他' },
 ];
 
-const getListUrl = () => {
-  const back = new URLSearchParams(window.location.search).get('back') ?? '';
-
-  if (!back.startsWith('?')) {
-    return '/media';
-  }
-
-  try {
-    const query = new URLSearchParams(back.slice(1)).toString();
-    return query ? `/media?${query}` : '/media';
-  } catch {
-    return '/media';
-  }
-};
-
 export const CreateForm = () => {
-  const listUrl = getListUrl();
+  const listUrl = getListUrl('/media');
   const { formError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
 

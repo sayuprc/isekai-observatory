@@ -1,7 +1,15 @@
-import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
-import type { EventSearchSortBy, EventStatusValue, EventTypeValue, PerPage, SortOrder } from '../../generated';
+import { For, Match, Show, Switch } from 'solid-js';
+import type { EventSearchSortBy, EventStatusValue, EventTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
 import { normalizeDateValue } from '../../utils/date';
+import {
+  PER_PAGE_OPTIONS,
+  createSearchResource,
+  createSearchState,
+  parsePage,
+  pickParam,
+} from '../../utils/search-list';
+import type { PerPageOption } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
@@ -15,7 +23,6 @@ const formatSchedule = (schedule: { startOn: string | null; endOn: string | null
   return endOn && endOn !== startOn ? `${startOn}〜${endOn}` : startOn;
 };
 
-const PER_PAGE_OPTIONS: PerPage[] = [25, 50, 100];
 const SORT_OPTIONS: Array<{ value: EventSearchSortBy; label: string }> = [
   { value: 'schedule', label: '開催時期' },
   { value: 'title', label: 'タイトル' },
@@ -33,7 +40,7 @@ type SearchParams = {
   sort: EventSearchSortBy;
   order: SortOrder;
   page: number;
-  perPage: PerPage;
+  perPage: PerPageOption;
 };
 
 const DEFAULT_PARAMS: SearchParams = {
@@ -47,93 +54,52 @@ const DEFAULT_PARAMS: SearchParams = {
   perPage: 25,
 };
 
-const pick = <T extends string | number>(value: unknown, candidates: readonly T[], fallback: T): T =>
-  candidates.find(candidate => String(candidate) === value) ?? fallback;
+const parseParams = (query: URLSearchParams): SearchParams => ({
+  title: query.get('title') ?? '',
+  type: pickParam(query.get('type'), EVENT_TYPE_OPTIONS.map(option => `${option.value}` as const), ''),
+  status: pickParam(query.get('status'), EVENT_STATUS_OPTIONS.map(option => `${option.value}` as const), ''),
+  isDisplay: pickParam(query.get('is_display'), ['true', 'false'] as const, ''),
+  sort: pickParam(query.get('sort'), SORT_OPTIONS.map(option => option.value), DEFAULT_PARAMS.sort),
+  order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
+  page: parsePage(query.get('page')),
+  perPage: pickParam(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
+});
 
-const getInitialParams = (): SearchParams => {
-  const query = new URLSearchParams(window.location.search);
-
-  return {
-    title: query.get('title') ?? '',
-    type: pick(query.get('type'), EVENT_TYPE_OPTIONS.map(option => `${option.value}` as const), ''),
-    status: pick(query.get('status'), EVENT_STATUS_OPTIONS.map(option => `${option.value}` as const), ''),
-    isDisplay: pick(query.get('is_display'), ['true', 'false'] as const, ''),
-    sort: pick(query.get('sort'), SORT_OPTIONS.map(option => option.value), DEFAULT_PARAMS.sort),
-    order: pick(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
-    page: Math.max(1, Number(query.get('page')) || 1),
-    perPage: pick(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
-  };
-};
-
-const updateUrl = (params: SearchParams) => {
-  const query = new URLSearchParams();
-  if (params.title) query.set('title', params.title);
-  if (params.type) query.set('type', params.type);
-  if (params.status) query.set('status', params.status);
-  if (params.isDisplay) query.set('is_display', params.isDisplay);
-  query.set('sort', params.sort);
-  query.set('order', params.order);
-  query.set('page', String(params.page));
-  query.set('per_page', String(params.perPage));
-  history.pushState(null, '', `?${query.toString()}`);
-};
+const toQuery = (params: SearchParams) => ({
+  title: params.title,
+  type: params.type,
+  status: params.status,
+  is_display: params.isDisplay,
+  sort: params.sort,
+  order: params.order,
+  page: params.page,
+  per_page: params.perPage,
+});
 
 export const SearchList = () => {
-  const initial = getInitialParams();
-  // 検索ボタンを押すまで、入力中の条件は検索に反映しない
-  const [params, setParams] = createSignal<SearchParams>(initial);
-  const [input, setInput] = createSignal<SearchParams>(initial);
-  const [fetchError, setFetchError] = createSignal<string | null>(null);
-
-  const updateInput = (patch: Partial<SearchParams>) => setInput(current => ({ ...current, ...patch }));
-
-  const apply = (next: SearchParams) => {
-    setParams(next);
-    updateUrl(next);
-  };
-
-  const [data, { refetch }] = createResource(params, async (current) => {
-    setFetchError(null);
-    const response = await client.api.events.search.get({
-      query: {
-        title: current.title || undefined,
-        type: current.type,
-        status: current.status,
-        is_display: current.isDisplay === '' ? undefined : current.isDisplay === 'true',
-        sort: current.sort,
-        order: current.order,
-        page: current.page,
-        per_page: current.perPage,
-      },
-    });
-    if (response.status === 401) {
-      window.location.href = '/auth/login';
-      return;
-    }
-    if (response.status === 403) {
-      setFetchError('イベントの閲覧権限がありません');
-      return;
-    }
-    if (!response.data) {
-      setFetchError('データの取得に失敗しました');
-      return;
-    }
-    return response.data;
+  const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
+    defaults: DEFAULT_PARAMS,
+    parse: parseParams,
+    toQuery,
   });
 
-  const handleSearch = (event: Event) => {
-    event.preventDefault();
-    apply({ ...input(), page: 1 });
-  };
-
-  const handleReset = () => {
-    setInput(DEFAULT_PARAMS);
-    apply(DEFAULT_PARAMS);
-  };
-
-  const handlePageChange = (page: number) => {
-    apply({ ...params(), page });
-  };
+  const { data, refetch, fetchError } = createSearchResource(
+    params,
+    current =>
+      client.api.events.search.get({
+        query: {
+          title: current.title || undefined,
+          type: current.type,
+          status: current.status,
+          is_display: current.isDisplay === '' ? undefined : current.isDisplay === 'true',
+          sort: current.sort,
+          order: current.order,
+          page: current.page,
+          per_page: current.perPage,
+        },
+      }),
+    { forbiddenMessage: 'イベントの閲覧権限がありません' },
+  );
 
   return (
     <>
@@ -213,7 +179,7 @@ export const SearchList = () => {
             id="event-per-page"
             class="select select-bordered select-sm"
             value={input().perPage}
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
+            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPageOption })}
           >
             {PER_PAGE_OPTIONS.map(perPage => <option value={perPage}>{perPage}件</option>)}
           </select>

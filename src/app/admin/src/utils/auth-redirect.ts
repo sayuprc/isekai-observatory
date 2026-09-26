@@ -32,3 +32,8 @@ export const createLoginRedirectPath = (returnTo: string): string => {
 
   return `/auth/login?${searchParams.toString()}`;
 };
+
+/** セッション切れ (401) のとき、いまの画面を return_to に付けてログイン画面へ移る */
+export const redirectToLogin = (): void => {
+  window.location.href = createLoginRedirectPath(`${window.location.pathname}${window.location.search}`);
+};

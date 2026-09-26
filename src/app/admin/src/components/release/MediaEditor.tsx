@@ -1,5 +1,6 @@
 import { For, Index, Show, createSignal } from 'solid-js';
 import type { ReleaseGetResponse, SongSummary } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createSortable, reorderItems } from '../sortable';
 
@@ -205,7 +206,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
     setIsSearching(false);
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return;
     }
 

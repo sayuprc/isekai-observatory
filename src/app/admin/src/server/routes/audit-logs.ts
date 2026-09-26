@@ -1,8 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { auditLogServiceGetAuditLog, auditLogServiceSearchAuditLogs } from '../../generated';
 import type { AuditAction, AuditTargetType, PerPage } from '../../generated';
-import { withAuthRetry } from '../client';
-import { resolveApiResponse } from '../errors';
+import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
 const AuditActionSchema = t.Union([
@@ -33,23 +32,20 @@ export const auditLogs = new Elysia({ prefix: '/audit-logs' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await auditLogServiceSearchAuditLogs({
-            client,
-            query: {
-              from: query.from || undefined,
-              to: query.to || undefined,
-              action: (query.action as AuditAction | undefined) || undefined,
-              target_type: (query.target_type as AuditTargetType | undefined) || undefined,
-              target_id: query.target_id || undefined,
-              admin_user_name: query.admin_user_name || undefined,
-              page: query.page ?? 1,
-              per_page: (query.per_page ?? 50) as PerPage,
-            },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        auditLogServiceSearchAuditLogs({
+          client,
+          query: {
+            from: query.from || undefined,
+            to: query.to || undefined,
+            action: (query.action as AuditAction | undefined) || undefined,
+            target_type: (query.target_type as AuditTargetType | undefined) || undefined,
+            target_id: query.target_id || undefined,
+            admin_user_name: query.admin_user_name || undefined,
+            page: query.page ?? 1,
+            per_page: (query.per_page ?? 50) as PerPage,
+          },
+        }));
     },
     {
       query: t.Object({
@@ -67,9 +63,8 @@ export const auditLogs = new Elysia({ prefix: '/audit-logs' })
   .get(
     '/:auditLogId',
     async ({ params: { auditLogId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(await auditLogServiceGetAuditLog({ client, path: { auditLogId } }));
-      });
+      return requestWithAuth(authSession, client =>
+        auditLogServiceGetAuditLog({ client, path: { auditLogId } }));
     },
     {
       params: t.Object({

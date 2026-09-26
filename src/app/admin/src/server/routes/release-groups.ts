@@ -7,8 +7,7 @@ import {
   releaseGroupServiceUpdateReleaseGroup,
 } from '../../generated';
 import type { PerPage, ReleaseGroupSearchSortBy, ReleaseGroupTypeValue, SortOrder } from '../../generated';
-import { withAuthRetry } from '../client';
-import { resolveApiResponse } from '../errors';
+import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
 export const releaseGroups = new Elysia({ prefix: '/release-groups' })
@@ -16,17 +15,14 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .post(
     '/',
     async ({ body, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await releaseGroupServiceCreateReleaseGroup({
-            client,
-            body: {
-              ...body,
-              typeValue: body.typeValue as ReleaseGroupTypeValue,
-            },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        releaseGroupServiceCreateReleaseGroup({
+          client,
+          body: {
+            ...body,
+            typeValue: body.typeValue as ReleaseGroupTypeValue,
+          },
+        }));
     },
     {
       body: t.Object({
@@ -41,22 +37,19 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await releaseGroupServiceSearchReleaseGroups({
-            client,
-            query: {
-              title: query.title || undefined,
-              type: query.type as ReleaseGroupTypeValue | undefined,
-              is_display: query.is_display,
-              sort: (query.sort ?? 'first_released_on') as ReleaseGroupSearchSortBy,
-              order: (query.order ?? 'desc') as SortOrder,
-              page: query.page ?? 1,
-              per_page: (query.per_page ?? 25) as PerPage,
-            },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        releaseGroupServiceSearchReleaseGroups({
+          client,
+          query: {
+            title: query.title || undefined,
+            type: query.type as ReleaseGroupTypeValue | undefined,
+            is_display: query.is_display,
+            sort: (query.sort ?? 'first_released_on') as ReleaseGroupSearchSortBy,
+            order: (query.order ?? 'desc') as SortOrder,
+            page: query.page ?? 1,
+            per_page: (query.per_page ?? 25) as PerPage,
+          },
+        }));
     },
     {
       query: t.Object({
@@ -73,11 +66,8 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .get(
     '/:releaseGroupId',
     async ({ params: { releaseGroupId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await releaseGroupServiceGetReleaseGroup({ client, path: { releaseGroupId } }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        releaseGroupServiceGetReleaseGroup({ client, path: { releaseGroupId } }));
     },
     {
       params: t.Object({
@@ -88,15 +78,12 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .put(
     '/:releaseGroupId',
     async ({ params: { releaseGroupId }, body, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await releaseGroupServiceUpdateReleaseGroup({
-            client,
-            path: { releaseGroupId },
-            body,
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        releaseGroupServiceUpdateReleaseGroup({
+          client,
+          path: { releaseGroupId },
+          body,
+        }));
     },
     {
       params: t.Object({
@@ -114,14 +101,11 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .delete(
     '/:releaseGroupId',
     async ({ params: { releaseGroupId }, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        return resolveApiResponse(
-          await releaseGroupServiceDeleteReleaseGroup({
-            client,
-            path: { releaseGroupId },
-          }),
-        );
-      });
+      return requestWithAuth(authSession, client =>
+        releaseGroupServiceDeleteReleaseGroup({
+          client,
+          path: { releaseGroupId },
+        }));
     },
     {
       params: t.Object({

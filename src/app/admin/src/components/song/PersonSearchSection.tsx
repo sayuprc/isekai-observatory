@@ -1,6 +1,7 @@
 import { createSignal, For, Show } from 'solid-js';
 import type { Accessor, Setter } from 'solid-js';
 import type { Person, SongPersonRole } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createSortable, reorderItems } from '../sortable';
 import { addSelectedPersonToRole, type PersonSelections } from './person-selection';
@@ -67,7 +68,7 @@ export const PersonSearchSection = (props: Props) => {
     setSearching(false);
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return;
     }
 

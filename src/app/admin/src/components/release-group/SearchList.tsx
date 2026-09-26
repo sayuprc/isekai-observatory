@@ -1,11 +1,17 @@
-import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { ReleaseGroupSearchSortBy, ReleaseGroupTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
+import {
+  PER_PAGE_OPTIONS,
+  createSearchResource,
+  createSearchState,
+  parsePage,
+  pickParam,
+} from '../../utils/search-list';
+import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
-const PER_PAGE_OPTIONS = [25, 50, 100] as const;
-type PerPage = (typeof PER_PAGE_OPTIONS)[number];
 type DisplayFilter = '' | 'true' | 'false';
 type Sort = ReleaseGroupSearchSortBy;
 type Order = SortOrder;
@@ -17,34 +23,6 @@ const RELEASE_GROUP_TYPE_OPTIONS: Array<{ value: '' | `${ReleaseGroupTypeValue}`
   { value: '3', label: 'EP' },
   { value: '99', label: 'その他' },
 ];
-
-const DEFAULT_PARAMS = {
-  title: '',
-  type: '' as '' | `${ReleaseGroupTypeValue}`,
-  isDisplay: '' as DisplayFilter,
-  sort: 'first_released_on' as Sort,
-  order: 'desc' as Order,
-  page: 1,
-  perPage: 25 as PerPage,
-};
-
-const getInitialParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  const perPageRaw = Number(params.get('per_page'));
-
-  const sort = params.get('sort');
-  const order = params.get('order');
-
-  return {
-    title: params.get('title') ?? DEFAULT_PARAMS.title,
-    type: (params.get('type') ?? DEFAULT_PARAMS.type) as '' | `${ReleaseGroupTypeValue}`,
-    isDisplay: (params.get('is_display') ?? DEFAULT_PARAMS.isDisplay) as DisplayFilter,
-    sort: sort === 'first_released_on' || sort === 'title' ? sort : DEFAULT_PARAMS.sort,
-    order: order === 'asc' || order === 'desc' ? order : DEFAULT_PARAMS.order,
-    page: Number(params.get('page') ?? String(DEFAULT_PARAMS.page)) || DEFAULT_PARAMS.page,
-    perPage: (PER_PAGE_OPTIONS.includes(perPageRaw as PerPage) ? perPageRaw : DEFAULT_PARAMS.perPage) as PerPage,
-  };
-};
 
 const normalizeDateDisplayValue = (value: unknown): string => {
   if (value instanceof Date) {
@@ -70,137 +48,66 @@ const buildDetailHref = (releaseGroupId: string): string => {
   return back ? `${path}?back=${encodeURIComponent(back)}` : path;
 };
 
+type SearchParams = {
+  title: string;
+  type: '' | `${ReleaseGroupTypeValue}`;
+  isDisplay: DisplayFilter;
+  sort: Sort;
+  order: Order;
+  page: number;
+  perPage: PerPage;
+};
+
+const DEFAULT_PARAMS: SearchParams = {
+  title: '',
+  type: '',
+  isDisplay: '',
+  sort: 'first_released_on',
+  order: 'desc',
+  page: 1,
+  perPage: 25,
+};
+
+const parseParams = (query: URLSearchParams): SearchParams => ({
+  title: query.get('title') ?? '',
+  type: pickParam(query.get('type'), RELEASE_GROUP_TYPE_OPTIONS.map(option => option.value), ''),
+  isDisplay: pickParam(query.get('is_display'), ['true', 'false'] as const, ''),
+  sort: pickParam(query.get('sort'), ['first_released_on', 'title'] as const, DEFAULT_PARAMS.sort),
+  order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
+  page: parsePage(query.get('page')),
+  perPage: pickParam(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
+});
+
+const toQuery = (params: SearchParams) => ({
+  title: params.title,
+  type: params.type,
+  is_display: params.isDisplay,
+  sort: params.sort,
+  order: params.order,
+  page: params.page,
+  per_page: params.perPage,
+});
+
 export const SearchList = () => {
-  const initial = getInitialParams();
+  const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
+    defaults: DEFAULT_PARAMS,
+    parse: parseParams,
+    toQuery,
+  });
 
-  const [title, setTitle] = createSignal(initial.title);
-  const [type, setType] = createSignal(initial.type);
-  const [isDisplay, setIsDisplay] = createSignal<DisplayFilter>(initial.isDisplay);
-  const [sort, setSort] = createSignal<Sort>(initial.sort);
-  const [order, setOrder] = createSignal<Order>(initial.order);
-  const [page, setPage] = createSignal(initial.page);
-  const [perPage, setPerPage] = createSignal<PerPage>(initial.perPage);
-
-  const [inputTitle, setInputTitle] = createSignal(initial.title);
-  const [inputType, setInputType] = createSignal(initial.type);
-  const [inputIsDisplay, setInputIsDisplay] = createSignal<DisplayFilter>(initial.isDisplay);
-  const [inputSort, setInputSort] = createSignal<Sort>(initial.sort);
-  const [inputOrder, setInputOrder] = createSignal<Order>(initial.order);
-  const [inputPerPage, setInputPerPage] = createSignal<PerPage>(initial.perPage);
-
-  const updateUrl = (params: {
-    title: string;
-    type: string;
-    isDisplay: DisplayFilter;
-    sort: Sort;
-    order: Order;
-    page: number;
-    perPage: number;
-  }) => {
-    const searchParams = new URLSearchParams();
-    if (params.title) searchParams.set('title', params.title);
-    if (params.type) searchParams.set('type', params.type);
-    if (params.isDisplay) searchParams.set('is_display', params.isDisplay);
-    if (params.sort) searchParams.set('sort', params.sort);
-    if (params.order) searchParams.set('order', params.order);
-    searchParams.set('page', String(params.page));
-    searchParams.set('per_page', String(params.perPage));
-    history.pushState(null, '', `?${searchParams.toString()}`);
-  };
-
-  const [fetchError, setFetchError] = createSignal<string | null>(null);
-
-  const [data, { refetch }] = createResource(
-    () => ({
-      title: title(),
-      type: type(),
-      isDisplay: isDisplay(),
-      sort: sort(),
-      order: order(),
-      page: page(),
-      perPage: perPage(),
+  const { data, refetch, fetchError } = createSearchResource(params, current =>
+    client.api['release-groups'].search.get({
+      query: {
+        title: current.title,
+        type: current.type || undefined,
+        is_display: current.isDisplay === '' ? undefined : current.isDisplay === 'true',
+        sort: current.sort,
+        order: current.order,
+        page: current.page,
+        per_page: current.perPage,
+      },
     }),
-    async (params) => {
-      setFetchError(null);
-
-      const { data, status } = await client.api['release-groups'].search.get({
-        query: {
-          title: params.title,
-          type: params.type || undefined,
-          is_display: params.isDisplay === '' ? undefined : params.isDisplay === 'true',
-          sort: params.sort,
-          order: params.order,
-          page: params.page,
-          per_page: params.perPage,
-        },
-      });
-
-      if (status === 401) {
-        window.location.href = '/auth/login';
-        return;
-      }
-
-      if (!data) {
-        setFetchError('データの取得に失敗しました。再度お試しください。');
-        return;
-      }
-
-      return data;
-    },
   );
-
-  const handleSearch = (e: Event) => {
-    e.preventDefault();
-
-    const newPage = 1;
-
-    setTitle(inputTitle());
-    setType(inputType());
-    setIsDisplay(inputIsDisplay());
-    setSort(inputSort());
-    setOrder(inputOrder());
-    setPerPage(inputPerPage());
-    setPage(newPage);
-    updateUrl({
-      title: inputTitle(),
-      type: inputType(),
-      isDisplay: inputIsDisplay(),
-      sort: inputSort(),
-      order: inputOrder(),
-      page: newPage,
-      perPage: inputPerPage(),
-    });
-  };
-
-  const handlePageChange = (nextPage: number) => {
-    setPage(nextPage);
-    updateUrl({
-      title: title(),
-      type: type(),
-      isDisplay: isDisplay(),
-      sort: sort(),
-      order: order(),
-      page: nextPage,
-      perPage: perPage(),
-    });
-  };
-
-  const handleReset = () => {
-    setInputTitle(DEFAULT_PARAMS.title);
-    setInputType(DEFAULT_PARAMS.type);
-    setInputIsDisplay(DEFAULT_PARAMS.isDisplay);
-    setInputSort(DEFAULT_PARAMS.sort);
-    setInputOrder(DEFAULT_PARAMS.order);
-    setInputPerPage(DEFAULT_PARAMS.perPage);
-    setTitle(DEFAULT_PARAMS.title);
-    setType(DEFAULT_PARAMS.type);
-    setIsDisplay(DEFAULT_PARAMS.isDisplay);
-    setSort(DEFAULT_PARAMS.sort);
-    setOrder(DEFAULT_PARAMS.order);
-    setPage(DEFAULT_PARAMS.page);
-    setPerPage(DEFAULT_PARAMS.perPage);
-    updateUrl(DEFAULT_PARAMS);
-  };
 
   return (
     <>
@@ -213,8 +120,8 @@ export const SearchList = () => {
             type="text"
             id="title"
             name="title"
-            value={inputTitle()}
-            onInput={e => setInputTitle(e.currentTarget.value)}
+            value={input().title}
+            onInput={e => updateInput({ title: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="作品名で検索"
           />
@@ -227,11 +134,11 @@ export const SearchList = () => {
             id="type"
             name="type"
             class="select select-bordered select-sm"
-            onChange={e => setInputType(e.currentTarget.value as '' | `${ReleaseGroupTypeValue}`)}
+            onChange={e => updateInput({ type: e.currentTarget.value as '' | `${ReleaseGroupTypeValue}` })}
           >
             <For each={RELEASE_GROUP_TYPE_OPTIONS}>
               {option => (
-                <option value={option.value} selected={inputType() === option.value}>
+                <option value={option.value} selected={input().type === option.value}>
                   {option.label}
                 </option>
               )}
@@ -246,15 +153,15 @@ export const SearchList = () => {
             id="isDisplay"
             name="isDisplay"
             class="select select-bordered select-sm"
-            onChange={e => setInputIsDisplay(e.currentTarget.value as DisplayFilter)}
+            onChange={e => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
           >
-            <option value="" selected={inputIsDisplay() === ''}>
+            <option value="" selected={input().isDisplay === ''}>
               すべて
             </option>
-            <option value="true" selected={inputIsDisplay() === 'true'}>
+            <option value="true" selected={input().isDisplay === 'true'}>
               表示する
             </option>
-            <option value="false" selected={inputIsDisplay() === 'false'}>
+            <option value="false" selected={input().isDisplay === 'false'}>
               表示しない
             </option>
           </select>
@@ -267,12 +174,12 @@ export const SearchList = () => {
             id="sort"
             name="sort"
             class="select select-bordered select-sm"
-            onChange={e => setInputSort(e.currentTarget.value as Sort)}
+            onChange={e => updateInput({ sort: e.currentTarget.value as Sort })}
           >
-            <option value="first_released_on" selected={inputSort() === 'first_released_on'}>
+            <option value="first_released_on" selected={input().sort === 'first_released_on'}>
               初リリース日
             </option>
-            <option value="title" selected={inputSort() === 'title'}>
+            <option value="title" selected={input().sort === 'title'}>
               タイトル
             </option>
           </select>
@@ -285,12 +192,12 @@ export const SearchList = () => {
             id="order"
             name="order"
             class="select select-bordered select-sm"
-            onChange={e => setInputOrder(e.currentTarget.value as Order)}
+            onChange={e => updateInput({ order: e.currentTarget.value as Order })}
           >
-            <option value="desc" selected={inputOrder() === 'desc'}>
+            <option value="desc" selected={input().order === 'desc'}>
               降順
             </option>
-            <option value="asc" selected={inputOrder() === 'asc'}>
+            <option value="asc" selected={input().order === 'asc'}>
               昇順
             </option>
           </select>
@@ -303,11 +210,11 @@ export const SearchList = () => {
             id="perPage"
             name="perPage"
             class="select select-bordered select-sm"
-            onChange={e => setInputPerPage(Number(e.currentTarget.value) as PerPage)}
+            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
               {n => (
-                <option value={n} selected={inputPerPage() === n}>
+                <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
               )}
@@ -389,7 +296,7 @@ export const SearchList = () => {
       </div>
 
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
-        <Pagination page={page()} maxPage={data()!.maxPage} onChange={handlePageChange} />
+        <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>
     </>
   );

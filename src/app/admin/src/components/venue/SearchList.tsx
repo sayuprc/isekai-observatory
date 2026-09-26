@@ -1,134 +1,78 @@
-import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { SortOrder, VenueKindValue, VenueSearchSortBy } from '../../generated';
 import { client } from '../../utils/client';
+import {
+  PER_PAGE_OPTIONS,
+  createSearchResource,
+  createSearchState,
+  parsePage,
+  pickParam,
+} from '../../utils/search-list';
+import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
-const PER_PAGE_OPTIONS = [25, 50, 100] as const;
-type PerPage = (typeof PER_PAGE_OPTIONS)[number];
 type KindFilter = '' | `${VenueKindValue}`;
 type SortBy = VenueSearchSortBy;
 
-const DEFAULT_PARAMS = {
+type SearchParams = {
+  name: string;
+  kind: KindFilter;
+  sort: SortBy;
+  order: SortOrder;
+  page: number;
+  perPage: PerPage;
+};
+
+const DEFAULT_PARAMS: SearchParams = {
   name: '',
-  kind: '' as KindFilter,
-  sort: 'name' as SortBy,
-  order: 'asc' as SortOrder,
+  kind: '',
+  sort: 'name',
+  order: 'asc',
   page: 1,
-  perPage: 25 as PerPage,
+  perPage: 25,
 };
 
-const getInitialParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  const perPageRaw = Number(params.get('per_page'));
-  const kind = params.get('kind');
-  const sort = params.get('sort');
+const parseParams = (query: URLSearchParams): SearchParams => ({
+  name: query.get('name') ?? '',
+  kind: pickParam(query.get('kind'), ['1', '2'] as const, ''),
+  sort: pickParam(query.get('sort'), ['name'] as const, DEFAULT_PARAMS.sort),
+  order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
+  page: parsePage(query.get('page')),
+  perPage: pickParam(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
+});
 
-  return {
-    name: params.get('name') ?? '',
-    kind: (kind === '1' || kind === '2' ? kind : '') as KindFilter,
-    sort: (sort === 'name' ? sort : 'name') as SortBy,
-    order: (params.get('order') === 'desc' ? 'desc' : 'asc') as SortOrder,
-    page: Number(params.get('page') ?? '1') || 1,
-    perPage: (PER_PAGE_OPTIONS.includes(perPageRaw as PerPage) ? perPageRaw : 25) as PerPage,
-  };
-};
+const toQuery = (params: SearchParams) => ({
+  name: params.name,
+  kind: params.kind,
+  sort: params.sort,
+  order: params.order,
+  page: params.page,
+  per_page: params.perPage,
+});
 
 export const SearchList = () => {
-  const initial = getInitialParams();
-  const [name, setName] = createSignal(initial.name);
-  const [kind, setKind] = createSignal<KindFilter>(initial.kind);
-  const [sort, setSort] = createSignal<SortBy>(initial.sort);
-  const [order, setOrder] = createSignal(initial.order);
-  const [page, setPage] = createSignal(initial.page);
-  const [perPage, setPerPage] = createSignal<PerPage>(initial.perPage);
-  const [inputName, setInputName] = createSignal(initial.name);
-  const [inputKind, setInputKind] = createSignal<KindFilter>(initial.kind);
-  const [inputSort, setInputSort] = createSignal<SortBy>(initial.sort);
-  const [inputOrder, setInputOrder] = createSignal(initial.order);
-  const [inputPerPage, setInputPerPage] = createSignal<PerPage>(initial.perPage);
-  const [fetchError, setFetchError] = createSignal<string | null>(null);
+  const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
+    defaults: DEFAULT_PARAMS,
+    parse: parseParams,
+    toQuery,
+  });
 
-  const updateUrl = (params: typeof DEFAULT_PARAMS) => {
-    const query = new URLSearchParams();
-    if (params.name) query.set('name', params.name);
-    if (params.kind) query.set('kind', params.kind);
-    query.set('sort', params.sort);
-    query.set('order', params.order);
-    query.set('page', String(params.page));
-    query.set('per_page', String(params.perPage));
-    history.pushState(null, '', `?${query.toString()}`);
-  };
-
-  const [data, { refetch }] = createResource(
-    () => ({ name: name(), kind: kind(), sort: sort(), order: order(), page: page(), perPage: perPage() }),
-    async (params) => {
-      setFetchError(null);
-      const response = await client.api.venues.search.get({
+  const { data, refetch, fetchError } = createSearchResource(
+    params,
+    current =>
+      client.api.venues.search.get({
         query: {
-          name: params.name,
-          kind: params.kind ? Number(params.kind) as VenueKindValue : undefined,
-          sort: params.sort,
-          order: params.order,
-          page: params.page,
-          per_page: params.perPage,
+          name: current.name,
+          kind: current.kind || undefined,
+          sort: current.sort,
+          order: current.order,
+          page: current.page,
+          per_page: current.perPage,
         },
-      });
-
-      if (response.status === 401) {
-        window.location.href = '/auth/login';
-        return;
-      }
-      if (response.status === 403) {
-        setFetchError('開催先の閲覧権限がありません');
-        return;
-      }
-      if (!response.data) {
-        setFetchError('データの取得に失敗しました。再度お試しください。');
-        return;
-      }
-      return response.data;
-    },
+      }),
+    { forbiddenMessage: '開催先の閲覧権限がありません' },
   );
-
-  const handleSearch = (event: Event) => {
-    event.preventDefault();
-    const next = {
-      name: inputName(),
-      kind: inputKind(),
-      sort: inputSort(),
-      order: inputOrder(),
-      page: 1,
-      perPage: inputPerPage(),
-    };
-    setName(next.name);
-    setKind(next.kind);
-    setSort(next.sort);
-    setOrder(next.order);
-    setPage(next.page);
-    setPerPage(next.perPage);
-    updateUrl(next);
-  };
-
-  const handlePageChange = (nextPage: number) => {
-    setPage(nextPage);
-    updateUrl({ name: name(), kind: kind(), sort: sort(), order: order(), page: nextPage, perPage: perPage() });
-  };
-
-  const handleReset = () => {
-    setInputName('');
-    setInputKind('');
-    setInputSort('name');
-    setInputOrder('asc');
-    setInputPerPage(25);
-    setName('');
-    setKind('');
-    setSort('name');
-    setOrder('asc');
-    setPage(1);
-    setPerPage(25);
-    updateUrl(DEFAULT_PARAMS);
-  };
 
   return (
     <>
@@ -138,8 +82,8 @@ export const SearchList = () => {
           <input
             id="name"
             class="input input-bordered input-sm"
-            value={inputName()}
-            onInput={e => setInputName(e.currentTarget.value)}
+            value={input().name}
+            onInput={e => updateInput({ name: e.currentTarget.value })}
             placeholder="開催先名で検索"
           />
         </fieldset>
@@ -148,11 +92,11 @@ export const SearchList = () => {
           <select
             id="kind"
             class="select select-bordered select-sm"
-            onChange={e => setInputKind(e.currentTarget.value as KindFilter)}
+            onChange={e => updateInput({ kind: e.currentTarget.value as KindFilter })}
           >
-            <option value="" selected={inputKind() === ''}>すべて</option>
-            <option value="1" selected={inputKind() === '1'}>現地</option>
-            <option value="2" selected={inputKind() === '2'}>オンライン</option>
+            <option value="" selected={input().kind === ''}>すべて</option>
+            <option value="1" selected={input().kind === '1'}>現地</option>
+            <option value="2" selected={input().kind === '2'}>オンライン</option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
@@ -160,9 +104,9 @@ export const SearchList = () => {
           <select
             id="sort"
             class="select select-bordered select-sm"
-            onChange={e => setInputSort(e.currentTarget.value as SortBy)}
+            onChange={e => updateInput({ sort: e.currentTarget.value as SortBy })}
           >
-            <option value="name" selected={inputSort() === 'name'}>開催先名</option>
+            <option value="name" selected={input().sort === 'name'}>開催先名</option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
@@ -170,10 +114,10 @@ export const SearchList = () => {
           <select
             id="order"
             class="select select-bordered select-sm"
-            onChange={e => setInputOrder(e.currentTarget.value as SortOrder)}
+            onChange={e => updateInput({ order: e.currentTarget.value as SortOrder })}
           >
-            <option value="asc" selected={inputOrder() === 'asc'}>昇順</option>
-            <option value="desc" selected={inputOrder() === 'desc'}>降順</option>
+            <option value="asc" selected={input().order === 'asc'}>昇順</option>
+            <option value="desc" selected={input().order === 'desc'}>降順</option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
@@ -181,9 +125,9 @@ export const SearchList = () => {
           <select
             id="perPage"
             class="select select-bordered select-sm"
-            onChange={e => setInputPerPage(Number(e.currentTarget.value) as PerPage)}
+            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
-            <For each={PER_PAGE_OPTIONS}>{n => <option value={n} selected={inputPerPage() === n}>{n}件</option>}</For>
+            <For each={PER_PAGE_OPTIONS}>{n => <option value={n} selected={input().perPage === n}>{n}件</option>}</For>
           </select>
         </fieldset>
         <button type="submit" class="btn btn-primary btn-sm mb-1">検索</button>
@@ -235,7 +179,7 @@ export const SearchList = () => {
         </table>
       </div>
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
-        <Pagination page={page()} maxPage={data()!.maxPage} onChange={handlePageChange} />
+        <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>
     </>
   );

@@ -6,6 +6,7 @@ import type {
   SongType,
   SongTypeValue,
 } from '../../generated';
+import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
@@ -43,7 +44,7 @@ export const CreateView = () => {
     const { data, status } = await client.api.songs['create-form'].get();
 
     if (status === 401) {
-      window.location.href = '/auth/login';
+      redirectToLogin();
       return { status: 'error' };
     }
 
