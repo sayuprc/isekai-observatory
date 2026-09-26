@@ -1,0 +1,246 @@
+/* 楽曲一覧と楽曲詳細 */
+
+@keyframes viewer-card-in {
+
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .home-feature,
+  .song-grid-card:nth-child(-n + 8) {
+    animation: viewer-card-in 0.36s ease-out both;
+  }
+
+  .song-grid-card:nth-child(2) {
+    animation-delay: 35ms;
+  }
+
+  .song-grid-card:nth-child(3) {
+    animation-delay: 70ms;
+  }
+
+  .song-grid-card:nth-child(4) {
+    animation-delay: 105ms;
+  }
+}
+
+.media-card-grid,
+.song-grid {
+  display: grid;
+  gap: 28px;
+}
+
+.media-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.song-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.media-card,
+.song-grid-card {
+  display: block;
+}
+
+/* 一覧は 300 件超を一度に描くので、画面外のカードはレイアウトと描画を省く
+   高さは auto で実測値を再利用させ、初回だけ概算値を使う */
+
+.song-grid-card {
+  position: relative;
+  min-width: 0;
+
+  /* auto 付きを解釈しないブラウザ向けに固定値を先に置く。未指定だと画面外カードが高さ 0 に潰れる */
+
+  contain-intrinsic-size: 260px;
+  contain-intrinsic-size: auto 260px;
+  padding: 12px 12px 26px;
+  content-visibility: auto;
+  overflow: hidden;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.media-card-body,
+.song-grid-body {
+  padding: 22px 12px 0;
+}
+
+.media-card-title,
+.song-grid-title {
+  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  letter-spacing: 0.04em;
+}
+
+.song-grid-title {
+  font-size: 22px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.song-grid-card::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.song-grid-card:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+
+  .song-grid-card:hover {
+    border-color: var(--accent-strong);
+    box-shadow: 0 14px 28px color-mix(in oklab, var(--fg) 7%, transparent);
+    transform: translateY(-6px);
+  }
+
+  .song-grid-card:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.song-grid-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.song-credit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+}
+
+.song-credit-item {
+  min-width: 0;
+  padding: 24px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.song-credit-label {
+  margin: 0 0 14px;
+  font-family: "Shippori Mincho", serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--fg-muted);
+}
+
+.song-credit-value {
+  margin: 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* 楽曲詳細の収録リリース一覧。画像の代わりに色見本を置く */
+
+.rel-swatch {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  background: var(--c);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 7%);
+}
+
+.song-detail-content .rel-swatch {
+  display: none;
+}
+
+/* サムネイルが無い楽曲は収録リリースの代表色を地に敷く */
+
+.song-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  aspect-ratio: var(--song-tile-aspect, 1 / 1);
+  padding: 16px;
+  overflow: hidden;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line);
+}
+
+.home-feature .song-tile {
+  aspect-ratio: 16 / 9;
+}
+
+.song-grid-card:has(.song-tile-image) .song-tile {
+  border: 0;
+  border-radius: 2px;
+}
+
+.song-tile.has-color-fallback {
+  background:
+    radial-gradient(ellipse at 30% 20%, color-mix(in oklab, var(--song-tile-color) 66%, transparent), transparent 50%),
+    radial-gradient(ellipse at 70% 80%, color-mix(in oklab, var(--song-tile-color) 40%, transparent), transparent 60%),
+    linear-gradient(135deg, var(--song-tile-color), color-mix(in oklab, var(--song-tile-color) 55%, var(--bg-elev-2)));
+}
+
+.song-tile-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song-tile-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--fg-faint);
+}
+
+.song-tile-meta-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.song-tile-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in oklab, var(--fg) 30%, transparent);
+}

@@ -1,0 +1,164 @@
+/* デザイントークンとテーマごとの配色 (themes.ts の THEMES と対応する) */
+
+:root {
+  --bg: #0e0e10;
+  --bg-elev: #151518;
+  --bg-elev-2: #1c1c21;
+  --fg: #f4f4f5;
+  --fg-muted: #939395;
+  --fg-faint: #808082;
+  --line: #353537;
+  --line-soft: #232325;
+  --accent: #d31b28;
+  --accent-strong: #dd4d57;
+  --accent-faint: #451217;
+  --accent-contrast: #fff;
+  --accent-2: #fff;
+  --accent-2-strong: #fff;
+  --accent-2-faint: #515153;
+  --special: #989899;
+  --special-strong: #bababc;
+  --special-faint: #535355;
+  --paper: #1c1c21;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+[data-palette="anemone-1"] {
+  --bg: #0e0e10;
+  --bg-elev: #151518;
+  --bg-elev-2: #1c1c21;
+  --fg: #f4f4f5;
+  --fg-muted: #939395;
+  --fg-faint: #808082;
+  --line: #353537;
+  --line-soft: #232325;
+  --accent: #d31b28;
+  --accent-strong: #dd4d57;
+  --accent-faint: #451217;
+  --accent-contrast: #fff;
+  --accent-2: #fff;
+  --accent-2-strong: #fff;
+  --accent-2-faint: #515153;
+  --special: #989899;
+  --special-strong: #bababc;
+  --special-faint: #535355;
+  --paper: #1c1c21;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+[data-palette="anemone-2"] {
+  --bg: #f3eeee;
+  --bg-elev: #faf7f8;
+  --bg-elev-2: #e2d9dc;
+  --fg: #1e1f22;
+  --fg-muted: #777678;
+  --fg-faint: #727274;
+  --line: #cfcbcb;
+  --line-soft: #e0dbdc;
+  --accent: #60c3d0;
+  --accent-strong: #305f66;
+  --accent-faint: #cae2e6;
+  --accent-contrast: #1e1f22;
+  --accent-2: #4d4e88;
+  --accent-2-strong: #414270;
+  --accent-2-faint: #c5c1d1;
+  --special: #737274;
+  --special-strong: #535355;
+  --special-faint: #b3b0b1;
+  --paper: #e2d9dc;
+  --shadow: 0 20px 60px rgba(40, 40, 60, 0.07);
+}
+
+[data-palette="nemophila-1"] {
+  --bg: #f5f7fa;
+  --bg-elev: #fff;
+  --bg-elev-2: #d2e6ff;
+  --fg: #1a1d20;
+  --fg-muted: #76797c;
+  --fg-faint: #727477;
+  --line: #d0d2d5;
+  --line-soft: #e1e3e6;
+  --accent: #1c8bf4;
+  --accent-strong: #1a72c6;
+  --accent-faint: #b8d9f8;
+  --accent-contrast: #fff;
+  --accent-2: #22252a;
+  --accent-2-strong: #1e2125;
+  --accent-2-faint: #babcc0;
+  --special: #727477;
+  --special-strong: #515456;
+  --special-faint: #b3b6b9;
+  --paper: #d2e6ff;
+  --shadow: 0 20px 60px rgba(40, 40, 60, 0.07);
+}
+
+[data-palette="nemophila-2"] {
+  --bg: #111318;
+  --bg-elev: #1b1e26;
+  --bg-elev-2: #1c2029;
+  --fg: #f1f3f6;
+  --fg-muted: #939599;
+  --fg-faint: #808284;
+  --line: #37393e;
+  --line-soft: #25272c;
+  --accent: #1d70ec;
+  --accent-strong: #4f8ff0;
+  --accent-faint: #142d53;
+  --accent-contrast: #fff;
+  --accent-2: #d4d9e2;
+  --accent-2-strong: #dde1e8;
+  --accent-2-faint: #484a51;
+  --special: #97999d;
+  --special-strong: #b9bbbe;
+  --special-faint: #54565b;
+  --paper: #1c2029;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+[data-palette="sunflower-1"] {
+  --bg: #faf9f6;
+  --bg-elev: #fff;
+  --bg-elev-2: #fef9c3;
+  --fg: #1e201e;
+  --fg-muted: #7a7b79;
+  --fg-faint: #727774;
+  --line: #d5d4d1;
+  --line-soft: #e6e5e3;
+  --accent: #fad423;
+  --accent-strong: #7a6813;
+  --accent-faint: #faefbb;
+  --accent-contrast: #1e201e;
+  --accent-2: #317781;
+  --accent-2-strong: #2a626a;
+  --accent-2-faint: #c2d5d5;
+  --special: #767774;
+  --special-strong: #555654;
+  --special-faint: #b8b8b5;
+  --paper: #fef9c3;
+  --shadow: 0 20px 60px rgba(40, 40, 60, 0.07);
+}
+
+/* sunflower-2 は現在 THEMES から外しているが将来再提供する予定のため配色定義を残す */
+
+[data-palette="sunflower-2"] {
+  --bg: #0f0f11;
+  --bg-elev: #18181c;
+  --bg-elev-2: #222227;
+  --fg: #f3f4f6;
+  --fg-muted: #939496;
+  --fg-faint: #808284;
+  --line: #363638;
+  --line-soft: #242426;
+  --accent: #c5a358;
+  --accent-strong: #d2b77d;
+  --accent-faint: #423825;
+  --accent-contrast: #0f0f11;
+  --accent-2: #dc2626;
+  --accent-2-strong: #e45656;
+  --accent-2-faint: #481517;
+  --special: #98989a;
+  --special-strong: #babbbd;
+  --special-faint: #535456;
+  --paper: #222227;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}

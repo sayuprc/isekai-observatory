@@ -1,0 +1,75 @@
+/* プロフィール (pages/_profile.astro) */
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 64px;
+}
+
+.profile-portrait {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background:
+    radial-gradient(ellipse at 30% 20%, color-mix(in oklab, var(--accent) 40%, transparent) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, color-mix(in oklab, var(--accent) 26%, transparent) 0%, transparent 60%),
+    linear-gradient(135deg, var(--bg-elev), var(--bg-elev-2));
+  border: 1px solid var(--line);
+}
+
+.profile-portrait-meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  margin-top: 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--fg-muted);
+  letter-spacing: 0.1em;
+  border: 1px solid var(--line);
+}
+
+.chronology-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px 32px;
+}
+
+.chronology-grid-mock {
+  gap: 32px;
+}
+
+.chronology-grid-mock > :nth-child(odd) {
+  padding-right: 32px;
+  font-family: Spectral, serif;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--accent-strong);
+  border-right: 1px solid var(--line);
+}
+
+.chronology-grid-mock > :nth-child(even) {
+  padding: 8px 0 24px;
+  margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.9;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.chronology-grid > :nth-child(odd) {
+  padding-right: 32px;
+  font-family: Spectral, serif;
+  font-size: 36px;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--accent-strong);
+  border-right: 1px solid var(--line);
+}
+
+.chronology-grid > :nth-child(even) {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.9;
+  border-bottom: 1px solid var(--line-soft);
+}

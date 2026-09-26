@@ -1,6 +1,6 @@
 // カラーテーマ定義
 // 衣装をベースにした配色のメタデータ
-// 実際の色値は src/styles/viewer.css の [data-palette="..."] が Source of Truth で、ここは value / 表示名 / swatch を保持する
+// 実際の色値は src/styles/tokens.css の [data-palette="..."] が Source of Truth で、ここは value / 表示名 / swatch を保持する
 
 export type ThemeTone = 'dark' | 'light';
 

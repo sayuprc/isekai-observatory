@@ -1,0 +1,154 @@
+/* 要素の基本スタイル、フォーカス表示、スクロールバーなど全ページ共通の土台 */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--fg);
+  background: var(--bg);
+  text-rendering: optimizelegibility;
+  transition:
+    background-color 0.5s ease,
+    color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  /* ドロワー表示時に viewport のスクロールバー幅が消えても背面を動かさない */
+  scrollbar-gutter: stable;
+}
+
+body {
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+.viewer-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--accent) 7%, transparent),
+    color-mix(in oklab, var(--accent-faint) 20%, transparent) 65%,
+    transparent
+  );
+}
+
+.viewer-ambient-light,
+.viewer-ambient-wash {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.viewer-ambient-light {
+  top: -230px;
+  right: -260px;
+  width: 850px;
+  height: 850px;
+  background: radial-gradient(circle, color-mix(in oklab, var(--accent) 15%, transparent), transparent 68%);
+}
+
+.viewer-ambient-wash {
+  top: 480px;
+  left: -350px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, color-mix(in oklab, var(--accent-2) 9%, transparent), transparent 70%);
+}
+
+::selection {
+  color: var(--fg);
+  background: color-mix(in oklab, var(--accent) 40%, transparent);
+}
+
+/* キーボード操作時のフォーカス表示 */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 200;
+  padding: 10px 18px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 14px;
+  color: var(--accent-contrast);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  background: var(--accent);
+  border-radius: 0 0 6px 6px;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+.font-en {
+  font-family: "EB Garamond", serif;
+  letter-spacing: 0.02em;
+}
+
+.eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.label-mono {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--fg-muted);
+  letter-spacing: 0.06em;
+}
+
+/* スクロールバー */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-faint);
+}

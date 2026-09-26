@@ -1,0 +1,344 @@
+/* メディア一覧とメディア詳細 */
+
+.media-card-title {
+  font-size: 18px;
+}
+
+.media-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.recent-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+}
+
+.post-card-compact {
+  padding: 16px;
+}
+
+.post-card-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.platform-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.platform-badge-x {
+  color: #fff;
+  background: #000;
+}
+
+.platform-badge-ig {
+  color: #fff;
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.platform-badge-yt {
+  color: #fff;
+  background: #f03;
+}
+
+.platform-badge-blog {
+  color: var(--bg);
+  background: var(--fg);
+}
+
+.post-card-title {
+  font-family: "Shippori Mincho", serif;
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.post-card-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 6;
+  font-family: "Noto Serif JP", serif;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--fg);
+  -webkit-box-orient: vertical;
+}
+
+.post-card-compact .post-card-text {
+  -webkit-line-clamp: 4;
+}
+
+.post-card-image {
+  aspect-ratio: 4 / 3;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--tile-color) 70%, transparent),
+      color-mix(in oklab, var(--tile-color) 30%, transparent)
+    ),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 8px);
+}
+
+.post-card-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--fg-muted);
+  letter-spacing: 0.1em;
+}
+
+.media-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.media-list-row {
+  display: grid;
+  grid-template-columns: 80px 240px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.media-list-thumb {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.media-featured-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 48px;
+  margin-bottom: 64px;
+}
+
+.media-featured-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feature-subtitle {
+  margin-bottom: 24px;
+  font-family: "EB Garamond", serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--accent-strong);
+}
+
+.media-mosaic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 180px;
+  gap: 16px;
+}
+
+.media-mosaic-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.media-mosaic-lg {
+  grid-row: span 2;
+  grid-column: span 2;
+}
+
+.media-mosaic-md {
+  grid-column: span 2;
+}
+
+.media-mosaic-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 40%, color-mix(in oklab, var(--tile-color) 80%, transparent), transparent 55%),
+    radial-gradient(ellipse at 75% 60%, color-mix(in oklab, var(--tile-color) 50%, transparent), transparent 60%),
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--tile-color) 80%, transparent),
+      color-mix(in oklab, var(--tile-color) 30%, transparent)
+    );
+}
+
+.media-mosaic-copy {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  color: white;
+}
+
+.media-mosaic-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.media-posts-grid {
+  margin-top: 32px;
+}
+
+.media-detail-thumbnail-link {
+  position: relative;
+  display: block;
+  max-width: 800px;
+  margin: 0 auto 32px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.media-detail-thumbnail-overlay {
+  position: absolute;
+  inset: auto 12px 12px auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.08em;
+  background: rgb(0 0 0 / 70%);
+  border-radius: 3px;
+  opacity: 1;
+}
+
+.media-detail-thumbnail {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.media-detail-thumbnail-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent) 24%, var(--bg-elev-2)),
+    color-mix(in oklab, var(--accent) 8%, var(--bg-elev-2))
+  );
+}
+
+.media-detail-thumbnail-placeholder-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  color: var(--fg-muted);
+  letter-spacing: 0.1em;
+}
+
+/* チップ内のメディアサムネイル(楽曲ドロワーの関連メディア一覧) */
+
+.rel-thumb {
+  display: block;
+  flex-shrink: 0;
+  width: 96px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.detail-page-content .rel-thumb {
+  border-radius: 3px;
+}
+
+.rel-thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent) 24%, var(--bg-elev-2)),
+    color-mix(in oklab, var(--accent) 8%, var(--bg-elev-2))
+  );
+}
+
+.rel-thumb-placeholder-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--fg-muted);
+  letter-spacing: 0.08em;
+}
+
+.mv-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 25% 40%, color-mix(in oklab, var(--tile-color) 80%, transparent), transparent 55%),
+    radial-gradient(ellipse at 75% 60%, color-mix(in oklab, var(--tile-color) 50%, transparent), transparent 60%),
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--tile-color) 80%, transparent),
+      color-mix(in oklab, var(--tile-color) 30%, transparent)
+    );
+}
+
+.mv-thumb::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 4px);
+}
+
+.mv-thumb-label {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  z-index: 1;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.15em;
+}
+
+.mv-thumb-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  transform: translate(-50%, -50%);
+}
+
+.mv-thumb .mv-thumb-play svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}

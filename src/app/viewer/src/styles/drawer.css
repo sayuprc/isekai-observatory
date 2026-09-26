@@ -1,0 +1,157 @@
+/* 詳細ドロワー (DetailDrawer) の枠組みと、ドロワー内で詳細本文を詰める上書き */
+
+/* ─── Detail Panel ─── */
+
+/* ドロワー表示中は背面ページをスクロールさせない */
+
+body.drawer-lock {
+  overflow: hidden;
+}
+
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+  background: color-mix(in oklab, var(--bg) 78%, transparent);
+  backdrop-filter: blur(14px);
+  animation: page-in 0.25s ease;
+}
+
+.detail-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(740px, 94vw);
+  height: 100%;
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  animation: slide-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes slide-in {
+
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.detail-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--line);
+}
+
+.drawer-head-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.drawer-share-btn {
+  width: auto;
+  min-width: 64px;
+  padding: 0 12px;
+  border-radius: 999px;
+}
+
+.drawer-open-link {
+  text-decoration: none;
+}
+
+.detail-body {
+  position: relative;
+  flex: 1;
+  padding: 32px 28px 64px;
+  overflow-y: auto;
+}
+
+.drawer-skeleton {
+  display: grid;
+  gap: 14px;
+}
+
+.drawer-skeleton-line {
+  height: 14px;
+  background: var(--bg-elev-2);
+  border-radius: 4px;
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+.drawer-skeleton-eyebrow {
+  width: 120px;
+}
+
+.drawer-skeleton-title {
+  width: 60%;
+  height: 32px;
+}
+
+.drawer-skeleton-art {
+  width: min(160px, 100%);
+  aspect-ratio: 1 / 1;
+  background: var(--bg-elev-2);
+  border-radius: 6px;
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+.drawer-skeleton-short {
+  width: 40%;
+}
+
+@keyframes skeleton-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.detail-panel .detail-page-content .detail-title {
+  font-size: 32px;
+}
+
+.detail-panel .detail-page-content > .rel-list {
+  grid-template-columns: 1fr;
+}
+
+.detail-panel .song-detail-content .detail-title-en {
+  display: block;
+  margin-top: 6px;
+}
+
+.detail-panel .song-credit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.detail-panel .song-credit-item {
+  padding: 16px;
+  background: var(--bg-elev);
+}
+
+.detail-panel .media-detail-content .mv-thumb {
+  max-width: 280px;
+}
+
+.detail-panel .release-detail-content .detail-title-en {
+  display: block;
+  margin-top: 6px;
+}

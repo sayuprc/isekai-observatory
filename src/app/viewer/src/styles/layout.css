@@ -1,0 +1,522 @@
+/* ヘッダー・ナビ・テーマ切り替え・フッター・パンくずなどサイトの枠組み */
+
+.shell {
+  max-width: 1480px;
+  padding: 0 48px;
+  margin: 0 auto;
+}
+
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  border-bottom: 0;
+  backdrop-filter: blur(20px) saturate(140%);
+}
+
+.nav-inner {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  max-width: 1480px;
+  padding: 18px 48px;
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+  align-items: center;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-mark {
+  font-family: "Shippori Mincho", serif;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--fg);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.brand-en {
+  font-family: "EB Garamond", serif;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--fg-muted);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.brand-logo {
+  display: block;
+  width: auto;
+  height: 38px;
+}
+
+/* 非 production 環境の識別バッジ。テーマの palette に依存させず環境ごとの固定色にする */
+
+.env-badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: 0.08em;
+  background: #6b7280;
+  border-radius: 999px;
+}
+
+.env-badge[data-env="local"] {
+  background: #16a34a;
+}
+
+.env-badge[data-env="development"] {
+  background: #2563eb;
+}
+
+.env-badge[data-env="staging"] {
+  background: #d97706;
+}
+
+.footer-logo {
+  display: block;
+  width: auto;
+  height: 44px;
+}
+
+.brand-logo-light,
+.footer-logo-light {
+  display: none;
+}
+
+[data-palette="anemone-2"] .brand-logo-dark,
+[data-palette="anemone-2"] .footer-logo-dark,
+[data-palette="nemophila-1"] .brand-logo-dark,
+[data-palette="nemophila-1"] .footer-logo-dark,
+[data-palette="sunflower-1"] .brand-logo-dark,
+[data-palette="sunflower-1"] .footer-logo-dark {
+  display: none;
+}
+
+[data-palette="anemone-2"] .brand-logo-light,
+[data-palette="anemone-2"] .footer-logo-light,
+[data-palette="nemophila-1"] .brand-logo-light,
+[data-palette="nemophila-1"] .footer-logo-light,
+[data-palette="sunflower-1"] .brand-logo-light,
+[data-palette="sunflower-1"] .footer-logo-light {
+  display: block;
+}
+
+/* モバイル用のボトムナビ。720px 以下でのみ表示する */
+
+.bottom-nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 60;
+  display: none;
+  background: color-mix(in oklab, var(--bg) 92%, transparent);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(20px) saturate(140%);
+}
+
+.bottom-nav svg {
+  color: var(--bottom-nav-icon, var(--fg-muted));
+  transition: color 0.2s ease;
+}
+
+.bottom-nav a {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  padding: 10px 0 calc(12px + env(safe-area-inset-bottom));
+  font-family: "Noto Serif JP", serif;
+  font-size: 10px;
+  color: var(--fg-muted);
+  letter-spacing: 0.08em;
+  transition: color 0.2s ease;
+}
+
+.bottom-nav a.is-active {
+  --bottom-nav-icon: var(--accent-strong);
+
+  color: var(--fg);
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.nav-links a {
+  position: relative;
+  padding: 8px 18px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 14px;
+  color: var(--fg-muted);
+  letter-spacing: 0.08em;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-2);
+}
+
+.nav-links a.is-active {
+  color: var(--fg);
+}
+
+.nav-links a.is-active::after {
+  position: absolute;
+  bottom: -19px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  content: "";
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-utils {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  color: var(--fg-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+.theme-picker {
+  position: relative;
+}
+
+.theme-trigger {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  height: 36px;
+  padding: 6px 14px 6px 8px;
+  font-family: "Noto Serif JP", serif;
+  color: var(--fg-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.theme-trigger:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+.theme-trigger .hanger-icon {
+  flex-shrink: 0;
+  color: var(--fg-muted);
+  transition: color 0.2s ease;
+}
+
+.theme-trigger:hover .hanger-icon {
+  color: var(--accent-strong);
+}
+
+.theme-trigger .label {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: flex-start;
+
+  /* テーマ名の長さで幅が変わると nav-links がずれるため、最長名に合わせて固定する */
+  width: 104px;
+  line-height: 1;
+}
+
+.theme-trigger .label .jp {
+  font-family: "Shippori Mincho", serif;
+  font-size: 12px;
+  color: var(--fg);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.theme-trigger .label .en {
+  margin-top: 2px;
+  font-family: "EB Garamond", serif;
+  font-size: 10px;
+  font-style: italic;
+  color: var(--fg-muted);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.theme-trigger .caret {
+  margin-left: 2px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  color: var(--fg-faint);
+}
+
+.theme-pop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+.theme-pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 91;
+  width: 360px;
+  padding: 18px 18px 16px;
+  background: color-mix(in oklab, var(--bg) 94%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px) saturate(140%);
+}
+
+.theme-pop-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.theme-pop-title {
+  font-family: "Shippori Mincho", serif;
+  font-size: 14px;
+  color: var(--fg);
+  letter-spacing: 0.12em;
+}
+
+.theme-pop-title-en {
+  font-family: "EB Garamond", serif;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--fg-muted);
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.theme-opt {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.theme-opt:hover {
+  background: color-mix(in oklab, var(--accent) 8%, transparent);
+  border-color: var(--line-soft);
+}
+
+.theme-opt.is-active {
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  border-color: var(--accent);
+}
+
+.theme-opt .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.theme-opt .meta .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "Shippori Mincho", serif;
+  font-size: 13px;
+  color: var(--fg);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.theme-opt .meta .sub {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "EB Garamond", serif;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.theme-opt .check {
+  margin-left: auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--accent-strong);
+  opacity: 0;
+}
+
+.theme-opt.is-active .check {
+  opacity: 1;
+}
+
+/* フッター */
+
+.site-footer {
+  padding: 64px 0 48px;
+  margin-top: 96px;
+  border-top: 1px solid var(--line);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-brand {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.footer-brand-mark {
+  font-family: "Shippori Mincho", serif;
+  font-size: 28px;
+  color: var(--fg);
+  letter-spacing: 0.1em;
+}
+
+.footer-disclaimer {
+  max-width: 320px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--fg-muted);
+}
+
+.footer-col-title {
+  margin: 0 0 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.footer-col ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.footer-col li {
+  font-size: 13px;
+  line-height: 2;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.footer-col li:hover {
+  color: var(--accent-2);
+}
+
+.footer-version {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--fg-muted);
+  letter-spacing: 0.06em;
+}
+
+/* ページ間遷移 */
+
+@keyframes page-in {
+
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-section {
+  padding-top: 48px;
+}
+
+/* パンくず: 詳細ページから一覧へ戻る導線 */
+
+.breadcrumb {
+  padding-top: 24px;
+}
+
+.breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  margin-right: 8px;
+  color: var(--fg-faint);
+  content: "/";
+}
+
+.breadcrumb-link:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+.breadcrumb-current {
+  color: var(--fg);
+}

@@ -1,0 +1,230 @@
+/* 詳細ページと詳細ドロワーで共有する本文・関連チップ */
+
+.detail-title {
+  margin: 10px 0 4px;
+  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-size: 32px;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+}
+
+.detail-title-en {
+  font-family: "EB Garamond", serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--accent-2);
+}
+
+.rel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-page-content > .rel-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.rel-chip {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: var(--bg-elev-2);
+  border: 1px solid transparent;
+  transition: all 0.18s ease;
+}
+
+.rel-chip:hover {
+  background: color-mix(in oklab, var(--accent) 8%, var(--bg-elev-2));
+  border-color: var(--accent);
+  transform: translateX(2px);
+}
+
+.rel-chip[data-unlinked] {
+  cursor: default;
+  border-left: 2px dashed var(--line);
+  opacity: 0.72;
+}
+
+.rel-chip[data-unlinked]:hover {
+  background: var(--bg-elev-2);
+  border-color: var(--line);
+  transform: none;
+}
+
+.detail-page-content .rel-chip {
+  min-width: 0;
+  padding: 20px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.release-medium .rel-list {
+  gap: 0;
+}
+
+.release-medium .rel-chip {
+  padding: 16px 12px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+}
+
+.release-medium .rel-chip[href] {
+  border-left: 2px solid var(--accent);
+}
+
+.release-medium .rel-chip[data-unlinked] {
+  border-left: 2px dashed var(--line);
+  opacity: 1;
+}
+
+.detail-page-content .rel-chip[href]:hover,
+.home-feature .release-medium .rel-chip[href]:hover {
+  background: var(--bg-elev-2);
+  border-color: var(--accent-strong);
+  transform: translateY(-2px);
+}
+
+.detail-page-content .rel-chip[data-unlinked] {
+  cursor: default;
+  border-left: 2px dashed var(--line);
+  opacity: 1;
+  transform: none;
+}
+
+.rel-arrow {
+  font-size: 14px;
+  color: var(--accent-strong);
+}
+
+.rel-arrow-muted {
+  color: var(--fg-faint);
+}
+
+/* チップ内の補足行 (日付・種別など) */
+
+.rel-sub {
+  margin-top: 2px;
+  font-size: 10px;
+}
+
+.detail-page-content .rel-sub {
+  margin-top: 8px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* 詳細ページのセクション見出し */
+
+.detail-section-head {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  justify-content: flex-start;
+  padding-bottom: 14px;
+  margin-top: 44px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.detail-section-head-title {
+  font-family: "Shippori Mincho", serif;
+  font-size: 17px;
+  color: var(--fg);
+  letter-spacing: 0.08em;
+}
+
+.detail-section-head-count {
+  min-width: 28px;
+  padding: 2px 8px;
+  font-family: Spectral, serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  text-align: center;
+  background: var(--bg-elev-2);
+  border-radius: 20px;
+}
+
+.detail-page-content {
+  min-width: 0;
+}
+
+.detail-page > .detail-page-content {
+  padding: 40px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.detail-page-content > .label-mono {
+  display: inline-block;
+  padding: 6px 12px;
+  line-height: 1.8;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+}
+
+.detail-page-content .detail-title {
+  margin: 22px 0 28px;
+  font-size: clamp(28px, 3.4vw, 48px);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.detail-index {
+  font-family: Spectral, serif;
+  font-style: italic;
+  color: var(--accent-strong);
+}
+
+.rel-chip .detail-index {
+  min-width: 28px;
+}
+
+.feature-summary,
+.detail-description {
+  line-height: 1.85;
+  color: var(--fg-muted);
+}
+
+.detail-page-content .detail-description {
+  max-width: 78ch;
+  font-size: 14px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+.detail-page-content .detail-description:empty {
+  display: none;
+}
+
+.rel-main {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "Shippori Mincho", serif;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.detail-page-content .rel-main {
+  overflow: visible;
+  font-size: 16px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.rel-copy {
+  flex: 1;
+  min-width: 0;
+}

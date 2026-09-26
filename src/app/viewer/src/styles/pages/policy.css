@@ -1,0 +1,57 @@
+/* ポリシー文書 (サイトポリシー / プライバシーポリシー) と Markdown 文書 */
+
+.policy-doc h2 {
+  margin: 48px 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ポリシー文書(サイトポリシー / プライバシーポリシー) */
+
+.policy-doc {
+  max-width: 920px;
+  font-size: 15px;
+  line-height: 2;
+  color: var(--fg);
+}
+
+.policy-updated {
+  margin: 8px 0 40px;
+}
+
+.policy-doc h2:first-of-type {
+  margin-top: 0;
+}
+
+.policy-doc p {
+  margin: 0 0 18px;
+}
+
+.shell.page-section .policy-doc ul {
+  padding-left: 1.4em;
+  margin: 0 0 18px;
+}
+
+.shell.page-section .policy-doc li {
+  margin-bottom: 8px;
+}
+
+.shell.page-section .policy-doc a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Markdown から起こす文書は、書いた通りの箇条書きとして出す
+   reset.css が ul / ol のマーカーを落としているのでここで戻す */
+
+.shell.page-section .markdown-doc ul {
+  list-style-type: disc;
+}
+
+.shell.page-section .markdown-doc ol {
+  padding-left: 1.4em;
+  margin: 0 0 18px;
+  list-style-type: decimal;
+}
