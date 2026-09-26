@@ -125,12 +125,12 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
     const options = [...picker.querySelectorAll<HTMLButtonElement>('[data-palette-option]')];
 
     if (
-      trigger === null ||
-      overlay === null ||
-      pop === null ||
-      currentLabel === null ||
-      currentSubLabel === null ||
-      options.length === 0
+      trigger === null
+      || overlay === null
+      || pop === null
+      || currentLabel === null
+      || currentSubLabel === null
+      || options.length === 0
     ) {
       return;
     }
