@@ -8,7 +8,9 @@ import {
 import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
-const formatValuesSchema = t.Array(t.Numeric(), { minItems: 1 });
+const formatValuesSchema = t.Array(t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(4), t.Literal(99)]), {
+  minItems: 1,
+});
 
 const mediaSchema = t.Array(
   t.Object({

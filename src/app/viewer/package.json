@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "deploy": "wrangler deploy",
     "astro": "astro",
+    "typecheck": "SKIP_CONTENT_FETCH=true astro check && tsc --noEmit",
     "prettier:format": "prettier --write .",
     "prettier:format:check": "prettier --check .",
     "eslint:fix": "eslint --fix",
@@ -36,6 +37,7 @@
     "wrangler": "catalog:"
   },
   "devDependencies": {
+    "@astrojs/check": "catalog:astro",
     "@eslint/js": "catalog:lint",
     "@hey-api/openapi-ts": "catalog:gen",
     "@types/bun": "catalog:",

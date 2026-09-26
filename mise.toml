@@ -366,17 +366,23 @@ usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/admin"
 run = "bun run stylelint:fix ${usage_path}"
 
+[tasks."admin:typecheck"]
+description = "Admin の TypeScript をチェックする"
+dir = "src/app/admin"
+run = "bun run typecheck"
+
 [tasks."admin:fix"]
 description = "Admin の formatter を実行し、フォーマットを自動修正する"
 depends = ["admin:format"]
 
 [tasks."admin:check"]
-description = "Admin の formatter check / linter を直列で実行する"
+description = "Admin の formatter check / linter / typecheck を直列で実行する"
 dir = "src/app/admin"
 run = [
   "bun run prettier:format:check",
   "bun run eslint:check",
   "bun run stylelint:check",
+  "bun run typecheck",
 ]
 
 [tasks."admin:prism"]
@@ -440,17 +446,23 @@ usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/viewer"
 run = "bun run stylelint:fix ${usage_path}"
 
+[tasks."viewer:typecheck"]
+description = "Viewer の TypeScript をチェックする"
+dir = "src/app/viewer"
+run = "bun run typecheck"
+
 [tasks."viewer:fix"]
 description = "Viewer の formatter を実行し、フォーマットを自動修正する"
 depends = ["viewer:format"]
 
 [tasks."viewer:check"]
-description = "Viewer の formatter check / linter を直列で実行する"
+description = "Viewer の formatter check / linter / typecheck を直列で実行する"
 dir = "src/app/viewer"
 run = [
   "bun run prettier:format:check",
   "bun run eslint:check",
   "bun run stylelint:check",
+  "bun run typecheck",
 ]
 
 # -- Notify Contract --

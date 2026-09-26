@@ -124,6 +124,35 @@ jobs:
       - name: Run ESLint
         run: mise run viewer:lint
 
+  typecheck:
+    name: TypeScript
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup mise
+        uses: ./.github/actions/setup-mise
+
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            src/app/node_modules
+            src/app/viewer/node_modules
+          key: viewer-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install packages
+        run: mise run pnpm:install
+
+      - name: Run TypeScript Check
+        run: mise run viewer:typecheck
+
   style:
     name: Stylelint
 
