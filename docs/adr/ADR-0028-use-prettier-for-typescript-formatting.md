@@ -40,3 +40,4 @@ admin-proxy だけが Biome で lint と整形を行っており、contracts の
 - JSX やテンプレートの改行位置など、Prettier の既定から外れた整形は選べない
 - Prettier はコメントを折り返さないため、120 字を超えるコメントを検出できない
 - 各パッケージの `prettier.config.mjs` は重複しており、変更時はすべてを揃える必要がある
+- 演算子を行頭に置く `experimentalOperatorPosition` は experimental で、Prettier の更新で挙動が変わりうる
