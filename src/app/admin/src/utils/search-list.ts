@@ -11,7 +11,7 @@ type QueryValue = string | number | boolean | undefined;
 
 /** URL の値が候補にあればそれを、なければ fallback を返す */
 export const pickParam = <T extends string | number>(value: string | null, candidates: readonly T[], fallback: T): T =>
-  candidates.find(candidate => String(candidate) === value) ?? fallback;
+  candidates.find((candidate) => String(candidate) === value) ?? fallback;
 
 export const parsePage = (value: string | null): number => Math.max(1, Number(value) || 1);
 
@@ -31,7 +31,7 @@ export const createSearchState = <P extends { page: number }>(options: SearchSta
   const [params, setParams] = createSignal<P>(initial);
   const [input, setInput] = createSignal<P>(initial);
 
-  const updateInput = (patch: Partial<P>) => setInput(current => ({ ...current, ...patch }));
+  const updateInput = (patch: Partial<P>) => setInput((current) => ({ ...current, ...patch }));
 
   const apply = (next: P) => {
     setParams(() => next);

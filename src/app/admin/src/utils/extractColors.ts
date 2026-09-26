@@ -1,13 +1,6 @@
 import { Vibrant } from 'node-vibrant/browser';
 
-export const SWATCH_ORDER = [
-  'Vibrant',
-  'Muted',
-  'DarkVibrant',
-  'DarkMuted',
-  'LightVibrant',
-  'LightMuted',
-] as const;
+export const SWATCH_ORDER = ['Vibrant', 'Muted', 'DarkVibrant', 'DarkMuted', 'LightVibrant', 'LightMuted'] as const;
 
 export type SwatchName = (typeof SWATCH_ORDER)[number];
 
@@ -86,7 +79,7 @@ export const extractColorsFromImage = async (file: Blob): Promise<ExtractedColor
       throw new Error('No color candidates extracted');
     }
 
-    const chromatic = candidates.filter(candidate => candidate.saturation >= MIN_PREFERRED_SATURATION);
+    const chromatic = candidates.filter((candidate) => candidate.saturation >= MIN_PREFERRED_SATURATION);
     const pool = chromatic.length > 0 ? chromatic : candidates;
     const ranked = [...pool].toSorted((a, b) => b.score - a.score);
     const best = ranked[0];

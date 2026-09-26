@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import {
-  addSelectedPerson,
-  addSelectedPersonToRole,
-  toRequestSongPersons,
-} from './person-selection';
+import { addSelectedPerson, addSelectedPersonToRole, toRequestSongPersons } from './person-selection';
 
 describe('楽曲の人物選択', () => {
   it('同じ役割には同一人物を重複して追加しない', () => {

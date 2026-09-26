@@ -55,9 +55,7 @@ const resolveAnchorTarget = (eventTarget: EventTarget | null): DrawerTarget | nu
 // 詳細ページ本体からドロワーに出す部分だけを抜き出す
 // キャッシュには抜き出した後の HTML を入れ、レイアウト分を保持しない
 const extractDetailContent = (pageHtml: string, pathname: string): string => {
-  const content = new DOMParser()
-    .parseFromString(pageHtml, 'text/html')
-    .querySelector('.detail-page-content');
+  const content = new DOMParser().parseFromString(pageHtml, 'text/html').querySelector('.detail-page-content');
 
   if (content === null) {
     throw new Error(`Missing .detail-page-content in ${pathname}`);
@@ -126,7 +124,7 @@ const readDrawerPaths = (state: unknown): string[] | null => {
 
   const { drawerPaths } = state as { drawerPaths?: unknown };
   if (!Array.isArray(drawerPaths) || drawerPaths.length === 0) return null;
-  if (!drawerPaths.every(path => typeof path === 'string')) return null;
+  if (!drawerPaths.every((path) => typeof path === 'string')) return null;
 
   return drawerPaths;
 };
@@ -197,11 +195,7 @@ export const DetailDrawer = () => {
     return loadTarget(target, () => {
       const nextStack = [...stack(), target];
       setStack(nextStack);
-      window.history.pushState(
-        { drawerPaths: nextStack.map(item => item.pathname) },
-        '',
-        target.pathname,
-      );
+      window.history.pushState({ drawerPaths: nextStack.map((item) => item.pathname) }, '', target.pathname);
     });
   };
 
@@ -238,7 +232,7 @@ export const DetailDrawer = () => {
       return;
     }
 
-    const targets = paths.map(resolveDrawerTarget).filter(target => target !== null);
+    const targets = paths.map(resolveDrawerTarget).filter((target) => target !== null);
     const nextTarget = targets[targets.length - 1];
     if (targets.length !== paths.length || !nextTarget) {
       closeDrawer();
@@ -256,8 +250,7 @@ export const DetailDrawer = () => {
 
     const shareUrl = new URL(target.pathname, window.location.origin).toString();
     // 識別子を共有シートに出さないよう、詳細コンテンツが持つ表示タイトルを使う
-    const shareTitle = bodyRef?.querySelector('[data-share-title]')?.getAttribute('data-share-title')
-      ?? SITE_TITLE;
+    const shareTitle = bodyRef?.querySelector('[data-share-title]')?.getAttribute('data-share-title') ?? SITE_TITLE;
 
     try {
       if (navigator.share) {
@@ -362,33 +355,39 @@ export const DetailDrawer = () => {
   };
 
   // 開閉に合わせて背面を操作不能にする (スクロールロック + inert + フォーカスの移動と復帰)
-  createEffect(on(isOpen, (open) => {
-    if (open) {
-      restoreFocusTo = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      document.body.classList.add('drawer-lock');
+  createEffect(
+    on(
+      isOpen,
+      (open) => {
+        if (open) {
+          restoreFocusTo = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          document.body.classList.add('drawer-lock');
 
-      for (const child of document.body.children) {
-        if (overlayRef !== undefined && child.contains(overlayRef)) continue;
-        if (child.hasAttribute('inert')) continue;
-        child.setAttribute('inert', '');
-        inertedElements.push(child);
-      }
+          for (const child of document.body.children) {
+            if (overlayRef !== undefined && child.contains(overlayRef)) continue;
+            if (child.hasAttribute('inert')) continue;
+            child.setAttribute('inert', '');
+            inertedElements.push(child);
+          }
 
-      panelRef?.focus();
-      return;
-    }
+          panelRef?.focus();
+          return;
+        }
 
-    document.body.classList.remove('drawer-lock');
-    for (const element of inertedElements) {
-      element.removeAttribute('inert');
-    }
-    inertedElements = [];
+        document.body.classList.remove('drawer-lock');
+        for (const element of inertedElements) {
+          element.removeAttribute('inert');
+        }
+        inertedElements = [];
 
-    if (restoreFocusTo?.isConnected) {
-      restoreFocusTo.focus();
-    }
-    restoreFocusTo = null;
-  }, { defer: true }));
+        if (restoreFocusTo?.isConnected) {
+          restoreFocusTo.focus();
+        }
+        restoreFocusTo = null;
+      },
+      { defer: true },
+    ),
+  );
 
   onMount(() => {
     // リロード直後は前回セッションのドロワー state が残っていることがあるので捨てる
@@ -416,16 +415,16 @@ export const DetailDrawer = () => {
 
   return (
     <Show when={current()}>
-      {target => (
-        <div class="detail-overlay" ref={el => overlayRef = el} onClick={requestClose}>
+      {(target) => (
+        <div class="detail-overlay" ref={(el) => (overlayRef = el)} onClick={requestClose}>
           <aside
             class="detail-panel"
             role="dialog"
             aria-modal="true"
             aria-label={`${kindLabel(target().kind)}の詳細`}
             tabindex="-1"
-            ref={el => panelRef = el}
-            onClick={event => event.stopPropagation()}
+            ref={(el) => (panelRef = el)}
+            onClick={(event) => event.stopPropagation()}
           >
             <div class="detail-head">
               <div style={{ 'display': 'flex', 'align-items': 'center', 'gap': '12px' }}>
@@ -459,7 +458,7 @@ export const DetailDrawer = () => {
                 </button>
               </div>
             </div>
-            <div class="detail-body" aria-busy={loading()} ref={el => bodyRef = el}>
+            <div class="detail-body" aria-busy={loading()} ref={(el) => (bodyRef = el)}>
               <Show when={loading()}>
                 <div class="drawer-skeleton" aria-hidden="true">
                   <div class="drawer-skeleton-line drawer-skeleton-eyebrow"></div>

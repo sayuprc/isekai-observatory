@@ -12,31 +12,24 @@ const { release } = Astro.props;
 <div class="release-version-content" style={`--c:${release.color};`}>
   <div class="release-version-track-list">
     {release.description && <p class="detail-description release-version-description">{release.description}</p>}
-    {
-      release.media.map(medium => (
-        <div class="release-medium">
-          {
-            release.media.length > 1 && (
-              <div class="label-mono release-medium-heading">
-                DISC {medium.position}{medium.name !== null ? ` · ${medium.name}` : ''}
-              </div>
-            )
-          }
-          {
-            medium.tracks.length > 0
-              ? (
-                  <div class="rel-list">
-                    {medium.tracks.map(track => (
-                      <TrackChip track={track} />
-                    ))}
-                  </div>
-                )
-              : (
-                  <p class="detail-description">収録曲情報はありません。</p>
-                )
-          }
-        </div>
-      ))
-    }
+    {release.media.map((medium) => (
+      <div class="release-medium">
+        {release.media.length > 1 && (
+          <div class="label-mono release-medium-heading">
+            DISC {medium.position}
+            {medium.name !== null ? ` · ${medium.name}` : ''}
+          </div>
+        )}
+        {medium.tracks.length > 0 ? (
+          <div class="rel-list">
+            {medium.tracks.map((track) => (
+              <TrackChip track={track} />
+            ))}
+          </div>
+        ) : (
+          <p class="detail-description">収録曲情報はありません。</p>
+        )}
+      </div>
+    ))}
   </div>
 </div>

@@ -19,10 +19,10 @@ export const toVenueEntry = (venue: Venue): VenueEntry => ({
 
 // 同じ開催先は Event 内で重複できないので、追加済みなら何もしない
 export const addVenue = (entries: VenueEntry[], venue: Venue): VenueEntry[] =>
-  entries.some(entry => entry.venueId === venue.venueId) ? entries : [...entries, toVenueEntry(venue)];
+  entries.some((entry) => entry.venueId === venue.venueId) ? entries : [...entries, toVenueEntry(venue)];
 
 export const toSourceForms = (sources: EventSource[]): SourceForm[] =>
-  sources.map(source => ({ displayName: source.displayName, url: source.url }));
+  sources.map((source) => ({ displayName: source.displayName, url: source.url }));
 
 export const toSourcesPayload = (sources: SourceForm[]): EventSource[] =>
   sources.map((source, index) => ({
@@ -38,7 +38,7 @@ export const validateSources = (sources: SourceForm[]): string | null => {
     }
   }
 
-  const urls = sources.map(source => source.url.trim());
+  const urls = sources.map((source) => source.url.trim());
   if (new Set(urls).size !== urls.length) {
     return '出典の URL が重複しています';
   }

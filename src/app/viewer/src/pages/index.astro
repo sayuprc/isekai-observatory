@@ -15,12 +15,12 @@ import { SITE_DESCRIPTION } from '../shared/site';
 
 const latestReleaseGroup = await releaseGroupContentRepository.latest();
 const latestSong = await songContentRepository.latest();
-const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap(medium => medium.tracks) ?? [];
+const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap((medium) => medium.tracks) ?? [];
 // 延期・中止は除く。どれを出すかはブラウザ上の現在日付で下のスクリプトが決める
-const upcomingEvents = (await eventContentRepository.upcoming()).filter(event => event.status.value === 1);
+const upcomingEvents = (await eventContentRepository.upcoming()).filter((event) => event.status.value === 1);
 
 const siteStats = await siteStatsRepository.get();
-const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry.url) !== null)
+const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(entry.url) !== null)
   ? [YOUTUBE_THUMBNAIL_ORIGIN]
   : [];
 ---
@@ -51,77 +51,76 @@ const preconnect = latestSong?.media.some(entry => youtubeThumbnailFromUrl(entry
   </section>
 
   <div class="shell home-feature-row">
-    {
-      latestSong && (
-        <section class="home-feature">
-          <SectionHead title="最新楽曲" />
-          <div class="feature-grid-link">
-            <a href={`/songs/${latestSong.songId}`} class="feature-art-link" aria-label={latestSong.title}>
-              <SongTile
-                songId={latestSong.songId}
-                title={latestSong.title}
-                index={0}
-                media={latestSong.media}
-                releaseGroups={latestSong.releaseGroups}
-                aspectRatio="1 / 1"
-                sizes="(max-width: 720px) calc(100vw - 90px), (max-width: 900px) calc(100vw - 106px), calc((min(1480px, 100vw) - 260px) / 2)"
-                loading="eager"
-              />
-            </a>
-            <div class="feature-body">
-              <div class="eyebrow">{latestSong.type.name}</div>
-              <h3 class="feature-title">
-                <a href={`/songs/${latestSong.songId}`}>{latestSong.title}</a>
-              </h3>
-              {latestSong.description && <p class="feature-summary feature-summary-fill">{latestSong.description}</p>}
-              <a class="btn feature-more" href={`/songs/${latestSong.songId}`}>楽曲詳細 →</a>
-            </div>
-          </div>
-        </section>
-      )
-    }
-
-    {
-      latestReleaseGroup && (
-        <section class="home-feature">
-          <SectionHead title="最新リリース" />
-          <div
-            class="feature-release"
-            style={`--c:${representativeColor(latestReleaseGroup)};`}
-          >
-            <div class="eyebrow">{latestReleaseGroup.type.name} — {dottedDate(latestReleaseGroup.firstReleasedOn)}</div>
+    {latestSong && (
+      <section class="home-feature">
+        <SectionHead title="最新楽曲" />
+        <div class="feature-grid-link">
+          <a href={`/songs/${latestSong.songId}`} class="feature-art-link" aria-label={latestSong.title}>
+            <SongTile
+              songId={latestSong.songId}
+              title={latestSong.title}
+              index={0}
+              media={latestSong.media}
+              releaseGroups={latestSong.releaseGroups}
+              aspectRatio="1 / 1"
+              sizes="(max-width: 720px) calc(100vw - 90px), (max-width: 900px) calc(100vw - 106px), calc((min(1480px, 100vw) - 260px) / 2)"
+              loading="eager"
+            />
+          </a>
+          <div class="feature-body">
+            <div class="eyebrow">{latestSong.type.name}</div>
             <h3 class="feature-title">
-              <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>
+              <a href={`/songs/${latestSong.songId}`}>{latestSong.title}</a>
             </h3>
-            {latestReleaseGroup.description && <p class="feature-summary">{latestReleaseGroup.description}</p>}
-            <div class="release-medium">
-              <div class="rel-list feature-track-list" aria-label="収録曲">
-                {latestReleaseTracks.map(track => <TrackChip track={track} />)}
-              </div>
-            </div>
-            <a class="btn feature-more" href={`/releases/${latestReleaseGroup.releaseGroupId}`}>リリース詳細 →</a>
+            {latestSong.description && <p class="feature-summary feature-summary-fill">{latestSong.description}</p>}
+            <a class="btn feature-more" href={`/songs/${latestSong.songId}`}>
+              楽曲詳細 →
+            </a>
           </div>
-        </section>
-      )
-    }
+        </div>
+      </section>
+    )}
 
-    {
-      upcomingEvents.length > 0 && (
-        <section class="home-feature home-feature-wide" data-upcoming-section hidden>
-          <SectionHead title="今後の予定" />
-          <ol class="event-home-list">
-            {
-              upcomingEvents.map(event => (
-                <li data-upcoming-event data-start={event.schedule.startOn}>
-                  <EventRow event={event} withYear />
-                </li>
-              ))
-            }
-          </ol>
-          <a class="btn feature-more" href="/events">イベント一覧 →</a>
-        </section>
-      )
-    }
+    {latestReleaseGroup && (
+      <section class="home-feature">
+        <SectionHead title="最新リリース" />
+        <div class="feature-release" style={`--c:${representativeColor(latestReleaseGroup)};`}>
+          <div class="eyebrow">
+            {latestReleaseGroup.type.name} — {dottedDate(latestReleaseGroup.firstReleasedOn)}
+          </div>
+          <h3 class="feature-title">
+            <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>
+          </h3>
+          {latestReleaseGroup.description && <p class="feature-summary">{latestReleaseGroup.description}</p>}
+          <div class="release-medium">
+            <div class="rel-list feature-track-list" aria-label="収録曲">
+              {latestReleaseTracks.map((track) => (
+                <TrackChip track={track} />
+              ))}
+            </div>
+          </div>
+          <a class="btn feature-more" href={`/releases/${latestReleaseGroup.releaseGroupId}`}>
+            リリース詳細 →
+          </a>
+        </div>
+      </section>
+    )}
+
+    {upcomingEvents.length > 0 && (
+      <section class="home-feature home-feature-wide" data-upcoming-section hidden>
+        <SectionHead title="今後の予定" />
+        <ol class="event-home-list">
+          {upcomingEvents.map((event) => (
+            <li data-upcoming-event data-start={event.schedule.startOn}>
+              <EventRow event={event} withYear />
+            </li>
+          ))}
+        </ol>
+        <a class="btn feature-more" href="/events">
+          イベント一覧 →
+        </a>
+      </section>
+    )}
   </div>
 </Layout>
 

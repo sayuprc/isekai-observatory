@@ -5,7 +5,7 @@ import { songContentRepository } from '../../features/songs/content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  return (await songContentRepository.all()).map(song => ({
+  return (await songContentRepository.all()).map((song) => ({
     params: { songId: song.songId },
     props: { song },
   }));
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 const { song } = Astro.props;
 
 const pageDescription = song.description || `ヰ世界情緒が歌う楽曲「${song.title}」の情報`;
-const preconnect = song.media.some(entry => youtubeThumbnailFromUrl(entry.url) !== null)
+const preconnect = song.media.some((entry) => youtubeThumbnailFromUrl(entry.url) !== null)
   ? [YOUTUBE_THUMBNAIL_ORIGIN]
   : [];
 ---
@@ -22,7 +22,10 @@ const preconnect = song.media.some(entry => youtubeThumbnailFromUrl(entry.url) !
 <Layout
   pageTitle={song.title}
   pageDescription={pageDescription}
-  breadcrumbs={[{ label: '楽曲', href: '/songs' }, { label: song.title, href: null }]}
+  breadcrumbs={[
+    { label: '楽曲', href: '/songs' },
+    { label: song.title, href: null },
+  ]}
   preconnect={preconnect}
 >
   <section class="shell page-section detail-page">

@@ -11,8 +11,8 @@ import Layout from '../../layouts/Layout.astro';
 const videoTypes: readonly string[] = VIDEO_TYPES;
 const postTypes: readonly string[] = POST_TYPES;
 const entries = [...SITE_DATA.media].sort((a, b) => b.date.localeCompare(a.date));
-const videos = entries.filter(entry => videoTypes.includes(entry.type));
-const posts = entries.filter(entry => postTypes.includes(entry.type));
+const videos = entries.filter((entry) => videoTypes.includes(entry.type));
+const posts = entries.filter((entry) => postTypes.includes(entry.type));
 const featured = videos[0];
 ---
 
@@ -53,118 +53,111 @@ const featured = videos[0];
 
     <div data-layout-group="media">
       <div data-layout-panel="cinema">
-        {
-          featured && (
-            <>
-              <div
-                class="media-featured-grid"
-                data-media-entry
-                data-media-type={featured.type}
-                data-media-kind="video"
-              >
-                <a href={`/media/${featured.id}`}>
-                  <MVThumb
-                    color={featured.color}
-                    label={`NOW PLAYING — ${mediaTypeLabel(featured.type).toUpperCase()}`}
-                  />
-                </a>
-                <div class="media-featured-copy">
-                  <div class="label-mono">FEATURED · {featured.date}</div>
-                  <h3 class="feature-title">{featured.title}</h3>
-                  <div class="feature-subtitle">{mediaTypeLabel(featured.type)} · {featured.views} views</div>
-                  <p class="feature-summary">{featured.description}</p>
+        {featured && (
+          <>
+            <div class="media-featured-grid" data-media-entry data-media-type={featured.type} data-media-kind="video">
+              <a href={`/media/${featured.id}`}>
+                <MVThumb
+                  color={featured.color}
+                  label={`NOW PLAYING — ${mediaTypeLabel(featured.type).toUpperCase()}`}
+                />
+              </a>
+              <div class="media-featured-copy">
+                <div class="label-mono">FEATURED · {featured.date}</div>
+                <h3 class="feature-title">{featured.title}</h3>
+                <div class="feature-subtitle">
+                  {mediaTypeLabel(featured.type)} · {featured.views} views
                 </div>
+                <p class="feature-summary">{featured.description}</p>
               </div>
+            </div>
 
-              <div class="media-card-grid">
-                {
-                  videos.slice(1).map(entry => (
-                    <a
-                      href={`/media/${entry.id}`}
-                      class="media-card"
-                      data-media-entry
-                      data-media-type={entry.type}
-                      data-media-kind="video"
-                    >
-                      <MVThumb color={entry.color} label={mediaTypeLabel(entry.type).toUpperCase()} />
-                      <div class="media-card-body">
-                        <div class="label-mono">{entry.date} · {entry.views}</div>
-                        <div class="media-card-title">{entry.title}</div>
-                      </div>
-                    </a>
-                  ))
-                }
-              </div>
-
-              {
-                posts.length > 0 && (
-                  <div class="recent-posts-grid media-posts-grid">
-                    {
-                      posts.map(entry => (
-                        <div data-media-entry data-media-type={entry.type} data-media-kind="post">
-                          <PostCard entry={entry} />
-                        </div>
-                      ))
-                    }
+            <div class="media-card-grid">
+              {videos.slice(1).map((entry) => (
+                <a
+                  href={`/media/${entry.id}`}
+                  class="media-card"
+                  data-media-entry
+                  data-media-type={entry.type}
+                  data-media-kind="video"
+                >
+                  <MVThumb color={entry.color} label={mediaTypeLabel(entry.type).toUpperCase()} />
+                  <div class="media-card-body">
+                    <div class="label-mono">
+                      {entry.date} · {entry.views}
+                    </div>
+                    <div class="media-card-title">{entry.title}</div>
                   </div>
-                )
-              }
-            </>
-          )
-        }
+                </a>
+              ))}
+            </div>
+
+            {posts.length > 0 && (
+              <div class="recent-posts-grid media-posts-grid">
+                {posts.map((entry) => (
+                  <div data-media-entry data-media-type={entry.type} data-media-kind="post">
+                    <PostCard entry={entry} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       <div data-layout-panel="mosaic" hidden>
         <div class="media-mosaic">
-          {
-            entries.map((entry, index) => (
-              <a
-                href={`/media/${entry.id}`}
-                class={`media-mosaic-item media-mosaic-${['lg', 'sm', 'sm', 'md'][index % 4]}`}
-                data-media-entry
-                data-media-type={entry.type}
-                data-media-kind={videoTypes.includes(entry.type) ? 'video' : 'post'}
-              >
-                <div class="media-mosaic-bg" style={`--tile-color:${entry.color};`}></div>
-                <div class="media-mosaic-copy">
-                  <div class="label-mono media-mosaic-label">{mediaTypeLabel(entry.type).toUpperCase()}</div>
-                  <div class="label-mono">{entry.date}{entry.views ? ` · ${entry.views}` : ''}</div>
-                  <div class="media-card-title">{entry.title ?? entry.text}</div>
+          {entries.map((entry, index) => (
+            <a
+              href={`/media/${entry.id}`}
+              class={`media-mosaic-item media-mosaic-${['lg', 'sm', 'sm', 'md'][index % 4]}`}
+              data-media-entry
+              data-media-type={entry.type}
+              data-media-kind={videoTypes.includes(entry.type) ? 'video' : 'post'}
+            >
+              <div class="media-mosaic-bg" style={`--tile-color:${entry.color};`}></div>
+              <div class="media-mosaic-copy">
+                <div class="label-mono media-mosaic-label">{mediaTypeLabel(entry.type).toUpperCase()}</div>
+                <div class="label-mono">
+                  {entry.date}
+                  {entry.views ? ` · ${entry.views}` : ''}
                 </div>
-              </a>
-            ))
-          }
+                <div class="media-card-title">{entry.title ?? entry.text}</div>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
 
       <div data-layout-panel="list" hidden>
         <div class="media-list">
-          {
-            entries.map((entry, index) => (
-              <a
-                href={`/media/${entry.id}`}
-                class="media-list-row"
-                data-media-entry
-                data-media-type={entry.type}
-                data-media-kind={videoTypes.includes(entry.type) ? 'video' : 'post'}
-              >
-                <span class="detail-index">{String(index + 1).padStart(2, '0')}</span>
-                <div class="media-list-thumb">
-                  <MVThumb color={entry.color} />
+          {entries.map((entry, index) => (
+            <a
+              href={`/media/${entry.id}`}
+              class="media-list-row"
+              data-media-entry
+              data-media-type={entry.type}
+              data-media-kind={videoTypes.includes(entry.type) ? 'video' : 'post'}
+            >
+              <span class="detail-index">{String(index + 1).padStart(2, '0')}</span>
+              <div class="media-list-thumb">
+                <MVThumb color={entry.color} />
+              </div>
+              <div>
+                <div class="label-mono">
+                  {entry.date} · {mediaTypeLabel(entry.type)}
+                  {entry.views ? ` · ${entry.views}` : ''}
                 </div>
-                <div>
-                  <div class="label-mono">
-                    {entry.date} · {mediaTypeLabel(entry.type)}{entry.views ? ` · ${entry.views}` : ''}
-                  </div>
-                  <div class="media-card-title">{entry.title ?? entry.text}</div>
-                  <div class="media-card-tags">
-                    {Q.songsOfMedia(entry.id).map(song => <span class="pill">楽曲 · {song.title}</span>)}
-                  </div>
+                <div class="media-card-title">{entry.title ?? entry.text}</div>
+                <div class="media-card-tags">
+                  {Q.songsOfMedia(entry.id).map((song) => (
+                    <span class="pill">楽曲 · {song.title}</span>
+                  ))}
                 </div>
-                <span>→</span>
-              </a>
-            ))
-          }
+              </div>
+              <span>→</span>
+            </a>
+          ))}
         </div>
       </div>
     </div>

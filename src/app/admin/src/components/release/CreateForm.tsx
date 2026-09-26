@@ -123,14 +123,14 @@ export const CreateForm = () => {
   return (
     <Show
       when={params.releaseGroupId !== ''}
-      fallback={(
+      fallback={
         <div class="flex flex-col items-start gap-3">
           <p class="text-error">リリースグループが指定されていません。グループ詳細から追加してください。</p>
           <a href="/release-groups" class="btn btn-outline btn-sm">
             リリースグループ一覧へ
           </a>
         </div>
-      )}
+      }
     >
       <Switch>
         <Match when={resource.loading}>
@@ -152,7 +152,7 @@ export const CreateForm = () => {
           </div>
         </Match>
         <Match when={loadedInitialValues()}>
-          {initialValues => (
+          {(initialValues) => (
             <ReleaseCreateForm releaseGroupId={params.releaseGroupId} initialValues={initialValues()} />
           )}
         </Match>
@@ -222,12 +222,12 @@ const ReleaseCreateForm = (props: ReleaseCreateFormProps) => {
                 type="text"
                 class="input w-full"
                 value={name()}
-                onInput={e => setName(e.currentTarget.value)}
+                onInput={(e) => setName(e.currentTarget.value)}
                 placeholder="通常盤 / 初回限定盤 / 配信 など"
                 classList={{ 'input-error': !!getFieldError('name') }}
               />
               <Show when={getFieldError('name')}>
-                {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
               </Show>
             </div>
 
@@ -237,12 +237,12 @@ const ReleaseCreateForm = (props: ReleaseCreateFormProps) => {
                 type="date"
                 class="input w-full"
                 value={releasedOn()}
-                onInput={e => setReleasedOn(e.currentTarget.value)}
+                onInput={(e) => setReleasedOn(e.currentTarget.value)}
                 required
                 classList={{ 'input-error': !!getFieldError('releasedOn') }}
               />
               <Show when={getFieldError('releasedOn')}>
-                {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
               </Show>
             </div>
 
@@ -251,11 +251,11 @@ const ReleaseCreateForm = (props: ReleaseCreateFormProps) => {
               <textarea
                 class="textarea textarea-bordered min-h-32 w-full"
                 value={description()}
-                onInput={e => setDescription(e.currentTarget.value)}
+                onInput={(e) => setDescription(e.currentTarget.value)}
                 classList={{ 'textarea-error': !!getFieldError('description') }}
               />
               <Show when={getFieldError('description')}>
-                {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
               </Show>
             </div>
 
@@ -277,12 +277,12 @@ const ReleaseCreateForm = (props: ReleaseCreateFormProps) => {
                 step="1"
                 class="input w-full"
                 value={orderNo()}
-                onInput={e => setOrderNo(Number(e.currentTarget.value))}
+                onInput={(e) => setOrderNo(Number(e.currentTarget.value))}
                 required
                 classList={{ 'input-error': !!getFieldError('orderNo') }}
               />
               <Show when={getFieldError('orderNo')}>
-                {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
               </Show>
             </div>
 
@@ -291,14 +291,14 @@ const ReleaseCreateForm = (props: ReleaseCreateFormProps) => {
               <select
                 class="select select-bordered w-full"
                 value={String(isDisplay())}
-                onChange={e => setIsDisplay(e.currentTarget.value === 'true')}
+                onChange={(e) => setIsDisplay(e.currentTarget.value === 'true')}
                 classList={{ 'select-error': !!getFieldError('isDisplay') }}
               >
                 <option value="true">表示する</option>
                 <option value="false">表示しない</option>
               </select>
               <Show when={getFieldError('isDisplay')}>
-                {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
               </Show>
             </div>
           </div>

@@ -20,7 +20,7 @@ const ROLE_OPTIONS: { role: SongPersonRole; label: string }[] = [
 
 export const PersonSearchSection = (props: Props) => {
   const reorderPersons = (role: SongPersonRole, fromIndex: number, toIndex: number) => {
-    props.setSelections(current => ({
+    props.setSelections((current) => ({
       ...current,
       [role]: reorderItems(current[role], fromIndex, toIndex),
     }));
@@ -36,7 +36,7 @@ export const PersonSearchSection = (props: Props) => {
   const [searchError, setSearchError] = createSignal<string | null>(null);
 
   const isSelected = (role: SongPersonRole, personId: string) =>
-    props.selections()[role].some(person => person.personId === personId);
+    props.selections()[role].some((person) => person.personId === personId);
 
   const search = async (name: string, nextPage = 1) => {
     if (searching()) {
@@ -89,21 +89,24 @@ export const PersonSearchSection = (props: Props) => {
       return;
     }
 
-    props.setSelections(current =>
-      addSelectedPersonToRole(current, role, { personId: person.personId, name: person.name }));
+    props.setSelections((current) =>
+      addSelectedPersonToRole(current, role, { personId: person.personId, name: person.name }),
+    );
   };
 
   const removePerson = (role: SongPersonRole, personId: string) => {
-    props.setSelections(current => ({
+    props.setSelections((current) => ({
       ...current,
-      [role]: current[role].filter(person => person.personId !== personId),
+      [role]: current[role].filter((person) => person.personId !== personId),
     }));
   };
 
   return (
     <section class="space-y-4 rounded-box border border-base-300 bg-base-100 p-4">
       <div>
-        <label class="label" for="song-person-search">人物名</label>
+        <label class="label" for="song-person-search">
+          人物名
+        </label>
         <div class="flex gap-2">
           <input
             id="song-person-search"
@@ -111,7 +114,7 @@ export const PersonSearchSection = (props: Props) => {
             class="input input-bordered min-w-0 flex-1"
             value={query()}
             placeholder="人物名で検索"
-            onInput={event => setQuery(event.currentTarget.value)}
+            onInput={(event) => setQuery(event.currentTarget.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 event.preventDefault();
@@ -128,7 +131,7 @@ export const PersonSearchSection = (props: Props) => {
             {searching() ? '検索中...' : '検索'}
           </button>
         </div>
-        <Show when={searchError()}>{message => <p class="mt-2 text-sm text-error">{message()}</p>}</Show>
+        <Show when={searchError()}>{(message) => <p class="mt-2 text-sm text-error">{message()}</p>}</Show>
       </div>
 
       <Show when={hasSearched() && !searchError()}>
@@ -138,12 +141,12 @@ export const PersonSearchSection = (props: Props) => {
             fallback={<p class="text-sm text-base-content/60">条件に一致する人物はありません。</p>}
           >
             <For each={results()}>
-              {person => (
+              {(person) => (
                 <div class="flex items-center justify-between gap-3 rounded-box border border-base-300 p-3">
                   <span class="min-w-0 truncate">{person.name}</span>
                   <div class="join shrink-0">
                     <For each={ROLE_OPTIONS}>
-                      {option => (
+                      {(option) => (
                         <button
                           type="button"
                           class="btn btn-xs join-item"
@@ -166,7 +169,9 @@ export const PersonSearchSection = (props: Props) => {
 
           <Show when={maxPage() > 1}>
             <div class="flex items-center justify-between text-xs text-base-content/60">
-              <span>{page()} / {maxPage()} ページ</span>
+              <span>
+                {page()} / {maxPage()} ページ
+              </span>
               <div class="flex gap-2">
                 <button
                   type="button"
@@ -192,7 +197,7 @@ export const PersonSearchSection = (props: Props) => {
 
       <div class="grid gap-3 lg:grid-cols-3">
         <For each={ROLE_OPTIONS}>
-          {option => (
+          {(option) => (
             <div class="rounded-box border border-base-300 p-3">
               <p class="font-semibold">{option.label}</p>
               <Show

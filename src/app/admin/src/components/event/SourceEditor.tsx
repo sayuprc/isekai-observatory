@@ -10,12 +10,12 @@ interface SourceEditorProps {
 
 export const SourceEditor = (props: SourceEditorProps) => {
   const moveItem = (fromIndex: number, toIndex: number) => {
-    props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
+    props.onChange((prev) => reorderItems(prev, fromIndex, toIndex));
   };
   const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
   const update = (index: number, patch: Partial<SourceForm>) => {
-    props.onChange(prev => prev.map((source, i) => (i === index ? { ...source, ...patch } : source)));
+    props.onChange((prev) => prev.map((source, i) => (i === index ? { ...source, ...patch } : source)));
   };
 
   return (
@@ -23,10 +23,7 @@ export const SourceEditor = (props: SourceEditorProps) => {
       <legend class="px-2 text-sm font-semibold text-base-content/70">出典</legend>
       <p class="mb-4 text-sm text-base-content/60">公式の告知ページや配信ページなど、情報の出どころを登録します</p>
 
-      <Show
-        when={props.sources.length > 0}
-        fallback={<p class="text-sm text-base-content/60">出典はまだありません</p>}
-      >
+      <Show when={props.sources.length > 0} fallback={<p class="text-sm text-base-content/60">出典はまだありません</p>}>
         <ul class="space-y-3">
           <Index each={props.sources}>
             {(source, index) => (
@@ -42,24 +39,28 @@ export const SourceEditor = (props: SourceEditorProps) => {
                   <button {...sortable.dragHandleProps('sources', index, `出典${index + 1}`)}>⠿</button>
                   <span class="badge badge-neutral badge-sm mb-2">{index + 1}</span>
                   <div class="min-w-40 flex-1">
-                    <label class="label" for={`source-name-${index}`}>表示名</label>
+                    <label class="label" for={`source-name-${index}`}>
+                      表示名
+                    </label>
                     <input
                       id={`source-name-${index}`}
                       class="input input-bordered input-sm w-full"
                       placeholder="公式サイト など"
                       value={source().displayName}
-                      onInput={e => update(index, { displayName: e.currentTarget.value })}
+                      onInput={(e) => update(index, { displayName: e.currentTarget.value })}
                     />
                   </div>
                   <div class="min-w-60 flex-[2]">
-                    <label class="label" for={`source-url-${index}`}>URL</label>
+                    <label class="label" for={`source-url-${index}`}>
+                      URL
+                    </label>
                     <input
                       id={`source-url-${index}`}
                       type="url"
                       class="input input-bordered input-sm w-full"
                       placeholder="https://"
                       value={source().url}
-                      onInput={e => update(index, { url: e.currentTarget.value })}
+                      onInput={(e) => update(index, { url: e.currentTarget.value })}
                     />
                   </div>
                   <ListItemActions
@@ -67,7 +68,7 @@ export const SourceEditor = (props: SourceEditorProps) => {
                     index={index}
                     length={props.sources.length}
                     onMove={moveItem}
-                    onRemove={() => props.onChange(prev => prev.filter((_, i) => i !== index))}
+                    onRemove={() => props.onChange((prev) => prev.filter((_, i) => i !== index))}
                   />
                 </div>
               </li>
@@ -80,7 +81,7 @@ export const SourceEditor = (props: SourceEditorProps) => {
         <button
           type="button"
           class="btn btn-outline btn-sm"
-          onClick={() => props.onChange(prev => [...prev, { displayName: '', url: '' }])}
+          onClick={() => props.onChange((prev) => [...prev, { displayName: '', url: '' }])}
         >
           出典を追加
         </button>

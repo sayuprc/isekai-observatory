@@ -50,7 +50,7 @@
 
 .hero-ledger-label {
   flex-basis: 100%;
-  font-family: "Noto Serif JP", serif;
+  font-family: 'Noto Serif JP', serif;
   font-size: 12px;
   color: var(--fg-muted);
   letter-spacing: 0.16em;
@@ -77,11 +77,13 @@
 .hero-ledger-link .hero-ledger-value::after {
   display: inline-block;
   margin-left: 10px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   color: var(--fg-muted);
-  content: "→";
-  transition: color 0.2s ease, transform 0.2s ease;
+  content: '→';
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .hero-ledger-link:hover .hero-ledger-label {
@@ -95,7 +97,7 @@
 
 .hero-mark {
   margin: 0;
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: clamp(56px, 9vw, 128px);
   line-height: 1;
   letter-spacing: 0.18em;
@@ -165,7 +167,7 @@
 
 .feature-title {
   margin: 12px 0 6px;
-  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
   font-size: 40px;
   letter-spacing: 0.06em;
 }
@@ -264,7 +266,7 @@
 }
 
 .home-feature .eyebrow {
-  font-family: "JetBrains Mono", "Noto Serif JP", serif;
+  font-family: 'JetBrains Mono', 'Noto Serif JP', serif;
   font-size: 11px;
   line-height: 1.8;
   letter-spacing: 0.08em;

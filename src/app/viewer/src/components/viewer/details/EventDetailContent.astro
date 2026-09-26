@@ -17,12 +17,12 @@ const statusName = eventStatusName(event.status);
 // 期間の開始日と終了日は、それぞれ途中で折り返さないよう分けて持つ
 const facts = [
   { label: '開催時期', parts: eventDetailDate(event) ?? ['開催時期未定'], separator: ' 〜 ' },
-  { label: '開催先', parts: [event.venues.map(venue => venue.name).join(' / ') || '-'], separator: '' },
+  { label: '開催先', parts: [event.venues.map((venue) => venue.name).join(' / ') || '-'], separator: '' },
 ];
 
 const coVocalistText = (performance: Performance): string | null =>
   performance.coVocalists.length > 0
-    ? `共演: ${performance.coVocalists.map(person => person.creditName ?? person.name).join(' / ')}`
+    ? `共演: ${performance.coVocalists.map((person) => person.creditName ?? person.name).join(' / ')}`
     : null;
 const toSong = (performance: Performance) => ({
   title: performance.songTitle,
@@ -31,13 +31,13 @@ const toSong = (performance: Performance) => ({
 });
 
 // セットリストの項目に楽曲披露を入れ込み、どの項目からも参照されない披露だけを別に出す
-const setlistItems = event.setlist.map(item => ({
+const setlistItems = event.setlist.map((item) => ({
   index: String(item.orderNo).padStart(2, '0'),
   label: item.label,
   songs: item.performances.map(toSong),
 }));
-const referencedIds = new Set(event.setlist.flatMap(item => item.performances.map(p => p.performanceId)));
-const looseSongs = event.performances.filter(p => !referencedIds.has(p.performanceId)).map(toSong);
+const referencedIds = new Set(event.setlist.flatMap((item) => item.performances.map((p) => p.performanceId)));
+const looseSongs = event.performances.filter((p) => !referencedIds.has(p.performanceId)).map(toSong);
 const looseTitle = setlistItems.length > 0 ? 'セットリスト外の楽曲披露' : '楽曲披露';
 
 const hostname = (url: string): string => {
@@ -58,86 +58,74 @@ const hostname = (url: string): string => {
   {event.description && <p class="detail-description event-detail-description">{event.description}</p>}
 
   <dl class="event-detail-facts">
-    {
-      facts.map(fact => (
-        <div class="event-detail-fact">
-          <dt class="event-detail-fact-label">{fact.label}</dt>
-          <dd class="event-detail-fact-value">
-            {fact.parts.map((part, index) => (
-              <>
-                {index > 0 && fact.separator}
-                <span class="event-detail-fact-part">{part}</span>
-              </>
-            ))}
-          </dd>
-        </div>
-      ))
-    }
+    {facts.map((fact) => (
+      <div class="event-detail-fact">
+        <dt class="event-detail-fact-label">{fact.label}</dt>
+        <dd class="event-detail-fact-value">
+          {fact.parts.map((part, index) => (
+            <>
+              {index > 0 && fact.separator}
+              <span class="event-detail-fact-part">{part}</span>
+            </>
+          ))}
+        </dd>
+      </div>
+    ))}
   </dl>
 
-  {
-    setlistItems.length > 0 && (
-      <>
-        <DetailSectionHead title="セットリスト" count={setlistItems.length} />
-        <ol class="event-setlist">
-          {
-            setlistItems.map(item => (
-              <li class="event-setlist-item" data-label-only={item.songs.length === 0 ? '' : undefined}>
-                <span class="detail-index">{item.index}</span>
-                <div class="event-setlist-body">
-                  {item.label && <div class="event-setlist-label">{item.label}</div>}
-                  {item.songs.length > 0 && <EventSetlistSongs songs={item.songs} />}
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-      </>
-    )
-  }
+  {setlistItems.length > 0 && (
+    <>
+      <DetailSectionHead title="セットリスト" count={setlistItems.length} />
+      <ol class="event-setlist">
+        {setlistItems.map((item) => (
+          <li class="event-setlist-item" data-label-only={item.songs.length === 0 ? '' : undefined}>
+            <span class="detail-index">{item.index}</span>
+            <div class="event-setlist-body">
+              {item.label && <div class="event-setlist-label">{item.label}</div>}
+              {item.songs.length > 0 && <EventSetlistSongs songs={item.songs} />}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </>
+  )}
 
-  {
-    looseSongs.length > 0 && (
-      <>
-        <DetailSectionHead title={looseTitle} count={looseSongs.length} />
-        <div class="event-setlist">
-          <div class="event-setlist-item event-setlist-item-loose">
-            <EventSetlistSongs songs={looseSongs} />
-          </div>
+  {looseSongs.length > 0 && (
+    <>
+      <DetailSectionHead title={looseTitle} count={looseSongs.length} />
+      <div class="event-setlist">
+        <div class="event-setlist-item event-setlist-item-loose">
+          <EventSetlistSongs songs={looseSongs} />
         </div>
-      </>
-    )
-  }
+      </div>
+    </>
+  )}
 
-  {
-    event.media.length > 0 && (
-      <>
-        <DetailSectionHead title="関連メディア" count={event.media.length} />
-        <div class="rel-list">
-          {event.media.map(media => <MediaChip media={media} />)}
-        </div>
-      </>
-    )
-  }
+  {event.media.length > 0 && (
+    <>
+      <DetailSectionHead title="関連メディア" count={event.media.length} />
+      <div class="rel-list">
+        {event.media.map((media) => (
+          <MediaChip media={media} />
+        ))}
+      </div>
+    </>
+  )}
 
-  {
-    event.sources.length > 0 && (
-      <>
-        <DetailSectionHead title="出典" count={event.sources.length} />
-        <div class="rel-list">
-          {
-            event.sources.map(source => (
-              <a class="rel-chip" href={source.url} target="_blank" rel="noopener noreferrer">
-                <div class="rel-copy">
-                  <div class="rel-main">{source.displayName}</div>
-                  <div class="label-mono rel-sub">{hostname(source.url)}</div>
-                </div>
-                <span class="rel-arrow rel-arrow-muted">↗</span>
-              </a>
-            ))
-          }
-        </div>
-      </>
-    )
-  }
+  {event.sources.length > 0 && (
+    <>
+      <DetailSectionHead title="出典" count={event.sources.length} />
+      <div class="rel-list">
+        {event.sources.map((source) => (
+          <a class="rel-chip" href={source.url} target="_blank" rel="noopener noreferrer">
+            <div class="rel-copy">
+              <div class="rel-main">{source.displayName}</div>
+              <div class="label-mono rel-sub">{hostname(source.url)}</div>
+            </div>
+            <span class="rel-arrow rel-arrow-muted">↗</span>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
 </div>

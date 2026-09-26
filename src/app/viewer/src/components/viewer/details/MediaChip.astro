@@ -20,30 +20,28 @@ const publishedAt = dottedDateOfDateTime(media.publishedAt);
 ---
 
 <a class="rel-chip" href={`/media/${media.mediaId}`}>
-  {
-    thumbnailUrl
-      ? (
-          <img
-            class="rel-thumb"
-            src={thumbnailUrl}
-            srcset={youtubeThumbnailSrcset(thumbnailUrl)}
-            sizes="96px"
-            width="96"
-            height="54"
-            loading="lazy"
-            decoding="async"
-            alt={media.title}
-          />
-        )
-      : (
-          <div class="rel-thumb rel-thumb-placeholder">
-            <span class="rel-thumb-placeholder-label">{platformName}</span>
-          </div>
-        )
-  }
+  {thumbnailUrl ? (
+    <img
+      class="rel-thumb"
+      src={thumbnailUrl}
+      srcset={youtubeThumbnailSrcset(thumbnailUrl)}
+      sizes="96px"
+      width="96"
+      height="54"
+      loading="lazy"
+      decoding="async"
+      alt={media.title}
+    />
+  ) : (
+    <div class="rel-thumb rel-thumb-placeholder">
+      <span class="rel-thumb-placeholder-label">{platformName}</span>
+    </div>
+  )}
   <div class="rel-copy">
     <div class="rel-main">{media.title}</div>
-    <div class="label-mono rel-sub">{publishedAt} · {platformName} · {media.type.name}</div>
+    <div class="label-mono rel-sub">
+      {publishedAt} · {platformName} · {media.type.name}
+    </div>
   </div>
   <span class="rel-arrow rel-arrow-muted">→</span>
 </a>

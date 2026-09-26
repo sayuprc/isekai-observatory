@@ -4,7 +4,7 @@ import { releaseGroupContentRepository } from '../../features/releases/content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  return (await releaseGroupContentRepository.entries()).map(entry => ({
+  return (await releaseGroupContentRepository.entries()).map((entry) => ({
     params: { releaseGroupId: entry.id },
     props: { releaseGroup: releaseGroupContentRepository.fromEntry(entry) },
   }));
@@ -18,7 +18,10 @@ const pageDescription = releaseGroup.description || `ヰ世界情緒が参加す
 <Layout
   pageTitle={releaseGroup.title}
   pageDescription={pageDescription}
-  breadcrumbs={[{ label: 'リリース', href: '/releases' }, { label: releaseGroup.title, href: null }]}
+  breadcrumbs={[
+    { label: 'リリース', href: '/releases' },
+    { label: releaseGroup.title, href: null },
+  ]}
 >
   <section class="shell page-section detail-page">
     <ReleaseDetailContent releaseGroup={releaseGroup} />

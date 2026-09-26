@@ -32,47 +32,40 @@ const thumbnailUrl = media.reduce<string | null>((found, entry) => found ?? yout
 const thumbnailSrcset = thumbnailUrl === null ? undefined : youtubeThumbnailSrcset(thumbnailUrl);
 
 // メディアから導出できなければ収録リリースの最初の代表色で代替する
-const fallbackColor = thumbnailUrl === null
-  ? releaseGroups.reduce<string | null>((found, entry) => found ?? entry.color, null)
-  : null;
+const fallbackColor =
+  thumbnailUrl === null ? releaseGroups.reduce<string | null>((found, entry) => found ?? entry.color, null) : null;
 
 const sequence = String(index + 1).padStart(2, '0');
 const tileStyle = [
   `--song-tile-aspect:${aspectRatio}`,
   fallbackColor === null ? null : `--song-tile-color:${fallbackColor}`,
-].filter(Boolean).join(';');
+]
+  .filter(Boolean)
+  .join(';');
 ---
 
-<div
-  class:list={['song-tile', { 'has-color-fallback': fallbackColor !== null }]}
-  style={tileStyle}
-  aria-hidden="true"
->
-  {
-    thumbnailUrl
-      ? (
-          <img
-            class="song-tile-image"
-            src={thumbnailUrl}
-            srcset={thumbnailSrcset}
-            sizes={sizes}
-            loading={loading}
-            fetchpriority={loading === 'eager' ? 'high' : undefined}
-            decoding="async"
-            alt=""
-          />
-        )
-      : (
-          <>
-            <div class="song-tile-top">
-              <span class="song-tile-meta-text">{sequence}</span>
-            </div>
-            <span class="song-tile-icon">
-              <svg width="42" height="42" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M9 17.5V6.2l9-1.8v9.4a2.6 2.6 0 1 1-1.5-2.36V6.1L10.5 7.3v9.1A2.6 2.6 0 1 1 9 14.05z" />
-              </svg>
-            </span>
-          </>
-        )
-  }
+<div class:list={['song-tile', { 'has-color-fallback': fallbackColor !== null }]} style={tileStyle} aria-hidden="true">
+  {thumbnailUrl ? (
+    <img
+      class="song-tile-image"
+      src={thumbnailUrl}
+      srcset={thumbnailSrcset}
+      sizes={sizes}
+      loading={loading}
+      fetchpriority={loading === 'eager' ? 'high' : undefined}
+      decoding="async"
+      alt=""
+    />
+  ) : (
+    <>
+      <div class="song-tile-top">
+        <span class="song-tile-meta-text">{sequence}</span>
+      </div>
+      <span class="song-tile-icon">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M9 17.5V6.2l9-1.8v9.4a2.6 2.6 0 1 1-1.5-2.36V6.1L10.5 7.3v9.1A2.6 2.6 0 1 1 9 14.05z" />
+        </svg>
+      </span>
+    </>
+  )}
 </div>

@@ -18,13 +18,13 @@ export function sortByIndex<T extends { index: number }>(
 ): Array<{ id: string; data: T }> {
   return [...entries]
     .sort((a, b) => a.data.index - b.data.index)
-    .map(entry => ({ id: entry.id, data: entry.data as T }));
+    .map((entry) => ({ id: entry.id, data: entry.data as T }));
 }
 
 export function allFromCollection<T extends { index: number }>(
   entries: ReadonlyArray<IndexedEntry>,
 ): Omit<T, 'index'>[] {
-  return sortByIndex<T>(entries).map(entry => stripIndex(entry.data));
+  return sortByIndex<T>(entries).map((entry) => stripIndex(entry.data));
 }
 
 export function latestFromCollection<T extends { index: number }>(

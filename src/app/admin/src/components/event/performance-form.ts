@@ -22,11 +22,11 @@ export type SetlistItemForm = {
 export const newId = (): string => crypto.randomUUID();
 
 export const toPerformanceForms = (performances: SongPerformance[]): PerformanceForm[] =>
-  performances.map(performance => ({
+  performances.map((performance) => ({
     performanceId: performance.performanceId,
     songId: performance.songId,
     songTitle: performance.songTitle,
-    coVocalists: performance.coVocalists.map(person => ({
+    coVocalists: performance.coVocalists.map((person) => ({
       personId: person.personId,
       name: person.name,
       creditName: person.creditName ?? '',
@@ -34,10 +34,10 @@ export const toPerformanceForms = (performances: SongPerformance[]): Performance
   }));
 
 export const toSetlistItemForms = (setlist: SetlistItem[]): SetlistItemForm[] =>
-  setlist.map(item => ({
+  setlist.map((item) => ({
     setlistItemId: item.setlistItemId,
     label: item.label ?? '',
-    performanceIds: item.performances.map(performance => performance.performanceId),
+    performanceIds: item.performances.map((performance) => performance.performanceId),
   }));
 
 export const addPerformance = (
@@ -54,7 +54,8 @@ const updateCoVocalists = (
   updater: (coVocalists: CoVocalistForm[]) => CoVocalistForm[],
 ): PerformanceForm[] =>
   performances.map((performance, index) =>
-    index === performanceIndex ? { ...performance, coVocalists: updater(performance.coVocalists) } : performance);
+    index === performanceIndex ? { ...performance, coVocalists: updater(performance.coVocalists) } : performance,
+  );
 
 // 同じ披露に同一人物を重複して追加しない
 export const addCoVocalist = (
@@ -62,10 +63,11 @@ export const addCoVocalist = (
   performanceIndex: number,
   person: { personId: string; name: string },
 ): PerformanceForm[] =>
-  updateCoVocalists(performances, performanceIndex, coVocalists =>
-    coVocalists.some(item => item.personId === person.personId)
+  updateCoVocalists(performances, performanceIndex, (coVocalists) =>
+    coVocalists.some((item) => item.personId === person.personId)
       ? coVocalists
-      : [...coVocalists, { personId: person.personId, name: person.name, creditName: '' }]);
+      : [...coVocalists, { personId: person.personId, name: person.name, creditName: '' }],
+  );
 
 export const setCreditName = (
   performances: PerformanceForm[],
@@ -73,16 +75,18 @@ export const setCreditName = (
   personIndex: number,
   creditName: string,
 ): PerformanceForm[] =>
-  updateCoVocalists(performances, performanceIndex, coVocalists =>
-    coVocalists.map((person, index) => (index === personIndex ? { ...person, creditName } : person)));
+  updateCoVocalists(performances, performanceIndex, (coVocalists) =>
+    coVocalists.map((person, index) => (index === personIndex ? { ...person, creditName } : person)),
+  );
 
 export const removeCoVocalist = (
   performances: PerformanceForm[],
   performanceIndex: number,
   personIndex: number,
 ): PerformanceForm[] =>
-  updateCoVocalists(performances, performanceIndex, coVocalists =>
-    coVocalists.filter((_, index) => index !== personIndex));
+  updateCoVocalists(performances, performanceIndex, (coVocalists) =>
+    coVocalists.filter((_, index) => index !== personIndex),
+  );
 
 export const toPerformancesPayload = (performances: PerformanceForm[]): RequestSongPerformance[] =>
   performances.map((performance, index) => ({
@@ -96,17 +100,14 @@ export const toPerformancesPayload = (performances: PerformanceForm[]): RequestS
     })),
   }));
 
-export const toSetlistPayload = (
-  setlist: SetlistItemForm[],
-  performances: PerformanceForm[],
-): RequestSetlistItem[] => {
-  const performanceIds = new Set(performances.map(performance => performance.performanceId));
+export const toSetlistPayload = (setlist: SetlistItemForm[], performances: PerformanceForm[]): RequestSetlistItem[] => {
+  const performanceIds = new Set(performances.map((performance) => performance.performanceId));
 
   return setlist.map((item, index) => ({
     setlistItemId: item.setlistItemId,
     orderNo: index + 1,
     label: item.label.trim() === '' ? null : item.label.trim(),
-    performanceIds: item.performanceIds.filter(performanceId => performanceIds.has(performanceId)),
+    performanceIds: item.performanceIds.filter((performanceId) => performanceIds.has(performanceId)),
   }));
 };
 

@@ -5,7 +5,7 @@ import { YOUTUBE_THUMBNAIL_ORIGIN, youtubeThumbnailFromUrl } from '../../feature
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  return (await mediaContentRepository.all()).map(media => ({
+  return (await mediaContentRepository.all()).map((media) => ({
     params: { mediaId: media.mediaId },
     props: { media },
   }));

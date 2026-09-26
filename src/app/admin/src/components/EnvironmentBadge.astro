@@ -7,15 +7,12 @@ const badges: Record<string, { label: string; className: string }> = {
   staging: { label: 'STG', className: 'badge-warning' },
 };
 
-const badge = APP_ENV === 'production'
-  ? null
-  : (badges[APP_ENV] ?? { label: APP_ENV.toUpperCase(), className: 'badge-error' });
+const badge =
+  APP_ENV === 'production' ? null : (badges[APP_ENV] ?? { label: APP_ENV.toUpperCase(), className: 'badge-error' });
 ---
 
 {badge && (
-  <span
-    class={`badge ${badge.className} badge-sm pointer-events-none fixed top-2 right-2 z-50 font-bold sm:badge-lg`}
-  >
+  <span class={`badge ${badge.className} badge-sm pointer-events-none fixed top-2 right-2 z-50 font-bold sm:badge-lg`}>
     {badge.label}
   </span>
 )}

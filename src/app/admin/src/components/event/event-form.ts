@@ -63,13 +63,14 @@ export const createEventForm = (event?: Event) => {
   // 削除された楽曲披露への参照をセットリストから外す
   const updatePerformances = (updater: (prev: PerformanceForm[]) => PerformanceForm[]) => {
     const next = updater(performances());
-    const ids = new Set(next.map(performance => performance.performanceId));
+    const ids = new Set(next.map((performance) => performance.performanceId));
     setPerformances(next);
-    setSetlist(items =>
-      items.map(item => ({
+    setSetlist((items) =>
+      items.map((item) => ({
         ...item,
-        performanceIds: item.performanceIds.filter(id => ids.has(id)),
-      })));
+        performanceIds: item.performanceIds.filter((id) => ids.has(id)),
+      })),
+    );
   };
 
   const validate = (): string | null => validateSetlistItems(setlist()) ?? validateSources(sources());

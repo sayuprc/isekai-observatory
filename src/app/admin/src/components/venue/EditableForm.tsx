@@ -9,8 +9,12 @@ import { createSubmitting } from '../../utils/use-submitting';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
 
-interface DetailViewProps { venueId: string }
-interface EditableFormProps { data: { venue: Venue } }
+interface DetailViewProps {
+  venueId: string;
+}
+interface EditableFormProps {
+  data: { venue: Venue };
+}
 type FetchState = { status: 'ok'; data: { venue: Venue } } | { status: 'forbidden' } | { status: 'error' };
 type Payload = { name: string; kind: VenueKindValue };
 
@@ -50,10 +54,12 @@ export const DetailView = (props: DetailViewProps) => {
       <Match when={resource.error || resource()?.status === 'error'}>
         <div class="flex flex-col items-start gap-3">
           <p class="text-error">データの取得に失敗しました。</p>
-          <button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>再試行</button>
+          <button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>
+            再試行
+          </button>
         </div>
       </Match>
-      <Match when={loadedData()}>{data => <EditableForm data={data()} />}</Match>
+      <Match when={loadedData()}>{(data) => <EditableForm data={data()} />}</Match>
     </Switch>
   );
 };
@@ -124,13 +130,17 @@ const EditableForm = (props: EditableFormProps) => {
 
   return (
     <>
-      <a href={listUrl} class="btn btn-ghost btn-sm mb-4">← 一覧に戻る</a>
+      <a href={listUrl} class="btn btn-ghost btn-sm mb-4">
+        ← 一覧に戻る
+      </a>
       <FormError message={formError()} onClose={clearErrors} />
       <div class="max-w-4xl space-y-6">
-        <form onSubmit={event => event.preventDefault()}>
+        <form onSubmit={(event) => event.preventDefault()}>
           <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
             <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
-            <label class="label" for="name">開催先名</label>
+            <label class="label" for="name">
+              開催先名
+            </label>
             <input
               id="name"
               type="text"
@@ -141,11 +151,17 @@ const EditableForm = (props: EditableFormProps) => {
               value={props.data.venue.name}
               classList={{ 'input-error': !!getFieldError('name') }}
             />
-            <Show when={getFieldError('name')}>{message => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
-            <label class="label mt-4" for="kind">種別</label>
+            <Show when={getFieldError('name')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
+            <label class="label mt-4" for="kind">
+              種別
+            </label>
             <select id="kind" name="kind" class="select w-full" required>
-              <option value="1" selected={props.data.venue.kind.value === 1}>現地</option>
-              <option value="2" selected={props.data.venue.kind.value === 2}>オンライン</option>
+              <option value="1" selected={props.data.venue.kind.value === 1}>
+                現地
+              </option>
+              <option value="2" selected={props.data.venue.kind.value === 2}>
+                オンライン
+              </option>
             </select>
             <div class="mt-6 flex justify-end">
               <button type="button" onClick={handleUpdate} class="btn btn-primary" disabled={isSubmitting()}>

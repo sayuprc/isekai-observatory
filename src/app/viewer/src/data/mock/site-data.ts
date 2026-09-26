@@ -868,28 +868,28 @@ export type EventStats = {
 };
 
 export const Q = {
-  song: (id: string): Song | undefined => SITE_DATA.songs.find(s => s.id === id),
-  event: (id: string): AppearanceEvent | undefined => SITE_DATA.events.find(e => e.id === id),
-  release: (id: string): Release | undefined => SITE_DATA.releases.find(r => r.id === id),
-  media: (id: string): MediaEntry | undefined => SITE_DATA.media.find(m => m.id === id),
-  performance: (id: string): Performance | undefined => SITE_DATA.performances.find(p => p.id === id),
+  song: (id: string): Song | undefined => SITE_DATA.songs.find((s) => s.id === id),
+  event: (id: string): AppearanceEvent | undefined => SITE_DATA.events.find((e) => e.id === id),
+  release: (id: string): Release | undefined => SITE_DATA.releases.find((r) => r.id === id),
+  media: (id: string): MediaEntry | undefined => SITE_DATA.media.find((m) => m.id === id),
+  performance: (id: string): Performance | undefined => SITE_DATA.performances.find((p) => p.id === id),
 
-  releasesOfSong: (songId: string): Release[] => SITE_DATA.releases.filter(r => r.songIds.includes(songId)),
-  performancesOfSong: (songId: string): Performance[] => SITE_DATA.performances.filter(p => p.songId === songId),
-  mediaOfSong: (songId: string): MediaEntry[] => SITE_DATA.media.filter(m => m.songIds.includes(songId)),
+  releasesOfSong: (songId: string): Release[] => SITE_DATA.releases.filter((r) => r.songIds.includes(songId)),
+  performancesOfSong: (songId: string): Performance[] => SITE_DATA.performances.filter((p) => p.songId === songId),
+  mediaOfSong: (songId: string): MediaEntry[] => SITE_DATA.media.filter((m) => m.songIds.includes(songId)),
   eventsOfSong: (songId: string): AppearanceEvent[] => {
-    const ids = [...new Set(SITE_DATA.performances.filter(p => p.songId === songId).map(p => p.eventId))];
-    return ids.map(id => Q.event(id)).filter((e): e is AppearanceEvent => e !== undefined);
+    const ids = [...new Set(SITE_DATA.performances.filter((p) => p.songId === songId).map((p) => p.eventId))];
+    return ids.map((id) => Q.event(id)).filter((e): e is AppearanceEvent => e !== undefined);
   },
   firstReleaseDateOfSong: (songId: string): string | null => {
     const rs = Q.releasesOfSong(songId);
     if (!rs.length) return null;
-    return rs.map(r => r.date).sort()[0] ?? null;
+    return rs.map((r) => r.date).sort()[0] ?? null;
   },
   firstPerformanceDateOfSong: (songId: string): string | null => {
     const ps = Q.performancesOfSong(songId);
     if (!ps.length) return null;
-    return ps.map(p => p.date).sort()[0] ?? null;
+    return ps.map((p) => p.date).sort()[0] ?? null;
   },
   firstAppearanceDateOfSong: (songId: string): string | null => {
     const dates = [Q.firstReleaseDateOfSong(songId), Q.firstPerformanceDateOfSong(songId)].filter(
@@ -899,17 +899,17 @@ export const Q = {
     return dates.sort()[0] ?? null;
   },
 
-  performancesAtEvent: (eventId: string): Performance[] => SITE_DATA.performances.filter(p => p.eventId === eventId),
+  performancesAtEvent: (eventId: string): Performance[] => SITE_DATA.performances.filter((p) => p.eventId === eventId),
   songsAtEvent: (eventId: string): Song[] => {
-    const ids = [...new Set(SITE_DATA.performances.filter(p => p.eventId === eventId).map(p => p.songId))];
-    return ids.map(id => Q.song(id)).filter((s): s is Song => s !== undefined);
+    const ids = [...new Set(SITE_DATA.performances.filter((p) => p.eventId === eventId).map((p) => p.songId))];
+    return ids.map((id) => Q.song(id)).filter((s): s is Song => s !== undefined);
   },
-  mediaOfEvent: (eventId: string): MediaEntry[] => SITE_DATA.media.filter(m => m.eventId === eventId),
+  mediaOfEvent: (eventId: string): MediaEntry[] => SITE_DATA.media.filter((m) => m.eventId === eventId),
 
   songsOfMedia: (mediaId: string): Song[] => {
     const m = Q.media(mediaId);
     if (!m) return [];
-    return m.songIds.map(id => Q.song(id)).filter((s): s is Song => s !== undefined);
+    return m.songIds.map((id) => Q.song(id)).filter((s): s is Song => s !== undefined);
   },
   eventOfMedia: (mediaId: string): AppearanceEvent | null => {
     const m = Q.media(mediaId);
@@ -919,7 +919,7 @@ export const Q = {
   songsOfRelease: (releaseId: string): Song[] => {
     const r = Q.release(releaseId);
     if (!r) return [];
-    return r.songIds.map(id => Q.song(id)).filter((s): s is Song => s !== undefined);
+    return r.songIds.map((id) => Q.song(id)).filter((s): s is Song => s !== undefined);
   },
 
   songStats: (songId: string): SongStats => ({

@@ -18,7 +18,9 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <div>
-        <div class="eyebrow" style="margin-bottom: 16px;">SINGER · VIRTUAL</div>
+        <div class="eyebrow" style="margin-bottom: 16px;">
+          SINGER · VIRTUAL
+        </div>
         <h1 class="detail-title">{SITE_DATA.artist.name}</h1>
         <div class="detail-title-en">{SITE_DATA.artist.nameEn}</div>
 
@@ -34,7 +36,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="label-mono">SONGS</div>
           <div>{SITE_DATA.songs.length}+ tracks</div>
           <div class="label-mono">MUSIC VIDEOS</div>
-          <div>{SITE_DATA.media.filter(entry => entry.type === 'mv').length}+ films</div>
+          <div>{SITE_DATA.media.filter((entry) => entry.type === 'mv').length}+ films</div>
           <div class="label-mono">RELEASES</div>
           <div>{SITE_DATA.releases.length}+ titles</div>
         </div>
@@ -43,18 +45,26 @@ import Layout from '../layouts/Layout.astro';
 
         <div style="font-family:'Shippori Mincho', serif;font-size:16px;line-height:2.1;color:var(--fg);">
           <p style="margin-top:0;">
-            {SITE_DATA.artist.tagline} ——
-            夜と詩の間にあるような声で歌うアーティスト。<br />
+            {SITE_DATA.artist.tagline} —— 夜と詩の間にあるような声で歌うアーティスト。
+            <br />
             オリジナル楽曲・カバーともに、静謐で物語性のある歌世界を編む。
           </p>
           <p>※ このプロフィール文はサンプルです。後で公式情報やファン目線の紹介に差し替えてください。</p>
         </div>
 
         <div class="hero-actions" style="margin-top: 40px;">
-          <a class="btn" href="#">YouTube ↗</a>
-          <a class="btn" href="#">Twitter / X ↗</a>
-          <a class="btn" href="#">Streaming ↗</a>
-          <a class="btn" href="#">Official ↗</a>
+          <a class="btn" href="#">
+            YouTube ↗
+          </a>
+          <a class="btn" href="#">
+            Twitter / X ↗
+          </a>
+          <a class="btn" href="#">
+            Streaming ↗
+          </a>
+          <a class="btn" href="#">
+            Official ↗
+          </a>
         </div>
       </div>
     </div>
@@ -62,12 +72,18 @@ import Layout from '../layouts/Layout.astro';
     <div style="margin-top: 96px;">
       <SectionHead title="軌跡" />
       <div class="chronology-grid chronology-grid-mock">
-        <div>2020</div><div>活動開始 / デビュー</div>
-        <div>2021</div><div>初のシングル多数リリース、配信ライブ複数回</div>
-        <div>2022</div><div>初アルバム『残響アーカイブ』リリース、初ワンマンライブ</div>
-        <div>2023</div><div>シリーズ公演「幻奏夜会」開始、海外配信</div>
-        <div>2024</div><div>大型フェス出演、メディア露出増、新作続々</div>
-        <div>2025</div><div>Spring Voyage 2025 開催予定</div>
+        <div>2020</div>
+        <div>活動開始 / デビュー</div>
+        <div>2021</div>
+        <div>初のシングル多数リリース、配信ライブ複数回</div>
+        <div>2022</div>
+        <div>初アルバム『残響アーカイブ』リリース、初ワンマンライブ</div>
+        <div>2023</div>
+        <div>シリーズ公演「幻奏夜会」開始、海外配信</div>
+        <div>2024</div>
+        <div>大型フェス出演、メディア露出増、新作続々</div>
+        <div>2025</div>
+        <div>Spring Voyage 2025 開催予定</div>
       </div>
     </div>
   </section>

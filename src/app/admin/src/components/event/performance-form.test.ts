@@ -28,7 +28,7 @@ describe('イベントの楽曲披露フォーム', () => {
   it('指定した披露だけに共演者を追加する', () => {
     const result = addCoVocalist([performance('p1'), performance('p2')], 1, person);
 
-    expect(result.map(item => item.coVocalists)).toEqual([[], [person]]);
+    expect(result.map((item) => item.coVocalists)).toEqual([[], [person]]);
   });
 
   it('同じ披露には同一人物を重複して追加しない', () => {
@@ -41,13 +41,13 @@ describe('イベントの楽曲披露フォーム', () => {
     const other = { personId: 'person-2', name: '人物2', creditName: '' };
     const result = setCreditName([performance('p1', [person, other])], 0, 1, 'ゲスト');
 
-    expect(result.map(item => item.coVocalists)).toEqual([[person, { ...other, creditName: 'ゲスト' }]]);
+    expect(result.map((item) => item.coVocalists)).toEqual([[person, { ...other, creditName: 'ゲスト' }]]);
   });
 
   it('指定した共演者を外す', () => {
     const result = removeCoVocalist([performance('p1', [person])], 0, 0);
 
-    expect(result.map(item => item.coVocalists)).toEqual([[]]);
+    expect(result.map((item) => item.coVocalists)).toEqual([[]]);
   });
 
   it('存在しない楽曲披露への参照をセットリストの送信値から除く', () => {

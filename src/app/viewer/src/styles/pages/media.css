@@ -43,7 +43,7 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 15px;
   line-height: 1;
   border-radius: 4px;
@@ -70,7 +70,7 @@
 }
 
 .post-card-title {
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 18px;
   line-height: 1.4;
   letter-spacing: 0.04em;
@@ -80,7 +80,7 @@
   display: -webkit-box;
   overflow: hidden;
   -webkit-line-clamp: 6;
-  font-family: "Noto Serif JP", serif;
+  font-family: 'Noto Serif JP', serif;
   font-size: 14px;
   line-height: 1.85;
   color: var(--fg);
@@ -106,7 +106,7 @@
   display: flex;
   gap: 16px;
   margin-top: auto;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   color: var(--fg-muted);
   letter-spacing: 0.1em;
@@ -146,7 +146,7 @@
 
 .feature-subtitle {
   margin-bottom: 24px;
-  font-family: "EB Garamond", serif;
+  font-family: 'EB Garamond', serif;
   font-size: 18px;
   font-style: italic;
   color: var(--accent-strong);
@@ -219,7 +219,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px 14px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   font-weight: 500;
   color: #fff;
@@ -249,7 +249,7 @@
 }
 
 .media-detail-thumbnail-placeholder-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 15px;
   color: var(--fg-muted);
   letter-spacing: 0.1em;
@@ -282,7 +282,7 @@
 }
 
 .rel-thumb-placeholder-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--fg-muted);
   letter-spacing: 0.08em;
@@ -305,7 +305,7 @@
 .mv-thumb::before {
   position: absolute;
   inset: 0;
-  content: "";
+  content: '';
   background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 4px);
 }
 
@@ -314,7 +314,7 @@
   top: 10px;
   left: 12px;
   z-index: 1;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.15em;

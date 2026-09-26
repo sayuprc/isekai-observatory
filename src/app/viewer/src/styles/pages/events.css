@@ -11,7 +11,7 @@
 
 /* リリース一覧と同じく、絞り込みで 1 件も残らなかったグループは畳む */
 
-.event-group:not(:has([data-event-entry]:not([data-viewer-filter-match="false"]))) {
+.event-group:not(:has([data-event-entry]:not([data-viewer-filter-match='false']))) {
   display: none;
 }
 
@@ -34,7 +34,7 @@
 .event-group-count {
   display: block;
   margin-top: 12px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   font-weight: 400;
   color: var(--fg-muted);
@@ -63,7 +63,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .event-line-date-main {
@@ -121,11 +121,12 @@
 
 .event-line-arrow {
   color: var(--fg-muted);
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 @media (hover: hover) {
-
   .event-line:hover {
     background: var(--bg-elev);
   }
@@ -305,7 +306,7 @@ a.event-setlist-song-title::after {
   margin-left: 8px;
   font-size: 12px;
   color: var(--fg-muted);
-  content: "→";
+  content: '→';
 }
 
 a.event-setlist-song-title:hover {

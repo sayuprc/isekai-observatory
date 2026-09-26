@@ -57,10 +57,12 @@ export const DetailView = (props: DetailViewProps) => {
       <Match when={resource.error || resource()?.status === 'error'}>
         <div class="flex flex-col items-start gap-3">
           <p class="text-error">データの取得に失敗しました。</p>
-          <button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>再試行</button>
+          <button type="button" class="btn btn-outline btn-sm" onClick={() => refetch()}>
+            再試行
+          </button>
         </div>
       </Match>
-      <Match when={loadedData()}>{data => <EditableForm data={data()} />}</Match>
+      <Match when={loadedData()}>{(data) => <EditableForm data={data()} />}</Match>
     </Switch>
   );
 };
@@ -102,7 +104,9 @@ const EditableForm = (props: EditableFormProps) => {
 
   return (
     <>
-      <a href={getListUrl('/events')} class="btn btn-ghost btn-sm mb-4">← 一覧に戻る</a>
+      <a href={getListUrl('/events')} class="btn btn-ghost btn-sm mb-4">
+        ← 一覧に戻る
+      </a>
       <FormError message={formError()} onClose={clearErrors} />
       <div class="max-w-4xl space-y-6">
         <form class="space-y-6" onSubmit={save}>

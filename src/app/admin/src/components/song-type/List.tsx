@@ -40,9 +40,9 @@ export const SongTypeList = () => {
               <ListState state="empty" colSpan={1} message="楽曲種別はありません。" />
             </Match>
             <Match when={data()}>
-              {result => (
+              {(result) => (
                 <For each={result().types}>
-                  {type => (
+                  {(type) => (
                     <tr>
                       <td>{type.name}</td>
                     </tr>

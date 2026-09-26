@@ -11,13 +11,10 @@ import { dottedDate } from '../../shared/date';
 // API は最古発売日の降順で返すので、年の区切りを入れるだけで並べ替えは不要
 const releaseGroups = await releaseGroupContentRepository.all();
 
-const years = [...new Set(releaseGroups.map(releaseGroup => releaseGroup.firstReleasedOn.slice(0, 4)))];
+const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.firstReleasedOn.slice(0, 4)))];
 ---
 
-<Layout
-  pageTitle="リリース"
-  pageDescription="ヰ世界情緒のリリース一覧。アルバム・シングルなどを記録しています"
->
+<Layout pageTitle="リリース" pageDescription="ヰ世界情緒のリリース一覧。アルバム・シングルなどを記録しています">
   <section class="shell page-section">
     <SectionHead title="リリース" level={1} />
 
@@ -56,49 +53,46 @@ const years = [...new Set(releaseGroups.map(releaseGroup => releaseGroup.firstRe
       <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
     </div>
 
-    {
-      years.map((year) => {
-        const items = releaseGroups.filter(releaseGroup => releaseGroup.firstReleasedOn.startsWith(year));
+    {years.map((year) => {
+      const items = releaseGroups.filter((releaseGroup) => releaseGroup.firstReleasedOn.startsWith(year));
 
-        return (
-          <section class="release-year" data-release-year>
-            <div class="release-year-head">
-              <div class="release-year-num">{year}</div>
-              <div class="release-year-count" data-release-year-count>{items.length}作品</div>
+      return (
+        <section class="release-year" data-release-year>
+          <div class="release-year-head">
+            <div class="release-year-num">{year}</div>
+            <div class="release-year-count" data-release-year-count>
+              {items.length}作品
             </div>
-            <ol class="release-year-list">
-              {
-                items.map((releaseGroup) => {
-                  const trackTitles = releaseGroup.releases
-                    .flatMap(release => release.media.flatMap(medium => medium.tracks.map(track => track.title)));
+          </div>
+          <ol class="release-year-list">
+            {items.map((releaseGroup) => {
+              const trackTitles = releaseGroup.releases.flatMap((release) =>
+                release.media.flatMap((medium) => medium.tracks.map((track) => track.title)),
+              );
 
-                  return (
-                    <li
-                      data-release-entry
-                      data-release-type={String(releaseGroup.type.value)}
-                      data-release-search={[releaseGroup.title, releaseGroup.type.name, ...trackTitles]
-                        .join(' ')
-                        .toLowerCase()}
-                    >
-                      <a
-                        href={`/releases/${releaseGroup.releaseGroupId}`}
-                        class="release-row"
-                        style={`--release-color:${representativeColor(releaseGroup)};`}
-                      >
-                        <span class="release-row-title">{releaseGroup.title}</span>
-                        <span class="release-row-type">{releaseGroup.type.name}</span>
-                        <span class="label-mono release-row-date">
-                          {dottedDate(releaseGroup.firstReleasedOn.slice(5))}
-                        </span>
-                      </a>
-                    </li>
-                  );
-                })
-              }
-            </ol>
-          </section>
-        );
-      })
-    }
+              return (
+                <li
+                  data-release-entry
+                  data-release-type={String(releaseGroup.type.value)}
+                  data-release-search={[releaseGroup.title, releaseGroup.type.name, ...trackTitles]
+                    .join(' ')
+                    .toLowerCase()}
+                >
+                  <a
+                    href={`/releases/${releaseGroup.releaseGroupId}`}
+                    class="release-row"
+                    style={`--release-color:${representativeColor(releaseGroup)};`}
+                  >
+                    <span class="release-row-title">{releaseGroup.title}</span>
+                    <span class="release-row-type">{releaseGroup.type.name}</span>
+                    <span class="label-mono release-row-date">{dottedDate(releaseGroup.firstReleasedOn.slice(5))}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      );
+    })}
   </section>
 </Layout>

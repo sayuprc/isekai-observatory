@@ -60,7 +60,7 @@ export const SearchList = () => {
 
   const { data, refetch, fetchError } = createSearchResource(
     params,
-    current =>
+    (current) =>
       client.api.venues.search.get({
         query: {
           name: current.name,
@@ -78,63 +78,97 @@ export const SearchList = () => {
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="name">開催先名</label>
+          <label class="fieldset-label" for="name">
+            開催先名
+          </label>
           <input
             id="name"
             class="input input-bordered input-sm"
             value={input().name}
-            onInput={e => updateInput({ name: e.currentTarget.value })}
+            onInput={(e) => updateInput({ name: e.currentTarget.value })}
             placeholder="開催先名で検索"
           />
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="kind">種別</label>
+          <label class="fieldset-label" for="kind">
+            種別
+          </label>
           <select
             id="kind"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ kind: e.currentTarget.value as KindFilter })}
+            onChange={(e) => updateInput({ kind: e.currentTarget.value as KindFilter })}
           >
-            <option value="" selected={input().kind === ''}>すべて</option>
-            <option value="1" selected={input().kind === '1'}>現地</option>
-            <option value="2" selected={input().kind === '2'}>オンライン</option>
+            <option value="" selected={input().kind === ''}>
+              すべて
+            </option>
+            <option value="1" selected={input().kind === '1'}>
+              現地
+            </option>
+            <option value="2" selected={input().kind === '2'}>
+              オンライン
+            </option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="sort">ソート項目</label>
+          <label class="fieldset-label" for="sort">
+            ソート項目
+          </label>
           <select
             id="sort"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ sort: e.currentTarget.value as SortBy })}
+            onChange={(e) => updateInput({ sort: e.currentTarget.value as SortBy })}
           >
-            <option value="name" selected={input().sort === 'name'}>開催先名</option>
+            <option value="name" selected={input().sort === 'name'}>
+              開催先名
+            </option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="order">並び順</label>
+          <label class="fieldset-label" for="order">
+            並び順
+          </label>
           <select
             id="order"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ order: e.currentTarget.value as SortOrder })}
+            onChange={(e) => updateInput({ order: e.currentTarget.value as SortOrder })}
           >
-            <option value="asc" selected={input().order === 'asc'}>昇順</option>
-            <option value="desc" selected={input().order === 'desc'}>降順</option>
+            <option value="asc" selected={input().order === 'asc'}>
+              昇順
+            </option>
+            <option value="desc" selected={input().order === 'desc'}>
+              降順
+            </option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="perPage">表示件数</label>
+          <label class="fieldset-label" for="perPage">
+            表示件数
+          </label>
           <select
             id="perPage"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
+            onChange={(e) => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
-            <For each={PER_PAGE_OPTIONS}>{n => <option value={n} selected={input().perPage === n}>{n}件</option>}</For>
+            <For each={PER_PAGE_OPTIONS}>
+              {(n) => (
+                <option value={n} selected={input().perPage === n}>
+                  {n}件
+                </option>
+              )}
+            </For>
           </select>
         </fieldset>
-        <button type="submit" class="btn btn-primary btn-sm mb-1">検索</button>
-        <button type="button" class="btn btn-ghost btn-sm mb-1" onClick={handleReset}>リセット</button>
+        <button type="submit" class="btn btn-primary btn-sm mb-1">
+          検索
+        </button>
+        <button type="button" class="btn btn-ghost btn-sm mb-1" onClick={handleReset}>
+          リセット
+        </button>
       </form>
       <div class="mb-4 flex justify-end">
-        <a href="/venues/create" class="btn btn-primary btn-sm">新規作成</a>
+        <a href="/venues/create" class="btn btn-primary btn-sm">
+          新規作成
+        </a>
       </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
         <table class="table table-sm table-zebra md:table-md">
@@ -150,15 +184,15 @@ export const SearchList = () => {
                 <ListState state="loading" colSpan={2} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.venues.length === 0}>
                 <ListState state="empty" colSpan={2} />
               </Match>
               <Match when={data()}>
-                {result => (
+                {(result) => (
                   <For each={result().venues}>
-                    {venue => (
+                    {(venue) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td>
                           <a

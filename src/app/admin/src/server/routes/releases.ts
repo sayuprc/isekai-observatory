@@ -29,8 +29,7 @@ export const releases = new Elysia({ prefix: '/releases' })
   .post(
     '/',
     async ({ body, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        releaseServiceCreateRelease({ client, body }));
+      return requestWithAuth(authSession, (client) => releaseServiceCreateRelease({ client, body }));
     },
     {
       body: t.Object({
@@ -49,8 +48,7 @@ export const releases = new Elysia({ prefix: '/releases' })
   .get(
     '/:releaseId',
     async ({ params: { releaseId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        releaseServiceGetRelease({ client, path: { releaseId } }));
+      return requestWithAuth(authSession, (client) => releaseServiceGetRelease({ client, path: { releaseId } }));
     },
     {
       params: t.Object({
@@ -61,12 +59,13 @@ export const releases = new Elysia({ prefix: '/releases' })
   .put(
     '/:releaseId',
     async ({ params: { releaseId }, body, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         releaseServiceUpdateRelease({
           client,
           path: { releaseId },
           body,
-        }));
+        }),
+      );
     },
     {
       params: t.Object({
@@ -87,11 +86,12 @@ export const releases = new Elysia({ prefix: '/releases' })
   .delete(
     '/:releaseId',
     async ({ params: { releaseId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         releaseServiceDeleteRelease({
           client,
           path: { releaseId },
-        }));
+        }),
+      );
     },
     {
       params: t.Object({

@@ -44,8 +44,8 @@
 |---|---|---|---|
 | API の request / response 形状 | `src/app/contracts` | `mise run generate` の影響先 | `mise run contract:format:check`, `contract:test`, `contract:compile:*` |
 | サーバーの業務ロジック | `src/app/server` | 必要なら `src/app/contracts` | `mise run ecs`, `phpstan`, `arkitect`, `test` |
-| 管理画面の UI / BFF | `src/app/admin` | 必要なら `src/app/contracts` | `cd src/app && bun --filter admin lint:check`, `style:check`, `build` |
-| 閲覧サイトの UI | `src/app/viewer` | 必要なら `src/app/contracts` | `cd src/app && bun --filter viewer lint:check`, `style:check`, `build` |
+| 管理画面の UI / BFF | `src/app/admin` | 必要なら `src/app/contracts` | `mise run admin:check`, `cd src/app && bun --filter admin build` |
+| 閲覧サイトの UI | `src/app/viewer` | 必要なら `src/app/contracts` | `mise run viewer:check`, `cd src/app && bun --filter viewer build` |
 | Discord 通知配達 | `src/notification/discord-notifier` | 各 env の `docker/discord-notifier`、Cloud Build | `mise run discord-notifier:check` |
 | 通知 Pub/Sub publish | `src/notification/publish` | 各 env の `docker/viewer` (viewer-deploy から利用) | `mise run notify-publish:check` |
 | アプリ通知 JSON 契約 | `src/notification/contract` | `notify-publish` / `discord-notifier` | `mise run notify-contract:check` |

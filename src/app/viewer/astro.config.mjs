@@ -35,10 +35,7 @@ export default defineConfig({
   prefetch: {
     defaultStrategy: 'hover',
   },
-  integrations: [
-    solidJs(),
-    sitemap(),
-  ],
+  integrations: [solidJs(), sitemap()],
   vite: {
     build: {
       // 小さなスクリプトも全ページへのインライン展開ではなくハッシュ付きファイルとしてキャッシュさせる

@@ -20,7 +20,7 @@ export const FormatCheckboxes = (props: FormatCheckboxesProps) => {
   const toggle = (value: ReleaseFormatValue, checked: boolean) => {
     const next = checked
       ? [...props.formatValues, value]
-      : props.formatValues.filter(formatValue => formatValue !== value);
+      : props.formatValues.filter((formatValue) => formatValue !== value);
     props.onChange(next.toSorted((a, b) => a - b));
   };
 
@@ -29,22 +29,20 @@ export const FormatCheckboxes = (props: FormatCheckboxesProps) => {
       <label class="label">提供形態</label>
       <div class="flex flex-wrap gap-4">
         <For each={RELEASE_FORMAT_OPTIONS}>
-          {option => (
+          {(option) => (
             <label class="label cursor-pointer gap-2">
               <input
                 type="checkbox"
                 class="checkbox checkbox-sm"
                 checked={props.formatValues.includes(option.value)}
-                onChange={e => toggle(option.value, e.currentTarget.checked)}
+                onChange={(e) => toggle(option.value, e.currentTarget.checked)}
               />
               <span>{option.label}</span>
             </label>
           )}
         </For>
       </div>
-      <Show when={props.fieldError}>
-        {message => <p class="mt-1 text-xs text-error">{message()}</p>}
-      </Show>
+      <Show when={props.fieldError}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
     </div>
   );
 };

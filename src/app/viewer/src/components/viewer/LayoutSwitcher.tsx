@@ -30,7 +30,7 @@ export default function LayoutSwitcher(props: Props) {
   return (
     <div class="seg">
       <For each={props.options}>
-        {option => (
+        {(option) => (
           <button
             type="button"
             class={value() === option.value ? 'is-active' : undefined}

@@ -10,7 +10,7 @@ async function all(): Promise<ReleaseGroup[]> {
       const result = await releaseGroupServiceListReleaseGroups({ client: apiClient, query: { limit, cursor } });
       return requireData('releaseGroupServiceListReleaseGroups', result);
     },
-    data => ({ items: data.releaseGroups, nextCursor: data.nextCursor }),
+    (data) => ({ items: data.releaseGroups, nextCursor: data.nextCursor }),
   );
 }
 

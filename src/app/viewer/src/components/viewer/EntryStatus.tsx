@@ -10,7 +10,7 @@ type Props = {
 function countMatchedEntries(selector: string): number {
   return Array.from(document.querySelectorAll(selector))
     .filter((entry): entry is HTMLElement => entry instanceof HTMLElement)
-    .filter(entry => entry.dataset.viewerFilterMatch !== 'false').length;
+    .filter((entry) => entry.dataset.viewerFilterMatch !== 'false').length;
 }
 
 export default function EntryStatus(props: Props) {
@@ -43,9 +43,5 @@ export default function EntryStatus(props: Props) {
     onCleanup(() => document.removeEventListener('viewer:filter-change', onFilterChange));
   });
 
-  return (
-    <div class="entry-status">
-      {count()} 件
-    </div>
-  );
+  return <div class="entry-status">{count()} 件</div>;
 }

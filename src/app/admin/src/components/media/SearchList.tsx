@@ -58,7 +58,11 @@ const DEFAULT_PARAMS: SearchParams = {
 
 const parseParams = (query: URLSearchParams): SearchParams => ({
   title: query.get('title') ?? '',
-  type: pickParam(query.get('type'), MEDIA_TYPE_OPTIONS.map(option => option.value), ''),
+  type: pickParam(
+    query.get('type'),
+    MEDIA_TYPE_OPTIONS.map((option) => option.value),
+    '',
+  ),
   isDisplay: pickParam(query.get('is_display'), ['true', 'false'] as const, ''),
   sort: pickParam(query.get('sort'), ['published_at', 'title'] as const, DEFAULT_PARAMS.sort),
   order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
@@ -83,7 +87,7 @@ export const SearchList = () => {
     toQuery,
   });
 
-  const { data, refetch, fetchError } = createSearchResource(params, current =>
+  const { data, refetch, fetchError } = createSearchResource(params, (current) =>
     client.api.media.search.get({
       query: {
         title: current.title,
@@ -109,7 +113,7 @@ export const SearchList = () => {
             id="title"
             name="title"
             value={input().title}
-            onInput={e => updateInput({ title: e.currentTarget.value })}
+            onInput={(e) => updateInput({ title: e.currentTarget.value })}
             class="input input-bordered input-sm"
             placeholder="メディアタイトルで検索"
           />
@@ -122,10 +126,10 @@ export const SearchList = () => {
             id="type"
             name="type"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ type: e.currentTarget.value as '' | `${MediaTypeValue}` })}
+            onChange={(e) => updateInput({ type: e.currentTarget.value as '' | `${MediaTypeValue}` })}
           >
             <For each={MEDIA_TYPE_OPTIONS}>
-              {option => (
+              {(option) => (
                 <option value={option.value} selected={input().type === option.value}>
                   {option.label}
                 </option>
@@ -141,7 +145,7 @@ export const SearchList = () => {
             id="isDisplay"
             name="isDisplay"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
+            onChange={(e) => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
           >
             <option value="" selected={input().isDisplay === ''}>
               すべて
@@ -162,7 +166,7 @@ export const SearchList = () => {
             id="sort"
             name="sort"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ sort: e.currentTarget.value as Sort })}
+            onChange={(e) => updateInput({ sort: e.currentTarget.value as Sort })}
           >
             <option value="published_at" selected={input().sort === 'published_at'}>
               公開日
@@ -180,7 +184,7 @@ export const SearchList = () => {
             id="order"
             name="order"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ order: e.currentTarget.value as Order })}
+            onChange={(e) => updateInput({ order: e.currentTarget.value as Order })}
           >
             <option value="asc" selected={input().order === 'asc'}>
               昇順
@@ -198,10 +202,10 @@ export const SearchList = () => {
             id="perPage"
             name="perPage"
             class="select select-bordered select-sm"
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
+            onChange={(e) => updateInput({ perPage: Number(e.currentTarget.value) as PerPage })}
           >
             <For each={PER_PAGE_OPTIONS}>
-              {n => (
+              {(n) => (
                 <option value={n} selected={input().perPage === n}>
                   {n}件
                 </option>
@@ -240,15 +244,15 @@ export const SearchList = () => {
                 <ListState state="loading" colSpan={5} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={5} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={5} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.media.length === 0}>
                 <ListState state="empty" colSpan={5} message="条件に一致するメディアはありません。" />
               </Match>
               <Match when={data()}>
-                {result => (
+                {(result) => (
                   <For each={result().media}>
-                    {media => (
+                    {(media) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td class="min-w-44 max-w-56">
                           <a

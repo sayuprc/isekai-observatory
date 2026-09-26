@@ -4,7 +4,10 @@ import { eventContentRepository } from '../../features/events/content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  return (await eventContentRepository.all()).map(event => ({ params: { eventId: event.eventId }, props: { event } }));
+  return (await eventContentRepository.all()).map((event) => ({
+    params: { eventId: event.eventId },
+    props: { event },
+  }));
 }
 
 const { event } = Astro.props;
@@ -14,7 +17,10 @@ const pageDescription = event.description || `ヰ世界情緒のイベント「$
 <Layout
   pageTitle={event.title}
   pageDescription={pageDescription}
-  breadcrumbs={[{ label: 'イベント', href: '/events' }, { label: event.title, href: null }]}
+  breadcrumbs={[
+    { label: 'イベント', href: '/events' },
+    { label: event.title, href: null },
+  ]}
 >
   <section class="shell page-section detail-page">
     <EventDetailContent event={event} />

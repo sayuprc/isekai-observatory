@@ -14,7 +14,7 @@ interface VenueEditorProps {
 
 export const VenueEditor = (props: VenueEditorProps) => {
   const moveItem = (fromIndex: number, toIndex: number) => {
-    props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
+    props.onChange((prev) => reorderItems(prev, fromIndex, toIndex));
   };
   const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
@@ -59,7 +59,7 @@ export const VenueEditor = (props: VenueEditorProps) => {
                   index={index}
                   length={props.venues.length}
                   onMove={moveItem}
-                  onRemove={() => props.onChange(prev => prev.filter((_, i) => i !== index))}
+                  onRemove={() => props.onChange((prev) => prev.filter((_, i) => i !== index))}
                 />
               </li>
             )}
@@ -72,8 +72,8 @@ export const VenueEditor = (props: VenueEditorProps) => {
           title="開催先を追加"
           placeholder="開催先名で検索"
           search={venueSearch}
-          itemLabel={venue => `${venue.name} (${venue.kind.name})`}
-          onAdd={venue => props.onChange(prev => addVenue(prev, venue))}
+          itemLabel={(venue) => `${venue.name} (${venue.kind.name})`}
+          onAdd={(venue) => props.onChange((prev) => addVenue(prev, venue))}
           emptyResultMessage="該当する開催先がありません。開催先の管理画面で先に登録してください"
         />
       </div>

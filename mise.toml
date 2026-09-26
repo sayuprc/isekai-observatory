@@ -330,15 +330,16 @@ bun run generate:api
 description = "Admin の formatter を実行し、フォーマットを自動修正する"
 dir = "src/app/admin"
 run = [
-  "bun run biome:format",
+  "bun run prettier:format",
   "bun run eslint:fix",
   "bun run stylelint:fix",
 ]
 
 [tasks."admin:format:check"]
 description = "Admin の formatter をチェックする"
+usage = 'arg "[path]" var=#true help="Prettier のチェック対象パス (省略時は全体)"'
 dir = "src/app/admin"
-run = "bun run biome:format:check"
+run = "bun x prettier --check ${usage_path:-.}"
 
 [tasks."admin:lint"]
 description = "Admin の linter を実行する"
@@ -373,7 +374,7 @@ depends = ["admin:format"]
 description = "Admin の formatter check / linter を直列で実行する"
 dir = "src/app/admin"
 run = [
-  "bun run biome:format:check",
+  "bun run prettier:format:check",
   "bun run eslint:check",
   "bun run stylelint:check",
 ]
@@ -403,15 +404,16 @@ bun run generate:api
 description = "Viewer の formatter を実行し、フォーマットを自動修正する"
 dir = "src/app/viewer"
 run = [
-  "bun run biome:format",
+  "bun run prettier:format",
   "bun run eslint:fix",
   "bun run stylelint:fix",
 ]
 
 [tasks."viewer:format:check"]
 description = "Viewer の formatter をチェックする"
+usage = 'arg "[path]" var=#true help="Prettier のチェック対象パス (省略時は全体)"'
 dir = "src/app/viewer"
-run = "bun run biome:format:check"
+run = "bun x prettier --check ${usage_path:-.}"
 
 [tasks."viewer:lint"]
 description = "Viewer の linter を実行する"
@@ -446,7 +448,7 @@ depends = ["viewer:format"]
 description = "Viewer の formatter check / linter を直列で実行する"
 dir = "src/app/viewer"
 run = [
-  "bun run biome:format:check",
+  "bun run prettier:format:check",
   "bun run eslint:check",
   "bun run stylelint:check",
 ]

@@ -10,7 +10,7 @@ interface Props {
 const { event, withYear = false } = Astro.props;
 const date = eventDateColumn(event, withYear);
 const statusName = eventStatusName(event.status);
-const venueNames = event.venues.map(venue => venue.name).join(' / ');
+const venueNames = event.venues.map((venue) => venue.name).join(' / ');
 ---
 
 <a
@@ -25,9 +25,12 @@ const venueNames = event.venues.map(venue => venue.name).join(' / ');
   <span class="event-line-type">{event.type.name}</span>
   <span class="event-line-body">
     <span class="event-line-title">
-      {event.title}{statusName && <span class="event-line-status">{statusName}</span>}
+      {event.title}
+      {statusName && <span class="event-line-status">{statusName}</span>}
     </span>
     {venueNames && <span class="event-line-venue">{venueNames}</span>}
   </span>
-  <span class="event-line-arrow" aria-hidden="true">→</span>
+  <span class="event-line-arrow" aria-hidden="true">
+    →
+  </span>
 </a>

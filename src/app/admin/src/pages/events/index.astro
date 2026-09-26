@@ -3,4 +3,8 @@ import { SearchList } from '../../components/event/SearchList';
 import { FlashMessage } from '../../components/Flash';
 import Layout from '../../layouts/Layout.astro';
 ---
-<Layout pageTitle="イベント一覧"><FlashMessage client:only="solid-js" /><SearchList client:only="solid-js" /></Layout>
+
+<Layout pageTitle="イベント一覧">
+  <FlashMessage client:only="solid-js" />
+  <SearchList client:only="solid-js" />
+</Layout>

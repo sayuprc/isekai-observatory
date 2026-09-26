@@ -6,6 +6,5 @@ import { authGuard } from '../middleware';
 export const recoveryCodes = new Elysia({ prefix: '/recovery-codes' })
   .use(authGuard)
   .post('/', async ({ authSession }) => {
-    return requestWithAuth(authSession, client =>
-      recoveryCodeServiceGenerate({ client }));
+    return requestWithAuth(authSession, (client) => recoveryCodeServiceGenerate({ client }));
   });

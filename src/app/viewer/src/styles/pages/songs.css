@@ -1,7 +1,6 @@
 /* 楽曲一覧と楽曲詳細 */
 
 @keyframes viewer-card-in {
-
   from {
     opacity: 0;
     transform: translateY(16px);
@@ -14,7 +13,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-
   .home-feature,
   .song-grid-card:nth-child(-n + 8) {
     animation: viewer-card-in 0.36s ease-out both;
@@ -71,7 +69,10 @@
   background: var(--bg-elev);
   border: 1px solid var(--line);
   border-radius: 5px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .media-card-body,
@@ -81,7 +82,7 @@
 
 .media-card-title,
 .song-grid-title {
-  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
   letter-spacing: 0.04em;
 }
 
@@ -97,7 +98,7 @@
   bottom: 0;
   left: 0;
   height: 3px;
-  content: "";
+  content: '';
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
@@ -110,7 +111,6 @@
 }
 
 @media (hover: hover) {
-
   .song-grid-card:hover {
     border-color: var(--accent-strong);
     box-shadow: 0 14px 28px color-mix(in oklab, var(--fg) 7%, transparent);
@@ -147,7 +147,7 @@
 
 .song-credit-label {
   margin: 0 0 14px;
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 11px;
   font-weight: 500;
   line-height: 1.4;
@@ -156,7 +156,7 @@
 
 .song-credit-value {
   margin: 0;
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 18px;
   font-weight: 500;
   line-height: 1.7;
@@ -223,7 +223,7 @@
   gap: 12px;
   align-items: center;
   justify-content: flex-end;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   line-height: 1.2;
   color: var(--fg-faint);

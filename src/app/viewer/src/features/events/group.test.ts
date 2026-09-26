@@ -16,7 +16,7 @@ const event = (title: string, startOn: string | null, endOn: string | null = nul
   setlist: [],
 });
 
-const titles = (events: Event[]) => events.map(item => item.title);
+const titles = (events: Event[]) => events.map((item) => item.title);
 
 const events = [
   event('2025-03', '2025-03-01'),
@@ -36,7 +36,7 @@ describe('イベント一覧のグループ', () => {
   });
 
   it('未来と過去を区別せず、年ごとに新しい順で並べる', () => {
-    expect(groups.byYear.map(group => [group.year, titles(group.events)])).toEqual([
+    expect(groups.byYear.map((group) => [group.year, titles(group.events)])).toEqual([
       ['2026', ['2026-12', '2026-09']],
       ['2025', ['2025-11', '2025-03']],
       ['2024', ['2024-08']],

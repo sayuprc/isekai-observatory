@@ -39,12 +39,9 @@ const ReleaseNameLink = (props: { release: ReleaseGroupReferencedRelease }) => (
 
 const ReleaseFormatBadges = (props: { release: ReleaseGroupReferencedRelease }) => (
   <div class="flex flex-wrap gap-1">
-    <Show
-      when={props.release.formatValues.length > 0}
-      fallback={<span class="text-sm text-base-content/60">—</span>}
-    >
+    <Show when={props.release.formatValues.length > 0} fallback={<span class="text-sm text-base-content/60">—</span>}>
       <For each={props.release.formatValues}>
-        {formatValue => (
+        {(formatValue) => (
           <span class="badge badge-outline badge-sm">{RELEASE_FORMAT_LABELS[formatValue] ?? '不明'}</span>
         )}
       </For>
@@ -155,7 +152,7 @@ export const DetailView = (props: DetailViewProps) => {
           </button>
         </div>
       </Match>
-      <Match when={loadedData()}>{data => <ReleaseGroupForm data={data()} />}</Match>
+      <Match when={loadedData()}>{(data) => <ReleaseGroupForm data={data()} />}</Match>
     </Switch>
   );
 };
@@ -238,11 +235,11 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                   type="text"
                   class="input w-full"
                   value={title()}
-                  onInput={e => setTitle(e.currentTarget.value)}
+                  onInput={(e) => setTitle(e.currentTarget.value)}
                   classList={{ 'input-error': !!getFieldError('title') }}
                 />
                 <Show when={getFieldError('title')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -251,14 +248,14 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                 <select
                   class="select select-bordered w-full"
                   value={String(typeValue())}
-                  onChange={e => setTypeValue(Number(e.currentTarget.value) as ReleaseGroupTypeValue)}
+                  onChange={(e) => setTypeValue(Number(e.currentTarget.value) as ReleaseGroupTypeValue)}
                 >
                   <For each={RELEASE_GROUP_TYPE_OPTIONS}>
-                    {option => <option value={option.value}>{option.label}</option>}
+                    {(option) => <option value={option.value}>{option.label}</option>}
                   </For>
                 </select>
                 <Show when={getFieldError('typeValue')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -267,11 +264,11 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                 <textarea
                   class="textarea textarea-bordered min-h-32 w-full"
                   value={description()}
-                  onInput={e => setDescription(e.currentTarget.value)}
+                  onInput={(e) => setDescription(e.currentTarget.value)}
                   classList={{ 'textarea-error': !!getFieldError('description') }}
                 />
                 <Show when={getFieldError('description')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -283,11 +280,11 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                   step="1"
                   class="input w-full"
                   value={orderNo()}
-                  onInput={e => setOrderNo(Number(e.currentTarget.value))}
+                  onInput={(e) => setOrderNo(Number(e.currentTarget.value))}
                   classList={{ 'input-error': !!getFieldError('orderNo') }}
                 />
                 <Show when={getFieldError('orderNo')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -296,14 +293,14 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                 <select
                   class="select select-bordered w-full"
                   value={String(isDisplay())}
-                  onChange={e => setIsDisplay(e.currentTarget.value === 'true')}
+                  onChange={(e) => setIsDisplay(e.currentTarget.value === 'true')}
                   classList={{ 'select-error': !!getFieldError('isDisplay') }}
                 >
                   <option value="true">表示する</option>
                   <option value="false">表示しない</option>
                 </select>
                 <Show when={getFieldError('isDisplay')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
             </div>
@@ -329,7 +326,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
           >
             <ul class="flex flex-col gap-2 md:hidden">
               <For each={props.data.releases}>
-                {release => (
+                {(release) => (
                   <li
                     class="rounded-box border-y border-r border-l-4 border-base-300 bg-base-100 p-3"
                     style={{ 'border-left-color': release.color }}
@@ -364,7 +361,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                 </thead>
                 <tbody>
                   <For each={props.data.releases}>
-                    {release => (
+                    {(release) => (
                       <tr>
                         <td
                           class="min-w-40 border-l-4 font-medium"

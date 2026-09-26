@@ -102,7 +102,7 @@ export const DetailView = (props: Props) => {
         </div>
       </Match>
       <Match when={resource()?.status === 'ok' && resource()!.data}>
-        {data => (
+        {(data) => (
           <div class="flex flex-col gap-4">
             <Show when={typeof window !== 'undefined'}>
               <div>

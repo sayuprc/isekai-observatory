@@ -17,7 +17,7 @@ const groups = [
 const total = groups.reduce((sum, group) => sum + group.events.length, 0);
 
 const searchText = (event: Event) =>
-  [event.title, event.type.name, eventDate(event) ?? '', ...event.venues.map(venue => venue.name)]
+  [event.title, event.type.name, eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
     .join(' ')
     .toLowerCase();
 ---
@@ -62,28 +62,22 @@ const searchText = (event: Event) =>
       <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
     </div>
 
-    {
-      groups.map(group => (
-        <section class="event-group" data-event-group>
-          <h2 class:list={['event-group-label', { 'event-group-label-year': group.isYear }]}>
-            {group.label}
-            <span class="event-group-count" data-event-group-count>{group.events.length}件</span>
-          </h2>
-          <ol class="event-group-list">
-            {
-              group.events.map(event => (
-                <li
-                  data-event-entry
-                  data-event-type={String(event.type.value)}
-                  data-event-search={searchText(event)}
-                >
-                  <EventRow event={event} />
-                </li>
-              ))
-            }
-          </ol>
-        </section>
-      ))
-    }
+    {groups.map((group) => (
+      <section class="event-group" data-event-group>
+        <h2 class:list={['event-group-label', { 'event-group-label-year': group.isYear }]}>
+          {group.label}
+          <span class="event-group-count" data-event-group-count>
+            {group.events.length}件
+          </span>
+        </h2>
+        <ol class="event-group-list">
+          {group.events.map((event) => (
+            <li data-event-entry data-event-type={String(event.type.value)} data-event-search={searchText(event)}>
+              <EventRow event={event} />
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
   </section>
 </Layout>

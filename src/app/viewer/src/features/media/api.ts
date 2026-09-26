@@ -10,7 +10,7 @@ async function all(): Promise<Media[]> {
       const result = await mediaServiceListMedia({ client: apiClient, query: { limit, cursor } });
       return requireData('mediaServiceListMedia', result);
     },
-    data => ({ items: data.media, nextCursor: data.nextCursor }),
+    (data) => ({ items: data.media, nextCursor: data.nextCursor }),
   );
 }
 

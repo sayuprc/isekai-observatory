@@ -10,4 +10,8 @@ const labels: Record<string, string> = {
 const label = !env || env === 'production' ? null : (labels[env] ?? env.toUpperCase());
 ---
 
-{label && <span class="env-badge" data-env={env}>{label}</span>}
+{label && (
+  <span class="env-badge" data-env={env}>
+    {label}
+  </span>
+)}

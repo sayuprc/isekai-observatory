@@ -21,7 +21,7 @@
   justify-content: space-between;
   padding: 16px;
   margin-top: 16px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   color: var(--fg-muted);
   letter-spacing: 0.1em;

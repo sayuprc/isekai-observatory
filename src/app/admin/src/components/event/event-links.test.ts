@@ -8,7 +8,7 @@ describe('イベントの開催先と出典', () => {
   it('開催先を末尾に追加し、追加済みの開催先は重複させない', () => {
     const entries = addVenue([], venue('1'));
 
-    expect(addVenue(entries, venue('2')).map(entry => entry.venueId)).toEqual(['1', '2']);
+    expect(addVenue(entries, venue('2')).map((entry) => entry.venueId)).toEqual(['1', '2']);
     expect(addVenue(entries, venue('1'))).toBe(entries);
   });
 

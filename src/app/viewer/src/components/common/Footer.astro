@@ -31,41 +31,85 @@ import { navLinks } from '../../shared/nav';
           <div class="footer-brand-mark">ヰ世界観測所</div>
         </div>
         <p class="footer-disclaimer">
-          当サイトは非公式ファンサイトです。<br />ヰ世界情緒および関係各社とは一切関係ありません。<br />当サイトで扱う楽曲・画像・映像などの著作権等はすべて各権利者に帰属します。
+          当サイトは非公式ファンサイトです。
+          <br />
+          ヰ世界情緒および関係各社とは一切関係ありません。
+          <br />
+          当サイトで扱う楽曲・画像・映像などの著作権等はすべて各権利者に帰属します。
         </p>
       </div>
       <nav class="footer-col" aria-label="サイトマップ">
         <h2 class="footer-col-title">Archive</h2>
         <ul>
-          {
-            navLinks.map(link => (
-              <li>
-                <a href={link.href}>{link.label}</a>
-              </li>
-            ))
-          }
+          {navLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))}
         </ul>
       </nav>
       <nav class="footer-col" aria-label="外部リンク">
         <h2 class="footer-col-title">External</h2>
         <ul>
-          <li><a href="https://www.youtube.com/@isekaijoucho" target="_blank" rel="noopener noreferrer">YouTube</a></li>
-          <li><a href="https://www.youtube.com/@isekaijoucho_sub" target="_blank" rel="noopener noreferrer">YouTube(sub)</a></li>
-          <li><a href="https://x.com/isekaijoucho" target="_blank" rel="noopener noreferrer">X(旧 Twitter)</a></li>
-          <li><a href="https://www.tiktok.com/@isekaijoucho" target="_blank" rel="noopener noreferrer">TikTok</a></li>
-          <li><a href="https://space.bilibili.com/488978908" target="_blank" rel="noopener noreferrer">bilibili</a></li>
-          <li><a href="https://kamitsubaki.jp/artist/isekaijoucho" target="_blank" rel="noopener noreferrer">Official Site</a></li>
-          <li><a href="https://isekaijoucho.kamitsubaki.jp/" target="_blank" rel="noopener noreferrer">Official Fanclub「1209Carat.」</a></li>
-          <li><a href="https://piapro.jp/isekaijoucho" target="_blank" rel="noopener noreferrer">piapro</a></li>
-          <li><a href="https://linktr.ee/isekaijoucho" target="_blank" rel="noopener noreferrer">Linktree</a></li>
+          <li>
+            <a href="https://www.youtube.com/@isekaijoucho" target="_blank" rel="noopener noreferrer">
+              YouTube
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@isekaijoucho_sub" target="_blank" rel="noopener noreferrer">
+              YouTube(sub)
+            </a>
+          </li>
+          <li>
+            <a href="https://x.com/isekaijoucho" target="_blank" rel="noopener noreferrer">
+              X(旧 Twitter)
+            </a>
+          </li>
+          <li>
+            <a href="https://www.tiktok.com/@isekaijoucho" target="_blank" rel="noopener noreferrer">
+              TikTok
+            </a>
+          </li>
+          <li>
+            <a href="https://space.bilibili.com/488978908" target="_blank" rel="noopener noreferrer">
+              bilibili
+            </a>
+          </li>
+          <li>
+            <a href="https://kamitsubaki.jp/artist/isekaijoucho" target="_blank" rel="noopener noreferrer">
+              Official Site
+            </a>
+          </li>
+          <li>
+            <a href="https://isekaijoucho.kamitsubaki.jp/" target="_blank" rel="noopener noreferrer">
+              Official Fanclub「1209Carat.」
+            </a>
+          </li>
+          <li>
+            <a href="https://piapro.jp/isekaijoucho" target="_blank" rel="noopener noreferrer">
+              piapro
+            </a>
+          </li>
+          <li>
+            <a href="https://linktr.ee/isekaijoucho" target="_blank" rel="noopener noreferrer">
+              Linktree
+            </a>
+          </li>
         </ul>
       </nav>
       <nav class="footer-col" aria-label="サイト情報">
         <h2 class="footer-col-title">About</h2>
         <ul>
-          <li><a href="/site-policy">サイトポリシー</a></li>
-          <li><a href="/contact">お問い合わせ</a></li>
-          <li><a href="/changelog">更新履歴</a></li>
+          <li>
+            <a href="/site-policy">サイトポリシー</a>
+          </li>
+          <li>
+            <a href="/contact">お問い合わせ</a>
+          </li>
+          <li>
+            <a href="/changelog">更新履歴</a>
+          </li>
         </ul>
       </nav>
     </div>

@@ -202,11 +202,11 @@ export const Sidebar = (props: Props) => {
         </a>
       </div>
       <nav class="flex-1 overflow-y-auto px-2 py-4">
-        {navSections.map(section => (
+        {navSections.map((section) => (
           <div class="mb-3">
             <h2 class="px-3 py-1 text-xs font-semibold tracking-wider text-base-content/60">{section.title}</h2>
             <ul class="menu menu-sm gap-1">
-              {section.items.map(item => (
+              {section.items.map((item) => (
                 <li>
                   <a
                     href={item.href}

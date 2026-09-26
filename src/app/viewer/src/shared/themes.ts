@@ -65,7 +65,7 @@ export const THEMES: Theme[] = [
 ];
 
 export const LIGHT_PALETTES: Set<string> = new Set(
-  THEMES.filter(theme => theme.tone === 'light').map(theme => theme.value),
+  THEMES.filter((theme) => theme.tone === 'light').map((theme) => theme.value),
 );
 
 export const DEFAULT_PALETTE = 'anemone-1';
@@ -74,9 +74,7 @@ export const PALETTE_STORAGE_KEY = 'isekai-observatory-palette';
 
 // 未知の値 (廃止テーマ等) は既定テーマに落とす
 export const themeByValue = (value: string): Theme =>
-  THEMES.find(theme => theme.value === value)
-  ?? THEMES.find(theme => theme.value === DEFAULT_PALETTE)
-  ?? THEMES[0];
+  THEMES.find((theme) => theme.value === value) ?? THEMES.find((theme) => theme.value === DEFAULT_PALETTE) ?? THEMES[0];
 
 export const themeLabel = (theme: Theme): string => theme.costume ?? theme.jp;
 

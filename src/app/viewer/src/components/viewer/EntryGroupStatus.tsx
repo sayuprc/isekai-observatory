@@ -25,7 +25,7 @@ export default function EntryGroupStatus(props: Props) {
 
       const matched = Array.from(group.querySelectorAll(props.entrySelector))
         .filter((entry): entry is HTMLElement => entry instanceof HTMLElement)
-        .filter(entry => entry.dataset.viewerFilterMatch !== 'false').length;
+        .filter((entry) => entry.dataset.viewerFilterMatch !== 'false').length;
 
       countElement.textContent = `${matched}${props.unit}`;
     }

@@ -2,14 +2,14 @@
 
 .detail-title {
   margin: 10px 0 4px;
-  font-family: "Noto Serif JP", "Shippori Mincho", serif;
+  font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
   font-size: 32px;
   line-height: 1.25;
   letter-spacing: 0.04em;
 }
 
 .detail-title-en {
-  font-family: "EB Garamond", serif;
+  font-family: 'EB Garamond', serif;
   font-size: 18px;
   font-style: italic;
   color: var(--accent-2);
@@ -62,7 +62,10 @@
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 4px;
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .release-medium .rel-list {
@@ -134,7 +137,7 @@
 }
 
 .detail-section-head-title {
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 17px;
   color: var(--fg);
   letter-spacing: 0.08em;
@@ -209,7 +212,7 @@
 .rel-main {
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: "Shippori Mincho", serif;
+  font-family: 'Shippori Mincho', serif;
   font-size: 14px;
   white-space: nowrap;
 }

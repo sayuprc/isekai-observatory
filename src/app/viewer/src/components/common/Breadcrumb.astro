@@ -10,14 +10,18 @@ const { items } = Astro.props;
 
 <nav class="breadcrumb shell" aria-label="パンくずリスト">
   <ol class="breadcrumb-list">
-    {
-      items.map(item => (
-        <li class="breadcrumb-item">
-          {item.href === null
-            ? <span class="breadcrumb-current" aria-current="page">{item.label}</span>
-            : <a class="breadcrumb-link" href={item.href}>{item.label}</a>}
-        </li>
-      ))
-    }
+    {items.map((item) => (
+      <li class="breadcrumb-item">
+        {item.href === null ? (
+          <span class="breadcrumb-current" aria-current="page">
+            {item.label}
+          </span>
+        ) : (
+          <a class="breadcrumb-link" href={item.href}>
+            {item.label}
+          </a>
+        )}
+      </li>
+    ))}
   </ol>
 </nav>

@@ -31,18 +31,19 @@ export const venues = new Elysia({ prefix: '/venues' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         venueServiceSearchVenues({
           client,
           query: {
             name: query.name || undefined,
-            kind: query.kind ? Number(query.kind) as VenueKindValue : undefined,
+            kind: query.kind ? (Number(query.kind) as VenueKindValue) : undefined,
             sort: (query.sort ?? 'name') as VenueSearchSortBy,
             order: (query.order ?? 'asc') as SortOrder,
             page: query.page ?? 1,
             per_page: (query.per_page ?? 25) as PerPage,
           },
-        }));
+        }),
+      );
     },
     {
       query: t.Object({
@@ -58,8 +59,7 @@ export const venues = new Elysia({ prefix: '/venues' })
   .get(
     '/:venueId',
     async ({ params: { venueId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        venueServiceGetVenue({ client, path: { venueId } }));
+      return requestWithAuth(authSession, (client) => venueServiceGetVenue({ client, path: { venueId } }));
     },
     { params: t.Object({ venueId: t.String() }) },
   )
@@ -68,8 +68,7 @@ export const venues = new Elysia({ prefix: '/venues' })
     async ({ body, authSession }) => {
       assertVenueName(body.name);
 
-      return requestWithAuth(authSession, client =>
-        venueServiceCreateVenue({ client, body }));
+      return requestWithAuth(authSession, (client) => venueServiceCreateVenue({ client, body }));
     },
     {
       body: t.Object({
@@ -83,8 +82,7 @@ export const venues = new Elysia({ prefix: '/venues' })
     async ({ params: { venueId }, body, authSession }) => {
       assertVenueName(body.name);
 
-      return requestWithAuth(authSession, client =>
-        venueServiceUpdateVenue({ client, path: { venueId }, body }));
+      return requestWithAuth(authSession, (client) => venueServiceUpdateVenue({ client, path: { venueId }, body }));
     },
     {
       params: t.Object({ venueId: t.String() }),
@@ -97,8 +95,7 @@ export const venues = new Elysia({ prefix: '/venues' })
   .delete(
     '/:venueId',
     async ({ params: { venueId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        venueServiceDeleteVenue({ client, path: { venueId } }));
+      return requestWithAuth(authSession, (client) => venueServiceDeleteVenue({ client, path: { venueId } }));
     },
     { params: t.Object({ venueId: t.String() }) },
   );

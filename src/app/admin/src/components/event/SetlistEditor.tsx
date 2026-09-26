@@ -12,33 +12,33 @@ interface SetlistEditorProps {
 
 export const SetlistEditor = (props: SetlistEditorProps) => {
   const moveItem = (fromIndex: number, toIndex: number) => {
-    props.onChange(prev => reorderItems(prev, fromIndex, toIndex));
+    props.onChange((prev) => reorderItems(prev, fromIndex, toIndex));
   };
   const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
-  const referencedIds = () => new Set(props.setlist.flatMap(item => item.performanceIds));
+  const referencedIds = () => new Set(props.setlist.flatMap((item) => item.performanceIds));
 
   const availableFor = (itemIndex: number) => {
     const current = new Set(props.setlist[itemIndex]?.performanceIds ?? []);
     return props.performances.filter(
-      performance => current.has(performance.performanceId) || !referencedIds().has(performance.performanceId),
+      (performance) => current.has(performance.performanceId) || !referencedIds().has(performance.performanceId),
     );
   };
 
   const addItem = () => {
-    props.onChange(prev => [...prev, { setlistItemId: newId(), label: '', performanceIds: [] }]);
+    props.onChange((prev) => [...prev, { setlistItemId: newId(), label: '', performanceIds: [] }]);
   };
 
   const removeItem = (index: number) => {
-    props.onChange(prev => prev.filter((_, i) => i !== index));
+    props.onChange((prev) => prev.filter((_, i) => i !== index));
   };
 
   const setLabel = (index: number, label: string) => {
-    props.onChange(prev => prev.map((item, i) => (i === index ? { ...item, label } : item)));
+    props.onChange((prev) => prev.map((item, i) => (i === index ? { ...item, label } : item)));
   };
 
   const togglePerformance = (itemIndex: number, performanceId: string, checked: boolean) => {
-    props.onChange(prev =>
+    props.onChange((prev) =>
       prev.map((item, i) => {
         if (i !== itemIndex) {
           return item;
@@ -48,8 +48,9 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
             ? item
             : { ...item, performanceIds: [...item.performanceIds, performanceId] };
         }
-        return { ...item, performanceIds: item.performanceIds.filter(id => id !== performanceId) };
-      }));
+        return { ...item, performanceIds: item.performanceIds.filter((id) => id !== performanceId) };
+      }),
+    );
   };
 
   return (
@@ -58,7 +59,9 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
       <Show when={props.disabled}>
         <p class="mb-4 text-sm text-base-content/60">延期または中止のイベントにはセットリストを設定できません</p>
       </Show>
-      <p class="mb-4 text-sm text-base-content/60">ライブまたは配信のみ設定できます。各項目は表示名か楽曲披露のどちらかが必要です</p>
+      <p class="mb-4 text-sm text-base-content/60">
+        ライブまたは配信のみ設定できます。各項目は表示名か楽曲披露のどちらかが必要です
+      </p>
 
       <Show
         when={props.setlist.length > 0}
@@ -80,14 +83,16 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
                     <button {...sortable.dragHandleProps('setlist', index, `セットリスト${index + 1}`)}>⠿</button>
                     <span class="badge badge-neutral badge-sm mb-2">{index + 1}</span>
                     <div>
-                      <label class="label" for={`setlist-label-${index}`}>表示名(任意)</label>
+                      <label class="label" for={`setlist-label-${index}`}>
+                        表示名(任意)
+                      </label>
                       <input
                         id={`setlist-label-${index}`}
                         type="text"
                         class="input input-bordered input-sm"
                         value={item().label}
                         placeholder="MC / アンコール など"
-                        onInput={e => setLabel(index, e.currentTarget.value)}
+                        onInput={(e) => setLabel(index, e.currentTarget.value)}
                       />
                     </div>
                   </div>
@@ -108,15 +113,16 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
                   >
                     <ul class="space-y-1">
                       <For each={availableFor(index)}>
-                        {performance => (
+                        {(performance) => (
                           <li>
                             <label class="flex cursor-pointer items-center gap-2 text-sm">
                               <input
                                 type="checkbox"
                                 class="checkbox checkbox-sm"
                                 checked={item().performanceIds.includes(performance.performanceId)}
-                                onChange={e =>
-                                  togglePerformance(index, performance.performanceId, e.currentTarget.checked)}
+                                onChange={(e) =>
+                                  togglePerformance(index, performance.performanceId, e.currentTarget.checked)
+                                }
                               />
                               {performance.songTitle}
                             </label>

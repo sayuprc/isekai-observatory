@@ -62,14 +62,14 @@ export const ColorField = (props: ColorFieldProps) => {
             type="color"
             class="h-10 w-16 rounded-box border border-base-300"
             value={currentHex()}
-            onInput={e => setNormalizedColor(e.currentTarget.value)}
+            onInput={(e) => setNormalizedColor(e.currentTarget.value)}
             aria-label="代表色をカラーピッカーで選ぶ"
           />
           <input
             type="text"
             class="input w-40 font-mono"
             value={props.value}
-            onInput={e => setNormalizedColor(e.currentTarget.value)}
+            onInput={(e) => setNormalizedColor(e.currentTarget.value)}
             placeholder="#989899"
             required
             classList={{ 'input-error': !!props.fieldError }}
@@ -91,9 +91,7 @@ export const ColorField = (props: ColorFieldProps) => {
           <Show when={extracting()}>
             <p class="text-xs text-base-content/60">抽出中…</p>
           </Show>
-          <Show when={extractError()}>
-            {message => <p class="text-xs text-error">{message()}</p>}
-          </Show>
+          <Show when={extractError()}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
         </div>
 
         <Show when={candidates().length > 0}>
@@ -128,9 +126,7 @@ export const ColorField = (props: ColorFieldProps) => {
           </div>
         </Show>
       </div>
-      <Show when={props.fieldError}>
-        {message => <p class="mt-1 text-xs text-error">{message()}</p>}
-      </Show>
+      <Show when={props.fieldError}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
     </div>
   );
 };

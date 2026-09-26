@@ -26,21 +26,19 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
     </a>
     <EnvironmentBadge />
     <div class="nav-links">
-      {
-        navLinks.map((link) => {
-          const isActive = isActivePath(currentPath, link.href);
-          return (
-            <a
-              href={link.href}
-              class={isActive ? 'is-active' : undefined}
-              aria-current={isActive ? 'page' : undefined}
-              data-astro-prefetch
-            >
-              {link.label}
-            </a>
-          );
-        })
-      }
+      {navLinks.map((link) => {
+        const isActive = isActivePath(currentPath, link.href);
+        return (
+          <a
+            href={link.href}
+            class={isActive ? 'is-active' : undefined}
+            aria-current={isActive ? 'page' : undefined}
+            data-astro-prefetch
+          >
+            {link.label}
+          </a>
+        );
+      })}
     </div>
     <div class="nav-utils">
       <div class="theme-picker" data-theme-picker>
@@ -69,34 +67,38 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
             <path d="M12 10.1L3.5 16.2C3 16.6 3.3 17.5 4 17.5H20C20.7 17.5 21 16.6 20.5 16.2L12 10.1Z" />
           </svg>
           <span class="label">
-            <span class="jp" data-theme-current-jp>{themeLabel(defaultTheme)}</span>
-            <span class="en" data-theme-current-en>{themeSubLabel(defaultTheme)}</span>
+            <span class="jp" data-theme-current-jp>
+              {themeLabel(defaultTheme)}
+            </span>
+            <span class="en" data-theme-current-en>
+              {themeSubLabel(defaultTheme)}
+            </span>
           </span>
           <span class="caret">▾</span>
         </button>
         <div class="theme-pop-overlay" hidden data-theme-overlay></div>
         <div class="theme-pop" role="dialog" aria-labelledby="theme-pop-title" hidden data-theme-pop>
           <div class="theme-pop-head">
-            <span class="theme-pop-title" id="theme-pop-title">カラーテーマ</span>
+            <span class="theme-pop-title" id="theme-pop-title">
+              カラーテーマ
+            </span>
             <span class="theme-pop-title-en">Color Themes</span>
           </div>
           <div class="theme-grid">
-            {
-              THEMES.map(theme => (
-                <button
-                  class:list={['theme-opt', theme.value === DEFAULT_PALETTE && 'is-active']}
-                  type="button"
-                  aria-pressed={theme.value === DEFAULT_PALETTE ? 'true' : 'false'}
-                  data-palette-option={theme.value}
-                >
-                  <span class="meta">
-                    <span class="name">{themeLabel(theme)}</span>
-                    <span class="sub">{themeSubLabel(theme)}</span>
-                  </span>
-                  <span class="check">●</span>
-                </button>
-              ))
-            }
+            {THEMES.map((theme) => (
+              <button
+                class:list={['theme-opt', theme.value === DEFAULT_PALETTE && 'is-active']}
+                type="button"
+                aria-pressed={theme.value === DEFAULT_PALETTE ? 'true' : 'false'}
+                data-palette-option={theme.value}
+              >
+                <span class="meta">
+                  <span class="name">{themeLabel(theme)}</span>
+                  <span class="sub">{themeSubLabel(theme)}</span>
+                </span>
+                <span class="check">●</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -139,7 +141,7 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
       pop.hidden = !open;
 
       if (open) {
-        (options.find(option => option.classList.contains('is-active')) ?? options[0]).focus();
+        (options.find((option) => option.classList.contains('is-active')) ?? options[0]).focus();
       }
     };
 
@@ -184,7 +186,7 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
       }
 
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-        const index = options.findIndex(option => option === document.activeElement);
+        const index = options.findIndex((option) => option === document.activeElement);
 
         if (index !== -1) {
           event.preventDefault();

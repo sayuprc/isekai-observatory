@@ -16,7 +16,7 @@ const createAuthSession = (
 ): AuthSession => {
   return {
     credential,
-    storeCredential: async nextCredential => nextCredential,
+    storeCredential: async (nextCredential) => nextCredential,
     clearCredential: async () => {},
     acquireRefreshLock: async () => true,
     waitForCredentialUpdate: async () => credential,
@@ -81,7 +81,7 @@ describe('createWithAuthRetry', () => {
     const refreshedCredentials: Credential[] = [];
 
     const withAuthRetry = createWithAuthRetry({
-      createClient: credential => credential.accessToken,
+      createClient: (credential) => credential.accessToken,
       refreshAccessToken: async (credential) => {
         refreshedCredentials.push(credential);
         return latestCredential;
@@ -119,7 +119,7 @@ describe('createWithAuthRetry', () => {
   it('refresh が 401 ならそのまま未認証へフォールバックする', async () => {
     const cleared: string[] = [];
     const withAuthRetry = createWithAuthRetry({
-      createClient: credential => credential.accessToken,
+      createClient: (credential) => credential.accessToken,
       refreshAccessToken: async () => {
         throw new ApiError(401, {});
       },

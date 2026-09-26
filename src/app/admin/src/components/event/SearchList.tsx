@@ -56,10 +56,22 @@ const DEFAULT_PARAMS: SearchParams = {
 
 const parseParams = (query: URLSearchParams): SearchParams => ({
   title: query.get('title') ?? '',
-  type: pickParam(query.get('type'), EVENT_TYPE_OPTIONS.map(option => `${option.value}` as const), ''),
-  status: pickParam(query.get('status'), EVENT_STATUS_OPTIONS.map(option => `${option.value}` as const), ''),
+  type: pickParam(
+    query.get('type'),
+    EVENT_TYPE_OPTIONS.map((option) => `${option.value}` as const),
+    '',
+  ),
+  status: pickParam(
+    query.get('status'),
+    EVENT_STATUS_OPTIONS.map((option) => `${option.value}` as const),
+    '',
+  ),
   isDisplay: pickParam(query.get('is_display'), ['true', 'false'] as const, ''),
-  sort: pickParam(query.get('sort'), SORT_OPTIONS.map(option => option.value), DEFAULT_PARAMS.sort),
+  sort: pickParam(
+    query.get('sort'),
+    SORT_OPTIONS.map((option) => option.value),
+    DEFAULT_PARAMS.sort,
+  ),
   order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
   page: parsePage(query.get('page')),
   perPage: pickParam(query.get('per_page'), PER_PAGE_OPTIONS, DEFAULT_PARAMS.perPage),
@@ -85,7 +97,7 @@ export const SearchList = () => {
 
   const { data, refetch, fetchError } = createSearchResource(
     params,
-    current =>
+    (current) =>
       client.api.events.search.get({
         query: {
           title: current.title || undefined,
@@ -105,45 +117,57 @@ export const SearchList = () => {
     <>
       <form class="mb-4 flex flex-wrap items-end gap-4" onSubmit={handleSearch}>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="event-title">タイトル</label>
+          <label class="fieldset-label" for="event-title">
+            タイトル
+          </label>
           <input
             id="event-title"
             class="input input-bordered input-sm"
             value={input().title}
-            onInput={e => updateInput({ title: e.currentTarget.value })}
+            onInput={(e) => updateInput({ title: e.currentTarget.value })}
           />
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="event-type">種別</label>
+          <label class="fieldset-label" for="event-type">
+            種別
+          </label>
           <select
             id="event-type"
             class="select select-bordered select-sm"
             value={input().type}
-            onChange={e => updateInput({ type: e.currentTarget.value as TypeFilter })}
+            onChange={(e) => updateInput({ type: e.currentTarget.value as TypeFilter })}
           >
             <option value="">すべて</option>
-            {EVENT_TYPE_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
+            {EVENT_TYPE_OPTIONS.map((option) => (
+              <option value={option.value}>{option.label}</option>
+            ))}
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="event-status">状態</label>
+          <label class="fieldset-label" for="event-status">
+            状態
+          </label>
           <select
             id="event-status"
             class="select select-bordered select-sm"
             value={input().status}
-            onChange={e => updateInput({ status: e.currentTarget.value as StatusFilter })}
+            onChange={(e) => updateInput({ status: e.currentTarget.value as StatusFilter })}
           >
             <option value="">すべて</option>
-            {EVENT_STATUS_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
+            {EVENT_STATUS_OPTIONS.map((option) => (
+              <option value={option.value}>{option.label}</option>
+            ))}
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="event-is-display">表示設定</label>
+          <label class="fieldset-label" for="event-is-display">
+            表示設定
+          </label>
           <select
             id="event-is-display"
             class="select select-bordered select-sm"
             value={input().isDisplay}
-            onChange={e => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
+            onChange={(e) => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
           >
             <option value="">すべて</option>
             <option value="true">表示する</option>
@@ -151,44 +175,60 @@ export const SearchList = () => {
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="event-sort">ソート項目</label>
+          <label class="fieldset-label" for="event-sort">
+            ソート項目
+          </label>
           <select
             id="event-sort"
             class="select select-bordered select-sm"
             value={input().sort}
-            onChange={e => updateInput({ sort: e.currentTarget.value as EventSearchSortBy })}
+            onChange={(e) => updateInput({ sort: e.currentTarget.value as EventSearchSortBy })}
           >
-            {SORT_OPTIONS.map(option => <option value={option.value}>{option.label}</option>)}
+            {SORT_OPTIONS.map((option) => (
+              <option value={option.value}>{option.label}</option>
+            ))}
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="event-order">並び順</label>
+          <label class="fieldset-label" for="event-order">
+            並び順
+          </label>
           <select
             id="event-order"
             class="select select-bordered select-sm"
             value={input().order}
-            onChange={e => updateInput({ order: e.currentTarget.value as SortOrder })}
+            onChange={(e) => updateInput({ order: e.currentTarget.value as SortOrder })}
           >
             <option value="asc">昇順</option>
             <option value="desc">降順</option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
-          <label class="fieldset-label" for="event-per-page">表示件数</label>
+          <label class="fieldset-label" for="event-per-page">
+            表示件数
+          </label>
           <select
             id="event-per-page"
             class="select select-bordered select-sm"
             value={input().perPage}
-            onChange={e => updateInput({ perPage: Number(e.currentTarget.value) as PerPageOption })}
+            onChange={(e) => updateInput({ perPage: Number(e.currentTarget.value) as PerPageOption })}
           >
-            {PER_PAGE_OPTIONS.map(perPage => <option value={perPage}>{perPage}件</option>)}
+            {PER_PAGE_OPTIONS.map((perPage) => (
+              <option value={perPage}>{perPage}件</option>
+            ))}
           </select>
         </fieldset>
-        <button class="btn btn-primary btn-sm mb-1" type="submit">検索</button>
-        <button class="btn btn-ghost btn-sm mb-1" type="button" onClick={handleReset}>リセット</button>
+        <button class="btn btn-primary btn-sm mb-1" type="submit">
+          検索
+        </button>
+        <button class="btn btn-ghost btn-sm mb-1" type="button" onClick={handleReset}>
+          リセット
+        </button>
       </form>
       <div class="mb-4 flex justify-end">
-        <a href="/events/create" class="btn btn-primary btn-sm">新規作成</a>
+        <a href="/events/create" class="btn btn-primary btn-sm">
+          新規作成
+        </a>
       </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
         <table class="table table-zebra">
@@ -207,15 +247,15 @@ export const SearchList = () => {
                 <ListState state="loading" colSpan={5} />
               </Match>
               <Match when={fetchError()}>
-                {message => <ListState state="error" colSpan={5} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={5} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.events.length === 0}>
                 <ListState state="empty" colSpan={5} />
               </Match>
               <Match when={data()}>
-                {result => (
+                {(result) => (
                   <For each={result().events}>
-                    {event => (
+                    {(event) => (
                       <tr>
                         <td>
                           <a

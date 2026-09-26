@@ -97,7 +97,7 @@ export const DetailView = (props: DetailViewProps) => {
           </button>
         </div>
       </Match>
-      <Match when={loadedData()}>{data => <ReleaseForm data={data()} />}</Match>
+      <Match when={loadedData()}>{(data) => <ReleaseForm data={data()} />}</Match>
     </Switch>
   );
 };
@@ -205,12 +205,12 @@ const ReleaseForm = (props: ReleaseFormProps) => {
                   type="text"
                   class="input w-full"
                   value={name()}
-                  onInput={e => setName(e.currentTarget.value)}
+                  onInput={(e) => setName(e.currentTarget.value)}
                   placeholder="通常盤 / 初回限定盤 / 配信 など"
                   classList={{ 'input-error': !!getFieldError('name') }}
                 />
                 <Show when={getFieldError('name')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -220,11 +220,11 @@ const ReleaseForm = (props: ReleaseFormProps) => {
                   type="date"
                   class="input w-full"
                   value={releasedOn()}
-                  onInput={e => setReleasedOn(e.currentTarget.value)}
+                  onInput={(e) => setReleasedOn(e.currentTarget.value)}
                   classList={{ 'input-error': !!getFieldError('releasedOn') }}
                 />
                 <Show when={getFieldError('releasedOn')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -233,11 +233,11 @@ const ReleaseForm = (props: ReleaseFormProps) => {
                 <textarea
                   class="textarea textarea-bordered min-h-32 w-full"
                   value={description()}
-                  onInput={e => setDescription(e.currentTarget.value)}
+                  onInput={(e) => setDescription(e.currentTarget.value)}
                   classList={{ 'textarea-error': !!getFieldError('description') }}
                 />
                 <Show when={getFieldError('description')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -259,11 +259,11 @@ const ReleaseForm = (props: ReleaseFormProps) => {
                   step="1"
                   class="input w-full"
                   value={orderNo()}
-                  onInput={e => setOrderNo(Number(e.currentTarget.value))}
+                  onInput={(e) => setOrderNo(Number(e.currentTarget.value))}
                   classList={{ 'input-error': !!getFieldError('orderNo') }}
                 />
                 <Show when={getFieldError('orderNo')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
 
@@ -272,14 +272,14 @@ const ReleaseForm = (props: ReleaseFormProps) => {
                 <select
                   class="select select-bordered w-full"
                   value={String(isDisplay())}
-                  onChange={e => setIsDisplay(e.currentTarget.value === 'true')}
+                  onChange={(e) => setIsDisplay(e.currentTarget.value === 'true')}
                   classList={{ 'select-error': !!getFieldError('isDisplay') }}
                 >
                   <option value="true">表示する</option>
                   <option value="false">表示しない</option>
                 </select>
                 <Show when={getFieldError('isDisplay')}>
-                  {message => <p class="mt-1 text-xs text-error">{message()}</p>}
+                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
                 </Show>
               </div>
             </div>

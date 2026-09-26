@@ -14,14 +14,12 @@ import { authGuard } from '../middleware';
 export const songTags = new Elysia({ prefix: '/song-tags' })
   .use(authGuard)
   .get('/', async ({ authSession }) => {
-    return requestWithAuth(authSession, client =>
-      songTagServiceListSongTags({ client }));
+    return requestWithAuth(authSession, (client) => songTagServiceListSongTags({ client }));
   })
   .get(
     '/:songTagId',
     async ({ params: { songTagId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        songTagServiceGetSongTag({ client, path: { songTagId } }));
+      return requestWithAuth(authSession, (client) => songTagServiceGetSongTag({ client, path: { songTagId } }));
     },
     {
       params: t.Object({
@@ -32,7 +30,7 @@ export const songTags = new Elysia({ prefix: '/song-tags' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return requestWithAuth(authSession, client =>
+      return requestWithAuth(authSession, (client) =>
         songTagServiceSearchSongTags({
           client,
           query: {
@@ -42,7 +40,8 @@ export const songTags = new Elysia({ prefix: '/song-tags' })
             page: query.page ?? 1,
             per_page: (query.per_page ?? 50) as PerPage,
           },
-        }));
+        }),
+      );
     },
     {
       query: t.Object({
@@ -57,8 +56,7 @@ export const songTags = new Elysia({ prefix: '/song-tags' })
   .post(
     '/',
     async ({ body: { name }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        songTagServiceCreateSongTag({ client, body: { name } }));
+      return requestWithAuth(authSession, (client) => songTagServiceCreateSongTag({ client, body: { name } }));
     },
     {
       body: t.Object({
@@ -69,8 +67,9 @@ export const songTags = new Elysia({ prefix: '/song-tags' })
   .put(
     '/:songTagId',
     async ({ params: { songTagId }, body: { name, orderNo }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        songTagServiceUpdateSongTag({ client, path: { songTagId }, body: { name, orderNo } }));
+      return requestWithAuth(authSession, (client) =>
+        songTagServiceUpdateSongTag({ client, path: { songTagId }, body: { name, orderNo } }),
+      );
     },
     {
       params: t.Object({
@@ -85,8 +84,7 @@ export const songTags = new Elysia({ prefix: '/song-tags' })
   .delete(
     '/:songTagId',
     async ({ params: { songTagId }, authSession }) => {
-      return requestWithAuth(authSession, client =>
-        songTagServiceDeleteSongTag({ client, path: { songTagId } }));
+      return requestWithAuth(authSession, (client) => songTagServiceDeleteSongTag({ client, path: { songTagId } }));
     },
     {
       params: t.Object({
