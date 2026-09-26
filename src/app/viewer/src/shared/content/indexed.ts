@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 
 /** API の並び順を index として持たせたコレクションの要素 */
 export type Indexed<T> = T & { index: number };
