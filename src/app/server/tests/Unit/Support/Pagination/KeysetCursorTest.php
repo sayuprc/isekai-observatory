@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Support\Pagination;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Pagination\KeysetCursor;
 use Tests\TestCase;
 
@@ -33,7 +33,7 @@ class KeysetCursorTest extends TestCase
     #[DataProvider('provideUnreadableValues')]
     public function rejectsUnreadableValues(string $value): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(BusinessRuleViolationException::class);
 
         KeysetCursor::decode($value);
     }
@@ -55,9 +55,9 @@ class KeysetCursorTest extends TestCase
     {
         $cursor = KeysetCursor::decode(KeysetCursor::encode(['orderNo' => '1', 'id' => 1]));
 
-        $this->assertThrows(static fn () => $cursor->int('orderNo'), InvalidArgumentException::class);
-        $this->assertThrows(static fn () => $cursor->string('id'), InvalidArgumentException::class);
-        $this->assertThrows(static fn () => $cursor->string('missing'), InvalidArgumentException::class);
-        $this->assertThrows(static fn () => $cursor->nullableString('missing'), InvalidArgumentException::class);
+        $this->assertThrows(static fn () => $cursor->int('orderNo'), BusinessRuleViolationException::class);
+        $this->assertThrows(static fn () => $cursor->string('id'), BusinessRuleViolationException::class);
+        $this->assertThrows(static fn () => $cursor->string('missing'), BusinessRuleViolationException::class);
+        $this->assertThrows(static fn () => $cursor->nullableString('missing'), BusinessRuleViolationException::class);
     }
 }

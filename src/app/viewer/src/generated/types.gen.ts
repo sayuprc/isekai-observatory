@@ -479,6 +479,10 @@ export type EventServiceListEventsData = {
 
 export type EventServiceListEventsErrors = {
     /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
      * Server error
      */
     500: ErrorResponse;
@@ -507,6 +511,10 @@ export type MediaServiceListMediaData = {
 
 export type MediaServiceListMediaErrors = {
     /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
      * Server error
      */
     500: ErrorResponse;
@@ -534,6 +542,10 @@ export type ReleaseGroupServiceListReleaseGroupsData = {
 };
 
 export type ReleaseGroupServiceListReleaseGroupsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
     /**
      * Server error
      */
@@ -587,6 +599,10 @@ export type SongServiceListSongsData = {
 };
 
 export type SongServiceListSongsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
     /**
      * Server error
      */

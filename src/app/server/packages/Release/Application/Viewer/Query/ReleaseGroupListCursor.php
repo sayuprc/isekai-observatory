@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Release\Application\Viewer\Query;
 
-use InvalidArgumentException;
 use Support\Pagination\KeysetCursor;
 
 final class ReleaseGroupListCursor
@@ -18,9 +17,6 @@ final class ReleaseGroupListCursor
         ]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public static function decode(string $value): DecodedReleaseGroupListCursor
     {
         $cursor = KeysetCursor::decode($value);

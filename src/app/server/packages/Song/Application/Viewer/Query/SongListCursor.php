@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Song\Application\Viewer\Query;
 
-use InvalidArgumentException;
 use Support\Pagination\KeysetCursor;
 
 final class SongListCursor
@@ -17,9 +16,6 @@ final class SongListCursor
         ]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public static function decode(string $value): DecodedSongListCursor
     {
         $cursor = KeysetCursor::decode($value);

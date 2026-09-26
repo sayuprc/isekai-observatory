@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Event\Application\Viewer\Query;
 
-use InvalidArgumentException;
 use Support\Pagination\KeysetCursor;
 
 final class EventListCursor
@@ -17,9 +16,6 @@ final class EventListCursor
         ]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public static function decode(string $value): DecodedEventListCursor
     {
         $cursor = KeysetCursor::decode($value);

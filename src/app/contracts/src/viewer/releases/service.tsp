@@ -10,5 +10,8 @@ namespace IsekaiObservatory.Viewer;
 @route("/release-groups")
 interface ReleaseGroupService {
   @doc("リリースグループ一覧取得API")
-  listReleaseGroups(@query cursor?: cursor, @query limit?: limit): Ok<ReleaseGroupListResponse> | InternalServerError;
+  listReleaseGroups(@query cursor?: cursor, @query limit?: limit):
+    | Ok<ReleaseGroupListResponse>
+    | BadRequest
+    | InternalServerError;
 }

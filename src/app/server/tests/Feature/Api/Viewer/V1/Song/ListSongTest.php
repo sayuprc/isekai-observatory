@@ -6,6 +6,7 @@ namespace Tests\Feature\Api\Viewer\V1\Song;
 
 use DateTimeImmutable;
 use Media\Domain\Models\MediaType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\Persons\SongPersonRole;
@@ -262,5 +263,29 @@ class ListSongTest extends DatabaseTestCase
                     ],
                 ],
             ]);
+    }
+
+    #[Test]
+    #[DataProvider('provideInvalidCursors')]
+    public function rejectsInvalidCursor(string $cursor): void
+    {
+        $this->get(route(ViewerSongRouteMap::List, ['cursor' => $cursor]))
+            ->assertStatus(400)
+            ->assertExactJson([
+                'code' => 'business_rule_violation',
+                'message' => 'カーソルが不正です。',
+            ]);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function provideInvalidCursors(): array
+    {
+        return [
+            'not base64' => ['***'],
+            'not json' => [base64_encode('not json')],
+            'missing keys' => [base64_encode('{}')],
+        ];
     }
 }

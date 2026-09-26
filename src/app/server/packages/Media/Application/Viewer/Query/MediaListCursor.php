@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Media\Application\Viewer\Query;
 
-use InvalidArgumentException;
 use Support\Pagination\KeysetCursor;
 
 final class MediaListCursor
@@ -17,9 +16,6 @@ final class MediaListCursor
         ]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public static function decode(string $value): DecodedMediaListCursor
     {
         $cursor = KeysetCursor::decode($value);

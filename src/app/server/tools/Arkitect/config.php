@@ -24,7 +24,10 @@ return [
     new Define(SupportComponent::Contracts),
     new Define(SupportComponent::Optional),
     new Define(SupportComponent::Collection),
-    new Define(SupportComponent::Pagination),
+    new Define(SupportComponent::Pagination, [
+        SupportComponent::Pagination,
+        SupportComponent::Domain,
+    ]),
     new Define(SupportComponent::UseCase, [
         SupportComponent::UseCase,
         AdminUserComponent::Domain,
