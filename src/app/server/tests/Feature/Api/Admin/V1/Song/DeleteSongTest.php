@@ -32,8 +32,20 @@ class DeleteSongTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function emptyParameters(): void
+    public function invalidSongId(): void
     {
-        $this->markTestSkipped('TODO 実装する');
+        $this->withAuth()
+            ->delete(route(SongRouteMap::Delete, 'invalid-id'))
+            ->assertStatus(422)
+            ->assertExactJson([
+                'code' => 'validation_failed',
+                'message' => '入力内容に誤りがあります',
+                'details' => [
+                    [
+                        'field' => '',
+                        'message' => '予期せぬエラー',
+                    ],
+                ],
+            ]);
     }
 }
