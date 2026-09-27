@@ -256,30 +256,12 @@
 }
 
 .theme-trigger .label {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: flex-start;
-
   /* テーマ名の長さで幅が変わると nav-links がずれるため、最長名に合わせて固定する */
   width: 104px;
-  line-height: 1;
-}
-
-.theme-trigger .label .jp {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 12px;
-  color: var(--fg);
-  letter-spacing: 0.1em;
-  white-space: nowrap;
-}
-
-.theme-trigger .label .en {
-  margin-top: 2px;
   font-family: 'EB Garamond', serif;
-  font-size: 10px;
-  font-style: italic;
-  color: var(--fg-muted);
+  font-size: 13px;
+  line-height: 1;
+  color: var(--fg);
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
@@ -361,30 +343,14 @@
   border-color: var(--accent);
 }
 
-.theme-opt .meta {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
+.theme-opt .name {
   min-width: 0;
-}
-
-.theme-opt .meta .name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: 'Shippori Mincho', serif;
-  font-size: 13px;
-  color: var(--fg);
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-}
-
-.theme-opt .meta .sub {
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: 'EB Garamond', serif;
-  font-size: 11px;
-  font-style: italic;
-  color: var(--fg-muted);
+  font-size: 14px;
+  color: var(--fg);
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
