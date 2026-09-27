@@ -9,6 +9,7 @@ use Event\Domain\Models\EventStatus;
 use Event\Infrastructures\EventRepository;
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
+use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -31,6 +32,10 @@ class EventRepositoryTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
         $this->storeMedia($this->createMedia($mediaId, '配信アーカイブ', 'https://example.com/archive', MediaType::LiveStream, true));
+        $releaseGroupId = $this->generateUuid();
+        $releaseId = $this->generateUuid();
+        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'ライブ映像作品', ReleaseGroupType::Other));
+        $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, 'Blu-ray', true));
 
         $eventId = $this->generateUuid();
         $performanceId = $this->generateUuid();
@@ -39,6 +44,7 @@ class EventRepositoryTest extends DatabaseTestCase
             $eventId,
             venues: [['venueId' => $venueId, 'orderNo' => 1]],
             media: [['mediaId' => $mediaId, 'orderNo' => 1]],
+            releases: [['releaseId' => $releaseId, 'orderNo' => 1]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
             performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
             setlist: [['setlistItemId' => $setlistItemId, 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],

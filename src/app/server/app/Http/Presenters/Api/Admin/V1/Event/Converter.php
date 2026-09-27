@@ -9,6 +9,7 @@ use Event\Application\Admin\Assemble\AssembledCoVocalist;
 use Event\Application\Admin\Assemble\AssembledEvent;
 use Event\Application\Admin\Assemble\AssembledMedia;
 use Event\Application\Admin\Assemble\AssembledPerformance;
+use Event\Application\Admin\Assemble\AssembledRelease;
 use Event\Application\Admin\Assemble\AssembledSetlistItem;
 use Event\Application\Admin\Assemble\AssembledSource;
 use Event\Application\Admin\Assemble\AssembledVenue;
@@ -16,6 +17,7 @@ use Event\Application\Admin\Query\EventSummary;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
+use OpenAPI\Admin\Client\Model\EventRelease as OpenApiEventRelease;
 use OpenAPI\Admin\Client\Model\EventSource as OpenApiEventSource;
 use OpenAPI\Admin\Client\Model\EventStatus as OpenApiEventStatus;
 use OpenAPI\Admin\Client\Model\EventStatusValue;
@@ -27,6 +29,7 @@ use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
 use OpenAPI\Admin\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Admin\Client\Model\MediaTypeValue;
 use OpenAPI\Admin\Client\Model\PerformancePerson as OpenApiPerformancePerson;
+use OpenAPI\Admin\Client\Model\ReleaseFormatValue;
 use OpenAPI\Admin\Client\Model\SetlistItem as OpenApiSetlistItem;
 use OpenAPI\Admin\Client\Model\SongPerformance as OpenApiSongPerformance;
 use OpenAPI\Admin\Client\Model\Venue as OpenApiVenue;
@@ -58,6 +61,7 @@ class Converter
             ->setIsDisplay($event->isDisplay)
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
             ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
+            ->setReleases(array_map($this->toOpenApiRelease(...), $event->releases))
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
             ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
@@ -110,6 +114,21 @@ class Converter
                     ->setValue(MediaTypeValue::from($media->typeValue)),
             )
             ->setIsDisplay($media->isDisplay);
+    }
+
+    private function toOpenApiRelease(AssembledRelease $release): OpenApiEventRelease
+    {
+        return new OpenApiEventRelease()
+            ->setReleaseId($release->releaseId)
+            ->setReleaseGroupId($release->releaseGroupId)
+            ->setReleaseGroupTitle($release->releaseGroupTitle)
+            ->setName($release->name)
+            ->setReleasedOn(new DateTime($release->releasedOn))
+            ->setIsDisplay($release->isDisplay)
+            ->setFormatValues(array_map(
+                static fn (int $formatValue): ReleaseFormatValue => ReleaseFormatValue::from($formatValue),
+                $release->formatValues,
+            ));
     }
 
     private function toOpenApiSource(AssembledSource $source): OpenApiEventSource

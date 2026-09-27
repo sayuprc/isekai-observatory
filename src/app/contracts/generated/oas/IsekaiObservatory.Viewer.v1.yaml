@@ -3,9 +3,9 @@ info:
   title: ヰ世界観測所 API
   version: v1
 tags:
+  - name: ReleaseGroup
   - name: Event
   - name: Media
-  - name: ReleaseGroup
   - name: SiteStats
   - name: Song
 paths:
@@ -230,6 +230,7 @@ components:
         - status
         - venues
         - media
+        - releases
         - sources
         - performances
         - setlist
@@ -254,6 +255,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EventMediaSummary'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventReleaseSummary'
         sources:
           type: array
           items:
@@ -296,6 +301,31 @@ components:
           $ref: '#/components/schemas/mediaPublishedAt'
         type:
           $ref: '#/components/schemas/MediaType'
+    EventReleaseSummary:
+      type: object
+      required:
+        - releaseId
+        - releaseGroupId
+        - releaseGroupTitle
+        - name
+        - releasedOn
+        - formats
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        releaseGroupTitle:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormat'
+      description: イベントに関連づけた公開リリース(版)。リリースとリリースグループがともに公開のものだけが載る
     EventSource:
       type: object
       required:

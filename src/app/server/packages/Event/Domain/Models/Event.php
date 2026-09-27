@@ -6,6 +6,7 @@ namespace Event\Domain\Models;
 
 use Event\Domain\Models\Media\EventMediaLinks;
 use Event\Domain\Models\Performances\SongPerformances;
+use Event\Domain\Models\Releases\EventReleaseLinks;
 use Event\Domain\Models\Setlist\Setlist;
 use Event\Domain\Models\Sources\EventSources;
 use Event\Domain\Models\Venues\EventVenueLinks;
@@ -27,6 +28,7 @@ readonly class Event
         public bool $isDisplay,
         public EventVenueLinks $venues,
         public EventMediaLinks $media,
+        public EventReleaseLinks $releases,
         public EventSources $sources,
         public SongPerformances $performances,
         public Setlist $setlist,
@@ -34,11 +36,12 @@ readonly class Event
     }
 
     /**
-     * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<_eventSourceInput>                    $sources
-     * @param list<_songPerformanceInput>                $performances
-     * @param list<_setlistItemInput>                    $setlist
+     * @param list<array{venueId: string, orderNo: int}>   $venues
+     * @param list<array{mediaId: string, orderNo: int}>   $media
+     * @param list<array{releaseId: string, orderNo: int}> $releases
+     * @param list<_eventSourceInput>                      $sources
+     * @param list<_songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                      $setlist
      */
     public static function reconstruct(
         string $eventId,
@@ -51,6 +54,7 @@ readonly class Event
         bool $isDisplay,
         array $venues = [],
         array $media = [],
+        array $releases = [],
         array $sources = [],
         array $performances = [],
         array $setlist = [],
@@ -65,6 +69,7 @@ readonly class Event
             $isDisplay,
             EventVenueLinks::reconstruct($venues),
             EventMediaLinks::reconstruct($media),
+            EventReleaseLinks::reconstruct($releases),
             EventSources::reconstruct($sources),
             SongPerformances::reconstruct($performances),
             Setlist::reconstruct($setlist),
@@ -72,7 +77,7 @@ readonly class Event
     }
 
     /**
-     * @return array{event_id: string, title: string, description: string, type: int, start_on: ?string, end_on: ?string, status: int, is_display: bool, venues: list<array{venue_id: string, order_no: int}>, media: list<array{media_id: string, order_no: int}>, sources: list<array{name: string, url: string, order_no: int}>, performances: list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, order_no: int}>}>, setlist: list<array{setlist_item_id: string, order_no: int, label: ?string, performance_ids: list<string>}>}
+     * @return array{event_id: string, title: string, description: string, type: int, start_on: ?string, end_on: ?string, status: int, is_display: bool, venues: list<array{venue_id: string, order_no: int}>, media: list<array{media_id: string, order_no: int}>, releases: list<array{release_id: string, order_no: int}>, sources: list<array{name: string, url: string, order_no: int}>, performances: list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, order_no: int}>}>, setlist: list<array{setlist_item_id: string, order_no: int, label: ?string, performance_ids: list<string>}>}
      */
     public function toArray(): array
     {
@@ -86,6 +91,7 @@ readonly class Event
             'is_display' => $this->isDisplay,
             'venues' => $this->venues->toArray(),
             'media' => $this->media->toArray(),
+            'releases' => $this->releases->toArray(),
             'sources' => $this->sources->toArray(),
             'performances' => $this->performances->toArray(),
             'setlist' => $this->setlist->toArray(),

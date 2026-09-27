@@ -9,6 +9,7 @@ use Event\Domain\Models\Media\EventMediaLink;
 use Event\Domain\Models\Performances\CoVocalist;
 use Event\Domain\Models\Performances\PerformanceId;
 use Event\Domain\Models\Performances\SongPerformance;
+use Event\Domain\Models\Releases\EventReleaseLink;
 use Event\Domain\Models\Setlist\SetlistItem;
 use Event\Domain\Models\Sources\EventSource;
 use Event\Domain\Models\Venues\EventVenueLink;
@@ -17,6 +18,11 @@ use Media\Domain\Models\MediaId;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Person\Domain\Models\Person;
 use Person\Domain\Models\PersonRepositoryInterface;
+use Release\Domain\Models\Release;
+use Release\Domain\Models\ReleaseGroup;
+use Release\Domain\Models\ReleaseGroupRepositoryInterface;
+use Release\Domain\Models\ReleaseId;
+use Release\Domain\Models\ReleaseRepositoryInterface;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongRepositoryInterface;
 use Venue\Domain\Models\Venue;
@@ -24,13 +30,15 @@ use Venue\Domain\Models\VenueId;
 use Venue\Domain\Models\VenueRepositoryInterface;
 
 /**
- * Event が ID で参照する開催先・Media・楽曲・人物を引き、表示に必要な値へ組み立てる
+ * Event が ID で参照する開催先・Media・リリース・楽曲・人物を引き、表示に必要な値へ組み立てる
  */
 class EventAssembler
 {
     public function __construct(
         private readonly VenueRepositoryInterface $venueRepository,
         private readonly MediaRepositoryInterface $mediaRepository,
+        private readonly ReleaseRepositoryInterface $releaseRepository,
+        private readonly ReleaseGroupRepositoryInterface $releaseGroupRepository,
         private readonly SongRepositoryInterface $songRepository,
         private readonly PersonRepositoryInterface $personRepository,
     ) {
@@ -40,6 +48,8 @@ class EventAssembler
     {
         $venueMap = $this->venueMap($event);
         $mediaMap = $this->mediaMap($event);
+        $releaseMap = $this->releaseMap($event);
+        $releaseGroupMap = $this->releaseGroupMap($releaseMap);
         $songMap = $this->songMap($event);
         $personMap = $this->personMap($event);
 
@@ -62,6 +72,9 @@ class EventAssembler
             )->toArray(),
             $event->media->toGeneric()->map(
                 fn (EventMediaLink $link): AssembledMedia => $this->toAssembledMedia($mediaMap[$link->mediaId->value] ?? null),
+            )->toArray(),
+            $event->releases->toGeneric()->map(
+                fn (EventReleaseLink $link): AssembledRelease => $this->toAssembledRelease($releaseMap[$link->releaseId->value] ?? null, $releaseGroupMap),
             )->toArray(),
             $event->sources->toGeneric()->map(
                 static fn (EventSource $source): AssembledSource => new AssembledSource($source->displayName->value, $source->url->value, $source->orderNo->value),
@@ -102,6 +115,39 @@ class EventAssembler
         }
 
         return $mediaMap;
+    }
+
+    /** @return array<string, Release> */
+    private function releaseMap(Event $event): array
+    {
+        $releaseIds = $event->releases->toGeneric()->map(static fn (EventReleaseLink $link): ReleaseId => $link->releaseId)->toArray();
+
+        $releaseMap = [];
+        foreach ($this->releaseRepository->findByIds(...$releaseIds) as $release) {
+            $releaseMap[$release->releaseId->value] = $release;
+        }
+
+        return $releaseMap;
+    }
+
+    /**
+     * @param array<string, Release> $releaseMap
+     *
+     * @return array<string, ReleaseGroup>
+     */
+    private function releaseGroupMap(array $releaseMap): array
+    {
+        $releaseGroupIds = [];
+        foreach ($releaseMap as $release) {
+            $releaseGroupIds[$release->releaseGroupId->value] = $release->releaseGroupId;
+        }
+
+        $releaseGroupMap = [];
+        foreach ($this->releaseGroupRepository->findByIds(...array_values($releaseGroupIds)) as $releaseGroup) {
+            $releaseGroupMap[$releaseGroup->releaseGroupId->value] = $releaseGroup;
+        }
+
+        return $releaseGroupMap;
     }
 
     /** @return array<string, Song> */
@@ -159,6 +205,27 @@ class EventAssembler
             $media->type->getName(),
             $media->type->value,
             $media->isDisplay,
+        );
+    }
+
+    /**
+     * @param array<string, ReleaseGroup> $releaseGroupMap
+     */
+    private function toAssembledRelease(?Release $release, array $releaseGroupMap): AssembledRelease
+    {
+        // Event が成立している時点で参照先のリリースとその所属グループは存在する
+        assert($release instanceof Release);
+        $releaseGroup = $releaseGroupMap[$release->releaseGroupId->value] ?? null;
+        assert($releaseGroup instanceof ReleaseGroup);
+
+        return new AssembledRelease(
+            $release->releaseId->value,
+            $releaseGroup->releaseGroupId->value,
+            $releaseGroup->title->value,
+            $release->name->value,
+            $release->releasedOn->value->format('Y-m-d'),
+            $release->isDisplay && $releaseGroup->isDisplay,
+            $release->formats->toArray(),
         );
     }
 

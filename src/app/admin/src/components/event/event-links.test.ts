@@ -1,8 +1,17 @@
 import { describe, expect, it } from 'bun:test';
-import type { Venue } from '../../generated';
-import { addVenue, toSourcesPayload, validateSources } from './event-links';
+import type { EventRelease, ReleaseGroupReferencedRelease, Venue } from '../../generated';
+import { addRelease, addVenue, releaseLabel, toEventReleases, toSourcesPayload, validateSources } from './event-links';
 
 const venue = (venueId: string): Venue => ({ venueId, name: `会場${venueId}`, kind: { name: '現地', value: 1 } });
+const release = (releaseId: string): EventRelease => ({
+  releaseId,
+  releaseGroupId: 'group',
+  releaseGroupTitle: 'ライブ映像',
+  name: `版${releaseId}`,
+  releasedOn: '2026-03-01',
+  isDisplay: true,
+  formatValues: [4],
+});
 
 describe('イベントの開催先と出典', () => {
   it('開催先を末尾に追加し、追加済みの開催先は重複させない', () => {
@@ -10,6 +19,69 @@ describe('イベントの開催先と出典', () => {
 
     expect(addVenue(entries, venue('2')).map((entry) => entry.venueId)).toEqual(['1', '2']);
     expect(addVenue(entries, venue('1'))).toBe(entries);
+  });
+
+  it('リリースを末尾に追加し、追加済みのリリースは重複させない', () => {
+    const entries = addRelease([], release('1'));
+
+    expect(addRelease(entries, release('2')).map((entry) => entry.releaseId)).toEqual(['1', '2']);
+    expect(addRelease(entries, release('1'))).toBe(entries);
+  });
+
+  it('リリースグループの版を候補にし、グループと版がともに公開のときだけ公開扱いにする', () => {
+    const releases: ReleaseGroupReferencedRelease[] = [
+      {
+        releaseId: 'a',
+        name: '通常盤',
+        releasedOn: '2026-03-01',
+        color: '#000000',
+        isDisplay: true,
+        orderNo: 1,
+        formatValues: [4],
+      },
+      {
+        releaseId: 'b',
+        name: '限定盤',
+        releasedOn: '2026-03-01',
+        color: '#000000',
+        isDisplay: false,
+        orderNo: 2,
+        formatValues: [3],
+      },
+    ];
+
+    expect(toEventReleases({ releaseGroupId: 'g', title: 'ライブ', isDisplay: true }, releases)).toEqual([
+      {
+        releaseId: 'a',
+        releaseGroupId: 'g',
+        releaseGroupTitle: 'ライブ',
+        name: '通常盤',
+        releasedOn: '2026-03-01',
+        isDisplay: true,
+        formatValues: [4],
+      },
+      {
+        releaseId: 'b',
+        releaseGroupId: 'g',
+        releaseGroupTitle: 'ライブ',
+        name: '限定盤',
+        releasedOn: '2026-03-01',
+        isDisplay: false,
+        formatValues: [3],
+      },
+    ]);
+    expect(
+      toEventReleases({ releaseGroupId: 'g', title: 'ライブ', isDisplay: false }, releases).map(
+        (entry) => entry.isDisplay,
+      ),
+    ).toEqual([false, false]);
+  });
+
+  it('リリースをグループ名・版名・発売日・提供形態で表示する', () => {
+    expect(releaseLabel({ ...release('1'), name: '通常盤', formatValues: [3, 4] })).toBe(
+      'ライブ映像 通常盤 (2026-03-01 / DVD・Blu-ray)',
+    );
+    expect(releaseLabel({ ...release('1'), name: '' })).toBe('ライブ映像 (2026-03-01 / Blu-ray)');
   });
 
   it('出典を画面の順序で送信値にする', () => {

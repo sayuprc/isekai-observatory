@@ -103,6 +103,7 @@ export type Event = {
     isDisplay: boolean;
     venues: Array<Venue>;
     media: Array<Media>;
+    releases: Array<EventRelease>;
     sources: Array<EventSource>;
     performances: Array<SongPerformance>;
     setlist: Array<SetlistItem>;
@@ -117,6 +118,7 @@ export type EventCreateRequest = {
     isDisplay: boolean;
     venues: Array<RequestEventVenueLink>;
     media: Array<RequestEventMediaLink>;
+    releases: Array<RequestEventReleaseLink>;
     sources: Array<EventSource>;
     performances: Array<RequestSongPerformance>;
     setlist: Array<RequestSetlistItem>;
@@ -128,6 +130,19 @@ export type EventCreateResponse = {
 
 export type EventGetResponse = {
     event: Event;
+};
+
+/**
+ * イベントに関連づけたリリース(版)。isDisplay はリリースとリリースグループがともに公開のとき true
+ */
+export type EventRelease = {
+    releaseId: ReleaseId;
+    releaseGroupId: ReleaseGroupId;
+    releaseGroupTitle: ReleaseGroupTitle;
+    name: ReleaseName;
+    releasedOn: ReleasedOn;
+    isDisplay: boolean;
+    formatValues: Array<ReleaseFormatValue>;
 };
 
 export type EventSearchResponse = {
@@ -190,6 +205,7 @@ export type EventUpdateRequest = {
     isDisplay: boolean;
     venues: Array<RequestEventVenueLink>;
     media: Array<RequestEventMediaLink>;
+    releases: Array<RequestEventReleaseLink>;
     sources: Array<EventSource>;
     performances: Array<RequestSongPerformance>;
     setlist: Array<RequestSetlistItem>;
@@ -596,6 +612,11 @@ export type ReleaseUpdateResponse = {
 
 export type RequestEventMediaLink = {
     mediaId: MediaId;
+    orderNo: OrderNo;
+};
+
+export type RequestEventReleaseLink = {
+    releaseId: ReleaseId;
     orderNo: OrderNo;
 };
 

@@ -4,6 +4,7 @@ import { MediaSection } from '../media/MediaSection';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
 import { PerformanceEditor } from './PerformanceEditor';
+import { ReleaseEditor } from './ReleaseEditor';
 import { SetlistEditor } from './SetlistEditor';
 import { SourceEditor } from './SourceEditor';
 import { VenueEditor } from './VenueEditor';
@@ -136,6 +137,7 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
       availableMedia={props.form.availableMedia}
       setAvailableMedia={props.form.setAvailableMedia}
     />
+    <ReleaseEditor releases={props.form.releases()} onChange={props.form.setReleases} />
     <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
   </>
 );

@@ -8,6 +8,7 @@ use AdminUser\Domain\Models\Permission;
 use Release\Domain\Models\ReleaseId;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -34,6 +35,10 @@ readonly class DeleteUseCase
 
             if ($release === null) {
                 return;
+            }
+
+            if ($this->repository->isUsed($releaseId)) {
+                throw new BusinessRuleViolationException('このリリースはイベントに使用されているため削除できません');
             }
 
             $this->repository->delete($releaseId);

@@ -1,4 +1,12 @@
-import type { EventSource, Venue } from '../../generated';
+import type {
+  EventRelease,
+  EventSource,
+  ReleaseGroupReferencedRelease,
+  ReleaseGroupSummary,
+  Venue,
+} from '../../generated';
+import { normalizeDateValue } from '../../utils/date';
+import { RELEASE_FORMAT_OPTIONS } from '../release/FormatCheckboxes';
 
 export type VenueEntry = {
   venueId: string;
@@ -20,6 +28,35 @@ export const toVenueEntry = (venue: Venue): VenueEntry => ({
 // 同じ開催先は Event 内で重複できないので、追加済みなら何もしない
 export const addVenue = (entries: VenueEntry[], venue: Venue): VenueEntry[] =>
   entries.some((entry) => entry.venueId === venue.venueId) ? entries : [...entries, toVenueEntry(venue)];
+
+// 同じリリースは Event 内で重複できないので、追加済みなら何もしない
+export const addRelease = (entries: EventRelease[], release: EventRelease): EventRelease[] =>
+  entries.some((entry) => entry.releaseId === release.releaseId) ? entries : [...entries, release];
+
+// リリースグループと傘下の版から、イベントに関連づける候補を組み立てる
+export const toEventReleases = (
+  releaseGroup: Pick<ReleaseGroupSummary, 'releaseGroupId' | 'title' | 'isDisplay'>,
+  releases: ReleaseGroupReferencedRelease[],
+): EventRelease[] =>
+  releases.map((release) => ({
+    releaseId: release.releaseId,
+    releaseGroupId: releaseGroup.releaseGroupId,
+    releaseGroupTitle: releaseGroup.title,
+    name: release.name,
+    releasedOn: release.releasedOn,
+    isDisplay: releaseGroup.isDisplay && release.isDisplay,
+    formatValues: release.formatValues,
+  }));
+
+export const releaseLabel = (release: EventRelease): string => {
+  const formats = release.formatValues
+    .map((value) => RELEASE_FORMAT_OPTIONS.find((option) => option.value === value)?.label ?? '')
+    .filter((label) => label !== '')
+    .join('・');
+  const name = release.name === '' ? release.releaseGroupTitle : `${release.releaseGroupTitle} ${release.name}`;
+
+  return `${name} (${normalizeDateValue(release.releasedOn)} / ${formats})`;
+};
 
 export const toSourceForms = (sources: EventSource[]): SourceForm[] =>
   sources.map((source) => ({ displayName: source.displayName, url: source.url }));

@@ -9,6 +9,7 @@ use Event\Application\Viewer\Query\EventCoVocalistSummary;
 use Event\Application\Viewer\Query\EventListItem;
 use Event\Application\Viewer\Query\EventMediaSummary;
 use Event\Application\Viewer\Query\EventPerformanceSummary;
+use Event\Application\Viewer\Query\EventReleaseSummary;
 use Event\Application\Viewer\Query\EventSetlistItemSummary;
 use Event\Application\Viewer\Query\EventSourceSummary;
 use Event\Application\Viewer\Query\EventVenueSummary;
@@ -17,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use OpenAPI\Viewer\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Viewer\Client\Model\EventListResponse;
 use OpenAPI\Viewer\Client\Model\EventMediaSummary as OpenApiEventMediaSummary;
+use OpenAPI\Viewer\Client\Model\EventReleaseSummary as OpenApiEventReleaseSummary;
 use OpenAPI\Viewer\Client\Model\EventSource as OpenApiEventSource;
 use OpenAPI\Viewer\Client\Model\EventStatus as OpenApiEventStatus;
 use OpenAPI\Viewer\Client\Model\EventStatusValue;
@@ -27,8 +29,11 @@ use OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as O
 use OpenAPI\Viewer\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Viewer\Client\Model\MediaTypeValue;
 use OpenAPI\Viewer\Client\Model\PerformancePerson as OpenApiPerformancePerson;
+use OpenAPI\Viewer\Client\Model\ReleaseFormat as OpenApiReleaseFormat;
+use OpenAPI\Viewer\Client\Model\ReleaseFormatValue;
 use OpenAPI\Viewer\Client\Model\SetlistItem as OpenApiSetlistItem;
 use OpenAPI\Viewer\Client\Model\SongPerformance as OpenApiSongPerformance;
+use Release\Domain\Models\ReleaseFormat;
 
 class ListPresenter
 {
@@ -55,6 +60,7 @@ class ListPresenter
             ->setStatus(new OpenApiEventStatus()->setName($event->status->getName())->setValue(EventStatusValue::from($event->status->value)))
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
             ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
+            ->setReleases(array_map($this->toOpenApiRelease(...), $event->releases))
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
             ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
@@ -76,6 +82,22 @@ class ListPresenter
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
             ->setType(new OpenApiMediaType()->setName($media->type->getName())->setValue(MediaTypeValue::from($media->type->value)));
+    }
+
+    private function toOpenApiRelease(EventReleaseSummary $release): OpenApiEventReleaseSummary
+    {
+        return new OpenApiEventReleaseSummary()
+            ->setReleaseId($release->releaseId)
+            ->setReleaseGroupId($release->releaseGroupId)
+            ->setReleaseGroupTitle($release->releaseGroupTitle)
+            ->setName($release->name)
+            ->setReleasedOn(new DateTime($release->releasedOn))
+            ->setFormats(array_map(
+                static fn (ReleaseFormat $format): OpenApiReleaseFormat => new OpenApiReleaseFormat()
+                    ->setName($format->getName())
+                    ->setValue(ReleaseFormatValue::from($format->value)),
+                $release->formats,
+            ));
     }
 
     private function toOpenApiSource(EventSourceSummary $source): OpenApiEventSource

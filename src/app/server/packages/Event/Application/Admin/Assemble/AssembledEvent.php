@@ -12,6 +12,7 @@ readonly class AssembledEvent
     /**
      * @param array<int, AssembledVenue>       $venues
      * @param array<int, AssembledMedia>       $media
+     * @param array<int, AssembledRelease>     $releases
      * @param array<int, AssembledSource>      $sources
      * @param array<int, AssembledPerformance> $performances
      * @param array<int, AssembledSetlistItem> $setlist
@@ -27,6 +28,7 @@ readonly class AssembledEvent
         public bool $isDisplay,
         public array $venues,
         public array $media,
+        public array $releases,
         public array $sources,
         public array $performances,
         public array $setlist,

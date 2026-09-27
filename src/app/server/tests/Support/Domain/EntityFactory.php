@@ -69,11 +69,12 @@ use Venue\Domain\Models\VenueName;
 trait EntityFactory
 {
     /**
-     * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<_eventSourceInput>                    $sources
-     * @param list<_songPerformanceInput>                $performances
-     * @param list<_setlistItemInput>                    $setlist
+     * @param list<array{venueId: string, orderNo: int}>   $venues
+     * @param list<array{mediaId: string, orderNo: int}>   $media
+     * @param list<array{releaseId: string, orderNo: int}> $releases
+     * @param list<_eventSourceInput>                      $sources
+     * @param list<_songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                      $setlist
      */
     protected function createEvent(
         string $eventId,
@@ -85,6 +86,7 @@ trait EntityFactory
         bool $isDisplay = true,
         array $venues = [],
         array $media = [],
+        array $releases = [],
         array $sources = [],
         array $performances = [],
         array $setlist = [],
@@ -100,6 +102,7 @@ trait EntityFactory
             $isDisplay,
             $venues,
             $media,
+            $releases,
             $sources,
             $performances,
             $setlist,

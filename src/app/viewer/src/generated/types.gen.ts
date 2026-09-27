@@ -35,6 +35,7 @@ export type Event = {
     status: EventStatus;
     venues: Array<EventVenueSummary>;
     media: Array<EventMediaSummary>;
+    releases: Array<EventReleaseSummary>;
     sources: Array<EventSource>;
     performances: Array<SongPerformance>;
     setlist: Array<SetlistItem>;
@@ -51,6 +52,18 @@ export type EventMediaSummary = {
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
     type: MediaType;
+};
+
+/**
+ * イベントに関連づけた公開リリース(版)。リリースとリリースグループがともに公開のものだけが載る
+ */
+export type EventReleaseSummary = {
+    releaseId: ReleaseId;
+    releaseGroupId: ReleaseGroupId;
+    releaseGroupTitle: ReleaseGroupTitle;
+    name: ReleaseName;
+    releasedOn: ReleasedOn;
+    formats: Array<ReleaseFormat>;
 };
 
 export type EventSource = {

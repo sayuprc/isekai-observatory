@@ -2,6 +2,7 @@ import "../../shared";
 import "../../packages/event";
 import "../../packages/media";
 import "../../packages/song";
+import "../releases";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Event;
@@ -22,6 +23,16 @@ model EventMediaSummary {
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
   type: MediaType;
+}
+
+@doc("イベントに関連づけた公開リリース(版)。リリースとリリースグループがともに公開のものだけが載る")
+model EventReleaseSummary {
+  releaseId: releaseId;
+  releaseGroupId: releaseGroupId;
+  releaseGroupTitle: releaseGroupTitle;
+  name: releaseName;
+  releasedOn: releasedOn;
+  formats: ReleaseFormat[];
 }
 
 model EventSource {
@@ -59,6 +70,7 @@ model Event {
   status: EventStatus;
   venues: EventVenueSummary[];
   media: EventMediaSummary[];
+  releases: EventReleaseSummary[];
   sources: EventSource[];
   performances: SongPerformance[];
   setlist: SetlistItem[];

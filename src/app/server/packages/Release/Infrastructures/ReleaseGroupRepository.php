@@ -46,6 +46,23 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     }
 
     #[Override]
+    public function findByIds(ReleaseGroupId ...$releaseGroupIds): array
+    {
+        if ($releaseGroupIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(self::COLUMNS)
+                ->from(self::TABLE)
+                ->where('release_group_id', 'IN', array_map(fn (ReleaseGroupId $releaseGroupId): string => $this->converter->toBin($releaseGroupId->value), $releaseGroupIds)),
+        );
+
+        return array_map($this->hydrate(...), $rows);
+    }
+
+    #[Override]
     public function save(ReleaseGroup $releaseGroup): ReleaseGroup
     {
         $data = $releaseGroup->toArray();

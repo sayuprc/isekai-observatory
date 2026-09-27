@@ -25,6 +25,7 @@
 - ジャケットなど権利者画像を保存・配信しない。色は単色のみ
 - formats を空にできない。Medium に format を持たせない
 - 傘下 Release がある ReleaseGroup は削除できない
+- Event から関連リリースとして参照されている Release は削除できない (Event 側がリンクを所有する。`event.md` 参照)
 - Viewer に個別 get や `isDisplay` を出さない
 
 ## 主な関係
