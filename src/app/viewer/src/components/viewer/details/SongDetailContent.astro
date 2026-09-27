@@ -23,8 +23,10 @@ const formatPerformanceDate = (value: Song['performances'][number]): string => {
   return endOn ? `${dottedDate(startOn)}〜${dottedDate(endOn)}` : dottedDate(startOn);
 };
 
-const formatPerformers = (value: Song['performances'][number]): string =>
-  value.coVocalistNames.length > 0 ? `共演: ${value.coVocalistNames.join(' / ')}` : 'ヰ世界情緒';
+const formatPerformanceSub = (value: Song['performances'][number]): string =>
+  value.coVocalistNames.length > 0
+    ? `${formatPerformanceDate(value)} · 共演: ${value.coVocalistNames.join(' / ')}`
+    : formatPerformanceDate(value);
 ---
 
 <div class="detail-page-content song-detail-content" data-share-title={song.title}>
@@ -46,15 +48,13 @@ const formatPerformers = (value: Song['performances'][number]): string =>
 
   {song.performances.length > 0 && (
     <>
-      <DetailSectionHead title="披露されたイベント" count={song.performances.length} />
+      <DetailSectionHead title="関連イベント" count={song.performances.length} />
       <div class="rel-list">
         {song.performances.map((performance) => (
           <a class="rel-chip" href={`/events/${performance.eventId}`}>
             <div class="rel-copy">
               <div class="rel-main">{performance.eventTitle}</div>
-              <div class="label-mono rel-sub">
-                {formatPerformanceDate(performance)} · {formatPerformers(performance)}
-              </div>
+              <div class="label-mono rel-sub">{formatPerformanceSub(performance)}</div>
             </div>
             <span class="rel-arrow rel-arrow-muted">→</span>
           </a>
