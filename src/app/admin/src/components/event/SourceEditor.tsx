@@ -23,6 +23,16 @@ export const SourceEditor = (props: SourceEditorProps) => {
       <legend class="px-2 text-sm font-semibold text-base-content/70">出典</legend>
       <p class="mb-4 text-sm text-base-content/60">公式の告知ページや配信ページなど、情報の出どころを登録します</p>
 
+      <div class="mb-4">
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          onClick={() => props.onChange((prev) => [...prev, { displayName: '', url: '' }])}
+        >
+          出典を追加
+        </button>
+      </div>
+
       <Show when={props.sources.length > 0} fallback={<p class="text-sm text-base-content/60">出典はまだありません</p>}>
         <ul class="space-y-3">
           <Index each={props.sources}>
@@ -76,16 +86,6 @@ export const SourceEditor = (props: SourceEditorProps) => {
           </Index>
         </ul>
       </Show>
-
-      <div class="mt-4">
-        <button
-          type="button"
-          class="btn btn-outline btn-sm"
-          onClick={() => props.onChange((prev) => [...prev, { displayName: '', url: '' }])}
-        >
-          出典を追加
-        </button>
-      </div>
     </fieldset>
   );
 };
