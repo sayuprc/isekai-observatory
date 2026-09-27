@@ -1,9 +1,8 @@
 import { Index, Show, createSignal } from 'solid-js';
-import type { Person, SongSummary } from '../../generated';
 import { client } from '../../utils/client';
-import { createKeywordSearch } from '../keyword-search';
-import { KeywordSearchPanel } from '../KeywordSearchPanel';
+import { SearchCombobox } from '../SearchCombobox';
 import { createSortable, reorderItems } from '../sortable';
+import { CoVocalistChip } from './CoVocalistChip';
 import { ListItemActions } from './ListItemActions';
 import {
   addCoVocalist,
@@ -21,32 +20,33 @@ interface PerformanceEditorProps {
 
 const SEARCH_PER_PAGE = 25;
 
+const fetchSongs = async (title: string) => {
+  const { data, status } = await client.api.songs.search.get({
+    query: { title, sort: 'title', order: 'asc', page: 1, per_page: SEARCH_PER_PAGE },
+  });
+  return { items: data?.songs, status };
+};
+
+const fetchPersons = async (name: string) => {
+  const { data, status } = await client.api.persons.search.get({
+    query: { name, sort: 'name', order: 'asc', page: 1, per_page: SEARCH_PER_PAGE },
+  });
+  return { items: data?.persons, status };
+};
+
 export const PerformanceEditor = (props: PerformanceEditorProps) => {
   const moveItem = (fromIndex: number, toIndex: number) => {
     props.onChange((prev) => reorderItems(prev, fromIndex, toIndex));
   };
   const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
-  const [personTargetIndex, setPersonTargetIndex] = createSignal(0);
 
-  const songSearch = createKeywordSearch<SongSummary>({
-    emptyKeywordMessage: '楽曲名を入力してください',
-    fetch: async (title) => {
-      const { data, status } = await client.api.songs.search.get({
-        query: { title, sort: 'title', order: 'asc', page: 1, per_page: SEARCH_PER_PAGE },
-      });
-      return { items: data?.songs, status };
-    },
-  });
-
-  const personSearch = createKeywordSearch<Person>({
-    emptyKeywordMessage: '人物名を入力してください',
-    fetch: async (name) => {
-      const { data, status } = await client.api.persons.search.get({
-        query: { name, sort: 'name', order: 'asc', page: 1, per_page: SEARCH_PER_PAGE },
-      });
-      return { items: data?.persons, status };
-    },
-  });
+  // 並べ替えや削除で位置が変わっても同じ披露を指すよう、追加先は ID で持つ
+  const [targetId, setTargetId] = createSignal<string | null>(null);
+  const targetIndex = () => {
+    const index = props.performances.findIndex((performance) => performance.performanceId === targetId());
+    return index === -1 ? 0 : index;
+  };
+  const target = () => props.performances[targetIndex()];
 
   const removePerformance = (index: number) => {
     props.onChange((prev) => prev.filter((_, i) => i !== index));
@@ -63,102 +63,89 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
         <p class="mb-4 text-sm text-base-content/60">延期または中止のイベントには楽曲披露を設定できません</p>
       </Show>
 
+      <div class="mb-4 grid gap-3 rounded-box border border-base-300 bg-base-100 p-3 lg:grid-cols-2">
+        <SearchCombobox
+          label="楽曲"
+          placeholder="楽曲名を入力"
+          fetch={fetchSongs}
+          itemLabel={(song) => song.title}
+          isAdded={(song) => props.performances.some((performance) => performance.songId === song.songId)}
+          onPick={(song) => props.onChange((prev) => addPerformance(prev, song))}
+          disabled={props.disabled}
+        />
+        <SearchCombobox
+          label="共演者"
+          placeholder="人物名を入力 (選択中の行に追加)"
+          fetch={fetchPersons}
+          itemLabel={(person) => person.name}
+          isAdded={(person) =>
+            target()?.coVocalists.some((coVocalist) => coVocalist.personId === person.personId) ?? false
+          }
+          onPick={(person) => props.onChange((prev) => addCoVocalist(prev, targetIndex(), person))}
+          disabled={props.disabled || props.performances.length === 0}
+        />
+      </div>
+
       <Show
         when={props.performances.length > 0}
         fallback={<p class="text-sm text-base-content/60">楽曲披露はまだありません</p>}
       >
-        <ul class="space-y-3">
+        <p class="mb-1 text-xs text-base-content/60">行をクリックすると共演者の追加先になります</p>
+        <ul class="divide-y divide-base-300 rounded-box border border-base-300 bg-base-100">
           <Index each={props.performances}>
             {(performance, index) => (
               <li
                 {...sortable.dropTargetProps('performances', index)}
-                class="rounded-box border border-base-300 bg-base-100 p-4"
+                class="flex cursor-pointer flex-wrap items-center gap-2 px-2 py-1 transition-colors"
                 classList={{
+                  'bg-primary/10': targetIndex() === index,
                   'opacity-50': sortable.isDragging('performances', index),
-                  'border-primary bg-primary/5': sortable.isDropTarget('performances', index),
+                  'outline outline-primary': sortable.isDropTarget('performances', index),
                 }}
+                onClick={() => setTargetId(performance().performanceId)}
               >
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                  <div class="flex min-w-0 items-center gap-2">
-                    <button {...sortable.dragHandleProps('performances', index, `楽曲披露${index + 1}`)}>⠿</button>
-                    <span class="badge badge-neutral badge-sm">{index + 1}</span>
-                    <a href={`/songs/${performance().songId}`} class="link link-hover truncate font-medium">
-                      {performance().songTitle}
-                    </a>
-                  </div>
-                  <ListItemActions
-                    label={`楽曲披露${index + 1}`}
-                    index={index}
-                    length={props.performances.length}
-                    onMove={moveItem}
-                    onRemove={() => removePerformance(index)}
-                  />
+                <button {...sortable.dragHandleProps('performances', index, `楽曲披露${index + 1}`)}>⠿</button>
+                <span class="w-6 text-right text-xs text-base-content/60">{index + 1}</span>
+                <button
+                  type="button"
+                  class="min-w-40 text-left font-medium"
+                  aria-pressed={targetIndex() === index}
+                  title="共演者の追加先にする"
+                >
+                  {performance().songTitle}
+                </button>
+                <div class="flex flex-1 flex-wrap gap-1">
+                  <Index each={performance().coVocalists}>
+                    {(person, personIndex) => (
+                      <CoVocalistChip
+                        name={person().name}
+                        creditName={person().creditName}
+                        onCreditNameChange={(creditName) => changeCreditName(index, personIndex, creditName)}
+                        onRemove={() => props.onChange((prev) => removeCoVocalist(prev, index, personIndex))}
+                      />
+                    )}
+                  </Index>
                 </div>
-
-                <div class="mt-3 space-y-2">
-                  <p class="text-xs font-semibold text-base-content/60">共演者</p>
-                  <Show
-                    when={performance().coVocalists.length > 0}
-                    fallback={<p class="text-sm text-base-content/50">共演者なし</p>}
-                  >
-                    <Index each={performance().coVocalists}>
-                      {(person, personIndex) => (
-                        <div class="flex flex-wrap items-end gap-2">
-                          <span class="text-sm">{person().name}</span>
-                          <input
-                            type="text"
-                            class="input input-bordered input-xs w-40"
-                            placeholder="クレジット名(任意)"
-                            value={person().creditName}
-                            onInput={(e) => changeCreditName(index, personIndex, e.currentTarget.value)}
-                          />
-                          <button
-                            type="button"
-                            class="btn btn-ghost btn-xs text-error"
-                            onClick={() => props.onChange((prev) => removeCoVocalist(prev, index, personIndex))}
-                          >
-                            外す
-                          </button>
-                        </div>
-                      )}
-                    </Index>
-                  </Show>
-                  <button type="button" class="btn btn-ghost btn-xs" onClick={() => setPersonTargetIndex(index)}>
-                    この披露に共演者を追加する対象にする
-                    <Show when={personTargetIndex() === index}>
-                      <span class="badge badge-primary badge-xs ml-1">選択中</span>
-                    </Show>
-                  </button>
-                </div>
+                <a
+                  href={`/songs/${performance().songId}`}
+                  class="btn btn-ghost btn-xs"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  楽曲
+                </a>
+                <ListItemActions
+                  label={`楽曲披露${index + 1}`}
+                  index={index}
+                  length={props.performances.length}
+                  onMove={moveItem}
+                  onRemove={() => removePerformance(index)}
+                />
               </li>
             )}
           </Index>
         </ul>
       </Show>
-
-      <div class="mt-6 grid gap-4 lg:grid-cols-2">
-        <KeywordSearchPanel
-          title="楽曲を追加"
-          placeholder="楽曲名で検索"
-          search={songSearch}
-          itemLabel={(song) => song.title}
-          onAdd={(song) => props.onChange((prev) => addPerformance(prev, song))}
-          disabled={props.disabled}
-          emptyResultMessage="該当する楽曲がありません"
-        />
-        <KeywordSearchPanel
-          title="共演者を追加"
-          placeholder="人物名で検索"
-          search={personSearch}
-          itemLabel={(person) => person.name}
-          onAdd={(person) => props.onChange((prev) => addCoVocalist(prev, personTargetIndex(), person))}
-          disabled={props.disabled || props.performances.length === 0}
-        >
-          <p class="mb-2 text-xs text-base-content/60">
-            対象: 楽曲披露 {props.performances.length === 0 ? 'なし' : personTargetIndex() + 1}
-          </p>
-        </KeywordSearchPanel>
-      </div>
     </fieldset>
   );
 };

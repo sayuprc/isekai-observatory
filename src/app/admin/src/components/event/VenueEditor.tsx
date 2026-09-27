@@ -33,6 +33,17 @@ export const VenueEditor = (props: VenueEditorProps) => {
       <legend class="px-2 text-sm font-semibold text-base-content/70">開催先</legend>
       <p class="mb-4 text-sm text-base-content/60">現地会場と配信先を同じイベントにまとめて登録できます</p>
 
+      <div class="mb-6">
+        <KeywordSearchPanel
+          title="開催先を追加"
+          placeholder="開催先名で検索"
+          search={venueSearch}
+          itemLabel={(venue) => `${venue.name} (${venue.kind.name})`}
+          onAdd={(venue) => props.onChange((prev) => addVenue(prev, venue))}
+          emptyResultMessage="該当する開催先がありません。開催先の管理画面で先に登録してください"
+        />
+      </div>
+
       <Show
         when={props.venues.length > 0}
         fallback={<p class="text-sm text-base-content/60">開催先はまだありません</p>}
@@ -66,17 +77,6 @@ export const VenueEditor = (props: VenueEditorProps) => {
           </Index>
         </ul>
       </Show>
-
-      <div class="mt-6">
-        <KeywordSearchPanel
-          title="開催先を追加"
-          placeholder="開催先名で検索"
-          search={venueSearch}
-          itemLabel={(venue) => `${venue.name} (${venue.kind.name})`}
-          onAdd={(venue) => props.onChange((prev) => addVenue(prev, venue))}
-          emptyResultMessage="該当する開催先がありません。開催先の管理画面で先に登録してください"
-        />
-      </div>
     </fieldset>
   );
 };

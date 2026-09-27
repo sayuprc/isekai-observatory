@@ -88,6 +88,19 @@ export const removeCoVocalist = (
     coVocalists.filter((_, index) => index !== personIndex),
   );
 
+// まだどの項目にも紐づいていない楽曲披露を、披露順に 1 件 1 項目でセットリスト末尾へ足す
+export const appendUnassignedPerformances = (
+  setlist: SetlistItemForm[],
+  performances: PerformanceForm[],
+): SetlistItemForm[] => {
+  const assignedIds = new Set(setlist.flatMap((item) => item.performanceIds));
+  const added = performances
+    .filter((performance) => !assignedIds.has(performance.performanceId))
+    .map((performance) => ({ setlistItemId: newId(), label: '', performanceIds: [performance.performanceId] }));
+
+  return [...setlist, ...added];
+};
+
 export const toPerformancesPayload = (performances: PerformanceForm[]): RequestSongPerformance[] =>
   performances.map((performance, index) => ({
     performanceId: performance.performanceId,
