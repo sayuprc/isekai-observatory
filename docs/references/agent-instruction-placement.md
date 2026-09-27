@@ -22,6 +22,7 @@ Claude Code の記事「Steering Claude Code: CLAUDE.md files, skills, hooks, ru
 - Skills の配布先 (Cursor / Codex 等): `.agents/skills/` (`.apm/skills` から同期する)
 - Subagents: `.cursor/agents/`, `.codex/agents/`
 - Deterministic hooks: `tools/hooks/`, `.cursor/hooks.json`, `.codex/hooks.json`
+- クラウドセッション用 SessionStart hook: `.claude/settings.json` (`tools/hooks/cloud-session-start.sh`)
 
 ## 判断基準
 
