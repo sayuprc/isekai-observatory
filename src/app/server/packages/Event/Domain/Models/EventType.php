@@ -21,7 +21,7 @@ enum EventType: int
         return match ($this) {
             self::Live => 'ライブ',
             self::Stream => '配信',
-            self::Exhibition => '個展',
+            self::Exhibition => '展覧会',
             self::Radio => 'ラジオ',
             self::Other => 'その他',
         };
