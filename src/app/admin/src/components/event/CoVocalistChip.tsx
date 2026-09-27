@@ -1,18 +1,29 @@
-import { Show, createSignal } from 'solid-js';
+import { Show, createSignal, type JSX } from 'solid-js';
 
 interface CoVocalistChipProps {
   name: string;
   creditName: string;
   onCreditNameChange: (creditName: string) => void;
+  // createSortable の draggableProps と dropTargetProps を渡す
+  sortableProps: JSX.HTMLAttributes<HTMLElement>;
+  isDragging: boolean;
+  isDropTarget: boolean;
   onRemove: () => void;
 }
 
-// 共演者 1 人分のチップ. 名前をクリックするとクレジット名を編集できる
+// 共演者 1 人分のチップ. 名前をクリックするとクレジット名を編集でき、ドラッグで並べ替えられる
 export const CoVocalistChip = (props: CoVocalistChipProps) => {
   const [editing, setEditing] = createSignal(false);
 
   return (
-    <span class="badge badge-outline gap-1 whitespace-nowrap">
+    <span
+      {...props.sortableProps}
+      // クレジット名の入力中は、テキスト選択がドラッグにならないよう止める
+      draggable={!editing()}
+      class="badge badge-outline cursor-grab gap-1 whitespace-nowrap active:cursor-grabbing"
+      classList={{ 'opacity-50': props.isDragging, 'badge-primary': props.isDropTarget }}
+      title="ドラッグで並べ替え"
+    >
       <Show
         when={editing()}
         fallback={

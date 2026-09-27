@@ -34,17 +34,13 @@ export const createSortable = <TScope extends SortableScope>(
   const isSamePosition = (position: Position<TScope> | null, scope: TScope, index: number) =>
     position?.scope === scope && position.index === index;
 
-  const dragHandleProps = (
+  // 要素そのものをつかんで動かすための属性. キーボード操作が要る場合は dragHandleProps を使う
+  const draggableProps = (
     scope: TScope,
     index: number,
-    label: string,
-  ): JSX.ButtonHTMLAttributes<HTMLButtonElement> => ({
-    'type': 'button',
-    'draggable': true,
-    'class': 'btn btn-ghost btn-xs cursor-grab active:cursor-grabbing',
-    'aria-label': `${label}を並べ替え`,
-    'title': 'ドラッグまたは上下キーで並べ替え',
-    'onDragStart': (event) => {
+  ): Pick<JSX.HTMLAttributes<HTMLElement>, 'draggable' | 'onDragStart' | 'onDragEnd'> => ({
+    draggable: true,
+    onDragStart: (event) => {
       setDragging({ scope, index });
       event.dataTransfer?.setData('text/plain', `${String(scope)}:${index}`);
 
@@ -52,10 +48,22 @@ export const createSortable = <TScope extends SortableScope>(
         event.dataTransfer.effectAllowed = 'move';
       }
     },
-    'onDragEnd': () => {
+    onDragEnd: () => {
       setDragging(null);
       setDropTarget(null);
     },
+  });
+
+  const dragHandleProps = (
+    scope: TScope,
+    index: number,
+    label: string,
+  ): JSX.ButtonHTMLAttributes<HTMLButtonElement> => ({
+    ...draggableProps(scope, index),
+    'type': 'button',
+    'class': 'btn btn-ghost btn-xs cursor-grab active:cursor-grabbing',
+    'aria-label': `${label}を並べ替え`,
+    'title': 'ドラッグまたは上下キーで並べ替え',
     'onKeyDown': (event) => {
       if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
         return;
@@ -99,6 +107,7 @@ export const createSortable = <TScope extends SortableScope>(
   });
 
   return {
+    draggableProps,
     dragHandleProps,
     dropTargetProps,
     isDragging: (scope: TScope, index: number) => isSamePosition(dragging(), scope, index),

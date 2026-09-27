@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'bun:test';
 import {
   addCoVocalist,
+  addCoVocalistToPerformances,
   addPerformance,
   appendUnassignedPerformances,
+  collectCoVocalists,
+  moveCoVocalist,
   removeCoVocalist,
   setCreditName,
   toSetlistPayload,
@@ -75,5 +78,35 @@ describe('イベントの楽曲披露フォーム', () => {
     const setlist = [{ setlistItemId: 's1', label: '', performanceIds: ['p1'] }];
 
     expect(appendUnassignedPerformances(setlist, [performance('p1')])).toEqual(setlist);
+  });
+
+  it('指定した複数の披露へ同じ共演者をまとめて追加し、付いている披露には重ねない', () => {
+    const result = addCoVocalistToPerformances(
+      [performance('p1', [person]), performance('p2'), performance('p3')],
+      new Set(['p1', 'p2']),
+      person,
+    );
+
+    expect(result.map((item) => item.coVocalists)).toEqual([[person], [person], []]);
+  });
+
+  it('イベント内の共演者を初出順に重複なく集める', () => {
+    const other = { personId: 'person-2', name: '人物2', creditName: 'ゲスト' };
+    const result = collectCoVocalists([performance('p1', [other]), performance('p2', [person, other])]);
+
+    expect(result).toEqual([
+      { personId: 'person-2', name: '人物2' },
+      { personId: 'person-1', name: '人物1' },
+    ]);
+  });
+
+  it('指定した披露の共演者だけを並べ替える', () => {
+    const other = { personId: 'person-2', name: '人物2', creditName: '' };
+    const result = moveCoVocalist([performance('p1', [person, other]), performance('p2', [person, other])], 0, 1, 0);
+
+    expect(result.map((item) => item.coVocalists)).toEqual([
+      [other, person],
+      [person, other],
+    ]);
   });
 });
