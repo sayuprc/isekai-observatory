@@ -1,4 +1,5 @@
 import type { RequestSetlistItem, RequestSongPerformance, SetlistItem, SongPerformance } from '../../generated';
+import { reorderItems } from '../sortable';
 
 export type CoVocalistForm = {
   personId: string;
@@ -69,6 +70,30 @@ export const addCoVocalist = (
       : [...coVocalists, { personId: person.personId, name: person.name, creditName: '' }],
   );
 
+// 指定した複数の披露へ同じ共演者をまとめて追加する. 既に付いている披露はそのまま
+export const addCoVocalistToPerformances = (
+  performances: PerformanceForm[],
+  performanceIds: ReadonlySet<string>,
+  person: { personId: string; name: string },
+): PerformanceForm[] =>
+  performances.reduce(
+    (acc, performance, index) =>
+      performanceIds.has(performance.performanceId) ? addCoVocalist(acc, index, person) : acc,
+    performances,
+  );
+
+// イベント内で付いている共演者を、初出順に重複なく並べる
+export const collectCoVocalists = (performances: PerformanceForm[]): { personId: string; name: string }[] => {
+  const persons = new Map<string, { personId: string; name: string }>();
+  for (const person of performances.flatMap((performance) => performance.coVocalists)) {
+    if (!persons.has(person.personId)) {
+      persons.set(person.personId, { personId: person.personId, name: person.name });
+    }
+  }
+
+  return [...persons.values()];
+};
+
 export const setCreditName = (
   performances: PerformanceForm[],
   performanceIndex: number,
@@ -87,6 +112,14 @@ export const removeCoVocalist = (
   updateCoVocalists(performances, performanceIndex, (coVocalists) =>
     coVocalists.filter((_, index) => index !== personIndex),
   );
+
+export const moveCoVocalist = (
+  performances: PerformanceForm[],
+  performanceIndex: number,
+  fromIndex: number,
+  toIndex: number,
+): PerformanceForm[] =>
+  updateCoVocalists(performances, performanceIndex, (coVocalists) => reorderItems(coVocalists, fromIndex, toIndex));
 
 // まだどの項目にも紐づいていない楽曲披露を、披露順に 1 件 1 項目でセットリスト末尾へ足す
 export const appendUnassignedPerformances = (
