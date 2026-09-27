@@ -1,3 +1,6 @@
+import { For } from 'solid-js';
+import { pageItems } from '../utils/pagination';
+
 interface Props {
   page: number;
   maxPage: number;
@@ -16,6 +19,25 @@ export const Pagination = (props: Props) => {
         >
           前へ
         </button>
+        <For each={pageItems(props.page, props.maxPage)}>
+          {(item) =>
+            item === 'ellipsis' ? (
+              <button type="button" class="btn join-item btn-sm btn-disabled" tabIndex={-1}>
+                …
+              </button>
+            ) : (
+              <button
+                type="button"
+                class="btn join-item btn-sm"
+                classList={{ 'btn-active': item === props.page }}
+                aria-current={item === props.page ? 'page' : undefined}
+                onClick={() => props.onChange(item)}
+              >
+                {item}
+              </button>
+            )
+          }
+        </For>
         <button
           type="button"
           class="btn join-item btn-sm"
@@ -25,9 +47,6 @@ export const Pagination = (props: Props) => {
           次へ
         </button>
       </div>
-      <span class="text-sm text-base-content/70">
-        {props.page} / {props.maxPage}
-      </span>
     </div>
   );
 };
