@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import {
   addCoVocalist,
   addPerformance,
+  appendUnassignedPerformances,
   removeCoVocalist,
   setCreditName,
   toSetlistPayload,
@@ -57,5 +58,22 @@ describe('イベントの楽曲披露フォーム', () => {
     );
 
     expect(result).toEqual([{ setlistItemId: 's1', orderNo: 1, label: '本編', performanceIds: ['p1'] }]);
+  });
+
+  it('未紐づけの楽曲披露だけを披露順に 1 件 1 項目でセットリスト末尾へ足す', () => {
+    const existing = { setlistItemId: 's1', label: '', performanceIds: ['p2'] };
+    const result = appendUnassignedPerformances([existing], [performance('p1'), performance('p2'), performance('p3')]);
+
+    expect(result[0]).toBe(existing);
+    expect(result.slice(1).map((item) => ({ label: item.label, performanceIds: item.performanceIds }))).toEqual([
+      { label: '', performanceIds: ['p1'] },
+      { label: '', performanceIds: ['p3'] },
+    ]);
+  });
+
+  it('すべて紐づけ済みならセットリストを変えない', () => {
+    const setlist = [{ setlistItemId: 's1', label: '', performanceIds: ['p1'] }];
+
+    expect(appendUnassignedPerformances(setlist, [performance('p1')])).toEqual(setlist);
   });
 });

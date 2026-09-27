@@ -1,7 +1,7 @@
 import { For, Index, Show } from 'solid-js';
 import { createSortable, reorderItems } from '../sortable';
 import { ListItemActions } from './ListItemActions';
-import { newId, type PerformanceForm, type SetlistItemForm } from './performance-form';
+import { appendUnassignedPerformances, newId, type PerformanceForm, type SetlistItemForm } from './performance-form';
 
 interface SetlistEditorProps {
   setlist: SetlistItemForm[];
@@ -16,13 +16,16 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
   };
   const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
-  const referencedIds = () => new Set(props.setlist.flatMap((item) => item.performanceIds));
+  const unassigned = () => {
+    const assignedIds = new Set(props.setlist.flatMap((item) => item.performanceIds));
+    return props.performances.filter((performance) => !assignedIds.has(performance.performanceId));
+  };
 
-  const availableFor = (itemIndex: number) => {
-    const current = new Set(props.setlist[itemIndex]?.performanceIds ?? []);
-    return props.performances.filter(
-      (performance) => current.has(performance.performanceId) || !referencedIds().has(performance.performanceId),
-    );
+  const songTitleOf = (performanceId: string) =>
+    props.performances.find((performance) => performance.performanceId === performanceId)?.songTitle ?? '';
+
+  const updateItem = (index: number, patch: (item: SetlistItemForm) => SetlistItemForm) => {
+    props.onChange((prev) => prev.map((item, i) => (i === index ? patch(item) : item)));
   };
 
   const addItem = () => {
@@ -33,24 +36,15 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
     props.onChange((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const setLabel = (index: number, label: string) => {
-    props.onChange((prev) => prev.map((item, i) => (i === index ? { ...item, label } : item)));
+  const linkPerformance = (index: number, performanceId: string) => {
+    updateItem(index, (item) => ({ ...item, performanceIds: [...item.performanceIds, performanceId] }));
   };
 
-  const togglePerformance = (itemIndex: number, performanceId: string, checked: boolean) => {
-    props.onChange((prev) =>
-      prev.map((item, i) => {
-        if (i !== itemIndex) {
-          return item;
-        }
-        if (checked) {
-          return item.performanceIds.includes(performanceId)
-            ? item
-            : { ...item, performanceIds: [...item.performanceIds, performanceId] };
-        }
-        return { ...item, performanceIds: item.performanceIds.filter((id) => id !== performanceId) };
-      }),
-    );
+  const unlinkPerformance = (index: number, performanceId: string) => {
+    updateItem(index, (item) => ({
+      ...item,
+      performanceIds: item.performanceIds.filter((id) => id !== performanceId),
+    }));
   };
 
   return (
@@ -63,86 +57,95 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
         ライブまたは配信のみ設定できます。各項目は表示名か楽曲披露のどちらかが必要です
       </p>
 
+      <div class="mb-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          disabled={props.disabled || unassigned().length === 0}
+          onClick={() => props.onChange((prev) => appendUnassignedPerformances(prev, props.performances))}
+        >
+          未紐づけの楽曲披露 {unassigned().length} 件から項目を作成
+        </button>
+        <button type="button" class="btn btn-outline btn-sm" disabled={props.disabled} onClick={addItem}>
+          項目を追加
+        </button>
+      </div>
+
       <Show
         when={props.setlist.length > 0}
         fallback={<p class="text-sm text-base-content/60">セットリストはまだありません</p>}
       >
-        <ul class="space-y-3">
+        <ul class="divide-y divide-base-300 rounded-box border border-base-300 bg-base-100">
           <Index each={props.setlist}>
             {(item, index) => (
               <li
                 {...sortable.dropTargetProps('setlist', index)}
-                class="rounded-box border border-base-300 bg-base-100 p-4"
+                class="flex flex-wrap items-center gap-2 px-2 py-1 transition-colors"
                 classList={{
                   'opacity-50': sortable.isDragging('setlist', index),
-                  'border-primary bg-primary/5': sortable.isDropTarget('setlist', index),
+                  'outline outline-primary': sortable.isDropTarget('setlist', index),
                 }}
               >
-                <div class="flex flex-wrap items-end justify-between gap-2">
-                  <div class="flex flex-wrap items-end gap-2">
-                    <button {...sortable.dragHandleProps('setlist', index, `セットリスト${index + 1}`)}>⠿</button>
-                    <span class="badge badge-neutral badge-sm mb-2">{index + 1}</span>
-                    <div>
-                      <label class="label" for={`setlist-label-${index}`}>
-                        表示名(任意)
-                      </label>
-                      <input
-                        id={`setlist-label-${index}`}
-                        type="text"
-                        class="input input-bordered input-sm"
-                        value={item().label}
-                        placeholder="MC / アンコール など"
-                        onInput={(e) => setLabel(index, e.currentTarget.value)}
-                      />
-                    </div>
-                  </div>
-                  <ListItemActions
-                    label={`セットリスト${index + 1}`}
-                    index={index}
-                    length={props.setlist.length}
-                    onMove={moveItem}
-                    onRemove={() => removeItem(index)}
-                  />
-                </div>
-
-                <div class="mt-3">
-                  <p class="mb-2 text-xs font-semibold text-base-content/60">紐づける楽曲披露</p>
-                  <Show
-                    when={availableFor(index).length > 0}
-                    fallback={<p class="text-sm text-base-content/50">紐づけ可能な楽曲披露がありません</p>}
-                  >
-                    <ul class="space-y-1">
-                      <For each={availableFor(index)}>
-                        {(performance) => (
-                          <li>
-                            <label class="flex cursor-pointer items-center gap-2 text-sm">
-                              <input
-                                type="checkbox"
-                                class="checkbox checkbox-sm"
-                                checked={item().performanceIds.includes(performance.performanceId)}
-                                onChange={(e) =>
-                                  togglePerformance(index, performance.performanceId, e.currentTarget.checked)
-                                }
-                              />
-                              {performance.songTitle}
-                            </label>
-                          </li>
-                        )}
+                <button {...sortable.dragHandleProps('setlist', index, `セットリスト${index + 1}`)}>⠿</button>
+                <span class="w-6 text-right text-xs text-base-content/60">{index + 1}</span>
+                <input
+                  type="text"
+                  class="input input-bordered input-xs w-36"
+                  aria-label={`セットリスト${index + 1}の表示名`}
+                  placeholder="表示名(任意)"
+                  value={item().label}
+                  onInput={(e) => {
+                    const label = e.currentTarget.value;
+                    updateItem(index, (current) => ({ ...current, label }));
+                  }}
+                />
+                <div class="flex flex-1 flex-wrap items-center gap-1">
+                  <For each={item().performanceIds}>
+                    {(performanceId) => (
+                      <span class="badge badge-primary badge-soft gap-1 whitespace-nowrap">
+                        {songTitleOf(performanceId)}
+                        <button
+                          type="button"
+                          aria-label={`${songTitleOf(performanceId)}の紐づけを外す`}
+                          onClick={() => unlinkPerformance(index, performanceId)}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    )}
+                  </For>
+                  <Show when={unassigned().length > 0}>
+                    <select
+                      class="select select-ghost select-xs w-44"
+                      aria-label={`セットリスト${index + 1}に楽曲披露を紐づける`}
+                      value=""
+                      onChange={(e) => {
+                        const performanceId = e.currentTarget.value;
+                        e.currentTarget.value = '';
+                        if (performanceId !== '') {
+                          linkPerformance(index, performanceId);
+                        }
+                      }}
+                    >
+                      <option value="">＋ 楽曲披露を紐づけ</option>
+                      <For each={unassigned()}>
+                        {(performance) => <option value={performance.performanceId}>{performance.songTitle}</option>}
                       </For>
-                    </ul>
+                    </select>
                   </Show>
                 </div>
+                <ListItemActions
+                  label={`セットリスト${index + 1}`}
+                  index={index}
+                  length={props.setlist.length}
+                  onMove={moveItem}
+                  onRemove={() => removeItem(index)}
+                />
               </li>
             )}
           </Index>
         </ul>
       </Show>
-
-      <div class="mt-4">
-        <button type="button" class="btn btn-outline btn-sm" disabled={props.disabled} onClick={addItem}>
-          項目を追加
-        </button>
-      </div>
     </fieldset>
   );
 };
