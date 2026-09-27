@@ -4,7 +4,7 @@ import type { EventStatusValue, EventTypeValue } from '../../generated';
 export const EVENT_TYPE_OPTIONS: { value: EventTypeValue; label: string }[] = [
   { value: 1, label: 'ライブ' },
   { value: 2, label: '配信' },
-  { value: 3, label: '個展' },
+  { value: 3, label: '展覧会' },
   { value: 4, label: 'ラジオ' },
   { value: 99, label: 'その他' },
 ];
