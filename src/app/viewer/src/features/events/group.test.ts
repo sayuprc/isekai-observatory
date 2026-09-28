@@ -11,6 +11,7 @@ const event = (title: string, startOn: string | null, endOn: string | null = nul
   status: { name: '通常', value: 1 },
   venues: [],
   media: [],
+  releases: [],
   sources: [],
   performances: [],
   setlist: [],

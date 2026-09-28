@@ -104,5 +104,12 @@ interface ReleaseService {
 
   @doc("リリース削除API")
   @delete
-  deleteRelease(@path releaseId: uuid): NoContent | Unauthorized | Forbidden | NotFound | Unprocessable | ServerError;
+  deleteRelease(@path releaseId: uuid):
+    | NoContent
+    | BadRequest
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | Unprocessable
+    | ServerError;
 }

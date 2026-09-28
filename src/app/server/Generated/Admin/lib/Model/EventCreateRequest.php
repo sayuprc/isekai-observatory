@@ -65,6 +65,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'is_display' => 'bool',
         'venues' => '\OpenAPI\Admin\Client\Model\RequestEventVenueLink[]',
         'media' => '\OpenAPI\Admin\Client\Model\RequestEventMediaLink[]',
+        'releases' => '\OpenAPI\Admin\Client\Model\RequestEventReleaseLink[]',
         'sources' => '\OpenAPI\Admin\Client\Model\EventSource[]',
         'performances' => '\OpenAPI\Admin\Client\Model\RequestSongPerformance[]',
         'setlist' => '\OpenAPI\Admin\Client\Model\RequestSetlistItem[]'
@@ -86,6 +87,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'is_display' => null,
         'venues' => null,
         'media' => null,
+        'releases' => null,
         'sources' => null,
         'performances' => null,
         'setlist' => null
@@ -105,6 +107,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'is_display' => false,
         'venues' => false,
         'media' => false,
+        'releases' => false,
         'sources' => false,
         'performances' => false,
         'setlist' => false
@@ -204,6 +207,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'is_display' => 'isDisplay',
         'venues' => 'venues',
         'media' => 'media',
+        'releases' => 'releases',
         'sources' => 'sources',
         'performances' => 'performances',
         'setlist' => 'setlist'
@@ -223,6 +227,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'is_display' => 'setIsDisplay',
         'venues' => 'setVenues',
         'media' => 'setMedia',
+        'releases' => 'setReleases',
         'sources' => 'setSources',
         'performances' => 'setPerformances',
         'setlist' => 'setSetlist'
@@ -242,6 +247,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'is_display' => 'getIsDisplay',
         'venues' => 'getVenues',
         'media' => 'getMedia',
+        'releases' => 'getReleases',
         'sources' => 'getSources',
         'performances' => 'getPerformances',
         'setlist' => 'getSetlist'
@@ -312,6 +318,7 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('venues', $data ?? [], null);
         $this->setIfExists('media', $data ?? [], null);
+        $this->setIfExists('releases', $data ?? [], null);
         $this->setIfExists('sources', $data ?? [], null);
         $this->setIfExists('performances', $data ?? [], null);
         $this->setIfExists('setlist', $data ?? [], null);
@@ -371,6 +378,9 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         }
         if ($this->container['media'] === null) {
             $invalidProperties[] = "'media' can't be null";
+        }
+        if ($this->container['releases'] === null) {
+            $invalidProperties[] = "'releases' can't be null";
         }
         if ($this->container['sources'] === null) {
             $invalidProperties[] = "'sources' can't be null";
@@ -613,6 +623,33 @@ class EventCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable media cannot be null');
         }
         $this->container['media'] = $media;
+
+        return $this;
+    }
+
+    /**
+     * Gets releases
+     *
+     * @return \OpenAPI\Admin\Client\Model\RequestEventReleaseLink[]
+     */
+    public function getReleases()
+    {
+        return $this->container['releases'];
+    }
+
+    /**
+     * Sets releases
+     *
+     * @param \OpenAPI\Admin\Client\Model\RequestEventReleaseLink[] $releases releases
+     *
+     * @return self
+     */
+    public function setReleases($releases)
+    {
+        if (is_null($releases)) {
+            throw new \InvalidArgumentException('non-nullable releases cannot be null');
+        }
+        $this->container['releases'] = $releases;
 
         return $this;
     }

@@ -4,6 +4,7 @@ import "../../packages/media";
 import "../../packages/song";
 import "../media";
 import "../persons";
+import "../releases";
 import "../venues";
 
 using IsekaiObservatory.Shared;
@@ -45,6 +46,17 @@ model SetlistItem {
   performances: SongPerformance[];
 }
 
+@doc("イベントに関連づけたリリース(版)。isDisplay はリリースとリリースグループがともに公開のとき true")
+model EventRelease {
+  releaseId: releaseId;
+  releaseGroupId: releaseGroupId;
+  releaseGroupTitle: releaseGroupTitle;
+  name: releaseName;
+  releasedOn: releasedOn;
+  isDisplay: boolean;
+  formatValues: ReleaseFormatValue[];
+}
+
 @doc("イベント")
 model Event {
   eventId: eventId;
@@ -56,6 +68,7 @@ model Event {
   isDisplay: boolean;
   venues: Venue[];
   media: Media[];
+  releases: EventRelease[];
   sources: EventSource[];
   performances: SongPerformance[];
   setlist: SetlistItem[];

@@ -14,6 +14,7 @@ use Event\Application\Viewer\Query\EventListPage;
 use Event\Application\Viewer\Query\EventMediaSummary;
 use Event\Application\Viewer\Query\EventPerformanceSummary;
 use Event\Application\Viewer\Query\EventQueryServiceInterface;
+use Event\Application\Viewer\Query\EventReleaseSummary;
 use Event\Application\Viewer\Query\EventSetlistItemSummary;
 use Event\Application\Viewer\Query\EventSourceSummary;
 use Event\Application\Viewer\Query\EventVenueSummary;
@@ -21,6 +22,7 @@ use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Media\Domain\Models\MediaType;
 use Override;
+use Release\Domain\Models\ReleaseFormat;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -59,12 +61,13 @@ readonly class EventQueryService implements EventQueryServiceInterface
 
         $venuesByEvent = $this->loadVenues($binEventIds);
         $mediaByEvent = $this->loadMedia($binEventIds);
+        $releasesByEvent = $this->loadReleases($binEventIds);
         $sourcesByEvent = $this->loadSources($binEventIds);
         $performancesByEvent = $this->loadPerformances($binEventIds);
         $setlistByEvent = $this->loadSetlist($binEventIds, $performancesByEvent);
 
         $events = array_map(
-            function (array $row) use ($venuesByEvent, $mediaByEvent, $sourcesByEvent, $performancesByEvent, $setlistByEvent): EventListItem {
+            function (array $row) use ($venuesByEvent, $mediaByEvent, $releasesByEvent, $sourcesByEvent, $performancesByEvent, $setlistByEvent): EventListItem {
                 $binEventId = Row::string($row, 'event_id');
 
                 return new EventListItem(
@@ -77,6 +80,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
                     EventStatus::from(Row::int($row, 'status')),
                     $venuesByEvent[$binEventId] ?? [],
                     $mediaByEvent[$binEventId] ?? [],
+                    $releasesByEvent[$binEventId] ?? [],
                     $sourcesByEvent[$binEventId] ?? [],
                     array_values($performancesByEvent[$binEventId] ?? []),
                     $setlistByEvent[$binEventId] ?? [],
@@ -170,6 +174,59 @@ readonly class EventQueryService implements EventQueryServiceInterface
                 Row::string($row, 'url'),
                 new DateTimeImmutable(Row::string($row, 'published_at')),
                 MediaType::from(Row::int($row, 'type')),
+            );
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * リリースとリリースグループがともに公開のものだけを返す
+     *
+     * @param list<string> $binEventIds
+     *
+     * @return array<string, list<EventReleaseSummary>>
+     */
+    private function loadReleases(array $binEventIds): array
+    {
+        if ($binEventIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['event_releases.event_id', 'releases.release_id', 'releases.name', 'releases.released_on', 'release_groups.release_group_id', 'release_groups.title'])
+                ->from('event_releases')
+                ->join('releases', 'event_releases.release_id = releases.release_id')
+                ->join('release_groups', 'releases.release_group_id = release_groups.release_group_id')
+                ->where('event_releases.event_id', 'IN', $binEventIds)
+                ->where('releases.is_display', '=', true)
+                ->where('release_groups.is_display', '=', true)
+                ->orderBy('event_releases.order_no'),
+        );
+        $binReleaseIds = array_map(static fn (array $row): string => Row::string($row, 'release_id'), $rows);
+
+        $formatsByRelease = [];
+        foreach ($binReleaseIds === [] ? [] : $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['release_id', 'format'])
+                ->from('release_formats')
+                ->where('release_id', 'IN', $binReleaseIds)
+                ->orderBy('format'),
+        ) as $row) {
+            $formatsByRelease[Row::string($row, 'release_id')][] = ReleaseFormat::from(Row::int($row, 'format'));
+        }
+
+        $grouped = [];
+        foreach ($rows as $row) {
+            $binReleaseId = Row::string($row, 'release_id');
+            $grouped[Row::string($row, 'event_id')][] = new EventReleaseSummary(
+                $this->converter->toUuid($binReleaseId),
+                $this->converter->toUuid(Row::string($row, 'release_group_id')),
+                Row::string($row, 'title'),
+                Row::string($row, 'name'),
+                Row::string($row, 'released_on'),
+                $formatsByRelease[$binReleaseId] ?? [],
             );
         }
 

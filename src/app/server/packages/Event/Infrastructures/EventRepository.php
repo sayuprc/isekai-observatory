@@ -63,7 +63,7 @@ readonly class EventRepository implements EventRepositoryInterface
         // 子テーブルは洗い替えする
         // 共演者とセットリスト項目の披露参照は、親の削除で CASCADE される
         $this->queryFactory->deleteFromTables(
-            ['event_setlist_items', 'song_performances', 'event_sources', 'event_media', 'event_venues'],
+            ['event_setlist_items', 'song_performances', 'event_sources', 'event_releases', 'event_media', 'event_venues'],
             'event_id',
             $binEventId,
         );
@@ -119,6 +119,19 @@ readonly class EventRepository implements EventRepositoryInterface
                     $media['order_no'],
                 ],
                 $data['media'],
+            ),
+        );
+
+        $this->queryFactory->insertRows(
+            'event_releases',
+            ['event_id', 'release_id', 'order_no'],
+            array_map(
+                fn (array $release): array => [
+                    $binEventId,
+                    $this->converter->toBin($release['release_id']),
+                    $release['order_no'],
+                ],
+                $data['releases'],
             ),
         );
 
@@ -227,6 +240,7 @@ readonly class EventRepository implements EventRepositoryInterface
             Row::bool($row, 'is_display'),
             $this->loadVenues($binEventId),
             $this->loadMedia($binEventId),
+            $this->loadReleases($binEventId),
             $this->loadSources($binEventId),
             $this->loadPerformances($binEventId),
             $this->loadSetlist($binEventId),
@@ -267,6 +281,26 @@ readonly class EventRepository implements EventRepositoryInterface
         return array_map(
             fn (array $row): array => [
                 'mediaId' => $this->converter->toUuid(Row::string($row, 'media_id')),
+                'orderNo' => Row::int($row, 'order_no'),
+            ],
+            $rows,
+        );
+    }
+
+    /** @return list<array{releaseId: string, orderNo: int}> */
+    private function loadReleases(string $binEventId): array
+    {
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['release_id', 'order_no'])
+                ->from('event_releases')
+                ->where('event_id', '=', $binEventId)
+                ->orderBy('order_no'),
+        );
+
+        return array_map(
+            fn (array $row): array => [
+                'releaseId' => $this->converter->toUuid(Row::string($row, 'release_id')),
                 'orderNo' => Row::int($row, 'order_no'),
             ],
             $rows,

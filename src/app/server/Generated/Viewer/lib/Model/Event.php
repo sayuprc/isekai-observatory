@@ -65,6 +65,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => '\OpenAPI\Viewer\Client\Model\EventStatus',
         'venues' => '\OpenAPI\Viewer\Client\Model\EventVenueSummary[]',
         'media' => '\OpenAPI\Viewer\Client\Model\EventMediaSummary[]',
+        'releases' => '\OpenAPI\Viewer\Client\Model\EventReleaseSummary[]',
         'sources' => '\OpenAPI\Viewer\Client\Model\EventSource[]',
         'performances' => '\OpenAPI\Viewer\Client\Model\SongPerformance[]',
         'setlist' => '\OpenAPI\Viewer\Client\Model\SetlistItem[]'
@@ -86,6 +87,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => null,
         'venues' => null,
         'media' => null,
+        'releases' => null,
         'sources' => null,
         'performances' => null,
         'setlist' => null
@@ -105,6 +107,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => false,
         'venues' => false,
         'media' => false,
+        'releases' => false,
         'sources' => false,
         'performances' => false,
         'setlist' => false
@@ -204,6 +207,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => 'status',
         'venues' => 'venues',
         'media' => 'media',
+        'releases' => 'releases',
         'sources' => 'sources',
         'performances' => 'performances',
         'setlist' => 'setlist'
@@ -223,6 +227,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => 'setStatus',
         'venues' => 'setVenues',
         'media' => 'setMedia',
+        'releases' => 'setReleases',
         'sources' => 'setSources',
         'performances' => 'setPerformances',
         'setlist' => 'setSetlist'
@@ -242,6 +247,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => 'getStatus',
         'venues' => 'getVenues',
         'media' => 'getMedia',
+        'releases' => 'getReleases',
         'sources' => 'getSources',
         'performances' => 'getPerformances',
         'setlist' => 'getSetlist'
@@ -312,6 +318,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('venues', $data ?? [], null);
         $this->setIfExists('media', $data ?? [], null);
+        $this->setIfExists('releases', $data ?? [], null);
         $this->setIfExists('sources', $data ?? [], null);
         $this->setIfExists('performances', $data ?? [], null);
         $this->setIfExists('setlist', $data ?? [], null);
@@ -371,6 +378,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['media'] === null) {
             $invalidProperties[] = "'media' can't be null";
+        }
+        if ($this->container['releases'] === null) {
+            $invalidProperties[] = "'releases' can't be null";
         }
         if ($this->container['sources'] === null) {
             $invalidProperties[] = "'sources' can't be null";
@@ -613,6 +623,33 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable media cannot be null');
         }
         $this->container['media'] = $media;
+
+        return $this;
+    }
+
+    /**
+     * Gets releases
+     *
+     * @return \OpenAPI\Viewer\Client\Model\EventReleaseSummary[]
+     */
+    public function getReleases()
+    {
+        return $this->container['releases'];
+    }
+
+    /**
+     * Sets releases
+     *
+     * @param \OpenAPI\Viewer\Client\Model\EventReleaseSummary[] $releases releases
+     *
+     * @return self
+     */
+    public function setReleases($releases)
+    {
+        if (is_null($releases)) {
+            throw new \InvalidArgumentException('non-nullable releases cannot be null');
+        }
+        $this->container['releases'] = $releases;
 
         return $this;
     }

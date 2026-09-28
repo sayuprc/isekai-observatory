@@ -2,6 +2,7 @@ import "../../shared";
 import "../../packages/event";
 import "../../packages/media";
 import "../../packages/song";
+import "../releases";
 import "../venues";
 
 using IsekaiObservatory.Shared;
@@ -29,6 +30,7 @@ model EventCreateRequest {
   isDisplay: boolean;
   venues: RequestEventVenueLink[];
   media: RequestEventMediaLink[];
+  releases: RequestEventReleaseLink[];
   sources: EventSource[];
   performances: RequestSongPerformance[];
   setlist: RequestSetlistItem[];
@@ -47,6 +49,7 @@ model EventUpdateRequest {
   isDisplay: boolean;
   venues: RequestEventVenueLink[];
   media: RequestEventMediaLink[];
+  releases: RequestEventReleaseLink[];
   sources: EventSource[];
   performances: RequestSongPerformance[];
   setlist: RequestSetlistItem[];
@@ -63,6 +66,11 @@ model RequestEventVenueLink {
 
 model RequestEventMediaLink {
   mediaId: mediaId;
+  orderNo: orderNo;
+}
+
+model RequestEventReleaseLink {
+  releaseId: releaseId;
   orderNo: orderNo;
 }
 

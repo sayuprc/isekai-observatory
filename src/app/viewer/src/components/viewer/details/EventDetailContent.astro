@@ -1,6 +1,7 @@
 ---
 import type { Event } from '../../../features/events/types';
 import { eventDetailDate, eventStatusName } from '../../../features/events/types';
+import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import EventSetlistSongs from './EventSetlistSongs.astro';
 import MediaChip from './MediaChip.astro';
@@ -39,6 +40,15 @@ const setlistItems = event.setlist.map((item) => ({
 const referencedIds = new Set(event.setlist.flatMap((item) => item.performances.map((p) => p.performanceId)));
 const looseSongs = event.performances.filter((p) => !referencedIds.has(p.performanceId)).map(toSong);
 const looseTitle = setlistItems.length > 0 ? 'セットリスト外の楽曲披露' : '楽曲披露';
+
+// 版名が無いリリースはグループのタイトルだけを出す
+const releases = event.releases.map((release) => ({
+  href: `/releases/${release.releaseGroupId}`,
+  title: release.name === '' ? release.releaseGroupTitle : `${release.releaseGroupTitle} ${release.name}`,
+  sub: [dottedDate(release.releasedOn), release.formats.map((format) => format.name).join('・')]
+    .filter((part) => part !== '')
+    .join(' · '),
+}));
 
 const hostname = (url: string): string => {
   try {
@@ -97,6 +107,23 @@ const hostname = (url: string): string => {
         <div class="event-setlist-item event-setlist-item-loose">
           <EventSetlistSongs songs={looseSongs} />
         </div>
+      </div>
+    </>
+  )}
+
+  {releases.length > 0 && (
+    <>
+      <DetailSectionHead title="関連リリース" count={releases.length} />
+      <div class="rel-list">
+        {releases.map((release) => (
+          <a class="rel-chip" href={release.href}>
+            <div class="rel-copy">
+              <div class="rel-main">{release.title}</div>
+              <div class="label-mono rel-sub">{release.sub}</div>
+            </div>
+            <span class="rel-arrow rel-arrow-muted">→</span>
+          </a>
+        ))}
       </div>
     </>
   )}

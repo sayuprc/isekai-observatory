@@ -47,6 +47,7 @@ readonly class UpdateUseCase
                 $inputData->isDisplay,
                 $inputData->venues,
                 $inputData->media,
+                $inputData->releases,
                 $inputData->sources,
                 $inputData->performances,
                 $inputData->setlist,

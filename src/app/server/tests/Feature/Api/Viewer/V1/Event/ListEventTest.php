@@ -9,6 +9,8 @@ use Event\Route\ViewerEventRouteMap;
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Release\Domain\Models\ReleaseFormat;
+use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -71,6 +73,46 @@ class ListEventTest extends DatabaseTestCase
             ->assertJsonPath('events.0.performances.0.coVocalists.0.name', '共演者')
             ->assertJsonPath('events.0.setlist.0.label', '本編')
             ->assertJsonPath('events.0.setlist.0.performances.0.songTitle', '公開楽曲');
+    }
+
+    #[Test]
+    public function listsOnlyReleasesPublicWithTheirGroup(): void
+    {
+        $publicGroupId = $this->generateUuid();
+        $privateGroupId = $this->generateUuid();
+        $visibleReleaseId = $this->generateUuid();
+        $privateReleaseId = $this->generateUuid();
+        $privateGroupReleaseId = $this->generateUuid();
+        $eventId = $this->generateUuid();
+
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($publicGroupId, 'ライブ映像作品', ReleaseGroupType::Other),
+            $this->createReleaseGroup($privateGroupId, '非公開の作品', ReleaseGroupType::Other, isDisplay: false),
+        );
+        $this->storeReleases(
+            $this->createRelease($visibleReleaseId, $publicGroupId, 'Blu-ray', true, formats: [ReleaseFormat::BluRay->value, ReleaseFormat::Dvd->value]),
+            $this->createRelease($privateReleaseId, $publicGroupId, '非公開の版', false, orderNo: 2),
+            $this->createRelease($privateGroupReleaseId, $privateGroupId, '非公開グループの版', true),
+        );
+        $this->storeEvents($this->createEvent(
+            $eventId,
+            releases: [
+                ['releaseId' => $privateReleaseId, 'orderNo' => 1],
+                ['releaseId' => $visibleReleaseId, 'orderNo' => 2],
+                ['releaseId' => $privateGroupReleaseId, 'orderNo' => 3],
+            ],
+        ));
+
+        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'events.0.releases')
+            ->assertJsonPath('events.0.releases.0.releaseId', $visibleReleaseId)
+            ->assertJsonPath('events.0.releases.0.releaseGroupId', $publicGroupId)
+            ->assertJsonPath('events.0.releases.0.releaseGroupTitle', 'ライブ映像作品')
+            ->assertJsonPath('events.0.releases.0.name', 'Blu-ray')
+            ->assertJsonPath('events.0.releases.0.releasedOn', '2024-01-01')
+            ->assertJsonPath('events.0.releases.0.formats.0.value', ReleaseFormat::Dvd->value)
+            ->assertJsonPath('events.0.releases.0.formats.1.value', ReleaseFormat::BluRay->value);
     }
 
     #[Test]

@@ -57,6 +57,30 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     }
 
     #[Override]
+    public function findByIds(ReleaseId ...$releaseIds): array
+    {
+        if ($releaseIds === []) {
+            return [];
+        }
+
+        $releaseRows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(self::COLUMNS)
+                ->from(self::TABLE)
+                ->where('release_id', 'IN', array_map(fn (ReleaseId $releaseId): string => $this->converter->toBin($releaseId->value), $releaseIds)),
+        );
+
+        return array_map(
+            function (array $releaseRow): Release {
+                $binReleaseId = Row::string($releaseRow, 'release_id');
+
+                return $this->hydrate($releaseRow, $this->loadFormats($binReleaseId), $this->loadMedia($binReleaseId));
+            },
+            $releaseRows,
+        );
+    }
+
+    #[Override]
     public function existsByReleaseGroupId(ReleaseGroupId $releaseGroupId): bool
     {
         $rows = $this->queryFactory->fetchAll(
@@ -148,6 +172,19 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             ->from(self::TABLE)
             ->where('release_id', '=', $this->converter->toBin($releaseId->value))
             ->execute($this->queryFactory->pdo());
+    }
+
+    #[Override]
+    public function isUsed(ReleaseId $releaseId): bool
+    {
+        $count = Row::intValue(
+            $this->queryFactory->select()
+                ->from('event_releases')
+                ->where('release_id', '=', $this->converter->toBin($releaseId->value))
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
+        );
+
+        return $count > 0;
     }
 
     /**

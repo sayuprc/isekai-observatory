@@ -12,6 +12,7 @@ readonly class EventListItem
     /**
      * @param array<EventVenueSummary>       $venues
      * @param array<EventMediaSummary>       $media        公開 Media のみ
+     * @param array<EventReleaseSummary>     $releases     リリースとリリースグループがともに公開のもののみ
      * @param array<EventSourceSummary>      $sources
      * @param array<EventPerformanceSummary> $performances
      * @param array<EventSetlistItemSummary> $setlist
@@ -26,6 +27,7 @@ readonly class EventListItem
         public EventStatus $status,
         public array $venues,
         public array $media,
+        public array $releases,
         public array $sources,
         public array $performances,
         public array $setlist,

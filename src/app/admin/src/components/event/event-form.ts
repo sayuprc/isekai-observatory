@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js';
-import type { Event, EventCreateRequest, EventStatusValue, EventTypeValue, Media } from '../../generated';
+import type { Event, EventCreateRequest, EventRelease, EventStatusValue, EventTypeValue, Media } from '../../generated';
 import { normalizeDateValue } from '../../utils/date';
 import { toMediaEntry, type MediaEntry } from '../media/MediaSection';
 import {
@@ -39,6 +39,7 @@ export const createEventForm = (event?: Event) => {
   const [mediaEntries, setMediaEntries] = createSignal<MediaEntry[]>((event?.media ?? []).map(toMediaEntry));
   // MediaSection が重複候補の判定に使う、既知の Media の一覧
   const [availableMedia, setAvailableMedia] = createSignal<Media[]>(event?.media ?? []);
+  const [releases, setReleases] = createSignal<EventRelease[]>(event?.releases ?? []);
   const [sources, setSources] = createSignal<SourceForm[]>(toSourceForms(event?.sources ?? []));
 
   const canEditPerformances = () => allowsPerformances(statusValue());
@@ -87,6 +88,7 @@ export const createEventForm = (event?: Event) => {
     isDisplay: isDisplay(),
     venues: venues().map((venue, index) => ({ venueId: venue.venueId, orderNo: index + 1 })),
     media: mediaEntries().map((media, index) => ({ mediaId: media.mediaId, orderNo: index + 1 })),
+    releases: releases().map((release, index) => ({ releaseId: release.releaseId, orderNo: index + 1 })),
     sources: toSourcesPayload(sources()),
     performances: toPerformancesPayload(performances()),
     setlist: toSetlistPayload(setlist(), performances()),
@@ -117,6 +119,8 @@ export const createEventForm = (event?: Event) => {
     setMediaEntries,
     availableMedia,
     setAvailableMedia,
+    releases,
+    setReleases,
     sources,
     setSources,
     canEditPerformances,

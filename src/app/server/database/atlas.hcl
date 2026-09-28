@@ -11,6 +11,7 @@ variable "table_schemas" {
     "file://schemas/events.my.hcl",
     "file://schemas/event-venues.my.hcl",
     "file://schemas/event-media.my.hcl",
+    "file://schemas/event-releases.my.hcl",
     "file://schemas/event-sources.my.hcl",
     "file://schemas/song-performances.my.hcl",
     "file://schemas/song-performance-persons.my.hcl",

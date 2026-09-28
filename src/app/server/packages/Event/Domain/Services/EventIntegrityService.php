@@ -13,6 +13,7 @@ use Event\Domain\Models\EventTitle;
 use Event\Domain\Models\EventType;
 use Event\Domain\Models\Media\EventMediaLinks;
 use Event\Domain\Models\Performances\SongPerformances;
+use Event\Domain\Models\Releases\EventReleaseLinks;
 use Event\Domain\Models\Setlist\Setlist;
 use Event\Domain\Models\Sources\EventSources;
 use Event\Domain\Models\Venues\EventVenueLinks;
@@ -34,12 +35,13 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}    $schedule
-     * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<_eventSourceInput>                    $sources
-     * @param list<_songPerformanceInput>                $performances
-     * @param list<_setlistItemInput>                    $setlist
+     * @param array{startOn: ?string, endOn: ?string}      $schedule
+     * @param list<array{venueId: string, orderNo: int}>   $venues
+     * @param list<array{mediaId: string, orderNo: int}>   $media
+     * @param list<array{releaseId: string, orderNo: int}> $releases
+     * @param list<_eventSourceInput>                      $sources
+     * @param list<_songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                      $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -52,6 +54,7 @@ readonly class EventIntegrityService
         bool $isDisplay,
         array $venues,
         array $media,
+        array $releases,
         array $sources,
         array $performances,
         array $setlist,
@@ -66,6 +69,7 @@ readonly class EventIntegrityService
             $isDisplay,
             $venues,
             $media,
+            $releases,
             $sources,
             $performances,
             $setlist,
@@ -73,12 +77,13 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}    $schedule
-     * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<_eventSourceInput>                    $sources
-     * @param list<_songPerformanceInput>                $performances
-     * @param list<_setlistItemInput>                    $setlist
+     * @param array{startOn: ?string, endOn: ?string}      $schedule
+     * @param list<array{venueId: string, orderNo: int}>   $venues
+     * @param list<array{mediaId: string, orderNo: int}>   $media
+     * @param list<array{releaseId: string, orderNo: int}> $releases
+     * @param list<_eventSourceInput>                      $sources
+     * @param list<_songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                      $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -92,6 +97,7 @@ readonly class EventIntegrityService
         bool $isDisplay,
         array $venues,
         array $media,
+        array $releases,
         array $sources,
         array $performances,
         array $setlist,
@@ -106,6 +112,7 @@ readonly class EventIntegrityService
             $isDisplay,
             $venues,
             $media,
+            $releases,
             $sources,
             $performances,
             $setlist,
@@ -113,12 +120,13 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}    $schedule
-     * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<_eventSourceInput>                    $sources
-     * @param list<_songPerformanceInput>                $performances
-     * @param list<_setlistItemInput>                    $setlist
+     * @param array{startOn: ?string, endOn: ?string}      $schedule
+     * @param list<array{venueId: string, orderNo: int}>   $venues
+     * @param list<array{mediaId: string, orderNo: int}>   $media
+     * @param list<array{releaseId: string, orderNo: int}> $releases
+     * @param list<_eventSourceInput>                      $sources
+     * @param list<_songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                      $setlist
      *
      * @throws BusinessRuleViolationException
      */
@@ -132,6 +140,7 @@ readonly class EventIntegrityService
         bool $isDisplay,
         array $venues,
         array $media,
+        array $releases,
         array $sources,
         array $performances,
         array $setlist,
@@ -146,6 +155,7 @@ readonly class EventIntegrityService
             $isDisplay,
             EventVenueLinks::fromArray($venues),
             EventMediaLinks::fromArray($media),
+            EventReleaseLinks::fromArray($releases),
             EventSources::fromArray($sources),
             SongPerformances::fromArray($performances),
             Setlist::fromArray($setlist),

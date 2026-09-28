@@ -12,12 +12,13 @@ namespace Event\Application\Admin\UseCase\Create;
 readonly class CreateInputData
 {
     /**
-     * @param array{startOn: ?string, endOn: ?string}    $schedule
-     * @param list<array{venueId: string, orderNo: int}> $venues
-     * @param list<array{mediaId: string, orderNo: int}> $media
-     * @param list<_eventSourceInput>                    $sources
-     * @param list<_songPerformanceInput>                $performances
-     * @param list<_setlistItemInput>                    $setlist
+     * @param array{startOn: ?string, endOn: ?string}      $schedule
+     * @param list<array{venueId: string, orderNo: int}>   $venues
+     * @param list<array{mediaId: string, orderNo: int}>   $media
+     * @param list<array{releaseId: string, orderNo: int}> $releases
+     * @param list<_eventSourceInput>                      $sources
+     * @param list<_songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                      $setlist
      */
     public function __construct(
         public string $title,
@@ -28,6 +29,7 @@ readonly class CreateInputData
         public bool $isDisplay,
         public array $venues,
         public array $media,
+        public array $releases,
         public array $sources,
         public array $performances,
         public array $setlist,

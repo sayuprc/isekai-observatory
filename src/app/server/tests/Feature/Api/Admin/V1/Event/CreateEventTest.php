@@ -7,6 +7,8 @@ namespace Tests\Feature\Api\Admin\V1\Event;
 use Event\Route\EventRouteMap;
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
+use Release\Domain\Models\ReleaseFormat;
+use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -35,6 +37,10 @@ class CreateEventTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
         $this->storeMedia($this->createMedia($mediaId, '配信アーカイブ', 'https://example.com/archive', MediaType::LiveStream, true));
+        $releaseGroupId = $this->generateUuid();
+        $releaseId = $this->generateUuid();
+        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'ライブ映像作品', ReleaseGroupType::Other));
+        $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, 'Blu-ray', true, formats: [ReleaseFormat::BluRay->value]));
 
         $performanceId = $this->generateUuid();
         $response = $this->withAuth()
@@ -47,6 +53,7 @@ class CreateEventTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'venues' => [['venueId' => $venueId, 'orderNo' => 1]],
                 'media' => [['mediaId' => $mediaId, 'orderNo' => 1]],
+                'releases' => [['releaseId' => $releaseId, 'orderNo' => 1]],
                 'sources' => [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
                 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
@@ -58,6 +65,12 @@ class CreateEventTest extends DatabaseTestCase
             ->assertJsonPath('event.venues.0.name', '会場')
             ->assertJsonPath('event.media.0.mediaId', $mediaId)
             ->assertJsonPath('event.media.0.title', '配信アーカイブ')
+            ->assertJsonPath('event.releases.0.releaseId', $releaseId)
+            ->assertJsonPath('event.releases.0.releaseGroupId', $releaseGroupId)
+            ->assertJsonPath('event.releases.0.releaseGroupTitle', 'ライブ映像作品')
+            ->assertJsonPath('event.releases.0.name', 'Blu-ray')
+            ->assertJsonPath('event.releases.0.isDisplay', true)
+            ->assertJsonPath('event.releases.0.formatValues', [ReleaseFormat::BluRay->value])
             ->assertJsonPath('event.performances.0.songId', $songId)
             ->assertJsonPath('event.performances.0.songTitle', '披露曲')
             ->assertJsonPath('event.performances.0.coVocalists.0.name', '共演者')
@@ -83,6 +96,7 @@ class CreateEventTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
+                'releases' => [],
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '展示作品', 'performanceIds' => []]],
@@ -107,6 +121,7 @@ class CreateEventTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
+                'releases' => [],
                 'sources' => [],
                 'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
                 'setlist' => [],
@@ -128,6 +143,7 @@ class CreateEventTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
+                'releases' => [],
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'オープニング', 'performanceIds' => []]],
@@ -149,6 +165,7 @@ class CreateEventTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
+                'releases' => [],
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [],
@@ -169,6 +186,7 @@ class CreateEventTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
+                'releases' => [],
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [],
@@ -191,6 +209,7 @@ class CreateEventTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
+                'releases' => [],
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [],

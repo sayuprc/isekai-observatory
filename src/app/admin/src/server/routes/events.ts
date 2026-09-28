@@ -34,6 +34,10 @@ const eventMediaLinkSchema = t.Object({
   mediaId: t.String(),
   orderNo: t.Number(),
 });
+const eventReleaseLinkSchema = t.Object({
+  releaseId: t.String(),
+  orderNo: t.Number(),
+});
 const eventSourceSchema = t.Object({
   displayName: t.String({ minLength: 1 }),
   url: t.String({ minLength: 1 }),
@@ -54,6 +58,7 @@ const eventBodySchema = t.Object({
   isDisplay: t.Boolean(),
   venues: t.Array(eventVenueLinkSchema),
   media: t.Array(eventMediaLinkSchema),
+  releases: t.Array(eventReleaseLinkSchema),
   sources: t.Array(eventSourceSchema),
   performances: t.Array(songPerformanceSchema),
   setlist: t.Array(setlistItemSchema),

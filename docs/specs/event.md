@@ -13,6 +13,7 @@
 - **EventSource**: `displayName` / `url` / `orderNo`。用途を固定 enum で分類しない
 - **SongPerformance (楽曲披露)**: 本人が Event 内で一つの Song を一回披露した事実
 - **Setlist**: Live または Stream で判明している演目を `orderNo` 順に並べた一覧
+- **関連リリース**: Event を収録したライブ映像作品や特典映像などとして Event に関連づけた Release (版)
 
 ## できること
 
@@ -20,9 +21,12 @@
   タイトル、活動種別、延期・中止、公開状態で検索できる
 - Event はタイトル必須、改行可能なプレーンテキストの説明は空文字を許容する必須値。同じタイトル・日付を許容する
 - 一回の開始を一つの Event とする。同日昼夜公演は別 Event、同時刻の現地会場と配信先は一つの Event とする
-- 開催先は 0 件以上。Venue / Media / EventSource は Event 内で重複不可かつ `orderNo` を持つ
+- 開催先は 0 件以上。Venue / Media / Release / EventSource は Event 内で重複不可かつ `orderNo` を持つ
 - EventSource は 0 件でも Event を公開できる。Viewer には表示名と URL を公開する
 - Event は複数の Media を関連づけられる。リンクの所有は Event 側
+- Event は複数の Release (版) を関連リリースとして関連づけられる。リンクの所有は Event 側
+  同じ作品の通常盤と限定盤のように、Event を収録した版ごとに関連づける
+  Admin はリリースグループのタイトルで検索し、傘下の版から選ぶ
 - Postponed の Event は延期先 Event を参照しない。延期後の開催は別 Event として登録する
 - SongPerformance はすべての EventType に 0 件以上登録でき、必ず 1 件の Song を参照する
   同じ Event で同じ Song を複数回披露した場合も別 SongPerformance とする
@@ -37,7 +41,7 @@
 - Postponed / Cancelled の Event は SongPerformance と Setlist を持たない
   状態を Postponed / Cancelled にする保存で SongPerformance または Setlist が残っていれば拒否する
 - SongPerformance の公開可否は所属する Event の `isDisplay` に従い、SongPerformance ごとには持たない
-- Admin の作成・更新は Venue、EventSource、Media、SongPerformance、Setlist を含む Event 集約全体を原子的に保存する
+- Admin の作成・更新は Venue、EventSource、Media、Release、SongPerformance、Setlist を含む Event 集約全体を原子的に保存する
 - `ReadEvent` / `WriteEvent` で操作を認可し、作成・更新・削除を Event 対象で監査記録する
 - Viewer: 公開 Event の詳細を含む cursor 一覧。個別 get は持たない
   SSG は一覧からイベント詳細ページを生成し、イベント一覧、ホームの今後の予定、Song の披露履歴から辿れる
@@ -46,6 +50,7 @@
 - ホームの今後の予定は、延期・中止を除外したうえでブラウザ上の現在日付と比較して導出する
 - 公開 Event が非公開 Song を参照する場合、イベント詳細には曲名だけを出し、Song ID とリンクは出さない
   非公開 Media はイベント詳細から除外する
+  関連リリースは Release とその ReleaseGroup がともに公開のものだけを出し、リリース詳細へリンクする
 
 ## できないこと
 
@@ -58,7 +63,7 @@
 - EventSource の用途分類、本文、画像を保存しない
 - 権利者画像を保存・配信しない
 - 初期スコープで Discord 公開通知や開催前リマインドを行わない
-- 参照中の Song / Person / Venue / Media は削除できない
+- 参照中の Song / Person / Venue / Media / Release は削除できない
 - Event の公開状態は削除可否に影響しない。別 Event などからの FK 参照がなければ削除でき、所有する子要素は同時に削除する
 
 ## 主な関係
@@ -68,6 +73,7 @@ classDiagram
   direction LR
   Event "N" --> "M" Venue : order
   Event "N" --> "M" Media : order / リンク所有
+  Event "N" --> "M" Release : 関連リリース / order / リンク所有
   Event "1" --> "N" EventSource : 所有
   Event "1" --> "N" SongPerformance : 所有
   SongPerformance "N" --> "1" Song

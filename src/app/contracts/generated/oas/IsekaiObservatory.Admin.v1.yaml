@@ -9,12 +9,12 @@ tags:
   - name: AuditLog
   - name: Media
   - name: Person
-  - name: Venue
-  - name: Event
   - name: SongTag
   - name: Song
   - name: ReleaseGroup
   - name: Release
+  - name: Venue
+  - name: Event
   - name: SongType
 paths:
   /admin-users:
@@ -2026,6 +2026,12 @@ paths:
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Access is unauthorized.
           content:
@@ -3258,6 +3264,7 @@ components:
         - isDisplay
         - venues
         - media
+        - releases
         - sources
         - performances
         - setlist
@@ -3284,6 +3291,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Media'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventRelease'
         sources:
           type: array
           items:
@@ -3308,6 +3319,7 @@ components:
         - isDisplay
         - venues
         - media
+        - releases
         - sources
         - performances
         - setlist
@@ -3332,6 +3344,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RequestEventMediaLink'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventReleaseLink'
         sources:
           type: array
           items:
@@ -3358,6 +3374,34 @@ components:
       properties:
         event:
           $ref: '#/components/schemas/Event'
+    EventRelease:
+      type: object
+      required:
+        - releaseId
+        - releaseGroupId
+        - releaseGroupTitle
+        - name
+        - releasedOn
+        - isDisplay
+        - formatValues
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        releaseGroupTitle:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        isDisplay:
+          type: boolean
+        formatValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+      description: イベントに関連づけたリリース(版)。isDisplay はリリースとリリースグループがともに公開のとき true
     EventSearchResponse:
       type: object
       required:
@@ -3469,6 +3513,7 @@ components:
         - isDisplay
         - venues
         - media
+        - releases
         - sources
         - performances
         - setlist
@@ -3493,6 +3538,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RequestEventMediaLink'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventReleaseLink'
         sources:
           type: array
           items:
@@ -4355,6 +4404,16 @@ components:
       properties:
         mediaId:
           $ref: '#/components/schemas/mediaId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    RequestEventReleaseLink:
+      type: object
+      required:
+        - releaseId
+        - orderNo
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
         orderNo:
           $ref: '#/components/schemas/orderNo'
     RequestEventVenueLink:
