@@ -23,7 +23,7 @@ export const ReleaseEditor = (props: ReleaseEditorProps) => {
     emptyKeywordMessage: 'リリースグループのタイトルを入力してください',
     fetch: async (title) => {
       const { data, status } = await client.api['release-groups'].search.get({
-        query: { title, sort: 'first_released_on', order: 'desc', page: 1, per_page: 10 },
+        query: { title, sort: 'first_released_on', order: 'desc', page: 1, per_page: 25 },
       });
       if (!data) {
         return { items: undefined, status };
