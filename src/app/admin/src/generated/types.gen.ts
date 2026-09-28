@@ -2799,6 +2799,10 @@ export type ReleaseServiceDeleteReleaseData = {
 
 export type ReleaseServiceDeleteReleaseErrors = {
     /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
      * Access is unauthorized.
      */
     401: ErrorResponse;
