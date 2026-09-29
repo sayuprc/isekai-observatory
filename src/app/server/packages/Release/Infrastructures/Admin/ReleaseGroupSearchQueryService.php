@@ -78,9 +78,9 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
 
         if ($criteria->title->isPresent()) {
             $query = $query->where(
-                'release_groups.title',
+                'release_groups.title_lower',
                 'LIKE',
-                SqlHelper::containsPattern($criteria->title->get()),
+                SqlHelper::containsPattern(mb_strtolower($criteria->title->get())),
             );
         }
 

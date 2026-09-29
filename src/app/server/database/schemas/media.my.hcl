@@ -12,6 +12,15 @@ table "media" {
     type    = varchar(255)
     comment = "タイトル"
   }
+  column "title_lower" {
+    null = true
+    type = varchar(255)
+    as {
+      expr = "lower(`title`)"
+      type = VIRTUAL
+    }
+    comment = "タイトル(小文字)"
+  }
   // URL は日本語ドメインやパスをそのまま保持できるよう text のままにする
   // MySQL の index 長制約により text へ完全な unique 制約は張らず、重複はアプリケーション側で防ぐ
   column "url" {
@@ -48,5 +57,9 @@ table "media" {
 
   primary_key {
     columns = [column.media_id]
+  }
+
+  index "idx_media_title_lower" {
+    columns = [column.title_lower]
   }
 }
