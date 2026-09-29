@@ -35,6 +35,20 @@ class SearchMediaTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function canSearchByTitleCaseInsensitively(): void
+    {
+        $repository = $this->app->make(MediaRepository::class);
+        $repository->save($this->createMedia($this->generateUuid(), 'Observatory MV', 'https://example.com/mv', MediaType::Mv, true));
+        $repository->save($this->createMedia($this->generateUuid(), '別の動画', 'https://example.com/other', MediaType::AudioVideo, true));
+
+        $this->withAuth()
+            ->getJson(route(MediaRouteMap::Search, ['title' => 'oBSERVATORY']))
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'media')
+            ->assertJsonPath('media.0.title', 'Observatory MV');
+    }
+
+    #[Test]
     public function canSearchWithoutTitle(): void
     {
         $repository = $this->app->make(MediaRepository::class);

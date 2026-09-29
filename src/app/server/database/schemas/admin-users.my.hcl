@@ -12,6 +12,15 @@ table "admin_users" {
     type    = varchar(255)
     comment = "管理者名"
   }
+  column "name_lower" {
+    null = true
+    type = varchar(255)
+    as {
+      expr = "lower(`name`)"
+      type = VIRTUAL
+    }
+    comment = "管理者名(小文字)"
+  }
   column "email" {
     null    = false
     type    = varchar(255)
@@ -36,6 +45,10 @@ table "admin_users" {
 
   primary_key {
     columns = [column.admin_user_id]
+  }
+
+  index "idx_admin_users_name_lower" {
+    columns = [column.name_lower]
   }
 
   index "admin_users_email_unique" {

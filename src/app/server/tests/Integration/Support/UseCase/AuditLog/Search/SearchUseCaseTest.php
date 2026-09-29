@@ -123,6 +123,21 @@ class SearchUseCaseTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function filtersByAdminUserNameCaseInsensitively(): void
+    {
+        $actorId = $this->seedActor(name: 'Observer');
+        $otherActorId = $this->seedActor(email: 'other@example.com', name: '別の管理者');
+
+        $this->insertAuditLog($actorId, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-01 10:00:00'));
+        $this->insertAuditLog($otherActorId, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 10:00:00'));
+
+        $result = $this->getInstance()->handle(new SearchInputData(adminUserName: 'oBSERVER'));
+
+        $this->assertCount(1, $result->auditLogs);
+        $this->assertSame('Observer', $result->auditLogs[0]->adminUserName);
+    }
+
+    #[Test]
     public function escapesLikeMetacharactersInAdminUserName(): void
     {
         // メタ文字を含む名前と、含まない名前の両方を seed

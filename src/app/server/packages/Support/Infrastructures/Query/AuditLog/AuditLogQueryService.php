@@ -122,9 +122,9 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
 
         if ($criteria->adminUserName->isPresent()) {
             $query = $query->where(
-                'admin_users.name',
+                'admin_users.name_lower',
                 'LIKE',
-                SqlHelper::containsPattern($criteria->adminUserName->get()),
+                SqlHelper::containsPattern(mb_strtolower($criteria->adminUserName->get())),
             );
         }
 

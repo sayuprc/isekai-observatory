@@ -12,6 +12,15 @@ table "release_groups" {
     type    = varchar(255)
     comment = "タイトル"
   }
+  column "title_lower" {
+    null = true
+    type = varchar(255)
+    as {
+      expr = "lower(`title`)"
+      type = VIRTUAL
+    }
+    comment = "タイトル(小文字)"
+  }
   column "type" {
     null     = false
     type     = tinyint
@@ -48,5 +57,9 @@ table "release_groups" {
 
   primary_key {
     columns = [column.release_group_id]
+  }
+
+  index "idx_release_groups_title_lower" {
+    columns = [column.title_lower]
   }
 }

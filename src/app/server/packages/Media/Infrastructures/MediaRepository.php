@@ -187,9 +187,9 @@ readonly class MediaRepository implements MediaRepositoryInterface
 
         if ($criteria->title->isPresent()) {
             $query = $query->where(
-                'title',
+                'title_lower',
                 'LIKE',
-                SqlHelper::containsPattern($criteria->title->get()),
+                SqlHelper::containsPattern(mb_strtolower($criteria->title->get())),
             );
         }
 

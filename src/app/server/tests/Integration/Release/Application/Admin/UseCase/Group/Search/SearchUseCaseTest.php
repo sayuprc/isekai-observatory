@@ -80,6 +80,23 @@ class SearchUseCaseTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function filtersByTitleCaseInsensitively(): void
+    {
+        $releaseGroupId1 = $this->generateUuid();
+        $releaseGroupId2 = $this->generateUuid();
+
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($releaseGroupId1, 'Observatory', ReleaseGroupType::Album, true),
+            $this->createReleaseGroup($releaseGroupId2, '別の作品', ReleaseGroupType::Album, true),
+        );
+
+        $result = $this->getInstance()->handle(new SearchInputData(title: 'oBSERVATORY'));
+
+        $this->assertCount(1, $result->releaseGroups);
+        $this->assertSame($releaseGroupId1, $result->releaseGroups[0]->releaseGroupId);
+    }
+
+    #[Test]
     public function sortsByOrderNoDescendingWhenFirstReleasedOnIsSame(): void
     {
         $releaseGroupId1 = $this->generateUuid();
