@@ -120,6 +120,7 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
     <PerformanceEditor
       performances={props.form.performances()}
       onChange={props.form.updatePerformances}
+      relatedReleases={props.form.releases()}
       disabled={!props.form.canEditPerformances()}
     />
     <Show when={props.form.canEditSetlist()}>

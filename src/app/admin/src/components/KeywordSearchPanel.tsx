@@ -9,6 +9,7 @@ interface KeywordSearchPanelProps<T extends object> {
   onAdd: (item: T) => void;
   disabled?: boolean;
   emptyResultMessage?: string;
+  actionLabel?: string;
   children?: JSX.Element;
 }
 
@@ -57,7 +58,7 @@ export const KeywordSearchPanel = <T extends object>(props: KeywordSearchPanelPr
               disabled={props.disabled}
               onClick={() => props.onAdd(item)}
             >
-              追加
+              {props.actionLabel ?? '追加'}
             </button>
           </li>
         )}

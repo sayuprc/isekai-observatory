@@ -2,7 +2,10 @@ import { For, Index, Show, createSignal } from 'solid-js';
 import type { ReleaseGetResponse, SongSummary } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import type { SongCandidate } from '../song-import';
 import { createSortable, reorderItems } from '../sortable';
+import { toTrackForms } from './event-import';
+import { EventImport } from './EventImport';
 
 /**
  * songId が null のトラックは管理対象外楽曲(タイトルのみトラック)で title が必須
@@ -136,17 +139,23 @@ export const MediaEditor = (props: MediaEditorProps) => {
     props.onChange((prev) => prev.map((medium, i) => (i === index ? { ...medium, name } : medium)));
   };
 
-  const appendTrack = (track: TrackForm) => {
-    const index = Math.min(targetMediumIndex(), props.media.length - 1);
+  const targetIndex = () => Math.min(targetMediumIndex(), props.media.length - 1);
+
+  const appendTracks = (tracks: TrackForm[]) => {
+    const index = targetIndex();
 
     if (index < 0) {
       return;
     }
 
     props.onChange((prev) =>
-      prev.map((medium, i) => (i === index ? { ...medium, tracks: [...medium.tracks, track] } : medium)),
+      prev.map((medium, i) => (i === index ? { ...medium, tracks: [...medium.tracks, ...tracks] } : medium)),
     );
   };
+
+  const appendTrack = (track: TrackForm) => appendTracks([track]);
+
+  const importFromEvent = (candidates: SongCandidate[]) => appendTracks(toTrackForms(candidates));
 
   const addTrack = (song: SongSummary) => {
     appendTrack({ songId: song.songId, songTitle: song.title, title: '' });
@@ -432,7 +441,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                 <label class="label">追加先媒体</label>
                 <select
                   class="select select-bordered select-sm"
-                  value={String(Math.min(targetMediumIndex(), props.media.length - 1))}
+                  value={String(targetIndex())}
                   onChange={(e) => setTargetMediumIndex(Number(e.currentTarget.value))}
                 >
                   <Index each={props.media}>
@@ -530,6 +539,8 @@ export const MediaEditor = (props: MediaEditorProps) => {
               </div>
             </Show>
           </div>
+
+          <EventImport targetLabel={`媒体 ${targetIndex() + 1}`} onImport={importFromEvent} />
 
           <div>
             <label class="label">管理対象外楽曲を追加</label>
