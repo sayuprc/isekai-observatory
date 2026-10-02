@@ -1,11 +1,11 @@
 import { Index, Show } from 'solid-js';
 import type { EventRelease } from '../../generated';
-import { client } from '../../utils/client';
 import { createKeywordSearch } from '../keyword-search';
 import { KeywordSearchPanel } from '../KeywordSearchPanel';
 import { createSortable, reorderItems } from '../sortable';
-import { addRelease, releaseLabel, toEventReleases } from './event-links';
+import { addRelease, releaseLabel } from './event-links';
 import { ListItemActions } from './ListItemActions';
+import { searchEventReleases } from './release-search';
 
 interface ReleaseEditorProps {
   releases: EventRelease[];
@@ -18,35 +18,9 @@ export const ReleaseEditor = (props: ReleaseEditorProps) => {
   };
   const sortable = createSortable((_scope, fromIndex, toIndex) => moveItem(fromIndex, toIndex));
 
-  // 検索の主語はリリースグループなので、ヒットしたグループの版を展開して候補にする
   const releaseSearch = createKeywordSearch<EventRelease>({
     emptyKeywordMessage: 'リリースグループのタイトルを入力してください',
-    fetch: async (title) => {
-      const { data, status } = await client.api['release-groups'].search.get({
-        query: { title, sort: 'first_released_on', order: 'desc', page: 1, per_page: 25 },
-      });
-      if (!data) {
-        return { items: undefined, status };
-      }
-
-      const details = await Promise.all(
-        data.releaseGroups.map(async (releaseGroup) => {
-          const detail = await client.api['release-groups']({ releaseGroupId: releaseGroup.releaseGroupId }).get();
-          return { releaseGroup, detail };
-        }),
-      );
-      const failed = details.find(({ detail }) => !detail.data);
-      if (failed) {
-        return { items: undefined, status: failed.detail.status };
-      }
-
-      return {
-        items: details.flatMap(({ releaseGroup, detail }) =>
-          toEventReleases(releaseGroup, detail.data?.releases ?? []),
-        ),
-        status,
-      };
-    },
+    fetch: searchEventReleases,
   });
 
   return (

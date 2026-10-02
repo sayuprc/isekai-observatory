@@ -1,4 +1,5 @@
 import { For, Index, Show, createSignal } from 'solid-js';
+import type { EventRelease } from '../../generated';
 import { client } from '../../utils/client';
 import { SearchCombobox } from '../SearchCombobox';
 import { createSortable, reorderItems } from '../sortable';
@@ -14,10 +15,13 @@ import {
   type PerformanceForm,
 } from './performance-form';
 import { clickPerformance, emptySelection } from './performance-selection';
+import { addPerformancesFromCandidates } from './release-import';
+import { ReleaseImport } from './ReleaseImport';
 
 interface PerformanceEditorProps {
   performances: PerformanceForm[];
   onChange: (updater: (prev: PerformanceForm[]) => PerformanceForm[]) => void;
+  relatedReleases: EventRelease[];
   disabled?: boolean;
 }
 
@@ -131,6 +135,14 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
             </div>
           </Show>
         </div>
+      </div>
+
+      <div class="mb-4">
+        <ReleaseImport
+          relatedReleases={props.relatedReleases}
+          onImport={(candidates) => props.onChange((prev) => addPerformancesFromCandidates(prev, candidates))}
+          disabled={props.disabled}
+        />
       </div>
 
       <Show

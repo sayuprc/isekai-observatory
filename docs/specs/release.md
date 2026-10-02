@@ -16,6 +16,8 @@
 ## できること
 
 - Admin: ReleaseGroup / Release の CRUD。一覧・検索の主語は ReleaseGroup
+- Admin: Event のセットリスト順に楽曲披露を Track として取り込める
+  セットリスト外の楽曲披露は末尾に並べ、表示名だけの項目はタイトルのみの Track として選んだときだけ取り込む
 - Admin: 版の代表色を手入力する。またはローカル画像からブラウザ内で抽出して人が選ぶ (画像はサーバへ送らない)
 - Viewer: 公開 Group の cursor 一覧 (ネストで公開 Release / Medium / Track)
   公開 Release を 1 件以上持つ Group のみ返す
