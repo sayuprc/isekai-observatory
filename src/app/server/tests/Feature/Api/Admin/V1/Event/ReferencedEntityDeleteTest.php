@@ -97,7 +97,7 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
             venues: [['venueId' => $venueId, 'orderNo' => 1]],
             media: [['mediaId' => $mediaId, 'orderNo' => 1]],
             releases: [['releaseId' => $releaseId, 'orderNo' => 1]],
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'orderNo' => 1]]]],
+            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1]]]],
         ));
 
         return [$songId, $personId, $venueId, $mediaId, $releaseId];

@@ -149,11 +149,23 @@ export type MediaType = {
  */
 export type MediaTypeValue = 1 | 2 | 3 | 4 | 5 | 99;
 
+/**
+ * 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
+ */
 export type PerformancePerson = {
     personId: Uuid;
     name: string;
     creditName: PerformanceCreditName | null;
+    personGroup: PerformancePersonGroup | null;
     orderNo: OrderNo;
+};
+
+/**
+ * 共演者が出演したグループ
+ */
+export type PerformancePersonGroup = {
+    personGroupId: Uuid;
+    name: string;
 };
 
 export type ReleaseFormat = {
@@ -300,6 +312,9 @@ export type SongPerformanceHistory = {
     eventTitle: EventTitle;
     typeValue: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
+    /**
+     * 共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる
+     */
     coVocalistNames: Array<string>;
 };
 

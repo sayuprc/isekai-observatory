@@ -73,11 +73,16 @@ return [
         PersonComponent::Domain,
         SupportComponent::Domain,
         SupportComponent::Contracts,
+        SupportComponent::Collection,
         SupportComponent::Optional,
         LibraryComponent::ResultType,
     ]),
+    new Define(PersonComponent::Query, [
+        PersonComponent::Domain,
+    ]),
     new Define(PersonComponent::UseCase, [
         PersonComponent::Domain,
+        PersonComponent::Query,
         AdminUserComponent::Domain,
         AuthComponent::Domain,
         SupportComponent::Contracts,

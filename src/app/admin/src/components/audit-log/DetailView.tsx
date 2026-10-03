@@ -20,6 +20,7 @@ const TARGET_TYPE_LABEL: Record<string, string> = {
   AdminUser: '管理ユーザー',
   Media: 'メディア',
   Person: '人物',
+  PersonGroup: '人物グループ',
   Release: 'リリース',
   ReleaseGroup: 'リリースグループ',
   Song: '楽曲',

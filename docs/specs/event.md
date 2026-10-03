@@ -32,6 +32,8 @@
   同じ Event で同じ Song を複数回披露した場合も別 SongPerformance とする
 - SongPerformance は一緒に歌唱した Person を共演者として順序付きで参照できる
   演奏だけを担当した Person は含めず、当日のユニット名などを任意のクレジット名として持てる
+  グループとして全員で出演した共演者は、任意の出演グループ (PersonGroup) を共演者ごとに持てる。一部メンバーだけの披露は個人として記録する
+  出演グループ付きの共演者とグループの現在のメンバー構成の一致は検証しない
 - Live / Stream は Setlist を持てる。項目は `orderNo` を持ち、次のどちらかまたは両方を満たす
   - 1 件以上の SongPerformance を参照する。メドレーでは複数件を参照できる
   - 本人が歌唱しない演目などを表す表示名を持つ
@@ -59,7 +61,7 @@
 - Activity 集約や共通テーブルを導入せず、Event / Release / Media を独立した集約として維持する
 - Event の予定／開催済み状態を永続化しない。現在日時を理由に状態を自動更新しない
 - Event の時刻やタイムゾーンを構造化データとして保存しない。必要な時刻情報は説明に記載する
-- EventSeries、主催者、Event 単位の出演者、団体マスタを持たない
+- EventSeries、主催者、Event 単位の出演者、団体マスタを持たない。PersonGroup は共演者の入力・表示用で、Event の出演者や主催者を表さない
 - Setlist を Exhibition / Radio / Other に持たせない
 - 共演者に演奏者を含めない。本人が歌唱しない演目を SongPerformance にしない
 - EventSource の用途分類、本文、画像を保存しない
@@ -80,6 +82,7 @@ classDiagram
   Event "1" --> "N" SongPerformance : 所有
   SongPerformance "N" --> "1" Song
   SongPerformance "N" --> "M" Person : 共演者 / order
+  SongPerformance ..> PersonGroup : 共演者ごとの出演グループ (任意)
   Event "1" --> "0..1" Setlist : Live / Stream
   Setlist "1" --> "N" SetlistItem : order
   SetlistItem "0..1" --> "0..N" SongPerformance : 任意参照

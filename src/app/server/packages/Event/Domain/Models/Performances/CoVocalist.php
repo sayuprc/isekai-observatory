@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Event\Domain\Models\Performances;
 
+use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonId;
 use Support\Domain\ValueObjects\OrderNo;
 
@@ -12,18 +13,20 @@ readonly class CoVocalist
     public function __construct(
         public PersonId $personId,
         public ?CreditName $creditName,
+        public ?PersonGroupId $personGroupId,
         public OrderNo $orderNo,
     ) {
     }
 
     /**
-     * @return array{person_id: string, credit_name: ?string, order_no: int}
+     * @return array{person_id: string, credit_name: ?string, person_group_id: ?string, order_no: int}
      */
     public function toArray(): array
     {
         return [
             'person_id' => $this->personId->value,
             'credit_name' => $this->creditName?->value,
+            'person_group_id' => $this->personGroupId?->value,
             'order_no' => $this->orderNo->value,
         ];
     }

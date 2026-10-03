@@ -12,7 +12,7 @@ use Support\Domain\ValueObjects\OrderNo;
 /**
  * @extends ImmutableCollection<int, SongPerformance>
  *
- * @phpstan-type _songPerformanceInput array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, orderNo: int}>}
+ * @phpstan-type _songPerformanceInput array{performanceId: string, songId: string, orderNo: int, coVocalists: list<array{personId: string, creditName: ?string, personGroupId: ?string, orderNo: int}>}
  */
 readonly class SongPerformances extends ImmutableCollection
 {
@@ -71,7 +71,7 @@ readonly class SongPerformances extends ImmutableCollection
     }
 
     /**
-     * @return list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, order_no: int}>}>
+     * @return list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, person_group_id: ?string, order_no: int}>}>
      */
     public function toArray(): array
     {

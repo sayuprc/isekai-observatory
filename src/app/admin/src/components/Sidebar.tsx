@@ -162,7 +162,10 @@ const navSections: NavSection[] = [
   },
   {
     title: '関係者',
-    items: [{ href: '/persons', label: '人物', icon: UsersIcon }],
+    items: [
+      { href: '/persons', label: '人物', icon: UsersIcon },
+      { href: '/person-groups', label: '人物グループ', icon: UsersIcon },
+    ],
   },
   {
     title: 'イベント',

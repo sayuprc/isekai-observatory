@@ -28,7 +28,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
         $this->storeEvents($this->createEvent(
             $eventId,
             title: '披露ライブ',
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'orderNo' => 1]]]],
+            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1]]]],
         ));
 
         $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
@@ -37,6 +37,35 @@ class PerformanceHistoryTest extends DatabaseTestCase
             ->assertJsonPath('songs.0.performances.0.eventId', $eventId)
             ->assertJsonPath('songs.0.performances.0.eventTitle', '披露ライブ')
             ->assertJsonPath('songs.0.performances.0.coVocalistNames.0', '共演者');
+    }
+
+    #[Test]
+    public function collapsesCoVocalistsOfPersonGroupIntoGroupName(): void
+    {
+        $songId = $this->generateUuid();
+        $member1 = $this->generateUuid();
+        $member2 = $this->generateUuid();
+        $guest = $this->generateUuid();
+        $personGroupId = $this->generateUuid();
+        $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
+        $this->storePersons(
+            $this->createPerson($member1, 'メンバー1', 1),
+            $this->createPerson($member2, 'メンバー2', 2),
+            $this->createPerson($guest, 'ゲスト', 3),
+        );
+        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$member1, $member2]));
+        $this->storeEvents($this->createEvent(
+            $this->generateUuid(),
+            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
+                ['personId' => $guest, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                ['personId' => $member1, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 2],
+                ['personId' => $member2, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 3],
+            ]]],
+        ));
+
+        $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->assertStatus(200)
+            ->assertJsonPath('songs.0.performances.0.coVocalistNames', ['ゲスト', 'グループ']);
     }
 
     #[Test]

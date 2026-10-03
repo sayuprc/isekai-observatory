@@ -463,7 +463,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets co_vocalist_names
      *
-     * @param string[] $co_vocalist_names co_vocalist_names
+     * @param string[] $co_vocalist_names 共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる
      *
      * @return self
      */

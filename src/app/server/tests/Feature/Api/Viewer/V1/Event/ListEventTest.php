@@ -52,7 +52,7 @@ class ListEventTest extends DatabaseTestCase
             media: [['mediaId' => $visibleMediaId, 'orderNo' => 1], ['mediaId' => $hiddenMediaId, 'orderNo' => 2]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/event', 'orderNo' => 1]],
             performances: [
-                ['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'orderNo' => 1]]],
+                ['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1]]],
                 ['performanceId' => $hiddenPerformanceId, 'songId' => $hiddenSongId, 'orderNo' => 2, 'coVocalists' => []],
             ],
             setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$visiblePerformanceId]]],
@@ -71,8 +71,32 @@ class ListEventTest extends DatabaseTestCase
             ->assertJsonPath('events.0.performances.1.songId', null)
             ->assertJsonPath('events.0.performances.1.songTitle', '非公開楽曲')
             ->assertJsonPath('events.0.performances.0.coVocalists.0.name', '共演者')
+            ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup', null)
             ->assertJsonPath('events.0.setlist.0.label', '本編')
             ->assertJsonPath('events.0.setlist.0.performances.0.songTitle', '公開楽曲');
+    }
+
+    #[Test]
+    public function listsPersonGroupOfCoVocalists(): void
+    {
+        $songId = $this->generateUuid();
+        $personId = $this->generateUuid();
+        $personGroupId = $this->generateUuid();
+        $this->storeSongs($this->createSong($songId, '楽曲', '説明', SongType::Original, true, 1));
+        $this->storePersons($this->createPerson($personId, 'メンバー', 1));
+        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
+        $this->storeEvents($this->createEvent(
+            $this->generateUuid(),
+            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
+                ['personId' => $personId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
+            ]]],
+        ));
+
+        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertStatus(200)
+            ->assertJsonPath('events.0.performances.0.coVocalists.0.name', 'メンバー')
+            ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup.personGroupId', $personGroupId)
+            ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup.name', 'グループ');
     }
 
     #[Test]

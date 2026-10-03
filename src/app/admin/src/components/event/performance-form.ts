@@ -1,10 +1,26 @@
 import type { RequestSetlistItem, RequestSongPerformance, SetlistItem, SongPerformance } from '../../generated';
 import { reorderItems } from '../sortable';
 
+export type PersonGroupRef = {
+  personGroupId: string;
+  name: string;
+};
+
+// personGroup はグループとして全員で出演したときだけ持つ
 export type CoVocalistForm = {
   personId: string;
   name: string;
   creditName: string;
+  personGroup: PersonGroupRef | null;
+};
+
+// 画面上の共演者の 1 単位. グループで追加したメンバーは 1 つにまとめて扱う
+export type CoVocalistUnit =
+  | { type: 'person'; coVocalist: CoVocalistForm }
+  | { type: 'group'; personGroup: PersonGroupRef; members: CoVocalistForm[] };
+
+export type PersonGroupPreset = PersonGroupRef & {
+  members: { personId: string; name: string }[];
 };
 
 export type PerformanceForm = {
@@ -31,6 +47,7 @@ export const toPerformanceForms = (performances: SongPerformance[]): Performance
       personId: person.personId,
       name: person.name,
       creditName: person.creditName ?? '',
+      personGroup: person.personGroup,
     })),
   }));
 
@@ -58,6 +75,43 @@ const updateCoVocalists = (
     index === performanceIndex ? { ...performance, coVocalists: updater(performance.coVocalists) } : performance,
   );
 
+// グループのメンバーは最初のメンバーの位置にまとめる
+export const toCoVocalistUnits = (coVocalists: CoVocalistForm[]): CoVocalistUnit[] => {
+  const units: CoVocalistUnit[] = [];
+  const groupUnits = new Map<string, Extract<CoVocalistUnit, { type: 'group' }>>();
+
+  for (const coVocalist of coVocalists) {
+    if (coVocalist.personGroup === null) {
+      units.push({ type: 'person', coVocalist });
+      continue;
+    }
+
+    const existing = groupUnits.get(coVocalist.personGroup.personGroupId);
+    if (existing) {
+      existing.members.push(coVocalist);
+      continue;
+    }
+
+    const unit = { type: 'group' as const, personGroup: coVocalist.personGroup, members: [coVocalist] };
+    groupUnits.set(coVocalist.personGroup.personGroupId, unit);
+    units.push(unit);
+  }
+
+  return units;
+};
+
+const fromCoVocalistUnits = (units: CoVocalistUnit[]): CoVocalistForm[] =>
+  units.flatMap((unit) => (unit.type === 'person' ? [unit.coVocalist] : unit.members));
+
+const updateCoVocalistUnits = (
+  performances: PerformanceForm[],
+  performanceIndex: number,
+  updater: (units: CoVocalistUnit[]) => CoVocalistUnit[],
+): PerformanceForm[] =>
+  updateCoVocalists(performances, performanceIndex, (coVocalists) =>
+    fromCoVocalistUnits(updater(toCoVocalistUnits(coVocalists))),
+  );
+
 // 同じ披露に同一人物を重複して追加しない
 export const addCoVocalist = (
   performances: PerformanceForm[],
@@ -67,7 +121,7 @@ export const addCoVocalist = (
   updateCoVocalists(performances, performanceIndex, (coVocalists) =>
     coVocalists.some((item) => item.personId === person.personId)
       ? coVocalists
-      : [...coVocalists, { personId: person.personId, name: person.name, creditName: '' }],
+      : [...coVocalists, { personId: person.personId, name: person.name, creditName: '', personGroup: null }],
   );
 
 // 指定した複数の披露へ同じ共演者をまとめて追加する. 既に付いている披露はそのまま
@@ -82,11 +136,48 @@ export const addCoVocalistToPerformances = (
     performances,
   );
 
-// イベント内で付いている共演者を、初出順に重複なく並べる
+// グループのメンバーを末尾にまとめて追加する. 同じ披露に同じグループは重ねない
+// 個別に付いていたメンバーは、グループとしての出演に置き換える
+export const addPersonGroup = (
+  performances: PerformanceForm[],
+  performanceIndex: number,
+  personGroup: PersonGroupPreset,
+): PerformanceForm[] =>
+  updateCoVocalists(performances, performanceIndex, (coVocalists) => {
+    if (coVocalists.some((item) => item.personGroup?.personGroupId === personGroup.personGroupId)) {
+      return coVocalists;
+    }
+
+    const memberIds = new Set(personGroup.members.map((member) => member.personId));
+    const ref = { personGroupId: personGroup.personGroupId, name: personGroup.name };
+
+    return [
+      ...coVocalists.filter((item) => !memberIds.has(item.personId)),
+      ...personGroup.members.map((member) => ({
+        personId: member.personId,
+        name: member.name,
+        creditName: '',
+        personGroup: ref,
+      })),
+    ];
+  });
+
+export const addPersonGroupToPerformances = (
+  performances: PerformanceForm[],
+  performanceIds: ReadonlySet<string>,
+  personGroup: PersonGroupPreset,
+): PerformanceForm[] =>
+  performances.reduce(
+    (acc, performance, index) =>
+      performanceIds.has(performance.performanceId) ? addPersonGroup(acc, index, personGroup) : acc,
+    performances,
+  );
+
+// イベント内で個別に付いている共演者を、初出順に重複なく並べる
 export const collectCoVocalists = (performances: PerformanceForm[]): { personId: string; name: string }[] => {
   const persons = new Map<string, { personId: string; name: string }>();
   for (const person of performances.flatMap((performance) => performance.coVocalists)) {
-    if (!persons.has(person.personId)) {
+    if (person.personGroup === null && !persons.has(person.personId)) {
       persons.set(person.personId, { personId: person.personId, name: person.name });
     }
   }
@@ -94,24 +185,44 @@ export const collectCoVocalists = (performances: PerformanceForm[]): { personId:
   return [...persons.values()];
 };
 
+// イベント内で付いているグループを、初出時のメンバー構成で重複なく並べる
+export const collectPersonGroups = (performances: PerformanceForm[]): PersonGroupPreset[] => {
+  const groups = new Map<string, PersonGroupPreset>();
+  for (const unit of performances.flatMap((performance) => toCoVocalistUnits(performance.coVocalists))) {
+    if (unit.type === 'group' && !groups.has(unit.personGroup.personGroupId)) {
+      groups.set(unit.personGroup.personGroupId, {
+        ...unit.personGroup,
+        members: unit.members.map((member) => ({ personId: member.personId, name: member.name })),
+      });
+    }
+  }
+
+  return [...groups.values()];
+};
+
+// 以降の unitIndex は toCoVocalistUnits の並びでの位置
+// クレジット名は個別の共演者だけが持つ
 export const setCreditName = (
   performances: PerformanceForm[],
   performanceIndex: number,
-  personIndex: number,
+  unitIndex: number,
   creditName: string,
 ): PerformanceForm[] =>
-  updateCoVocalists(performances, performanceIndex, (coVocalists) =>
-    coVocalists.map((person, index) => (index === personIndex ? { ...person, creditName } : person)),
+  updateCoVocalistUnits(performances, performanceIndex, (units) =>
+    units.map((unit, index) =>
+      index === unitIndex && unit.type === 'person'
+        ? { ...unit, coVocalist: { ...unit.coVocalist, creditName } }
+        : unit,
+    ),
   );
 
+// グループはメンバーごとまとめて外す
 export const removeCoVocalist = (
   performances: PerformanceForm[],
   performanceIndex: number,
-  personIndex: number,
+  unitIndex: number,
 ): PerformanceForm[] =>
-  updateCoVocalists(performances, performanceIndex, (coVocalists) =>
-    coVocalists.filter((_, index) => index !== personIndex),
-  );
+  updateCoVocalistUnits(performances, performanceIndex, (units) => units.filter((_, index) => index !== unitIndex));
 
 export const moveCoVocalist = (
   performances: PerformanceForm[],
@@ -119,7 +230,7 @@ export const moveCoVocalist = (
   fromIndex: number,
   toIndex: number,
 ): PerformanceForm[] =>
-  updateCoVocalists(performances, performanceIndex, (coVocalists) => reorderItems(coVocalists, fromIndex, toIndex));
+  updateCoVocalistUnits(performances, performanceIndex, (units) => reorderItems(units, fromIndex, toIndex));
 
 // まだどの項目にも紐づいていない楽曲披露を、披露順に 1 件 1 項目でセットリスト末尾へ足す
 export const appendUnassignedPerformances = (
@@ -142,6 +253,7 @@ export const toPerformancesPayload = (performances: PerformanceForm[]): RequestS
     coVocalists: performance.coVocalists.map((person, personIndex) => ({
       personId: person.personId,
       creditName: person.creditName.trim() === '' ? null : person.creditName.trim(),
+      personGroupId: person.personGroup?.personGroupId ?? null,
       orderNo: personIndex + 1,
     })),
   }));

@@ -35,7 +35,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * PerformancePerson Class Doc Comment
  *
  * @category Class
- * @description 楽曲披露の共演者
+ * @description 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,6 +61,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         'person_id' => 'string',
         'name' => 'string',
         'credit_name' => 'string',
+        'person_group' => '\OpenAPI\Admin\Client\Model\PerformancePersonGroup',
         'order_no' => 'int'
     ];
 
@@ -75,6 +76,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         'person_id' => 'uuid',
         'name' => null,
         'credit_name' => null,
+        'person_group' => null,
         'order_no' => 'int32'
     ];
 
@@ -87,6 +89,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         'person_id' => false,
         'name' => false,
         'credit_name' => true,
+        'person_group' => true,
         'order_no' => false
     ];
 
@@ -179,6 +182,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         'person_id' => 'personId',
         'name' => 'name',
         'credit_name' => 'creditName',
+        'person_group' => 'personGroup',
         'order_no' => 'orderNo'
     ];
 
@@ -191,6 +195,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         'person_id' => 'setPersonId',
         'name' => 'setName',
         'credit_name' => 'setCreditName',
+        'person_group' => 'setPersonGroup',
         'order_no' => 'setOrderNo'
     ];
 
@@ -203,6 +208,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         'person_id' => 'getPersonId',
         'name' => 'getName',
         'credit_name' => 'getCreditName',
+        'person_group' => 'getPersonGroup',
         'order_no' => 'getOrderNo'
     ];
 
@@ -266,6 +272,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         $this->setIfExists('person_id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('credit_name', $data ?? [], null);
+        $this->setIfExists('person_group', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
     }
 
@@ -313,6 +320,9 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
             $invalidProperties[] = "invalid value for 'credit_name', the character length must be bigger than or equal to 1.";
         }
 
+        if ($this->container['person_group'] === null) {
+            $invalidProperties[] = "'person_group' can't be null";
+        }
         if ($this->container['order_no'] === null) {
             $invalidProperties[] = "'order_no' can't be null";
         }
@@ -429,6 +439,40 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
         }
 
         $this->container['credit_name'] = $credit_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets person_group
+     *
+     * @return \OpenAPI\Admin\Client\Model\PerformancePersonGroup
+     */
+    public function getPersonGroup()
+    {
+        return $this->container['person_group'];
+    }
+
+    /**
+     * Sets person_group
+     *
+     * @param \OpenAPI\Admin\Client\Model\PerformancePersonGroup $person_group person_group
+     *
+     * @return self
+     */
+    public function setPersonGroup($person_group)
+    {
+        if (is_null($person_group)) {
+            array_push($this->openAPINullablesSetToNull, 'person_group');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('person_group', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['person_group'] = $person_group;
 
         return $this;
     }

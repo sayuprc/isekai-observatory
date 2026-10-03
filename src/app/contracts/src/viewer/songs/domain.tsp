@@ -25,6 +25,8 @@ model SongPerformanceHistory {
   eventTitle: eventTitle;
   typeValue: EventTypeValue;
   schedule: EventSchedule;
+
+  @doc("共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる")
   coVocalistNames: string[];
 }
 

@@ -1,7 +1,7 @@
 import { Index, Show } from 'solid-js';
+import { ListItemActions } from '../ListItemActions';
 import { createSortable, reorderItems } from '../sortable';
 import type { SourceForm } from './event-links';
-import { ListItemActions } from './ListItemActions';
 
 interface SourceEditorProps {
   sources: SourceForm[];

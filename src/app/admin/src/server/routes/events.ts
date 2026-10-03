@@ -18,6 +18,7 @@ const eventScheduleSchema = t.Object({
 const performancePersonSchema = t.Object({
   personId: t.String(),
   creditName: nullableString(),
+  personGroupId: nullableString(),
   orderNo: t.Number(),
 });
 const songPerformanceSchema = t.Object({

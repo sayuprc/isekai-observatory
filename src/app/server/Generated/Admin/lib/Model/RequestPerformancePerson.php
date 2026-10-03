@@ -35,7 +35,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  * RequestPerformancePerson Class Doc Comment
  *
  * @category Class
- * @description The template for picking properties.
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,7 +59,8 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
     protected static $openAPITypes = [
         'person_id' => 'string',
         'credit_name' => 'string',
-        'order_no' => 'int'
+        'order_no' => 'int',
+        'person_group_id' => 'string'
     ];
 
     /**
@@ -73,7 +73,8 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
     protected static $openAPIFormats = [
         'person_id' => 'uuid',
         'credit_name' => null,
-        'order_no' => 'int32'
+        'order_no' => 'int32',
+        'person_group_id' => 'uuid'
     ];
 
     /**
@@ -84,7 +85,8 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
     protected static array $openAPINullables = [
         'person_id' => false,
         'credit_name' => true,
-        'order_no' => false
+        'order_no' => false,
+        'person_group_id' => true
     ];
 
     /**
@@ -175,7 +177,8 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
     protected static $attributeMap = [
         'person_id' => 'personId',
         'credit_name' => 'creditName',
-        'order_no' => 'orderNo'
+        'order_no' => 'orderNo',
+        'person_group_id' => 'personGroupId'
     ];
 
     /**
@@ -186,7 +189,8 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
     protected static $setters = [
         'person_id' => 'setPersonId',
         'credit_name' => 'setCreditName',
-        'order_no' => 'setOrderNo'
+        'order_no' => 'setOrderNo',
+        'person_group_id' => 'setPersonGroupId'
     ];
 
     /**
@@ -197,7 +201,8 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
     protected static $getters = [
         'person_id' => 'getPersonId',
         'credit_name' => 'getCreditName',
-        'order_no' => 'getOrderNo'
+        'order_no' => 'getOrderNo',
+        'person_group_id' => 'getPersonGroupId'
     ];
 
     /**
@@ -260,6 +265,7 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
         $this->setIfExists('person_id', $data ?? [], null);
         $this->setIfExists('credit_name', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
+        $this->setIfExists('person_group_id', $data ?? [], null);
     }
 
     /**
@@ -306,6 +312,9 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
+        if ($this->container['person_group_id'] === null) {
+            $invalidProperties[] = "'person_group_id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -415,6 +424,40 @@ class RequestPerformancePerson implements ModelInterface, ArrayAccess, \JsonSeri
         }
 
         $this->container['order_no'] = $order_no;
+
+        return $this;
+    }
+
+    /**
+     * Gets person_group_id
+     *
+     * @return string
+     */
+    public function getPersonGroupId()
+    {
+        return $this->container['person_group_id'];
+    }
+
+    /**
+     * Sets person_group_id
+     *
+     * @param string $person_group_id 人物グループID
+     *
+     * @return self
+     */
+    public function setPersonGroupId($person_group_id)
+    {
+        if (is_null($person_group_id)) {
+            array_push($this->openAPINullablesSetToNull, 'person_group_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('person_group_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['person_group_id'] = $person_group_id;
 
         return $this;
     }

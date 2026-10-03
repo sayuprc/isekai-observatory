@@ -46,7 +46,7 @@ class EventRepositoryTest extends DatabaseTestCase
             media: [['mediaId' => $mediaId, 'orderNo' => 1]],
             releases: [['releaseId' => $releaseId, 'orderNo' => 1]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'orderNo' => 1]]]],
+            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'personGroupId' => null, 'orderNo' => 1]]]],
             setlist: [['setlistItemId' => $setlistItemId, 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
         );
         $this->getInstance()->save($event);
@@ -71,12 +71,12 @@ class EventRepositoryTest extends DatabaseTestCase
             $eventId,
             performances: [
                 ['performanceId' => $performance1, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                    ['personId' => $person2, 'creditName' => null, 'orderNo' => 1],
-                    ['personId' => $person1, 'creditName' => 'ユニット', 'orderNo' => 2],
+                    ['personId' => $person2, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                    ['personId' => $person1, 'creditName' => 'ユニット', 'personGroupId' => null, 'orderNo' => 2],
                 ]],
                 ['performanceId' => $performance2, 'songId' => $songId, 'orderNo' => 2, 'coVocalists' => []],
                 ['performanceId' => $performance3, 'songId' => $songId, 'orderNo' => 3, 'coVocalists' => [
-                    ['personId' => $person1, 'creditName' => null, 'orderNo' => 1],
+                    ['personId' => $person1, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
                 ]],
             ],
             setlist: [
@@ -103,7 +103,7 @@ class EventRepositoryTest extends DatabaseTestCase
         $this->getInstance()->save($this->createEvent(
             $eventId,
             performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $personId, 'creditName' => null, 'orderNo' => 1],
+                ['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
             ]]],
             setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performanceIds' => [$performanceId]]],
         ));

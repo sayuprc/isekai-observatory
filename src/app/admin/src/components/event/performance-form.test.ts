@@ -3,11 +3,15 @@ import {
   addCoVocalist,
   addCoVocalistToPerformances,
   addPerformance,
+  addPersonGroupToPerformances,
   appendUnassignedPerformances,
   collectCoVocalists,
+  collectPersonGroups,
   moveCoVocalist,
   removeCoVocalist,
   setCreditName,
+  toCoVocalistUnits,
+  toPerformancesPayload,
   toSetlistPayload,
   type PerformanceForm,
 } from './performance-form';
@@ -19,7 +23,7 @@ const performance = (performanceId: string, coVocalists: PerformanceForm['coVoca
   coVocalists,
 });
 
-const person = { personId: 'person-1', name: '人物1', creditName: '' };
+const person = { personId: 'person-1', name: '人物1', creditName: '', personGroup: null };
 
 describe('イベントの楽曲披露フォーム', () => {
   it('楽曲を末尾に披露として追加する', () => {
@@ -42,7 +46,7 @@ describe('イベントの楽曲披露フォーム', () => {
   });
 
   it('指定した共演者のクレジット名だけを変更する', () => {
-    const other = { personId: 'person-2', name: '人物2', creditName: '' };
+    const other = { personId: 'person-2', name: '人物2', creditName: '', personGroup: null };
     const result = setCreditName([performance('p1', [person, other])], 0, 1, 'ゲスト');
 
     expect(result.map((item) => item.coVocalists)).toEqual([[person, { ...other, creditName: 'ゲスト' }]]);
@@ -91,7 +95,7 @@ describe('イベントの楽曲披露フォーム', () => {
   });
 
   it('イベント内の共演者を初出順に重複なく集める', () => {
-    const other = { personId: 'person-2', name: '人物2', creditName: 'ゲスト' };
+    const other = { personId: 'person-2', name: '人物2', creditName: 'ゲスト', personGroup: null };
     const result = collectCoVocalists([performance('p1', [other]), performance('p2', [person, other])]);
 
     expect(result).toEqual([
@@ -101,12 +105,85 @@ describe('イベントの楽曲披露フォーム', () => {
   });
 
   it('指定した披露の共演者だけを並べ替える', () => {
-    const other = { personId: 'person-2', name: '人物2', creditName: '' };
+    const other = { personId: 'person-2', name: '人物2', creditName: '', personGroup: null };
     const result = moveCoVocalist([performance('p1', [person, other]), performance('p2', [person, other])], 0, 1, 0);
 
     expect(result.map((item) => item.coVocalists)).toEqual([
       [other, person],
       [person, other],
     ]);
+  });
+
+  describe('グループとしての共演者', () => {
+    const groupRef = { personGroupId: 'group-1', name: 'グループ' };
+    const preset = {
+      ...groupRef,
+      members: [
+        { personId: 'member-1', name: 'メンバー1' },
+        { personId: 'member-2', name: 'メンバー2' },
+      ],
+    };
+    const member = (personId: string, name: string) => ({ personId, name, creditName: '', personGroup: groupRef });
+
+    it('選択中の披露にメンバーをグループ付きでまとめて追加し、同じグループは重ねない', () => {
+      const once = addPersonGroupToPerformances([performance('p1'), performance('p2')], new Set(['p1']), preset);
+      const twice = addPersonGroupToPerformances(once, new Set(['p1']), preset);
+
+      expect(twice.map((item) => item.coVocalists)).toEqual([
+        [member('member-1', 'メンバー1'), member('member-2', 'メンバー2')],
+        [],
+      ]);
+    });
+
+    it('個別に付いていたメンバーはグループとしての出演に置き換える', () => {
+      const individual = { personId: 'member-2', name: 'メンバー2', creditName: '', personGroup: null };
+      const result = addPersonGroupToPerformances([performance('p1', [person, individual])], new Set(['p1']), preset);
+
+      expect(result[0]!.coVocalists).toEqual([
+        person,
+        member('member-1', 'メンバー1'),
+        member('member-2', 'メンバー2'),
+      ]);
+    });
+
+    it('グループのメンバーは最初のメンバーの位置に 1 単位としてまとめる', () => {
+      const units = toCoVocalistUnits([member('member-1', 'メンバー1'), person, member('member-2', 'メンバー2')]);
+
+      expect(units.map((unit) => (unit.type === 'group' ? unit.members.length : unit.coVocalist.name))).toEqual([
+        2,
+        '人物1',
+      ]);
+    });
+
+    it('並べ替えと削除はグループ単位で行う', () => {
+      const performances = [
+        performance('p1', [person, member('member-1', 'メンバー1'), member('member-2', 'メンバー2')]),
+      ];
+
+      expect(moveCoVocalist(performances, 0, 1, 0)[0]!.coVocalists.map((item) => item.personId)).toEqual([
+        'member-1',
+        'member-2',
+        'person-1',
+      ]);
+      expect(removeCoVocalist(performances, 0, 1)[0]!.coVocalists).toEqual([person]);
+    });
+
+    it('個別の共演者だけを集め、グループは初出時のメンバー構成で集める', () => {
+      const performances = [performance('p1', [person, member('member-1', 'メンバー1')])];
+
+      expect(collectCoVocalists(performances)).toEqual([{ personId: 'person-1', name: '人物1' }]);
+      expect(collectPersonGroups(performances)).toEqual([
+        { ...groupRef, members: [{ personId: 'member-1', name: 'メンバー1' }] },
+      ]);
+    });
+
+    it('送信値にはグループ ID を共演者ごとに載せる', () => {
+      const payload = toPerformancesPayload([performance('p1', [person, member('member-1', 'メンバー1')])]);
+
+      expect(payload[0]!.coVocalists).toEqual([
+        { personId: 'person-1', creditName: null, personGroupId: null, orderNo: 1 },
+        { personId: 'member-1', creditName: null, personGroupId: 'group-1', orderNo: 2 },
+      ]);
+    });
   });
 });

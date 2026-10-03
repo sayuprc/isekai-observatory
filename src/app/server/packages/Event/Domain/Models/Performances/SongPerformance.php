@@ -18,7 +18,7 @@ readonly class SongPerformance
     }
 
     /**
-     * @return array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, order_no: int}>}
+     * @return array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, person_group_id: ?string, order_no: int}>}
      */
     public function toArray(): array
     {

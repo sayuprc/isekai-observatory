@@ -49,6 +49,8 @@ enum AuditTargetType: string
 
     case PERSON = 'Person';
 
+    case PERSON_GROUP = 'PersonGroup';
+
     case RELEASE = 'Release';
 
     case RELEASE_GROUP = 'ReleaseGroup';
