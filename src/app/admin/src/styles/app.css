@@ -1,47 +1,5 @@
 @import 'tailwindcss';
 
 @plugin "daisyui" {
-  themes: false;
-}
-
-/* 管理画面専用のダークテーマ。主操作はアンバー、選択中や情報は青で示す */
-@plugin "daisyui/theme" {
-  --color-base-100: #0f1115;
-  --color-base-200: #161920;
-  --color-base-300: #262a33;
-  --color-base-content: #e7e9ee;
-  --color-primary: #e8b04b;
-  --color-primary-content: #1a1305;
-  --color-secondary: #c99ae6;
-  --color-secondary-content: #1d1024;
-  --color-accent: #8cb8ff;
-  --color-accent-content: #0b1730;
-  --color-neutral: #1f2430;
-  --color-neutral-content: #e7e9ee;
-  --color-info: #8cb8ff;
-  --color-info-content: #0b1730;
-  --color-success: #5fd08a;
-  --color-success-content: #07210f;
-  --color-warning: #f2c14e;
-  --color-warning-content: #231a04;
-  --color-error: #f07178;
-  --color-error-content: #2a0709;
-  --radius-selector: 0.375rem;
-  --radius-field: 0.375rem;
-  --radius-box: 0.625rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
-
-  name: 'observatory';
-  default: true;
-  prefersdark: true;
-  color-scheme: dark;
-}
-
-@theme {
-  --font-sans: 'IBM Plex Sans JP', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  themes: dark --default;
 }

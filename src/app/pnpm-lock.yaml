@@ -35,12 +35,6 @@ catalogs:
     '@fontsource/eb-garamond':
       specifier: 5.3.0
       version: 5.3.0
-    '@fontsource/ibm-plex-mono':
-      specifier: 5.3.0
-      version: 5.3.0
-    '@fontsource/ibm-plex-sans-jp':
-      specifier: 5.3.0
-      version: 5.3.0
     '@fontsource/jetbrains-mono':
       specifier: 5.3.0
       version: 5.3.0
@@ -143,12 +137,6 @@ importers:
       '@elysiajs/eden':
         specifier: 1.4.9
         version: 1.4.9(elysia@1.4.30(@sinclair/typebox@0.34.49)(@types/bun@1.4.2)(exact-mirror@1.0.0)(file-type@21.3.4(supports-color@10.2.2))(openapi-types@12.1.3)(typescript@6.0.3))
-      '@fontsource/ibm-plex-mono':
-        specifier: catalog:fonts
-        version: 5.3.0
-      '@fontsource/ibm-plex-sans-jp':
-        specifier: catalog:fonts
-        version: 5.3.0
       '@tailwindcss/vite':
         specifier: catalog:ui
         version: 4.3.3(vite@8.1.0(@types/node@25.9.1)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
@@ -997,12 +985,6 @@ packages:
 
   '@fontsource/eb-garamond@5.3.0':
     resolution: {integrity: sha512-VplwHpB8FLuzl+4G5LDci1b3Z4SghiuXH8XEgaxjnOb5aue5mEt1njmDKeO6iyLeGa73LffU7PC7hzncLRx0ZA==}
-
-  '@fontsource/ibm-plex-mono@5.3.0':
-    resolution: {integrity: sha512-eTgnZjZEGk1QtD3ZstF+Vclo2HLAni8YMy34/DxllwZvyz1lR/1RF/xTiAquOBO7MvqBx8D2Ig2WCPMVfdZu7Q==}
-
-  '@fontsource/ibm-plex-sans-jp@5.3.0':
-    resolution: {integrity: sha512-Eas8EEVkh0UbITQMskrCF5Ha1L24GagNsvjMfrKwhv3KNPFRjbZAt0fLO4lSgfx4U4rHWpX5JeMDJNXF+hcguQ==}
 
   '@fontsource/jetbrains-mono@5.3.0':
     resolution: {integrity: sha512-fqDfB5I9f1p1TV486aUgB9t8zP84P0O1FtQR5Ol9vjwPy+S+EIGlVYm1cvj2W5shcZMTg2nZFdVMoH5wFu8a1A==}
@@ -5381,10 +5363,6 @@ snapshots:
       levn: 0.4.1
 
   '@fontsource/eb-garamond@5.3.0': {}
-
-  '@fontsource/ibm-plex-mono@5.3.0': {}
-
-  '@fontsource/ibm-plex-sans-jp@5.3.0': {}
 
   '@fontsource/jetbrains-mono@5.3.0': {}
 

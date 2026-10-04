@@ -16,7 +16,7 @@ export default {
     'at-rule-no-unknown': [
       true,
       {
-        ignoreAtRules: ['plugin', 'theme'],
+        ignoreAtRules: ['plugin'],
       },
     ],
     'import-notation': 'string',
