@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Release\Application\Admin\UseCase\Group\Search\SearchInputData;
 use Release\Application\Admin\UseCase\Group\Search\SearchUseCase;
 use Release\Domain\Models\ReleaseGroupType;
+use Song\Domain\Models\SongType;
 use Support\Domain\SearchCriteria\PerPage;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -137,6 +138,38 @@ class SearchUseCaseTest extends DatabaseTestCase
 
         $this->assertCount(5, $result->releaseGroups);
         $this->assertSame(2, $result->maxPage);
+    }
+
+    #[Test]
+    public function countsReleasesAndDistinctManagedSongs(): void
+    {
+        $songId1 = $this->generateUuid();
+        $songId2 = $this->generateUuid();
+        $this->storeSongs(
+            $this->createSong($songId1, '楽曲1', '説明', SongType::Original, true, 1),
+            $this->createSong($songId2, '楽曲2', '説明', SongType::Original, true, 2),
+        );
+        $releaseGroupId = $this->generateUuid();
+        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, '作品', ReleaseGroupType::Single, true));
+        // 楽曲1 は両方の版に収録されているが 1 曲と数え、タイトルだけのトラックは数えない
+        $this->storeReleases(
+            $this->createRelease($this->generateUuid(), $releaseGroupId, 'CD', true, media: [
+                ['position' => 1, 'name' => null, 'tracks' => [
+                    ['songId' => $songId1, 'title' => null, 'trackNo' => 1],
+                    ['songId' => $songId2, 'title' => null, 'trackNo' => 2],
+                    ['songId' => null, 'title' => 'インスト', 'trackNo' => 3],
+                ]],
+            ]),
+            $this->createRelease($this->generateUuid(), $releaseGroupId, '配信', true, orderNo: 2, media: [
+                ['position' => 1, 'name' => null, 'tracks' => [['songId' => $songId1, 'title' => null, 'trackNo' => 1]]],
+            ]),
+        );
+
+        $releaseGroups = $this->getInstance()->handle(new SearchInputData())->releaseGroups;
+
+        $this->assertCount(1, $releaseGroups);
+        $this->assertSame(2, $releaseGroups[0]->releaseCount);
+        $this->assertSame(2, $releaseGroups[0]->songCount);
     }
 
     private function getInstance(): SearchUseCase

@@ -52,6 +52,11 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
             $this->queryFactory->paginate($query, $criteria->page, $criteria->perPage),
         );
 
+        // 件数は 1 ページ分のグループ ID でまとめて引き、行ごとの問い合わせを避ける
+        $binGroupIds = array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $rows);
+        $releaseCounts = $this->queryFactory->countBy('releases', 'release_group_id', $binGroupIds);
+        $songCounts = $this->countSongs($binGroupIds);
+
         return array_map(
             fn (array $row): ReleaseGroupSummary => new ReleaseGroupSummary(
                 $this->converter->toUuid(Row::string($row, 'release_group_id')),
@@ -61,9 +66,41 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
                 Row::bool($row, 'is_display'),
                 Row::int($row, 'order_no'),
                 Row::nullableString($row, 'first_released_on'),
+                $releaseCounts[Row::string($row, 'release_group_id')] ?? 0,
+                $songCounts[Row::string($row, 'release_group_id')] ?? 0,
             ),
             $rows,
         );
+    }
+
+    /**
+     * グループごとに、傘下のリリースへ収録された管理対象の楽曲を重複なく数える
+     * タイトルだけのトラック (song_id が NULL) は COUNT(DISTINCT) で除かれる
+     *
+     * @param list<string> $binGroupIds
+     *
+     * @return array<string, int>
+     */
+    private function countSongs(array $binGroupIds): array
+    {
+        if ($binGroupIds === []) {
+            return [];
+        }
+
+        $counts = [];
+        foreach ($this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->select('releases.release_group_id')
+                ->select(new Sql('COUNT(DISTINCT release_tracks.song_id)'), 'song_count')
+                ->from('release_tracks')
+                ->join('releases', 'releases.release_id = release_tracks.release_id')
+                ->where('releases.release_group_id', 'IN', $binGroupIds)
+                ->groupBy('releases.release_group_id'),
+        ) as $row) {
+            $counts[Row::string($row, 'release_group_id')] = Row::int($row, 'song_count');
+        }
+
+        return $counts;
     }
 
     #[Override]

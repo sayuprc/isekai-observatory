@@ -14,6 +14,8 @@ readonly class ReleaseGroupSummary
         public bool $isDisplay,
         public int $orderNo,
         public ?string $firstReleasedOn,
+        public int $releaseCount,
+        public int $songCount,
     ) {
     }
 }

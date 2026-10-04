@@ -636,6 +636,14 @@ export type ReleaseGroupSummary = {
     isDisplay: boolean;
     orderNo: OrderNo;
     firstReleasedOn: ReleasedOn | null;
+    /**
+     * 傘下のリリース (版) の件数
+     */
+    releaseCount: number;
+    /**
+     * 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
+     */
+    songCount: number;
 };
 
 /**
