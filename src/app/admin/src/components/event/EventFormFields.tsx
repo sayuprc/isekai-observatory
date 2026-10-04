@@ -1,4 +1,4 @@
-import { createSignal, Show, type JSX } from 'solid-js';
+import { children, createSignal, type JSX, Show } from 'solid-js';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
 import { SegmentedControl } from '../SegmentedControl';
@@ -56,32 +56,37 @@ interface EventFormFieldsProps {
   history?: JSX.Element;
 }
 
-export const EventFormFields = (props: EventFormFieldsProps) => (
-  <>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
-      <EventBasicInfo form={props.form} />
-      <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
-      <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
-    </TabPanel>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="performances" current={props.tab}>
-      <PerformanceWorkspace form={props.form} />
-    </TabPanel>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="related" current={props.tab} class="max-w-4xl">
-      <MediaSection
-        entries={props.form.mediaEntries}
-        setEntries={props.form.setMediaEntries}
-        availableMedia={props.form.availableMedia}
-        setAvailableMedia={props.form.setAvailableMedia}
-      />
-      <ReleaseEditor releases={props.form.releases()} onChange={props.form.setReleases} />
-    </TabPanel>
-    <Show when={props.history}>
-      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab} class="max-w-4xl">
-        {props.history}
+export const EventFormFields = (props: EventFormFieldsProps) => {
+  // JSX の props を Show の条件と中身で 2 回参照すると要素が 2 つ作られるので、1 回だけ評価して使い回す
+  const history = children(() => props.history);
+
+  return (
+    <>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
+        <EventBasicInfo form={props.form} />
+        <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
+        <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
       </TabPanel>
-    </Show>
-  </>
-);
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="performances" current={props.tab}>
+        <PerformanceWorkspace form={props.form} />
+      </TabPanel>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="related" current={props.tab} class="max-w-4xl">
+        <MediaSection
+          entries={props.form.mediaEntries}
+          setEntries={props.form.setMediaEntries}
+          availableMedia={props.form.availableMedia}
+          setAvailableMedia={props.form.setAvailableMedia}
+        />
+        <ReleaseEditor releases={props.form.releases()} onChange={props.form.setReleases} />
+      </TabPanel>
+      <Show when={history()}>
+        <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab} class="max-w-4xl">
+          {history()}
+        </TabPanel>
+      </Show>
+    </>
+  );
+};
 
 const SCHEDULE_MODE_OPTIONS: { value: ScheduleMode; label: string }[] = [
   { value: 'undecided', label: '未定' },

@@ -1,4 +1,4 @@
-import { createSignal, For, Show, type JSX } from 'solid-js';
+import { children, createSignal, For, type JSX, Show } from 'solid-js';
 import type { SongTag, SongType } from '../../generated';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
@@ -57,38 +57,43 @@ interface SongFormFieldsProps {
   history?: JSX.Element;
 }
 
-export const SongFormFields = (props: SongFormFieldsProps) => (
-  <>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
-      <SongBasicInfo {...props} />
-      <SongTagSection form={props.form} availableTags={props.availableTags} />
-    </TabPanel>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="persons" current={props.tab} class="max-w-4xl">
-      <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-        <legend class="px-2 text-sm font-semibold text-base-content/70">関係者</legend>
-        <div class="space-y-4">
-          <PersonSearchSection
-            selections={props.form.personSelections}
-            setSelections={props.form.setPersonSelections}
-          />
-        </div>
-      </fieldset>
-    </TabPanel>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="media" current={props.tab} class="max-w-4xl">
-      <MediaSection
-        entries={props.form.mediaEntries}
-        setEntries={props.form.setMediaEntries}
-        availableMedia={props.form.availableMedia}
-        setAvailableMedia={props.form.setAvailableMedia}
-      />
-    </TabPanel>
-    <Show when={props.history}>
-      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab} class="max-w-4xl">
-        {props.history}
+export const SongFormFields = (props: SongFormFieldsProps) => {
+  // JSX の props を Show の条件と中身で 2 回参照すると要素が 2 つ作られるので、1 回だけ評価して使い回す
+  const history = children(() => props.history);
+
+  return (
+    <>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
+        <SongBasicInfo {...props} />
+        <SongTagSection form={props.form} availableTags={props.availableTags} />
       </TabPanel>
-    </Show>
-  </>
-);
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="persons" current={props.tab} class="max-w-4xl">
+        <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
+          <legend class="px-2 text-sm font-semibold text-base-content/70">関係者</legend>
+          <div class="space-y-4">
+            <PersonSearchSection
+              selections={props.form.personSelections}
+              setSelections={props.form.setPersonSelections}
+            />
+          </div>
+        </fieldset>
+      </TabPanel>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="media" current={props.tab} class="max-w-4xl">
+        <MediaSection
+          entries={props.form.mediaEntries}
+          setEntries={props.form.setMediaEntries}
+          availableMedia={props.form.availableMedia}
+          setAvailableMedia={props.form.setAvailableMedia}
+        />
+      </TabPanel>
+      <Show when={history()}>
+        <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab} class="max-w-4xl">
+          {history()}
+        </TabPanel>
+      </Show>
+    </>
+  );
+};
 
 const SongBasicInfo = (props: SongFormFieldsProps) => (
   <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border px-6 py-3">

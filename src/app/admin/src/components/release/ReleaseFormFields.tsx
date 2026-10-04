@@ -1,4 +1,4 @@
-import { Show, type JSX } from 'solid-js';
+import { children, type JSX, Show } from 'solid-js';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
@@ -51,25 +51,30 @@ interface ReleaseFormFieldsProps {
   history?: JSX.Element;
 }
 
-export const ReleaseFormFields = (props: ReleaseFormFieldsProps) => (
-  <>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
-      <ReleaseBasicInfo form={props.form} getFieldError={props.getFieldError} />
-    </TabPanel>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="tracks" current={props.tab} class="max-w-5xl">
-      <MediaEditor
-        media={props.form.media()}
-        onChange={props.form.setMedia}
-        fieldError={props.getFieldError('media')}
-      />
-    </TabPanel>
-    <Show when={props.history}>
-      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab} class="max-w-4xl">
-        {props.history}
+export const ReleaseFormFields = (props: ReleaseFormFieldsProps) => {
+  // JSX の props を Show の条件と中身で 2 回参照すると要素が 2 つ作られるので、1 回だけ評価して使い回す
+  const history = children(() => props.history);
+
+  return (
+    <>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
+        <ReleaseBasicInfo form={props.form} getFieldError={props.getFieldError} />
       </TabPanel>
-    </Show>
-  </>
-);
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="tracks" current={props.tab} class="max-w-5xl">
+        <MediaEditor
+          media={props.form.media()}
+          onChange={props.form.setMedia}
+          fieldError={props.getFieldError('media')}
+        />
+      </TabPanel>
+      <Show when={history()}>
+        <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab} class="max-w-4xl">
+          {history()}
+        </TabPanel>
+      </Show>
+    </>
+  );
+};
 
 const FieldError = (props: { message: string | undefined }) => (
   <Show when={props.message}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
