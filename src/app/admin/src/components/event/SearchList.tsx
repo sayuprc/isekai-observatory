@@ -9,6 +9,8 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
+import { ListWithPreview, selectedRowClass } from '../ListPreview';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 import {
@@ -233,97 +235,86 @@ export const SearchList = () => {
           新規作成
         </a>
       </div>
-      <div class="@container">
-        <div class="grid gap-4 @5xl:grid-cols-[minmax(0,1fr)_20rem] @5xl:items-start">
-          <div class="min-w-0 overflow-x-auto rounded-box border border-base-300 bg-base-100">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th>タイトル</th>
-                  <th>種別</th>
-                  <th>開催時期</th>
-                  <th>開催先</th>
-                  <th class="text-right">披露</th>
-                  <th class="text-right">セトリ</th>
-                  <th class="text-right">出典</th>
-                  <th>状態</th>
-                  <th>公開</th>
-                </tr>
-              </thead>
-              <tbody>
-                <Switch>
-                  <Match when={data.loading}>
-                    <ListState state="loading" colSpan={9} />
-                  </Match>
-                  <Match when={fetchError()}>
-                    {(message) => <ListState state="error" colSpan={9} message={message()} onRetry={() => refetch()} />}
-                  </Match>
-                  <Match when={data() && data()!.events.length === 0}>
-                    <ListState state="empty" colSpan={9} />
-                  </Match>
-                  <Match when={data()}>
-                    {(result) => (
-                      <For each={result().events}>
-                        {(event) => (
-                          <tr
-                            class="cursor-pointer hover:bg-base-200"
-                            classList={{
-                              'bg-info/10 shadow-[inset_3px_0_0_var(--color-info)]': event.eventId === selectedId(),
-                            }}
-                            onClick={() => setSelectedId(event.eventId)}
-                            onFocusIn={() => setSelectedId(event.eventId)}
-                          >
-                            <td class="max-w-md">
-                              <a class="link link-hover line-clamp-2" href={detailUrl(event)}>
-                                {event.title}
-                              </a>
-                            </td>
-                            <td class="whitespace-nowrap">{event.type.name}</td>
-                            <td class="font-mono text-xs whitespace-nowrap">{formatSchedule(event.schedule)}</td>
-                            <td class="max-w-48 truncate text-base-content/70">{event.venueNames.join(' · ')}</td>
-                            <CountCell
-                              count={event.performanceCount}
-                              applicable={allowsPerformances(event.status.value)}
-                            />
-                            <CountCell
-                              count={event.setlistItemCount}
-                              applicable={allowsPerformances(event.status.value) && allowsSetlist(event.type.value)}
-                            />
-                            <CountCell count={event.sourceCount} applicable />
-                            <td class="whitespace-nowrap">{event.status.name}</td>
-                            <td>
-                              <span
-                                class={`badge badge-sm whitespace-nowrap ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
-                              >
-                                {event.isDisplay ? '公開' : '非公開'}
-                              </span>
-                            </td>
-                          </tr>
-                        )}
-                      </For>
-                    )}
-                  </Match>
-                </Switch>
-              </tbody>
-            </table>
-          </div>
-          <div class="hidden @5xl:sticky @5xl:top-20 @5xl:block">
-            <EventPreview event={selectedEvent()} detailUrl={detailUrl} />
-          </div>
-        </div>
-      </div>
+      <ListWithPreview
+        table={
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>タイトル</th>
+                <th>種別</th>
+                <th>開催時期</th>
+                <th>開催先</th>
+                <th class="text-right">披露</th>
+                <th class="text-right">セトリ</th>
+                <th class="text-right">出典</th>
+                <th>状態</th>
+                <th>公開</th>
+              </tr>
+            </thead>
+            <tbody>
+              <Switch>
+                <Match when={data.loading}>
+                  <ListState state="loading" colSpan={9} />
+                </Match>
+                <Match when={fetchError()}>
+                  {(message) => <ListState state="error" colSpan={9} message={message()} onRetry={() => refetch()} />}
+                </Match>
+                <Match when={data() && data()!.events.length === 0}>
+                  <ListState state="empty" colSpan={9} />
+                </Match>
+                <Match when={data()}>
+                  {(result) => (
+                    <For each={result().events}>
+                      {(event) => (
+                        <tr
+                          class="cursor-pointer hover:bg-base-200"
+                          classList={{
+                            [selectedRowClass]: event.eventId === selectedId(),
+                          }}
+                          onClick={() => setSelectedId(event.eventId)}
+                          onFocusIn={() => setSelectedId(event.eventId)}
+                        >
+                          <td class="max-w-md">
+                            <a class="link link-hover line-clamp-2" href={detailUrl(event)}>
+                              {event.title}
+                            </a>
+                          </td>
+                          <td class="whitespace-nowrap">{event.type.name}</td>
+                          <td class="font-mono text-xs whitespace-nowrap">{formatSchedule(event.schedule)}</td>
+                          <td class="max-w-48 truncate text-base-content/70">{event.venueNames.join(' · ')}</td>
+                          <CountCell
+                            count={event.performanceCount}
+                            applicable={allowsPerformances(event.status.value)}
+                            warnWhenZero
+                          />
+                          <CountCell
+                            count={event.setlistItemCount}
+                            applicable={allowsPerformances(event.status.value) && allowsSetlist(event.type.value)}
+                            warnWhenZero
+                          />
+                          <CountCell count={event.sourceCount} warnWhenZero />
+                          <td class="whitespace-nowrap">{event.status.name}</td>
+                          <td>
+                            <span
+                              class={`badge badge-sm whitespace-nowrap ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
+                            >
+                              {event.isDisplay ? '公開' : '非公開'}
+                            </span>
+                          </td>
+                        </tr>
+                      )}
+                    </For>
+                  )}
+                </Match>
+              </Switch>
+            </tbody>
+          </table>
+        }
+        preview={<EventPreview event={selectedEvent()} detailUrl={detailUrl} />}
+      />
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>
     </>
   );
 };
-
-// 件数のセル。0 件は未入力として目立たせ、種別や開催状態で持てない項目は「—」にする
-const CountCell = (props: { count: number; applicable: boolean }) => (
-  <td class="text-right font-mono text-xs">
-    <Show when={props.applicable} fallback={<span class="text-base-content/40">—</span>}>
-      <span classList={{ 'text-warning': props.count === 0 }}>{props.count}</span>
-    </Show>
-  </td>
-);

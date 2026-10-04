@@ -5235,6 +5235,10 @@ components:
         - type
         - isDisplay
         - orderNo
+        - performanceCount
+        - mediaCount
+        - personCount
+        - releaseCount
       properties:
         songId:
           $ref: '#/components/schemas/songId'
@@ -5246,6 +5250,22 @@ components:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
+        performanceCount:
+          type: integer
+          format: int32
+          description: 楽曲披露の件数
+        mediaCount:
+          type: integer
+          format: int32
+          description: リンクしているメディアの件数
+        personCount:
+          type: integer
+          format: int32
+          description: 作詞・作曲・編曲として登録されている人物の人数。役割が重なる人物は 1 人と数える
+        releaseCount:
+          type: integer
+          format: int32
+          description: 収録しているリリースの件数
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
@@ -5254,6 +5274,10 @@ components:
             value: 1
           isDisplay: true
           orderNo: 1
+          performanceCount: 3
+          mediaCount: 1
+          personCount: 2
+          releaseCount: 1
     SongTag:
       type: object
       required:

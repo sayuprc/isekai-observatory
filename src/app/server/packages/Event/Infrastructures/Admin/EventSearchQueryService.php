@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Event\Infrastructures\Admin;
 
 use Emonkak\Orm\SelectBuilder;
-use Emonkak\Orm\Sql;
 use Event\Application\Admin\Query\EventSearchQueryServiceInterface;
 use Event\Application\Admin\Query\EventSummary;
 use Event\Domain\Criteria\EventSearchCriteria;
@@ -47,9 +46,9 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
 
         $binEventIds = array_map(static fn (array $row): string => Row::string($row, 'event_id'), $rows);
         $venueNames = $this->loadVenueNames($binEventIds);
-        $performanceCounts = $this->countByEvent('song_performances', $binEventIds);
-        $setlistItemCounts = $this->countByEvent('event_setlist_items', $binEventIds);
-        $sourceCounts = $this->countByEvent('event_sources', $binEventIds);
+        $performanceCounts = $this->queryFactory->countBy('song_performances', 'event_id', $binEventIds);
+        $setlistItemCounts = $this->queryFactory->countBy('event_setlist_items', 'event_id', $binEventIds);
+        $sourceCounts = $this->queryFactory->countBy('event_sources', 'event_id', $binEventIds);
 
         return array_map(
             fn (array $row): EventSummary => new EventSummary(
@@ -101,35 +100,6 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
         }
 
         return $grouped;
-    }
-
-    /**
-     * 子テーブルの件数をイベントごとに数える。行のないイベントは結果に含まれない
-     *
-     * @param 'event_setlist_items'|'event_sources'|'song_performances' $table
-     * @param list<string>                                               $binEventIds
-     *
-     * @return array<string, int>
-     */
-    private function countByEvent(string $table, array $binEventIds): array
-    {
-        if ($binEventIds === []) {
-            return [];
-        }
-
-        $counts = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['event_id'])
-                ->select(new Sql('COUNT(*)'), 'count')
-                ->from($table)
-                ->where('event_id', 'IN', $binEventIds)
-                ->groupBy('event_id'),
-        ) as $row) {
-            $counts[Row::string($row, 'event_id')] = Row::int($row, 'count');
-        }
-
-        return $counts;
     }
 
     private function buildSearchQuery(EventSearchCriteria $criteria): SelectBuilder

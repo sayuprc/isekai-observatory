@@ -853,6 +853,22 @@ export type SongSummary = {
     type: SongType;
     isDisplay: boolean;
     orderNo: OrderNo;
+    /**
+     * 楽曲披露の件数
+     */
+    performanceCount: number;
+    /**
+     * リンクしているメディアの件数
+     */
+    mediaCount: number;
+    /**
+     * 作詞・作曲・編曲として登録されている人物の人数。役割が重なる人物は 1 人と数える
+     */
+    personCount: number;
+    /**
+     * 収録しているリリースの件数
+     */
+    releaseCount: number;
 };
 
 export type SongTag = {

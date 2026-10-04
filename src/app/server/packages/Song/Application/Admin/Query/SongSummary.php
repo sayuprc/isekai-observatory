@@ -14,6 +14,10 @@ readonly class SongSummary
         public SongType $type,
         public bool $isDisplay,
         public int $orderNo,
+        public int $performanceCount,
+        public int $mediaCount,
+        public int $personCount,
+        public int $releaseCount,
     ) {
     }
 }
