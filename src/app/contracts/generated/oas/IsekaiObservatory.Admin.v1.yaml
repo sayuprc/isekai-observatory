@@ -4360,7 +4360,7 @@ components:
         persons:
           type: array
           items:
-            $ref: '#/components/schemas/Person'
+            $ref: '#/components/schemas/PersonSummary'
         maxPage:
           type: integer
           format: int32
@@ -4370,6 +4370,30 @@ components:
         - name
         - order_no
       description: 人物検索のソート条件
+    PersonSummary:
+      type: object
+      required:
+        - personId
+        - name
+        - orderNo
+        - songCount
+        - performanceCount
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: 作詞・作曲・編曲として関わっている楽曲の件数
+        performanceCount:
+          type: integer
+          format: int32
+          description: 共演者として記録されている楽曲披露の件数
+      description: 人物一覧の 1 行分
     PersonUpdateRequest:
       type: object
       required:

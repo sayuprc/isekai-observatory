@@ -465,7 +465,7 @@ export type PersonListResponse = {
 };
 
 export type PersonSearchResponse = {
-    persons: Array<Person>;
+    persons: Array<PersonSummary>;
     maxPage: number;
 };
 
@@ -473,6 +473,23 @@ export type PersonSearchResponse = {
  * 人物検索のソート条件
  */
 export type PersonSearchSortBy = 'name' | 'order_no';
+
+/**
+ * 人物一覧の 1 行分
+ */
+export type PersonSummary = {
+    personId: PersonId;
+    name: PersonName;
+    orderNo: OrderNo;
+    /**
+     * 作詞・作曲・編曲として関わっている楽曲の件数
+     */
+    songCount: number;
+    /**
+     * 共演者として記録されている楽曲披露の件数
+     */
+    performanceCount: number;
+};
 
 export type PersonUpdateRequest = {
     name: PersonName;

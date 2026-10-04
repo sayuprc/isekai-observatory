@@ -9,7 +9,7 @@ model PersonListResponse {
 }
 
 model PersonSearchResponse {
-  persons: Person[];
+  persons: PersonSummary[];
   maxPage: int32;
 }
 

@@ -17,3 +17,14 @@ model Person {
   name: personName;
   orderNo: orderNo;
 }
+
+@doc("人物一覧の 1 行分")
+model PersonSummary {
+  ...Person;
+
+  @doc("作詞・作曲・編曲として関わっている楽曲の件数")
+  songCount: int32;
+
+  @doc("共演者として記録されている楽曲披露の件数")
+  performanceCount: int32;
+}
