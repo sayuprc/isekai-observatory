@@ -1,7 +1,6 @@
 import { For, Match, Show, Switch } from 'solid-js';
-import type { EventSearchSortBy, EventStatusValue, EventTypeValue, SortOrder } from '../../generated';
+import type { EventSearchSortBy, EventStatusValue, EventSummary, EventTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
-import { normalizeDateValue } from '../../utils/date';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
@@ -10,18 +9,16 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
-import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
-
-const formatSchedule = (schedule: { startOn: string | null; endOn: string | null }): string => {
-  if (!schedule.startOn) {
-    return '未定';
-  }
-  const startOn = normalizeDateValue(schedule.startOn);
-  const endOn = schedule.endOn ? normalizeDateValue(schedule.endOn) : null;
-  return endOn && endOn !== startOn ? `${startOn}〜${endOn}` : startOn;
-};
+import {
+  allowsPerformances,
+  allowsSetlist,
+  EVENT_STATUS_OPTIONS,
+  EVENT_TYPE_OPTIONS,
+  formatSchedule,
+} from './event-options';
 
 const SORT_OPTIONS: Array<{ value: EventSearchSortBy; label: string }> = [
   { value: 'schedule', label: '開催時期' },
@@ -112,6 +109,9 @@ export const SearchList = () => {
       }),
     { forbiddenMessage: 'イベントの閲覧権限がありません' },
   );
+
+  const detailUrl = (event: EventSummary) =>
+    `/events/${event.eventId}?back=${encodeURIComponent(window.location.search)}`;
 
   return (
     <>
@@ -237,42 +237,55 @@ export const SearchList = () => {
               <th>タイトル</th>
               <th>種別</th>
               <th>開催時期</th>
+              <th>開催先</th>
+              <th class="text-right">披露</th>
+              <th class="text-right">セトリ</th>
+              <th class="text-right">出典</th>
               <th>状態</th>
-              <th>表示設定</th>
+              <th>公開</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={5} />
+                <ListState state="loading" colSpan={9} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={5} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={9} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.events.length === 0}>
-                <ListState state="empty" colSpan={5} />
+                <ListState state="empty" colSpan={9} />
               </Match>
               <Match when={data()}>
                 {(result) => (
                   <For each={result().events}>
                     {(event) => (
                       <tr>
-                        <td>
-                          <a
-                            class="link link-hover"
-                            href={`/events/${event.eventId}?back=${encodeURIComponent(window.location.search)}`}
-                          >
+                        <td class="max-w-md">
+                          <a class="link link-hover line-clamp-2" href={detailUrl(event)}>
                             {event.title}
                           </a>
                         </td>
-                        <td>{event.type.name}</td>
+                        <td class="whitespace-nowrap">{event.type.name}</td>
                         <td>{formatSchedule(event.schedule)}</td>
-                        <td>{event.status.name}</td>
+                        <td class="max-w-48 truncate text-base-content/70">{event.venueNames.join(' · ')}</td>
+                        <CountCell
+                          count={event.performanceCount}
+                          applicable={allowsPerformances(event.status.value)}
+                          warnWhenZero
+                        />
+                        <CountCell
+                          count={event.setlistItemCount}
+                          applicable={allowsPerformances(event.status.value) && allowsSetlist(event.type.value)}
+                          warnWhenZero
+                        />
+                        <CountCell count={event.sourceCount} warnWhenZero />
+                        <td class="whitespace-nowrap">{event.status.name}</td>
                         <td>
                           <span
-                            class={`badge badge-sm ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
+                            class={`badge badge-sm whitespace-nowrap ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
                           >
-                            {event.isDisplay ? '表示する' : '表示しない'}
+                            {event.isDisplay ? '公開' : '非公開'}
                           </span>
                         </td>
                       </tr>
