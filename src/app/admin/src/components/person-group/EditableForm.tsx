@@ -2,9 +2,12 @@ import { createResource, createSignal, Match, Switch } from 'solid-js';
 import type { PersonGroup } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
+import { ActionMenu } from '../ActionMenu';
+import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
 import { toMembersPayload, type MemberForm } from './member-form';
@@ -76,8 +79,9 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
   const [members, setMembers] = createSignal<MemberForm[]>(
     props.personGroup.members.map((member) => ({ personId: member.personId, name: member.name })),
   );
+  const { isDirty, allowLeave } = createDirtyTracker(() => ({ name: name(), members: toMembersPayload(members()) }));
 
-  const handleUpdate = withSubmitting(async (e: Event) => {
+  const handleUpdate = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
     clearErrors();
 
@@ -88,12 +92,14 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
 
     if (data) {
       setFlash('更新しました');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
 
     if (status === 404) {
       setFlash('データがありません', 'error');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
@@ -101,9 +107,7 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
     handleError(status, error);
   });
 
-  const handleDelete = withSubmitting(async (e: Event) => {
-    e.preventDefault();
-
+  const handleDelete = withSubmitting(async () => {
     if (!window.confirm('削除します。よろしいですか？')) {
       return;
     }
@@ -118,43 +122,41 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
     }
 
     setFlash('削除しました');
+    allowLeave();
     window.location.href = listUrl;
   });
 
   return (
     <>
-      <a href={listUrl} class="btn btn-ghost btn-sm mb-4">
-        ← 一覧に戻る
-      </a>
-      <FormError message={formError()} onClose={clearErrors} />
-      <div class="max-w-4xl space-y-6">
-        <form class="space-y-6" onsubmit={handleUpdate}>
-          <PersonGroupFields
-            name={name()}
-            onNameChange={setName}
-            members={members()}
-            onMembersChange={setMembers}
-            nameError={getFieldError('name')}
+      <EntityHeader
+        breadcrumb={{ href: listUrl, label: '人物グループ' }}
+        title={name() || '(グループ名未入力)'}
+        formId="person-group-form"
+        isDirty={isDirty()}
+        isSubmitting={isSubmitting()}
+        submitLabel="保存"
+        submittingLabel="保存中..."
+        onDiscard={() => discardChanges(allowLeave)}
+        menu={
+          <ActionMenu
+            label="その他の操作"
+            items={[
+              { label: 'このグループを削除する', danger: true, disabled: isSubmitting(), onSelect: handleDelete },
+            ]}
           />
-          <div class="flex justify-end">
-            <button class="btn btn-primary" disabled={isSubmitting()}>
-              {isSubmitting() ? '更新中...' : '更新'}
-            </button>
-          </div>
-        </form>
-
-        <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
-          <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
-          <p class="mt-1 text-sm text-base-content/60">
-            この操作は取り消せません。楽曲披露で使われているグループは削除できません。
-          </p>
-          <div class="mt-4">
-            <button onClick={handleDelete} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>
-              {isSubmitting() ? '削除中...' : 'このグループを削除する'}
-            </button>
-          </div>
-        </fieldset>
-      </div>
+        }
+      />
+      <FormError message={formError()} onClose={clearErrors} />
+      <p class="mb-4 max-w-4xl text-sm text-base-content/60">楽曲披露で使われているグループは削除できません</p>
+      <form id="person-group-form" class="max-w-4xl space-y-6" onSubmit={handleUpdate}>
+        <PersonGroupFields
+          name={name()}
+          onNameChange={setName}
+          members={members()}
+          onMembersChange={setMembers}
+          nameError={getFieldError('name')}
+        />
+      </form>
     </>
   );
 };
