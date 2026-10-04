@@ -1044,7 +1044,7 @@ export type VenueKind = {
 export type VenueKindValue = 1 | 2;
 
 export type VenueSearchResponse = {
-    venues: Array<Venue>;
+    venues: Array<VenueSummary>;
     maxPage: number;
 };
 
@@ -1052,6 +1052,19 @@ export type VenueSearchResponse = {
  * 開催先検索のソート条件
  */
 export type VenueSearchSortBy = 'name';
+
+/**
+ * 開催先一覧の 1 行分
+ */
+export type VenueSummary = {
+    venueId: VenueId;
+    name: VenueName;
+    kind: VenueKind;
+    /**
+     * この開催先を使っているイベントの件数
+     */
+    eventCount: number;
+};
 
 export type VenueUpdateRequest = {
     name: VenueName;

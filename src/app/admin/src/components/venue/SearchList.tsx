@@ -9,6 +9,7 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -74,6 +75,7 @@ export const SearchList = () => {
     { forbiddenMessage: '開催先の閲覧権限がありません' },
   );
 
+  const detailUrl = (id: string) => `/venues/${id}?back=${encodeURIComponent(window.location.search)}`;
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -176,18 +178,19 @@ export const SearchList = () => {
             <tr>
               <th>開催先名</th>
               <th>種別</th>
+              <th class="text-right">イベント</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={2} />
+                <ListState state="loading" colSpan={3} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={3} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.venues.length === 0}>
-                <ListState state="empty" colSpan={2} />
+                <ListState state="empty" colSpan={3} />
               </Match>
               <Match when={data()}>
                 {(result) => (
@@ -195,14 +198,12 @@ export const SearchList = () => {
                     {(venue) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td>
-                          <a
-                            class="link link-hover font-medium"
-                            href={`/venues/${venue.venueId}?back=${encodeURIComponent(window.location.search)}`}
-                          >
+                          <a href={detailUrl(venue.venueId)} class="link link-hover font-medium">
                             {venue.name}
                           </a>
                         </td>
-                        <td>{venue.kind.name}</td>
+                        <td class="whitespace-nowrap">{venue.kind.name}</td>
+                        <CountCell count={venue.eventCount} />
                       </tr>
                     )}
                   </For>
@@ -212,6 +213,7 @@ export const SearchList = () => {
           </tbody>
         </table>
       </div>
+
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>

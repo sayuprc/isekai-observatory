@@ -5620,7 +5620,7 @@ components:
         venues:
           type: array
           items:
-            $ref: '#/components/schemas/Venue'
+            $ref: '#/components/schemas/VenueSummary'
         maxPage:
           type: integer
           format: int32
@@ -5629,6 +5629,25 @@ components:
       enum:
         - name
       description: 開催先検索のソート条件
+    VenueSummary:
+      type: object
+      required:
+        - venueId
+        - name
+        - kind
+        - eventCount
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKind'
+        eventCount:
+          type: integer
+          format: int32
+          description: この開催先を使っているイベントの件数
+      description: 開催先一覧の 1 行分
     VenueUpdateRequest:
       type: object
       required:
