@@ -2,13 +2,17 @@ import { Match, Switch, createResource } from 'solid-js';
 import type { Event } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
+import { ActionMenu } from '../ActionMenu';
+import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
 import { createEventForm } from './event-form';
 import { EventFormFields } from './EventFormFields';
+import { EventMeta } from './EventMeta';
 
 interface DetailViewProps {
   eventId: string;
@@ -72,6 +76,8 @@ const EditableForm = (props: EditableFormProps) => {
   const { isSubmitting, withSubmitting } = createSubmitting();
   const event = props.data.event;
   const form = createEventForm(event);
+  const { isDirty, allowLeave } = createDirtyTracker(form.toRequestBody);
+  const listUrl = getListUrl('/events');
 
   const save = withSubmitting(async (submitEvent: SubmitEvent) => {
     submitEvent.preventDefault();
@@ -85,7 +91,8 @@ const EditableForm = (props: EditableFormProps) => {
     const { data, error, status } = await client.api.events({ eventId: event.eventId }).put(form.toRequestBody());
     if (data) {
       setFlash('更新しました');
-      window.location.href = getListUrl('/events');
+      allowLeave();
+      window.location.href = listUrl;
       return;
     }
     handleError(status, error);
@@ -99,34 +106,39 @@ const EditableForm = (props: EditableFormProps) => {
       return;
     }
     setFlash('削除しました');
-    window.location.href = getListUrl('/events');
+    allowLeave();
+    window.location.href = listUrl;
   });
+
+  const discard = () => {
+    if (!window.confirm('未保存の変更を破棄します。よろしいですか？')) return;
+    allowLeave();
+    window.location.reload();
+  };
 
   return (
     <>
-      <a href={getListUrl('/events')} class="btn btn-ghost btn-sm mb-4">
-        ← 一覧に戻る
-      </a>
+      <EntityHeader
+        breadcrumb={{ href: listUrl, label: 'イベント' }}
+        title={form.title() || '(タイトル未入力)'}
+        meta={<EventMeta form={form} />}
+        formId="event-form"
+        isDirty={isDirty()}
+        isSubmitting={isSubmitting()}
+        submitLabel="保存"
+        submittingLabel="保存中..."
+        onDiscard={discard}
+        menu={
+          <ActionMenu
+            label="その他の操作"
+            items={[{ label: 'このイベントを削除する', danger: true, disabled: isSubmitting(), onSelect: remove }]}
+          />
+        }
+      />
       <FormError message={formError()} onClose={clearErrors} />
-      <div class="max-w-4xl space-y-6">
-        <form class="space-y-6" onSubmit={save}>
-          <EventFormFields form={form} />
-          <div class="flex justify-end">
-            <button type="submit" class="btn btn-primary" disabled={isSubmitting()}>
-              {isSubmitting() ? '更新中...' : '更新'}
-            </button>
-          </div>
-        </form>
-        <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
-          <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
-          <p class="mt-1 text-sm text-base-content/60">この操作は取り消せません。</p>
-          <div class="mt-4">
-            <button type="button" onClick={remove} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>
-              このイベントを削除する
-            </button>
-          </div>
-        </fieldset>
-      </div>
+      <form id="event-form" class="max-w-4xl space-y-6" onSubmit={save}>
+        <EventFormFields form={form} />
+      </form>
     </>
   );
 };

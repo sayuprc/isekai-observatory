@@ -1,7 +1,6 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { EventSearchSortBy, EventStatusValue, EventTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
-import { normalizeDateValue } from '../../utils/date';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
@@ -12,16 +11,7 @@ import {
 import type { PerPageOption } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
-import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
-
-const formatSchedule = (schedule: { startOn: string | null; endOn: string | null }): string => {
-  if (!schedule.startOn) {
-    return '未定';
-  }
-  const startOn = normalizeDateValue(schedule.startOn);
-  const endOn = schedule.endOn ? normalizeDateValue(schedule.endOn) : null;
-  return endOn && endOn !== startOn ? `${startOn}〜${endOn}` : startOn;
-};
+import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS, formatSchedule } from './event-options';
 
 const SORT_OPTIONS: Array<{ value: EventSearchSortBy; label: string }> = [
   { value: 'schedule', label: '開催時期' },
