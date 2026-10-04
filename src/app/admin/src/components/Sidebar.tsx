@@ -153,9 +153,9 @@ const navSections: NavSection[] = [
   {
     title: '記録',
     items: [
-      { href: '/events', label: 'イベント', icon: PlayIcon },
       { href: '/songs', label: '楽曲', icon: MusicNoteIcon },
       { href: '/release-groups', label: 'リリースグループ', icon: DiscIcon },
+      { href: '/events', label: 'イベント', icon: PlayIcon },
       { href: '/media', label: 'メディア', icon: PlayIcon },
     ],
   },
