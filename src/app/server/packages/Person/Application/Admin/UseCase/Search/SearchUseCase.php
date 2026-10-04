@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Person\Application\Admin\UseCase\Search;
 
 use AdminUser\Domain\Models\Permission;
+use Person\Application\Admin\Query\PersonUsageCountQueryServiceInterface;
 use Person\Domain\Criteria\PersonSearchCriteria;
+use Person\Domain\Models\Person;
+use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonRepositoryInterface;
 use Support\Optional\Arg;
 use Support\Optional\None;
@@ -17,6 +20,7 @@ readonly class SearchUseCase
     public function __construct(
         private UseCaseAuthorizer $authorizer,
         private PersonRepositoryInterface $repository,
+        private PersonUsageCountQueryServiceInterface $usageCountQueryService,
     ) {
     }
 
@@ -34,9 +38,12 @@ readonly class SearchUseCase
             $inputData->perPage,
         );
 
+        $persons = $this->repository->search($criteria);
+
         return new SearchOutputData(
-            $this->repository->search($criteria),
+            $persons,
             $this->repository->maxPage($criteria),
+            $this->usageCountQueryService->countUsages(array_values(array_map(static fn (Person $person): PersonId => $person->personId, $persons))),
         );
     }
 }
