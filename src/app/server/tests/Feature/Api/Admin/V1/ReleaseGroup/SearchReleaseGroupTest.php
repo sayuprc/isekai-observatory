@@ -57,6 +57,10 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                         'isDisplay' => true,
                         'orderNo' => 1,
                         'firstReleasedOn' => '2026-02-01',
+
+                        'releaseCount' => 1,
+
+                        'songCount' => 0,
                     ],
                     [
                         'releaseGroupId' => $releaseGroupId1,
@@ -66,6 +70,10 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                         'isDisplay' => true,
                         'orderNo' => 1,
                         'firstReleasedOn' => '2026-01-01',
+
+                        'releaseCount' => 2,
+
+                        'songCount' => 0,
                     ],
                     [
                         'releaseGroupId' => $releaseGroupId3,
@@ -75,6 +83,10 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                         'isDisplay' => true,
                         'orderNo' => 1,
                         'firstReleasedOn' => null,
+
+                        'releaseCount' => 0,
+
+                        'songCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,

@@ -9,6 +9,7 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -113,6 +114,8 @@ export const SearchList = () => {
     }),
   );
 
+  const typeLabelOf = (typeValue: ReleaseGroupTypeValue) =>
+    RELEASE_GROUP_TYPE_OPTIONS.find((option) => option.value === String(typeValue))?.label ?? '不明';
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -246,19 +249,21 @@ export const SearchList = () => {
               <th>タイトル</th>
               <th>種別</th>
               <th>初リリース日</th>
-              <th>表示設定</th>
+              <th class="text-right">版</th>
+              <th class="text-right">収録曲</th>
+              <th>公開</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={4} />
+                <ListState state="loading" colSpan={6} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={6} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.releaseGroups.length === 0}>
-                <ListState state="empty" colSpan={4} message="条件に一致するリリースグループはありません。" />
+                <ListState state="empty" colSpan={6} message="条件に一致するリリースグループはありません。" />
               </Match>
               <Match when={data()}>
                 {(result) => (
@@ -270,20 +275,17 @@ export const SearchList = () => {
                             {releaseGroup.title}
                           </a>
                         </td>
-                        <td class="whitespace-nowrap">
-                          {RELEASE_GROUP_TYPE_OPTIONS.find((option) => option.value === String(releaseGroup.typeValue))
-                            ?.label ?? '不明'}
-                        </td>
+                        <td class="whitespace-nowrap">{typeLabelOf(releaseGroup.typeValue)}</td>
                         <td class="whitespace-nowrap text-sm">
                           {releaseGroup.firstReleasedOn ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn) : '—'}
                         </td>
+                        <CountCell count={releaseGroup.releaseCount} warnWhenZero />
+                        <CountCell count={releaseGroup.songCount} />
                         <td class="whitespace-nowrap">
                           <span
-                            class={`badge badge-sm ${
-                              releaseGroup.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'
-                            }`}
+                            class={`badge badge-sm ${releaseGroup.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
                           >
-                            {releaseGroup.isDisplay ? '表示する' : '表示しない'}
+                            {releaseGroup.isDisplay ? '公開' : '非公開'}
                           </span>
                         </td>
                       </tr>
