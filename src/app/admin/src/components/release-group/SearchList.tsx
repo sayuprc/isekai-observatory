@@ -243,7 +243,7 @@ export const SearchList = () => {
       </div>
 
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm">
+        <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
               <th>タイトル</th>
@@ -269,14 +269,14 @@ export const SearchList = () => {
                 {(result) => (
                   <For each={result().releaseGroups}>
                     {(releaseGroup) => (
-                      <tr class="hover:bg-base-200">
+                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td class="min-w-56">
                           <a href={buildDetailHref(releaseGroup.releaseGroupId)} class="link link-hover font-medium">
                             {releaseGroup.title}
                           </a>
                         </td>
                         <td class="whitespace-nowrap">{typeLabelOf(releaseGroup.typeValue)}</td>
-                        <td class="font-mono text-xs whitespace-nowrap">
+                        <td class="whitespace-nowrap text-sm">
                           {releaseGroup.firstReleasedOn ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn) : '—'}
                         </td>
                         <CountCell count={releaseGroup.releaseCount} warnWhenZero />

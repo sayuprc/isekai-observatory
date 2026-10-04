@@ -221,7 +221,7 @@ export const SearchList = () => {
         </a>
       </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm">
+        <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
               <th>楽曲名</th>
@@ -231,7 +231,7 @@ export const SearchList = () => {
               <th class="text-right">関係者</th>
               <th class="text-right">リリース</th>
               <th>公開</th>
-              <th class="text-right">表示順</th>
+              <th>表示順</th>
             </tr>
           </thead>
           <tbody>
@@ -249,7 +249,7 @@ export const SearchList = () => {
                 {(result) => (
                   <For each={result().songs}>
                     {(song) => (
-                      <tr class="hover:bg-base-200">
+                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td>
                           <a href={detailUrl(song.songId)} class="link link-hover font-medium">
                             {song.title}
@@ -269,7 +269,7 @@ export const SearchList = () => {
                             {song.isDisplay ? '公開' : '非公開'}
                           </span>
                         </td>
-                        <td class="text-right font-mono text-xs">{song.orderNo}</td>
+                        <td>{song.orderNo}</td>
                       </tr>
                     )}
                   </For>

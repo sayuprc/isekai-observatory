@@ -103,7 +103,7 @@ export const SearchList = () => {
         </a>
       </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm">
+        <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
               <th>グループ名</th>
@@ -126,7 +126,7 @@ export const SearchList = () => {
                 {(result) => (
                   <For each={result().personGroups}>
                     {(personGroup) => (
-                      <tr class="hover:bg-base-200">
+                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td>
                           <a href={detailUrl(personGroup.personGroupId)} class="link link-hover font-medium">
                             {personGroup.name}

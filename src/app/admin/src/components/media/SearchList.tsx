@@ -230,7 +230,7 @@ export const SearchList = () => {
       </div>
 
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm">
+        <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
               <th>タイトル</th>
@@ -257,15 +257,13 @@ export const SearchList = () => {
                 {(result) => (
                   <For each={result().media}>
                     {(media) => (
-                      <tr class="hover:bg-base-200">
+                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td class="max-w-72 min-w-44">
                           <a href={detailUrl(media.mediaId)} class="link link-hover block truncate font-medium">
                             {media.title}
                           </a>
                         </td>
-                        <td class="font-mono text-xs whitespace-nowrap">
-                          {normalizeDateTimeDisplayValue(media.publishedAt)}
-                        </td>
+                        <td class="whitespace-nowrap text-sm">{normalizeDateTimeDisplayValue(media.publishedAt)}</td>
                         <td class="whitespace-nowrap">{media.type.name}</td>
                         <CountCell count={media.songCount} />
                         <CountCell count={media.eventCount} />

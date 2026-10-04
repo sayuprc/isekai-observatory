@@ -231,7 +231,7 @@ export const SearchList = () => {
         </a>
       </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm">
+        <table class="table table-zebra">
           <thead>
             <tr>
               <th>タイトル</th>
@@ -260,14 +260,14 @@ export const SearchList = () => {
                 {(result) => (
                   <For each={result().events}>
                     {(event) => (
-                      <tr class="hover:bg-base-200">
+                      <tr>
                         <td class="max-w-md">
                           <a class="link link-hover line-clamp-2" href={detailUrl(event)}>
                             {event.title}
                           </a>
                         </td>
                         <td class="whitespace-nowrap">{event.type.name}</td>
-                        <td class="font-mono text-xs whitespace-nowrap">{formatSchedule(event.schedule)}</td>
+                        <td>{formatSchedule(event.schedule)}</td>
                         <td class="max-w-48 truncate text-base-content/70">{event.venueNames.join(' · ')}</td>
                         <CountCell
                           count={event.performanceCount}

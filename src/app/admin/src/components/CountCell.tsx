@@ -10,7 +10,7 @@ interface CountCellProps {
 
 // 一覧の件数の列
 export const CountCell = (props: CountCellProps) => (
-  <td class="text-right font-mono text-xs">
+  <td class="text-right">
     <Show when={props.applicable ?? true} fallback={<span class="text-base-content/40">—</span>}>
       <span
         classList={{

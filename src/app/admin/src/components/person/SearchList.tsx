@@ -152,13 +152,13 @@ export const SearchList = () => {
         </a>
       </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm">
+        <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
               <th>人物名</th>
               <th class="text-right">楽曲</th>
               <th class="text-right">共演</th>
-              <th class="text-right">表示順</th>
+              <th>表示順</th>
             </tr>
           </thead>
           <tbody>
@@ -176,7 +176,7 @@ export const SearchList = () => {
                 {(result) => (
                   <For each={result().persons}>
                     {(person) => (
-                      <tr class="hover:bg-base-200">
+                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td>
                           <a href={detailUrl(person.personId)} class="link link-hover font-medium">
                             {person.name}
@@ -184,7 +184,7 @@ export const SearchList = () => {
                         </td>
                         <CountCell count={person.songCount} />
                         <CountCell count={person.performanceCount} />
-                        <td class="text-right font-mono text-xs">{person.orderNo}</td>
+                        <td>{person.orderNo}</td>
                       </tr>
                     )}
                   </For>
