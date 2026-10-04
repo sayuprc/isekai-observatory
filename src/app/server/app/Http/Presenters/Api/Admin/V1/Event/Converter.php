@@ -47,7 +47,11 @@ class Converter
             ->setType($this->toOpenApiType($event->type))
             ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
             ->setStatus($this->toOpenApiStatus($event->status))
-            ->setIsDisplay($event->isDisplay);
+            ->setIsDisplay($event->isDisplay)
+            ->setVenueNames($event->venueNames)
+            ->setPerformanceCount($event->performanceCount)
+            ->setSetlistItemCount($event->setlistItemCount)
+            ->setSourceCount($event->sourceCount);
     }
 
     public function toOpenApiEvent(AssembledEvent $event): OpenApiEvent
