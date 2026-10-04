@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal, onMount } from 'solid-js';
 
 // 表示中のタブを URL の ?tab= に同期する。再読み込みや URL の共有で同じタブを開けるようにする
 export const createTabState = <T extends string>(tabs: readonly T[], fallback: T) => {
@@ -7,7 +7,9 @@ export const createTabState = <T extends string>(tabs: readonly T[], fallback: T
     return tabs.find((tab) => tab === value) ?? fallback;
   };
 
-  const [tab, setTabSignal] = createSignal<T>(read());
+  // サーバーでの描画とハイドレーションをそろえるため、初期値は既定のタブにし、URL はマウント後に読む
+  const [tab, setTabSignal] = createSignal<T>(fallback);
+  onMount(() => setTabSignal(() => read()));
 
   const setTab = (next: T) => {
     setTabSignal(() => next);

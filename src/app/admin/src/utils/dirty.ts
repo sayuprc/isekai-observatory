@@ -17,11 +17,13 @@ export const createDirtyTracker = (snapshot: () => unknown) => {
     event.preventDefault();
   };
 
+  // client:load の部品はサーバーでも描画され、そこでは onCleanup も走る
+  // window はブラウザにしかないので、登録と解除はどちらも onMount の中で行う
   onMount(() => {
     setInitial(JSON.stringify(snapshot()));
     window.addEventListener('beforeunload', handleBeforeUnload);
+    onCleanup(() => window.removeEventListener('beforeunload', handleBeforeUnload));
   });
-  onCleanup(() => window.removeEventListener('beforeunload', handleBeforeUnload));
 
   // 保存・削除・破棄のあとに画面を移るときは確認を出さない
   const allowLeave = () => {

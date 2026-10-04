@@ -33,13 +33,14 @@ export const ActionMenu = (props: ActionMenuProps) => {
     }
   };
 
+  // サーバーでの描画では onCleanup も走るので、document への登録と解除はどちらも onMount の中で行う
   onMount(() => {
     document.addEventListener('click', handleDocumentClick);
     details()?.addEventListener('keydown', handleKeyDown);
-  });
-  onCleanup(() => {
-    document.removeEventListener('click', handleDocumentClick);
-    details()?.removeEventListener('keydown', handleKeyDown);
+    onCleanup(() => {
+      document.removeEventListener('click', handleDocumentClick);
+      details()?.removeEventListener('keydown', handleKeyDown);
+    });
   });
 
   return (
