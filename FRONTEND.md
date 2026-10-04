@@ -19,6 +19,20 @@
 
 - `src/app/admin` / `src/app/viewer` のディレクトリ境界は `docs/design-docs/subproject-boundaries.md` を参照する
 
+## 管理画面の画面構成
+
+- 詳細・作成画面の構成は ADR-0030 に従い、`EntityHeader` / `ActionMenu` / `TabList` / `FormRow` / `SegmentedControl` を使う
+- 未保存検知は、入力を状態で持つフォームは `createDirtyTracker`、`FormData` で読むフォームは `createFormDirtyTracker` を使う
+- 保存・削除・破棄のあとに画面を移るときは、離脱の確認を出さないよう `allowLeave()` を呼んでから移る
+- 一覧の件数列は ADR-0031 に従い、検索 API の `*Summary` 型から `CountCell` で出す
+
+## client:load の部品で守ること
+
+- `client:load` の部品はサーバーでも描画され、描画後に `onCleanup` も走る
+- `window` / `document` / `localStorage` への登録・解除・読み取りは、`onMount` の中で行う
+- JSX として受け取った props を `Show` の条件と中身のように 2 回参照しない。`children()` で 1 回だけ評価して使い回す
+- 2 回参照すると、サーバーで余分な要素が作られ、ハイドレーションで要素を照合できなくなる
+
 ## UI 品質の最低条件
 
 - キーボードだけでも主要操作ができる
