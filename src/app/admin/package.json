@@ -29,6 +29,8 @@
     "@astrojs/node": "11.1.5",
     "@astrojs/solid-js": "catalog:astro",
     "@elysiajs/eden": "1.4.9",
+    "@fontsource/ibm-plex-mono": "catalog:fonts",
+    "@fontsource/ibm-plex-sans-jp": "catalog:fonts",
     "@tailwindcss/vite": "catalog:ui",
     "@upstash/redis": "1.38.4",
     "astro": "catalog:astro",
