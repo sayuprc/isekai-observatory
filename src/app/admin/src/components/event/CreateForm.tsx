@@ -48,7 +48,7 @@ export const CreateForm = () => {
         tabs={<EventTabList form={form} current={tab()} onChange={setTab} withHistory={false} />}
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="event-form" class="max-w-4xl space-y-6" onSubmit={submit}>
+      <form ref={bindForm} id="event-form" onSubmit={submit}>
         <EventFormFields form={form} tab={tab()} />
       </form>
     </>

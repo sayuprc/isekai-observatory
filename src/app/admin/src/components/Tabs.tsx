@@ -47,6 +47,7 @@ interface TabPanelProps {
   idPrefix: string;
   tabKey: string;
   current: string;
+  class?: string;
   children: JSX.Element;
 }
 
@@ -58,7 +59,7 @@ export const TabPanel = (props: TabPanelProps) => (
     aria-labelledby={`${props.idPrefix}-tab-${props.tabKey}`}
     data-tab={props.tabKey}
     hidden={props.tabKey !== props.current}
-    class="space-y-6"
+    class={`space-y-6 ${props.class ?? ''}`}
   >
     {props.children}
   </div>

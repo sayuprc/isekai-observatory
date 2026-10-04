@@ -140,7 +140,7 @@ const EditableForm = (props: EditableFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="event-form" class="max-w-4xl space-y-6" onSubmit={save}>
+      <form ref={bindForm} id="event-form" onSubmit={save}>
         <EventFormFields
           form={form}
           tab={tab()}

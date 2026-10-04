@@ -1,4 +1,4 @@
-import { For, Index, Match, Show, Switch, createSignal } from 'solid-js';
+import { Index, Match, Show, Switch } from 'solid-js';
 import type { EventRelease } from '../../generated';
 import { client } from '../../utils/client';
 import { ListItemActions } from '../ListItemActions';
@@ -6,20 +6,16 @@ import { SearchCombobox } from '../SearchCombobox';
 import { createSortable, reorderItems } from '../sortable';
 import { CoVocalistChip } from './CoVocalistChip';
 import {
-  addCoVocalistToPerformances,
   addPerformance,
-  addPersonGroupToPerformances,
-  collectCoVocalists,
-  collectPersonGroups,
   moveCoVocalist,
   removeCoVocalist,
   setCreditName,
   toCoVocalistUnits,
   type CoVocalistUnit,
   type PerformanceForm,
-  type PersonGroupPreset,
+  type SetlistItemForm,
 } from './performance-form';
-import { clickPerformance, emptySelection } from './performance-selection';
+import { clickPerformance, type PerformanceSelection } from './performance-selection';
 import { PersonGroupChip } from './PersonGroupChip';
 import { addPerformancesFromCandidates, toReleasePerformanceCandidates } from './release-import';
 import { ReleaseImport } from './ReleaseImport';
@@ -28,6 +24,11 @@ interface PerformanceEditorProps {
   performances: PerformanceForm[];
   onChange: (updater: (prev: PerformanceForm[]) => PerformanceForm[]) => void;
   relatedReleases: EventRelease[];
+  // 選択状態はセットリストの強調や選択パネルと共有するため、呼び出し側で持つ
+  selection: PerformanceSelection;
+  onSelectionChange: (updater: (prev: PerformanceSelection) => PerformanceSelection) => void;
+  // 各行にセットリストの何番に紐づいているかを出すために使う
+  setlist: SetlistItemForm[];
   disabled?: boolean;
 }
 
@@ -40,22 +41,8 @@ const fetchSongs = async (title: string) => {
   return { items: data?.songs, status };
 };
 
-const fetchPersons = async (name: string) => {
-  const { data, status } = await client.api.persons.search.get({
-    query: { name, sort: 'name', order: 'asc', page: 1, per_page: SEARCH_PER_PAGE },
-  });
-  return { items: data?.persons, status };
-};
-
 const asGroupUnit = (unit: CoVocalistUnit) => (unit.type === 'group' ? unit : undefined);
 const asPersonUnit = (unit: CoVocalistUnit) => (unit.type === 'person' ? unit : undefined);
-
-const fetchPersonGroups = async (name: string) => {
-  const { data, status } = await client.api['person-groups'].search.get({
-    query: { name, page: 1, per_page: SEARCH_PER_PAGE },
-  });
-  return { items: data?.personGroups, status };
-};
 
 export const PerformanceEditor = (props: PerformanceEditorProps) => {
   const moveItem = (fromIndex: number, toIndex: number) => {
@@ -68,46 +55,16 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
     props.onChange((prev) => moveCoVocalist(prev, index, fromIndex, toIndex));
   });
 
-  // 共演者の追加先. 並べ替えや削除で位置が変わっても同じ披露を指すよう ID で持つ
-  const [selection, setSelection] = createSignal(emptySelection());
-  const isSelected = (performanceId: string) => selection().selectedIds.has(performanceId);
-  // 削除済みの披露は数えない
-  const selectedCount = () => props.performances.filter((performance) => isSelected(performance.performanceId)).length;
+  const isSelected = (performanceId: string) => props.selection.selectedIds.has(performanceId);
 
   const togglePerformance = (index: number, extendRange: boolean) => {
     const performanceIds = props.performances.map((performance) => performance.performanceId);
-    setSelection((current) => clickPerformance(current, performanceIds, index, extendRange));
+    props.onSelectionChange((current) => clickPerformance(current, performanceIds, index, extendRange));
   };
 
-  const selectAll = () => {
-    setSelection({
-      selectedIds: new Set(props.performances.map((performance) => performance.performanceId)),
-      anchorId: null,
-    });
-  };
-
-  const addCoVocalistToSelected = (person: { personId: string; name: string }) => {
-    props.onChange((prev) => addCoVocalistToPerformances(prev, selection().selectedIds, person));
-  };
-
-  // 選択中の披露すべてに付いている人は、追加済みとして扱う
-  const isOnAllSelected = (personId: string) =>
-    selectedCount() > 0
-    && props.performances
-      .filter((performance) => isSelected(performance.performanceId))
-      .every((performance) => performance.coVocalists.some((coVocalist) => coVocalist.personId === personId));
-
-  const addPersonGroupToSelected = (personGroup: PersonGroupPreset) => {
-    props.onChange((prev) => addPersonGroupToPerformances(prev, selection().selectedIds, personGroup));
-  };
-
-  const isGroupOnAllSelected = (personGroupId: string) =>
-    selectedCount() > 0
-    && props.performances
-      .filter((performance) => isSelected(performance.performanceId))
-      .every((performance) =>
-        performance.coVocalists.some((coVocalist) => coVocalist.personGroup?.personGroupId === personGroupId),
-      );
+  // 楽曲披露 ID からセットリストの項目番号 (1 始まり) を引く
+  const setlistNumbersOf = (performanceId: string) =>
+    props.setlist.flatMap((item, index) => (item.performanceIds.includes(performanceId) ? [index + 1] : []));
 
   const removePerformance = (index: number) => {
     props.onChange((prev) => prev.filter((_, i) => i !== index));
@@ -124,7 +81,7 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
         <p class="mb-4 text-sm text-base-content/60">延期または中止のイベントには楽曲披露を設定できません</p>
       </Show>
 
-      <div class="mb-4 grid gap-3 rounded-box border border-base-300 bg-base-100 p-3 lg:grid-cols-2">
+      <div class="mb-4 rounded-box border border-base-300 bg-base-100 p-3">
         <SearchCombobox
           label="楽曲"
           placeholder="楽曲名を入力"
@@ -134,59 +91,6 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
           onPick={(song) => props.onChange((prev) => addPerformance(prev, song))}
           disabled={props.disabled}
         />
-        <div class="space-y-2">
-          <SearchCombobox
-            label="共演者"
-            placeholder={selectedCount() === 0 ? '先に一覧で行を選択' : '人物名を入力 (選択中の行に追加)'}
-            fetch={fetchPersons}
-            itemLabel={(person) => person.name}
-            isAdded={(person) => isOnAllSelected(person.personId)}
-            onPick={addCoVocalistToSelected}
-            disabled={props.disabled || selectedCount() === 0}
-          />
-          <SearchCombobox
-            label="グループ"
-            placeholder={selectedCount() === 0 ? '先に一覧で行を選択' : 'グループ名を入力 (メンバーを選択中の行に追加)'}
-            fetch={fetchPersonGroups}
-            itemLabel={(personGroup) => personGroup.name}
-            isAdded={(personGroup) => isGroupOnAllSelected(personGroup.personGroupId)}
-            onPick={addPersonGroupToSelected}
-            disabled={props.disabled || selectedCount() === 0}
-          />
-          <Show
-            when={collectPersonGroups(props.performances).length + collectCoVocalists(props.performances).length > 0}
-          >
-            <div class="flex flex-wrap items-center gap-1">
-              <span class="text-xs text-base-content/60">このイベントの共演者:</span>
-              <For each={collectPersonGroups(props.performances)}>
-                {(personGroup) => (
-                  <button
-                    type="button"
-                    class="btn btn-outline btn-secondary btn-xs"
-                    aria-label={`${personGroup.name}を選択中の行に追加`}
-                    disabled={selectedCount() === 0 || isGroupOnAllSelected(personGroup.personGroupId)}
-                    onClick={() => addPersonGroupToSelected(personGroup)}
-                  >
-                    ＋ {personGroup.name}
-                  </button>
-                )}
-              </For>
-              <For each={collectCoVocalists(props.performances)}>
-                {(person) => (
-                  <button
-                    type="button"
-                    class="btn btn-outline btn-xs"
-                    aria-label={`${person.name}を選択中の行に追加`}
-                    disabled={selectedCount() === 0 || isOnAllSelected(person.personId)}
-                    onClick={() => addCoVocalistToSelected(person)}
-                  >
-                    ＋ {person.name}
-                  </button>
-                )}
-              </For>
-            </div>
-          </Show>
-        </div>
       </div>
 
       <div class="mb-4">
@@ -205,15 +109,6 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
         when={props.performances.length > 0}
         fallback={<p class="text-sm text-base-content/60">楽曲披露はまだありません</p>}
       >
-        <div class="mb-1 flex flex-wrap items-center gap-2 text-xs text-base-content/60">
-          <span>{selectedCount()} 件選択中 (行をクリックで選択、Shift+クリックで範囲選択)</span>
-          <button type="button" class="btn btn-ghost btn-xs" onClick={selectAll}>
-            全選択
-          </button>
-          <button type="button" class="btn btn-ghost btn-xs" onClick={() => setSelection(emptySelection())}>
-            選択解除
-          </button>
-        </div>
         <ul class="divide-y divide-base-300 rounded-box border border-base-300 bg-base-100 select-none">
           <Index each={props.performances}>
             {(performance, index) => (
@@ -290,6 +185,11 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
                     }}
                   </Index>
                 </div>
+                <Show when={setlistNumbersOf(performance().performanceId).length > 0}>
+                  <span class="font-mono text-xs text-base-content/60">
+                    セトリ {setlistNumbersOf(performance().performanceId).join(', ')}
+                  </span>
+                </Show>
                 <a
                   href={`/songs/${performance().songId}`}
                   class="btn btn-ghost btn-xs"
