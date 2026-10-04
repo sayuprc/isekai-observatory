@@ -7,6 +7,7 @@ import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
 import { PerformanceWorkspace } from './PerformanceWorkspace';
 import { ReleaseEditor } from './ReleaseEditor';
+import { initialScheduleState, switchScheduleMode, type ScheduleMode } from './schedule-mode';
 import { SourceEditor } from './SourceEditor';
 import { VenueEditor } from './VenueEditor';
 
@@ -82,8 +83,6 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
   </>
 );
 
-type ScheduleMode = 'undecided' | 'single' | 'range';
-
 const SCHEDULE_MODE_OPTIONS: { value: ScheduleMode; label: string }[] = [
   { value: 'undecided', label: '未定' },
   { value: 'single', label: '単日' },
@@ -97,18 +96,25 @@ const DISPLAY_OPTIONS = [
 
 const EventBasicInfo = (props: { form: EventFormState }) => {
   // 開催時期の形式は入力欄の出し分けにだけ使う。保存する値は開始日と終了日から決まる
-  const [scheduleMode, setScheduleMode] = createSignal<ScheduleMode>(
-    props.form.endOn() ? 'range' : props.form.startOn() ? 'single' : 'undecided',
-  );
+  const initial = initialScheduleState(props.form.startOn(), props.form.endOn());
+  const [scheduleMode, setScheduleMode] = createSignal<ScheduleMode>(initial.mode);
+  let remembered = { startOn: initial.rememberedStartOn, endOn: initial.rememberedEndOn };
 
   const changeScheduleMode = (next: ScheduleMode) => {
-    setScheduleMode(next);
-    if (next === 'undecided') {
-      props.form.setStartOn('');
-    }
-    if (next !== 'range') {
-      props.form.setEndOn('');
-    }
+    const result = switchScheduleMode(
+      {
+        mode: scheduleMode(),
+        startOn: props.form.startOn(),
+        endOn: props.form.endOn(),
+        rememberedStartOn: remembered.startOn,
+        rememberedEndOn: remembered.endOn,
+      },
+      next,
+    );
+    remembered = { startOn: result.rememberedStartOn, endOn: result.rememberedEndOn };
+    setScheduleMode(result.mode);
+    props.form.setStartOn(result.startOn);
+    props.form.setEndOn(result.endOn);
   };
 
   return (
