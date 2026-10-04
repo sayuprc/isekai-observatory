@@ -1,4 +1,4 @@
-import { createSignal, For, Match, Show, Switch } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { SongSearchTypeValue, SongTypeValue } from '../../generated';
 import { client } from '../../utils/client';
 import {
@@ -10,8 +10,6 @@ import {
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { CountCell } from '../CountCell';
-import { MetaChip } from '../EntityHeader';
-import { ListWithPreview, RecordPreview, selectedRowClass, type RecordPreviewData } from '../ListPreview';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -88,30 +86,7 @@ export const SearchList = () => {
     }),
   );
 
-  // 右側のプレビューに出す行。取得結果の中から引くので、ページを移ると外れる
-  const [selectedId, setSelectedId] = createSignal<string | null>(null);
   const detailUrl = (songId: string) => `/songs/${songId}?back=${encodeURIComponent(window.location.search)}`;
-  const selectedRecord = (): RecordPreviewData | undefined => {
-    const song = data()?.songs.find((candidate) => candidate.songId === selectedId());
-    if (!song) return undefined;
-    return {
-      title: song.title,
-      meta: (
-        <>
-          <MetaChip>{song.type.name}</MetaChip>
-          <MetaChip dot={song.isDisplay ? 'success' : 'muted'}>{song.isDisplay ? '公開' : '非公開'}</MetaChip>
-        </>
-      ),
-      rows: [
-        { label: '楽曲披露', value: song.performanceCount },
-        { label: 'メディア', value: song.mediaCount },
-        { label: '関係者', value: song.personCount },
-        { label: '収録リリース', value: song.releaseCount },
-      ],
-      actions: [{ label: '開く', href: detailUrl(song.songId), primary: true }],
-    };
-  };
-
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -245,75 +220,65 @@ export const SearchList = () => {
           新規作成
         </a>
       </div>
-      <ListWithPreview
-        table={
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th>楽曲名</th>
-                <th>楽曲種別</th>
-                <th class="text-right">披露</th>
-                <th class="text-right">メディア</th>
-                <th class="text-right">関係者</th>
-                <th class="text-right">リリース</th>
-                <th>公開</th>
-                <th class="text-right">表示順</th>
-              </tr>
-            </thead>
-            <tbody>
-              <Switch>
-                <Match when={data.loading}>
-                  <ListState state="loading" colSpan={8} />
-                </Match>
-                <Match when={fetchError()}>
-                  {(message) => <ListState state="error" colSpan={8} message={message()} onRetry={() => refetch()} />}
-                </Match>
-                <Match when={data() && data()!.songs.length === 0}>
-                  <ListState state="empty" colSpan={8} />
-                </Match>
-                <Match when={data()}>
-                  {(result) => (
-                    <For each={result().songs}>
-                      {(song) => (
-                        <tr
-                          class="cursor-pointer hover:bg-base-200"
-                          classList={{ [selectedRowClass]: song.songId === selectedId() }}
-                          onClick={() => setSelectedId(song.songId)}
-                          onFocusIn={() => setSelectedId(song.songId)}
-                        >
-                          <td>
-                            <a href={detailUrl(song.songId)} class="link link-hover font-medium">
-                              {song.title}
-                            </a>
-                          </td>
-                          <td class="whitespace-nowrap">
-                            <span class={`badge badge-sm badge-soft ${SONG_TYPE_BADGE_CLASS[song.type.value]}`}>
-                              {song.type.name}
-                            </span>
-                          </td>
-                          <CountCell count={song.performanceCount} />
-                          <CountCell count={song.mediaCount} />
-                          <CountCell count={song.personCount} />
-                          <CountCell count={song.releaseCount} />
-                          <td class="whitespace-nowrap">
-                            <span
-                              class={`badge badge-sm ${song.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
-                            >
-                              {song.isDisplay ? '公開' : '非公開'}
-                            </span>
-                          </td>
-                          <td class="text-right font-mono text-xs">{song.orderNo}</td>
-                        </tr>
-                      )}
-                    </For>
-                  )}
-                </Match>
-              </Switch>
-            </tbody>
-          </table>
-        }
-        preview={<RecordPreview label="選択中の楽曲" record={selectedRecord()} />}
-      />
+      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>楽曲名</th>
+              <th>楽曲種別</th>
+              <th class="text-right">披露</th>
+              <th class="text-right">メディア</th>
+              <th class="text-right">関係者</th>
+              <th class="text-right">リリース</th>
+              <th>公開</th>
+              <th class="text-right">表示順</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Switch>
+              <Match when={data.loading}>
+                <ListState state="loading" colSpan={8} />
+              </Match>
+              <Match when={fetchError()}>
+                {(message) => <ListState state="error" colSpan={8} message={message()} onRetry={() => refetch()} />}
+              </Match>
+              <Match when={data() && data()!.songs.length === 0}>
+                <ListState state="empty" colSpan={8} />
+              </Match>
+              <Match when={data()}>
+                {(result) => (
+                  <For each={result().songs}>
+                    {(song) => (
+                      <tr class="hover:bg-base-200">
+                        <td>
+                          <a href={detailUrl(song.songId)} class="link link-hover font-medium">
+                            {song.title}
+                          </a>
+                        </td>
+                        <td class="whitespace-nowrap">
+                          <span class={`badge badge-sm badge-soft ${SONG_TYPE_BADGE_CLASS[song.type.value]}`}>
+                            {song.type.name}
+                          </span>
+                        </td>
+                        <CountCell count={song.performanceCount} />
+                        <CountCell count={song.mediaCount} />
+                        <CountCell count={song.personCount} />
+                        <CountCell count={song.releaseCount} />
+                        <td class="whitespace-nowrap">
+                          <span class={`badge badge-sm ${song.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}>
+                            {song.isDisplay ? '公開' : '非公開'}
+                          </span>
+                        </td>
+                        <td class="text-right font-mono text-xs">{song.orderNo}</td>
+                      </tr>
+                    )}
+                  </For>
+                )}
+              </Match>
+            </Switch>
+          </tbody>
+        </table>
+      </div>
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>

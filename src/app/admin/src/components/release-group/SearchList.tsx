@@ -1,4 +1,4 @@
-import { createSignal, For, Match, Show, Switch } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { ReleaseGroupSearchSortBy, ReleaseGroupTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
 import {
@@ -10,8 +10,6 @@ import {
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { CountCell } from '../CountCell';
-import { MetaChip } from '../EntityHeader';
-import { ListWithPreview, RecordPreview, selectedRowClass, type RecordPreviewData } from '../ListPreview';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -116,35 +114,8 @@ export const SearchList = () => {
     }),
   );
 
-  // 右側のプレビューに出す行。取得結果の中から引くので、ページを移ると外れる
-  const [selectedId, setSelectedId] = createSignal<string | null>(null);
   const typeLabelOf = (typeValue: ReleaseGroupTypeValue) =>
     RELEASE_GROUP_TYPE_OPTIONS.find((option) => option.value === String(typeValue))?.label ?? '不明';
-  const selectedRecord = (): RecordPreviewData | undefined => {
-    const releaseGroup = data()?.releaseGroups.find((candidate) => candidate.releaseGroupId === selectedId());
-    if (!releaseGroup) return undefined;
-    return {
-      title: releaseGroup.title,
-      meta: (
-        <>
-          <MetaChip>{typeLabelOf(releaseGroup.typeValue)}</MetaChip>
-          <MetaChip dot={releaseGroup.isDisplay ? 'success' : 'muted'}>
-            {releaseGroup.isDisplay ? '公開' : '非公開'}
-          </MetaChip>
-        </>
-      ),
-      rows: [
-        {
-          label: '初リリース日',
-          value: releaseGroup.firstReleasedOn ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn) : '—',
-        },
-        { label: 'リリース (版)', value: releaseGroup.releaseCount },
-        { label: '収録曲', value: releaseGroup.songCount },
-      ],
-      actions: [{ label: '開く', href: buildDetailHref(releaseGroup.releaseGroupId), primary: true }],
-    };
-  };
-
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -271,71 +242,61 @@ export const SearchList = () => {
         </a>
       </div>
 
-      <ListWithPreview
-        table={
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th>タイトル</th>
-                <th>種別</th>
-                <th>初リリース日</th>
-                <th class="text-right">版</th>
-                <th class="text-right">収録曲</th>
-                <th>公開</th>
-              </tr>
-            </thead>
-            <tbody>
-              <Switch>
-                <Match when={data.loading}>
-                  <ListState state="loading" colSpan={6} />
-                </Match>
-                <Match when={fetchError()}>
-                  {(message) => <ListState state="error" colSpan={6} message={message()} onRetry={() => refetch()} />}
-                </Match>
-                <Match when={data() && data()!.releaseGroups.length === 0}>
-                  <ListState state="empty" colSpan={6} message="条件に一致するリリースグループはありません。" />
-                </Match>
-                <Match when={data()}>
-                  {(result) => (
-                    <For each={result().releaseGroups}>
-                      {(releaseGroup) => (
-                        <tr
-                          class="cursor-pointer hover:bg-base-200"
-                          classList={{ [selectedRowClass]: releaseGroup.releaseGroupId === selectedId() }}
-                          onClick={() => setSelectedId(releaseGroup.releaseGroupId)}
-                          onFocusIn={() => setSelectedId(releaseGroup.releaseGroupId)}
-                        >
-                          <td class="min-w-56">
-                            <a href={buildDetailHref(releaseGroup.releaseGroupId)} class="link link-hover font-medium">
-                              {releaseGroup.title}
-                            </a>
-                          </td>
-                          <td class="whitespace-nowrap">{typeLabelOf(releaseGroup.typeValue)}</td>
-                          <td class="font-mono text-xs whitespace-nowrap">
-                            {releaseGroup.firstReleasedOn
-                              ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn)
-                              : '—'}
-                          </td>
-                          <CountCell count={releaseGroup.releaseCount} warnWhenZero />
-                          <CountCell count={releaseGroup.songCount} />
-                          <td class="whitespace-nowrap">
-                            <span
-                              class={`badge badge-sm ${releaseGroup.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
-                            >
-                              {releaseGroup.isDisplay ? '公開' : '非公開'}
-                            </span>
-                          </td>
-                        </tr>
-                      )}
-                    </For>
-                  )}
-                </Match>
-              </Switch>
-            </tbody>
-          </table>
-        }
-        preview={<RecordPreview label="選択中のリリースグループ" record={selectedRecord()} />}
-      />
+      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>タイトル</th>
+              <th>種別</th>
+              <th>初リリース日</th>
+              <th class="text-right">版</th>
+              <th class="text-right">収録曲</th>
+              <th>公開</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Switch>
+              <Match when={data.loading}>
+                <ListState state="loading" colSpan={6} />
+              </Match>
+              <Match when={fetchError()}>
+                {(message) => <ListState state="error" colSpan={6} message={message()} onRetry={() => refetch()} />}
+              </Match>
+              <Match when={data() && data()!.releaseGroups.length === 0}>
+                <ListState state="empty" colSpan={6} message="条件に一致するリリースグループはありません。" />
+              </Match>
+              <Match when={data()}>
+                {(result) => (
+                  <For each={result().releaseGroups}>
+                    {(releaseGroup) => (
+                      <tr class="hover:bg-base-200">
+                        <td class="min-w-56">
+                          <a href={buildDetailHref(releaseGroup.releaseGroupId)} class="link link-hover font-medium">
+                            {releaseGroup.title}
+                          </a>
+                        </td>
+                        <td class="whitespace-nowrap">{typeLabelOf(releaseGroup.typeValue)}</td>
+                        <td class="font-mono text-xs whitespace-nowrap">
+                          {releaseGroup.firstReleasedOn ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn) : '—'}
+                        </td>
+                        <CountCell count={releaseGroup.releaseCount} warnWhenZero />
+                        <CountCell count={releaseGroup.songCount} />
+                        <td class="whitespace-nowrap">
+                          <span
+                            class={`badge badge-sm ${releaseGroup.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
+                          >
+                            {releaseGroup.isDisplay ? '公開' : '非公開'}
+                          </span>
+                        </td>
+                      </tr>
+                    )}
+                  </For>
+                )}
+              </Match>
+            </Switch>
+          </tbody>
+        </table>
+      </div>
 
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />

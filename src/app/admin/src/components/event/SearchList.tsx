@@ -1,4 +1,4 @@
-import { createSignal, For, Match, Show, Switch } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { EventSearchSortBy, EventStatusValue, EventSummary, EventTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
 import {
@@ -10,7 +10,6 @@ import {
 } from '../../utils/search-list';
 import type { PerPageOption } from '../../utils/search-list';
 import { CountCell } from '../CountCell';
-import { ListWithPreview, selectedRowClass } from '../ListPreview';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 import {
@@ -20,7 +19,6 @@ import {
   EVENT_TYPE_OPTIONS,
   formatSchedule,
 } from './event-options';
-import { EventPreview } from './EventPreview';
 
 const SORT_OPTIONS: Array<{ value: EventSearchSortBy; label: string }> = [
   { value: 'schedule', label: '開催時期' },
@@ -112,9 +110,6 @@ export const SearchList = () => {
     { forbiddenMessage: 'イベントの閲覧権限がありません' },
   );
 
-  // 右側のプレビューに出す行。ページを移っても残らないよう、取得結果の中から引く
-  const [selectedId, setSelectedId] = createSignal<string | null>(null);
-  const selectedEvent = () => data()?.events.find((event) => event.eventId === selectedId());
   const detailUrl = (event: EventSummary) =>
     `/events/${event.eventId}?back=${encodeURIComponent(window.location.search)}`;
 
@@ -235,83 +230,73 @@ export const SearchList = () => {
           新規作成
         </a>
       </div>
-      <ListWithPreview
-        table={
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th>タイトル</th>
-                <th>種別</th>
-                <th>開催時期</th>
-                <th>開催先</th>
-                <th class="text-right">披露</th>
-                <th class="text-right">セトリ</th>
-                <th class="text-right">出典</th>
-                <th>状態</th>
-                <th>公開</th>
-              </tr>
-            </thead>
-            <tbody>
-              <Switch>
-                <Match when={data.loading}>
-                  <ListState state="loading" colSpan={9} />
-                </Match>
-                <Match when={fetchError()}>
-                  {(message) => <ListState state="error" colSpan={9} message={message()} onRetry={() => refetch()} />}
-                </Match>
-                <Match when={data() && data()!.events.length === 0}>
-                  <ListState state="empty" colSpan={9} />
-                </Match>
-                <Match when={data()}>
-                  {(result) => (
-                    <For each={result().events}>
-                      {(event) => (
-                        <tr
-                          class="cursor-pointer hover:bg-base-200"
-                          classList={{
-                            [selectedRowClass]: event.eventId === selectedId(),
-                          }}
-                          onClick={() => setSelectedId(event.eventId)}
-                          onFocusIn={() => setSelectedId(event.eventId)}
-                        >
-                          <td class="max-w-md">
-                            <a class="link link-hover line-clamp-2" href={detailUrl(event)}>
-                              {event.title}
-                            </a>
-                          </td>
-                          <td class="whitespace-nowrap">{event.type.name}</td>
-                          <td class="font-mono text-xs whitespace-nowrap">{formatSchedule(event.schedule)}</td>
-                          <td class="max-w-48 truncate text-base-content/70">{event.venueNames.join(' · ')}</td>
-                          <CountCell
-                            count={event.performanceCount}
-                            applicable={allowsPerformances(event.status.value)}
-                            warnWhenZero
-                          />
-                          <CountCell
-                            count={event.setlistItemCount}
-                            applicable={allowsPerformances(event.status.value) && allowsSetlist(event.type.value)}
-                            warnWhenZero
-                          />
-                          <CountCell count={event.sourceCount} warnWhenZero />
-                          <td class="whitespace-nowrap">{event.status.name}</td>
-                          <td>
-                            <span
-                              class={`badge badge-sm whitespace-nowrap ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
-                            >
-                              {event.isDisplay ? '公開' : '非公開'}
-                            </span>
-                          </td>
-                        </tr>
-                      )}
-                    </For>
-                  )}
-                </Match>
-              </Switch>
-            </tbody>
-          </table>
-        }
-        preview={<EventPreview event={selectedEvent()} detailUrl={detailUrl} />}
-      />
+      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>タイトル</th>
+              <th>種別</th>
+              <th>開催時期</th>
+              <th>開催先</th>
+              <th class="text-right">披露</th>
+              <th class="text-right">セトリ</th>
+              <th class="text-right">出典</th>
+              <th>状態</th>
+              <th>公開</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Switch>
+              <Match when={data.loading}>
+                <ListState state="loading" colSpan={9} />
+              </Match>
+              <Match when={fetchError()}>
+                {(message) => <ListState state="error" colSpan={9} message={message()} onRetry={() => refetch()} />}
+              </Match>
+              <Match when={data() && data()!.events.length === 0}>
+                <ListState state="empty" colSpan={9} />
+              </Match>
+              <Match when={data()}>
+                {(result) => (
+                  <For each={result().events}>
+                    {(event) => (
+                      <tr class="hover:bg-base-200">
+                        <td class="max-w-md">
+                          <a class="link link-hover line-clamp-2" href={detailUrl(event)}>
+                            {event.title}
+                          </a>
+                        </td>
+                        <td class="whitespace-nowrap">{event.type.name}</td>
+                        <td class="font-mono text-xs whitespace-nowrap">{formatSchedule(event.schedule)}</td>
+                        <td class="max-w-48 truncate text-base-content/70">{event.venueNames.join(' · ')}</td>
+                        <CountCell
+                          count={event.performanceCount}
+                          applicable={allowsPerformances(event.status.value)}
+                          warnWhenZero
+                        />
+                        <CountCell
+                          count={event.setlistItemCount}
+                          applicable={allowsPerformances(event.status.value) && allowsSetlist(event.type.value)}
+                          warnWhenZero
+                        />
+                        <CountCell count={event.sourceCount} warnWhenZero />
+                        <td class="whitespace-nowrap">{event.status.name}</td>
+                        <td>
+                          <span
+                            class={`badge badge-sm whitespace-nowrap ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
+                          >
+                            {event.isDisplay ? '公開' : '非公開'}
+                          </span>
+                        </td>
+                      </tr>
+                    )}
+                  </For>
+                )}
+              </Match>
+            </Switch>
+          </tbody>
+        </table>
+      </div>
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>

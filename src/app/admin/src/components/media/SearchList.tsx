@@ -1,4 +1,4 @@
-import { createSignal, For, Match, Show, Switch } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 import type { MediaSearchSortBy, MediaTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
 import { normalizeDateTimeDisplayValue } from '../../utils/date';
@@ -11,8 +11,6 @@ import {
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { CountCell } from '../CountCell';
-import { MetaChip } from '../EntityHeader';
-import { ListWithPreview, RecordPreview, selectedRowClass, type RecordPreviewData } from '../ListPreview';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -104,32 +102,7 @@ export const SearchList = () => {
     }),
   );
 
-  // 右側のプレビューに出す行。取得結果の中から引くので、ページを移ると外れる
-  const [selectedId, setSelectedId] = createSignal<string | null>(null);
   const detailUrl = (mediaId: string) => `/media/${mediaId}?back=${encodeURIComponent(window.location.search)}`;
-  const selectedRecord = (): RecordPreviewData | undefined => {
-    const media = data()?.media.find((candidate) => candidate.mediaId === selectedId());
-    if (!media) return undefined;
-    return {
-      title: media.title,
-      meta: (
-        <>
-          <MetaChip>{media.type.name}</MetaChip>
-          <MetaChip dot={media.isDisplay ? 'success' : 'muted'}>{media.isDisplay ? '公開' : '非公開'}</MetaChip>
-        </>
-      ),
-      rows: [
-        { label: '公開日', value: normalizeDateTimeDisplayValue(media.publishedAt) },
-        { label: 'リンクしている楽曲', value: media.songCount },
-        { label: '関連づけているイベント', value: media.eventCount },
-      ],
-      actions: [
-        { label: '開く', href: detailUrl(media.mediaId), primary: true },
-        { label: '元のページ', href: media.url, external: true },
-      ],
-    };
-  };
-
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -256,81 +229,73 @@ export const SearchList = () => {
         </a>
       </div>
 
-      <ListWithPreview
-        table={
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th>タイトル</th>
-                <th>公開日</th>
-                <th>種別</th>
-                <th class="text-right">楽曲</th>
-                <th class="text-right">イベント</th>
-                <th>公開</th>
-                <th>リンク</th>
-              </tr>
-            </thead>
-            <tbody>
-              <Switch>
-                <Match when={data.loading}>
-                  <ListState state="loading" colSpan={7} />
-                </Match>
-                <Match when={fetchError()}>
-                  {(message) => <ListState state="error" colSpan={7} message={message()} onRetry={() => refetch()} />}
-                </Match>
-                <Match when={data() && data()!.media.length === 0}>
-                  <ListState state="empty" colSpan={7} message="条件に一致するメディアはありません。" />
-                </Match>
-                <Match when={data()}>
-                  {(result) => (
-                    <For each={result().media}>
-                      {(media) => (
-                        <tr
-                          class="cursor-pointer hover:bg-base-200"
-                          classList={{ [selectedRowClass]: media.mediaId === selectedId() }}
-                          onClick={() => setSelectedId(media.mediaId)}
-                          onFocusIn={() => setSelectedId(media.mediaId)}
-                        >
-                          <td class="max-w-72 min-w-44">
-                            <a href={detailUrl(media.mediaId)} class="link link-hover block truncate font-medium">
-                              {media.title}
-                            </a>
-                          </td>
-                          <td class="font-mono text-xs whitespace-nowrap">
-                            {normalizeDateTimeDisplayValue(media.publishedAt)}
-                          </td>
-                          <td class="whitespace-nowrap">{media.type.name}</td>
-                          <CountCell count={media.songCount} />
-                          <CountCell count={media.eventCount} />
-                          <td class="whitespace-nowrap">
-                            <span
-                              class={`badge badge-sm ${media.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
-                            >
-                              {media.isDisplay ? '公開' : '非公開'}
-                            </span>
-                          </td>
-                          <td class="max-w-40">
-                            <a
-                              href={media.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              title={media.url}
-                              class="link link-hover block truncate text-sm whitespace-nowrap"
-                            >
-                              {toHostLabel(media.url)}
-                            </a>
-                          </td>
-                        </tr>
-                      )}
-                    </For>
-                  )}
-                </Match>
-              </Switch>
-            </tbody>
-          </table>
-        }
-        preview={<RecordPreview label="選択中のメディア" record={selectedRecord()} />}
-      />
+      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>タイトル</th>
+              <th>公開日</th>
+              <th>種別</th>
+              <th class="text-right">楽曲</th>
+              <th class="text-right">イベント</th>
+              <th>公開</th>
+              <th>リンク</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Switch>
+              <Match when={data.loading}>
+                <ListState state="loading" colSpan={7} />
+              </Match>
+              <Match when={fetchError()}>
+                {(message) => <ListState state="error" colSpan={7} message={message()} onRetry={() => refetch()} />}
+              </Match>
+              <Match when={data() && data()!.media.length === 0}>
+                <ListState state="empty" colSpan={7} message="条件に一致するメディアはありません。" />
+              </Match>
+              <Match when={data()}>
+                {(result) => (
+                  <For each={result().media}>
+                    {(media) => (
+                      <tr class="hover:bg-base-200">
+                        <td class="max-w-72 min-w-44">
+                          <a href={detailUrl(media.mediaId)} class="link link-hover block truncate font-medium">
+                            {media.title}
+                          </a>
+                        </td>
+                        <td class="font-mono text-xs whitespace-nowrap">
+                          {normalizeDateTimeDisplayValue(media.publishedAt)}
+                        </td>
+                        <td class="whitespace-nowrap">{media.type.name}</td>
+                        <CountCell count={media.songCount} />
+                        <CountCell count={media.eventCount} />
+                        <td class="whitespace-nowrap">
+                          <span
+                            class={`badge badge-sm ${media.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
+                          >
+                            {media.isDisplay ? '公開' : '非公開'}
+                          </span>
+                        </td>
+                        <td class="max-w-40">
+                          <a
+                            href={media.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            title={media.url}
+                            class="link link-hover block truncate text-sm whitespace-nowrap"
+                          >
+                            {toHostLabel(media.url)}
+                          </a>
+                        </td>
+                      </tr>
+                    )}
+                  </For>
+                )}
+              </Match>
+            </Switch>
+          </tbody>
+        </table>
+      </div>
 
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
