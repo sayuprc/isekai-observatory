@@ -1,6 +1,6 @@
 <?php
 /**
- * PersonGroupSearchResponse
+ * PersonGroupSummary
  *
  * PHP version 8.1
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * PersonGroupSearchResponse Class Doc Comment
+ * PersonGroupSummary Class Doc Comment
  *
  * @category Class
+ * @description 人物グループ一覧の 1 行分
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
       *
       * @var string
       */
-    protected static $openAPIModelName = 'PersonGroupSearchResponse';
+    protected static $openAPIModelName = 'PersonGroupSummary';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,8 +58,10 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
       * @var string[]
       */
     protected static $openAPITypes = [
-        'person_groups' => '\OpenAPI\Admin\Client\Model\PersonGroupSummary[]',
-        'max_page' => 'int'
+        'person_group_id' => 'string',
+        'name' => 'string',
+        'members' => '\OpenAPI\Admin\Client\Model\PersonGroupMember[]',
+        'performance_count' => 'int'
     ];
 
     /**
@@ -69,8 +72,10 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'person_groups' => null,
-        'max_page' => 'int32'
+        'person_group_id' => 'uuid',
+        'name' => null,
+        'members' => null,
+        'performance_count' => 'int32'
     ];
 
     /**
@@ -79,8 +84,10 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'person_groups' => false,
-        'max_page' => false
+        'person_group_id' => false,
+        'name' => false,
+        'members' => false,
+        'performance_count' => false
     ];
 
     /**
@@ -169,8 +176,10 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $attributeMap = [
-        'person_groups' => 'personGroups',
-        'max_page' => 'maxPage'
+        'person_group_id' => 'personGroupId',
+        'name' => 'name',
+        'members' => 'members',
+        'performance_count' => 'performanceCount'
     ];
 
     /**
@@ -179,8 +188,10 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $setters = [
-        'person_groups' => 'setPersonGroups',
-        'max_page' => 'setMaxPage'
+        'person_group_id' => 'setPersonGroupId',
+        'name' => 'setName',
+        'members' => 'setMembers',
+        'performance_count' => 'setPerformanceCount'
     ];
 
     /**
@@ -189,8 +200,10 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $getters = [
-        'person_groups' => 'getPersonGroups',
-        'max_page' => 'getMaxPage'
+        'person_group_id' => 'getPersonGroupId',
+        'name' => 'getName',
+        'members' => 'getMembers',
+        'performance_count' => 'getPerformanceCount'
     ];
 
     /**
@@ -250,8 +263,10 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('person_groups', $data ?? [], null);
-        $this->setIfExists('max_page', $data ?? [], null);
+        $this->setIfExists('person_group_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('members', $data ?? [], null);
+        $this->setIfExists('performance_count', $data ?? [], null);
     }
 
     /**
@@ -281,11 +296,21 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
     {
         $invalidProperties = [];
 
-        if ($this->container['person_groups'] === null) {
-            $invalidProperties[] = "'person_groups' can't be null";
+        if ($this->container['person_group_id'] === null) {
+            $invalidProperties[] = "'person_group_id' can't be null";
         }
-        if ($this->container['max_page'] === null) {
-            $invalidProperties[] = "'max_page' can't be null";
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ((mb_strlen($this->container['name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['members'] === null) {
+            $invalidProperties[] = "'members' can't be null";
+        }
+        if ($this->container['performance_count'] === null) {
+            $invalidProperties[] = "'performance_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +328,114 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
 
 
     /**
-     * Gets person_groups
+     * Gets person_group_id
      *
-     * @return \OpenAPI\Admin\Client\Model\PersonGroupSummary[]
+     * @return string
      */
-    public function getPersonGroups()
+    public function getPersonGroupId()
     {
-        return $this->container['person_groups'];
+        return $this->container['person_group_id'];
     }
 
     /**
-     * Sets person_groups
+     * Sets person_group_id
      *
-     * @param \OpenAPI\Admin\Client\Model\PersonGroupSummary[] $person_groups person_groups
+     * @param string $person_group_id 人物グループID
      *
      * @return self
      */
-    public function setPersonGroups($person_groups)
+    public function setPersonGroupId($person_group_id)
     {
-        if (is_null($person_groups)) {
-            throw new \InvalidArgumentException('non-nullable person_groups cannot be null');
+        if (is_null($person_group_id)) {
+            throw new \InvalidArgumentException('non-nullable person_group_id cannot be null');
         }
-        $this->container['person_groups'] = $person_groups;
+        $this->container['person_group_id'] = $person_group_id;
 
         return $this;
     }
 
     /**
-     * Gets max_page
+     * Gets name
      *
-     * @return int
+     * @return string
      */
-    public function getMaxPage()
+    public function getName()
     {
-        return $this->container['max_page'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets max_page
+     * Sets name
      *
-     * @param int $max_page max_page
+     * @param string $name 人物グループ名
      *
      * @return self
      */
-    public function setMaxPage($max_page)
+    public function setName($name)
     {
-        if (is_null($max_page)) {
-            throw new \InvalidArgumentException('non-nullable max_page cannot be null');
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['max_page'] = $max_page;
+
+        if ((mb_strlen($name) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling PersonGroupSummary., must be bigger than or equal to 1.');
+        }
+
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets members
+     *
+     * @return \OpenAPI\Admin\Client\Model\PersonGroupMember[]
+     */
+    public function getMembers()
+    {
+        return $this->container['members'];
+    }
+
+    /**
+     * Sets members
+     *
+     * @param \OpenAPI\Admin\Client\Model\PersonGroupMember[] $members members
+     *
+     * @return self
+     */
+    public function setMembers($members)
+    {
+        if (is_null($members)) {
+            throw new \InvalidArgumentException('non-nullable members cannot be null');
+        }
+        $this->container['members'] = $members;
+
+        return $this;
+    }
+
+    /**
+     * Gets performance_count
+     *
+     * @return int
+     */
+    public function getPerformanceCount()
+    {
+        return $this->container['performance_count'];
+    }
+
+    /**
+     * Sets performance_count
+     *
+     * @param int $performance_count このグループとして共演が記録されている楽曲披露の件数
+     *
+     * @return self
+     */
+    public function setPerformanceCount($performance_count)
+    {
+        if (is_null($performance_count)) {
+            throw new \InvalidArgumentException('non-nullable performance_count cannot be null');
+        }
+        $this->container['performance_count'] = $performance_count;
 
         return $this;
     }

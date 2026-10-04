@@ -447,8 +447,21 @@ export type PersonGroupMember = {
 };
 
 export type PersonGroupSearchResponse = {
-    personGroups: Array<PersonGroup>;
+    personGroups: Array<PersonGroupSummary>;
     maxPage: number;
+};
+
+/**
+ * 人物グループ一覧の 1 行分
+ */
+export type PersonGroupSummary = {
+    personGroupId: PersonGroupId;
+    name: PersonGroupName;
+    members: Array<PersonGroupMember>;
+    /**
+     * このグループとして共演が記録されている楽曲披露の件数
+     */
+    performanceCount: number;
 };
 
 export type PersonGroupUpdateRequest = {
