@@ -146,10 +146,10 @@ export const SearchList = () => {
               すべて
             </option>
             <option value="true" selected={input().isDisplay === true}>
-              表示する
+              表示
             </option>
             <option value="false" selected={input().isDisplay === false}>
-              表示しない
+              非表示
             </option>
           </select>
         </fieldset>
@@ -228,7 +228,7 @@ export const SearchList = () => {
               <th>楽曲種別</th>
               <th class="text-right">披露</th>
               <th class="text-right">メディア</th>
-              <th class="text-right">関係者</th>
+              <th class="text-right">クレジット</th>
               <th class="text-right">リリース</th>
               <th>公開</th>
               <th>表示順</th>

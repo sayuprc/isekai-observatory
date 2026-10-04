@@ -236,7 +236,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
 
   return (
     <fieldset class="rounded-box border border-base-300 bg-base-200 p-6">
-      <legend class="px-2 text-sm font-semibold text-base-content/70">媒体と収録楽曲</legend>
+      <legend class="px-2 text-sm font-semibold text-base-content/70">媒体と収録曲</legend>
       <Show when={props.fieldError}>{(message) => <p class="mb-4 text-sm text-error">{message()}</p>}</Show>
       <div class="space-y-6">
         <Show
@@ -305,7 +305,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                 <div class="mt-4">
                   <Show
                     when={medium().tracks.length > 0}
-                    fallback={<p class="text-sm text-base-content/60">収録楽曲はまだ登録されていません。</p>}
+                    fallback={<p class="text-sm text-base-content/60">収録曲はまだ登録されていません。</p>}
                   >
                     {/* For はオブジェクト同一性でキーするため、入力のたびに行が再生成されて IME が中断される。Index で DOM を保つ */}
                     <ul class="rounded-box border border-base-300 md:hidden">
@@ -487,7 +487,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                           <p class="mt-1 text-xs text-base-content/60">
                             {song.type.name}
                             {' · '}
-                            {song.isDisplay ? '表示する' : '表示しない'}
+                            {song.isDisplay ? '表示' : '非表示'}
                           </p>
                         </div>
                         <button type="button" class="btn btn-primary btn-xs shrink-0" onClick={() => addTrack(song)}>
@@ -524,7 +524,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                           <tr>
                             <td>{song.title}</td>
                             <td>{song.type.name}</td>
-                            <td>{song.isDisplay ? '表示する' : '表示しない'}</td>
+                            <td>{song.isDisplay ? '表示' : '非表示'}</td>
                             <td class="text-right">
                               <button type="button" class="btn btn-primary btn-xs" onClick={() => addTrack(song)}>
                                 追加

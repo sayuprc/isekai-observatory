@@ -266,8 +266,8 @@ export const MediaSection = (props: Props) => {
                 onChange={(e) => setSearchIsDisplay(e.currentTarget.value as DisplayFilter)}
               >
                 <option value="">すべての表示設定</option>
-                <option value="true">表示する</option>
-                <option value="false">表示しない</option>
+                <option value="true">表示</option>
+                <option value="false">非表示</option>
               </select>
 
               <select
@@ -466,7 +466,7 @@ export const MediaSection = (props: Props) => {
               checked={createIsDisplay()}
               onChange={(e) => setCreateIsDisplay(e.currentTarget.checked)}
             />
-            <span class="label-text">表示する</span>
+            <span class="label-text">表示</span>
           </label>
 
           <Show when={createError()}>{(message) => <p class="text-sm text-error">{message()}</p>}</Show>

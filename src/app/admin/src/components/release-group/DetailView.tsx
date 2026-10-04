@@ -43,7 +43,7 @@ const ReleaseFormatBadges = (props: { release: ReleaseGroupReferencedRelease }) 
 
 const ReleaseDisplayBadge = (props: { release: ReleaseGroupReferencedRelease }) => (
   <span class={`badge badge-sm ${props.release.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}>
-    {props.release.isDisplay ? '表示する' : '表示しない'}
+    {props.release.isDisplay ? '表示' : '非表示'}
   </span>
 );
 

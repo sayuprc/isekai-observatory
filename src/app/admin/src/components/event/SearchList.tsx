@@ -170,8 +170,8 @@ export const SearchList = () => {
             onChange={(e) => updateInput({ isDisplay: e.currentTarget.value as DisplayFilter })}
           >
             <option value="">すべて</option>
-            <option value="true">表示する</option>
-            <option value="false">表示しない</option>
+            <option value="true">表示</option>
+            <option value="false">非表示</option>
           </select>
         </fieldset>
         <fieldset class="fieldset">
@@ -239,7 +239,7 @@ export const SearchList = () => {
               <th>開催時期</th>
               <th>開催先</th>
               <th class="text-right">披露</th>
-              <th class="text-right">セトリ</th>
+              <th class="text-right">セットリスト</th>
               <th class="text-right">出典</th>
               <th>状態</th>
               <th>公開</th>

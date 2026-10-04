@@ -95,8 +95,8 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
 
       <div class="mb-4">
         <ReleaseImport
-          title="リリースの収録楽曲から追加"
-          description="選んだリリースの収録楽曲を、曲順のまま楽曲披露の末尾に追加します。管理対象外楽曲は追加できません"
+          title="リリースの収録曲から追加"
+          description="選んだリリースの収録曲を、曲順のまま楽曲披露の末尾に追加します。管理対象外楽曲は追加できません"
           importLabel="楽曲披露に追加"
           toCandidates={toReleasePerformanceCandidates}
           relatedReleases={props.relatedReleases}
@@ -187,7 +187,7 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
                 </div>
                 <Show when={setlistNumbersOf(performance().performanceId).length > 0}>
                   <span class="font-mono text-xs text-base-content/60">
-                    セトリ {setlistNumbersOf(performance().performanceId).join(', ')}
+                    セットリスト {setlistNumbersOf(performance().performanceId).join(', ')}
                   </span>
                 </Show>
                 <a

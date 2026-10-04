@@ -14,8 +14,8 @@ export type SongTab = (typeof SONG_TABS)[number];
 const TAB_ID_PREFIX = 'song';
 
 const DISPLAY_OPTIONS = [
-  { value: 'true', label: '表示する' },
-  { value: 'false', label: '表示しない' },
+  { value: 'true', label: '表示' },
+  { value: 'false', label: '非表示' },
 ];
 
 interface SongTabListProps {
@@ -29,7 +29,7 @@ interface SongTabListProps {
 export const SongTabList = (props: SongTabListProps) => {
   const items = (): TabItem<SongTab>[] => [
     { key: 'overview', label: '概要' },
-    { key: 'persons', label: '関係者', count: String(props.form.personCount()) },
+    { key: 'persons', label: 'クレジット', count: String(props.form.personCount()) },
     { key: 'media', label: 'メディア', count: String(props.form.mediaEntries().length) },
     ...(props.withHistory ? [{ key: 'history' as const, label: '履歴' }] : []),
   ];
@@ -69,7 +69,7 @@ export const SongFormFields = (props: SongFormFieldsProps) => {
       </TabPanel>
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="persons" current={props.tab} class="max-w-4xl">
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-          <legend class="px-2 text-sm font-semibold text-base-content/70">関係者</legend>
+          <legend class="px-2 text-sm font-semibold text-base-content/70">クレジット</legend>
           <div class="space-y-4">
             <PersonSearchSection
               selections={props.form.personSelections}
