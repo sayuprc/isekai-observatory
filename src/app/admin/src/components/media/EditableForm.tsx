@@ -1,22 +1,17 @@
-import { createResource, Match, Show, Switch } from 'solid-js';
+import { createResource, createSignal, Match, Show, Switch } from 'solid-js';
 import type { Media, MediaReferencedSong, MediaTypeValue } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { normalizeDateTimeInputValue } from '../../utils/date';
+import { createFormDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
+import { ActionMenu } from '../ActionMenu';
+import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-
-const MEDIA_TYPE_OPTIONS: Array<{ value: MediaTypeValue; label: string }> = [
-  { value: 1, label: 'MV' },
-  { value: 2, label: '音源動画' },
-  { value: 3, label: '配信' },
-  { value: 4, label: 'ショート' },
-  { value: 5, label: '投稿' },
-  { value: 99, label: 'その他' },
-];
+import { MediaFields } from './MediaFields';
 
 interface DetailViewProps {
   mediaId: string;
@@ -98,17 +93,15 @@ const EditableForm = (props: EditableFormProps) => {
 
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
+  const [typeValue, setTypeValue] = createSignal<MediaTypeValue>(props.data.media.type.value);
+  const [isDisplay, setIsDisplay] = createSignal(props.data.media.isDisplay);
+  const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(() => [typeValue(), isDisplay()]);
 
-  const handleSubmit = async (e: Event) => {
-    e.preventDefault();
-  };
-
-  const handleUpdate = withSubmitting(async (e: Event) => {
+  const handleUpdate = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
     clearErrors();
 
-    const form = (e.target as HTMLButtonElement).form as HTMLFormElement;
-    const formData = new FormData(form);
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
 
     const mediaId = props.data.media.mediaId;
 
@@ -127,12 +120,14 @@ const EditableForm = (props: EditableFormProps) => {
 
     if (data) {
       setFlash('更新しました');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
 
     if (status === 404) {
       setFlash('データがありません', 'error');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
@@ -140,9 +135,7 @@ const EditableForm = (props: EditableFormProps) => {
     handleError(status, error);
   });
 
-  const handleDelete = withSubmitting(async (e: Event) => {
-    e.preventDefault();
-
+  const handleDelete = withSubmitting(async () => {
     if (!window.confirm('削除します。よろしいですか？')) {
       return;
     }
@@ -164,96 +157,48 @@ const EditableForm = (props: EditableFormProps) => {
     }
 
     setFlash('削除しました');
+    allowLeave();
     window.location.href = listUrl;
   });
 
   return (
     <>
-      <a href={listUrl} class="btn btn-ghost btn-sm mb-4">
-        ← 一覧に戻る
-      </a>
+      <EntityHeader
+        breadcrumb={{ href: listUrl, label: 'メディア' }}
+        title={props.data.media.title}
+        formId="media-form"
+        isDirty={isDirty()}
+        isSubmitting={isSubmitting()}
+        submitLabel="保存"
+        submittingLabel="保存中..."
+        onDiscard={() => discardChanges(allowLeave)}
+        menu={
+          <ActionMenu
+            label="その他の操作"
+            items={[
+              { label: '元のページを開く', onSelect: () => window.open(props.data.media.url, '_blank', 'noreferrer') },
+              { label: 'このメディアを削除する', danger: true, disabled: isSubmitting(), onSelect: handleDelete },
+            ]}
+          />
+        }
+      />
       <FormError message={formError()} onClose={clearErrors} />
       <div class="max-w-4xl space-y-6">
-        <form onsubmit={handleSubmit}>
-          <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-            <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
-            <label class="label">タイトル</label>
-            <input
-              type="text"
-              class="input w-full"
-              name="title"
-              value={props.data.media.title}
-              classList={{ 'input-error': !!getFieldError('title') }}
-            />
-            <Show when={getFieldError('title')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
-
-            <label class="label">URL</label>
-            <input
-              type="url"
-              class="input w-full"
-              name="url"
-              value={props.data.media.url}
-              classList={{ 'input-error': !!getFieldError('url') }}
-            />
-            <Show when={getFieldError('url')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
-
-            <label class="label">公開日</label>
-            <input
-              type="datetime-local"
-              class="input w-full"
-              name="publishedAt"
-              value={normalizeDateTimeInputValue(props.data.media.publishedAt)}
-              step="1"
-              required
-              classList={{ 'input-error': !!getFieldError('publishedAt') }}
-            />
-            <Show when={getFieldError('publishedAt')}>
-              {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-            </Show>
-
-            <div class="grid gap-4 md:grid-cols-2">
-              <div>
-                <label class="label">種別</label>
-                <select
-                  class="select w-full"
-                  name="typeValue"
-                  value={props.data.media.type.value}
-                  classList={{ 'select-error': !!getFieldError('typeValue') }}
-                >
-                  {MEDIA_TYPE_OPTIONS.map((option) => (
-                    <option value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-                <Show when={getFieldError('typeValue')}>
-                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-                </Show>
-              </div>
-            </div>
-
-            <label class="label">表示設定</label>
-            <select
-              class="select w-full"
-              name="isDisplay"
-              value={String(props.data.media.isDisplay)}
-              classList={{ 'select-error': !!getFieldError('isDisplay') }}
-            >
-              <option value="true">表示する</option>
-              <option value="false">表示しない</option>
-            </select>
-            <Show when={getFieldError('isDisplay')}>
-              {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-            </Show>
-
-            <div class="mt-6 flex justify-end">
-              <button onClick={handleUpdate} class="btn btn-primary" disabled={isSubmitting()}>
-                {isSubmitting() ? '更新中...' : '更新'}
-              </button>
-            </div>
-          </fieldset>
+        <form ref={bindForm} id="media-form" onSubmit={handleUpdate}>
+          <MediaFields
+            title={props.data.media.title}
+            url={props.data.media.url}
+            publishedAt={normalizeDateTimeInputValue(props.data.media.publishedAt)}
+            typeValue={typeValue()}
+            onTypeValueChange={setTypeValue}
+            isDisplay={isDisplay()}
+            onIsDisplayChange={setIsDisplay}
+            getFieldError={getFieldError}
+          />
         </form>
-
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
           <legend class="px-2 text-sm font-semibold text-base-content/70">参照中の楽曲</legend>
+          <p class="mb-2 text-sm text-base-content/60">参照中の楽曲があるメディアは削除できません</p>
           <Show
             when={props.data.songs.length > 0}
             fallback={<p class="text-sm text-base-content/60">参照中の楽曲はありません。</p>}
@@ -285,18 +230,6 @@ const EditableForm = (props: EditableFormProps) => {
               </table>
             </div>
           </Show>
-        </fieldset>
-
-        <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
-          <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
-          <p class="mt-1 text-sm text-base-content/60">
-            この操作は取り消せません。参照中の楽曲があるメディアは削除できません。
-          </p>
-          <div class="mt-4">
-            <button onClick={handleDelete} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>
-              {isSubmitting() ? '削除中...' : 'このメディアを削除する'}
-            </button>
-          </div>
         </fieldset>
       </div>
     </>
