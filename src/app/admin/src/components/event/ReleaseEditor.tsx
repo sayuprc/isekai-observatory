@@ -2,9 +2,9 @@ import { Index, Show } from 'solid-js';
 import type { EventRelease } from '../../generated';
 import { createKeywordSearch } from '../keyword-search';
 import { KeywordSearchPanel } from '../KeywordSearchPanel';
+import { ListItemActions } from '../ListItemActions';
 import { createSortable, reorderItems } from '../sortable';
 import { addRelease, releaseLabel } from './event-links';
-import { ListItemActions } from './ListItemActions';
 import { searchEventReleases } from './release-search';
 
 interface ReleaseEditorProps {

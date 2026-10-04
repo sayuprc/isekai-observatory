@@ -546,6 +546,7 @@ components:
         - personId
         - name
         - creditName
+        - personGroup
         - orderNo
       properties:
         personId:
@@ -556,8 +557,24 @@ components:
           anyOf:
             - $ref: '#/components/schemas/performanceCreditName'
             - type: 'null'
+        personGroup:
+          anyOf:
+            - $ref: '#/components/schemas/PerformancePersonGroup'
+            - type: 'null'
         orderNo:
           $ref: '#/components/schemas/orderNo'
+      description: 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
+    PerformancePersonGroup:
+      type: object
+      required:
+        - personGroupId
+        - name
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/uuid'
+        name:
+          type: string
+      description: 共演者が出演したグループ
     ReleaseFormat:
       type: object
       required:
@@ -972,6 +989,7 @@ components:
           type: array
           items:
             type: string
+          description: 共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる
       description: 楽曲が公開イベントで披露された履歴
     SongRelationCounts:
       type: object

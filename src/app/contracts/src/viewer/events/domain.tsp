@@ -41,10 +41,18 @@ model EventSource {
   orderNo: orderNo;
 }
 
+@doc("共演者が出演したグループ")
+model PerformancePersonGroup {
+  personGroupId: uuid;
+  name: string;
+}
+
+@doc("楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ")
 model PerformancePerson {
   personId: uuid;
   name: string;
   creditName: performanceCreditName | null;
+  personGroup: PerformancePersonGroup | null;
   orderNo: orderNo;
 }
 

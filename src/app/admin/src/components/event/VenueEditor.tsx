@@ -3,9 +3,9 @@ import type { Venue } from '../../generated';
 import { client } from '../../utils/client';
 import { createKeywordSearch } from '../keyword-search';
 import { KeywordSearchPanel } from '../KeywordSearchPanel';
+import { ListItemActions } from '../ListItemActions';
 import { createSortable, reorderItems } from '../sortable';
 import { addVenue, type VenueEntry } from './event-links';
-import { ListItemActions } from './ListItemActions';
 
 interface VenueEditorProps {
   venues: VenueEntry[];

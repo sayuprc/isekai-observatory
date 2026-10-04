@@ -10,6 +10,7 @@ readonly class AssembledCoVocalist
         public string $personId,
         public string $name,
         public ?string $creditName,
+        public ?AssembledPersonGroup $personGroup,
         public int $orderNo,
     ) {
     }

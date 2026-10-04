@@ -9,6 +9,7 @@ import "./auth";
 import "./events";
 import "./media";
 import "./persons";
+import "./person-groups";
 import "./releases";
 import "./song-tags";
 import "./song-types";

@@ -74,7 +74,10 @@ model RequestEventReleaseLink {
   orderNo: orderNo;
 }
 
-model RequestPerformancePerson is PickProperties<PerformancePerson, "personId" | "creditName" | "orderNo">;
+model RequestPerformancePerson {
+  ...PickProperties<PerformancePerson, "personId" | "creditName" | "orderNo">;
+  personGroupId: personGroupId | null;
+}
 
 model RequestSongPerformance {
   ...PickProperties<SongPerformance, "performanceId" | "songId" | "orderNo">;

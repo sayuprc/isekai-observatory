@@ -15,6 +15,8 @@ use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannelRepositoryInterface;
 use Person\Domain\Models\Person;
+use Person\Domain\Models\PersonGroup;
+use Person\Domain\Models\PersonGroupRepositoryInterface;
 use Person\Domain\Models\PersonRepositoryInterface;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleaseGroup;
@@ -45,6 +47,12 @@ trait EntityStore
     {
         $repository = $this->makeRepository(PersonRepositoryInterface::class);
         array_map(static fn (Person $item) => $repository->save($item), $items);
+    }
+
+    protected function storePersonGroups(PersonGroup ...$items): void
+    {
+        $repository = $this->makeRepository(PersonGroupRepositoryInterface::class);
+        array_map(static fn (PersonGroup $item) => $repository->save($item), $items);
     }
 
     protected function storeSongs(Song ...$items): void

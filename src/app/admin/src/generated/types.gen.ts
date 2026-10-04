@@ -66,7 +66,7 @@ export type AuditLogSummary = {
 /**
  * 監査ログの対象種別
  */
-export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'Release' | 'ReleaseGroup' | 'Song' | 'SongTag' | 'Venue' | 'Event';
+export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'PersonGroup' | 'Release' | 'ReleaseGroup' | 'Song' | 'SongTag' | 'Venue' | 'Event';
 
 /**
  * エラー分類を表す機械可読なコード
@@ -333,13 +333,22 @@ export type Medium = {
 export type PerPage = 25 | 50 | 100;
 
 /**
- * 楽曲披露の共演者
+ * 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
  */
 export type PerformancePerson = {
     personId: PersonId;
     name: PersonName;
     creditName: PerformanceCreditName | null;
+    personGroup: PerformancePersonGroup | null;
     orderNo: OrderNo;
+};
+
+/**
+ * 共演者が出演したグループ
+ */
+export type PerformancePersonGroup = {
+    personGroupId: PersonGroupId;
+    name: PersonGroupName;
 };
 
 export type Permission = {
@@ -368,6 +377,51 @@ export type PersonCreateResponse = {
 
 export type PersonGetResponse = {
     person: Person;
+};
+
+/**
+ * 共演者をまとめて入力・表示するための人物グループ
+ */
+export type PersonGroup = {
+    personGroupId: PersonGroupId;
+    name: PersonGroupName;
+    members: Array<PersonGroupMember>;
+};
+
+export type PersonGroupCreateRequest = {
+    name: PersonGroupName;
+    members: Array<RequestPersonGroupMember>;
+};
+
+export type PersonGroupCreateResponse = {
+    personGroup: PersonGroup;
+};
+
+export type PersonGroupGetResponse = {
+    personGroup: PersonGroup;
+};
+
+/**
+ * 人物グループのメンバー
+ */
+export type PersonGroupMember = {
+    personId: PersonId;
+    name: PersonName;
+    orderNo: OrderNo;
+};
+
+export type PersonGroupSearchResponse = {
+    personGroups: Array<PersonGroup>;
+    maxPage: number;
+};
+
+export type PersonGroupUpdateRequest = {
+    name: PersonGroupName;
+    members: Array<RequestPersonGroupMember>;
+};
+
+export type PersonGroupUpdateResponse = {
+    personGroup: PersonGroup;
 };
 
 export type PersonListResponse = {
@@ -625,12 +679,18 @@ export type RequestEventVenueLink = {
     orderNo: OrderNo;
 };
 
-/**
- * The template for picking properties.
- */
 export type RequestPerformancePerson = {
     personId: PersonId;
     creditName: PerformanceCreditName | null;
+    orderNo: OrderNo;
+    personGroupId: PersonGroupId | null;
+};
+
+/**
+ * The template for picking properties.
+ */
+export type RequestPersonGroupMember = {
+    personId: PersonId;
     orderNo: OrderNo;
 };
 
@@ -1068,6 +1128,16 @@ export type PerformanceId = string;
  * 権限名
  */
 export type PermissionName = string;
+
+/**
+ * 人物グループID
+ */
+export type PersonGroupId = string;
+
+/**
+ * 人物グループ名
+ */
+export type PersonGroupName = string;
 
 /**
  * 人物ID
@@ -2152,6 +2222,257 @@ export type MediaServiceUpdateMediaResponses = {
 };
 
 export type MediaServiceUpdateMediaResponse = MediaServiceUpdateMediaResponses[keyof MediaServiceUpdateMediaResponses];
+
+export type PersonGroupServiceCreatePersonGroupData = {
+    body: PersonGroupCreateRequest;
+    path?: never;
+    query?: never;
+    url: '/person-groups';
+};
+
+export type PersonGroupServiceCreatePersonGroupErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type PersonGroupServiceCreatePersonGroupError = PersonGroupServiceCreatePersonGroupErrors[keyof PersonGroupServiceCreatePersonGroupErrors];
+
+export type PersonGroupServiceCreatePersonGroupResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: PersonGroupCreateResponse;
+};
+
+export type PersonGroupServiceCreatePersonGroupResponse = PersonGroupServiceCreatePersonGroupResponses[keyof PersonGroupServiceCreatePersonGroupResponses];
+
+export type PersonGroupServiceSearchPersonGroupsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        name?: string;
+        page?: Page;
+        per_page?: PerPage;
+    };
+    url: '/person-groups/search';
+};
+
+export type PersonGroupServiceSearchPersonGroupsErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type PersonGroupServiceSearchPersonGroupsError = PersonGroupServiceSearchPersonGroupsErrors[keyof PersonGroupServiceSearchPersonGroupsErrors];
+
+export type PersonGroupServiceSearchPersonGroupsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: PersonGroupSearchResponse;
+};
+
+export type PersonGroupServiceSearchPersonGroupsResponse = PersonGroupServiceSearchPersonGroupsResponses[keyof PersonGroupServiceSearchPersonGroupsResponses];
+
+export type PersonGroupServiceDeletePersonGroupData = {
+    body?: never;
+    path: {
+        personGroupId: Uuid;
+    };
+    query?: never;
+    url: '/person-groups/{personGroupId}';
+};
+
+export type PersonGroupServiceDeletePersonGroupErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type PersonGroupServiceDeletePersonGroupError = PersonGroupServiceDeletePersonGroupErrors[keyof PersonGroupServiceDeletePersonGroupErrors];
+
+export type PersonGroupServiceDeletePersonGroupResponses = {
+    /**
+     * There is no content to send for this request, but the headers may be useful.
+     */
+    204: void;
+};
+
+export type PersonGroupServiceDeletePersonGroupResponse = PersonGroupServiceDeletePersonGroupResponses[keyof PersonGroupServiceDeletePersonGroupResponses];
+
+export type PersonGroupServiceGetPersonGroupData = {
+    body?: never;
+    path: {
+        personGroupId: Uuid;
+    };
+    query?: never;
+    url: '/person-groups/{personGroupId}';
+};
+
+export type PersonGroupServiceGetPersonGroupErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type PersonGroupServiceGetPersonGroupError = PersonGroupServiceGetPersonGroupErrors[keyof PersonGroupServiceGetPersonGroupErrors];
+
+export type PersonGroupServiceGetPersonGroupResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: PersonGroupGetResponse;
+};
+
+export type PersonGroupServiceGetPersonGroupResponse = PersonGroupServiceGetPersonGroupResponses[keyof PersonGroupServiceGetPersonGroupResponses];
+
+export type PersonGroupServiceUpdatePersonGroupData = {
+    body: PersonGroupUpdateRequest;
+    path: {
+        personGroupId: Uuid;
+    };
+    query?: never;
+    url: '/person-groups/{personGroupId}';
+};
+
+export type PersonGroupServiceUpdatePersonGroupErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type PersonGroupServiceUpdatePersonGroupError = PersonGroupServiceUpdatePersonGroupErrors[keyof PersonGroupServiceUpdatePersonGroupErrors];
+
+export type PersonGroupServiceUpdatePersonGroupResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: PersonGroupUpdateResponse;
+};
+
+export type PersonGroupServiceUpdatePersonGroupResponse = PersonGroupServiceUpdatePersonGroupResponses[keyof PersonGroupServiceUpdatePersonGroupResponses];
 
 export type PersonServiceListPersonsData = {
     body?: never;

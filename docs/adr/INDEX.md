@@ -32,3 +32,4 @@
 | ADR-0026 | accepted | 開催単位は Event とし Activity 集約を導入しない | [api, admin, viewer] |
 | ADR-0027 | accepted | Event は時刻を保持せず日付で管理する | [api, admin, viewer] |
 | ADR-0028 | accepted | TypeScript パッケージの整形は Prettier に任せ、ESLint と Stylelint は lint だけを担う | [admin, viewer, admin-proxy] |
+| ADR-0029 | accepted | 共演者は人単位で保存し出演グループは共演者ごとの任意参照で表す | [api, admin, viewer] |

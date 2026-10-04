@@ -31,6 +31,23 @@ class DeletePersonTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function canDeleteMemberOfPersonGroup(): void
+    {
+        $personId = $this->generateUuid();
+        $personGroupId = $this->generateUuid();
+
+        $this->storePersons($this->createPerson($personId, '人物', 1));
+        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
+
+        $this->withAuth()
+            ->delete(route(PersonRouteMap::Delete, $personId))
+            ->assertStatus(204);
+
+        $this->assertDatabaseCount('person_groups', 1);
+        $this->assertDatabaseCount('person_group_members', 0);
+    }
+
+    #[Test]
     public function invalidPersonId(): void
     {
         $this->withAuth()

@@ -24,6 +24,7 @@ enum AuditTargetType {
   adminUser: "AdminUser",
   media: "Media",
   person: "Person",
+  personGroup: "PersonGroup",
   release: "Release",
   releaseGroup: "ReleaseGroup",
   song: "Song",

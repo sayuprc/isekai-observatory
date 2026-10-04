@@ -173,12 +173,13 @@ readonly class EventRepository implements EventRepositoryInterface
                     $this->converter->toBin($person['person_id']),
                     $person['order_no'],
                     $person['credit_name'],
+                    $person['person_group_id'] === null ? null : $this->converter->toBin($person['person_group_id']),
                 ];
             }
         }
         $this->queryFactory->insertRows(
             'song_performance_persons',
-            ['performance_id', 'person_id', 'order_no', 'credit_name'],
+            ['performance_id', 'person_id', 'order_no', 'credit_name', 'person_group_id'],
             $performancePersonRows,
         );
 
@@ -346,6 +347,7 @@ readonly class EventRepository implements EventRepositoryInterface
                     'song_performance_persons.person_id',
                     'song_performance_persons.order_no',
                     'song_performance_persons.credit_name',
+                    'song_performance_persons.person_group_id',
                 ])
                 ->from('song_performance_persons')
                 ->join('song_performances', 'song_performances.performance_id = song_performance_persons.performance_id')
@@ -358,6 +360,7 @@ readonly class EventRepository implements EventRepositoryInterface
             $coVocalistsByPerformance[Row::string($row, 'performance_id')][] = [
                 'personId' => $this->converter->toUuid(Row::string($row, 'person_id')),
                 'creditName' => Row::nullableString($row, 'credit_name'),
+                'personGroupId' => ($binGroupId = Row::nullableString($row, 'person_group_id')) === null ? null : $this->converter->toUuid($binGroupId),
                 'orderNo' => Row::int($row, 'order_no'),
             ];
         }

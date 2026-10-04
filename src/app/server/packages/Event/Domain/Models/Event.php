@@ -77,7 +77,7 @@ readonly class Event
     }
 
     /**
-     * @return array{event_id: string, title: string, description: string, type: int, start_on: ?string, end_on: ?string, status: int, is_display: bool, venues: list<array{venue_id: string, order_no: int}>, media: list<array{media_id: string, order_no: int}>, releases: list<array{release_id: string, order_no: int}>, sources: list<array{name: string, url: string, order_no: int}>, performances: list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, order_no: int}>}>, setlist: list<array{setlist_item_id: string, order_no: int, label: ?string, performance_ids: list<string>}>}
+     * @return array{event_id: string, title: string, description: string, type: int, start_on: ?string, end_on: ?string, status: int, is_display: bool, venues: list<array{venue_id: string, order_no: int}>, media: list<array{media_id: string, order_no: int}>, releases: list<array{release_id: string, order_no: int}>, sources: list<array{name: string, url: string, order_no: int}>, performances: list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, person_group_id: ?string, order_no: int}>}>, setlist: list<array{setlist_item_id: string, order_no: int, label: ?string, performance_ids: list<string>}>}
      */
     public function toArray(): array
     {

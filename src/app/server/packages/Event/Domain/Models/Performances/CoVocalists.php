@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Event\Domain\Models\Performances;
 
+use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonId;
 use Support\Collection\ImmutableCollection;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
@@ -12,7 +13,7 @@ use Support\Domain\ValueObjects\OrderNo;
 /**
  * @extends ImmutableCollection<int, CoVocalist>
  *
- * @phpstan-type _coVocalistInput array{personId: string, creditName: ?string, orderNo: int}
+ * @phpstan-type _coVocalistInput array{personId: string, creditName: ?string, personGroupId: ?string, orderNo: int}
  */
 readonly class CoVocalists extends ImmutableCollection
 {
@@ -43,6 +44,7 @@ readonly class CoVocalists extends ImmutableCollection
             static fn (array $item): CoVocalist => new CoVocalist(
                 new PersonId($item['personId']),
                 $item['creditName'] === null ? null : new CreditName($item['creditName']),
+                $item['personGroupId'] === null ? null : new PersonGroupId($item['personGroupId']),
                 new OrderNo($item['orderNo']),
             ),
             $items,
@@ -50,7 +52,7 @@ readonly class CoVocalists extends ImmutableCollection
     }
 
     /**
-     * @return list<array{person_id: string, credit_name: ?string, order_no: int}>
+     * @return list<array{person_id: string, credit_name: ?string, person_group_id: ?string, order_no: int}>
      */
     public function toArray(): array
     {

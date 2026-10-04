@@ -4,6 +4,7 @@ import "../../packages/media";
 import "../../packages/song";
 import "../media";
 import "../persons";
+import "../person-groups";
 import "../releases";
 import "../venues";
 
@@ -21,11 +22,18 @@ model EventSource {
   orderNo: orderNo;
 }
 
-@doc("楽曲披露の共演者")
+@doc("共演者が出演したグループ")
+model PerformancePersonGroup {
+  personGroupId: personGroupId;
+  name: personGroupName;
+}
+
+@doc("楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ")
 model PerformancePerson {
   personId: personId;
   name: personName;
   creditName: performanceCreditName | null;
+  personGroup: PerformancePersonGroup | null;
   orderNo: orderNo;
 }
 

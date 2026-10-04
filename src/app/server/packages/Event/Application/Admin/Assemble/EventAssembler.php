@@ -17,6 +17,9 @@ use Media\Domain\Models\Media;
 use Media\Domain\Models\MediaId;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Person\Domain\Models\Person;
+use Person\Domain\Models\PersonGroup;
+use Person\Domain\Models\PersonGroupId;
+use Person\Domain\Models\PersonGroupRepositoryInterface;
 use Person\Domain\Models\PersonRepositoryInterface;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleaseGroup;
@@ -41,6 +44,7 @@ class EventAssembler
         private readonly ReleaseGroupRepositoryInterface $releaseGroupRepository,
         private readonly SongRepositoryInterface $songRepository,
         private readonly PersonRepositoryInterface $personRepository,
+        private readonly PersonGroupRepositoryInterface $personGroupRepository,
     ) {
     }
 
@@ -52,10 +56,11 @@ class EventAssembler
         $releaseGroupMap = $this->releaseGroupMap($releaseMap);
         $songMap = $this->songMap($event);
         $personMap = $this->personMap($event);
+        $personGroupMap = $this->personGroupMap($event);
 
         $performances = [];
         foreach ($event->performances as $performance) {
-            $performances[$performance->performanceId->value] = $this->toAssembledPerformance($performance, $songMap, $personMap);
+            $performances[$performance->performanceId->value] = $this->toAssembledPerformance($performance, $songMap, $personMap, $personGroupMap);
         }
 
         return new AssembledEvent(
@@ -184,6 +189,26 @@ class EventAssembler
         return $personMap;
     }
 
+    /** @return array<string, PersonGroup> */
+    private function personGroupMap(Event $event): array
+    {
+        $personGroupIds = [];
+        foreach ($event->performances as $performance) {
+            foreach ($performance->coVocalists as $coVocalist) {
+                if ($coVocalist->personGroupId !== null) {
+                    $personGroupIds[$coVocalist->personGroupId->value] = $coVocalist->personGroupId;
+                }
+            }
+        }
+
+        $personGroupMap = [];
+        foreach ($this->personGroupRepository->findByIds(...array_values($personGroupIds)) as $personGroup) {
+            $personGroupMap[$personGroup->personGroupId->value] = $personGroup;
+        }
+
+        return $personGroupMap;
+    }
+
     private function toAssembledVenue(?Venue $venue): AssembledVenue
     {
         // Event が成立している時点で参照先の開催先は存在する
@@ -230,10 +255,11 @@ class EventAssembler
     }
 
     /**
-     * @param array<string, Song>   $songMap
-     * @param array<string, Person> $personMap
+     * @param array<string, Song>        $songMap
+     * @param array<string, Person>      $personMap
+     * @param array<string, PersonGroup> $personGroupMap
      */
-    private function toAssembledPerformance(SongPerformance $performance, array $songMap, array $personMap): AssembledPerformance
+    private function toAssembledPerformance(SongPerformance $performance, array $songMap, array $personMap, array $personGroupMap): AssembledPerformance
     {
         $song = $songMap[$performance->songId->value] ?? null;
         // Event が成立している時点で参照先の楽曲は存在する
@@ -244,12 +270,34 @@ class EventAssembler
             $song->songId->value,
             $song->title->value,
             $performance->orderNo->value,
-            $performance->coVocalists->toGeneric()->map(static function (CoVocalist $coVocalist) use ($personMap): AssembledCoVocalist {
+            $performance->coVocalists->toGeneric()->map(static function (CoVocalist $coVocalist) use ($personMap, $personGroupMap): AssembledCoVocalist {
                 $person = $personMap[$coVocalist->personId->value] ?? null;
                 assert($person instanceof Person);
 
-                return new AssembledCoVocalist($person->personId->value, $person->name->value, $coVocalist->creditName?->value, $coVocalist->orderNo->value);
+                return new AssembledCoVocalist(
+                    $person->personId->value,
+                    $person->name->value,
+                    $coVocalist->creditName?->value,
+                    self::toAssembledPersonGroup($coVocalist->personGroupId, $personGroupMap),
+                    $coVocalist->orderNo->value,
+                );
             })->toArray(),
         );
+    }
+
+    /**
+     * @param array<string, PersonGroup> $personGroupMap
+     */
+    private static function toAssembledPersonGroup(?PersonGroupId $personGroupId, array $personGroupMap): ?AssembledPersonGroup
+    {
+        if ($personGroupId === null) {
+            return null;
+        }
+
+        $personGroup = $personGroupMap[$personGroupId->value] ?? null;
+        // 参照中のグループは削除できないため、出演グループは存在する
+        assert($personGroup instanceof PersonGroup);
+
+        return new AssembledPersonGroup($personGroup->personGroupId->value, $personGroup->name->value);
     }
 }

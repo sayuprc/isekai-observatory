@@ -10,6 +10,7 @@ readonly class EventCoVocalistSummary
         public string $personId,
         public string $name,
         public ?string $creditName,
+        public ?EventCoVocalistGroupSummary $personGroup,
         public int $orderNo,
     ) {
     }

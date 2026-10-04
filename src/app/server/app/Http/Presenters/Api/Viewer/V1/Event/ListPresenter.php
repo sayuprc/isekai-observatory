@@ -29,6 +29,7 @@ use OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as O
 use OpenAPI\Viewer\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Viewer\Client\Model\MediaTypeValue;
 use OpenAPI\Viewer\Client\Model\PerformancePerson as OpenApiPerformancePerson;
+use OpenAPI\Viewer\Client\Model\PerformancePersonGroup as OpenApiPerformancePersonGroup;
 use OpenAPI\Viewer\Client\Model\ReleaseFormat as OpenApiReleaseFormat;
 use OpenAPI\Viewer\Client\Model\ReleaseFormatValue;
 use OpenAPI\Viewer\Client\Model\SetlistItem as OpenApiSetlistItem;
@@ -114,7 +115,12 @@ class ListPresenter
             ->setPerformanceId($performance->performanceId)
             ->setSongTitle($performance->songTitle)
             ->setCoVocalists(array_map(
-                static fn (EventCoVocalistSummary $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson(['credit_name' => $coVocalist->creditName])
+                static fn (EventCoVocalistSummary $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson([
+                    'credit_name' => $coVocalist->creditName,
+                    'person_group' => $coVocalist->personGroup === null ? null : new OpenApiPerformancePersonGroup()
+                        ->setPersonGroupId($coVocalist->personGroup->personGroupId)
+                        ->setName($coVocalist->personGroup->name),
+                ])
                     ->setPersonId($coVocalist->personId)
                     ->setName($coVocalist->name)
                     ->setOrderNo($coVocalist->orderNo),

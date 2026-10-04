@@ -44,3 +44,25 @@ export function eventDateColumn(event: Event, withYear = false): { main: string;
 export function eventStatusName(status: Event['status']): string | null {
   return status.value === 1 ? null : status.name;
 }
+
+type CoVocalist = Event['performances'][number]['coVocalists'][number];
+
+// グループとして出演した共演者は、最初のメンバーの位置にグループ名 1 つでまとめる
+export function coVocalistNames(coVocalists: CoVocalist[]): string[] {
+  const names: string[] = [];
+  const seenGroupIds = new Set<string>();
+
+  for (const person of coVocalists) {
+    if (person.personGroup === null) {
+      names.push(person.creditName ?? person.name);
+      continue;
+    }
+
+    if (!seenGroupIds.has(person.personGroup.personGroupId)) {
+      seenGroupIds.add(person.personGroup.personGroupId);
+      names.push(person.personGroup.name);
+    }
+  }
+
+  return names;
+}

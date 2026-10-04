@@ -353,20 +353,30 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_performance_persons.performance_id', 'song_performance_persons.credit_name', 'persons.name'])
+                ->withSelect(['song_performance_persons.performance_id', 'song_performance_persons.credit_name', 'persons.name', 'person_groups.person_group_id'])
+                ->select('person_groups.name', 'person_group_name')
                 ->from('song_performance_persons')
                 ->join('persons', 'song_performance_persons.person_id = persons.person_id')
+                ->outerJoin('person_groups', 'song_performance_persons.person_group_id = person_groups.person_group_id')
                 ->where('song_performance_persons.performance_id', 'IN', $performanceIds)
                 ->orderBy('song_performance_persons.order_no'),
         );
 
+        // グループとして出演した共演者は、最初のメンバーの位置にグループ名 1 つでまとめる
         $grouped = [];
         foreach ($rows as $row) {
             $performanceId = Row::string($row, 'performance_id');
-            $creditName = Row::nullableString($row, 'credit_name');
-            $grouped[$performanceId][] = $creditName ?? Row::string($row, 'name');
+            $binGroupId = Row::nullableString($row, 'person_group_id');
+
+            if ($binGroupId === null) {
+                $grouped[$performanceId][] = Row::nullableString($row, 'credit_name') ?? Row::string($row, 'name');
+
+                continue;
+            }
+
+            $grouped[$performanceId]['group:' . $binGroupId] = Row::string($row, 'person_group_name');
         }
 
-        return $grouped;
+        return array_map(array_values(...), $grouped);
     }
 }

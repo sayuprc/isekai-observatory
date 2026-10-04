@@ -23,6 +23,11 @@ table "song_performance_persons" {
     type    = varchar(255)
     comment = "クレジット名(当日のユニット名など)"
   }
+  column "person_group_id" {
+    null    = true
+    type    = binary(16)
+    comment = "出演グループID(グループとして全員で出演したときだけ持つ)"
+  }
 
   primary_key {
     columns = [column.performance_id, column.person_id]
@@ -30,6 +35,10 @@ table "song_performance_persons" {
 
   index "fk_song_performance_persons_person_id" {
     columns = [column.person_id]
+  }
+
+  index "fk_song_performance_persons_person_group_id" {
+    columns = [column.person_group_id]
   }
 
   foreign_key "fk_song_performance_persons_performance_id" {
@@ -40,6 +49,11 @@ table "song_performance_persons" {
   foreign_key "fk_song_performance_persons_person_id" {
     columns     = [column.person_id]
     ref_columns = [table.persons.column.person_id]
+    on_delete   = RESTRICT
+  }
+  foreign_key "fk_song_performance_persons_person_group_id" {
+    columns     = [column.person_group_id]
+    ref_columns = [table.person_groups.column.person_group_id]
     on_delete   = RESTRICT
   }
 }

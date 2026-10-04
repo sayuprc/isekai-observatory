@@ -30,6 +30,11 @@ use App\Http\Controllers\Api\Admin\V1\Person\GetPersonController;
 use App\Http\Controllers\Api\Admin\V1\Person\ListPersonController;
 use App\Http\Controllers\Api\Admin\V1\Person\SearchPersonController;
 use App\Http\Controllers\Api\Admin\V1\Person\UpdatePersonController;
+use App\Http\Controllers\Api\Admin\V1\PersonGroup\CreatePersonGroupController;
+use App\Http\Controllers\Api\Admin\V1\PersonGroup\DeletePersonGroupController;
+use App\Http\Controllers\Api\Admin\V1\PersonGroup\GetPersonGroupController;
+use App\Http\Controllers\Api\Admin\V1\PersonGroup\SearchPersonGroupController;
+use App\Http\Controllers\Api\Admin\V1\PersonGroup\UpdatePersonGroupController;
 use App\Http\Controllers\Api\Admin\V1\Release\CreateReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\DeleteReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\GetReleaseController;
@@ -62,6 +67,7 @@ use Auth\Route\AuthRouteMap;
 use Event\Route\EventRouteMap;
 use Illuminate\Support\Facades\Route;
 use Media\Route\MediaRouteMap;
+use Person\Route\PersonGroupRouteMap;
 use Person\Route\PersonRouteMap;
 use Release\Route\ReleaseGroupRouteMap;
 use Release\Route\ReleaseRouteMap;
@@ -108,6 +114,14 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                     Route::delete('/{personId}', [DeletePersonController::class, 'handle'])->name(PersonRouteMap::Delete);
                     Route::get('/search', [SearchPersonController::class, 'handle'])->name(PersonRouteMap::Search);
                     Route::get('/{personId}', [GetPersonController::class, 'handle'])->name(PersonRouteMap::Get);
+                });
+
+                Route::prefix('person-groups')->group(static function () {
+                    Route::post('/', [CreatePersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Create);
+                    Route::put('/{personGroupId}', [UpdatePersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Update);
+                    Route::delete('/{personGroupId}', [DeletePersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Delete);
+                    Route::get('/search', [SearchPersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Search);
+                    Route::get('/{personGroupId}', [GetPersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Get);
                 });
 
                 Route::prefix('media')->group(static function () {

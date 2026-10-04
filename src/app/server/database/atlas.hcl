@@ -7,6 +7,8 @@ variable "table_schemas" {
     "file://schemas/admin-user-passkeys.my.hcl",
     "file://schemas/admin-user-recovery-codes.my.hcl",
     "file://schemas/persons.my.hcl",
+    "file://schemas/person-groups.my.hcl",
+    "file://schemas/person-group-members.my.hcl",
     "file://schemas/venues.my.hcl",
     "file://schemas/events.my.hcl",
     "file://schemas/event-venues.my.hcl",

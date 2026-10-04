@@ -1,20 +1,26 @@
-import { For, Index, Show, createSignal } from 'solid-js';
+import { For, Index, Match, Show, Switch, createSignal } from 'solid-js';
 import type { EventRelease } from '../../generated';
 import { client } from '../../utils/client';
+import { ListItemActions } from '../ListItemActions';
 import { SearchCombobox } from '../SearchCombobox';
 import { createSortable, reorderItems } from '../sortable';
 import { CoVocalistChip } from './CoVocalistChip';
-import { ListItemActions } from './ListItemActions';
 import {
   addCoVocalistToPerformances,
   addPerformance,
+  addPersonGroupToPerformances,
   collectCoVocalists,
+  collectPersonGroups,
   moveCoVocalist,
   removeCoVocalist,
   setCreditName,
+  toCoVocalistUnits,
+  type CoVocalistUnit,
   type PerformanceForm,
+  type PersonGroupPreset,
 } from './performance-form';
 import { clickPerformance, emptySelection } from './performance-selection';
+import { PersonGroupChip } from './PersonGroupChip';
 import { addPerformancesFromCandidates } from './release-import';
 import { ReleaseImport } from './ReleaseImport';
 
@@ -39,6 +45,16 @@ const fetchPersons = async (name: string) => {
     query: { name, sort: 'name', order: 'asc', page: 1, per_page: SEARCH_PER_PAGE },
   });
   return { items: data?.persons, status };
+};
+
+const asGroupUnit = (unit: CoVocalistUnit) => (unit.type === 'group' ? unit : undefined);
+const asPersonUnit = (unit: CoVocalistUnit) => (unit.type === 'person' ? unit : undefined);
+
+const fetchPersonGroups = async (name: string) => {
+  const { data, status } = await client.api['person-groups'].search.get({
+    query: { name, page: 1, per_page: SEARCH_PER_PAGE },
+  });
+  return { items: data?.personGroups, status };
 };
 
 export const PerformanceEditor = (props: PerformanceEditorProps) => {
@@ -81,12 +97,24 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
       .filter((performance) => isSelected(performance.performanceId))
       .every((performance) => performance.coVocalists.some((coVocalist) => coVocalist.personId === personId));
 
+  const addPersonGroupToSelected = (personGroup: PersonGroupPreset) => {
+    props.onChange((prev) => addPersonGroupToPerformances(prev, selection().selectedIds, personGroup));
+  };
+
+  const isGroupOnAllSelected = (personGroupId: string) =>
+    selectedCount() > 0
+    && props.performances
+      .filter((performance) => isSelected(performance.performanceId))
+      .every((performance) =>
+        performance.coVocalists.some((coVocalist) => coVocalist.personGroup?.personGroupId === personGroupId),
+      );
+
   const removePerformance = (index: number) => {
     props.onChange((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const changeCreditName = (performanceIndex: number, personIndex: number, creditName: string) => {
-    props.onChange((prev) => setCreditName(prev, performanceIndex, personIndex, creditName));
+  const changeCreditName = (performanceIndex: number, unitIndex: number, creditName: string) => {
+    props.onChange((prev) => setCreditName(prev, performanceIndex, unitIndex, creditName));
   };
 
   return (
@@ -116,9 +144,33 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
             onPick={addCoVocalistToSelected}
             disabled={props.disabled || selectedCount() === 0}
           />
-          <Show when={collectCoVocalists(props.performances).length > 0}>
+          <SearchCombobox
+            label="グループ"
+            placeholder={selectedCount() === 0 ? '先に一覧で行を選択' : 'グループ名を入力 (メンバーを選択中の行に追加)'}
+            fetch={fetchPersonGroups}
+            itemLabel={(personGroup) => personGroup.name}
+            isAdded={(personGroup) => isGroupOnAllSelected(personGroup.personGroupId)}
+            onPick={addPersonGroupToSelected}
+            disabled={props.disabled || selectedCount() === 0}
+          />
+          <Show
+            when={collectPersonGroups(props.performances).length + collectCoVocalists(props.performances).length > 0}
+          >
             <div class="flex flex-wrap items-center gap-1">
               <span class="text-xs text-base-content/60">このイベントの共演者:</span>
+              <For each={collectPersonGroups(props.performances)}>
+                {(personGroup) => (
+                  <button
+                    type="button"
+                    class="btn btn-outline btn-secondary btn-xs"
+                    aria-label={`${personGroup.name}を選択中の行に追加`}
+                    disabled={selectedCount() === 0 || isGroupOnAllSelected(personGroup.personGroupId)}
+                    onClick={() => addPersonGroupToSelected(personGroup)}
+                  >
+                    ＋ {personGroup.name}
+                  </button>
+                )}
+              </For>
               <For each={collectCoVocalists(props.performances)}>
                 {(person) => (
                   <button
@@ -192,21 +244,46 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
                 <span class="w-6 text-right text-xs text-base-content/60">{index + 1}</span>
                 <span class="min-w-40 font-medium">{performance().songTitle}</span>
                 <div class="flex flex-1 flex-wrap gap-1">
-                  <Index each={performance().coVocalists}>
-                    {(person, personIndex) => (
-                      <CoVocalistChip
-                        name={person().name}
-                        creditName={person().creditName}
-                        onCreditNameChange={(creditName) => changeCreditName(index, personIndex, creditName)}
-                        sortableProps={{
-                          ...chipSortable.draggableProps(performance().performanceId, personIndex),
-                          ...chipSortable.dropTargetProps(performance().performanceId, personIndex),
-                        }}
-                        isDragging={chipSortable.isDragging(performance().performanceId, personIndex)}
-                        isDropTarget={chipSortable.isDropTarget(performance().performanceId, personIndex)}
-                        onRemove={() => props.onChange((prev) => removeCoVocalist(prev, index, personIndex))}
-                      />
-                    )}
+                  <Index each={toCoVocalistUnits(performance().coVocalists)}>
+                    {(unit, unitIndex) => {
+                      const sortableProps = () => ({
+                        ...chipSortable.draggableProps(performance().performanceId, unitIndex),
+                        ...chipSortable.dropTargetProps(performance().performanceId, unitIndex),
+                      });
+                      const isDragging = () => chipSortable.isDragging(performance().performanceId, unitIndex);
+                      const isDropTarget = () => chipSortable.isDropTarget(performance().performanceId, unitIndex);
+                      const remove = () => props.onChange((prev) => removeCoVocalist(prev, index, unitIndex));
+
+                      return (
+                        <Switch>
+                          <Match when={asGroupUnit(unit())}>
+                            {(group) => (
+                              <PersonGroupChip
+                                name={group().personGroup.name}
+                                memberNames={group().members.map((member) => member.name)}
+                                sortableProps={sortableProps()}
+                                isDragging={isDragging()}
+                                isDropTarget={isDropTarget()}
+                                onRemove={remove}
+                              />
+                            )}
+                          </Match>
+                          <Match when={asPersonUnit(unit())}>
+                            {(person) => (
+                              <CoVocalistChip
+                                name={person().coVocalist.name}
+                                creditName={person().coVocalist.creditName}
+                                onCreditNameChange={(creditName) => changeCreditName(index, unitIndex, creditName)}
+                                sortableProps={sortableProps()}
+                                isDragging={isDragging()}
+                                isDropTarget={isDropTarget()}
+                                onRemove={remove}
+                              />
+                            )}
+                          </Match>
+                        </Switch>
+                      );
+                    }}
                   </Index>
                 </div>
                 <a

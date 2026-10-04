@@ -1,6 +1,6 @@
 import { For, Index, Show } from 'solid-js';
+import { ListItemActions } from '../ListItemActions';
 import { createSortable, reorderItems } from '../sortable';
-import { ListItemActions } from './ListItemActions';
 import { appendUnassignedPerformances, newId, type PerformanceForm, type SetlistItemForm } from './performance-form';
 
 interface SetlistEditorProps {

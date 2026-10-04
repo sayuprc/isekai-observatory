@@ -29,6 +29,7 @@ use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
 use OpenAPI\Admin\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Admin\Client\Model\MediaTypeValue;
 use OpenAPI\Admin\Client\Model\PerformancePerson as OpenApiPerformancePerson;
+use OpenAPI\Admin\Client\Model\PerformancePersonGroup as OpenApiPerformancePersonGroup;
 use OpenAPI\Admin\Client\Model\ReleaseFormatValue;
 use OpenAPI\Admin\Client\Model\SetlistItem as OpenApiSetlistItem;
 use OpenAPI\Admin\Client\Model\SongPerformance as OpenApiSongPerformance;
@@ -147,7 +148,12 @@ class Converter
             ->setSongTitle($performance->songTitle)
             ->setOrderNo($performance->orderNo)
             ->setCoVocalists(array_map(
-                static fn (AssembledCoVocalist $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson(['credit_name' => $coVocalist->creditName])
+                static fn (AssembledCoVocalist $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson([
+                    'credit_name' => $coVocalist->creditName,
+                    'person_group' => $coVocalist->personGroup === null ? null : new OpenApiPerformancePersonGroup()
+                        ->setPersonGroupId($coVocalist->personGroup->personGroupId)
+                        ->setName($coVocalist->personGroup->name),
+                ])
                     ->setPersonId($coVocalist->personId)
                     ->setName($coVocalist->name)
                     ->setOrderNo($coVocalist->orderNo),

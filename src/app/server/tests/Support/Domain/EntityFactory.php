@@ -27,6 +27,10 @@ use Media\Domain\Models\MediaType;
 use Media\Domain\Models\MediaUrl;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
 use Person\Domain\Models\Person;
+use Person\Domain\Models\PersonGroup;
+use Person\Domain\Models\PersonGroupId;
+use Person\Domain\Models\PersonGroupMembers;
+use Person\Domain\Models\PersonGroupName;
 use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonName;
 use Release\Domain\Models\Color;
@@ -120,6 +124,22 @@ trait EntityFactory
             new PersonId($personId),
             new PersonName($name),
             new OrderNo($orderNo),
+        );
+    }
+
+    /**
+     * @param list<string> $memberIds メンバーの人物 ID。並び順を表示順にする
+     */
+    protected function createPersonGroup(string $personGroupId, string $name, array $memberIds = []): PersonGroup
+    {
+        return new PersonGroup(
+            new PersonGroupId($personGroupId),
+            new PersonGroupName($name),
+            PersonGroupMembers::reconstruct(array_map(
+                static fn (string $personId, int $index): array => ['personId' => $personId, 'orderNo' => $index + 1],
+                $memberIds,
+                array_keys($memberIds),
+            )),
         );
     }
 

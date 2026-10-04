@@ -7,6 +7,7 @@ namespace Event\Infrastructures\Viewer;
 use DateTimeImmutable;
 use Emonkak\Orm\SelectBuilder;
 use Emonkak\Orm\Sql;
+use Event\Application\Viewer\Query\EventCoVocalistGroupSummary;
 use Event\Application\Viewer\Query\EventCoVocalistSummary;
 use Event\Application\Viewer\Query\EventListCursor;
 use Event\Application\Viewer\Query\EventListItem;
@@ -313,9 +314,18 @@ readonly class EventQueryService implements EventQueryServiceInterface
         $grouped = [];
         foreach ($this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_performance_persons.performance_id', 'song_performance_persons.credit_name', 'song_performance_persons.order_no', 'persons.person_id', 'persons.name'])
+                ->withSelect([
+                    'song_performance_persons.performance_id',
+                    'song_performance_persons.credit_name',
+                    'song_performance_persons.order_no',
+                    'persons.person_id',
+                    'persons.name',
+                    'person_groups.person_group_id',
+                ])
+                ->select('person_groups.name', 'person_group_name')
                 ->from('song_performance_persons')
                 ->join('persons', 'song_performance_persons.person_id = persons.person_id')
+                ->outerJoin('person_groups', 'song_performance_persons.person_group_id = person_groups.person_group_id')
                 ->where('song_performance_persons.performance_id', 'IN', $binPerformanceIds)
                 ->orderBy('song_performance_persons.order_no'),
         ) as $row) {
@@ -323,6 +333,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
                 $this->converter->toUuid(Row::string($row, 'person_id')),
                 Row::string($row, 'name'),
                 Row::nullableString($row, 'credit_name'),
+                ($binGroupId = Row::nullableString($row, 'person_group_id')) === null
+                    ? null
+                    : new EventCoVocalistGroupSummary($this->converter->toUuid($binGroupId), Row::string($row, 'person_group_name')),
                 Row::int($row, 'order_no'),
             );
         }

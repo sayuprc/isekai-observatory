@@ -1,6 +1,6 @@
 ---
 import type { Event } from '../../../features/events/types';
-import { eventDetailDate, eventStatusName } from '../../../features/events/types';
+import { coVocalistNames, eventDetailDate, eventStatusName } from '../../../features/events/types';
 import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import EventSetlistSongs from './EventSetlistSongs.astro';
@@ -22,9 +22,7 @@ const facts = [
 ];
 
 const coVocalistText = (performance: Performance): string | null =>
-  performance.coVocalists.length > 0
-    ? `共演: ${performance.coVocalists.map((person) => person.creditName ?? person.name).join(' / ')}`
-    : null;
+  performance.coVocalists.length > 0 ? `共演: ${coVocalistNames(performance.coVocalists).join(' / ')}` : null;
 const toSong = (performance: Performance) => ({
   title: performance.songTitle,
   href: performance.songId ? `/songs/${performance.songId}` : null,

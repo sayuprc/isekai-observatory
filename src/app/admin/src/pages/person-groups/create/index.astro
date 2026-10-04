@@ -1,0 +1,8 @@
+---
+import { CreateForm } from '../../../components/person-group/CreateForm';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout pageTitle="人物グループ作成">
+  <CreateForm client:only="solid-js" />
+</Layout>
