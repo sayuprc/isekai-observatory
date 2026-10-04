@@ -42,6 +42,8 @@
 - EventType を Live / Stream から Exhibition / Radio / Other へ変える場合、Setlist が残っていれば拒否する
 - Admin は Release の収録楽曲を曲順どおりに SongPerformance として取り込める
   取り込み元は関連リリースから選ぶか、リリースグループのタイトルで検索する。タイトルのみのトラックは取り込まない
+- Admin は Release の収録楽曲を曲順どおりに 1 曲 1 項目の Setlist 項目として取り込める
+  楽曲を参照するトラックは SongPerformance も作って項目から参照し、タイトルのみのトラックは表示名だけの項目にする
 - Postponed / Cancelled の Event は SongPerformance と Setlist を持たない
   状態を Postponed / Cancelled にする保存で SongPerformance または Setlist が残っていれば拒否する
 - SongPerformance の公開可否は所属する Event の `isDisplay` に従い、SongPerformance ごとには持たない

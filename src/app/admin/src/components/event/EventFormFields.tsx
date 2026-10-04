@@ -128,6 +128,8 @@ export const EventFormFields = (props: EventFormFieldsProps) => (
         setlist={props.form.setlist()}
         performances={props.form.performances()}
         onChange={props.form.setSetlist}
+        relatedReleases={props.form.releases()}
+        onImport={props.form.importSetlist}
         disabled={!props.form.canEditPerformances()}
       />
     </Show>

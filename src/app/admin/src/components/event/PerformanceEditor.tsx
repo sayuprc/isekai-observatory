@@ -21,7 +21,7 @@ import {
 } from './performance-form';
 import { clickPerformance, emptySelection } from './performance-selection';
 import { PersonGroupChip } from './PersonGroupChip';
-import { addPerformancesFromCandidates } from './release-import';
+import { addPerformancesFromCandidates, toReleasePerformanceCandidates } from './release-import';
 import { ReleaseImport } from './ReleaseImport';
 
 interface PerformanceEditorProps {
@@ -191,6 +191,10 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
 
       <div class="mb-4">
         <ReleaseImport
+          title="リリースの収録楽曲から追加"
+          description="選んだリリースの収録楽曲を、曲順のまま楽曲披露の末尾に追加します。管理対象外楽曲は追加できません"
+          importLabel="楽曲披露に追加"
+          toCandidates={toReleasePerformanceCandidates}
           relatedReleases={props.relatedReleases}
           onImport={(candidates) => props.onChange((prev) => addPerformancesFromCandidates(prev, candidates))}
           disabled={props.disabled}
