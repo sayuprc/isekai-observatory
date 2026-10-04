@@ -33,3 +33,5 @@
 | ADR-0027 | accepted | Event は時刻を保持せず日付で管理する | [api, admin, viewer] |
 | ADR-0028 | accepted | TypeScript パッケージの整形は Prettier に任せ、ESLint と Stylelint は lint だけを担う | [admin, viewer, admin-proxy] |
 | ADR-0029 | accepted | 共演者は人単位で保存し出演グループは共演者ごとの任意参照で表す | [api, admin, viewer] |
+| ADR-0030 | accepted | 管理画面の詳細・作成画面は固定見出しと保存操作、セクションの多い画面はタブで構成する | [admin] |
+| ADR-0031 | accepted | 管理画面の一覧の件数は検索用の Summary 型で返し、Application 層のクエリで数える | [api, admin] |
