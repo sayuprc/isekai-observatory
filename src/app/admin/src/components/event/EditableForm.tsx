@@ -5,13 +5,15 @@ import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
+import { createTabState } from '../../utils/tab';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
+import { TargetHistory } from '../audit-log/TargetHistory';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
 import { createEventForm } from './event-form';
-import { EventFormFields } from './EventFormFields';
+import { EVENT_TABS, EventFormFields, EventTabList } from './EventFormFields';
 import { EventMeta } from './EventMeta';
 
 interface DetailViewProps {
@@ -78,6 +80,7 @@ const EditableForm = (props: EditableFormProps) => {
   const form = createEventForm(event);
   const { isDirty, allowLeave } = createDirtyTracker(form.toRequestBody);
   const listUrl = getListUrl('/events');
+  const { tab, setTab, bindForm } = createTabState(EVENT_TABS, 'overview');
 
   const save = withSubmitting(async (submitEvent: SubmitEvent) => {
     submitEvent.preventDefault();
@@ -128,6 +131,7 @@ const EditableForm = (props: EditableFormProps) => {
         submitLabel="保存"
         submittingLabel="保存中..."
         onDiscard={discard}
+        tabs={<EventTabList form={form} current={tab()} onChange={setTab} withHistory />}
         menu={
           <ActionMenu
             label="その他の操作"
@@ -136,8 +140,12 @@ const EditableForm = (props: EditableFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form id="event-form" class="max-w-4xl space-y-6" onSubmit={save}>
-        <EventFormFields form={form} />
+      <form ref={bindForm} id="event-form" class="max-w-4xl space-y-6" onSubmit={save}>
+        <EventFormFields
+          form={form}
+          tab={tab()}
+          history={<TargetHistory targetType="Event" targetId={event.eventId} active={tab() === 'history'} />}
+        />
       </form>
     </>
   );

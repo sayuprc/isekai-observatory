@@ -1,7 +1,8 @@
-import { createSignal, Show } from 'solid-js';
+import { createSignal, Show, type JSX } from 'solid-js';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
 import { SegmentedControl } from '../SegmentedControl';
+import { TabList, TabPanel, type TabItem } from '../Tabs';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
 import { PerformanceEditor } from './PerformanceEditor';
@@ -10,41 +11,90 @@ import { SetlistEditor } from './SetlistEditor';
 import { SourceEditor } from './SourceEditor';
 import { VenueEditor } from './VenueEditor';
 
+export const EVENT_TABS = ['overview', 'performances', 'related', 'history'] as const;
+export type EventTab = (typeof EVENT_TABS)[number];
+
+const TAB_ID_PREFIX = 'event';
+
+interface EventTabListProps {
+  form: EventFormState;
+  current: EventTab;
+  onChange: (tab: EventTab) => void;
+  // 作成画面には履歴がない
+  withHistory: boolean;
+}
+
+export const EventTabList = (props: EventTabListProps) => {
+  const items = (): TabItem<EventTab>[] => [
+    { key: 'overview', label: '概要' },
+    {
+      key: 'performances',
+      label: '演目',
+      count: props.form.canEditSetlist()
+        ? `${props.form.performances().length} · ${props.form.setlist().length}`
+        : String(props.form.performances().length),
+    },
+    { key: 'related', label: '関連', count: String(props.form.mediaEntries().length + props.form.releases().length) },
+    ...(props.withHistory ? [{ key: 'history' as const, label: '履歴' }] : []),
+  ];
+
+  return (
+    <TabList
+      label="イベントの項目"
+      idPrefix={TAB_ID_PREFIX}
+      items={items()}
+      current={props.current}
+      onChange={props.onChange}
+    />
+  );
+};
+
 interface EventFormFieldsProps {
   form: EventFormState;
+  tab: EventTab;
+  // 履歴タブの中身。作成画面では渡さない
+  history?: JSX.Element;
 }
 
 export const EventFormFields = (props: EventFormFieldsProps) => (
   <>
-    <EventBasicInfo form={props.form} />
-
-    <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
-
-    <PerformanceEditor
-      performances={props.form.performances()}
-      onChange={props.form.updatePerformances}
-      relatedReleases={props.form.releases()}
-      disabled={!props.form.canEditPerformances()}
-    />
-    <Show when={props.form.canEditSetlist()}>
-      <SetlistEditor
-        setlist={props.form.setlist()}
+    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab}>
+      <EventBasicInfo form={props.form} />
+      <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
+      <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
+    </TabPanel>
+    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="performances" current={props.tab}>
+      <PerformanceEditor
         performances={props.form.performances()}
-        onChange={props.form.setSetlist}
+        onChange={props.form.updatePerformances}
         relatedReleases={props.form.releases()}
-        onImport={props.form.importSetlist}
         disabled={!props.form.canEditPerformances()}
       />
+      <Show when={props.form.canEditSetlist()}>
+        <SetlistEditor
+          setlist={props.form.setlist()}
+          performances={props.form.performances()}
+          onChange={props.form.setSetlist}
+          relatedReleases={props.form.releases()}
+          onImport={props.form.importSetlist}
+          disabled={!props.form.canEditPerformances()}
+        />
+      </Show>
+    </TabPanel>
+    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="related" current={props.tab}>
+      <MediaSection
+        entries={props.form.mediaEntries}
+        setEntries={props.form.setMediaEntries}
+        availableMedia={props.form.availableMedia}
+        setAvailableMedia={props.form.setAvailableMedia}
+      />
+      <ReleaseEditor releases={props.form.releases()} onChange={props.form.setReleases} />
+    </TabPanel>
+    <Show when={props.history}>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab}>
+        {props.history}
+      </TabPanel>
     </Show>
-
-    <MediaSection
-      entries={props.form.mediaEntries}
-      setEntries={props.form.setMediaEntries}
-      availableMedia={props.form.availableMedia}
-      setAvailableMedia={props.form.setAvailableMedia}
-    />
-    <ReleaseEditor releases={props.form.releases()} onChange={props.form.setReleases} />
-    <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
   </>
 );
 
@@ -61,7 +111,7 @@ const DISPLAY_OPTIONS = [
   { value: 'false', label: '表示しない' },
 ];
 
-const EventBasicInfo = (props: EventFormFieldsProps) => {
+const EventBasicInfo = (props: { form: EventFormState }) => {
   // 開催時期の形式は入力欄の出し分けにだけ使う。保存する値は開始日と終了日から決まる
   const [scheduleMode, setScheduleMode] = createSignal<ScheduleMode>(
     props.form.endOn() ? 'range' : props.form.startOn() ? 'single' : 'undecided',

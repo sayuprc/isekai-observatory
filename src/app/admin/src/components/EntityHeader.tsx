@@ -14,6 +14,8 @@ interface EntityHeaderProps {
   onDiscard?: () => void;
   // ActionMenu など
   menu?: JSX.Element;
+  // TabList など。見出しの下端に揃えて置く
+  tabs?: JSX.Element;
 }
 
 // 詳細・作成画面の上部に固定する見出しと保存操作
@@ -59,6 +61,9 @@ export const EntityHeader = (props: EntityHeaderProps) => (
         {props.menu}
       </div>
     </div>
+    <Show when={props.tabs}>
+      <div class="-mb-3 mt-2">{props.tabs}</div>
+    </Show>
   </div>
 );
 
