@@ -1,24 +1,16 @@
-import { For, Match, Show, Switch, createResource, createSignal } from 'solid-js';
-import type {
-  ReleaseFormatValue,
-  ReleaseGroupGetResponse,
-  ReleaseGroupReferencedRelease,
-  ReleaseGroupTypeValue,
-} from '../../generated';
+import { For, Match, Show, Switch, createResource } from 'solid-js';
+import type { ReleaseFormatValue, ReleaseGroupGetResponse, ReleaseGroupReferencedRelease } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
+import { ActionMenu } from '../ActionMenu';
+import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-
-const RELEASE_GROUP_TYPE_OPTIONS: Array<{ value: ReleaseGroupTypeValue; label: string }> = [
-  { value: 1, label: 'シングル' },
-  { value: 2, label: 'アルバム' },
-  { value: 3, label: 'EP' },
-  { value: 99, label: 'その他' },
-];
+import { createReleaseGroupForm, ReleaseGroupFields } from './ReleaseGroupFields';
 
 const RELEASE_FORMAT_LABELS: Record<ReleaseFormatValue, string> = {
   1: '配信',
@@ -161,36 +153,29 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
   const listUrl = getListUrl('/release-groups');
   const releaseGroupId = props.data.releaseGroup.releaseGroupId;
 
-  const [title, setTitle] = createSignal(props.data.releaseGroup.title);
-  const [typeValue, setTypeValue] = createSignal<ReleaseGroupTypeValue>(props.data.releaseGroup.typeValue);
-  const [description, setDescription] = createSignal(props.data.releaseGroup.description);
-  const [isDisplay, setIsDisplay] = createSignal(props.data.releaseGroup.isDisplay);
-  const [orderNo, setOrderNo] = createSignal(props.data.releaseGroup.orderNo);
+  const form = createReleaseGroupForm(props.data.releaseGroup);
+  const { isDirty, allowLeave } = createDirtyTracker(form.toRequestBody);
 
   const { formError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting: isUpdating, withSubmitting: withUpdating } = createSubmitting();
   const { isSubmitting: isDeleting, withSubmitting: withDeleting } = createSubmitting();
 
-  const handleSubmit = withUpdating(async (e: Event) => {
+  const handleSubmit = withUpdating(async (e: SubmitEvent) => {
     e.preventDefault();
     clearErrors();
 
-    const { data, error, status } = await client.api['release-groups']({ releaseGroupId }).put({
-      title: title(),
-      typeValue: typeValue(),
-      description: description(),
-      isDisplay: isDisplay(),
-      orderNo: orderNo(),
-    });
+    const { data, error, status } = await client.api['release-groups']({ releaseGroupId }).put(form.toRequestBody());
 
     if (data) {
       setFlash('更新しました');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
 
     if (status === 404) {
       setFlash('データがありません', 'error');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
@@ -198,9 +183,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
     handleError(status, error);
   });
 
-  const handleDelete = withDeleting(async (e: Event) => {
-    e.preventDefault();
-
+  const handleDelete = withDeleting(async () => {
     if (!window.confirm('削除します。よろしいですか？')) {
       return;
     }
@@ -215,106 +198,44 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
     }
 
     setFlash('削除しました');
+    allowLeave();
     window.location.href = listUrl;
   });
 
   return (
     <>
-      <a href={listUrl} class="btn btn-ghost btn-sm mb-4">
-        ← 一覧に戻る
-      </a>
+      <EntityHeader
+        breadcrumb={{ href: listUrl, label: 'リリースグループ' }}
+        title={form.title() || '(タイトル未入力)'}
+        formId="release-group-form"
+        isDirty={isDirty()}
+        isSubmitting={isUpdating() || isDeleting()}
+        submitLabel="保存"
+        submittingLabel="保存中..."
+        onDiscard={() => discardChanges(allowLeave)}
+        menu={
+          <ActionMenu
+            label="その他の操作"
+            items={[
+              {
+                label: 'このリリースグループを削除する',
+                danger: true,
+                disabled: isUpdating() || isDeleting(),
+                onSelect: handleDelete,
+              },
+            ]}
+          />
+        }
+      />
       <FormError message={formError()} onClose={clearErrors} />
       <div class="max-w-5xl space-y-6">
-        <form onSubmit={handleSubmit}>
-          <fieldset class="fieldset rounded-box border border-base-300 bg-base-200 p-6">
-            <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
-            <div class="grid gap-5 md:grid-cols-2">
-              <div>
-                <label class="label">タイトル</label>
-                <input
-                  type="text"
-                  class="input w-full"
-                  value={title()}
-                  onInput={(e) => setTitle(e.currentTarget.value)}
-                  classList={{ 'input-error': !!getFieldError('title') }}
-                />
-                <Show when={getFieldError('title')}>
-                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-                </Show>
-              </div>
-
-              <div>
-                <label class="label">種別</label>
-                <select
-                  class="select select-bordered w-full"
-                  value={String(typeValue())}
-                  onChange={(e) => setTypeValue(Number(e.currentTarget.value) as ReleaseGroupTypeValue)}
-                >
-                  <For each={RELEASE_GROUP_TYPE_OPTIONS}>
-                    {(option) => <option value={option.value}>{option.label}</option>}
-                  </For>
-                </select>
-                <Show when={getFieldError('typeValue')}>
-                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-                </Show>
-              </div>
-
-              <div class="md:col-span-2">
-                <label class="label">説明</label>
-                <textarea
-                  class="textarea textarea-bordered min-h-32 w-full"
-                  value={description()}
-                  onInput={(e) => setDescription(e.currentTarget.value)}
-                  classList={{ 'textarea-error': !!getFieldError('description') }}
-                />
-                <Show when={getFieldError('description')}>
-                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-                </Show>
-              </div>
-
-              <div>
-                <label class="label">表示順</label>
-                <input
-                  type="number"
-                  min="1"
-                  step="1"
-                  class="input w-full"
-                  value={orderNo()}
-                  onInput={(e) => setOrderNo(Number(e.currentTarget.value))}
-                  classList={{ 'input-error': !!getFieldError('orderNo') }}
-                />
-                <Show when={getFieldError('orderNo')}>
-                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-                </Show>
-              </div>
-
-              <div class="md:col-span-2">
-                <label class="label">表示設定</label>
-                <select
-                  class="select select-bordered w-full"
-                  value={String(isDisplay())}
-                  onChange={(e) => setIsDisplay(e.currentTarget.value === 'true')}
-                  classList={{ 'select-error': !!getFieldError('isDisplay') }}
-                >
-                  <option value="true">表示する</option>
-                  <option value="false">表示しない</option>
-                </select>
-                <Show when={getFieldError('isDisplay')}>
-                  {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-                </Show>
-              </div>
-            </div>
-
-            <div class="mt-6 flex justify-end">
-              <button class="btn btn-primary" disabled={isUpdating() || isDeleting()}>
-                {isUpdating() ? '更新中...' : '更新'}
-              </button>
-            </div>
-          </fieldset>
+        <form id="release-group-form" onSubmit={handleSubmit}>
+          <ReleaseGroupFields form={form} getFieldError={getFieldError} />
         </form>
 
         <fieldset class="rounded-box border border-base-300 bg-base-200 p-6">
           <legend class="px-2 text-sm font-semibold text-base-content/70">リリース(版)</legend>
+          <p class="mb-2 text-sm text-base-content/60">リリースが登録されているグループは削除できません</p>
           <div class="mb-4 flex justify-end">
             <a href={`/releases/create?releaseGroupId=${releaseGroupId}`} class="btn btn-primary btn-sm">
               リリースを追加
@@ -390,22 +311,6 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
               </table>
             </div>
           </Show>
-        </fieldset>
-
-        <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
-          <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
-          <p class="mt-1 text-sm text-base-content/60">
-            この操作は取り消せません。リリースが登録されている場合は削除できません。
-          </p>
-          <div class="mt-4">
-            <button
-              onClick={handleDelete}
-              class="btn btn-outline btn-error btn-sm"
-              disabled={isDeleting() || isUpdating()}
-            >
-              {isDeleting() ? '削除中...' : 'このリリースグループを削除する'}
-            </button>
-          </div>
         </fieldset>
       </div>
     </>
