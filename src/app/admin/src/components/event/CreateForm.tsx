@@ -49,7 +49,7 @@ export const CreateForm = () => {
       />
       <FormError message={formError()} onClose={clearErrors} />
       <form ref={bindForm} id="event-form" onSubmit={submit}>
-        <EventFormFields form={form} tab={tab()} onTabChange={setTab} />
+        <EventFormFields form={form} tab={tab()} />
       </form>
     </>
   );
