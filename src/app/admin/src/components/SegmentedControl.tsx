@@ -16,7 +16,7 @@ export const SegmentedControl = <T extends string | number>(props: SegmentedCont
         <button
           type="button"
           class="btn join-item font-normal"
-          classList={{ 'btn-neutral font-semibold': option.value === props.value }}
+          classList={{ 'btn-primary font-semibold': option.value === props.value }}
           aria-pressed={option.value === props.value}
           disabled={props.disabled}
           onClick={() => props.onChange(option.value)}
