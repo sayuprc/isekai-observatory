@@ -217,10 +217,12 @@ docker run --rm -u {{vars.uid}}:{{vars.gid}} -v ".:/local" ${OPENAPI_IMAGE} gene
   -p invokerPackage=OpenAPI\\Viewer\\Client
 '''
 
+# 可変長引数は usage.path を 1 件ずつ quote して渡す
+# ${usage_path} は引用符付きで連結された文字列なので、そのまま展開すると引用符が残り、空白でも分割される
 [tasks."api:phpstan"]
 description = "PHPStan を実行する"
 usage = 'arg "[path]" var=#true help="静的解析対象パス"'
-run = "docker compose exec php composer phpstan ${usage_path}"
+run = "docker compose exec php composer phpstan {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:phpstan:clear-cache"]
 description = "PHPStan のキャッシュを削除する"
@@ -233,19 +235,19 @@ run = "docker compose exec php composer arkitect"
 [tasks."api:ecs"]
 description = "ECS を実行し、コードフォーマットをチェックする"
 usage = 'arg "[path]" var=#true help="フォーマットチェック対象パス"'
-run = "docker compose exec php composer ecs ${usage_path}"
+run = "docker compose exec php composer ecs {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:ecs:fix"]
 description = "ECS を実行し、フォーマットを自動修正する"
 usage = 'arg "[path]" var=#true help="フォーマット自動修正対象パス"'
-run = "docker compose exec php composer ecs-fix ${usage_path}"
+run = "docker compose exec php composer ecs-fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:test"]
 description = "テストを実行する"
 usage = '''
 arg "[path]" var=#true help="テスト対象パス"
 '''
-run = "docker compose exec php ./vendor/bin/paratest ${usage_path}"
+run = "docker compose exec php ./vendor/bin/paratest {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:test:all"]
 description = "すべてのテストを実行する"
@@ -337,9 +339,9 @@ run = [
 
 [tasks."admin:format:check"]
 description = "Admin の formatter をチェックする"
-usage = 'arg "[path]" var=#true help="Prettier のチェック対象パス (省略時は全体)"'
+usage = 'arg "[path]" var=#true default="." help="Prettier のチェック対象パス (省略時は全体)"'
 dir = "src/app/admin"
-run = "bun x prettier --check ${usage_path:-.}"
+run = "bun x prettier --check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."admin:lint"]
 description = "Admin の linter を実行する"
@@ -358,13 +360,13 @@ run = "bun run eslint:fix"
 description = "Stylelint を実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
 dir = "src/app/admin"
-run = "bun run stylelint:check ${usage_path}"
+run = "bun run stylelint:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."admin:style:fix"]
 description = "Stylelint を --fix オプション付きで実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/admin"
-run = "bun run stylelint:fix ${usage_path}"
+run = "bun run stylelint:fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."admin:typecheck"]
 description = "Admin の TypeScript をチェックする"
@@ -417,9 +419,9 @@ run = [
 
 [tasks."viewer:format:check"]
 description = "Viewer の formatter をチェックする"
-usage = 'arg "[path]" var=#true help="Prettier のチェック対象パス (省略時は全体)"'
+usage = 'arg "[path]" var=#true default="." help="Prettier のチェック対象パス (省略時は全体)"'
 dir = "src/app/viewer"
-run = "bun x prettier --check ${usage_path:-.}"
+run = "bun x prettier --check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."viewer:lint"]
 description = "Viewer の linter を実行する"
@@ -438,13 +440,13 @@ run = "bun run eslint:fix"
 description = "Stylelint を実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
 dir = "src/app/viewer"
-run = "bun run stylelint:check ${usage_path}"
+run = "bun run stylelint:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."viewer:style:fix"]
 description = "Stylelint を --fix オプション付きで実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/viewer"
-run = "bun run stylelint:fix ${usage_path}"
+run = "bun run stylelint:fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."viewer:typecheck"]
 description = "Viewer の TypeScript をチェックする"
