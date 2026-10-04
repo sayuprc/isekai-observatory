@@ -151,13 +151,12 @@ type NavSection = {
 
 const navSections: NavSection[] = [
   {
-    title: '楽曲',
+    title: '記録',
     items: [
+      { href: '/events', label: 'イベント', icon: PlayIcon },
       { href: '/songs', label: '楽曲', icon: MusicNoteIcon },
       { href: '/release-groups', label: 'リリースグループ', icon: DiscIcon },
       { href: '/media', label: 'メディア', icon: PlayIcon },
-      { href: '/song-types', label: '楽曲種別', icon: TagIcon },
-      { href: '/song-tags', label: '楽曲タグ', icon: SwatchIcon },
     ],
   },
   {
@@ -168,10 +167,11 @@ const navSections: NavSection[] = [
     ],
   },
   {
-    title: 'イベント',
+    title: 'マスタ',
     items: [
-      { href: '/events', label: 'イベント', icon: PlayIcon },
       { href: '/venues', label: '開催先', icon: MapPinIcon },
+      { href: '/song-types', label: '楽曲種別', icon: TagIcon },
+      { href: '/song-tags', label: '楽曲タグ', icon: SwatchIcon },
     ],
   },
   {
@@ -214,9 +214,7 @@ export const Sidebar = (props: Props) => {
                   <a
                     href={item.href}
                     class={
-                      isActivePath(props.currentPath, item.href)
-                        ? 'active border-l-4 border-primary pl-[calc(theme(spacing.3)-4px)] font-semibold'
-                        : 'border-l-4 border-transparent'
+                      isActivePath(props.currentPath, item.href) ? 'menu-active font-semibold' : 'text-base-content/70'
                     }
                     aria-current={isActivePath(props.currentPath, item.href) ? 'page' : undefined}
                   >
