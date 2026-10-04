@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js';
 import type { Event, EventCreateRequest, EventRelease, EventStatusValue, EventTypeValue, Media } from '../../generated';
 import { normalizeDateValue } from '../../utils/date';
 import { toMediaEntry, type MediaEntry } from '../media/MediaSection';
+import type { SongCandidate } from '../song-import';
 import {
   toSourceForms,
   toSourcesPayload,
@@ -20,6 +21,7 @@ import {
   type PerformanceForm,
   type SetlistItemForm,
 } from './performance-form';
+import { addSetlistFromCandidates } from './release-import';
 
 export type EventRequestBody = EventCreateRequest;
 
@@ -74,6 +76,12 @@ export const createEventForm = (event?: Event) => {
     );
   };
 
+  const importSetlist = (candidates: SongCandidate[]) => {
+    const next = addSetlistFromCandidates({ performances: performances(), setlist: setlist() }, candidates);
+    setPerformances(next.performances);
+    setSetlist(next.setlist);
+  };
+
   const validate = (): string | null => validateSetlistItems(setlist()) ?? validateSources(sources());
 
   const toRequestBody = (): EventRequestBody => ({
@@ -113,6 +121,7 @@ export const createEventForm = (event?: Event) => {
     updatePerformances,
     setlist,
     setSetlist,
+    importSetlist,
     venues,
     setVenues,
     mediaEntries,

@@ -1,12 +1,19 @@
 import { For, Index, Show } from 'solid-js';
+import type { EventRelease } from '../../generated';
 import { ListItemActions } from '../ListItemActions';
+import type { SongCandidate } from '../song-import';
 import { createSortable, reorderItems } from '../sortable';
 import { appendUnassignedPerformances, newId, type PerformanceForm, type SetlistItemForm } from './performance-form';
+import { toReleaseSetlistCandidates } from './release-import';
+import { ReleaseImport } from './ReleaseImport';
 
 interface SetlistEditorProps {
   setlist: SetlistItemForm[];
   performances: PerformanceForm[];
   onChange: (updater: (prev: SetlistItemForm[]) => SetlistItemForm[]) => void;
+  relatedReleases: EventRelease[];
+  // 楽曲披露も同時に増えるので、セットリストだけを更新する onChange とは分ける
+  onImport: (candidates: SongCandidate[]) => void;
   disabled?: boolean;
 }
 
@@ -69,6 +76,18 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
         <button type="button" class="btn btn-outline btn-sm" disabled={props.disabled} onClick={addItem}>
           項目を追加
         </button>
+      </div>
+
+      <div class="mb-4">
+        <ReleaseImport
+          title="リリースの収録楽曲から追加"
+          description="選んだリリースの収録楽曲を、曲順のまま 1 曲 1 項目でセットリストの末尾に追加します。楽曲は楽曲披露にも追加し、管理対象外楽曲は表示名だけの項目にします"
+          importLabel="セットリストに追加"
+          toCandidates={toReleaseSetlistCandidates}
+          relatedReleases={props.relatedReleases}
+          onImport={props.onImport}
+          disabled={props.disabled}
+        />
       </div>
 
       <Show
