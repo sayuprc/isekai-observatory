@@ -144,6 +144,7 @@ const EditableForm = (props: EditableFormProps) => {
         <EventFormFields
           form={form}
           tab={tab()}
+          onTabChange={setTab}
           history={<TargetHistory targetType="Event" targetId={event.eventId} active={tab() === 'history'} />}
         />
       </form>

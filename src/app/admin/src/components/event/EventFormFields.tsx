@@ -5,6 +5,7 @@ import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
+import { EventChecklist } from './EventChecklist';
 import { PerformanceWorkspace } from './PerformanceWorkspace';
 import { ReleaseEditor } from './ReleaseEditor';
 import { SourceEditor } from './SourceEditor';
@@ -51,16 +52,24 @@ export const EventTabList = (props: EventTabListProps) => {
 interface EventFormFieldsProps {
   form: EventFormState;
   tab: EventTab;
+  onTabChange: (tab: EventTab) => void;
   // 履歴タブの中身。作成画面では渡さない
   history?: JSX.Element;
 }
 
 export const EventFormFields = (props: EventFormFieldsProps) => (
   <>
-    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
-      <EventBasicInfo form={props.form} />
-      <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
-      <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
+    <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="@container">
+      <div class="grid gap-6 @5xl:grid-cols-[minmax(0,56rem)_20rem] @5xl:items-start">
+        <div class="min-w-0 space-y-6">
+          <EventBasicInfo form={props.form} />
+          <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
+          <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
+        </div>
+        <div class="@5xl:sticky @5xl:top-44">
+          <EventChecklist form={props.form} onNavigate={props.onTabChange} />
+        </div>
+      </div>
     </TabPanel>
     <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="performances" current={props.tab}>
       <PerformanceWorkspace form={props.form} />
