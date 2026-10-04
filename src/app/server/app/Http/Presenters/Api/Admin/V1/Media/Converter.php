@@ -6,9 +6,11 @@ namespace App\Http\Presenters\Api\Admin\V1\Media;
 
 use DateTime;
 use Media\Application\Admin\Query\MediaReferencedSong;
+use Media\Application\Admin\Query\MediaUsageCount;
 use Media\Domain\Models\Media;
 use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
 use OpenAPI\Admin\Client\Model\MediaReferencedSong as OpenApiMediaReferencedSong;
+use OpenAPI\Admin\Client\Model\MediaSummary as OpenApiMediaSummary;
 use OpenAPI\Admin\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Admin\Client\Model\MediaTypeValue;
 
@@ -23,6 +25,19 @@ class Converter
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt->value))
             ->setType($this->toOpenApiMediaType($media))
             ->setIsDisplay($media->isDisplay);
+    }
+
+    public function toOpenApiMediaSummary(Media $media, MediaUsageCount $usage): OpenApiMediaSummary
+    {
+        return new OpenApiMediaSummary()
+            ->setMediaId($media->mediaId->value)
+            ->setTitle($media->title->value)
+            ->setUrl($media->url->value)
+            ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt->value))
+            ->setType($this->toOpenApiMediaType($media))
+            ->setIsDisplay($media->isDisplay)
+            ->setSongCount($usage->songCount)
+            ->setEventCount($usage->eventCount);
     }
 
     public function toOpenApiReferencedSong(MediaReferencedSong $song): OpenApiMediaReferencedSong

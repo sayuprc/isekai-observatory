@@ -303,7 +303,7 @@ export type MediaReferencedSong = {
 };
 
 export type MediaSearchResponse = {
-    media: Array<Media>;
+    media: Array<MediaSummary>;
     maxPage: number;
 };
 
@@ -311,6 +311,26 @@ export type MediaSearchResponse = {
  * メディア検索のソート条件
  */
 export type MediaSearchSortBy = 'published_at' | 'title';
+
+/**
+ * メディア一覧の 1 行分
+ */
+export type MediaSummary = {
+    mediaId: MediaId;
+    title: MediaTitle;
+    url: MediaUrl;
+    publishedAt: MediaPublishedAt;
+    type: MediaType;
+    isDisplay: boolean;
+    /**
+     * このメディアをリンクしている楽曲の件数
+     */
+    songCount: number;
+    /**
+     * このメディアを関連づけているイベントの件数
+     */
+    eventCount: number;
+};
 
 export type MediaType = {
     name: MediaTypeName;

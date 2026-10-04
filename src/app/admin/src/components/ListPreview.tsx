@@ -23,7 +23,8 @@ export interface RecordPreviewData {
   title: string;
   meta?: JSX.Element;
   rows: { label: string; value: string | number }[];
-  actions: { label: string; href: string; primary?: boolean }[];
+  // external は外部サイトへのリンクで、別タブで開く
+  actions: { label: string; href: string; primary?: boolean; external?: boolean }[];
 }
 
 interface RecordPreviewProps {
@@ -59,7 +60,13 @@ export const RecordPreview = (props: RecordPreviewProps) => (
           <div class="flex flex-wrap gap-2 px-5 py-4">
             <For each={record().actions}>
               {(action) => (
-                <a href={action.href} class="btn btn-sm" classList={{ 'btn-primary': action.primary }}>
+                <a
+                  href={action.href}
+                  class="btn btn-sm"
+                  classList={{ 'btn-primary': action.primary }}
+                  target={action.external ? '_blank' : undefined}
+                  rel={action.external ? 'noreferrer' : undefined}
+                >
                   {action.label}
                 </a>
               )}

@@ -4024,7 +4024,7 @@ components:
         media:
           type: array
           items:
-            $ref: '#/components/schemas/Media'
+            $ref: '#/components/schemas/MediaSummary'
         maxPage:
           type: integer
           format: int32
@@ -4034,6 +4034,39 @@ components:
         - published_at
         - title
       description: メディア検索のソート条件
+    MediaSummary:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+        - isDisplay
+        - songCount
+        - eventCount
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaType'
+        isDisplay:
+          type: boolean
+        songCount:
+          type: integer
+          format: int32
+          description: このメディアをリンクしている楽曲の件数
+        eventCount:
+          type: integer
+          format: int32
+          description: このメディアを関連づけているイベントの件数
+      description: メディア一覧の 1 行分
     MediaType:
       type: object
       required:
