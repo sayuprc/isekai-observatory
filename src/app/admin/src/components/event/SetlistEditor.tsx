@@ -14,6 +14,8 @@ interface SetlistEditorProps {
   relatedReleases: EventRelease[];
   // 楽曲披露も同時に増えるので、セットリストだけを更新する onChange とは分ける
   onImport: (candidates: SongCandidate[]) => void;
+  // 選択中の楽曲披露。紐づく項目を強調して、披露とセットリストの対応を見やすくする
+  highlightedPerformanceIds?: ReadonlySet<string>;
   disabled?: boolean;
 }
 
@@ -30,6 +32,9 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
 
   const songTitleOf = (performanceId: string) =>
     props.performances.find((performance) => performance.performanceId === performanceId)?.songTitle ?? '';
+
+  const isHighlighted = (item: SetlistItemForm) =>
+    item.performanceIds.some((performanceId) => props.highlightedPerformanceIds?.has(performanceId));
 
   const updateItem = (index: number, patch: (item: SetlistItemForm) => SetlistItemForm) => {
     props.onChange((prev) => prev.map((item, i) => (i === index ? patch(item) : item)));
@@ -101,6 +106,7 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
                 {...sortable.dropTargetProps('setlist', index)}
                 class="flex flex-wrap items-center gap-2 px-2 py-1 transition-colors"
                 classList={{
+                  'bg-info/10 shadow-[inset_3px_0_0_var(--color-info)]': isHighlighted(item()),
                   'opacity-50': sortable.isDragging('setlist', index),
                   'outline outline-primary': sortable.isDropTarget('setlist', index),
                 }}

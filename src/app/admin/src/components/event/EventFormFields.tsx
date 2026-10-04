@@ -5,10 +5,9 @@ import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
-import { PerformanceEditor } from './PerformanceEditor';
+import { PerformanceWorkspace } from './PerformanceWorkspace';
 import { ReleaseEditor } from './ReleaseEditor';
 import { initialScheduleState, switchScheduleMode, type ScheduleMode } from './schedule-mode';
-import { SetlistEditor } from './SetlistEditor';
 import { SourceEditor } from './SourceEditor';
 import { VenueEditor } from './VenueEditor';
 
@@ -68,23 +67,8 @@ export const EventFormFields = (props: EventFormFieldsProps) => {
         <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
         <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
       </TabPanel>
-      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="performances" current={props.tab} class="max-w-4xl">
-        <PerformanceEditor
-          performances={props.form.performances()}
-          onChange={props.form.updatePerformances}
-          relatedReleases={props.form.releases()}
-          disabled={!props.form.canEditPerformances()}
-        />
-        <Show when={props.form.canEditSetlist()}>
-          <SetlistEditor
-            setlist={props.form.setlist()}
-            performances={props.form.performances()}
-            onChange={props.form.setSetlist}
-            relatedReleases={props.form.releases()}
-            onImport={props.form.importSetlist}
-            disabled={!props.form.canEditPerformances()}
-          />
-        </Show>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="performances" current={props.tab}>
+        <PerformanceWorkspace form={props.form} />
       </TabPanel>
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="related" current={props.tab} class="max-w-4xl">
         <MediaSection
