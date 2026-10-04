@@ -3752,6 +3752,10 @@ components:
         - schedule
         - status
         - isDisplay
+        - venueNames
+        - performanceCount
+        - setlistItemCount
+        - sourceCount
       properties:
         eventId:
           $ref: '#/components/schemas/eventId'
@@ -3765,6 +3769,23 @@ components:
           $ref: '#/components/schemas/EventStatus'
         isDisplay:
           type: boolean
+        venueNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/venueName'
+          description: 開催先名。登録順に並べる
+        performanceCount:
+          type: integer
+          format: int32
+          description: 楽曲披露の件数
+        setlistItemCount:
+          type: integer
+          format: int32
+          description: セットリスト項目の件数
+        sourceCount:
+          type: integer
+          format: int32
+          description: 出典の件数
       description: イベント一覧の 1 行分
     EventType:
       type: object

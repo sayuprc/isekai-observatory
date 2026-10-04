@@ -9,6 +9,9 @@ use Event\Domain\Models\EventType;
 
 readonly class EventSummary
 {
+    /**
+     * @param list<string> $venueNames 開催先名。登録順
+     */
     public function __construct(
         public string $eventId,
         public string $title,
@@ -17,6 +20,10 @@ readonly class EventSummary
         public ?string $endOn,
         public EventStatus $status,
         public bool $isDisplay,
+        public array $venueNames,
+        public int $performanceCount,
+        public int $setlistItemCount,
+        public int $sourceCount,
     ) {
     }
 }

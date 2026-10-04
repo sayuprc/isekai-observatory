@@ -184,6 +184,22 @@ export type EventSummary = {
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatus;
     isDisplay: boolean;
+    /**
+     * 開催先名。登録順に並べる
+     */
+    venueNames: Array<VenueName>;
+    /**
+     * 楽曲披露の件数
+     */
+    performanceCount: number;
+    /**
+     * セットリスト項目の件数
+     */
+    setlistItemCount: number;
+    /**
+     * 出典の件数
+     */
+    sourceCount: number;
 };
 
 export type EventType = {

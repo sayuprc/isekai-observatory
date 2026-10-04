@@ -63,7 +63,11 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'type' => '\OpenAPI\Admin\Client\Model\EventType',
         'schedule' => '\OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
         'status' => '\OpenAPI\Admin\Client\Model\EventStatus',
-        'is_display' => 'bool'
+        'is_display' => 'bool',
+        'venue_names' => 'string[]',
+        'performance_count' => 'int',
+        'setlist_item_count' => 'int',
+        'source_count' => 'int'
     ];
 
     /**
@@ -79,7 +83,11 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'type' => null,
         'schedule' => null,
         'status' => null,
-        'is_display' => null
+        'is_display' => null,
+        'venue_names' => null,
+        'performance_count' => 'int32',
+        'setlist_item_count' => 'int32',
+        'source_count' => 'int32'
     ];
 
     /**
@@ -93,7 +101,11 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'type' => false,
         'schedule' => false,
         'status' => false,
-        'is_display' => false
+        'is_display' => false,
+        'venue_names' => false,
+        'performance_count' => false,
+        'setlist_item_count' => false,
+        'source_count' => false
     ];
 
     /**
@@ -187,7 +199,11 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'type' => 'type',
         'schedule' => 'schedule',
         'status' => 'status',
-        'is_display' => 'isDisplay'
+        'is_display' => 'isDisplay',
+        'venue_names' => 'venueNames',
+        'performance_count' => 'performanceCount',
+        'setlist_item_count' => 'setlistItemCount',
+        'source_count' => 'sourceCount'
     ];
 
     /**
@@ -201,7 +217,11 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'type' => 'setType',
         'schedule' => 'setSchedule',
         'status' => 'setStatus',
-        'is_display' => 'setIsDisplay'
+        'is_display' => 'setIsDisplay',
+        'venue_names' => 'setVenueNames',
+        'performance_count' => 'setPerformanceCount',
+        'setlist_item_count' => 'setSetlistItemCount',
+        'source_count' => 'setSourceCount'
     ];
 
     /**
@@ -215,7 +235,11 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'type' => 'getType',
         'schedule' => 'getSchedule',
         'status' => 'getStatus',
-        'is_display' => 'getIsDisplay'
+        'is_display' => 'getIsDisplay',
+        'venue_names' => 'getVenueNames',
+        'performance_count' => 'getPerformanceCount',
+        'setlist_item_count' => 'getSetlistItemCount',
+        'source_count' => 'getSourceCount'
     ];
 
     /**
@@ -281,6 +305,10 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('schedule', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
+        $this->setIfExists('venue_names', $data ?? [], null);
+        $this->setIfExists('performance_count', $data ?? [], null);
+        $this->setIfExists('setlist_item_count', $data ?? [], null);
+        $this->setIfExists('source_count', $data ?? [], null);
     }
 
     /**
@@ -331,6 +359,18 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
+        }
+        if ($this->container['venue_names'] === null) {
+            $invalidProperties[] = "'venue_names' can't be null";
+        }
+        if ($this->container['performance_count'] === null) {
+            $invalidProperties[] = "'performance_count' can't be null";
+        }
+        if ($this->container['setlist_item_count'] === null) {
+            $invalidProperties[] = "'setlist_item_count' can't be null";
+        }
+        if ($this->container['source_count'] === null) {
+            $invalidProperties[] = "'source_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -510,6 +550,114 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable is_display cannot be null');
         }
         $this->container['is_display'] = $is_display;
+
+        return $this;
+    }
+
+    /**
+     * Gets venue_names
+     *
+     * @return string[]
+     */
+    public function getVenueNames()
+    {
+        return $this->container['venue_names'];
+    }
+
+    /**
+     * Sets venue_names
+     *
+     * @param string[] $venue_names 開催先名。登録順に並べる
+     *
+     * @return self
+     */
+    public function setVenueNames($venue_names)
+    {
+        if (is_null($venue_names)) {
+            throw new \InvalidArgumentException('non-nullable venue_names cannot be null');
+        }
+        $this->container['venue_names'] = $venue_names;
+
+        return $this;
+    }
+
+    /**
+     * Gets performance_count
+     *
+     * @return int
+     */
+    public function getPerformanceCount()
+    {
+        return $this->container['performance_count'];
+    }
+
+    /**
+     * Sets performance_count
+     *
+     * @param int $performance_count 楽曲披露の件数
+     *
+     * @return self
+     */
+    public function setPerformanceCount($performance_count)
+    {
+        if (is_null($performance_count)) {
+            throw new \InvalidArgumentException('non-nullable performance_count cannot be null');
+        }
+        $this->container['performance_count'] = $performance_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets setlist_item_count
+     *
+     * @return int
+     */
+    public function getSetlistItemCount()
+    {
+        return $this->container['setlist_item_count'];
+    }
+
+    /**
+     * Sets setlist_item_count
+     *
+     * @param int $setlist_item_count セットリスト項目の件数
+     *
+     * @return self
+     */
+    public function setSetlistItemCount($setlist_item_count)
+    {
+        if (is_null($setlist_item_count)) {
+            throw new \InvalidArgumentException('non-nullable setlist_item_count cannot be null');
+        }
+        $this->container['setlist_item_count'] = $setlist_item_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets source_count
+     *
+     * @return int
+     */
+    public function getSourceCount()
+    {
+        return $this->container['source_count'];
+    }
+
+    /**
+     * Sets source_count
+     *
+     * @param int $source_count 出典の件数
+     *
+     * @return self
+     */
+    public function setSourceCount($source_count)
+    {
+        if (is_null($source_count)) {
+            throw new \InvalidArgumentException('non-nullable source_count cannot be null');
+        }
+        $this->container['source_count'] = $source_count;
 
         return $this;
     }
