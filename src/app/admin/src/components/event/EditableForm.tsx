@@ -2,7 +2,7 @@ import { Match, Switch, createResource } from 'solid-js';
 import type { Event } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
-import { createDirtyTracker } from '../../utils/dirty';
+import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createTabState } from '../../utils/tab';
@@ -113,12 +113,6 @@ const EditableForm = (props: EditableFormProps) => {
     window.location.href = listUrl;
   });
 
-  const discard = () => {
-    if (!window.confirm('未保存の変更を破棄します。よろしいですか？')) return;
-    allowLeave();
-    window.location.reload();
-  };
-
   return (
     <>
       <EntityHeader
@@ -130,7 +124,7 @@ const EditableForm = (props: EditableFormProps) => {
         isSubmitting={isSubmitting()}
         submitLabel="保存"
         submittingLabel="保存中..."
-        onDiscard={discard}
+        onDiscard={() => discardChanges(allowLeave)}
         tabs={<EventTabList form={form} current={tab()} onChange={setTab} withHistory />}
         menu={
           <ActionMenu
