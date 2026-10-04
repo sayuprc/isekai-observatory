@@ -10,10 +10,12 @@ use Media\Infrastructures\MediaRepository;
 use Override;
 use Person\Domain\Services\PersonUsageCheckerInterface;
 use Song\Application\Admin\Query\SongQueryServiceInterface;
+use Song\Application\Admin\Query\Tag\SongTagUsageCountQueryServiceInterface;
 use Song\Application\Viewer\Query\SongQueryServiceInterface as ViewerSongQueryServiceInterface;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Domain\Models\Tag\SongTagRepositoryInterface;
 use Song\Infrastructures\Admin\SongQueryService;
+use Song\Infrastructures\Admin\SongTagUsageCountQueryService;
 use Song\Infrastructures\PersonUsageChecker;
 use Song\Infrastructures\SongRepository;
 use Song\Infrastructures\Tag\SongTagRepository;
@@ -24,6 +26,7 @@ class SongServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->bind(SongTagUsageCountQueryServiceInterface::class, SongTagUsageCountQueryService::class);
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
         $this->app->bind(SongTagRepositoryInterface::class, SongTagRepository::class);
         $this->app->bind(PersonUsageCheckerInterface::class, PersonUsageChecker::class);

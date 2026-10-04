@@ -952,7 +952,7 @@ export type SongTagListResponse = {
 };
 
 export type SongTagSearchResponse = {
-    tags: Array<SongTag>;
+    tags: Array<SongTagSummary>;
     maxPage: number;
 };
 
@@ -960,6 +960,19 @@ export type SongTagSearchResponse = {
  * 楽曲タグ検索のソート条件
  */
 export type SongTagSearchSortBy = 'name' | 'order_no';
+
+/**
+ * 楽曲タグ一覧の 1 行分
+ */
+export type SongTagSummary = {
+    songTagId: SongTagId;
+    name: SongTagName;
+    orderNo: OrderNo;
+    /**
+     * このタグが付いている楽曲の件数
+     */
+    songCount: number;
+};
 
 export type SongTagUpdateRequest = {
     name: SongTagName;
