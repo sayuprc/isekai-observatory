@@ -17,3 +17,11 @@ model SongTag {
   name: songTagName;
   orderNo: orderNo;
 }
+
+@doc("楽曲タグ一覧の 1 行分")
+model SongTagSummary {
+  ...SongTag;
+
+  @doc("このタグが付いている楽曲の件数")
+  songCount: int32;
+}

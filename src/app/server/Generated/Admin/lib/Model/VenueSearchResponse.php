@@ -57,7 +57,7 @@ class VenueSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var string[]
       */
     protected static $openAPITypes = [
-        'venues' => '\OpenAPI\Admin\Client\Model\Venue[]',
+        'venues' => '\OpenAPI\Admin\Client\Model\VenueSummary[]',
         'max_page' => 'int'
     ];
 
@@ -305,7 +305,7 @@ class VenueSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets venues
      *
-     * @return \OpenAPI\Admin\Client\Model\Venue[]
+     * @return \OpenAPI\Admin\Client\Model\VenueSummary[]
      */
     public function getVenues()
     {
@@ -315,7 +315,7 @@ class VenueSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Sets venues
      *
-     * @param \OpenAPI\Admin\Client\Model\Venue[] $venues venues
+     * @param \OpenAPI\Admin\Client\Model\VenueSummary[] $venues venues
      *
      * @return self
      */

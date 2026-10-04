@@ -1,6 +1,6 @@
 <?php
 /**
- * SongTagSearchResponse
+ * SongTagSummary
  *
  * PHP version 8.1
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * SongTagSearchResponse Class Doc Comment
+ * SongTagSummary Class Doc Comment
  *
  * @category Class
+ * @description 楽曲タグ一覧の 1 行分
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class SongTagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongTagSearchResponse';
+    protected static $openAPIModelName = 'SongTagSummary';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,8 +58,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var string[]
       */
     protected static $openAPITypes = [
-        'tags' => '\OpenAPI\Admin\Client\Model\SongTagSummary[]',
-        'max_page' => 'int'
+        'song_tag_id' => 'string',
+        'name' => 'string',
+        'order_no' => 'int',
+        'song_count' => 'int'
     ];
 
     /**
@@ -69,8 +72,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'tags' => null,
-        'max_page' => 'int32'
+        'song_tag_id' => 'uuid',
+        'name' => null,
+        'order_no' => 'int32',
+        'song_count' => 'int32'
     ];
 
     /**
@@ -79,8 +84,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'tags' => false,
-        'max_page' => false
+        'song_tag_id' => false,
+        'name' => false,
+        'order_no' => false,
+        'song_count' => false
     ];
 
     /**
@@ -169,8 +176,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $attributeMap = [
-        'tags' => 'tags',
-        'max_page' => 'maxPage'
+        'song_tag_id' => 'songTagId',
+        'name' => 'name',
+        'order_no' => 'orderNo',
+        'song_count' => 'songCount'
     ];
 
     /**
@@ -179,8 +188,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $setters = [
-        'tags' => 'setTags',
-        'max_page' => 'setMaxPage'
+        'song_tag_id' => 'setSongTagId',
+        'name' => 'setName',
+        'order_no' => 'setOrderNo',
+        'song_count' => 'setSongCount'
     ];
 
     /**
@@ -189,8 +200,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $getters = [
-        'tags' => 'getTags',
-        'max_page' => 'getMaxPage'
+        'song_tag_id' => 'getSongTagId',
+        'name' => 'getName',
+        'order_no' => 'getOrderNo',
+        'song_count' => 'getSongCount'
     ];
 
     /**
@@ -250,8 +263,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('tags', $data ?? [], null);
-        $this->setIfExists('max_page', $data ?? [], null);
+        $this->setIfExists('song_tag_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('order_no', $data ?? [], null);
+        $this->setIfExists('song_count', $data ?? [], null);
     }
 
     /**
@@ -281,11 +296,25 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     {
         $invalidProperties = [];
 
-        if ($this->container['tags'] === null) {
-            $invalidProperties[] = "'tags' can't be null";
+        if ($this->container['song_tag_id'] === null) {
+            $invalidProperties[] = "'song_tag_id' can't be null";
         }
-        if ($this->container['max_page'] === null) {
-            $invalidProperties[] = "'max_page' can't be null";
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ((mb_strlen($this->container['name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['order_no'] === null) {
+            $invalidProperties[] = "'order_no' can't be null";
+        }
+        if (($this->container['order_no'] < 1)) {
+            $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['song_count'] === null) {
+            $invalidProperties[] = "'song_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +332,119 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
 
 
     /**
-     * Gets tags
+     * Gets song_tag_id
      *
-     * @return \OpenAPI\Admin\Client\Model\SongTagSummary[]
+     * @return string
      */
-    public function getTags()
+    public function getSongTagId()
     {
-        return $this->container['tags'];
+        return $this->container['song_tag_id'];
     }
 
     /**
-     * Sets tags
+     * Sets song_tag_id
      *
-     * @param \OpenAPI\Admin\Client\Model\SongTagSummary[] $tags tags
+     * @param string $song_tag_id 楽曲タグID
      *
      * @return self
      */
-    public function setTags($tags)
+    public function setSongTagId($song_tag_id)
     {
-        if (is_null($tags)) {
-            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        if (is_null($song_tag_id)) {
+            throw new \InvalidArgumentException('non-nullable song_tag_id cannot be null');
         }
-        $this->container['tags'] = $tags;
+        $this->container['song_tag_id'] = $song_tag_id;
 
         return $this;
     }
 
     /**
-     * Gets max_page
+     * Gets name
      *
-     * @return int
+     * @return string
      */
-    public function getMaxPage()
+    public function getName()
     {
-        return $this->container['max_page'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets max_page
+     * Sets name
      *
-     * @param int $max_page max_page
+     * @param string $name 楽曲タグ名
      *
      * @return self
      */
-    public function setMaxPage($max_page)
+    public function setName($name)
     {
-        if (is_null($max_page)) {
-            throw new \InvalidArgumentException('non-nullable max_page cannot be null');
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['max_page'] = $max_page;
+
+        if ((mb_strlen($name) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling SongTagSummary., must be bigger than or equal to 1.');
+        }
+
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets order_no
+     *
+     * @return int
+     */
+    public function getOrderNo()
+    {
+        return $this->container['order_no'];
+    }
+
+    /**
+     * Sets order_no
+     *
+     * @param int $order_no 表示順
+     *
+     * @return self
+     */
+    public function setOrderNo($order_no)
+    {
+        if (is_null($order_no)) {
+            throw new \InvalidArgumentException('non-nullable order_no cannot be null');
+        }
+
+        if (($order_no < 1)) {
+            throw new \InvalidArgumentException('invalid value for $order_no when calling SongTagSummary., must be bigger than or equal to 1.');
+        }
+
+        $this->container['order_no'] = $order_no;
+
+        return $this;
+    }
+
+    /**
+     * Gets song_count
+     *
+     * @return int
+     */
+    public function getSongCount()
+    {
+        return $this->container['song_count'];
+    }
+
+    /**
+     * Sets song_count
+     *
+     * @param int $song_count このタグが付いている楽曲の件数
+     *
+     * @return self
+     */
+    public function setSongCount($song_count)
+    {
+        if (is_null($song_count)) {
+            throw new \InvalidArgumentException('non-nullable song_count cannot be null');
+        }
+        $this->container['song_count'] = $song_count;
 
         return $this;
     }

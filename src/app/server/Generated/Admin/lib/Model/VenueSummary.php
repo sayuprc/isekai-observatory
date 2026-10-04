@@ -1,6 +1,6 @@
 <?php
 /**
- * SongTagSearchResponse
+ * VenueSummary
  *
  * PHP version 8.1
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * SongTagSearchResponse Class Doc Comment
+ * VenueSummary Class Doc Comment
  *
  * @category Class
+ * @description 開催先一覧の 1 行分
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class VenueSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongTagSearchResponse';
+    protected static $openAPIModelName = 'VenueSummary';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,8 +58,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var string[]
       */
     protected static $openAPITypes = [
-        'tags' => '\OpenAPI\Admin\Client\Model\SongTagSummary[]',
-        'max_page' => 'int'
+        'venue_id' => 'string',
+        'name' => 'string',
+        'kind' => '\OpenAPI\Admin\Client\Model\VenueKind',
+        'event_count' => 'int'
     ];
 
     /**
@@ -69,8 +72,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'tags' => null,
-        'max_page' => 'int32'
+        'venue_id' => 'uuid',
+        'name' => null,
+        'kind' => null,
+        'event_count' => 'int32'
     ];
 
     /**
@@ -79,8 +84,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'tags' => false,
-        'max_page' => false
+        'venue_id' => false,
+        'name' => false,
+        'kind' => false,
+        'event_count' => false
     ];
 
     /**
@@ -169,8 +176,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $attributeMap = [
-        'tags' => 'tags',
-        'max_page' => 'maxPage'
+        'venue_id' => 'venueId',
+        'name' => 'name',
+        'kind' => 'kind',
+        'event_count' => 'eventCount'
     ];
 
     /**
@@ -179,8 +188,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $setters = [
-        'tags' => 'setTags',
-        'max_page' => 'setMaxPage'
+        'venue_id' => 'setVenueId',
+        'name' => 'setName',
+        'kind' => 'setKind',
+        'event_count' => 'setEventCount'
     ];
 
     /**
@@ -189,8 +200,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $getters = [
-        'tags' => 'getTags',
-        'max_page' => 'getMaxPage'
+        'venue_id' => 'getVenueId',
+        'name' => 'getName',
+        'kind' => 'getKind',
+        'event_count' => 'getEventCount'
     ];
 
     /**
@@ -250,8 +263,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('tags', $data ?? [], null);
-        $this->setIfExists('max_page', $data ?? [], null);
+        $this->setIfExists('venue_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('kind', $data ?? [], null);
+        $this->setIfExists('event_count', $data ?? [], null);
     }
 
     /**
@@ -281,11 +296,25 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     {
         $invalidProperties = [];
 
-        if ($this->container['tags'] === null) {
-            $invalidProperties[] = "'tags' can't be null";
+        if ($this->container['venue_id'] === null) {
+            $invalidProperties[] = "'venue_id' can't be null";
         }
-        if ($this->container['max_page'] === null) {
-            $invalidProperties[] = "'max_page' can't be null";
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ((mb_strlen($this->container['name']) > 255)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 255.";
+        }
+
+        if ((mb_strlen($this->container['name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['kind'] === null) {
+            $invalidProperties[] = "'kind' can't be null";
+        }
+        if ($this->container['event_count'] === null) {
+            $invalidProperties[] = "'event_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +332,116 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
 
 
     /**
-     * Gets tags
+     * Gets venue_id
      *
-     * @return \OpenAPI\Admin\Client\Model\SongTagSummary[]
+     * @return string
      */
-    public function getTags()
+    public function getVenueId()
     {
-        return $this->container['tags'];
+        return $this->container['venue_id'];
     }
 
     /**
-     * Sets tags
+     * Sets venue_id
      *
-     * @param \OpenAPI\Admin\Client\Model\SongTagSummary[] $tags tags
+     * @param string $venue_id 開催先ID
      *
      * @return self
      */
-    public function setTags($tags)
+    public function setVenueId($venue_id)
     {
-        if (is_null($tags)) {
-            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        if (is_null($venue_id)) {
+            throw new \InvalidArgumentException('non-nullable venue_id cannot be null');
         }
-        $this->container['tags'] = $tags;
+        $this->container['venue_id'] = $venue_id;
 
         return $this;
     }
 
     /**
-     * Gets max_page
+     * Gets name
      *
-     * @return int
+     * @return string
      */
-    public function getMaxPage()
+    public function getName()
     {
-        return $this->container['max_page'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets max_page
+     * Sets name
      *
-     * @param int $max_page max_page
+     * @param string $name 開催先名
      *
      * @return self
      */
-    public function setMaxPage($max_page)
+    public function setName($name)
     {
-        if (is_null($max_page)) {
-            throw new \InvalidArgumentException('non-nullable max_page cannot be null');
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['max_page'] = $max_page;
+        if ((mb_strlen($name) > 255)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling VenueSummary., must be smaller than or equal to 255.');
+        }
+        if ((mb_strlen($name) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling VenueSummary., must be bigger than or equal to 1.');
+        }
+
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets kind
+     *
+     * @return \OpenAPI\Admin\Client\Model\VenueKind
+     */
+    public function getKind()
+    {
+        return $this->container['kind'];
+    }
+
+    /**
+     * Sets kind
+     *
+     * @param \OpenAPI\Admin\Client\Model\VenueKind $kind kind
+     *
+     * @return self
+     */
+    public function setKind($kind)
+    {
+        if (is_null($kind)) {
+            throw new \InvalidArgumentException('non-nullable kind cannot be null');
+        }
+        $this->container['kind'] = $kind;
+
+        return $this;
+    }
+
+    /**
+     * Gets event_count
+     *
+     * @return int
+     */
+    public function getEventCount()
+    {
+        return $this->container['event_count'];
+    }
+
+    /**
+     * Sets event_count
+     *
+     * @param int $event_count この開催先を使っているイベントの件数
+     *
+     * @return self
+     */
+    public function setEventCount($event_count)
+    {
+        if (is_null($event_count)) {
+            throw new \InvalidArgumentException('non-nullable event_count cannot be null');
+        }
+        $this->container['event_count'] = $event_count;
 
         return $this;
     }

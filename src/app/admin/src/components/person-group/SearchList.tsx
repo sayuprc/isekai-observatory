@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch } from 'solid-js';
+import { createSignal, For, Match, Show, Switch } from 'solid-js';
 import { client } from '../../utils/client';
 import {
   PER_PAGE_OPTIONS,
@@ -8,6 +8,8 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
+import { ListWithPreview, RecordPreview, selectedRowClass, type RecordPreviewData } from '../ListPreview';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -51,6 +53,22 @@ export const SearchList = () => {
       },
     }),
   );
+
+  // 右側のプレビューに出す行。取得結果の中から引くので、ページを移ると外れる
+  const [selectedId, setSelectedId] = createSignal<string | null>(null);
+  const detailUrl = (id: string) => `/person-groups/${id}?back=${encodeURIComponent(window.location.search)}`;
+  const selectedRecord = (): RecordPreviewData | undefined => {
+    const personGroup = data()?.personGroups.find((candidate) => candidate.personGroupId === selectedId());
+    if (!personGroup) return undefined;
+    return {
+      title: personGroup.name,
+      rows: [
+        { label: 'メンバー', value: personGroup.members.length },
+        { label: '共演した楽曲披露', value: personGroup.performanceCount },
+      ],
+      actions: [{ label: '開く', href: detailUrl(personGroup.personGroupId), primary: true }],
+    };
+  };
 
   return (
     <>
@@ -100,48 +118,58 @@ export const SearchList = () => {
           新規作成
         </a>
       </div>
-      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm table-zebra md:table-md">
-          <thead>
-            <tr>
-              <th>グループ名</th>
-              <th>メンバー</th>
-            </tr>
-          </thead>
-          <tbody>
-            <Switch>
-              <Match when={data.loading}>
-                <ListState state="loading" colSpan={2} />
-              </Match>
-              <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
-              </Match>
-              <Match when={data() && data()!.personGroups.length === 0}>
-                <ListState state="empty" colSpan={2} />
-              </Match>
-              <Match when={data()}>
-                {(result) => (
-                  <For each={result().personGroups}>
-                    {(personGroup) => (
-                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
-                        <td>
-                          <a
-                            href={`/person-groups/${personGroup.personGroupId}?back=${encodeURIComponent(window.location.search)}`}
-                            class="link link-hover font-medium"
-                          >
-                            {personGroup.name}
-                          </a>
-                        </td>
-                        <td>{personGroup.members.map((member) => member.name).join(' / ')}</td>
-                      </tr>
-                    )}
-                  </For>
-                )}
-              </Match>
-            </Switch>
-          </tbody>
-        </table>
-      </div>
+      <ListWithPreview
+        table={
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>グループ名</th>
+                <th>メンバー</th>
+                <th class="text-right">共演</th>
+              </tr>
+            </thead>
+            <tbody>
+              <Switch>
+                <Match when={data.loading}>
+                  <ListState state="loading" colSpan={3} />
+                </Match>
+                <Match when={fetchError()}>
+                  {(message) => <ListState state="error" colSpan={3} message={message()} onRetry={() => refetch()} />}
+                </Match>
+                <Match when={data() && data()!.personGroups.length === 0}>
+                  <ListState state="empty" colSpan={3} />
+                </Match>
+                <Match when={data()}>
+                  {(result) => (
+                    <For each={result().personGroups}>
+                      {(personGroup) => (
+                        <tr
+                          class="cursor-pointer hover:bg-base-200"
+                          classList={{ [selectedRowClass]: personGroup.personGroupId === selectedId() }}
+                          onClick={() => setSelectedId(personGroup.personGroupId)}
+                          onFocusIn={() => setSelectedId(personGroup.personGroupId)}
+                        >
+                          <td>
+                            <a href={detailUrl(personGroup.personGroupId)} class="link link-hover font-medium">
+                              {personGroup.name}
+                            </a>
+                          </td>
+                          <td class="max-w-md truncate text-base-content/70">
+                            {personGroup.members.map((member) => member.name).join(' / ')}
+                          </td>
+                          <CountCell count={personGroup.performanceCount} />
+                        </tr>
+                      )}
+                    </For>
+                  )}
+                </Match>
+              </Switch>
+            </tbody>
+          </table>
+        }
+        preview={<RecordPreview label="選択中の人物グループ" record={selectedRecord()} />}
+      />
+
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>

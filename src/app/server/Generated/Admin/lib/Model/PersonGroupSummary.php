@@ -1,6 +1,6 @@
 <?php
 /**
- * SongTagSearchResponse
+ * PersonGroupSummary
  *
  * PHP version 8.1
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * SongTagSearchResponse Class Doc Comment
+ * PersonGroupSummary Class Doc Comment
  *
  * @category Class
+ * @description 人物グループ一覧の 1 行分
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       *
       * @var string
       */
-    protected static $openAPIModelName = 'SongTagSearchResponse';
+    protected static $openAPIModelName = 'PersonGroupSummary';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,8 +58,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var string[]
       */
     protected static $openAPITypes = [
-        'tags' => '\OpenAPI\Admin\Client\Model\SongTagSummary[]',
-        'max_page' => 'int'
+        'person_group_id' => 'string',
+        'name' => 'string',
+        'members' => '\OpenAPI\Admin\Client\Model\PersonGroupMember[]',
+        'performance_count' => 'int'
     ];
 
     /**
@@ -69,8 +72,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'tags' => null,
-        'max_page' => 'int32'
+        'person_group_id' => 'uuid',
+        'name' => null,
+        'members' => null,
+        'performance_count' => 'int32'
     ];
 
     /**
@@ -79,8 +84,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'tags' => false,
-        'max_page' => false
+        'person_group_id' => false,
+        'name' => false,
+        'members' => false,
+        'performance_count' => false
     ];
 
     /**
@@ -169,8 +176,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $attributeMap = [
-        'tags' => 'tags',
-        'max_page' => 'maxPage'
+        'person_group_id' => 'personGroupId',
+        'name' => 'name',
+        'members' => 'members',
+        'performance_count' => 'performanceCount'
     ];
 
     /**
@@ -179,8 +188,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $setters = [
-        'tags' => 'setTags',
-        'max_page' => 'setMaxPage'
+        'person_group_id' => 'setPersonGroupId',
+        'name' => 'setName',
+        'members' => 'setMembers',
+        'performance_count' => 'setPerformanceCount'
     ];
 
     /**
@@ -189,8 +200,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      * @var string[]
      */
     protected static $getters = [
-        'tags' => 'getTags',
-        'max_page' => 'getMaxPage'
+        'person_group_id' => 'getPersonGroupId',
+        'name' => 'getName',
+        'members' => 'getMembers',
+        'performance_count' => 'getPerformanceCount'
     ];
 
     /**
@@ -250,8 +263,10 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('tags', $data ?? [], null);
-        $this->setIfExists('max_page', $data ?? [], null);
+        $this->setIfExists('person_group_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('members', $data ?? [], null);
+        $this->setIfExists('performance_count', $data ?? [], null);
     }
 
     /**
@@ -281,11 +296,21 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     {
         $invalidProperties = [];
 
-        if ($this->container['tags'] === null) {
-            $invalidProperties[] = "'tags' can't be null";
+        if ($this->container['person_group_id'] === null) {
+            $invalidProperties[] = "'person_group_id' can't be null";
         }
-        if ($this->container['max_page'] === null) {
-            $invalidProperties[] = "'max_page' can't be null";
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ((mb_strlen($this->container['name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['members'] === null) {
+            $invalidProperties[] = "'members' can't be null";
+        }
+        if ($this->container['performance_count'] === null) {
+            $invalidProperties[] = "'performance_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +328,114 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
 
 
     /**
-     * Gets tags
+     * Gets person_group_id
      *
-     * @return \OpenAPI\Admin\Client\Model\SongTagSummary[]
+     * @return string
      */
-    public function getTags()
+    public function getPersonGroupId()
     {
-        return $this->container['tags'];
+        return $this->container['person_group_id'];
     }
 
     /**
-     * Sets tags
+     * Sets person_group_id
      *
-     * @param \OpenAPI\Admin\Client\Model\SongTagSummary[] $tags tags
+     * @param string $person_group_id 人物グループID
      *
      * @return self
      */
-    public function setTags($tags)
+    public function setPersonGroupId($person_group_id)
     {
-        if (is_null($tags)) {
-            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        if (is_null($person_group_id)) {
+            throw new \InvalidArgumentException('non-nullable person_group_id cannot be null');
         }
-        $this->container['tags'] = $tags;
+        $this->container['person_group_id'] = $person_group_id;
 
         return $this;
     }
 
     /**
-     * Gets max_page
+     * Gets name
      *
-     * @return int
+     * @return string
      */
-    public function getMaxPage()
+    public function getName()
     {
-        return $this->container['max_page'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets max_page
+     * Sets name
      *
-     * @param int $max_page max_page
+     * @param string $name 人物グループ名
      *
      * @return self
      */
-    public function setMaxPage($max_page)
+    public function setName($name)
     {
-        if (is_null($max_page)) {
-            throw new \InvalidArgumentException('non-nullable max_page cannot be null');
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['max_page'] = $max_page;
+
+        if ((mb_strlen($name) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling PersonGroupSummary., must be bigger than or equal to 1.');
+        }
+
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets members
+     *
+     * @return \OpenAPI\Admin\Client\Model\PersonGroupMember[]
+     */
+    public function getMembers()
+    {
+        return $this->container['members'];
+    }
+
+    /**
+     * Sets members
+     *
+     * @param \OpenAPI\Admin\Client\Model\PersonGroupMember[] $members members
+     *
+     * @return self
+     */
+    public function setMembers($members)
+    {
+        if (is_null($members)) {
+            throw new \InvalidArgumentException('non-nullable members cannot be null');
+        }
+        $this->container['members'] = $members;
+
+        return $this;
+    }
+
+    /**
+     * Gets performance_count
+     *
+     * @return int
+     */
+    public function getPerformanceCount()
+    {
+        return $this->container['performance_count'];
+    }
+
+    /**
+     * Sets performance_count
+     *
+     * @param int $performance_count このグループとして共演が記録されている楽曲披露の件数
+     *
+     * @return self
+     */
+    public function setPerformanceCount($performance_count)
+    {
+        if (is_null($performance_count)) {
+            throw new \InvalidArgumentException('non-nullable performance_count cannot be null');
+        }
+        $this->container['performance_count'] = $performance_count;
 
         return $this;
     }

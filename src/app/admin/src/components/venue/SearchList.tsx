@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch } from 'solid-js';
+import { createSignal, For, Match, Show, Switch } from 'solid-js';
 import type { SortOrder, VenueKindValue, VenueSearchSortBy } from '../../generated';
 import { client } from '../../utils/client';
 import {
@@ -9,6 +9,9 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
+import { MetaChip } from '../EntityHeader';
+import { ListWithPreview, RecordPreview, selectedRowClass, type RecordPreviewData } from '../ListPreview';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -73,6 +76,20 @@ export const SearchList = () => {
       }),
     { forbiddenMessage: '開催先の閲覧権限がありません' },
   );
+
+  // 右側のプレビューに出す行。取得結果の中から引くので、ページを移ると外れる
+  const [selectedId, setSelectedId] = createSignal<string | null>(null);
+  const detailUrl = (id: string) => `/venues/${id}?back=${encodeURIComponent(window.location.search)}`;
+  const selectedRecord = (): RecordPreviewData | undefined => {
+    const venue = data()?.venues.find((candidate) => candidate.venueId === selectedId());
+    if (!venue) return undefined;
+    return {
+      title: venue.name,
+      meta: <MetaChip>{venue.kind.name}</MetaChip>,
+      rows: [{ label: '使っているイベント', value: venue.eventCount }],
+      actions: [{ label: '開く', href: detailUrl(venue.venueId), primary: true }],
+    };
+  };
 
   return (
     <>
@@ -170,48 +187,56 @@ export const SearchList = () => {
           新規作成
         </a>
       </div>
-      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-sm table-zebra md:table-md">
-          <thead>
-            <tr>
-              <th>開催先名</th>
-              <th>種別</th>
-            </tr>
-          </thead>
-          <tbody>
-            <Switch>
-              <Match when={data.loading}>
-                <ListState state="loading" colSpan={2} />
-              </Match>
-              <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
-              </Match>
-              <Match when={data() && data()!.venues.length === 0}>
-                <ListState state="empty" colSpan={2} />
-              </Match>
-              <Match when={data()}>
-                {(result) => (
-                  <For each={result().venues}>
-                    {(venue) => (
-                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
-                        <td>
-                          <a
-                            class="link link-hover font-medium"
-                            href={`/venues/${venue.venueId}?back=${encodeURIComponent(window.location.search)}`}
-                          >
-                            {venue.name}
-                          </a>
-                        </td>
-                        <td>{venue.kind.name}</td>
-                      </tr>
-                    )}
-                  </For>
-                )}
-              </Match>
-            </Switch>
-          </tbody>
-        </table>
-      </div>
+      <ListWithPreview
+        table={
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>開催先名</th>
+                <th>種別</th>
+                <th class="text-right">イベント</th>
+              </tr>
+            </thead>
+            <tbody>
+              <Switch>
+                <Match when={data.loading}>
+                  <ListState state="loading" colSpan={3} />
+                </Match>
+                <Match when={fetchError()}>
+                  {(message) => <ListState state="error" colSpan={3} message={message()} onRetry={() => refetch()} />}
+                </Match>
+                <Match when={data() && data()!.venues.length === 0}>
+                  <ListState state="empty" colSpan={3} />
+                </Match>
+                <Match when={data()}>
+                  {(result) => (
+                    <For each={result().venues}>
+                      {(venue) => (
+                        <tr
+                          class="cursor-pointer hover:bg-base-200"
+                          classList={{ [selectedRowClass]: venue.venueId === selectedId() }}
+                          onClick={() => setSelectedId(venue.venueId)}
+                          onFocusIn={() => setSelectedId(venue.venueId)}
+                        >
+                          <td>
+                            <a href={detailUrl(venue.venueId)} class="link link-hover font-medium">
+                              {venue.name}
+                            </a>
+                          </td>
+                          <td class="whitespace-nowrap">{venue.kind.name}</td>
+                          <CountCell count={venue.eventCount} />
+                        </tr>
+                      )}
+                    </For>
+                  )}
+                </Match>
+              </Switch>
+            </tbody>
+          </table>
+        }
+        preview={<RecordPreview label="選択中の開催先" record={selectedRecord()} />}
+      />
+
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>

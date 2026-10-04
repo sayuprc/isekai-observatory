@@ -4319,10 +4319,31 @@ components:
         personGroups:
           type: array
           items:
-            $ref: '#/components/schemas/PersonGroup'
+            $ref: '#/components/schemas/PersonGroupSummary'
         maxPage:
           type: integer
           format: int32
+    PersonGroupSummary:
+      type: object
+      required:
+        - personGroupId
+        - name
+        - members
+        - performanceCount
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/personGroupId'
+        name:
+          $ref: '#/components/schemas/personGroupName'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonGroupMember'
+        performanceCount:
+          type: integer
+          format: int32
+          description: このグループとして共演が記録されている楽曲披露の件数
+      description: 人物グループ一覧の 1 行分
     PersonGroupUpdateRequest:
       type: object
       required:
@@ -4360,7 +4381,7 @@ components:
         persons:
           type: array
           items:
-            $ref: '#/components/schemas/Person'
+            $ref: '#/components/schemas/PersonSummary'
         maxPage:
           type: integer
           format: int32
@@ -4370,6 +4391,30 @@ components:
         - name
         - order_no
       description: 人物検索のソート条件
+    PersonSummary:
+      type: object
+      required:
+        - personId
+        - name
+        - orderNo
+        - songCount
+        - performanceCount
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: 作詞・作曲・編曲として関わっている楽曲の件数
+        performanceCount:
+          type: integer
+          format: int32
+          description: 共演者として記録されている楽曲披露の件数
+      description: 人物一覧の 1 行分
     PersonUpdateRequest:
       type: object
       required:
@@ -5377,7 +5422,7 @@ components:
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/SongTag'
+            $ref: '#/components/schemas/SongTagSummary'
         maxPage:
           type: integer
           format: int32
@@ -5387,6 +5432,25 @@ components:
         - name
         - order_no
       description: 楽曲タグ検索のソート条件
+    SongTagSummary:
+      type: object
+      required:
+        - songTagId
+        - name
+        - orderNo
+        - songCount
+      properties:
+        songTagId:
+          $ref: '#/components/schemas/songTagId'
+        name:
+          $ref: '#/components/schemas/songTagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: このタグが付いている楽曲の件数
+      description: 楽曲タグ一覧の 1 行分
     SongTagUpdateRequest:
       type: object
       required:
@@ -5575,7 +5639,7 @@ components:
         venues:
           type: array
           items:
-            $ref: '#/components/schemas/Venue'
+            $ref: '#/components/schemas/VenueSummary'
         maxPage:
           type: integer
           format: int32
@@ -5584,6 +5648,25 @@ components:
       enum:
         - name
       description: 開催先検索のソート条件
+    VenueSummary:
+      type: object
+      required:
+        - venueId
+        - name
+        - kind
+        - eventCount
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKind'
+        eventCount:
+          type: integer
+          format: int32
+          description: この開催先を使っているイベントの件数
+      description: 開催先一覧の 1 行分
     VenueUpdateRequest:
       type: object
       required:

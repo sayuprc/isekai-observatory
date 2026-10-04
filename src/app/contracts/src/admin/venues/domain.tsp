@@ -38,3 +38,11 @@ model Venue {
   name: venueName;
   kind: VenueKind;
 }
+
+@doc("開催先一覧の 1 行分")
+model VenueSummary {
+  ...Venue;
+
+  @doc("この開催先を使っているイベントの件数")
+  eventCount: int32;
+}
