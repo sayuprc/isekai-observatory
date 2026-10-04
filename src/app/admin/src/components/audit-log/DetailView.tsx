@@ -1,19 +1,10 @@
 import { createResource, Match, Show, Switch } from 'solid-js';
-import type { AuditTargetType } from '../../generated';
+import type { AuditAction, AuditTargetType } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
 import { getListUrl } from '../../utils/list-url';
-
-const ACTION_LABEL: Record<string, string> = {
-  create: '作成',
-  update: '更新',
-  delete: '削除',
-  login: 'ログイン',
-  refresh: 'リフレッシュ',
-  recovery_code_issue: 'リカバリーコード発行',
-  recovery_code_use: 'リカバリーコード使用',
-};
+import { ACTION_LABEL } from './audit-log-labels';
 
 // 生成型に対象種別が増えたらコンパイルエラーで気付けるよう、網羅性を satisfies で検査する
 const TARGET_TYPE_LABEL: Record<string, string> = {
@@ -119,7 +110,7 @@ export const DetailView = (props: Props) => {
                 <dt class="font-semibold">実行者</dt>
                 <dd>{data().adminUserName}</dd>
                 <dt class="font-semibold">操作</dt>
-                <dd>{ACTION_LABEL[data().action] ?? data().action}</dd>
+                <dd>{ACTION_LABEL[data().action as AuditAction] ?? data().action}</dd>
                 <dt class="font-semibold">対象種別</dt>
                 <dd>{TARGET_TYPE_LABEL[data().targetType] ?? data().targetType}</dd>
                 <dt class="font-semibold">対象ID</dt>

@@ -12,6 +12,7 @@ import {
 import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
+import { ACTION_LABEL } from './audit-log-labels';
 
 type Action = AuditAction;
 type TargetType = AuditTargetType;
@@ -41,17 +42,6 @@ const TARGET_TYPE_OPTIONS = [
   'Venue',
   'Event',
 ] as const satisfies readonly TargetType[];
-
-const ACTION_LABEL: Record<Action, string> = {
-  create: '作成',
-  update: '更新',
-  delete: '削除',
-  register: '登録',
-  login: 'ログイン',
-  refresh: 'リフレッシュ',
-  recovery_code_issue: 'リカバリーコード発行',
-  recovery_code_use: 'リカバリーコード使用',
-};
 
 const TARGET_TYPE_LABEL: Record<TargetType, string> = {
   AdminUser: '管理ユーザー',
