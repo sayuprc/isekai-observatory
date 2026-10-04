@@ -11,8 +11,8 @@ export const RELEASE_GROUP_TYPE_OPTIONS: Array<{ value: ReleaseGroupTypeValue; l
 ];
 
 const DISPLAY_OPTIONS = [
-  { value: 'true', label: '表示する' },
-  { value: 'false', label: '表示しない' },
+  { value: 'true', label: '表示' },
+  { value: 'false', label: '非表示' },
 ];
 
 // 作成と編集で共通の入力状態

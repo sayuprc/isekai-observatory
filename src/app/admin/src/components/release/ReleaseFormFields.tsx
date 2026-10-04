@@ -13,8 +13,8 @@ export type ReleaseTab = (typeof RELEASE_TABS)[number];
 const TAB_ID_PREFIX = 'release';
 
 const DISPLAY_OPTIONS = [
-  { value: 'true', label: '表示する' },
-  { value: 'false', label: '表示しない' },
+  { value: 'true', label: '表示' },
+  { value: 'false', label: '非表示' },
 ];
 
 interface ReleaseTabListProps {
@@ -28,7 +28,7 @@ interface ReleaseTabListProps {
 export const ReleaseTabList = (props: ReleaseTabListProps) => {
   const items = (): TabItem<ReleaseTab>[] => [
     { key: 'overview', label: '概要' },
-    { key: 'tracks', label: '媒体と収録楽曲', count: String(props.form.trackCount()) },
+    { key: 'tracks', label: '媒体と収録曲', count: String(props.form.trackCount()) },
     ...(props.withHistory ? [{ key: 'history' as const, label: '履歴' }] : []),
   ];
 

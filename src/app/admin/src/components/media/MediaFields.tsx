@@ -13,8 +13,8 @@ export const MEDIA_TYPE_OPTIONS: Array<{ value: MediaTypeValue; label: string }>
 ];
 
 const DISPLAY_OPTIONS = [
-  { value: 'true', label: '表示する' },
-  { value: 'false', label: '表示しない' },
+  { value: 'true', label: '表示' },
+  { value: 'false', label: '非表示' },
 ];
 
 interface MediaFieldsProps {

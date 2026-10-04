@@ -31,7 +31,7 @@ export const VenueEditor = (props: VenueEditorProps) => {
   return (
     <fieldset class="rounded-box border border-base-300 bg-base-200 p-6">
       <legend class="px-2 text-sm font-semibold text-base-content/70">開催先</legend>
-      <p class="mb-4 text-sm text-base-content/60">現地会場と配信先を同じイベントにまとめて登録できます</p>
+      <p class="mb-4 text-sm text-base-content/60">現地とオンラインの開催先を同じイベントにまとめて登録できます</p>
 
       <div class="mb-6">
         <KeywordSearchPanel

@@ -153,10 +153,10 @@ export const SearchList = () => {
               すべて
             </option>
             <option value="true" selected={input().isDisplay === 'true'}>
-              表示する
+              表示
             </option>
             <option value="false" selected={input().isDisplay === 'false'}>
-              表示しない
+              非表示
             </option>
           </select>
         </fieldset>
