@@ -44,7 +44,7 @@ export const ActionMenu = (props: ActionMenuProps) => {
   });
 
   return (
-    <details ref={setDetails} class="dropdown dropdown-end">
+    <details ref={setDetails} class="dropdown dropdown-end max-sm:dropdown-top">
       <summary class="btn btn-square btn-sm" aria-label={props.label}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <circle cx="5" cy="12" r="1.8" />
