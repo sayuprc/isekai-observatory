@@ -34,7 +34,7 @@ const heading = pageTitle || siteTitle;
     <div class="drawer lg:drawer-open">
       <input id="admin-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex min-h-screen min-w-0 flex-col">
-        <header class="bg-base-100 border-base-300 sticky top-0 z-30 flex items-center gap-2 border-b px-3 py-3 sm:gap-3 sm:px-6 sm:py-4">
+        <header class="bg-base-100 border-base-300 sticky top-0 z-30 flex h-14 items-center gap-2 border-b px-3 sm:gap-3 sm:px-6">
           <label for="admin-drawer" class="btn btn-ghost btn-square btn-sm lg:hidden" aria-label="メニューを開く">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +50,7 @@ const heading = pageTitle || siteTitle;
           </label>
           <h1 class="min-w-0 flex-1 truncate pr-12 text-lg font-bold sm:text-xl lg:pr-0">{heading}</h1>
         </header>
-        <main class="min-w-0 flex-1 p-4 sm:p-6">
+        <main class="min-w-0 flex-1 p-4 sm:p-6 has-[[data-mobile-actionbar]]:pb-24 sm:has-[[data-mobile-actionbar]]:pb-6">
           <slot />
         </main>
       </div>

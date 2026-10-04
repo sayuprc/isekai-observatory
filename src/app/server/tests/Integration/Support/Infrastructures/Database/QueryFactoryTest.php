@@ -83,6 +83,17 @@ class QueryFactoryTest extends DatabaseTestCase
         $this->assertSame(0, $factory->maxPage($query->where('parent_id', '>', 100), PerPage::TwentyFive));
     }
 
+    #[Test]
+    public function countByCountsRowsPerKeyAndOmitsKeysWithoutRows(): void
+    {
+        $factory = $this->createFactoryWithTables();
+        $factory->insertRows('tmp_children_a', ['parent_id', 'value'], [[1, 'a'], [1, 'a'], [1, 'b'], [2, 'c'], [9, 'z']]);
+
+        $this->assertSame(['1' => 3, '2' => 1], $factory->countBy('tmp_children_a', 'parent_id', ['1', '2', '3']));
+        $this->assertSame(['1' => 2, '2' => 1], $factory->countBy('tmp_children_a', 'parent_id', ['1', '2'], 'value'));
+        $this->assertSame([], $factory->countBy('tmp_children_a', 'parent_id', []));
+    }
+
     private function createFactoryWithTables(): QueryFactory
     {
         // 一時テーブルは暗黙コミットを起こさないため、テストのトランザクション内で使える

@@ -1,7 +1,9 @@
 import { createSignal } from 'solid-js';
 import { client } from '../../utils/client';
+import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
+import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
 import { toMembersPayload, type MemberForm } from './member-form';
@@ -12,8 +14,9 @@ export const CreateForm = () => {
   const { isSubmitting, withSubmitting } = createSubmitting();
   const [name, setName] = createSignal('');
   const [members, setMembers] = createSignal<MemberForm[]>([]);
+  const { isDirty, allowLeave } = createDirtyTracker(() => ({ name: name(), members: toMembersPayload(members()) }));
 
-  const handleSubmit = withSubmitting(async (e: Event) => {
+  const handleSubmit = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
     clearErrors();
 
@@ -24,6 +27,7 @@ export const CreateForm = () => {
 
     if (data) {
       setFlash('作成しました');
+      allowLeave();
       window.location.href = '/person-groups';
       return;
     }
@@ -32,12 +36,18 @@ export const CreateForm = () => {
   });
 
   return (
-    <form onsubmit={handleSubmit}>
-      <a href="/person-groups" class="btn btn-ghost btn-sm mb-4">
-        ← 一覧に戻る
-      </a>
+    <>
+      <EntityHeader
+        breadcrumb={{ href: '/person-groups', label: '人物グループ' }}
+        title={name() || '新しい人物グループ'}
+        formId="person-group-form"
+        isDirty={isDirty()}
+        isSubmitting={isSubmitting()}
+        submitLabel="作成"
+        submittingLabel="作成中..."
+      />
       <FormError message={formError()} onClose={clearErrors} />
-      <div class="max-w-4xl space-y-6">
+      <form id="person-group-form" class="max-w-4xl space-y-6" onSubmit={handleSubmit}>
         <PersonGroupFields
           name={name()}
           onNameChange={setName}
@@ -45,12 +55,7 @@ export const CreateForm = () => {
           onMembersChange={setMembers}
           nameError={getFieldError('name')}
         />
-        <div class="flex justify-end">
-          <button class="btn btn-primary" disabled={isSubmitting()}>
-            {isSubmitting() ? '作成中...' : '作成'}
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };

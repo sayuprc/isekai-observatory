@@ -9,7 +9,7 @@ model SongTagListResponse {
 }
 
 model SongTagSearchResponse {
-  tags: SongTag[];
+  tags: SongTagSummary[];
   maxPage: int32;
 }
 

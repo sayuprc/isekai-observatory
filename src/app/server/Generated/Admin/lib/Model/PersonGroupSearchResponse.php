@@ -57,7 +57,7 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
       * @var string[]
       */
     protected static $openAPITypes = [
-        'person_groups' => '\OpenAPI\Admin\Client\Model\PersonGroup[]',
+        'person_groups' => '\OpenAPI\Admin\Client\Model\PersonGroupSummary[]',
         'max_page' => 'int'
     ];
 
@@ -305,7 +305,7 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets person_groups
      *
-     * @return \OpenAPI\Admin\Client\Model\PersonGroup[]
+     * @return \OpenAPI\Admin\Client\Model\PersonGroupSummary[]
      */
     public function getPersonGroups()
     {
@@ -315,7 +315,7 @@ class PersonGroupSearchResponse implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets person_groups
      *
-     * @param \OpenAPI\Admin\Client\Model\PersonGroup[] $person_groups person_groups
+     * @param \OpenAPI\Admin\Client\Model\PersonGroupSummary[] $person_groups person_groups
      *
      * @return self
      */

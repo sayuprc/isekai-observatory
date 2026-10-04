@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Admin\V1\SongTag;
 
 use PHPUnit\Framework\Attributes\Test;
+use Song\Domain\Models\SongType;
 use Song\Route\Tag\SongTagRouteMap;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
@@ -42,6 +43,7 @@ class SearchSongTagTest extends DatabaseTestCase
                         'songTagId' => $songTagId,
                         'name' => 'テストタグA',
                         'orderNo' => 1,
+                        'songCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -68,6 +70,7 @@ class SearchSongTagTest extends DatabaseTestCase
                         'songTagId' => $matchedId,
                         'name' => 'テストタグA',
                         'orderNo' => 1,
+                        'songCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -121,9 +124,26 @@ class SearchSongTagTest extends DatabaseTestCase
                         'songTagId' => $ids['tag-01'],
                         'name' => 'tag-01',
                         'orderNo' => 1,
+                        'songCount' => 0,
                     ],
                 ],
                 'maxPage' => 2,
             ]);
+    }
+
+    #[Test]
+    public function returnsSongCountTaggedWithEachTag(): void
+    {
+        $songTagId = $this->generateUuid();
+        $this->storeSongTags($this->createSongTag($songTagId, 'タグ', 1));
+        $this->storeSongs(
+            $this->createSong($this->generateUuid(), '楽曲1', '説明', SongType::Original, true, 1, [['songTagId' => $songTagId]]),
+            $this->createSong($this->generateUuid(), '楽曲2', '説明', SongType::Original, true, 2, [['songTagId' => $songTagId]]),
+        );
+
+        $this->withAuth()
+            ->get(route(SongTagRouteMap::Search))
+            ->assertStatus(200)
+            ->assertJsonPath('tags.0.songCount', 2);
     }
 }

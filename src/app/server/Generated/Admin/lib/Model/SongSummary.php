@@ -61,7 +61,11 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'string',
         'type' => '\OpenAPI\Admin\Client\Model\SongType',
         'is_display' => 'bool',
-        'order_no' => 'int'
+        'order_no' => 'int',
+        'performance_count' => 'int',
+        'media_count' => 'int',
+        'person_count' => 'int',
+        'release_count' => 'int'
     ];
 
     /**
@@ -76,7 +80,11 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => null,
         'type' => null,
         'is_display' => null,
-        'order_no' => 'int32'
+        'order_no' => 'int32',
+        'performance_count' => 'int32',
+        'media_count' => 'int32',
+        'person_count' => 'int32',
+        'release_count' => 'int32'
     ];
 
     /**
@@ -89,7 +97,11 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => false,
         'type' => false,
         'is_display' => false,
-        'order_no' => false
+        'order_no' => false,
+        'performance_count' => false,
+        'media_count' => false,
+        'person_count' => false,
+        'release_count' => false
     ];
 
     /**
@@ -182,7 +194,11 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'title',
         'type' => 'type',
         'is_display' => 'isDisplay',
-        'order_no' => 'orderNo'
+        'order_no' => 'orderNo',
+        'performance_count' => 'performanceCount',
+        'media_count' => 'mediaCount',
+        'person_count' => 'personCount',
+        'release_count' => 'releaseCount'
     ];
 
     /**
@@ -195,7 +211,11 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'setTitle',
         'type' => 'setType',
         'is_display' => 'setIsDisplay',
-        'order_no' => 'setOrderNo'
+        'order_no' => 'setOrderNo',
+        'performance_count' => 'setPerformanceCount',
+        'media_count' => 'setMediaCount',
+        'person_count' => 'setPersonCount',
+        'release_count' => 'setReleaseCount'
     ];
 
     /**
@@ -208,7 +228,11 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'getTitle',
         'type' => 'getType',
         'is_display' => 'getIsDisplay',
-        'order_no' => 'getOrderNo'
+        'order_no' => 'getOrderNo',
+        'performance_count' => 'getPerformanceCount',
+        'media_count' => 'getMediaCount',
+        'person_count' => 'getPersonCount',
+        'release_count' => 'getReleaseCount'
     ];
 
     /**
@@ -273,6 +297,10 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
+        $this->setIfExists('performance_count', $data ?? [], null);
+        $this->setIfExists('media_count', $data ?? [], null);
+        $this->setIfExists('person_count', $data ?? [], null);
+        $this->setIfExists('release_count', $data ?? [], null);
     }
 
     /**
@@ -325,6 +353,18 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
+        if ($this->container['performance_count'] === null) {
+            $invalidProperties[] = "'performance_count' can't be null";
+        }
+        if ($this->container['media_count'] === null) {
+            $invalidProperties[] = "'media_count' can't be null";
+        }
+        if ($this->container['person_count'] === null) {
+            $invalidProperties[] = "'person_count' can't be null";
+        }
+        if ($this->container['release_count'] === null) {
+            $invalidProperties[] = "'release_count' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -481,6 +521,114 @@ class SongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         $this->container['order_no'] = $order_no;
+
+        return $this;
+    }
+
+    /**
+     * Gets performance_count
+     *
+     * @return int
+     */
+    public function getPerformanceCount()
+    {
+        return $this->container['performance_count'];
+    }
+
+    /**
+     * Sets performance_count
+     *
+     * @param int $performance_count 楽曲披露の件数
+     *
+     * @return self
+     */
+    public function setPerformanceCount($performance_count)
+    {
+        if (is_null($performance_count)) {
+            throw new \InvalidArgumentException('non-nullable performance_count cannot be null');
+        }
+        $this->container['performance_count'] = $performance_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets media_count
+     *
+     * @return int
+     */
+    public function getMediaCount()
+    {
+        return $this->container['media_count'];
+    }
+
+    /**
+     * Sets media_count
+     *
+     * @param int $media_count リンクしているメディアの件数
+     *
+     * @return self
+     */
+    public function setMediaCount($media_count)
+    {
+        if (is_null($media_count)) {
+            throw new \InvalidArgumentException('non-nullable media_count cannot be null');
+        }
+        $this->container['media_count'] = $media_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets person_count
+     *
+     * @return int
+     */
+    public function getPersonCount()
+    {
+        return $this->container['person_count'];
+    }
+
+    /**
+     * Sets person_count
+     *
+     * @param int $person_count 作詞・作曲・編曲として登録されている人物の人数。役割が重なる人物は 1 人と数える
+     *
+     * @return self
+     */
+    public function setPersonCount($person_count)
+    {
+        if (is_null($person_count)) {
+            throw new \InvalidArgumentException('non-nullable person_count cannot be null');
+        }
+        $this->container['person_count'] = $person_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets release_count
+     *
+     * @return int
+     */
+    public function getReleaseCount()
+    {
+        return $this->container['release_count'];
+    }
+
+    /**
+     * Sets release_count
+     *
+     * @param int $release_count 収録しているリリースの件数
+     *
+     * @return self
+     */
+    public function setReleaseCount($release_count)
+    {
+        if (is_null($release_count)) {
+            throw new \InvalidArgumentException('non-nullable release_count cannot be null');
+        }
+        $this->container['release_count'] = $release_count;
 
         return $this;
     }

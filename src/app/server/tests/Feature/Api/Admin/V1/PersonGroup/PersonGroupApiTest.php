@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin\V1\PersonGroup;
 
+use Event\Infrastructures\EventRepository;
 use Person\Route\PersonGroupRouteMap;
 use PHPUnit\Framework\Attributes\Test;
+use Song\Domain\Models\SongType;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -96,5 +98,30 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this->withAuth()
             ->delete(route(PersonGroupRouteMap::Delete, $personGroupId))
             ->assertStatus(204);
+    }
+
+    #[Test]
+    public function searchReturnsPerformanceCountCreditedToTheGroup(): void
+    {
+        $memberId1 = $this->generateUuid();
+        $memberId2 = $this->generateUuid();
+        $personGroupId = $this->generateUuid();
+        $songId = $this->generateUuid();
+        $this->storePersons($this->createPerson($memberId1, 'メンバー1', 1), $this->createPerson($memberId2, 'メンバー2', 2));
+        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$memberId1, $memberId2]));
+        $this->storeSongs($this->createSong($songId, '楽曲', '説明', SongType::Original, true, 1));
+        // メンバー 2 人を同じ楽曲披露に入れても、楽曲披露は 1 件と数える
+        $this->app->make(EventRepository::class)->save($this->createEvent($this->generateUuid(), performances: [
+            ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
+                ['personId' => $memberId1, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
+                ['personId' => $memberId2, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 2],
+            ]],
+        ]));
+
+        $this->withAuth()
+            ->getJson(route(PersonGroupRouteMap::Search))
+            ->assertStatus(200)
+            ->assertJsonPath('personGroups.0.personGroupId', $personGroupId)
+            ->assertJsonPath('personGroups.0.performanceCount', 1);
     }
 }

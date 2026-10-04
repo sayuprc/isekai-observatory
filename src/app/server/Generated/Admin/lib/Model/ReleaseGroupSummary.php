@@ -64,7 +64,9 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'description' => 'string',
         'is_display' => 'bool',
         'order_no' => 'int',
-        'first_released_on' => '\DateTime'
+        'first_released_on' => '\DateTime',
+        'release_count' => 'int',
+        'song_count' => 'int'
     ];
 
     /**
@@ -81,7 +83,9 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'description' => null,
         'is_display' => null,
         'order_no' => 'int32',
-        'first_released_on' => 'date'
+        'first_released_on' => 'date',
+        'release_count' => 'int32',
+        'song_count' => 'int32'
     ];
 
     /**
@@ -96,7 +100,9 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'description' => false,
         'is_display' => false,
         'order_no' => false,
-        'first_released_on' => true
+        'first_released_on' => true,
+        'release_count' => false,
+        'song_count' => false
     ];
 
     /**
@@ -191,7 +197,9 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'description' => 'description',
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo',
-        'first_released_on' => 'firstReleasedOn'
+        'first_released_on' => 'firstReleasedOn',
+        'release_count' => 'releaseCount',
+        'song_count' => 'songCount'
     ];
 
     /**
@@ -206,7 +214,9 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'description' => 'setDescription',
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo',
-        'first_released_on' => 'setFirstReleasedOn'
+        'first_released_on' => 'setFirstReleasedOn',
+        'release_count' => 'setReleaseCount',
+        'song_count' => 'setSongCount'
     ];
 
     /**
@@ -221,7 +231,9 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'description' => 'getDescription',
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo',
-        'first_released_on' => 'getFirstReleasedOn'
+        'first_released_on' => 'getFirstReleasedOn',
+        'release_count' => 'getReleaseCount',
+        'song_count' => 'getSongCount'
     ];
 
     /**
@@ -288,6 +300,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
         $this->setIfExists('first_released_on', $data ?? [], null);
+        $this->setIfExists('release_count', $data ?? [], null);
+        $this->setIfExists('song_count', $data ?? [], null);
     }
 
     /**
@@ -345,6 +359,12 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
 
         if ($this->container['first_released_on'] === null) {
             $invalidProperties[] = "'first_released_on' can't be null";
+        }
+        if ($this->container['release_count'] === null) {
+            $invalidProperties[] = "'release_count' can't be null";
+        }
+        if ($this->container['song_count'] === null) {
+            $invalidProperties[] = "'song_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -563,6 +583,60 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
             }
         }
         $this->container['first_released_on'] = $first_released_on;
+
+        return $this;
+    }
+
+    /**
+     * Gets release_count
+     *
+     * @return int
+     */
+    public function getReleaseCount()
+    {
+        return $this->container['release_count'];
+    }
+
+    /**
+     * Sets release_count
+     *
+     * @param int $release_count 傘下のリリース (版) の件数
+     *
+     * @return self
+     */
+    public function setReleaseCount($release_count)
+    {
+        if (is_null($release_count)) {
+            throw new \InvalidArgumentException('non-nullable release_count cannot be null');
+        }
+        $this->container['release_count'] = $release_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets song_count
+     *
+     * @return int
+     */
+    public function getSongCount()
+    {
+        return $this->container['song_count'];
+    }
+
+    /**
+     * Sets song_count
+     *
+     * @param int $song_count 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
+     *
+     * @return self
+     */
+    public function setSongCount($song_count)
+    {
+        if (is_null($song_count)) {
+            throw new \InvalidArgumentException('non-nullable song_count cannot be null');
+        }
+        $this->container['song_count'] = $song_count;
 
         return $this;
     }

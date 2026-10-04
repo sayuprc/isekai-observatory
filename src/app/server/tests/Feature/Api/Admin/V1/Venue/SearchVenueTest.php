@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin\V1\Venue;
 
+use Event\Infrastructures\EventRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
@@ -41,6 +42,7 @@ class SearchVenueTest extends DatabaseTestCase
                     'venueId' => $onlineId,
                     'name' => '配信先サンプルB',
                     'kind' => ['name' => 'オンライン', 'value' => 2],
+                    'eventCount' => 0,
                 ]],
                 'maxPage' => 1,
             ]);
@@ -50,5 +52,20 @@ class SearchVenueTest extends DatabaseTestCase
     public function generalUserWithoutPermissionIsForbidden(): void
     {
         $this->withGeneralAuth()->get(route(VenueRouteMap::Search))->assertStatus(403);
+    }
+
+    #[Test]
+    public function returnsEventCountUsingTheVenue(): void
+    {
+        $venueId = $this->generateUuid();
+        $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
+        $repository = $this->app->make(EventRepository::class);
+        $repository->save($this->createEvent($this->generateUuid(), venues: [['venueId' => $venueId, 'orderNo' => 1]]));
+        $repository->save($this->createEvent($this->generateUuid(), venues: [['venueId' => $venueId, 'orderNo' => 1]]));
+
+        $this->withAuth()
+            ->get(route(VenueRouteMap::Search))
+            ->assertStatus(200)
+            ->assertJsonPath('venues.0.eventCount', 2);
     }
 }

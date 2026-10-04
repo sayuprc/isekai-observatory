@@ -7,7 +7,7 @@ namespace IsekaiObservatory.Admin;
 model RequestPersonGroupMember is PickProperties<PersonGroupMember, "personId" | "orderNo">;
 
 model PersonGroupSearchResponse {
-  personGroups: PersonGroup[];
+  personGroups: PersonGroupSummary[];
   maxPage: int32;
 }
 

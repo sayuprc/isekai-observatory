@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Song\Infrastructures\Admin;
 
+use Event\Infrastructures\EventRepository;
+use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
+use Release\Domain\Models\ReleaseGroupType;
+use Song\Application\Admin\Query\SongSummary;
 use Song\Domain\Criteria\SongSearchCriteria;
 use Song\Domain\Criteria\Sort;
+use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\SongType;
 use Song\Infrastructures\Admin\SongQueryService;
 use Support\Domain\SearchCriteria\Order;
@@ -135,6 +140,66 @@ class SongQueryServiceTest extends DatabaseTestCase
         $criteria = $this->criteria(title: new Some('存在しないタイトル'));
 
         $this->assertSame(0, $this->getInstance()->maxPage($criteria));
+    }
+
+    #[Test]
+    public function searchCountsRelatedRecordsPerSong(): void
+    {
+        $songId = $this->generateUuid();
+        $otherSongId = $this->generateUuid();
+        $personId = $this->generateUuid();
+        $arrangerId = $this->generateUuid();
+        $mediaId = $this->generateUuid();
+        $this->storePersons($this->createPerson($personId, '作詞作曲', 1), $this->createPerson($arrangerId, '編曲', 2));
+        $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true));
+        $this->storeSongs(
+            $this->createSong(
+                $songId,
+                'テスト楽曲',
+                'テスト楽曲説明',
+                SongType::Original,
+                true,
+                1,
+                [],
+                tagsOrPersons: [
+                    ['personId' => $personId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
+                    ['personId' => $personId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 1],
+                    ['personId' => $arrangerId, 'role' => SongPersonRole::Arranger->value, 'orderNo' => 1],
+                ],
+                media: [['mediaId' => $mediaId, 'orderNo' => 1]],
+            ),
+            $this->createSong($otherSongId, '関連なし楽曲', '説明', SongType::Original, true, 2),
+        );
+
+        // 同じリリースに 2 回収録されていても、リリースは 1 件と数える
+        $releaseGroupId = $this->generateUuid();
+        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'テスト作品', ReleaseGroupType::Single));
+        $this->storeReleases(
+            $this->createRelease($this->generateUuid(), $releaseGroupId, 'CD', true, media: [
+                ['position' => 1, 'name' => null, 'tracks' => [
+                    ['songId' => $songId, 'title' => null, 'trackNo' => 1],
+                    ['songId' => $songId, 'title' => null, 'trackNo' => 2],
+                ]],
+            ]),
+            $this->createRelease($this->generateUuid(), $releaseGroupId, '配信', true, orderNo: 2, media: [
+                ['position' => 1, 'name' => null, 'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]]],
+            ]),
+        );
+
+        $this->app->make(EventRepository::class)->save($this->createEvent($this->generateUuid(), performances: [
+            ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []],
+            ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 2, 'coVocalists' => []],
+        ]));
+
+        $results = $this->getInstance()->search($this->criteria());
+
+        $this->assertSame(
+            [[2, 1, 2, 2], [0, 0, 0, 0]],
+            array_map(
+                static fn (SongSummary $song): array => [$song->performanceCount, $song->mediaCount, $song->personCount, $song->releaseCount],
+                $results,
+            ),
+        );
     }
 
     private function criteria(

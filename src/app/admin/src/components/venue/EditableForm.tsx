@@ -1,13 +1,17 @@
-import { Match, Show, Switch, createResource } from 'solid-js';
+import { Match, Switch, createResource, createSignal } from 'solid-js';
 import type { Venue, VenueKindValue } from '../../generated';
 import { validateVenueName } from '../../schemas/venue';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { createFormDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
+import { ActionMenu } from '../ActionMenu';
+import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
+import { VenueFields } from './VenueFields';
 
 interface DetailViewProps {
   venueId: string;
@@ -69,11 +73,14 @@ const EditableForm = (props: EditableFormProps) => {
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const venueId = props.data.venue.venueId;
+  const [kind, setKind] = createSignal<VenueKindValue>(props.data.venue.kind.value);
+  const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(kind);
 
   const save = async (payload: Payload) => {
     const { data, error, status } = await client.api.venues({ venueId }).put(payload);
     if (data) {
       setFlash('更新しました');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
@@ -83,17 +90,17 @@ const EditableForm = (props: EditableFormProps) => {
     }
     if (status === 404) {
       setFlash('データがありません', 'error');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
     handleError(status, error);
   };
 
-  const handleUpdate = withSubmitting(async (event: Event) => {
+  const handleUpdate = withSubmitting(async (event: SubmitEvent) => {
     event.preventDefault();
     clearErrors();
-    const form = (event.target as HTMLButtonElement).form as HTMLFormElement;
-    const formData = new FormData(form);
+    const formData = new FormData(event.currentTarget as HTMLFormElement);
     const payload: Payload = {
       name: formData.get('name')?.toString() ?? '',
       kind: Number(formData.get('kind')?.toString() ?? '1') as VenueKindValue,
@@ -107,8 +114,7 @@ const EditableForm = (props: EditableFormProps) => {
     await save(payload);
   });
 
-  const handleDelete = withSubmitting(async (event: Event) => {
-    event.preventDefault();
+  const handleDelete = withSubmitting(async () => {
     if (!window.confirm('削除します。よろしいですか？')) return;
     const { error, status } = await client.api.venues({ venueId }).delete();
     if (status === 403) {
@@ -117,6 +123,7 @@ const EditableForm = (props: EditableFormProps) => {
     }
     if (status === 404) {
       setFlash('データがありません', 'error');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
@@ -125,66 +132,37 @@ const EditableForm = (props: EditableFormProps) => {
       return;
     }
     setFlash('削除しました');
+    allowLeave();
     window.location.href = listUrl;
   });
 
   return (
     <>
-      <a href={listUrl} class="btn btn-ghost btn-sm mb-4">
-        ← 一覧に戻る
-      </a>
+      <EntityHeader
+        breadcrumb={{ href: listUrl, label: '開催先' }}
+        title={props.data.venue.name}
+        formId="venue-form"
+        isDirty={isDirty()}
+        isSubmitting={isSubmitting()}
+        submitLabel="保存"
+        submittingLabel="保存中..."
+        onDiscard={() => discardChanges(allowLeave)}
+        menu={
+          <ActionMenu
+            label="その他の操作"
+            items={[{ label: 'この開催先を削除する', danger: true, disabled: isSubmitting(), onSelect: handleDelete }]}
+          />
+        }
+      />
       <FormError message={formError()} onClose={clearErrors} />
-      <div class="max-w-4xl space-y-6">
-        <form onSubmit={(event) => event.preventDefault()}>
-          <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-            <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
-            <label class="label" for="name">
-              開催先名
-            </label>
-            <input
-              id="name"
-              type="text"
-              class="input w-full"
-              name="name"
-              required
-              maxLength={255}
-              value={props.data.venue.name}
-              classList={{ 'input-error': !!getFieldError('name') }}
-            />
-            <Show when={getFieldError('name')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
-            <label class="label mt-4" for="kind">
-              種別
-            </label>
-            <select id="kind" name="kind" class="select w-full" required>
-              <option value="1" selected={props.data.venue.kind.value === 1}>
-                現地
-              </option>
-              <option value="2" selected={props.data.venue.kind.value === 2}>
-                オンライン
-              </option>
-            </select>
-            <div class="mt-6 flex justify-end">
-              <button type="button" onClick={handleUpdate} class="btn btn-primary" disabled={isSubmitting()}>
-                {isSubmitting() ? '更新中...' : '更新'}
-              </button>
-            </div>
-          </fieldset>
-        </form>
-        <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
-          <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
-          <p class="mt-1 text-sm text-base-content/60">この操作は取り消せません。</p>
-          <div class="mt-4">
-            <button
-              type="button"
-              onClick={handleDelete}
-              class="btn btn-outline btn-error btn-sm"
-              disabled={isSubmitting()}
-            >
-              {isSubmitting() ? '削除中...' : 'この開催先を削除する'}
-            </button>
-          </div>
-        </fieldset>
-      </div>
+      <form ref={bindForm} id="venue-form" class="max-w-4xl" onSubmit={handleUpdate}>
+        <VenueFields
+          name={props.data.venue.name}
+          kind={kind()}
+          onKindChange={setKind}
+          nameError={getFieldError('name')}
+        />
+      </form>
     </>
   );
 };

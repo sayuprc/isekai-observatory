@@ -37,7 +37,9 @@ class Converter
             ->setTypeValue(ReleaseGroupTypeValue::from($summary->typeValue))
             ->setDescription($summary->description)
             ->setIsDisplay($summary->isDisplay)
-            ->setOrderNo($summary->orderNo);
+            ->setOrderNo($summary->orderNo)
+            ->setReleaseCount($summary->releaseCount)
+            ->setSongCount($summary->songCount);
     }
 
     public function toOpenApiReferencedRelease(ReleaseGroupReferencedRelease $release): OpenApiReleaseGroupReferencedRelease

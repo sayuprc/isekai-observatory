@@ -2,11 +2,15 @@ import { createResource, Match, Show, Switch } from 'solid-js';
 import type { Person } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { createFormDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
+import { ActionMenu } from '../ActionMenu';
+import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
+import { FormRow } from '../FormRow';
 
 interface DetailViewProps {
   personId: string;
@@ -88,17 +92,13 @@ const EditableForm = (props: EditableFormProps) => {
 
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
+  const { isDirty, allowLeave, bindForm } = createFormDirtyTracker();
 
-  const handleSubmit = async (e: Event) => {
-    e.preventDefault();
-  };
-
-  const handleUpdate = withSubmitting(async (e: Event) => {
+  const handleUpdate = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
     clearErrors();
 
-    const form = (e.target as HTMLButtonElement).form as HTMLFormElement;
-    const formData = new FormData(form);
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
 
     const personId = props.data.person.personId;
 
@@ -114,12 +114,14 @@ const EditableForm = (props: EditableFormProps) => {
 
     if (data) {
       setFlash('更新しました');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
 
     if (status === 404) {
       setFlash('データがありません', 'error');
+      allowLeave();
       window.location.href = listUrl;
       return;
     }
@@ -127,9 +129,7 @@ const EditableForm = (props: EditableFormProps) => {
     handleError(status, error);
   });
 
-  const handleDelete = withSubmitting(async (e: Event) => {
-    e.preventDefault();
-
+  const handleDelete = withSubmitting(async () => {
     if (!window.confirm('削除します。よろしいですか？')) {
       return;
     }
@@ -151,61 +151,59 @@ const EditableForm = (props: EditableFormProps) => {
     }
 
     setFlash('削除しました');
+    allowLeave();
     window.location.href = listUrl;
   });
 
   return (
     <>
-      <a href={listUrl} class="btn btn-ghost btn-sm mb-4">
-        ← 一覧に戻る
-      </a>
+      <EntityHeader
+        breadcrumb={{ href: listUrl, label: '人物' }}
+        title={props.data.person.name}
+        formId="person-form"
+        isDirty={isDirty()}
+        isSubmitting={isSubmitting()}
+        submitLabel="保存"
+        submittingLabel="保存中..."
+        onDiscard={() => discardChanges(allowLeave)}
+        menu={
+          <ActionMenu
+            label="その他の操作"
+            items={[{ label: 'この人物を削除する', danger: true, disabled: isSubmitting(), onSelect: handleDelete }]}
+          />
+        }
+      />
       <FormError message={formError()} onClose={clearErrors} />
-      <div class="max-w-4xl space-y-6">
-        <form onsubmit={handleSubmit}>
-          <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-            <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
-            <label class="label">人物名</label>
+      <form ref={bindForm} id="person-form" class="max-w-4xl" onSubmit={handleUpdate}>
+        <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border px-6 py-3">
+          <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
+          <FormRow label="人物名" for="name">
             <input
+              id="name"
               type="text"
               class="input w-full"
               name="name"
+              required
               value={props.data.person.name}
               classList={{ 'input-error': !!getFieldError('name') }}
             />
-            <Show when={getFieldError('name')}>{(message) => <p class="mt-1 text-xs text-error">{message()}</p>}</Show>
-
-            <label class="label">表示順</label>
+            <Show when={getFieldError('name')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
+          </FormRow>
+          <FormRow label="表示順" for="orderNo">
             <input
+              id="orderNo"
               type="number"
-              class="input w-full"
+              class="input w-40"
               name="orderNo"
               required
               min="1"
               value={props.data.person.orderNo}
               classList={{ 'input-error': !!getFieldError('orderNo') }}
             />
-            <Show when={getFieldError('orderNo')}>
-              {(message) => <p class="mt-1 text-xs text-error">{message()}</p>}
-            </Show>
-
-            <div class="mt-6 flex justify-end">
-              <button onClick={handleUpdate} class="btn btn-primary" disabled={isSubmitting()}>
-                {isSubmitting() ? '更新中...' : '更新'}
-              </button>
-            </div>
-          </fieldset>
-        </form>
-
-        <fieldset class="rounded-box border border-error/20 bg-error/5 p-6">
-          <legend class="px-2 text-sm font-semibold text-error">危険な操作</legend>
-          <p class="mt-1 text-sm text-base-content/60">この操作は取り消せません。</p>
-          <div class="mt-4">
-            <button onClick={handleDelete} class="btn btn-outline btn-error btn-sm" disabled={isSubmitting()}>
-              {isSubmitting() ? '削除中...' : 'この人物を削除する'}
-            </button>
-          </div>
+            <Show when={getFieldError('orderNo')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
+          </FormRow>
         </fieldset>
-      </div>
+      </form>
     </>
   );
 };

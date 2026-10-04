@@ -9,6 +9,7 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -65,6 +66,7 @@ export const SearchList = () => {
     }),
   );
 
+  const detailUrl = (id: string) => `/persons/${id}?back=${encodeURIComponent(window.location.search)}`;
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -154,19 +156,21 @@ export const SearchList = () => {
           <thead>
             <tr>
               <th>人物名</th>
+              <th class="text-right">楽曲</th>
+              <th class="text-right">共演</th>
               <th>表示順</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={2} />
+                <ListState state="loading" colSpan={4} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.persons.length === 0}>
-                <ListState state="empty" colSpan={2} />
+                <ListState state="empty" colSpan={4} />
               </Match>
               <Match when={data()}>
                 {(result) => (
@@ -174,13 +178,12 @@ export const SearchList = () => {
                     {(person) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td>
-                          <a
-                            href={`/persons/${person.personId}?back=${encodeURIComponent(window.location.search)}`}
-                            class="link link-hover font-medium"
-                          >
+                          <a href={detailUrl(person.personId)} class="link link-hover font-medium">
                             {person.name}
                           </a>
                         </td>
+                        <CountCell count={person.songCount} />
+                        <CountCell count={person.performanceCount} />
                         <td>{person.orderNo}</td>
                       </tr>
                     )}
@@ -191,6 +194,7 @@ export const SearchList = () => {
           </tbody>
         </table>
       </div>
+
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>

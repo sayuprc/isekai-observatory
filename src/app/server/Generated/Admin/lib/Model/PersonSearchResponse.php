@@ -57,7 +57,7 @@ class PersonSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializ
       * @var string[]
       */
     protected static $openAPITypes = [
-        'persons' => '\OpenAPI\Admin\Client\Model\Person[]',
+        'persons' => '\OpenAPI\Admin\Client\Model\PersonSummary[]',
         'max_page' => 'int'
     ];
 
@@ -305,7 +305,7 @@ class PersonSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets persons
      *
-     * @return \OpenAPI\Admin\Client\Model\Person[]
+     * @return \OpenAPI\Admin\Client\Model\PersonSummary[]
      */
     public function getPersons()
     {
@@ -315,7 +315,7 @@ class PersonSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets persons
      *
-     * @param \OpenAPI\Admin\Client\Model\Person[] $persons persons
+     * @param \OpenAPI\Admin\Client\Model\PersonSummary[] $persons persons
      *
      * @return self
      */

@@ -3752,6 +3752,10 @@ components:
         - schedule
         - status
         - isDisplay
+        - venueNames
+        - performanceCount
+        - setlistItemCount
+        - sourceCount
       properties:
         eventId:
           $ref: '#/components/schemas/eventId'
@@ -3765,6 +3769,23 @@ components:
           $ref: '#/components/schemas/EventStatus'
         isDisplay:
           type: boolean
+        venueNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/venueName'
+          description: 開催先名。登録順に並べる
+        performanceCount:
+          type: integer
+          format: int32
+          description: 楽曲披露の件数
+        setlistItemCount:
+          type: integer
+          format: int32
+          description: セットリスト項目の件数
+        sourceCount:
+          type: integer
+          format: int32
+          description: 出典の件数
       description: イベント一覧の 1 行分
     EventType:
       type: object
@@ -4003,7 +4024,7 @@ components:
         media:
           type: array
           items:
-            $ref: '#/components/schemas/Media'
+            $ref: '#/components/schemas/MediaSummary'
         maxPage:
           type: integer
           format: int32
@@ -4013,6 +4034,39 @@ components:
         - published_at
         - title
       description: メディア検索のソート条件
+    MediaSummary:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+        - isDisplay
+        - songCount
+        - eventCount
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaType'
+        isDisplay:
+          type: boolean
+        songCount:
+          type: integer
+          format: int32
+          description: このメディアをリンクしている楽曲の件数
+        eventCount:
+          type: integer
+          format: int32
+          description: このメディアを関連づけているイベントの件数
+      description: メディア一覧の 1 行分
     MediaType:
       type: object
       required:
@@ -4265,10 +4319,31 @@ components:
         personGroups:
           type: array
           items:
-            $ref: '#/components/schemas/PersonGroup'
+            $ref: '#/components/schemas/PersonGroupSummary'
         maxPage:
           type: integer
           format: int32
+    PersonGroupSummary:
+      type: object
+      required:
+        - personGroupId
+        - name
+        - members
+        - performanceCount
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/personGroupId'
+        name:
+          $ref: '#/components/schemas/personGroupName'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonGroupMember'
+        performanceCount:
+          type: integer
+          format: int32
+          description: このグループとして共演が記録されている楽曲披露の件数
+      description: 人物グループ一覧の 1 行分
     PersonGroupUpdateRequest:
       type: object
       required:
@@ -4306,7 +4381,7 @@ components:
         persons:
           type: array
           items:
-            $ref: '#/components/schemas/Person'
+            $ref: '#/components/schemas/PersonSummary'
         maxPage:
           type: integer
           format: int32
@@ -4316,6 +4391,30 @@ components:
         - name
         - order_no
       description: 人物検索のソート条件
+    PersonSummary:
+      type: object
+      required:
+        - personId
+        - name
+        - orderNo
+        - songCount
+        - performanceCount
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: 作詞・作曲・編曲として関わっている楽曲の件数
+        performanceCount:
+          type: integer
+          format: int32
+          description: 共演者として記録されている楽曲披露の件数
+      description: 人物一覧の 1 行分
     PersonUpdateRequest:
       type: object
       required:
@@ -4682,6 +4781,8 @@ components:
         - isDisplay
         - orderNo
         - firstReleasedOn
+        - releaseCount
+        - songCount
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -4699,6 +4800,14 @@ components:
           anyOf:
             - $ref: '#/components/schemas/releasedOn'
             - type: 'null'
+        releaseCount:
+          type: integer
+          format: int32
+          description: 傘下のリリース (版) の件数
+        songCount:
+          type: integer
+          format: int32
+          description: 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
       description: リリースグループ一覧の 1 行分。firstReleasedOn は傘下リリースの最古発売日(リリース未登録なら null)
     ReleaseGroupTypeValue:
       type: integer
@@ -5214,6 +5323,10 @@ components:
         - type
         - isDisplay
         - orderNo
+        - performanceCount
+        - mediaCount
+        - personCount
+        - releaseCount
       properties:
         songId:
           $ref: '#/components/schemas/songId'
@@ -5225,6 +5338,22 @@ components:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
+        performanceCount:
+          type: integer
+          format: int32
+          description: 楽曲披露の件数
+        mediaCount:
+          type: integer
+          format: int32
+          description: リンクしているメディアの件数
+        personCount:
+          type: integer
+          format: int32
+          description: 作詞・作曲・編曲として登録されている人物の人数。役割が重なる人物は 1 人と数える
+        releaseCount:
+          type: integer
+          format: int32
+          description: 収録しているリリースの件数
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
@@ -5233,6 +5362,10 @@ components:
             value: 1
           isDisplay: true
           orderNo: 1
+          performanceCount: 3
+          mediaCount: 1
+          personCount: 2
+          releaseCount: 1
     SongTag:
       type: object
       required:
@@ -5289,7 +5422,7 @@ components:
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/SongTag'
+            $ref: '#/components/schemas/SongTagSummary'
         maxPage:
           type: integer
           format: int32
@@ -5299,6 +5432,25 @@ components:
         - name
         - order_no
       description: 楽曲タグ検索のソート条件
+    SongTagSummary:
+      type: object
+      required:
+        - songTagId
+        - name
+        - orderNo
+        - songCount
+      properties:
+        songTagId:
+          $ref: '#/components/schemas/songTagId'
+        name:
+          $ref: '#/components/schemas/songTagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: このタグが付いている楽曲の件数
+      description: 楽曲タグ一覧の 1 行分
     SongTagUpdateRequest:
       type: object
       required:
@@ -5487,7 +5639,7 @@ components:
         venues:
           type: array
           items:
-            $ref: '#/components/schemas/Venue'
+            $ref: '#/components/schemas/VenueSummary'
         maxPage:
           type: integer
           format: int32
@@ -5496,6 +5648,25 @@ components:
       enum:
         - name
       description: 開催先検索のソート条件
+    VenueSummary:
+      type: object
+      required:
+        - venueId
+        - name
+        - kind
+        - eventCount
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKind'
+        eventCount:
+          type: integer
+          format: int32
+          description: この開催先を使っているイベントの件数
+      description: 開催先一覧の 1 行分
     VenueUpdateRequest:
       type: object
       required:

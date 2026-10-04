@@ -72,6 +72,12 @@ model ReleaseGroupSummary {
   isDisplay: boolean;
   orderNo: orderNo;
   firstReleasedOn: releasedOn | null;
+
+  @doc("傘下のリリース (版) の件数")
+  releaseCount: int32;
+
+  @doc("傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える")
+  songCount: int32;
 }
 
 @doc("リリースグループ傘下のリリース 1 件分の概要")

@@ -57,7 +57,7 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
       * @var string[]
       */
     protected static $openAPITypes = [
-        'tags' => '\OpenAPI\Admin\Client\Model\SongTag[]',
+        'tags' => '\OpenAPI\Admin\Client\Model\SongTagSummary[]',
         'max_page' => 'int'
     ];
 
@@ -305,7 +305,7 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Gets tags
      *
-     * @return \OpenAPI\Admin\Client\Model\SongTag[]
+     * @return \OpenAPI\Admin\Client\Model\SongTagSummary[]
      */
     public function getTags()
     {
@@ -315,7 +315,7 @@ class SongTagSearchResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets tags
      *
-     * @param \OpenAPI\Admin\Client\Model\SongTag[] $tags tags
+     * @param \OpenAPI\Admin\Client\Model\SongTagSummary[] $tags tags
      *
      * @return self
      */

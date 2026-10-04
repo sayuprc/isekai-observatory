@@ -5,7 +5,7 @@ using IsekaiObservatory.Packages.Media;
 namespace IsekaiObservatory.Admin;
 
 model MediaSearchResponse {
-  media: Media[];
+  media: MediaSummary[];
   maxPage: int32;
 }
 

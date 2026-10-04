@@ -90,4 +90,16 @@ model EventSummary {
   schedule: EventSchedule;
   status: EventStatus;
   isDisplay: boolean;
+
+  @doc("開催先名。登録順に並べる")
+  venueNames: venueName[];
+
+  @doc("楽曲披露の件数")
+  performanceCount: int32;
+
+  @doc("セットリスト項目の件数")
+  setlistItemCount: int32;
+
+  @doc("出典の件数")
+  sourceCount: int32;
 }

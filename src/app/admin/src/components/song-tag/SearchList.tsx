@@ -9,6 +9,7 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -65,6 +66,7 @@ export const SearchList = () => {
     }),
   );
 
+  const detailUrl = (id: string) => `/song-tags/${id}?back=${encodeURIComponent(window.location.search)}`;
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -149,38 +151,37 @@ export const SearchList = () => {
           新規作成
         </a>
       </div>
-      <div class="rounded-box border border-base-300 bg-base-100 overflow-x-auto">
+      <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
         <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
               <th>楽曲タグ名</th>
+              <th class="text-right">楽曲</th>
               <th>表示順</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={2} />
+                <ListState state="loading" colSpan={3} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={2} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={3} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.tags.length === 0}>
-                <ListState state="empty" colSpan={2} message="条件に一致する楽曲タグはありません。" />
+                <ListState state="empty" colSpan={3} message="条件に一致する楽曲タグはありません。" />
               </Match>
               <Match when={data()}>
                 {(result) => (
                   <For each={result().tags}>
                     {(tag) => (
-                      <tr class="hover:bg-primary/30 focus-within:bg-primary/30 transition-colors">
+                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td>
-                          <a
-                            href={`/song-tags/${tag.songTagId}?back=${encodeURIComponent(window.location.search)}`}
-                            class="link link-hover font-medium"
-                          >
+                          <a href={detailUrl(tag.songTagId)} class="link link-hover font-medium">
                             {tag.name}
                           </a>
                         </td>
+                        <CountCell count={tag.songCount} />
                         <td>{tag.orderNo}</td>
                       </tr>
                     )}
@@ -191,6 +192,7 @@ export const SearchList = () => {
           </tbody>
         </table>
       </div>
+
       <Show when={!data.loading && !fetchError() && (data()?.maxPage ?? 0) > 1}>
         <Pagination page={params().page} maxPage={data()!.maxPage} onChange={handlePageChange} />
       </Show>

@@ -32,7 +32,11 @@ class SearchPresenter
             ->setTitle($song->title)
             ->setType($this->toOpenApiSongType($song->type))
             ->setIsDisplay($song->isDisplay)
-            ->setOrderNo($song->orderNo);
+            ->setOrderNo($song->orderNo)
+            ->setPerformanceCount($song->performanceCount)
+            ->setMediaCount($song->mediaCount)
+            ->setPersonCount($song->personCount)
+            ->setReleaseCount($song->releaseCount);
     }
 
     private function toOpenApiSongType(SongType $type): OpenApiSongType

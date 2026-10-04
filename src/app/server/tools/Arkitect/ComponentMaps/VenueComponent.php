@@ -10,5 +10,7 @@ enum VenueComponent: string implements ComponentMap
 
     case Domain = 'Venue\Domain\*';
 
+    case Query = 'Venue\Application\*\Query\*';
+
     case UseCase = 'Venue\Application\*\UseCase\*';
 }

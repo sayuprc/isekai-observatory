@@ -11,6 +11,7 @@ use Emonkak\Orm\Grammar\GrammarInterface;
 use Emonkak\Orm\InsertBuilder;
 use Emonkak\Orm\QueryBuilderInterface;
 use Emonkak\Orm\SelectBuilder;
+use Emonkak\Orm\Sql;
 use Emonkak\Orm\UpdateBuilder;
 use Support\Domain\SearchCriteria\PerPage;
 
@@ -84,6 +85,39 @@ final readonly class QueryFactory
         $count = Row::intValue($query->aggregate($this->pdo, 'COUNT(*)'));
 
         return (int)ceil($count / $perPage->value);
+    }
+
+    /**
+     * キー列の値ごとに行数を数える。行のないキーは結果に含まれない
+     *
+     * 管理画面の一覧で、1 ページ分の親 ID に対する子の件数を 1 回の問い合わせで引くときに使う
+     * テーブル名と列名は SQL に埋め込むため、コード上の定数だけを渡す
+     *
+     * @param list<string> $keys
+     * @param ?string      $distinctColumn 指定すると、その列の重複を除いて数える
+     *
+     * @return array<string, int>
+     */
+    public function countBy(string $table, string $keyColumn, array $keys, ?string $distinctColumn = null): array
+    {
+        if ($keys === []) {
+            return [];
+        }
+
+        $counted = $distinctColumn === null ? 'COUNT(*)' : "COUNT(DISTINCT {$distinctColumn})";
+        $counts = [];
+        foreach ($this->fetchAll(
+            $this->select()
+                ->select($keyColumn, 'count_key')
+                ->select(new Sql($counted), 'count_value')
+                ->from($table)
+                ->where($keyColumn, 'IN', $keys)
+                ->groupBy($keyColumn),
+        ) as $row) {
+            $counts[Row::string($row, 'count_key')] = Row::int($row, 'count_value');
+        }
+
+        return $counts;
     }
 
     /**

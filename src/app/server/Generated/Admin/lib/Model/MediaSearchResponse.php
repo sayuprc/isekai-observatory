@@ -57,7 +57,7 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var string[]
       */
     protected static $openAPITypes = [
-        'media' => '\OpenAPI\Admin\Client\Model\Media[]',
+        'media' => '\OpenAPI\Admin\Client\Model\MediaSummary[]',
         'max_page' => 'int'
     ];
 
@@ -305,7 +305,7 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets media
      *
-     * @return \OpenAPI\Admin\Client\Model\Media[]
+     * @return \OpenAPI\Admin\Client\Model\MediaSummary[]
      */
     public function getMedia()
     {
@@ -315,7 +315,7 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Sets media
      *
-     * @param \OpenAPI\Admin\Client\Model\Media[] $media media
+     * @param \OpenAPI\Admin\Client\Model\MediaSummary[] $media media
      *
      * @return self
      */

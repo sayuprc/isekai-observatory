@@ -184,6 +184,22 @@ export type EventSummary = {
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatus;
     isDisplay: boolean;
+    /**
+     * 開催先名。登録順に並べる
+     */
+    venueNames: Array<VenueName>;
+    /**
+     * 楽曲披露の件数
+     */
+    performanceCount: number;
+    /**
+     * セットリスト項目の件数
+     */
+    setlistItemCount: number;
+    /**
+     * 出典の件数
+     */
+    sourceCount: number;
 };
 
 export type EventType = {
@@ -287,7 +303,7 @@ export type MediaReferencedSong = {
 };
 
 export type MediaSearchResponse = {
-    media: Array<Media>;
+    media: Array<MediaSummary>;
     maxPage: number;
 };
 
@@ -295,6 +311,26 @@ export type MediaSearchResponse = {
  * メディア検索のソート条件
  */
 export type MediaSearchSortBy = 'published_at' | 'title';
+
+/**
+ * メディア一覧の 1 行分
+ */
+export type MediaSummary = {
+    mediaId: MediaId;
+    title: MediaTitle;
+    url: MediaUrl;
+    publishedAt: MediaPublishedAt;
+    type: MediaType;
+    isDisplay: boolean;
+    /**
+     * このメディアをリンクしている楽曲の件数
+     */
+    songCount: number;
+    /**
+     * このメディアを関連づけているイベントの件数
+     */
+    eventCount: number;
+};
 
 export type MediaType = {
     name: MediaTypeName;
@@ -411,8 +447,21 @@ export type PersonGroupMember = {
 };
 
 export type PersonGroupSearchResponse = {
-    personGroups: Array<PersonGroup>;
+    personGroups: Array<PersonGroupSummary>;
     maxPage: number;
+};
+
+/**
+ * 人物グループ一覧の 1 行分
+ */
+export type PersonGroupSummary = {
+    personGroupId: PersonGroupId;
+    name: PersonGroupName;
+    members: Array<PersonGroupMember>;
+    /**
+     * このグループとして共演が記録されている楽曲披露の件数
+     */
+    performanceCount: number;
 };
 
 export type PersonGroupUpdateRequest = {
@@ -429,7 +478,7 @@ export type PersonListResponse = {
 };
 
 export type PersonSearchResponse = {
-    persons: Array<Person>;
+    persons: Array<PersonSummary>;
     maxPage: number;
 };
 
@@ -437,6 +486,23 @@ export type PersonSearchResponse = {
  * 人物検索のソート条件
  */
 export type PersonSearchSortBy = 'name' | 'order_no';
+
+/**
+ * 人物一覧の 1 行分
+ */
+export type PersonSummary = {
+    personId: PersonId;
+    name: PersonName;
+    orderNo: OrderNo;
+    /**
+     * 作詞・作曲・編曲として関わっている楽曲の件数
+     */
+    songCount: number;
+    /**
+     * 共演者として記録されている楽曲披露の件数
+     */
+    performanceCount: number;
+};
 
 export type PersonUpdateRequest = {
     name: PersonName;
@@ -620,6 +686,14 @@ export type ReleaseGroupSummary = {
     isDisplay: boolean;
     orderNo: OrderNo;
     firstReleasedOn: ReleasedOn | null;
+    /**
+     * 傘下のリリース (版) の件数
+     */
+    releaseCount: number;
+    /**
+     * 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
+     */
+    songCount: number;
 };
 
 /**
@@ -837,6 +911,22 @@ export type SongSummary = {
     type: SongType;
     isDisplay: boolean;
     orderNo: OrderNo;
+    /**
+     * 楽曲披露の件数
+     */
+    performanceCount: number;
+    /**
+     * リンクしているメディアの件数
+     */
+    mediaCount: number;
+    /**
+     * 作詞・作曲・編曲として登録されている人物の人数。役割が重なる人物は 1 人と数える
+     */
+    personCount: number;
+    /**
+     * 収録しているリリースの件数
+     */
+    releaseCount: number;
 };
 
 export type SongTag = {
@@ -862,7 +952,7 @@ export type SongTagListResponse = {
 };
 
 export type SongTagSearchResponse = {
-    tags: Array<SongTag>;
+    tags: Array<SongTagSummary>;
     maxPage: number;
 };
 
@@ -870,6 +960,19 @@ export type SongTagSearchResponse = {
  * 楽曲タグ検索のソート条件
  */
 export type SongTagSearchSortBy = 'name' | 'order_no';
+
+/**
+ * 楽曲タグ一覧の 1 行分
+ */
+export type SongTagSummary = {
+    songTagId: SongTagId;
+    name: SongTagName;
+    orderNo: OrderNo;
+    /**
+     * このタグが付いている楽曲の件数
+     */
+    songCount: number;
+};
 
 export type SongTagUpdateRequest = {
     name: SongTagName;
@@ -954,7 +1057,7 @@ export type VenueKind = {
 export type VenueKindValue = 1 | 2;
 
 export type VenueSearchResponse = {
-    venues: Array<Venue>;
+    venues: Array<VenueSummary>;
     maxPage: number;
 };
 
@@ -962,6 +1065,19 @@ export type VenueSearchResponse = {
  * 開催先検索のソート条件
  */
 export type VenueSearchSortBy = 'name';
+
+/**
+ * 開催先一覧の 1 行分
+ */
+export type VenueSummary = {
+    venueId: VenueId;
+    name: VenueName;
+    kind: VenueKind;
+    /**
+     * この開催先を使っているイベントの件数
+     */
+    eventCount: number;
+};
 
 export type VenueUpdateRequest = {
     name: VenueName;
