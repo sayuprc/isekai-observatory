@@ -10,6 +10,7 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
@@ -101,6 +102,7 @@ export const SearchList = () => {
     }),
   );
 
+  const detailUrl = (mediaId: string) => `/media/${mediaId}?back=${encodeURIComponent(window.location.search)}`;
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -234,41 +236,42 @@ export const SearchList = () => {
               <th>タイトル</th>
               <th>公開日</th>
               <th>種別</th>
-              <th>表示設定</th>
+              <th class="text-right">楽曲</th>
+              <th class="text-right">イベント</th>
+              <th>公開</th>
               <th>リンク</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={5} />
+                <ListState state="loading" colSpan={7} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={5} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={7} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.media.length === 0}>
-                <ListState state="empty" colSpan={5} message="条件に一致するメディアはありません。" />
+                <ListState state="empty" colSpan={7} message="条件に一致するメディアはありません。" />
               </Match>
               <Match when={data()}>
                 {(result) => (
                   <For each={result().media}>
                     {(media) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
-                        <td class="min-w-44 max-w-56">
-                          <a
-                            href={`/media/${media.mediaId}?back=${encodeURIComponent(window.location.search)}`}
-                            class="link link-hover block truncate font-medium"
-                          >
+                        <td class="max-w-72 min-w-44">
+                          <a href={detailUrl(media.mediaId)} class="link link-hover block truncate font-medium">
                             {media.title}
                           </a>
                         </td>
                         <td class="whitespace-nowrap text-sm">{normalizeDateTimeDisplayValue(media.publishedAt)}</td>
                         <td class="whitespace-nowrap">{media.type.name}</td>
+                        <CountCell count={media.songCount} />
+                        <CountCell count={media.eventCount} />
                         <td class="whitespace-nowrap">
                           <span
                             class={`badge badge-sm ${media.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}
                           >
-                            {media.isDisplay ? '表示する' : '表示しない'}
+                            {media.isDisplay ? '公開' : '非公開'}
                           </span>
                         </td>
                         <td class="max-w-40">
@@ -277,7 +280,7 @@ export const SearchList = () => {
                             target="_blank"
                             rel="noreferrer"
                             title={media.url}
-                            class="link link-hover block truncate whitespace-nowrap text-sm"
+                            class="link link-hover block truncate text-sm whitespace-nowrap"
                           >
                             {toHostLabel(media.url)}
                           </a>

@@ -10,12 +10,14 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Illuminate\Support\ServiceProvider;
 use Media\Application\Admin\Query\MediaDetailQueryServiceInterface;
+use Media\Application\Admin\Query\MediaUsageCountQueryServiceInterface;
 use Media\Application\Cli\Query\YouTubeShortVideoQueryServiceInterface;
 use Media\Application\Cli\Query\YouTubeVideoQueryServiceInterface;
 use Media\Application\Viewer\Query\MediaQueryServiceInterface as ViewerMediaQueryServiceInterface;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannelRepositoryInterface;
 use Media\Infrastructures\Admin\MediaDetailQueryService;
+use Media\Infrastructures\Admin\MediaUsageCountQueryService;
 use Media\Infrastructures\Cli\YouTubeShortVideoQueryService;
 use Media\Infrastructures\Cli\YouTubeVideoQueryService;
 use Media\Infrastructures\MediaRepository;
@@ -30,6 +32,7 @@ class MediaServiceProvider extends ServiceProvider
     {
         $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
         $this->app->bind(MediaDetailQueryServiceInterface::class, MediaDetailQueryService::class);
+        $this->app->bind(MediaUsageCountQueryServiceInterface::class, MediaUsageCountQueryService::class);
         $this->app->bind(ViewerMediaQueryServiceInterface::class, ViewerMediaQueryService::class);
         $this->app->bind(YouTubeChannelRepositoryInterface::class, YouTubeChannelRepository::class);
         $this->app->bind(YouTubeVideoQueryServiceInterface::class, YouTubeVideoQueryService::class);

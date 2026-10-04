@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Admin\V1\Media;
 
 use DateTimeImmutable;
+use Event\Infrastructures\EventRepository;
 use Media\Domain\Models\MediaType;
 use Media\Infrastructures\MediaRepository;
 use Media\Route\MediaRouteMap;
 use PHPUnit\Framework\Attributes\Test;
+use Song\Domain\Models\SongType;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
+use Tests\Support\Domain\EntityStore;
 
 class SearchMediaTest extends DatabaseTestCase
 {
     use EntityFactory;
+    use EntityStore;
     use WithAuth;
 
     #[Test]
@@ -113,5 +117,32 @@ class SearchMediaTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonPath('media.0.mediaId', $idA)
             ->assertJsonPath('media.1.mediaId', $idI);
+    }
+
+    #[Test]
+    public function returnsSongAndEventCountsReferencingEachMedia(): void
+    {
+        $mediaId = $this->generateUuid();
+        $unusedMediaId = $this->generateUuid();
+        $repository = $this->app->make(MediaRepository::class);
+        $repository->save($this->createMedia($mediaId, 'A 参照あり', 'https://example.com/used', MediaType::Mv, true, new DateTimeImmutable('2024-01-01 00:00:00')));
+        $repository->save($this->createMedia($unusedMediaId, 'B 参照なし', 'https://example.com/unused', MediaType::Mv, true, new DateTimeImmutable('2024-02-01 00:00:00')));
+        $this->storeSongs(
+            $this->createSong($this->generateUuid(), '楽曲1', '説明', SongType::Original, true, 1, media: [['mediaId' => $mediaId, 'orderNo' => 1]]),
+            $this->createSong($this->generateUuid(), '楽曲2', '説明', SongType::Original, true, 2, media: [['mediaId' => $mediaId, 'orderNo' => 1]]),
+        );
+        $this->app->make(EventRepository::class)->save(
+            $this->createEvent($this->generateUuid(), media: [['mediaId' => $mediaId, 'orderNo' => 1]]),
+        );
+
+        $this->withAuth()
+            ->getJson(route(MediaRouteMap::Search, ['sort' => 'published_at', 'order' => 'asc']))
+            ->assertStatus(200)
+            ->assertJsonPath('media.0.mediaId', $mediaId)
+            ->assertJsonPath('media.0.songCount', 2)
+            ->assertJsonPath('media.0.eventCount', 1)
+            ->assertJsonPath('media.1.mediaId', $unusedMediaId)
+            ->assertJsonPath('media.1.songCount', 0)
+            ->assertJsonPath('media.1.eventCount', 0);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * MediaSearchResponse
+ * MediaSummary
  *
  * PHP version 8.1
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * MediaSearchResponse Class Doc Comment
+ * MediaSummary Class Doc Comment
  *
  * @category Class
+ * @description メディア一覧の 1 行分
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class MediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       *
       * @var string
       */
-    protected static $openAPIModelName = 'MediaSearchResponse';
+    protected static $openAPIModelName = 'MediaSummary';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,8 +58,14 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var string[]
       */
     protected static $openAPITypes = [
-        'media' => '\OpenAPI\Admin\Client\Model\MediaSummary[]',
-        'max_page' => 'int'
+        'media_id' => 'string',
+        'title' => 'string',
+        'url' => 'string',
+        'published_at' => '\DateTime',
+        'type' => '\OpenAPI\Admin\Client\Model\MediaType',
+        'is_display' => 'bool',
+        'song_count' => 'int',
+        'event_count' => 'int'
     ];
 
     /**
@@ -69,8 +76,14 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'media' => null,
-        'max_page' => 'int32'
+        'media_id' => 'uuid',
+        'title' => null,
+        'url' => 'uri',
+        'published_at' => 'date-time',
+        'type' => null,
+        'is_display' => null,
+        'song_count' => 'int32',
+        'event_count' => 'int32'
     ];
 
     /**
@@ -79,8 +92,14 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'media' => false,
-        'max_page' => false
+        'media_id' => false,
+        'title' => false,
+        'url' => false,
+        'published_at' => false,
+        'type' => false,
+        'is_display' => false,
+        'song_count' => false,
+        'event_count' => false
     ];
 
     /**
@@ -169,8 +188,14 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $attributeMap = [
-        'media' => 'media',
-        'max_page' => 'maxPage'
+        'media_id' => 'mediaId',
+        'title' => 'title',
+        'url' => 'url',
+        'published_at' => 'publishedAt',
+        'type' => 'type',
+        'is_display' => 'isDisplay',
+        'song_count' => 'songCount',
+        'event_count' => 'eventCount'
     ];
 
     /**
@@ -179,8 +204,14 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $setters = [
-        'media' => 'setMedia',
-        'max_page' => 'setMaxPage'
+        'media_id' => 'setMediaId',
+        'title' => 'setTitle',
+        'url' => 'setUrl',
+        'published_at' => 'setPublishedAt',
+        'type' => 'setType',
+        'is_display' => 'setIsDisplay',
+        'song_count' => 'setSongCount',
+        'event_count' => 'setEventCount'
     ];
 
     /**
@@ -189,8 +220,14 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $getters = [
-        'media' => 'getMedia',
-        'max_page' => 'getMaxPage'
+        'media_id' => 'getMediaId',
+        'title' => 'getTitle',
+        'url' => 'getUrl',
+        'published_at' => 'getPublishedAt',
+        'type' => 'getType',
+        'is_display' => 'getIsDisplay',
+        'song_count' => 'getSongCount',
+        'event_count' => 'getEventCount'
     ];
 
     /**
@@ -250,8 +287,14 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('media', $data ?? [], null);
-        $this->setIfExists('max_page', $data ?? [], null);
+        $this->setIfExists('media_id', $data ?? [], null);
+        $this->setIfExists('title', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('published_at', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('is_display', $data ?? [], null);
+        $this->setIfExists('song_count', $data ?? [], null);
+        $this->setIfExists('event_count', $data ?? [], null);
     }
 
     /**
@@ -281,11 +324,33 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     {
         $invalidProperties = [];
 
-        if ($this->container['media'] === null) {
-            $invalidProperties[] = "'media' can't be null";
+        if ($this->container['media_id'] === null) {
+            $invalidProperties[] = "'media_id' can't be null";
         }
-        if ($this->container['max_page'] === null) {
-            $invalidProperties[] = "'max_page' can't be null";
+        if ($this->container['title'] === null) {
+            $invalidProperties[] = "'title' can't be null";
+        }
+        if ((mb_strlen($this->container['title']) < 1)) {
+            $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['url'] === null) {
+            $invalidProperties[] = "'url' can't be null";
+        }
+        if ($this->container['published_at'] === null) {
+            $invalidProperties[] = "'published_at' can't be null";
+        }
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
+        }
+        if ($this->container['is_display'] === null) {
+            $invalidProperties[] = "'is_display' can't be null";
+        }
+        if ($this->container['song_count'] === null) {
+            $invalidProperties[] = "'song_count' can't be null";
+        }
+        if ($this->container['event_count'] === null) {
+            $invalidProperties[] = "'event_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +368,222 @@ class MediaSearchResponse implements ModelInterface, ArrayAccess, \JsonSerializa
 
 
     /**
-     * Gets media
+     * Gets media_id
      *
-     * @return \OpenAPI\Admin\Client\Model\MediaSummary[]
+     * @return string
      */
-    public function getMedia()
+    public function getMediaId()
     {
-        return $this->container['media'];
+        return $this->container['media_id'];
     }
 
     /**
-     * Sets media
+     * Sets media_id
      *
-     * @param \OpenAPI\Admin\Client\Model\MediaSummary[] $media media
+     * @param string $media_id メディアID
      *
      * @return self
      */
-    public function setMedia($media)
+    public function setMediaId($media_id)
     {
-        if (is_null($media)) {
-            throw new \InvalidArgumentException('non-nullable media cannot be null');
+        if (is_null($media_id)) {
+            throw new \InvalidArgumentException('non-nullable media_id cannot be null');
         }
-        $this->container['media'] = $media;
+        $this->container['media_id'] = $media_id;
 
         return $this;
     }
 
     /**
-     * Gets max_page
+     * Gets title
      *
-     * @return int
+     * @return string
      */
-    public function getMaxPage()
+    public function getTitle()
     {
-        return $this->container['max_page'];
+        return $this->container['title'];
     }
 
     /**
-     * Sets max_page
+     * Sets title
      *
-     * @param int $max_page max_page
+     * @param string $title メディアタイトル
      *
      * @return self
      */
-    public function setMaxPage($max_page)
+    public function setTitle($title)
     {
-        if (is_null($max_page)) {
-            throw new \InvalidArgumentException('non-nullable max_page cannot be null');
+        if (is_null($title)) {
+            throw new \InvalidArgumentException('non-nullable title cannot be null');
         }
-        $this->container['max_page'] = $max_page;
+
+        if ((mb_strlen($title) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $title when calling MediaSummary., must be bigger than or equal to 1.');
+        }
+
+        $this->container['title'] = $title;
+
+        return $this;
+    }
+
+    /**
+     * Gets url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->container['url'];
+    }
+
+    /**
+     * Sets url
+     *
+     * @param string $url メディアURL
+     *
+     * @return self
+     */
+    public function setUrl($url)
+    {
+        if (is_null($url)) {
+            throw new \InvalidArgumentException('non-nullable url cannot be null');
+        }
+        $this->container['url'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Gets published_at
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt()
+    {
+        return $this->container['published_at'];
+    }
+
+    /**
+     * Sets published_at
+     *
+     * @param \DateTime $published_at 公開日時
+     *
+     * @return self
+     */
+    public function setPublishedAt($published_at)
+    {
+        if (is_null($published_at)) {
+            throw new \InvalidArgumentException('non-nullable published_at cannot be null');
+        }
+        $this->container['published_at'] = $published_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets type
+     *
+     * @return \OpenAPI\Admin\Client\Model\MediaType
+     */
+    public function getType()
+    {
+        return $this->container['type'];
+    }
+
+    /**
+     * Sets type
+     *
+     * @param \OpenAPI\Admin\Client\Model\MediaType $type type
+     *
+     * @return self
+     */
+    public function setType($type)
+    {
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        }
+        $this->container['type'] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Gets is_display
+     *
+     * @return bool
+     */
+    public function getIsDisplay()
+    {
+        return $this->container['is_display'];
+    }
+
+    /**
+     * Sets is_display
+     *
+     * @param bool $is_display is_display
+     *
+     * @return self
+     */
+    public function setIsDisplay($is_display)
+    {
+        if (is_null($is_display)) {
+            throw new \InvalidArgumentException('non-nullable is_display cannot be null');
+        }
+        $this->container['is_display'] = $is_display;
+
+        return $this;
+    }
+
+    /**
+     * Gets song_count
+     *
+     * @return int
+     */
+    public function getSongCount()
+    {
+        return $this->container['song_count'];
+    }
+
+    /**
+     * Sets song_count
+     *
+     * @param int $song_count このメディアをリンクしている楽曲の件数
+     *
+     * @return self
+     */
+    public function setSongCount($song_count)
+    {
+        if (is_null($song_count)) {
+            throw new \InvalidArgumentException('non-nullable song_count cannot be null');
+        }
+        $this->container['song_count'] = $song_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets event_count
+     *
+     * @return int
+     */
+    public function getEventCount()
+    {
+        return $this->container['event_count'];
+    }
+
+    /**
+     * Sets event_count
+     *
+     * @param int $event_count このメディアを関連づけているイベントの件数
+     *
+     * @return self
+     */
+    public function setEventCount($event_count)
+    {
+        if (is_null($event_count)) {
+            throw new \InvalidArgumentException('non-nullable event_count cannot be null');
+        }
+        $this->container['event_count'] = $event_count;
 
         return $this;
     }
