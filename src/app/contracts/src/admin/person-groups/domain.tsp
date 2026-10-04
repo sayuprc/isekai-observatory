@@ -30,3 +30,11 @@ model PersonGroup {
   name: personGroupName;
   members: PersonGroupMember[];
 }
+
+@doc("人物グループ一覧の 1 行分")
+model PersonGroupSummary {
+  ...PersonGroup;
+
+  @doc("このグループとして共演が記録されている楽曲披露の件数")
+  performanceCount: int32;
+}

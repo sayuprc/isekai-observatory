@@ -6,6 +6,8 @@ namespace Person\Application\Admin\UseCase\Group\Search;
 
 use AdminUser\Domain\Models\Permission;
 use Person\Application\Admin\Query\PersonGroupQueryServiceInterface;
+use Person\Application\Admin\Query\PersonGroupSummary;
+use Person\Application\Admin\Query\PersonGroupUsageCountQueryServiceInterface;
 use Person\Domain\Criteria\PersonGroupSearchCriteria;
 use Support\Optional\Arg;
 use Support\Optional\None;
@@ -17,6 +19,7 @@ readonly class SearchUseCase
     public function __construct(
         private UseCaseAuthorizer $authorizer,
         private PersonGroupQueryServiceInterface $query,
+        private PersonGroupUsageCountQueryServiceInterface $usageCountQueryService,
     ) {
     }
 
@@ -32,9 +35,12 @@ readonly class SearchUseCase
             $inputData->perPage,
         );
 
+        $personGroups = $this->query->search($criteria);
+
         return new SearchOutputData(
-            $this->query->search($criteria),
+            $personGroups,
             $this->query->maxPage($criteria),
+            $this->usageCountQueryService->countPerformances(array_map(static fn (PersonGroupSummary $personGroup): string => $personGroup->personGroupId, $personGroups)),
         );
     }
 }

@@ -4319,10 +4319,31 @@ components:
         personGroups:
           type: array
           items:
-            $ref: '#/components/schemas/PersonGroup'
+            $ref: '#/components/schemas/PersonGroupSummary'
         maxPage:
           type: integer
           format: int32
+    PersonGroupSummary:
+      type: object
+      required:
+        - personGroupId
+        - name
+        - members
+        - performanceCount
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/personGroupId'
+        name:
+          $ref: '#/components/schemas/personGroupName'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonGroupMember'
+        performanceCount:
+          type: integer
+          format: int32
+          description: このグループとして共演が記録されている楽曲披露の件数
+      description: 人物グループ一覧の 1 行分
     PersonGroupUpdateRequest:
       type: object
       required:
