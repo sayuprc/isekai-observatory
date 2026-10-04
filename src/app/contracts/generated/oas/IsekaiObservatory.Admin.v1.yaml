@@ -4703,6 +4703,8 @@ components:
         - isDisplay
         - orderNo
         - firstReleasedOn
+        - releaseCount
+        - songCount
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -4720,6 +4722,14 @@ components:
           anyOf:
             - $ref: '#/components/schemas/releasedOn'
             - type: 'null'
+        releaseCount:
+          type: integer
+          format: int32
+          description: 傘下のリリース (版) の件数
+        songCount:
+          type: integer
+          format: int32
+          description: 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
       description: リリースグループ一覧の 1 行分。firstReleasedOn は傘下リリースの最古発売日(リリース未登録なら null)
     ReleaseGroupTypeValue:
       type: integer
