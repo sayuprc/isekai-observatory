@@ -46,6 +46,10 @@ class SearchUseCaseTest extends TestCase
             SongType::Original,
             true,
             1,
+            0,
+            0,
+            0,
+            0,
         );
 
         $this->query->shouldReceive('search')
@@ -75,6 +79,10 @@ class SearchUseCaseTest extends TestCase
             SongType::Original,
             true,
             1,
+            0,
+            0,
+            0,
+            0,
         );
 
         $this->query->shouldReceive('search')
@@ -103,6 +111,10 @@ class SearchUseCaseTest extends TestCase
             SongType::Original,
             true,
             1,
+            0,
+            0,
+            0,
+            0,
         );
 
         $this->query->shouldReceive('search')
@@ -131,6 +143,10 @@ class SearchUseCaseTest extends TestCase
             SongType::Original,
             false,
             1,
+            0,
+            0,
+            0,
+            0,
         );
 
         $this->query->shouldReceive('search')

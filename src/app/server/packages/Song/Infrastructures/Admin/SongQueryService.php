@@ -39,7 +39,23 @@ readonly class SongQueryService implements SongQueryServiceInterface
             ),
         );
 
-        return array_map($this->hydrate(...), $rows);
+        // 件数は 1 ページ分の楽曲 ID でまとめて引き、行ごとの問い合わせを避ける
+        $binSongIds = array_map(static fn (array $row): string => Row::string($row, 'song_id'), $rows);
+        $performanceCounts = $this->queryFactory->countBy('song_performances', 'song_id', $binSongIds);
+        $mediaCounts = $this->queryFactory->countBy('song_media_links', 'song_id', $binSongIds);
+        $personCounts = $this->queryFactory->countBy('song_persons', 'song_id', $binSongIds, 'person_id');
+        $releaseCounts = $this->queryFactory->countBy('release_tracks', 'song_id', $binSongIds, 'release_id');
+
+        return array_map(
+            fn (array $row): SongSummary => $this->hydrate(
+                $row,
+                $performanceCounts[Row::string($row, 'song_id')] ?? 0,
+                $mediaCounts[Row::string($row, 'song_id')] ?? 0,
+                $personCounts[Row::string($row, 'song_id')] ?? 0,
+                $releaseCounts[Row::string($row, 'song_id')] ?? 0,
+            ),
+            $rows,
+        );
     }
 
     #[Override]
@@ -74,7 +90,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
     /**
      * @param array<string, mixed> $row
      */
-    private function hydrate(array $row): SongSummary
+    private function hydrate(array $row, int $performanceCount, int $mediaCount, int $personCount, int $releaseCount): SongSummary
     {
         return new SongSummary(
             $this->converter->toUuid(Row::string($row, 'song_id')),
@@ -82,6 +98,10 @@ readonly class SongQueryService implements SongQueryServiceInterface
             SongType::from(Row::int($row, 'type')),
             Row::bool($row, 'is_display'),
             Row::int($row, 'order_no'),
+            $performanceCount,
+            $mediaCount,
+            $personCount,
+            $releaseCount,
         );
     }
 }

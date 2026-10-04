@@ -64,6 +64,10 @@ model Song {
   type: #{ name: "オリジナル曲", value: SongTypeValue.Original },
   isDisplay: true,
   orderNo: 1,
+  performanceCount: 3,
+  mediaCount: 1,
+  personCount: 2,
+  releaseCount: 1,
 })
 model SongSummary {
   songId: songId;
@@ -71,6 +75,18 @@ model SongSummary {
   type: SongType;
   isDisplay: boolean;
   orderNo: orderNo;
+
+  @doc("楽曲披露の件数")
+  performanceCount: int32;
+
+  @doc("リンクしているメディアの件数")
+  mediaCount: int32;
+
+  @doc("作詞・作曲・編曲として登録されている人物の人数。役割が重なる人物は 1 人と数える")
+  personCount: int32;
+
+  @doc("収録しているリリースの件数")
+  releaseCount: int32;
 }
 
 enum SongPersonRole {
