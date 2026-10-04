@@ -12,6 +12,7 @@ use Mockery;
 use Mockery\MockInterface;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
+use Song\Application\Admin\Query\Tag\SongTagUsageCountQueryServiceInterface;
 use Song\Application\Admin\UseCase\Tag\Search\SearchInputData;
 use Song\Application\Admin\UseCase\Tag\Search\SearchUseCase;
 use Song\Domain\Criteria\Tag\SongTagSearchCriteria;
@@ -27,12 +28,16 @@ class SearchUseCaseTest extends TestCase
 
     private MockInterface&SongTagRepositoryInterface $repository;
 
+    private MockInterface&SongTagUsageCountQueryServiceInterface $usageCountQueryService;
+
     #[Override]
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->repository = Mockery::mock(SongTagRepositoryInterface::class);
+        $this->usageCountQueryService = Mockery::mock(SongTagUsageCountQueryServiceInterface::class);
+        $this->usageCountQueryService->shouldReceive('countSongs')->andReturn([]);
     }
 
     #[Test]
@@ -90,7 +95,7 @@ class SearchUseCaseTest extends TestCase
 
         $this->expectException(UnauthenticatedException::class);
 
-        $result = new SearchUseCase($this->authorizer($context), $this->repository)->handle(new SearchInputData());
+        $result = new SearchUseCase($this->authorizer($context), $this->repository, $this->usageCountQueryService)->handle(new SearchInputData());
     }
 
     #[Test]
@@ -112,7 +117,7 @@ class SearchUseCaseTest extends TestCase
 
         $this->expectException(PermissionDeniedException::class);
 
-        $result = new SearchUseCase($this->authorizer($context), $this->repository)->handle(new SearchInputData());
+        $result = new SearchUseCase($this->authorizer($context), $this->repository, $this->usageCountQueryService)->handle(new SearchInputData());
     }
 
     private function getInstance(): SearchUseCase
@@ -120,6 +125,7 @@ class SearchUseCaseTest extends TestCase
         return new SearchUseCase(
             $this->authorizer(),
             $this->repository,
+            $this->usageCountQueryService,
         );
     }
 }

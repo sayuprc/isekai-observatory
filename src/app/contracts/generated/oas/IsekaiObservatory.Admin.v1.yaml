@@ -5422,7 +5422,7 @@ components:
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/SongTag'
+            $ref: '#/components/schemas/SongTagSummary'
         maxPage:
           type: integer
           format: int32
@@ -5432,6 +5432,25 @@ components:
         - name
         - order_no
       description: 楽曲タグ検索のソート条件
+    SongTagSummary:
+      type: object
+      required:
+        - songTagId
+        - name
+        - orderNo
+        - songCount
+      properties:
+        songTagId:
+          $ref: '#/components/schemas/songTagId'
+        name:
+          $ref: '#/components/schemas/songTagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: このタグが付いている楽曲の件数
+      description: 楽曲タグ一覧の 1 行分
     SongTagUpdateRequest:
       type: object
       required:
