@@ -99,8 +99,12 @@ return [
         SupportComponent::Optional,
         LibraryComponent::ResultType,
     ]),
+    new Define(VenueComponent::Query, [
+        VenueComponent::Domain,
+    ]),
     new Define(VenueComponent::UseCase, [
         VenueComponent::Domain,
+        VenueComponent::Query,
         AdminUserComponent::Domain,
         AuthComponent::Domain,
         SupportComponent::Contracts,

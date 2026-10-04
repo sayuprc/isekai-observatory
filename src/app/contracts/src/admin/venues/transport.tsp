@@ -5,7 +5,7 @@ using IsekaiObservatory.Shared;
 namespace IsekaiObservatory.Admin;
 
 model VenueSearchResponse {
-  venues: Venue[];
+  venues: VenueSummary[];
   maxPage: int32;
 }
 

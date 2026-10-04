@@ -9,7 +9,10 @@ use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
+use Venue\Application\Admin\Query\VenueUsageCountQueryServiceInterface;
 use Venue\Domain\Criteria\VenueSearchCriteria;
+use Venue\Domain\Models\Venue;
+use Venue\Domain\Models\VenueId;
 use Venue\Domain\Models\VenueKind;
 use Venue\Domain\Models\VenueRepositoryInterface;
 
@@ -18,6 +21,7 @@ readonly class SearchUseCase
     public function __construct(
         private UseCaseAuthorizer $authorizer,
         private VenueRepositoryInterface $repository,
+        private VenueUsageCountQueryServiceInterface $usageCountQueryService,
     ) {
     }
 
@@ -34,9 +38,12 @@ readonly class SearchUseCase
             $inputData->perPage,
         );
 
+        $venues = $this->repository->search($criteria);
+
         return new SearchOutputData(
-            $this->repository->search($criteria),
+            $venues,
             $this->repository->maxPage($criteria),
+            $this->usageCountQueryService->countEvents(array_values(array_map(static fn (Venue $venue): VenueId => $venue->venueId, $venues))),
         );
     }
 }
