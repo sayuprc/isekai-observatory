@@ -9,6 +9,7 @@ import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
+import { FormColumns } from '../FormColumns';
 import { FormError } from '../FormError';
 import { createReleaseGroupForm, ReleaseGroupFields } from './ReleaseGroupFields';
 
@@ -228,91 +229,94 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <div class="max-w-5xl space-y-6">
-        <form id="release-group-form" onSubmit={handleSubmit}>
-          <ReleaseGroupFields form={form} getFieldError={getFieldError} />
-        </form>
-
-        <fieldset class="rounded-box border border-base-300 bg-base-200 p-6">
-          <legend class="px-2 text-sm font-semibold text-base-content/70">リリース(版)</legend>
-          <p class="mb-2 text-sm text-base-content/60">リリースが登録されているグループは削除できません</p>
-          <div class="mb-4 flex justify-end">
-            <a href={`/releases/create?releaseGroupId=${releaseGroupId}`} class="btn btn-primary btn-sm">
-              リリースを追加
-            </a>
-          </div>
-          <Show
-            when={props.data.releases.length > 0}
-            fallback={<p class="text-sm text-base-content/60">リリースはまだ登録されていません。</p>}
-          >
-            <ul class="flex flex-col gap-2 md:hidden">
-              <For each={props.data.releases}>
-                {(release) => (
-                  <li
-                    class="rounded-box border-y border-r border-l-4 border-base-300 bg-base-100 p-3"
-                    style={{ 'border-left-color': release.color }}
-                  >
-                    <ReleaseNameLink release={release} />
-                    <div class="mt-1 flex flex-wrap gap-x-3 text-sm text-base-content/60">
-                      <span>{normalizeDateValue(release.releasedOn)}</span>
-                      <span>表示順 {release.orderNo}</span>
-                    </div>
-                    <div class="mt-2 flex flex-wrap gap-1">
-                      <ReleaseFormatBadges release={release} />
-                      <ReleaseDisplayBadge release={release} />
-                    </div>
-                    <div class="mt-2 flex justify-end">
-                      <CopyReleaseLink releaseGroupId={releaseGroupId} releaseId={release.releaseId} />
-                    </div>
-                  </li>
-                )}
-              </For>
-            </ul>
-            <div class="hidden overflow-x-auto rounded-box border border-base-300 bg-base-100 md:block">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>版名</th>
-                    <th>発売日</th>
-                    <th>表示順</th>
-                    <th>媒体</th>
-                    <th>表示設定</th>
-                    <th class="text-right">操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <For each={props.data.releases}>
-                    {(release) => (
-                      <tr>
-                        <td
-                          class="min-w-40 border-l-4 font-medium"
-                          style={{ 'border-left-color': release.color }}
-                          title={`代表色 ${release.color}`}
-                        >
-                          <ReleaseNameLink release={release} />
-                        </td>
-                        <td class="whitespace-nowrap text-sm">{normalizeDateValue(release.releasedOn)}</td>
-                        <td class="text-sm">{release.orderNo}</td>
-                        <td>
-                          <ReleaseFormatBadges release={release} />
-                        </td>
-                        <td class="whitespace-nowrap">
-                          <ReleaseDisplayBadge release={release} />
-                        </td>
-                        <td class="text-right">
-                          <div class="flex justify-end">
-                            <CopyReleaseLink releaseGroupId={releaseGroupId} releaseId={release.releaseId} />
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </For>
-                </tbody>
-              </table>
+      <FormColumns
+        main={
+          <form id="release-group-form" onSubmit={handleSubmit}>
+            <ReleaseGroupFields form={form} getFieldError={getFieldError} />
+          </form>
+        }
+        side={
+          <fieldset class="rounded-box border border-base-300 bg-base-200 p-6">
+            <legend class="px-2 text-sm font-semibold text-base-content/70">リリース(版)</legend>
+            <p class="mb-2 text-sm text-base-content/60">リリースが登録されているグループは削除できません</p>
+            <div class="mb-4 flex justify-end">
+              <a href={`/releases/create?releaseGroupId=${releaseGroupId}`} class="btn btn-primary btn-sm">
+                リリースを追加
+              </a>
             </div>
-          </Show>
-        </fieldset>
-      </div>
+            <Show
+              when={props.data.releases.length > 0}
+              fallback={<p class="text-sm text-base-content/60">リリースはまだ登録されていません。</p>}
+            >
+              <ul class="flex flex-col gap-2 md:hidden">
+                <For each={props.data.releases}>
+                  {(release) => (
+                    <li
+                      class="rounded-box border-y border-r border-l-4 border-base-300 bg-base-100 p-3"
+                      style={{ 'border-left-color': release.color }}
+                    >
+                      <ReleaseNameLink release={release} />
+                      <div class="mt-1 flex flex-wrap gap-x-3 text-sm text-base-content/60">
+                        <span>{normalizeDateValue(release.releasedOn)}</span>
+                        <span>表示順 {release.orderNo}</span>
+                      </div>
+                      <div class="mt-2 flex flex-wrap gap-1">
+                        <ReleaseFormatBadges release={release} />
+                        <ReleaseDisplayBadge release={release} />
+                      </div>
+                      <div class="mt-2 flex justify-end">
+                        <CopyReleaseLink releaseGroupId={releaseGroupId} releaseId={release.releaseId} />
+                      </div>
+                    </li>
+                  )}
+                </For>
+              </ul>
+              <div class="hidden overflow-x-auto rounded-box border border-base-300 bg-base-100 md:block">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>版名</th>
+                      <th>発売日</th>
+                      <th>表示順</th>
+                      <th>媒体</th>
+                      <th>表示設定</th>
+                      <th class="text-right">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <For each={props.data.releases}>
+                      {(release) => (
+                        <tr>
+                          <td
+                            class="min-w-40 border-l-4 font-medium"
+                            style={{ 'border-left-color': release.color }}
+                            title={`代表色 ${release.color}`}
+                          >
+                            <ReleaseNameLink release={release} />
+                          </td>
+                          <td class="whitespace-nowrap text-sm">{normalizeDateValue(release.releasedOn)}</td>
+                          <td class="text-sm">{release.orderNo}</td>
+                          <td>
+                            <ReleaseFormatBadges release={release} />
+                          </td>
+                          <td class="whitespace-nowrap">
+                            <ReleaseDisplayBadge release={release} />
+                          </td>
+                          <td class="text-right">
+                            <div class="flex justify-end">
+                              <CopyReleaseLink releaseGroupId={releaseGroupId} releaseId={release.releaseId} />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </For>
+                  </tbody>
+                </table>
+              </div>
+            </Show>
+          </fieldset>
+        }
+      />
     </>
   );
 };

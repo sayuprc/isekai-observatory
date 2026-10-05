@@ -22,6 +22,7 @@
 ## 管理画面の画面構成
 
 - 詳細・作成画面の構成は ADR-0030 に従い、`EntityHeader` / `ActionMenu` / `TabList` / `FormRow` / `SegmentedControl` を使う
+- 枠が複数ある画面やタブは `FormColumns` で組み、広い画面では主な入力と付随する一覧を左右に並べる
 - 未保存検知は、入力を状態で持つフォームは `createDirtyTracker`、`FormData` で読むフォームは `createFormDirtyTracker` を使う
 - 保存・削除・破棄のあとに画面を移るときは、離脱の確認を出さないよう `allowLeave()` を呼んでから移る
 - 一覧の件数列は ADR-0031 に従い、検索 API の `*Summary` 型から `CountCell` で出す

@@ -1,4 +1,5 @@
 import { children, createSignal, type JSX, Show } from 'solid-js';
+import { FormColumns } from '../FormColumns';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
 import { SegmentedControl } from '../SegmentedControl';
@@ -62,22 +63,32 @@ export const EventFormFields = (props: EventFormFieldsProps) => {
 
   return (
     <>
-      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
-        <EventBasicInfo form={props.form} />
-        <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
-        <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab}>
+        <FormColumns
+          main={<EventBasicInfo form={props.form} />}
+          side={
+            <>
+              <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
+              <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
+            </>
+          }
+        />
       </TabPanel>
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="performances" current={props.tab}>
         <PerformanceWorkspace form={props.form} />
       </TabPanel>
-      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="related" current={props.tab} class="max-w-4xl">
-        <MediaSection
-          entries={props.form.mediaEntries}
-          setEntries={props.form.setMediaEntries}
-          availableMedia={props.form.availableMedia}
-          setAvailableMedia={props.form.setAvailableMedia}
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="related" current={props.tab}>
+        <FormColumns
+          main={
+            <MediaSection
+              entries={props.form.mediaEntries}
+              setEntries={props.form.setMediaEntries}
+              availableMedia={props.form.availableMedia}
+              setAvailableMedia={props.form.setAvailableMedia}
+            />
+          }
+          side={<ReleaseEditor releases={props.form.releases()} onChange={props.form.setReleases} />}
         />
-        <ReleaseEditor releases={props.form.releases()} onChange={props.form.setReleases} />
       </TabPanel>
       <Show when={history()}>
         <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={props.tab} class="max-w-4xl">

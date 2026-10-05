@@ -1,5 +1,6 @@
 import { children, createSignal, For, type JSX, Show } from 'solid-js';
 import type { SongTag, SongType } from '../../generated';
+import { FormColumns } from '../FormColumns';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
 import { SearchableSelect } from '../SearchableSelect';
@@ -63,9 +64,11 @@ export const SongFormFields = (props: SongFormFieldsProps) => {
 
   return (
     <>
-      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab} class="max-w-4xl">
-        <SongBasicInfo {...props} />
-        <SongTagSection form={props.form} availableTags={props.availableTags} />
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab}>
+        <FormColumns
+          main={<SongBasicInfo {...props} />}
+          side={<SongTagSection form={props.form} availableTags={props.availableTags} />}
+        />
       </TabPanel>
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="persons" current={props.tab} class="max-w-4xl">
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">

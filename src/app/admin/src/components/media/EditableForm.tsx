@@ -10,6 +10,7 @@ import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
+import { FormColumns } from '../FormColumns';
 import { FormError } from '../FormError';
 import { MediaFields } from './MediaFields';
 
@@ -183,55 +184,59 @@ const EditableForm = (props: EditableFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <div class="max-w-4xl space-y-6">
-        <form ref={bindForm} id="media-form" onSubmit={handleUpdate}>
-          <MediaFields
-            title={props.data.media.title}
-            url={props.data.media.url}
-            publishedAt={normalizeDateTimeInputValue(props.data.media.publishedAt)}
-            typeValue={typeValue()}
-            onTypeValueChange={setTypeValue}
-            isDisplay={isDisplay()}
-            onIsDisplayChange={setIsDisplay}
-            getFieldError={getFieldError}
-          />
-        </form>
-        <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-          <legend class="px-2 text-sm font-semibold text-base-content/70">参照中の楽曲</legend>
-          <p class="mb-2 text-sm text-base-content/60">参照中の楽曲があるメディアは削除できません</p>
-          <Show
-            when={props.data.songs.length > 0}
-            fallback={<p class="text-sm text-base-content/60">参照中の楽曲はありません。</p>}
-          >
-            <div class="overflow-x-auto">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>楽曲</th>
-                    <th>楽曲順</th>
-                    <th>メディア順</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {props.data.songs.map((song) => (
+      <FormColumns
+        main={
+          <form ref={bindForm} id="media-form" onSubmit={handleUpdate}>
+            <MediaFields
+              title={props.data.media.title}
+              url={props.data.media.url}
+              publishedAt={normalizeDateTimeInputValue(props.data.media.publishedAt)}
+              typeValue={typeValue()}
+              onTypeValueChange={setTypeValue}
+              isDisplay={isDisplay()}
+              onIsDisplayChange={setIsDisplay}
+              getFieldError={getFieldError}
+            />
+          </form>
+        }
+        side={
+          <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
+            <legend class="px-2 text-sm font-semibold text-base-content/70">参照中の楽曲</legend>
+            <p class="mb-2 text-sm text-base-content/60">参照中の楽曲があるメディアは削除できません</p>
+            <Show
+              when={props.data.songs.length > 0}
+              fallback={<p class="text-sm text-base-content/60">参照中の楽曲はありません。</p>}
+            >
+              <div class="overflow-x-auto">
+                <table class="table table-sm">
+                  <thead>
                     <tr>
-                      <td>{song.title}</td>
-                      <td>{song.songOrderNo}</td>
-                      <td>{song.mediaOrderNo}</td>
-                      <td class="text-right">
-                        <a href={`/songs/${song.songId}`} class="btn btn-ghost btn-xs">
-                          楽曲を見る
-                        </a>
-                      </td>
+                      <th>楽曲</th>
+                      <th>楽曲順</th>
+                      <th>メディア順</th>
+                      <th></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Show>
-        </fieldset>
-      </div>
+                  </thead>
+                  <tbody>
+                    {props.data.songs.map((song) => (
+                      <tr>
+                        <td>{song.title}</td>
+                        <td>{song.songOrderNo}</td>
+                        <td>{song.mediaOrderNo}</td>
+                        <td class="text-right">
+                          <a href={`/songs/${song.songId}`} class="btn btn-ghost btn-xs">
+                            楽曲を見る
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Show>
+          </fieldset>
+        }
+      />
     </>
   );
 };
