@@ -231,7 +231,7 @@ export const SearchList = () => {
         </a>
       </div>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table class="table table-zebra">
+        <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
               <th>タイトル</th>
@@ -260,7 +260,7 @@ export const SearchList = () => {
                 {(result) => (
                   <For each={result().events}>
                     {(event) => (
-                      <tr>
+                      <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
                         <td class="max-w-md">
                           <a class="link link-hover line-clamp-2" href={detailUrl(event)}>
                             {event.title}
