@@ -168,10 +168,7 @@ class ListSongTest extends DatabaseTestCase
                     [
                         'songId' => $secondSongId,
                         'title' => '海月のうた',
-                        'type' => [
-                            'name' => 'カバー曲',
-                            'value' => 2,
-                        ],
+                        'typeValue' => 2,
                         'description' => '2 曲目',
                         'lyricists' => [],
                         'composers' => [],
@@ -184,10 +181,7 @@ class ListSongTest extends DatabaseTestCase
                             [
                                 'mediaId' => $visibleMediaId,
                                 'title' => '公開 MV',
-                                'type' => [
-                                    'name' => 'MV',
-                                    'value' => 1,
-                                ],
+                                'typeValue' => 1,
                                 'url' => 'https://example.com/public',
                                 'publishedAt' => '2024-03-01T12:00:00+09:00',
                             ],
@@ -213,10 +207,7 @@ class ListSongTest extends DatabaseTestCase
                     [
                         'songId' => $visibleSongId,
                         'title' => 'テスト楽曲',
-                        'type' => [
-                            'name' => 'オリジナル曲',
-                            'value' => 1,
-                        ],
+                        'typeValue' => 1,
                         'description' => 'Viewer の一覧表示向けに集約されたテスト楽曲説明',
                         'lyricists' => ['テスト作詞者A'],
                         'composers' => ['テスト作曲者A'],
@@ -229,20 +220,14 @@ class ListSongTest extends DatabaseTestCase
                             [
                                 'mediaId' => $visibleMediaId,
                                 'title' => '公開 MV',
-                                'type' => [
-                                    'name' => 'MV',
-                                    'value' => 1,
-                                ],
+                                'typeValue' => 1,
                                 'url' => 'https://example.com/public',
                                 'publishedAt' => '2024-03-01T12:00:00+09:00',
                             ],
                             [
                                 'mediaId' => $secondVisibleMediaId,
                                 'title' => '公開記事',
-                                'type' => [
-                                    'name' => '音源動画',
-                                    'value' => 2,
-                                ],
+                                'typeValue' => 2,
                                 'url' => 'https://example.com/article',
                                 'publishedAt' => '2024-05-01T18:30:00+09:00',
                             ],
@@ -252,10 +237,7 @@ class ListSongTest extends DatabaseTestCase
                             [
                                 'releaseGroupId' => $visibleReleaseGroupId,
                                 'title' => '公開リリース',
-                                'type' => [
-                                    'name' => 'シングル',
-                                    'value' => 1,
-                                ],
+                                'typeValue' => 1,
                                 'firstReleasedOn' => '2024-01-01',
                                 'color' => '#989899',
                             ],

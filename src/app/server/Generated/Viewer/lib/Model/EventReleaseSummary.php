@@ -63,7 +63,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'string',
         'name' => 'string',
         'released_on' => '\DateTime',
-        'formats' => '\OpenAPI\Viewer\Client\Model\ReleaseFormat[]'
+        'format_values' => '\OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]'
     ];
 
     /**
@@ -79,7 +79,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => null,
         'name' => null,
         'released_on' => 'date',
-        'formats' => null
+        'format_values' => null
     ];
 
     /**
@@ -93,7 +93,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => false,
         'name' => false,
         'released_on' => false,
-        'formats' => false
+        'format_values' => false
     ];
 
     /**
@@ -187,7 +187,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'releaseGroupTitle',
         'name' => 'name',
         'released_on' => 'releasedOn',
-        'formats' => 'formats'
+        'format_values' => 'formatValues'
     ];
 
     /**
@@ -201,7 +201,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'setReleaseGroupTitle',
         'name' => 'setName',
         'released_on' => 'setReleasedOn',
-        'formats' => 'setFormats'
+        'format_values' => 'setFormatValues'
     ];
 
     /**
@@ -215,7 +215,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'getReleaseGroupTitle',
         'name' => 'getName',
         'released_on' => 'getReleasedOn',
-        'formats' => 'getFormats'
+        'format_values' => 'getFormatValues'
     ];
 
     /**
@@ -280,7 +280,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         $this->setIfExists('release_group_title', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('released_on', $data ?? [], null);
-        $this->setIfExists('formats', $data ?? [], null);
+        $this->setIfExists('format_values', $data ?? [], null);
     }
 
     /**
@@ -329,8 +329,8 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         if ($this->container['released_on'] === null) {
             $invalidProperties[] = "'released_on' can't be null";
         }
-        if ($this->container['formats'] === null) {
-            $invalidProperties[] = "'formats' can't be null";
+        if ($this->container['format_values'] === null) {
+            $invalidProperties[] = "'format_values' can't be null";
         }
         return $invalidProperties;
     }
@@ -488,28 +488,28 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     }
 
     /**
-     * Gets formats
+     * Gets format_values
      *
-     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormat[]
+     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]
      */
-    public function getFormats()
+    public function getFormatValues()
     {
-        return $this->container['formats'];
+        return $this->container['format_values'];
     }
 
     /**
-     * Sets formats
+     * Sets format_values
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormat[] $formats formats
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[] $format_values format_values
      *
      * @return self
      */
-    public function setFormats($formats)
+    public function setFormatValues($format_values)
     {
-        if (is_null($formats)) {
-            throw new \InvalidArgumentException('non-nullable formats cannot be null');
+        if (is_null($format_values)) {
+            throw new \InvalidArgumentException('non-nullable format_values cannot be null');
         }
-        $this->container['formats'] = $formats;
+        $this->container['format_values'] = $format_values;
 
         return $this;
     }

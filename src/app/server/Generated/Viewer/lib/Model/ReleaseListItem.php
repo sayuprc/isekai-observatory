@@ -64,7 +64,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'string',
         'color' => 'string',
         'order_no' => 'int',
-        'formats' => '\OpenAPI\Viewer\Client\Model\ReleaseFormat[]',
+        'format_values' => '\OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]',
         'media' => '\OpenAPI\Viewer\Client\Model\ReleaseMediumItem[]'
     ];
 
@@ -82,7 +82,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => null,
         'color' => null,
         'order_no' => 'int32',
-        'formats' => null,
+        'format_values' => null,
         'media' => null
     ];
 
@@ -98,7 +98,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => false,
         'color' => false,
         'order_no' => false,
-        'formats' => false,
+        'format_values' => false,
         'media' => false
     ];
 
@@ -194,7 +194,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'description',
         'color' => 'color',
         'order_no' => 'orderNo',
-        'formats' => 'formats',
+        'format_values' => 'formatValues',
         'media' => 'media'
     ];
 
@@ -210,7 +210,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'setDescription',
         'color' => 'setColor',
         'order_no' => 'setOrderNo',
-        'formats' => 'setFormats',
+        'format_values' => 'setFormatValues',
         'media' => 'setMedia'
     ];
 
@@ -226,7 +226,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'getDescription',
         'color' => 'getColor',
         'order_no' => 'getOrderNo',
-        'formats' => 'getFormats',
+        'format_values' => 'getFormatValues',
         'media' => 'getMedia'
     ];
 
@@ -293,7 +293,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('color', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
-        $this->setIfExists('formats', $data ?? [], null);
+        $this->setIfExists('format_values', $data ?? [], null);
         $this->setIfExists('media', $data ?? [], null);
     }
 
@@ -350,8 +350,8 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
-        if ($this->container['formats'] === null) {
-            $invalidProperties[] = "'formats' can't be null";
+        if ($this->container['format_values'] === null) {
+            $invalidProperties[] = "'format_values' can't be null";
         }
         if ($this->container['media'] === null) {
             $invalidProperties[] = "'media' can't be null";
@@ -544,28 +544,28 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets formats
+     * Gets format_values
      *
-     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormat[]
+     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]
      */
-    public function getFormats()
+    public function getFormatValues()
     {
-        return $this->container['formats'];
+        return $this->container['format_values'];
     }
 
     /**
-     * Sets formats
+     * Sets format_values
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormat[] $formats formats
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[] $format_values format_values
      *
      * @return self
      */
-    public function setFormats($formats)
+    public function setFormatValues($format_values)
     {
-        if (is_null($formats)) {
-            throw new \InvalidArgumentException('non-nullable formats cannot be null');
+        if (is_null($format_values)) {
+            throw new \InvalidArgumentException('non-nullable format_values cannot be null');
         }
-        $this->container['formats'] = $formats;
+        $this->container['format_values'] = $format_values;
 
         return $this;
     }

@@ -1,6 +1,7 @@
 ---
 import { mediaPlatformLabel, youtubeThumbnailFromUrl, youtubeThumbnailSrcset } from '../../../features/media/labels';
-import type { Media } from '../../../features/media/types';
+import { MEDIA_TYPE_NAMES, type Media } from '../../../features/media/types';
+import { SONG_TYPE_NAMES } from '../../../features/songs/types';
 import { dottedDateOfDateTime } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 
@@ -38,7 +39,7 @@ const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
   </a>
 
   <div class="label-mono">
-    {dottedDateOfDateTime(media.publishedAt)} · {platformName} · {media.type.name}
+    {dottedDateOfDateTime(media.publishedAt)} · {platformName} · {MEDIA_TYPE_NAMES[media.typeValue]}
     {/* API に views が無いため未提供セクションとして雛形を残す */}
     {/* {entry.views ? ` · ${entry.views} views` : ''} */}
   </div>
@@ -54,7 +55,7 @@ const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
           <a class="rel-chip" href={`/songs/${song.songId}`}>
             <div class="rel-copy">
               <div class="rel-main">{song.title}</div>
-              <div class="label-mono rel-sub">{song.type.name}</div>
+              <div class="label-mono rel-sub">{SONG_TYPE_NAMES[song.typeValue]}</div>
             </div>
             <span class="rel-arrow rel-arrow-muted">→</span>
           </a>

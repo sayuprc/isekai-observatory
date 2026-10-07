@@ -62,8 +62,9 @@ class ListEventTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $eventId)
-            ->assertJsonPath('events.0.status.value', 1)
+            ->assertJsonPath('events.0.statusValue', 1)
             ->assertJsonPath('events.0.venues.0.name', '会場')
+            ->assertJsonPath('events.0.venues.0.kindValue', VenueKind::Physical->value)
             ->assertJsonPath('events.0.media.0.mediaId', $visibleMediaId)
             ->assertJsonCount(1, 'events.0.media')
             ->assertJsonPath('events.0.sources.0.displayName', '公式')
@@ -135,8 +136,8 @@ class ListEventTest extends DatabaseTestCase
             ->assertJsonPath('events.0.releases.0.releaseGroupTitle', 'ライブ映像作品')
             ->assertJsonPath('events.0.releases.0.name', 'Blu-ray')
             ->assertJsonPath('events.0.releases.0.releasedOn', '2024-01-01')
-            ->assertJsonPath('events.0.releases.0.formats.0.value', ReleaseFormat::Dvd->value)
-            ->assertJsonPath('events.0.releases.0.formats.1.value', ReleaseFormat::BluRay->value);
+            ->assertJsonPath('events.0.releases.0.formatValues.0', ReleaseFormat::Dvd->value)
+            ->assertJsonPath('events.0.releases.0.formatValues.1', ReleaseFormat::BluRay->value);
     }
 
     #[Test]

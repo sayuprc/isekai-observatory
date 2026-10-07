@@ -11,10 +11,16 @@ using IsekaiObservatory.Packages.Song;
 
 namespace IsekaiObservatory.Viewer;
 
+@doc("開催先種別の値")
+enum VenueKindValue {
+  Physical: 1,
+  Online: 2,
+}
+
 model EventVenueSummary {
   venueId: uuid;
   name: string;
-  kindName: string;
+  kindValue: VenueKindValue;
 }
 
 model EventMediaSummary {
@@ -22,7 +28,7 @@ model EventMediaSummary {
   title: mediaTitle;
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
-  type: MediaType;
+  typeValue: MediaTypeValue;
 }
 
 @doc("イベントに関連づけた公開リリース(版)。リリースとリリースグループがともに公開のものだけが載る")
@@ -32,7 +38,7 @@ model EventReleaseSummary {
   releaseGroupTitle: releaseGroupTitle;
   name: releaseName;
   releasedOn: releasedOn;
-  formats: ReleaseFormat[];
+  formatValues: ReleaseFormatValue[];
 }
 
 model EventSource {
@@ -73,9 +79,9 @@ model Event {
   eventId: eventId;
   title: eventTitle;
   description: eventDescription;
-  type: EventType;
+  typeValue: EventTypeValue;
   schedule: EventSchedule;
-  status: EventStatus;
+  statusValue: EventStatusValue;
   venues: EventVenueSummary[];
   media: EventMediaSummary[];
   releases: EventReleaseSummary[];

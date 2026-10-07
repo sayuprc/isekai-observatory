@@ -59,7 +59,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'song_id' => 'string',
         'title' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\SongType'
+        'type_value' => '\OpenAPI\Viewer\Client\Model\SongTypeValue'
     ];
 
     /**
@@ -72,7 +72,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'song_id' => 'uuid',
         'title' => null,
-        'type' => null
+        'type_value' => null
     ];
 
     /**
@@ -83,7 +83,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'song_id' => false,
         'title' => false,
-        'type' => false
+        'type_value' => false
     ];
 
     /**
@@ -174,7 +174,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'song_id' => 'songId',
         'title' => 'title',
-        'type' => 'type'
+        'type_value' => 'typeValue'
     ];
 
     /**
@@ -185,7 +185,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'song_id' => 'setSongId',
         'title' => 'setTitle',
-        'type' => 'setType'
+        'type_value' => 'setTypeValue'
     ];
 
     /**
@@ -196,7 +196,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'song_id' => 'getSongId',
         'title' => 'getTitle',
-        'type' => 'getType'
+        'type_value' => 'getTypeValue'
     ];
 
     /**
@@ -258,7 +258,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('song_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('type_value', $data ?? [], null);
     }
 
     /**
@@ -298,8 +298,8 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
+        if ($this->container['type_value'] === null) {
+            $invalidProperties[] = "'type_value' can't be null";
         }
         return $invalidProperties;
     }
@@ -376,28 +376,28 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets type
+     * Gets type_value
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongType
+     * @return \OpenAPI\Viewer\Client\Model\SongTypeValue
      */
-    public function getType()
+    public function getTypeValue()
     {
-        return $this->container['type'];
+        return $this->container['type_value'];
     }
 
     /**
-     * Sets type
+     * Sets type_value
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongType $type type
+     * @param \OpenAPI\Viewer\Client\Model\SongTypeValue $type_value type_value
      *
      * @return self
      */
-    public function setType($type)
+    public function setTypeValue($type_value)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if (is_null($type_value)) {
+            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
         }
-        $this->container['type'] = $type;
+        $this->container['type_value'] = $type_value;
 
         return $this;
     }

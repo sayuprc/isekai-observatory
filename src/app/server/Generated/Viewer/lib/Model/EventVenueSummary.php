@@ -59,7 +59,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $openAPITypes = [
         'venue_id' => 'string',
         'name' => 'string',
-        'kind_name' => 'string'
+        'kind_value' => '\OpenAPI\Viewer\Client\Model\VenueKindValue'
     ];
 
     /**
@@ -72,7 +72,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $openAPIFormats = [
         'venue_id' => 'uuid',
         'name' => null,
-        'kind_name' => null
+        'kind_value' => null
     ];
 
     /**
@@ -83,7 +83,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static array $openAPINullables = [
         'venue_id' => false,
         'name' => false,
-        'kind_name' => false
+        'kind_value' => false
     ];
 
     /**
@@ -174,7 +174,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $attributeMap = [
         'venue_id' => 'venueId',
         'name' => 'name',
-        'kind_name' => 'kindName'
+        'kind_value' => 'kindValue'
     ];
 
     /**
@@ -185,7 +185,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $setters = [
         'venue_id' => 'setVenueId',
         'name' => 'setName',
-        'kind_name' => 'setKindName'
+        'kind_value' => 'setKindValue'
     ];
 
     /**
@@ -196,7 +196,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $getters = [
         'venue_id' => 'getVenueId',
         'name' => 'getName',
-        'kind_name' => 'getKindName'
+        'kind_value' => 'getKindValue'
     ];
 
     /**
@@ -258,7 +258,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         $this->setIfExists('venue_id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('kind_name', $data ?? [], null);
+        $this->setIfExists('kind_value', $data ?? [], null);
     }
 
     /**
@@ -294,8 +294,8 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
-        if ($this->container['kind_name'] === null) {
-            $invalidProperties[] = "'kind_name' can't be null";
+        if ($this->container['kind_value'] === null) {
+            $invalidProperties[] = "'kind_value' can't be null";
         }
         return $invalidProperties;
     }
@@ -367,28 +367,28 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     }
 
     /**
-     * Gets kind_name
+     * Gets kind_value
      *
-     * @return string
+     * @return \OpenAPI\Viewer\Client\Model\VenueKindValue
      */
-    public function getKindName()
+    public function getKindValue()
     {
-        return $this->container['kind_name'];
+        return $this->container['kind_value'];
     }
 
     /**
-     * Sets kind_name
+     * Sets kind_value
      *
-     * @param string $kind_name kind_name
+     * @param \OpenAPI\Viewer\Client\Model\VenueKindValue $kind_value kind_value
      *
      * @return self
      */
-    public function setKindName($kind_name)
+    public function setKindValue($kind_value)
     {
-        if (is_null($kind_name)) {
-            throw new \InvalidArgumentException('non-nullable kind_name cannot be null');
+        if (is_null($kind_value)) {
+            throw new \InvalidArgumentException('non-nullable kind_value cannot be null');
         }
-        $this->container['kind_name'] = $kind_name;
+        $this->container['kind_value'] = $kind_value;
 
         return $this;
     }

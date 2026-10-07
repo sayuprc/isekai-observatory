@@ -4,11 +4,13 @@ import SectionHead from '../components/viewer/SectionHead.astro';
 import SongTile from '../components/viewer/SongTile.astro';
 import TrackChip from '../components/viewer/TrackChip.astro';
 import { eventContentRepository } from '../features/events/content';
+import { EVENT_STATUS } from '../features/events/types';
 import { YOUTUBE_THUMBNAIL_ORIGIN, youtubeThumbnailFromUrl } from '../features/media/labels';
 import { releaseGroupContentRepository } from '../features/releases/content';
-import { representativeColor } from '../features/releases/types';
+import { RELEASE_GROUP_TYPE_NAMES, representativeColor } from '../features/releases/types';
 import { siteStatsRepository } from '../features/site-stats/api';
 import { songContentRepository } from '../features/songs/content';
+import { SONG_TYPE_NAMES } from '../features/songs/types';
 import Layout from '../layouts/Layout.astro';
 import { dottedDate } from '../shared/date';
 import { SITE_DESCRIPTION } from '../shared/site';
@@ -17,7 +19,9 @@ const latestReleaseGroup = await releaseGroupContentRepository.latest();
 const latestSong = await songContentRepository.latest();
 const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap((medium) => medium.tracks) ?? [];
 // 延期・中止は除く。どれを出すかはブラウザ上の現在日付で下のスクリプトが決める
-const upcomingEvents = (await eventContentRepository.upcoming()).filter((event) => event.status.value === 1);
+const upcomingEvents = (await eventContentRepository.upcoming()).filter(
+  (event) => event.statusValue === EVENT_STATUS.normal,
+);
 
 const siteStats = await siteStatsRepository.get();
 const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(entry.url) !== null)
@@ -68,7 +72,7 @@ const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(ent
             />
           </a>
           <div class="feature-body">
-            <div class="eyebrow">{latestSong.type.name}</div>
+            <div class="eyebrow">{SONG_TYPE_NAMES[latestSong.typeValue]}</div>
             <h3 class="feature-title">
               <a href={`/songs/${latestSong.songId}`}>{latestSong.title}</a>
             </h3>
@@ -86,7 +90,7 @@ const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(ent
         <SectionHead title="最新リリース" />
         <div class="feature-release" style={`--c:${representativeColor(latestReleaseGroup)};`}>
           <div class="eyebrow">
-            {latestReleaseGroup.type.name} — {dottedDate(latestReleaseGroup.firstReleasedOn)}
+            {RELEASE_GROUP_TYPE_NAMES[latestReleaseGroup.typeValue]} — {dottedDate(latestReleaseGroup.firstReleasedOn)}
           </div>
           <h3 class="feature-title">
             <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>

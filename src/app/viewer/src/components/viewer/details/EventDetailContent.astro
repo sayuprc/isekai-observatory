@@ -1,6 +1,7 @@
 ---
 import type { Event } from '../../../features/events/types';
-import { coVocalistNames, eventDetailDate, eventStatusName } from '../../../features/events/types';
+import { EVENT_TYPE_NAMES, coVocalistNames, eventDetailDate, eventStatusName } from '../../../features/events/types';
+import { releaseFormatText } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import EventSetlistSongs from './EventSetlistSongs.astro';
@@ -13,7 +14,7 @@ interface Props {
 type Performance = Event['performances'][number];
 
 const { event } = Astro.props;
-const statusName = eventStatusName(event.status);
+const statusName = eventStatusName(event.statusValue);
 // 種別は見出しのバッジに出すので、開催情報には開催時期と開催先だけを並べる
 // 期間の開始日と終了日は、それぞれ途中で折り返さないよう分けて持つ
 const facts = [
@@ -43,7 +44,7 @@ const looseTitle = setlistItems.length > 0 ? 'セットリスト外の楽曲披�
 const releases = event.releases.map((release) => ({
   href: `/releases/${release.releaseGroupId}`,
   title: release.name === '' ? release.releaseGroupTitle : `${release.releaseGroupTitle} ${release.name}`,
-  sub: [dottedDate(release.releasedOn), release.formats.map((format) => format.name).join('・')]
+  sub: [dottedDate(release.releasedOn), releaseFormatText(release.formatValues)]
     .filter((part) => part !== '')
     .join(' · '),
 }));
@@ -59,7 +60,7 @@ const hostname = (url: string): string => {
 
 <div class="detail-page-content event-detail-content" data-share-title={event.title}>
   <div class="event-detail-meta">
-    <span class="label-mono">{event.type.name}</span>
+    <span class="label-mono">{EVENT_TYPE_NAMES[event.typeValue]}</span>
     {statusName && <span class="event-detail-status">{statusName}</span>}
   </div>
   <h1 class="detail-title">{event.title}</h1>

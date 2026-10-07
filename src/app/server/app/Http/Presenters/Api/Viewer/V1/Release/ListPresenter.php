@@ -6,11 +6,9 @@ namespace App\Http\Presenters\Api\Viewer\V1\Release;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
-use OpenAPI\Viewer\Client\Model\ReleaseFormat as OpenApiReleaseFormat;
 use OpenAPI\Viewer\Client\Model\ReleaseFormatValue;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupListItem as OpenApiReleaseGroupListItem;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupListResponse;
-use OpenAPI\Viewer\Client\Model\ReleaseGroupType as OpenApiReleaseGroupType;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue;
 use OpenAPI\Viewer\Client\Model\ReleaseListItem as OpenApiReleaseListItem;
 use OpenAPI\Viewer\Client\Model\ReleaseMediumItem as OpenApiReleaseMediumItem;
@@ -38,11 +36,7 @@ class ListPresenter
         return new OpenApiReleaseGroupListItem()
             ->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
-            ->setType(
-                new OpenApiReleaseGroupType()
-                    ->setName($releaseGroup->type->getName())
-                    ->setValue(ReleaseGroupTypeValue::from($releaseGroup->type->value)),
-            )
+            ->setTypeValue(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description)
             ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn))
             ->setReleases(array_map($this->toOpenApiReleaseListItem(...), $releaseGroup->releases));
@@ -57,15 +51,13 @@ class ListPresenter
             ->setDescription($release->description)
             ->setColor($release->color)
             ->setOrderNo($release->orderNo)
-            ->setFormats(array_map($this->toOpenApiReleaseFormat(...), $release->formats))
+            ->setFormatValues(array_map($this->toOpenApiReleaseFormatValue(...), $release->formats))
             ->setMedia(array_map($this->toOpenApiReleaseMediumItem(...), $release->media));
     }
 
-    private function toOpenApiReleaseFormat(ReleaseFormat $format): OpenApiReleaseFormat
+    private function toOpenApiReleaseFormatValue(ReleaseFormat $format): ReleaseFormatValue
     {
-        return new OpenApiReleaseFormat()
-            ->setName($format->getName())
-            ->setValue(ReleaseFormatValue::from($format->value));
+        return ReleaseFormatValue::from($format->value);
     }
 
     private function toOpenApiReleaseMediumItem(ReleaseMediumItem $medium): OpenApiReleaseMediumItem

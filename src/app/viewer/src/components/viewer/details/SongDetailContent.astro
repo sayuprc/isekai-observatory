@@ -1,5 +1,6 @@
 ---
-import type { Song } from '../../../features/songs/types';
+import { RELEASE_GROUP_TYPE_NAMES } from '../../../features/releases/types';
+import { SONG_TYPE_NAMES, type Song } from '../../../features/songs/types';
 import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import MediaChip from './MediaChip.astro';
@@ -30,7 +31,7 @@ const formatPerformanceSub = (value: Song['performances'][number]): string =>
 ---
 
 <div class="detail-page-content song-detail-content" data-share-title={song.title}>
-  <div class="label-mono">{song.type.name}</div>
+  <div class="label-mono">{SONG_TYPE_NAMES[song.typeValue]}</div>
   <h1 class="detail-title">{song.title}</h1>
   <p class="detail-description" style="margin-top: 24px;">
     {song.description}
@@ -73,7 +74,7 @@ const formatPerformanceSub = (value: Song['performances'][number]): string =>
             <div class="rel-copy">
               <div class="rel-main">{releaseGroup.title}</div>
               <div class="label-mono rel-sub">
-                {dottedDate(releaseGroup.firstReleasedOn)} · {releaseGroup.type.name}
+                {dottedDate(releaseGroup.firstReleasedOn)} · {RELEASE_GROUP_TYPE_NAMES[releaseGroup.typeValue]}
               </div>
             </div>
             <span class="rel-arrow rel-arrow-muted">→</span>

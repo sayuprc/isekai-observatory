@@ -1,7 +1,28 @@
-import type { Event as EventModel } from '../../generated/types.gen.js';
+import type { Event as EventModel, EventStatusValue, EventTypeValue } from '../../generated/types.gen.js';
 import { dottedDate } from '../../shared/date';
 
 export type Event = EventModel;
+
+export const EVENT_TYPE_NAMES: Record<EventTypeValue, string> = {
+  1: 'ライブ',
+  2: '配信',
+  3: '展覧会',
+  4: 'ラジオ',
+  99: 'その他',
+};
+
+export const EVENT_STATUS = {
+  normal: 1,
+  postponed: 2,
+  cancelled: 3,
+} as const satisfies Record<string, EventStatusValue>;
+
+// 通常開催は状態を出さず、延期と中止だけを表示する
+const EVENT_STATUS_NAMES: Record<EventStatusValue, string | null> = {
+  [EVENT_STATUS.normal]: null,
+  [EVENT_STATUS.postponed]: '延期',
+  [EVENT_STATUS.cancelled]: '中止',
+};
 
 export function eventDate(event: Event): string | null {
   const { startOn, endOn } = event.schedule;
@@ -40,9 +61,8 @@ export function eventDateColumn(event: Event, withYear = false): { main: string;
   return { main, sub: weekdayOf(startOn) };
 }
 
-// 通常開催は状態を出さず、延期と中止だけを表示する
-export function eventStatusName(status: Event['status']): string | null {
-  return status.value === 1 ? null : status.name;
+export function eventStatusName(statusValue: EventStatusValue): string | null {
+  return EVENT_STATUS_NAMES[statusValue];
 }
 
 type CoVocalist = Event['performances'][number]['coVocalists'][number];

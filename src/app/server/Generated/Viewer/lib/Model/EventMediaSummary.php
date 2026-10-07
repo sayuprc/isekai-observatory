@@ -61,7 +61,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'string',
         'url' => 'string',
         'published_at' => '\DateTime',
-        'type' => '\OpenAPI\Viewer\Client\Model\MediaType'
+        'type_value' => '\OpenAPI\Viewer\Client\Model\MediaTypeValue'
     ];
 
     /**
@@ -76,7 +76,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => null,
         'url' => 'uri',
         'published_at' => 'date-time',
-        'type' => null
+        'type_value' => null
     ];
 
     /**
@@ -89,7 +89,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => false,
         'url' => false,
         'published_at' => false,
-        'type' => false
+        'type_value' => false
     ];
 
     /**
@@ -182,7 +182,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'title',
         'url' => 'url',
         'published_at' => 'publishedAt',
-        'type' => 'type'
+        'type_value' => 'typeValue'
     ];
 
     /**
@@ -195,7 +195,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'setTitle',
         'url' => 'setUrl',
         'published_at' => 'setPublishedAt',
-        'type' => 'setType'
+        'type_value' => 'setTypeValue'
     ];
 
     /**
@@ -208,7 +208,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'getTitle',
         'url' => 'getUrl',
         'published_at' => 'getPublishedAt',
-        'type' => 'getType'
+        'type_value' => 'getTypeValue'
     ];
 
     /**
@@ -272,7 +272,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('url', $data ?? [], null);
         $this->setIfExists('published_at', $data ?? [], null);
-        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('type_value', $data ?? [], null);
     }
 
     /**
@@ -318,8 +318,8 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['published_at'] === null) {
             $invalidProperties[] = "'published_at' can't be null";
         }
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
+        if ($this->container['type_value'] === null) {
+            $invalidProperties[] = "'type_value' can't be null";
         }
         return $invalidProperties;
     }
@@ -450,28 +450,28 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     }
 
     /**
-     * Gets type
+     * Gets type_value
      *
-     * @return \OpenAPI\Viewer\Client\Model\MediaType
+     * @return \OpenAPI\Viewer\Client\Model\MediaTypeValue
      */
-    public function getType()
+    public function getTypeValue()
     {
-        return $this->container['type'];
+        return $this->container['type_value'];
     }
 
     /**
-     * Sets type
+     * Sets type_value
      *
-     * @param \OpenAPI\Viewer\Client\Model\MediaType $type type
+     * @param \OpenAPI\Viewer\Client\Model\MediaTypeValue $type_value type_value
      *
      * @return self
      */
-    public function setType($type)
+    public function setTypeValue($type_value)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if (is_null($type_value)) {
+            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
         }
-        $this->container['type'] = $type;
+        $this->container['type_value'] = $type_value;
 
         return $this;
     }

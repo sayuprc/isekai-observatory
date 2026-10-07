@@ -1,5 +1,5 @@
 ---
-import type { ReleaseGroup } from '../../../features/releases/types';
+import { RELEASE_GROUP_TYPE_NAMES, releaseFormatText, type ReleaseGroup } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
 import ReleaseVersionBody from './ReleaseVersionBody.astro';
 
@@ -13,7 +13,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
 
 <div class="detail-page-content release-detail-content" data-share-title={releaseGroup.title}>
   <div class="label-mono">
-    {dottedDate(releaseGroup.firstReleasedOn)} · {releaseGroup.type.name}
+    {dottedDate(releaseGroup.firstReleasedOn)} · {RELEASE_GROUP_TYPE_NAMES[releaseGroup.typeValue]}
   </div>
   <h1 class="detail-title">{releaseGroup.title}</h1>
   {releaseGroup.description && (
@@ -27,7 +27,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
       <section class="release-version release-version-single">
         <div class="release-version-meta">
           <span class="label-mono">{dottedDate(release.releasedOn)}</span>
-          <span class="label-mono">{release.formats.map((format) => format.name).join('・')}</span>
+          <span class="label-mono">{releaseFormatText(release.formatValues)}</span>
         </div>
         <div class="release-version-body">
           <ReleaseVersionBody release={release} />
@@ -40,7 +40,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
             <span class="label-mono">{dottedDate(release.releasedOn)}</span>
             {release.name !== '' && <span class="release-version-name">{release.name}</span>}
           </div>
-          <span class="label-mono">{release.formats.map((format) => format.name).join('・')}</span>
+          <span class="label-mono">{releaseFormatText(release.formatValues)}</span>
         </summary>
         <div class="release-version-body-shell">
           <div class="release-version-body">

@@ -60,9 +60,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'string',
         'title' => 'string',
         'description' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\EventType',
+        'type_value' => '\OpenAPI\Viewer\Client\Model\EventTypeValue',
         'schedule' => '\OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
-        'status' => '\OpenAPI\Viewer\Client\Model\EventStatus',
+        'status_value' => '\OpenAPI\Viewer\Client\Model\EventStatusValue',
         'venues' => '\OpenAPI\Viewer\Client\Model\EventVenueSummary[]',
         'media' => '\OpenAPI\Viewer\Client\Model\EventMediaSummary[]',
         'releases' => '\OpenAPI\Viewer\Client\Model\EventReleaseSummary[]',
@@ -82,9 +82,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'uuid',
         'title' => null,
         'description' => null,
-        'type' => null,
+        'type_value' => null,
         'schedule' => null,
-        'status' => null,
+        'status_value' => null,
         'venues' => null,
         'media' => null,
         'releases' => null,
@@ -102,9 +102,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => false,
         'title' => false,
         'description' => false,
-        'type' => false,
+        'type_value' => false,
         'schedule' => false,
-        'status' => false,
+        'status_value' => false,
         'venues' => false,
         'media' => false,
         'releases' => false,
@@ -202,9 +202,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'eventId',
         'title' => 'title',
         'description' => 'description',
-        'type' => 'type',
+        'type_value' => 'typeValue',
         'schedule' => 'schedule',
-        'status' => 'status',
+        'status_value' => 'statusValue',
         'venues' => 'venues',
         'media' => 'media',
         'releases' => 'releases',
@@ -222,9 +222,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'setEventId',
         'title' => 'setTitle',
         'description' => 'setDescription',
-        'type' => 'setType',
+        'type_value' => 'setTypeValue',
         'schedule' => 'setSchedule',
-        'status' => 'setStatus',
+        'status_value' => 'setStatusValue',
         'venues' => 'setVenues',
         'media' => 'setMedia',
         'releases' => 'setReleases',
@@ -242,9 +242,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'getEventId',
         'title' => 'getTitle',
         'description' => 'getDescription',
-        'type' => 'getType',
+        'type_value' => 'getTypeValue',
         'schedule' => 'getSchedule',
-        'status' => 'getStatus',
+        'status_value' => 'getStatusValue',
         'venues' => 'getVenues',
         'media' => 'getMedia',
         'releases' => 'getReleases',
@@ -313,9 +313,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('event_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
-        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('type_value', $data ?? [], null);
         $this->setIfExists('schedule', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('status_value', $data ?? [], null);
         $this->setIfExists('venues', $data ?? [], null);
         $this->setIfExists('media', $data ?? [], null);
         $this->setIfExists('releases', $data ?? [], null);
@@ -364,14 +364,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
         }
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
+        if ($this->container['type_value'] === null) {
+            $invalidProperties[] = "'type_value' can't be null";
         }
         if ($this->container['schedule'] === null) {
             $invalidProperties[] = "'schedule' can't be null";
         }
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
+        if ($this->container['status_value'] === null) {
+            $invalidProperties[] = "'status_value' can't be null";
         }
         if ($this->container['venues'] === null) {
             $invalidProperties[] = "'venues' can't be null";
@@ -493,28 +493,28 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets type
+     * Gets type_value
      *
-     * @return \OpenAPI\Viewer\Client\Model\EventType
+     * @return \OpenAPI\Viewer\Client\Model\EventTypeValue
      */
-    public function getType()
+    public function getTypeValue()
     {
-        return $this->container['type'];
+        return $this->container['type_value'];
     }
 
     /**
-     * Sets type
+     * Sets type_value
      *
-     * @param \OpenAPI\Viewer\Client\Model\EventType $type type
+     * @param \OpenAPI\Viewer\Client\Model\EventTypeValue $type_value type_value
      *
      * @return self
      */
-    public function setType($type)
+    public function setTypeValue($type_value)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if (is_null($type_value)) {
+            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
         }
-        $this->container['type'] = $type;
+        $this->container['type_value'] = $type_value;
 
         return $this;
     }
@@ -547,28 +547,28 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets status
+     * Gets status_value
      *
-     * @return \OpenAPI\Viewer\Client\Model\EventStatus
+     * @return \OpenAPI\Viewer\Client\Model\EventStatusValue
      */
-    public function getStatus()
+    public function getStatusValue()
     {
-        return $this->container['status'];
+        return $this->container['status_value'];
     }
 
     /**
-     * Sets status
+     * Sets status_value
      *
-     * @param \OpenAPI\Viewer\Client\Model\EventStatus $status status
+     * @param \OpenAPI\Viewer\Client\Model\EventStatusValue $status_value status_value
      *
      * @return self
      */
-    public function setStatus($status)
+    public function setStatusValue($status_value)
     {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($status_value)) {
+            throw new \InvalidArgumentException('non-nullable status_value cannot be null');
         }
-        $this->container['status'] = $status;
+        $this->container['status_value'] = $status_value;
 
         return $this;
     }
