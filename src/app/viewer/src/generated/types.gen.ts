@@ -30,9 +30,9 @@ export type Event = {
     eventId: EventId;
     title: EventTitle;
     description: EventDescription;
-    typeValue: EventTypeValue;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    statusValue: EventStatusValue;
+    status: EventStatusValue;
     venues: Array<EventVenueSummary>;
     media: Array<EventMediaSummary>;
     releases: Array<EventReleaseSummary>;
@@ -51,7 +51,7 @@ export type EventMediaSummary = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
 };
 
 /**
@@ -63,7 +63,7 @@ export type EventReleaseSummary = {
     releaseGroupTitle: ReleaseGroupTitle;
     name: ReleaseName;
     releasedOn: ReleasedOn;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
 };
 
 export type EventSource = {
@@ -85,7 +85,7 @@ export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 export type EventVenueSummary = {
     venueId: Uuid;
     name: string;
-    kindValue: VenueKindValue;
+    kind: VenueKindValue;
 };
 
 /**
@@ -103,7 +103,7 @@ export type MediaListItem = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
     counts: MediaRelationCounts;
     songs: Array<MediaSongSummary>;
 };
@@ -126,7 +126,7 @@ export type MediaRelationCounts = {
 export type MediaSongSummary = {
     songId: SongId;
     title: Title;
-    typeValue: SongTypeValue;
+    type: SongTypeValue;
 };
 
 /**
@@ -164,7 +164,7 @@ export type ReleaseFormatValue = 1 | 2 | 3 | 4 | 99;
 export type ReleaseGroupListItem = {
     releaseGroupId: ReleaseGroupId;
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     /**
      * 傘下の公開リリースの最古発売日
@@ -196,7 +196,7 @@ export type ReleaseListItem = {
     description: string;
     color: Color;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
     media: Array<ReleaseMediumItem>;
 };
 
@@ -240,7 +240,7 @@ export type SongListItem = {
     songId: SongId;
     title: Title;
     description: Description;
-    typeValue: SongTypeValue;
+    type: SongTypeValue;
     counts: SongRelationCounts;
     lyricists: Array<string>;
     composers: Array<string>;
@@ -267,7 +267,7 @@ export type SongListResponse = {
 export type SongMediaSummary = {
     mediaId: MediaId;
     title: MediaTitle;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
 };
@@ -285,7 +285,7 @@ export type SongPerformance = {
 export type SongPerformanceHistory = {
     eventId: EventId;
     eventTitle: EventTitle;
-    typeValue: EventTypeValue;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     /**
      * 共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる
@@ -310,7 +310,7 @@ export type SongRelationCounts = {
 export type SongReleaseGroupSummary = {
     releaseGroupId: ReleaseGroupId;
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     firstReleasedOn: ReleasedOn;
     /**
      * 代表色(公開リリースを発売日順に見て最初のもの)

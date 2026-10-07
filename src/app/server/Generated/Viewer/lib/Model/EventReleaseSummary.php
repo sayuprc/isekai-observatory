@@ -63,7 +63,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'string',
         'name' => 'string',
         'released_on' => '\DateTime',
-        'format_values' => '\OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]'
+        'formats' => '\OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]'
     ];
 
     /**
@@ -79,7 +79,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => null,
         'name' => null,
         'released_on' => 'date',
-        'format_values' => null
+        'formats' => null
     ];
 
     /**
@@ -93,7 +93,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => false,
         'name' => false,
         'released_on' => false,
-        'format_values' => false
+        'formats' => false
     ];
 
     /**
@@ -187,7 +187,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'releaseGroupTitle',
         'name' => 'name',
         'released_on' => 'releasedOn',
-        'format_values' => 'formatValues'
+        'formats' => 'formats'
     ];
 
     /**
@@ -201,7 +201,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'setReleaseGroupTitle',
         'name' => 'setName',
         'released_on' => 'setReleasedOn',
-        'format_values' => 'setFormatValues'
+        'formats' => 'setFormats'
     ];
 
     /**
@@ -215,7 +215,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'getReleaseGroupTitle',
         'name' => 'getName',
         'released_on' => 'getReleasedOn',
-        'format_values' => 'getFormatValues'
+        'formats' => 'getFormats'
     ];
 
     /**
@@ -280,7 +280,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         $this->setIfExists('release_group_title', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('released_on', $data ?? [], null);
-        $this->setIfExists('format_values', $data ?? [], null);
+        $this->setIfExists('formats', $data ?? [], null);
     }
 
     /**
@@ -329,8 +329,8 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         if ($this->container['released_on'] === null) {
             $invalidProperties[] = "'released_on' can't be null";
         }
-        if ($this->container['format_values'] === null) {
-            $invalidProperties[] = "'format_values' can't be null";
+        if ($this->container['formats'] === null) {
+            $invalidProperties[] = "'formats' can't be null";
         }
         return $invalidProperties;
     }
@@ -488,28 +488,28 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     }
 
     /**
-     * Gets format_values
+     * Gets formats
      *
      * @return \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]
      */
-    public function getFormatValues()
+    public function getFormats()
     {
-        return $this->container['format_values'];
+        return $this->container['formats'];
     }
 
     /**
-     * Sets format_values
+     * Sets formats
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[] $format_values format_values
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[] $formats formats
      *
      * @return self
      */
-    public function setFormatValues($format_values)
+    public function setFormats($formats)
     {
-        if (is_null($format_values)) {
-            throw new \InvalidArgumentException('non-nullable format_values cannot be null');
+        if (is_null($formats)) {
+            throw new \InvalidArgumentException('non-nullable formats cannot be null');
         }
-        $this->container['format_values'] = $format_values;
+        $this->container['formats'] = $formats;
 
         return $this;
     }

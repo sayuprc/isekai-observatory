@@ -34,8 +34,8 @@ const RELEASE_FORMAT_NAMES: Record<ReleaseFormatValue, string> = {
 };
 
 /** 提供形態を表示名にして並べる */
-export function releaseFormatText(formatValues: ReleaseFormatValue[]): string {
-  return formatValues.map((formatValue) => RELEASE_FORMAT_NAMES[formatValue]).join('・');
+export function releaseFormatText(formats: ReleaseFormatValue[]): string {
+  return formats.map((format) => RELEASE_FORMAT_NAMES[format]).join('・');
 }
 
 /** トラック詳細へのリンク可否。楽曲未紐づけまたは非表示のトラックはリンクしない */

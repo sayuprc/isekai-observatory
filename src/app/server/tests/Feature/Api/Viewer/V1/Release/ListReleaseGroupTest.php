@@ -101,7 +101,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
                     [
                         'releaseGroupId' => $releaseGroupId,
                         'title' => '観測された春',
-                        'typeValue' => 2,
+                        'type' => 2,
                         'description' => '1st アルバム',
                         'firstReleasedOn' => '2026-05-01',
                         'releases' => [
@@ -112,7 +112,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                 'description' => '先行配信',
                                 'color' => '#989899',
                                 'orderNo' => 20,
-                                'formatValues' => [1],
+                                'formats' => [1],
                                 'media' => [
                                     [
                                         'position' => 1,
@@ -155,7 +155,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                 'description' => 'CD+DVD',
                                 'color' => '#4a5a78',
                                 'orderNo' => 10,
-                                'formatValues' => [2, 3],
+                                'formats' => [2, 3],
                                 'media' => [
                                     [
                                         'position' => 1,

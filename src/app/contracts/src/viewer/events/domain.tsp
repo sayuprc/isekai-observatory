@@ -20,7 +20,7 @@ enum VenueKindValue {
 model EventVenueSummary {
   venueId: uuid;
   name: string;
-  kindValue: VenueKindValue;
+  kind: VenueKindValue;
 }
 
 model EventMediaSummary {
@@ -28,7 +28,7 @@ model EventMediaSummary {
   title: mediaTitle;
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
-  typeValue: MediaTypeValue;
+  type: MediaTypeValue;
 }
 
 @doc("イベントに関連づけた公開リリース(版)。リリースとリリースグループがともに公開のものだけが載る")
@@ -38,7 +38,7 @@ model EventReleaseSummary {
   releaseGroupTitle: releaseGroupTitle;
   name: releaseName;
   releasedOn: releasedOn;
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
 }
 
 model EventSource {
@@ -79,9 +79,9 @@ model Event {
   eventId: eventId;
   title: eventTitle;
   description: eventDescription;
-  typeValue: EventTypeValue;
+  type: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue;
+  status: EventStatusValue;
   venues: EventVenueSummary[];
   media: EventMediaSummary[];
   releases: EventReleaseSummary[];

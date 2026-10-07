@@ -61,8 +61,8 @@ export function eventDateColumn(event: Event, withYear = false): { main: string;
   return { main, sub: weekdayOf(startOn) };
 }
 
-export function eventStatusName(statusValue: EventStatusValue): string | null {
-  return EVENT_STATUS_NAMES[statusValue];
+export function eventStatusName(status: EventStatusValue): string | null {
+  return EVENT_STATUS_NAMES[status];
 }
 
 type CoVocalist = Event['performances'][number]['coVocalists'][number];

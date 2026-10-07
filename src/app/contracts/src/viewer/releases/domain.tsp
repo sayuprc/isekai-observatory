@@ -65,7 +65,7 @@ model ReleaseListItem {
   description: string;
   color: color;
   orderNo: orderNo;
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
   media: ReleaseMediumItem[];
 }
 
@@ -73,7 +73,7 @@ model ReleaseListItem {
 model ReleaseGroupListItem {
   releaseGroupId: releaseGroupId;
   title: releaseGroupTitle;
-  typeValue: ReleaseGroupTypeValue;
+  type: ReleaseGroupTypeValue;
   description: string;
 
   @doc("傘下の公開リリースの最古発売日")

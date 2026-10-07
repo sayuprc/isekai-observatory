@@ -35,7 +35,7 @@ class ListPresenter
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
-            ->setTypeValue(MediaTypeValue::from($media->type->value))
+            ->setType(MediaTypeValue::from($media->type->value))
             ->setCounts(new MediaRelationCounts()->setSongCount(count($songs)))
             ->setSongs($songs);
     }
@@ -44,6 +44,6 @@ class ListPresenter
     {
         return new OpenApiMediaSongSummary()->setSongId($song->songId)
             ->setTitle($song->title)
-            ->setTypeValue(SongTypeValue::from($song->type->value));
+            ->setType(SongTypeValue::from($song->type->value));
     }
 }

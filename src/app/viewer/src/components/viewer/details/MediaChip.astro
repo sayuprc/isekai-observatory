@@ -10,7 +10,7 @@ interface Props {
     title: string;
     url: string;
     publishedAt: string;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
   };
 }
 
@@ -42,7 +42,7 @@ const publishedAt = dottedDateOfDateTime(media.publishedAt);
   <div class="rel-copy">
     <div class="rel-main">{media.title}</div>
     <div class="label-mono rel-sub">
-      {publishedAt} · {platformName} · {MEDIA_TYPE_NAMES[media.typeValue]}
+      {publishedAt} · {platformName} · {MEDIA_TYPE_NAMES[media.type]}
     </div>
   </div>
   <span class="rel-arrow rel-arrow-muted">→</span>

@@ -59,7 +59,7 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'media_id' => 'string',
         'title' => 'string',
-        'type_value' => '\OpenAPI\Viewer\Client\Model\MediaTypeValue',
+        'type' => '\OpenAPI\Viewer\Client\Model\MediaTypeValue',
         'url' => 'string',
         'published_at' => '\DateTime'
     ];
@@ -74,7 +74,7 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'media_id' => 'uuid',
         'title' => null,
-        'type_value' => null,
+        'type' => null,
         'url' => 'uri',
         'published_at' => 'date-time'
     ];
@@ -87,7 +87,7 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'media_id' => false,
         'title' => false,
-        'type_value' => false,
+        'type' => false,
         'url' => false,
         'published_at' => false
     ];
@@ -180,7 +180,7 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'media_id' => 'mediaId',
         'title' => 'title',
-        'type_value' => 'typeValue',
+        'type' => 'type',
         'url' => 'url',
         'published_at' => 'publishedAt'
     ];
@@ -193,7 +193,7 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'media_id' => 'setMediaId',
         'title' => 'setTitle',
-        'type_value' => 'setTypeValue',
+        'type' => 'setType',
         'url' => 'setUrl',
         'published_at' => 'setPublishedAt'
     ];
@@ -206,7 +206,7 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'media_id' => 'getMediaId',
         'title' => 'getTitle',
-        'type_value' => 'getTypeValue',
+        'type' => 'getType',
         'url' => 'getUrl',
         'published_at' => 'getPublishedAt'
     ];
@@ -270,7 +270,7 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('media_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('url', $data ?? [], null);
         $this->setIfExists('published_at', $data ?? [], null);
     }
@@ -312,8 +312,8 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['type_value'] === null) {
-            $invalidProperties[] = "'type_value' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
         if ($this->container['url'] === null) {
             $invalidProperties[] = "'url' can't be null";
@@ -396,28 +396,28 @@ class SongMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets type_value
+     * Gets type
      *
      * @return \OpenAPI\Viewer\Client\Model\MediaTypeValue
      */
-    public function getTypeValue()
+    public function getType()
     {
-        return $this->container['type_value'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets type_value
+     * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\MediaTypeValue $type_value type_value
+     * @param \OpenAPI\Viewer\Client\Model\MediaTypeValue $type type
      *
      * @return self
      */
-    public function setTypeValue($type_value)
+    public function setType($type)
     {
-        if (is_null($type_value)) {
-            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['type_value'] = $type_value;
+        $this->container['type'] = $type;
 
         return $this;
     }

@@ -116,7 +116,7 @@ class ListMediaTest extends DatabaseTestCase
                         'title' => '公開 MV 1',
                         'url' => 'https://example.com/public/1',
                         'publishedAt' => '2024-03-01T12:00:00+09:00',
-                        'typeValue' => 1,
+                        'type' => 1,
                         'counts' => [
                             'songCount' => 2,
                         ],
@@ -124,12 +124,12 @@ class ListMediaTest extends DatabaseTestCase
                             [
                                 'songId' => $firstSongId,
                                 'title' => '公開楽曲 1',
-                                'typeValue' => 1,
+                                'type' => 1,
                             ],
                             [
                                 'songId' => $secondSongId,
                                 'title' => '公開楽曲 2',
-                                'typeValue' => 2,
+                                'type' => 2,
                             ],
                         ],
                     ],
@@ -153,7 +153,7 @@ class ListMediaTest extends DatabaseTestCase
                         'title' => '公開 MV 2',
                         'url' => 'https://example.com/public/2',
                         'publishedAt' => '2024-02-01T10:00:00+09:00',
-                        'typeValue' => 2,
+                        'type' => 2,
                         'counts' => [
                             'songCount' => 0,
                         ],

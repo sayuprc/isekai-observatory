@@ -36,7 +36,7 @@ class ListPresenter
         return new OpenApiReleaseGroupListItem()
             ->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
-            ->setTypeValue(ReleaseGroupTypeValue::from($releaseGroup->type->value))
+            ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description)
             ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn))
             ->setReleases(array_map($this->toOpenApiReleaseListItem(...), $releaseGroup->releases));
@@ -51,7 +51,7 @@ class ListPresenter
             ->setDescription($release->description)
             ->setColor($release->color)
             ->setOrderNo($release->orderNo)
-            ->setFormatValues(array_map($this->toOpenApiReleaseFormatValue(...), $release->formats))
+            ->setFormats(array_map($this->toOpenApiReleaseFormatValue(...), $release->formats))
             ->setMedia(array_map($this->toOpenApiReleaseMediumItem(...), $release->media));
     }
 

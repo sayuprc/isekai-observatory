@@ -50,12 +50,12 @@ class ListPresenter
             ->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
-            ->setTypeValue(EventTypeValue::from($event->type->value))
+            ->setType(EventTypeValue::from($event->type->value))
             ->setSchedule(new OpenApiEventSchedule([
                 'start_on' => $event->startOn === null ? null : new DateTime($event->startOn),
                 'end_on' => $event->endOn === null ? null : new DateTime($event->endOn),
             ]))
-            ->setStatusValue(EventStatusValue::from($event->status->value))
+            ->setStatus(EventStatusValue::from($event->status->value))
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
             ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
             ->setReleases(array_map($this->toOpenApiRelease(...), $event->releases))
@@ -69,7 +69,7 @@ class ListPresenter
         return new OpenApiEventVenueSummary()
             ->setVenueId($venue->venueId)
             ->setName($venue->name)
-            ->setKindValue(VenueKindValue::from($venue->kind->value));
+            ->setKind(VenueKindValue::from($venue->kind->value));
     }
 
     private function toOpenApiMedia(EventMediaSummary $media): OpenApiEventMediaSummary
@@ -79,7 +79,7 @@ class ListPresenter
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
-            ->setTypeValue(MediaTypeValue::from($media->type->value));
+            ->setType(MediaTypeValue::from($media->type->value));
     }
 
     private function toOpenApiRelease(EventReleaseSummary $release): OpenApiEventReleaseSummary
@@ -90,7 +90,7 @@ class ListPresenter
             ->setReleaseGroupTitle($release->releaseGroupTitle)
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
-            ->setFormatValues(array_map(
+            ->setFormats(array_map(
                 static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
                 $release->formats,
             ));

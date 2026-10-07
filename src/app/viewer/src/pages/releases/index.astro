@@ -77,12 +77,8 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
               return (
                 <li
                   data-release-entry
-                  data-release-type={String(releaseGroup.typeValue)}
-                  data-release-search={[
-                    releaseGroup.title,
-                    RELEASE_GROUP_TYPE_NAMES[releaseGroup.typeValue],
-                    ...trackTitles,
-                  ]
+                  data-release-type={String(releaseGroup.type)}
+                  data-release-search={[releaseGroup.title, RELEASE_GROUP_TYPE_NAMES[releaseGroup.type], ...trackTitles]
                     .join(' ')
                     .toLowerCase()}
                 >
@@ -92,7 +88,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
                     style={`--release-color:${representativeColor(releaseGroup)};`}
                   >
                     <span class="release-row-title">{releaseGroup.title}</span>
-                    <span class="release-row-type">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.typeValue]}</span>
+                    <span class="release-row-type">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}</span>
                     <span class="label-mono release-row-date">{dottedDate(releaseGroup.firstReleasedOn.slice(5))}</span>
                   </a>
                 </li>

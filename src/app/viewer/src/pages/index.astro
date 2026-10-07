@@ -20,7 +20,7 @@ const latestSong = await songContentRepository.latest();
 const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap((medium) => medium.tracks) ?? [];
 // 延期・中止は除く。どれを出すかはブラウザ上の現在日付で下のスクリプトが決める
 const upcomingEvents = (await eventContentRepository.upcoming()).filter(
-  (event) => event.statusValue === EVENT_STATUS.normal,
+  (event) => event.status === EVENT_STATUS.normal,
 );
 
 const siteStats = await siteStatsRepository.get();
@@ -72,7 +72,7 @@ const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(ent
             />
           </a>
           <div class="feature-body">
-            <div class="eyebrow">{SONG_TYPE_NAMES[latestSong.typeValue]}</div>
+            <div class="eyebrow">{SONG_TYPE_NAMES[latestSong.type]}</div>
             <h3 class="feature-title">
               <a href={`/songs/${latestSong.songId}`}>{latestSong.title}</a>
             </h3>
@@ -90,7 +90,7 @@ const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(ent
         <SectionHead title="最新リリース" />
         <div class="feature-release" style={`--c:${representativeColor(latestReleaseGroup)};`}>
           <div class="eyebrow">
-            {RELEASE_GROUP_TYPE_NAMES[latestReleaseGroup.typeValue]} — {dottedDate(latestReleaseGroup.firstReleasedOn)}
+            {RELEASE_GROUP_TYPE_NAMES[latestReleaseGroup.type]} — {dottedDate(latestReleaseGroup.firstReleasedOn)}
           </div>
           <h3 class="feature-title">
             <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>

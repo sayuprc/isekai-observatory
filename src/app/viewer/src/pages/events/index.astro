@@ -17,7 +17,7 @@ const groups = [
 const total = groups.reduce((sum, group) => sum + group.events.length, 0);
 
 const searchText = (event: Event) =>
-  [event.title, EVENT_TYPE_NAMES[event.typeValue], eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
+  [event.title, EVENT_TYPE_NAMES[event.type], eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
     .join(' ')
     .toLowerCase();
 ---
@@ -68,7 +68,7 @@ const searchText = (event: Event) =>
         </h2>
         <ol class="event-group-list">
           {group.events.map((event) => (
-            <li data-event-entry data-event-type={String(event.typeValue)} data-event-search={searchText(event)}>
+            <li data-event-entry data-event-type={String(event.type)} data-event-search={searchText(event)}>
               <EventRow event={event} />
             </li>
           ))}

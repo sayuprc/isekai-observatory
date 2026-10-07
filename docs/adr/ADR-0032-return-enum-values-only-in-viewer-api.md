@@ -20,7 +20,7 @@ API から表示名が自動で届くため、種別が増えても絞り込み�
 ## Decision
 
 - Viewer API は種別や状態を TypeSpec の enum の数値だけで返す
-  - フィールド名は `typeValue` / `statusValue` / `kindValue` のように `Value` を付ける。複数なら `formatValues` とする
+  - フィールド名は `type` / `status` / `kind` / `formats` のように `Value` を付けない
   - 表示名を返す `{ name, value }` の型は Viewer の契約で使わない
 - 表示名は Viewer が `Record<XxxValue, string>` の対応表として持つ
   - 一覧の表示と絞り込みの選択肢は同じ対応表から作る

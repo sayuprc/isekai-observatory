@@ -60,7 +60,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     protected static $openAPITypes = [
         'release_group_id' => 'string',
         'title' => 'string',
-        'type_value' => '\OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue',
+        'type' => '\OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue',
         'first_released_on' => '\DateTime',
         'color' => 'string'
     ];
@@ -75,7 +75,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     protected static $openAPIFormats = [
         'release_group_id' => 'uuid',
         'title' => null,
-        'type_value' => null,
+        'type' => null,
         'first_released_on' => 'date',
         'color' => null
     ];
@@ -88,7 +88,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     protected static array $openAPINullables = [
         'release_group_id' => false,
         'title' => false,
-        'type_value' => false,
+        'type' => false,
         'first_released_on' => false,
         'color' => false
     ];
@@ -181,7 +181,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     protected static $attributeMap = [
         'release_group_id' => 'releaseGroupId',
         'title' => 'title',
-        'type_value' => 'typeValue',
+        'type' => 'type',
         'first_released_on' => 'firstReleasedOn',
         'color' => 'color'
     ];
@@ -194,7 +194,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     protected static $setters = [
         'release_group_id' => 'setReleaseGroupId',
         'title' => 'setTitle',
-        'type_value' => 'setTypeValue',
+        'type' => 'setType',
         'first_released_on' => 'setFirstReleasedOn',
         'color' => 'setColor'
     ];
@@ -207,7 +207,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     protected static $getters = [
         'release_group_id' => 'getReleaseGroupId',
         'title' => 'getTitle',
-        'type_value' => 'getTypeValue',
+        'type' => 'getType',
         'first_released_on' => 'getFirstReleasedOn',
         'color' => 'getColor'
     ];
@@ -271,7 +271,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     {
         $this->setIfExists('release_group_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('first_released_on', $data ?? [], null);
         $this->setIfExists('color', $data ?? [], null);
     }
@@ -313,8 +313,8 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['type_value'] === null) {
-            $invalidProperties[] = "'type_value' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
         if ($this->container['first_released_on'] === null) {
             $invalidProperties[] = "'first_released_on' can't be null";
@@ -401,28 +401,28 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     }
 
     /**
-     * Gets type_value
+     * Gets type
      *
      * @return \OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue
      */
-    public function getTypeValue()
+    public function getType()
     {
-        return $this->container['type_value'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets type_value
+     * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue $type_value type_value
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue $type type
      *
      * @return self
      */
-    public function setTypeValue($type_value)
+    public function setType($type)
     {
-        if (is_null($type_value)) {
-            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['type_value'] = $type_value;
+        $this->container['type'] = $type;
 
         return $this;
     }

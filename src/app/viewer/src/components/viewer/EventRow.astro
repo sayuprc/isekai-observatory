@@ -9,7 +9,7 @@ interface Props {
 
 const { event, withYear = false } = Astro.props;
 const date = eventDateColumn(event, withYear);
-const statusName = eventStatusName(event.statusValue);
+const statusName = eventStatusName(event.status);
 const venueNames = event.venues.map((venue) => venue.name).join(' / ');
 ---
 
@@ -22,7 +22,7 @@ const venueNames = event.venues.map((venue) => venue.name).join(' / ');
     <span class="event-line-date-main">{date?.main ?? '— —'}</span>
     {date && <span class="event-line-date-sub">{date.sub}</span>}
   </span>
-  <span class="event-line-type">{EVENT_TYPE_NAMES[event.typeValue]}</span>
+  <span class="event-line-type">{EVENT_TYPE_NAMES[event.type]}</span>
   <span class="event-line-body">
     <span class="event-line-title">
       {event.title}

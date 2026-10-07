@@ -39,7 +39,7 @@ const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
   </a>
 
   <div class="label-mono">
-    {dottedDateOfDateTime(media.publishedAt)} · {platformName} · {MEDIA_TYPE_NAMES[media.typeValue]}
+    {dottedDateOfDateTime(media.publishedAt)} · {platformName} · {MEDIA_TYPE_NAMES[media.type]}
     {/* API に views が無いため未提供セクションとして雛形を残す */}
     {/* {entry.views ? ` · ${entry.views} views` : ''} */}
   </div>
@@ -55,7 +55,7 @@ const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
           <a class="rel-chip" href={`/songs/${song.songId}`}>
             <div class="rel-copy">
               <div class="rel-main">{song.title}</div>
-              <div class="label-mono rel-sub">{SONG_TYPE_NAMES[song.typeValue]}</div>
+              <div class="label-mono rel-sub">{SONG_TYPE_NAMES[song.type]}</div>
             </div>
             <span class="rel-arrow rel-arrow-muted">→</span>
           </a>

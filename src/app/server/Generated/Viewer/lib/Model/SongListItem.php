@@ -60,7 +60,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'string',
         'title' => 'string',
         'description' => 'string',
-        'type_value' => '\OpenAPI\Viewer\Client\Model\SongTypeValue',
+        'type' => '\OpenAPI\Viewer\Client\Model\SongTypeValue',
         'counts' => '\OpenAPI\Viewer\Client\Model\SongRelationCounts',
         'lyricists' => 'string[]',
         'composers' => 'string[]',
@@ -81,7 +81,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'uuid',
         'title' => null,
         'description' => null,
-        'type_value' => null,
+        'type' => null,
         'counts' => null,
         'lyricists' => null,
         'composers' => null,
@@ -100,7 +100,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => false,
         'title' => false,
         'description' => false,
-        'type_value' => false,
+        'type' => false,
         'counts' => false,
         'lyricists' => false,
         'composers' => false,
@@ -199,7 +199,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'songId',
         'title' => 'title',
         'description' => 'description',
-        'type_value' => 'typeValue',
+        'type' => 'type',
         'counts' => 'counts',
         'lyricists' => 'lyricists',
         'composers' => 'composers',
@@ -218,7 +218,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'setSongId',
         'title' => 'setTitle',
         'description' => 'setDescription',
-        'type_value' => 'setTypeValue',
+        'type' => 'setType',
         'counts' => 'setCounts',
         'lyricists' => 'setLyricists',
         'composers' => 'setComposers',
@@ -237,7 +237,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'getSongId',
         'title' => 'getTitle',
         'description' => 'getDescription',
-        'type_value' => 'getTypeValue',
+        'type' => 'getType',
         'counts' => 'getCounts',
         'lyricists' => 'getLyricists',
         'composers' => 'getComposers',
@@ -307,7 +307,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('song_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
-        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('counts', $data ?? [], null);
         $this->setIfExists('lyricists', $data ?? [], null);
         $this->setIfExists('composers', $data ?? [], null);
@@ -357,8 +357,8 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
         }
-        if ($this->container['type_value'] === null) {
-            $invalidProperties[] = "'type_value' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
         if ($this->container['counts'] === null) {
             $invalidProperties[] = "'counts' can't be null";
@@ -483,28 +483,28 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets type_value
+     * Gets type
      *
      * @return \OpenAPI\Viewer\Client\Model\SongTypeValue
      */
-    public function getTypeValue()
+    public function getType()
     {
-        return $this->container['type_value'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets type_value
+     * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongTypeValue $type_value type_value
+     * @param \OpenAPI\Viewer\Client\Model\SongTypeValue $type type
      *
      * @return self
      */
-    public function setTypeValue($type_value)
+    public function setType($type)
     {
-        if (is_null($type_value)) {
-            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['type_value'] = $type_value;
+        $this->container['type'] = $type;
 
         return $this;
     }

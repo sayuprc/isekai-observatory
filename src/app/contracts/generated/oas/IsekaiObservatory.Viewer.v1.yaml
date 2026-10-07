@@ -225,9 +225,9 @@ components:
         - eventId
         - title
         - description
-        - typeValue
+        - type
         - schedule
-        - statusValue
+        - status
         - venues
         - media
         - releases
@@ -241,11 +241,11 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
-        typeValue:
+        type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
-        statusValue:
+        status:
           $ref: '#/components/schemas/EventStatusValue'
         venues:
           type: array
@@ -289,7 +289,7 @@ components:
         - title
         - url
         - publishedAt
-        - typeValue
+        - type
       properties:
         mediaId:
           $ref: '#/components/schemas/mediaId'
@@ -299,7 +299,7 @@ components:
           $ref: '#/components/schemas/mediaUrl'
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
-        typeValue:
+        type:
           $ref: '#/components/schemas/MediaTypeValue'
     EventReleaseSummary:
       type: object
@@ -309,7 +309,7 @@ components:
         - releaseGroupTitle
         - name
         - releasedOn
-        - formatValues
+        - formats
       properties:
         releaseId:
           $ref: '#/components/schemas/releaseId'
@@ -321,7 +321,7 @@ components:
           $ref: '#/components/schemas/releaseName'
         releasedOn:
           $ref: '#/components/schemas/releasedOn'
-        formatValues:
+        formats:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseFormatValue'
@@ -362,13 +362,13 @@ components:
       required:
         - venueId
         - name
-        - kindValue
+        - kind
       properties:
         venueId:
           $ref: '#/components/schemas/uuid'
         name:
           type: string
-        kindValue:
+        kind:
           $ref: '#/components/schemas/VenueKindValue'
     IsekaiObservatory.Packages.Event.EventSchedule:
       type: object
@@ -396,7 +396,7 @@ components:
         - title
         - url
         - publishedAt
-        - typeValue
+        - type
         - counts
         - songs
       properties:
@@ -408,7 +408,7 @@ components:
           $ref: '#/components/schemas/mediaUrl'
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
-        typeValue:
+        type:
           $ref: '#/components/schemas/MediaTypeValue'
         counts:
           $ref: '#/components/schemas/MediaRelationCounts'
@@ -421,13 +421,13 @@ components:
           title: テストメディアMV
           url: https://example.com/media/1
           publishedAt: '2024-03-01T12:00:00+09:00'
-          typeValue: 1
+          type: 1
           counts:
             songCount: 1
           songs:
             - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
               title: テスト楽曲
-              typeValue: 1
+              type: 1
     MediaListResponse:
       type: object
       required:
@@ -446,13 +446,13 @@ components:
               title: テストメディアMV
               url: https://example.com/media/1
               publishedAt: '2024-03-01T12:00:00+09:00'
-              typeValue: 1
+              type: 1
               counts:
                 songCount: 1
               songs:
                 - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
                   title: テスト楽曲
-                  typeValue: 1
+                  type: 1
           nextCursor: eyJwdWJsaXNoZWRBdCI6IjIwMjQtMDMtMDEiLCJtZWRpYUlkIjoiMTExMTExMTEtMTExMS0xMTExLTExMTEtMTExMTExMTExMTExIn0=
     MediaRelationCounts:
       type: object
@@ -468,18 +468,18 @@ components:
       required:
         - songId
         - title
-        - typeValue
+        - type
       properties:
         songId:
           $ref: '#/components/schemas/songId'
         title:
           $ref: '#/components/schemas/title'
-        typeValue:
+        type:
           $ref: '#/components/schemas/SongTypeValue'
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
-          typeValue: 1
+          type: 1
     MediaTypeValue:
       type: integer
       format: int32
@@ -541,7 +541,7 @@ components:
       required:
         - releaseGroupId
         - title
-        - typeValue
+        - type
         - description
         - firstReleasedOn
         - releases
@@ -550,7 +550,7 @@ components:
           $ref: '#/components/schemas/releaseGroupId'
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
@@ -578,7 +578,7 @@ components:
         - releaseGroups:
             - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
               title: テストアルバム
-              typeValue: 2
+              type: 2
               description: 1st アルバム
               firstReleasedOn: '2026-05-01'
               releases:
@@ -588,7 +588,7 @@ components:
                   description: ''
                   color: '#4a5a78'
                   orderNo: 1
-                  formatValues:
+                  formats:
                     - 2
                   media:
                     - position: 1
@@ -617,7 +617,7 @@ components:
         - description
         - color
         - orderNo
-        - formatValues
+        - formats
         - media
       properties:
         releaseId:
@@ -632,7 +632,7 @@ components:
           $ref: '#/components/schemas/color'
         orderNo:
           $ref: '#/components/schemas/orderNo'
-        formatValues:
+        formats:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseFormatValue'
@@ -718,7 +718,7 @@ components:
         - songId
         - title
         - description
-        - typeValue
+        - type
         - counts
         - lyricists
         - composers
@@ -733,7 +733,7 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
-        typeValue:
+        type:
           $ref: '#/components/schemas/SongTypeValue'
         counts:
           $ref: '#/components/schemas/SongRelationCounts'
@@ -767,7 +767,7 @@ components:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
           description: テスト楽曲説明
-          typeValue: 1
+          type: 1
           counts:
             releaseCount: 1
             mediaCount: 1
@@ -780,13 +780,13 @@ components:
           media:
             - mediaId: 11111111-1111-1111-1111-111111111111
               title: テストメディアMV
-              typeValue: 1
+              type: 1
               url: https://www.youtube.com/watch?v=dummy
               publishedAt: '2024-03-01T12:00:00+09:00'
           releaseGroups:
             - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
               title: テストアルバム
-              typeValue: 2
+              type: 2
               firstReleasedOn: '2026-05-01'
               color: '#4a5a78'
           performances: []
@@ -807,7 +807,7 @@ components:
             - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
               title: テスト楽曲
               description: テスト楽曲説明
-              typeValue: 1
+              type: 1
               counts:
                 releaseCount: 1
                 mediaCount: 1
@@ -820,13 +820,13 @@ components:
               media:
                 - mediaId: 11111111-1111-1111-1111-111111111111
                   title: テストメディアMV
-                  typeValue: 1
+                  type: 1
                   url: https://www.youtube.com/watch?v=dummy
                   publishedAt: '2024-03-01T12:00:00+09:00'
               releaseGroups:
                 - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
                   title: テストアルバム
-                  typeValue: 2
+                  type: 2
                   firstReleasedOn: '2026-05-01'
                   color: '#4a5a78'
               performances: []
@@ -836,7 +836,7 @@ components:
       required:
         - mediaId
         - title
-        - typeValue
+        - type
         - url
         - publishedAt
       properties:
@@ -844,7 +844,7 @@ components:
           $ref: '#/components/schemas/mediaId'
         title:
           $ref: '#/components/schemas/mediaTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/MediaTypeValue'
         url:
           $ref: '#/components/schemas/mediaUrl'
@@ -853,7 +853,7 @@ components:
       examples:
         - mediaId: 11111111-1111-1111-1111-111111111111
           title: テストメディアMV
-          typeValue: 1
+          type: 1
           url: https://www.youtube.com/watch?v=dummy
           publishedAt: '2024-03-01T12:00:00+09:00'
     SongPerformance:
@@ -881,7 +881,7 @@ components:
       required:
         - eventId
         - eventTitle
-        - typeValue
+        - type
         - schedule
         - coVocalistNames
       properties:
@@ -889,7 +889,7 @@ components:
           $ref: '#/components/schemas/eventId'
         eventTitle:
           $ref: '#/components/schemas/eventTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
@@ -918,7 +918,7 @@ components:
       required:
         - releaseGroupId
         - title
-        - typeValue
+        - type
         - firstReleasedOn
         - color
       properties:
@@ -926,7 +926,7 @@ components:
           $ref: '#/components/schemas/releaseGroupId'
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         firstReleasedOn:
           $ref: '#/components/schemas/releasedOn'

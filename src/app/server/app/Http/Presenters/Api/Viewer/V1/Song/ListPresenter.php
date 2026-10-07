@@ -43,7 +43,7 @@ class ListPresenter
             ->setSongId($song->songId)
             ->setTitle($song->title)
             ->setDescription($song->description)
-            ->setTypeValue(SongTypeValue::from($song->type->value))
+            ->setType(SongTypeValue::from($song->type->value))
             ->setLyricists($song->lyricists)
             ->setComposers($song->composers)
             ->setArrangers($song->arrangers)
@@ -62,7 +62,7 @@ class ListPresenter
         return new OpenApiSongReleaseGroupSummary()
             ->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
-            ->setTypeValue(ReleaseGroupTypeValue::from($releaseGroup->typeValue))
+            ->setType(ReleaseGroupTypeValue::from($releaseGroup->typeValue))
             ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn))
             ->setColor($releaseGroup->color);
     }
@@ -72,7 +72,7 @@ class ListPresenter
         return new OpenApiSongMediaSummary()
             ->setMediaId($media->mediaId)
             ->setTitle($media->title)
-            ->setTypeValue(MediaTypeValue::from($media->type->value))
+            ->setType(MediaTypeValue::from($media->type->value))
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt));
     }
@@ -89,7 +89,7 @@ class ListPresenter
         return new OpenApiSongPerformanceHistory()
             ->setEventId($performance->eventId)
             ->setEventTitle($performance->eventTitle)
-            ->setTypeValue(EventTypeValue::from($performance->typeValue))
+            ->setType(EventTypeValue::from($performance->typeValue))
             ->setSchedule($scheduleModel)
             ->setCoVocalistNames($performance->coVocalistNames);
     }
