@@ -29,7 +29,7 @@ scalar mediaTypeName extends string;
 
 @doc("メディア種別の値")
 @friendlyName("MediaTypeValue")
-@enumDescriptions
+@enumExtensions
 enum MediaTypeValue {
   @doc("MV")
   Mv: 1,

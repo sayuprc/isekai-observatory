@@ -8,7 +8,7 @@ using Http;
 namespace IsekaiObservatory.Admin;
 
 @doc("開催先検索のソート条件")
-@enumDescriptions
+@enumExtensions
 enum VenueSearchSortBy {
   @doc("開催先名")
   name: "name",

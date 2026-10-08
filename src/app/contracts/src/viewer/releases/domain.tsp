@@ -26,7 +26,7 @@ scalar releasedOn extends string;
 scalar color extends string;
 
 @doc("リリースグループ種別の値")
-@enumDescriptions
+@enumExtensions
 enum ReleaseGroupTypeValue {
   @doc("シングル")
   Single: 1,
@@ -42,7 +42,7 @@ enum ReleaseGroupTypeValue {
 }
 
 @doc("提供形態の値")
-@enumDescriptions
+@enumExtensions
 enum ReleaseFormatValue {
   @doc("配信")
   Digital: 1,

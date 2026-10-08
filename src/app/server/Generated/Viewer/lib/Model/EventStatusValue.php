@@ -43,17 +43,17 @@ enum EventStatusValue: int
     /**
      * 通常
      */
-    case NUMBER_1 = 1;
+    case NORMAL = 1;
 
     /**
      * 延期
      */
-    case NUMBER_2 = 2;
+    case POSTPONED = 2;
 
     /**
      * 中止
      */
-    case NUMBER_3 = 3;
+    case CANCELLED = 3;
 
 }
 

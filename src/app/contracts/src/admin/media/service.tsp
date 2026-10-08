@@ -10,7 +10,7 @@ using Http;
 namespace IsekaiObservatory.Admin;
 
 @doc("メディア検索のソート条件")
-@enumDescriptions
+@enumExtensions
 enum MediaSearchSortBy {
   @doc("公開日")
   publishedAt: "published_at",

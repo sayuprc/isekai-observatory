@@ -33,7 +33,7 @@ scalar color extends string;
 scalar trackTitle extends string;
 
 @doc("リリースグループ種別")
-@IsekaiObservatory.Shared.enumDescriptions
+@IsekaiObservatory.Shared.enumExtensions
 enum ReleaseGroupTypeValue {
   @doc("シングル")
   Single: 1,
@@ -49,7 +49,7 @@ enum ReleaseGroupTypeValue {
 }
 
 @doc("提供形態")
-@IsekaiObservatory.Shared.enumDescriptions
+@IsekaiObservatory.Shared.enumExtensions
 enum ReleaseFormatValue {
   @doc("配信")
   Digital: 1,

@@ -43,12 +43,12 @@ enum SongSearchTypeValue: string
     /**
      * オリジナル曲
      */
-    case _1 = '1';
+    case ORIGINAL = '1';
 
     /**
      * カバー曲
      */
-    case _2 = '2';
+    case COVER = '2';
 
 }
 

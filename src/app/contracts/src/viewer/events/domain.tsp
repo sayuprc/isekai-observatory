@@ -12,7 +12,7 @@ using IsekaiObservatory.Packages.Song;
 namespace IsekaiObservatory.Viewer;
 
 @doc("開催先種別の値")
-@enumDescriptions
+@enumExtensions
 enum VenueKindValue {
   @doc("現地")
   Physical: 1,

@@ -36,7 +36,7 @@ model AdminUser {
 scalar roleName extends string;
 
 @doc("役割の値")
-@IsekaiObservatory.Shared.enumDescriptions
+@IsekaiObservatory.Shared.enumExtensions
 enum RoleValue {
   @doc("特権")
   Privilege: 1,
@@ -59,7 +59,7 @@ model Role {
 scalar permissionName extends string;
 
 @doc("権限の値")
-@IsekaiObservatory.Shared.enumDescriptions
+@IsekaiObservatory.Shared.enumExtensions
 enum PermissionValue {
   @doc("管理ユーザー閲覧")
   ReadAdminUser: "read_admin_user",

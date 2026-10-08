@@ -53,7 +53,7 @@ model GatewayTimeout {
 
 @doc("エラー分類を表す機械可読なコード")
 @friendlyName("ErrorCode")
-@enumDescriptions
+@enumExtensions
 enum ErrorCode {
   @doc("認証されていない (401)")
   Unauthenticated: "unauthenticated",

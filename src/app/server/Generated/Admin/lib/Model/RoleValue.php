@@ -43,17 +43,17 @@ enum RoleValue: int
     /**
      * 特権
      */
-    case NUMBER_1 = 1;
+    case PRIVILEGE = 1;
 
     /**
      * コンソール
      */
-    case NUMBER_2 = 2;
+    case CONSOLE = 2;
 
     /**
      * 一般
      */
-    case NUMBER_3 = 3;
+    case GENERAL = 3;
 
 }
 

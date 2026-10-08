@@ -10,6 +10,7 @@ import "./site-stats";
 import "./songs";
 
 using Http;
+using IsekaiObservatory.Shared;
 using Versioning;
 
 @service(#{ title: "ヰ世界観測所 API" })
@@ -23,7 +24,7 @@ using Versioning;
 @versioned(Version)
 namespace IsekaiObservatory.Viewer;
 
-@IsekaiObservatory.Shared.enumDescriptions
+@enumExtensions
 enum Version {
   @doc("バージョン 1")
   v1,

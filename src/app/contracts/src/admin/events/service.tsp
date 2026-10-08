@@ -10,7 +10,7 @@ using Http;
 namespace IsekaiObservatory.Admin;
 
 @doc("イベント検索のソート条件")
-@enumDescriptions
+@enumExtensions
 enum EventSearchSortBy {
   @doc("開催時期")
   schedule: "schedule",
