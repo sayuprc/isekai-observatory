@@ -39,9 +39,6 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
  */
 enum IsekaiObservatoryViewerVersion: string
 {
-    /**
-     * Possible values of this enum
-     */
     case V1 = 'v1';
 
 }

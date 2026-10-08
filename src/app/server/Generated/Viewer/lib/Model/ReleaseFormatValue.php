@@ -41,9 +41,6 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
 enum ReleaseFormatValue: int
 {
     /**
-     * Possible values of this enum
-     */
-    /**
      * 配信
      */
     case NUMBER_1 = 1;

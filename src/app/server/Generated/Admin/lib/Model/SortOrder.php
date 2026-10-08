@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum SortOrder: string
 {
-    /**
-     * Possible values of this enum
-     */
     case ASC = 'asc';
 
     case DESC = 'desc';

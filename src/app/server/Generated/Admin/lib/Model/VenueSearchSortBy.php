@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum VenueSearchSortBy: string
 {
-    /**
-     * Possible values of this enum
-     */
     case NAME = 'name';
 
 }

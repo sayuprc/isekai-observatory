@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum PerPage: int
 {
-    /**
-     * Possible values of this enum
-     */
     case NUMBER_25 = 25;
 
     case NUMBER_50 = 50;

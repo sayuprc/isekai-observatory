@@ -41,9 +41,6 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
 enum ReleaseGroupTypeValue: int
 {
     /**
-     * Possible values of this enum
-     */
-    /**
      * シングル
      */
     case NUMBER_1 = 1;

@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum VenueKindValue: int
 {
-    /**
-     * Possible values of this enum
-     */
     case NUMBER_1 = 1;
 
     case NUMBER_2 = 2;

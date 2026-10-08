@@ -41,9 +41,6 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
 enum VenueKindValue: int
 {
     /**
-     * Possible values of this enum
-     */
-    /**
      * 現地
      */
     case NUMBER_1 = 1;

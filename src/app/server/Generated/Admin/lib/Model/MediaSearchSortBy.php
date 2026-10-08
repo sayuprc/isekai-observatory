@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum MediaSearchSortBy: string
 {
-    /**
-     * Possible values of this enum
-     */
     case PUBLISHED_AT = 'published_at';
 
     case TITLE = 'title';

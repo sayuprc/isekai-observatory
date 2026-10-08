@@ -39,9 +39,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum IsekaiObservatoryAdminVersion: string
 {
-    /**
-     * Possible values of this enum
-     */
     case V1 = 'v1';
 
 }

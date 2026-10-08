@@ -41,9 +41,6 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
 enum MediaTypeValue: int
 {
     /**
-     * Possible values of this enum
-     */
-    /**
      * MV
      */
     case NUMBER_1 = 1;

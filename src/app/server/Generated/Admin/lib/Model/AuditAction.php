@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum AuditAction: string
 {
-    /**
-     * Possible values of this enum
-     */
     case CREATE = 'create';
 
     case UPDATE = 'update';

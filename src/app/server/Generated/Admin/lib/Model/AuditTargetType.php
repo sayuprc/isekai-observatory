@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum AuditTargetType: string
 {
-    /**
-     * Possible values of this enum
-     */
     case ADMIN_USER = 'AdminUser';
 
     case MEDIA = 'Media';

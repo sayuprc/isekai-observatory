@@ -39,9 +39,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum SongPersonRole: int
 {
-    /**
-     * Possible values of this enum
-     */
     case NUMBER_1 = 1;
 
     case NUMBER_2 = 2;

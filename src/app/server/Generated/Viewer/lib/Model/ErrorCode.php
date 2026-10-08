@@ -40,9 +40,6 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
  */
 enum ErrorCode: string
 {
-    /**
-     * Possible values of this enum
-     */
     case UNAUTHENTICATED = 'unauthenticated';
 
     case PERMISSION_DENIED = 'permission_denied';

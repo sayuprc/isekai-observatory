@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum PermissionValue: string
 {
-    /**
-     * Possible values of this enum
-     */
     case READ_ADMIN_USER = 'read_admin_user';
 
     case WRITE_ADMIN_USER = 'write_admin_user';

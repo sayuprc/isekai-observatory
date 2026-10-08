@@ -41,9 +41,6 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
 enum EventTypeValue: int
 {
     /**
-     * Possible values of this enum
-     */
-    /**
      * ライブ
      */
     case NUMBER_1 = 1;

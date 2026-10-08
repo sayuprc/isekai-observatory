@@ -40,9 +40,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum SongTagSearchSortBy: string
 {
-    /**
-     * Possible values of this enum
-     */
     case NAME = 'name';
 
     case ORDER_NO = 'order_no';

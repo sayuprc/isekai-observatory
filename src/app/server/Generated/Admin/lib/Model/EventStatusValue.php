@@ -41,9 +41,6 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum EventStatusValue: int
 {
     /**
-     * Possible values of this enum
-     */
-    /**
      * 通常
      */
     case NUMBER_1 = 1;
