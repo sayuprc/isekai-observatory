@@ -56,7 +56,7 @@ allowBuilds:
   unrs-resolver: false
   workerd: false
 overrides:
-  file-type@>=13.0.0 <21.3.1: 21.3.1
+  file-type@>=13.0.0 <21.3.1: 21.3.2
   http-cache-semantics@<=4.2.0: 4.3.0
   js-yaml@>=4.0.0 <4.3.2: 4.3.2
   seroval@<=1.6.2: 1.6.3
@@ -64,3 +64,5 @@ overrides:
   undici@>=7.0.0 <7.29.1: 7.29.1
 minimumReleaseAgeExclude:
   - http-cache-semantics@4.3.0
+  # Renovate security update: file-type@21.3.2
+  - file-type@21.3.2
