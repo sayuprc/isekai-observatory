@@ -3410,6 +3410,15 @@ components:
         - recovery_code_issue
         - recovery_code_use
       description: 監査ログの操作種別
+      x-enum-descriptions:
+        - 作成
+        - 更新
+        - 削除
+        - 登録
+        - ログイン
+        - リフレッシュ
+        - リカバリーコード発行
+        - リカバリーコード使用
     AuditLog:
       type: object
       required:
@@ -3503,6 +3512,17 @@ components:
         - Venue
         - Event
       description: 監査ログの対象種別
+      x-enum-descriptions:
+        - 管理ユーザー
+        - メディア
+        - 人物
+        - 人物グループ
+        - リリース
+        - リリースグループ
+        - 楽曲
+        - 楽曲タグ
+        - 開催先
+        - イベント
     ErrorCode:
       type: string
       enum:
@@ -3513,6 +3533,13 @@ components:
         - business_rule_violation
         - internal_error
       description: エラー分類を表す機械可読なコード
+      x-enum-descriptions:
+        - 認証されていない (401)
+        - 権限がない (403)
+        - 対象が見つからない (404)
+        - 入力形式の検証に失敗した (422)
+        - 業務ルールに違反した (400)
+        - 予期しないエラーが発生した (500)
     ErrorDetail:
       type: object
       required:
@@ -3708,6 +3735,9 @@ components:
         - schedule
         - title
       description: イベント検索のソート条件
+      x-enum-descriptions:
+        - 開催時期
+        - タイトル
     EventSource:
       type: object
       required:
@@ -3892,6 +3922,8 @@ components:
       type: string
       enum:
         - v1
+      x-enum-descriptions:
+        - バージョン 1
     IsekaiObservatory.Packages.Event.EventSchedule:
       type: object
       required:
@@ -4044,6 +4076,9 @@ components:
         - published_at
         - title
       description: メディア検索のソート条件
+      x-enum-descriptions:
+        - 公開日
+        - タイトル
     MediaSummary:
       type: object
       required:
@@ -4160,6 +4195,10 @@ components:
         - 50
         - 100
       description: 1ページあたりの件数
+      x-enum-descriptions:
+        - 25 件
+        - 50 件
+        - 100 件
     PerformancePerson:
       type: object
       required:
@@ -4226,6 +4265,21 @@ components:
         - read_event
         - write_event
       description: 権限の値
+      x-enum-descriptions:
+        - 管理ユーザー閲覧
+        - 管理ユーザー編集
+        - 人物閲覧
+        - 人物編集
+        - 楽曲閲覧
+        - 楽曲編集
+        - メディア閲覧
+        - メディア編集
+        - リリース閲覧
+        - リリース編集
+        - 開催先閲覧
+        - 開催先編集
+        - イベント閲覧
+        - イベント編集
     Person:
       type: object
       required:
@@ -4408,6 +4462,9 @@ components:
         - name
         - order_no
       description: 人物検索のソート条件
+      x-enum-descriptions:
+        - 人物名
+        - 表示順
     PersonSummary:
       type: object
       required:
@@ -4664,6 +4721,12 @@ components:
         - 4
         - 99
       description: 提供形態
+      x-enum-descriptions:
+        - 配信
+        - CD
+        - DVD
+        - Blu-ray
+        - その他
     ReleaseGetResponse:
       type: object
       required:
@@ -4788,6 +4851,9 @@ components:
         - first_released_on
         - title
       description: リリースグループ検索のソート条件
+      x-enum-descriptions:
+        - 初リリース日
+        - タイトル
     ReleaseGroupSummary:
       type: object
       required:
@@ -4835,6 +4901,11 @@ components:
         - 3
         - 99
       description: リリースグループ種別
+      x-enum-descriptions:
+        - シングル
+        - アルバム
+        - EP
+        - その他
     ReleaseGroupUpdateRequest:
       type: object
       required:
@@ -5072,6 +5143,10 @@ components:
         - 2
         - 3
       description: 役割の値
+      x-enum-descriptions:
+        - 特権
+        - コンソール
+        - 一般
     SetlistItem:
       type: object
       required:
@@ -5307,6 +5382,10 @@ components:
         - 1
         - 2
         - 3
+      x-enum-descriptions:
+        - 作詞
+        - 作曲
+        - 編曲
     SongSearchResponse:
       type: object
       required:
@@ -5326,12 +5405,18 @@ components:
         - title
         - order_no
       description: 楽曲検索のソート条件
+      x-enum-descriptions:
+        - 楽曲名
+        - 表示順
     SongSearchTypeValue:
       type: string
       enum:
         - '1'
         - '2'
       description: 楽曲検索API用の楽曲種別
+      x-enum-descriptions:
+        - オリジナル曲
+        - カバー曲
     SongSummary:
       type: object
       required:
@@ -5449,6 +5534,9 @@ components:
         - name
         - order_no
       description: 楽曲タグ検索のソート条件
+      x-enum-descriptions:
+        - 楽曲タグ名
+        - 表示順
     SongTagSummary:
       type: object
       required:
@@ -5569,6 +5657,9 @@ components:
         - asc
         - desc
       description: ソート順
+      x-enum-descriptions:
+        - 昇順
+        - 降順
     Track:
       type: object
       required:
@@ -5650,6 +5741,9 @@ components:
         - 1
         - 2
       description: 開催先種別の値
+      x-enum-descriptions:
+        - 現地
+        - オンライン
     VenueSearchResponse:
       type: object
       required:
@@ -5668,6 +5762,8 @@ components:
       enum:
         - name
       description: 開催先検索のソート条件
+      x-enum-descriptions:
+        - 開催先名
     VenueSummary:
       type: object
       required:
@@ -5708,6 +5804,8 @@ components:
       type: string
       enum:
         - v1
+      x-enum-descriptions:
+        - バージョン 1
     accessToken:
       type: string
       format: password

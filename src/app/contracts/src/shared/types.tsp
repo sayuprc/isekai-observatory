@@ -22,16 +22,26 @@ scalar page extends int32;
 
 @doc("ソート順")
 @friendlyName("SortOrder")
+@enumDescriptions
 enum SortOrder {
+  @doc("昇順")
   asc: "asc",
+
+  @doc("降順")
   desc: "desc",
 }
 
 @doc("1ページあたりの件数")
 @friendlyName("PerPage")
+@enumDescriptions
 enum PerPage {
+  @doc("25 件")
   twentyFive: 25,
+
+  @doc("50 件")
   fifty: 50,
+
+  @doc("100 件")
   oneHundred: 100,
 }
 

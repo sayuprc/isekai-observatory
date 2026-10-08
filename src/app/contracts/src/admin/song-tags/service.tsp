@@ -8,8 +8,12 @@ using Http;
 namespace IsekaiObservatory.Admin;
 
 @doc("楽曲タグ検索のソート条件")
+@enumDescriptions
 enum SongTagSearchSortBy {
+  @doc("楽曲タグ名")
   name: "name",
+
+  @doc("表示順")
   orderNo: "order_no",
 }
 

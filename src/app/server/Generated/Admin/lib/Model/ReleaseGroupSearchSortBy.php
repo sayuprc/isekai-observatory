@@ -40,8 +40,14 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum ReleaseGroupSearchSortBy: string
 {
+    /**
+     * 初リリース日
+     */
     case FIRST_RELEASED_ON = 'first_released_on';
 
+    /**
+     * タイトル
+     */
     case TITLE = 'title';
 
 }

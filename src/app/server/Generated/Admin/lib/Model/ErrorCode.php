@@ -40,16 +40,34 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum ErrorCode: string
 {
+    /**
+     * 認証されていない (401)
+     */
     case UNAUTHENTICATED = 'unauthenticated';
 
+    /**
+     * 権限がない (403)
+     */
     case PERMISSION_DENIED = 'permission_denied';
 
+    /**
+     * 対象が見つからない (404)
+     */
     case NOT_FOUND = 'not_found';
 
+    /**
+     * 入力形式の検証に失敗した (422)
+     */
     case VALIDATION_FAILED = 'validation_failed';
 
+    /**
+     * 業務ルールに違反した (400)
+     */
     case BUSINESS_RULE_VIOLATION = 'business_rule_violation';
 
+    /**
+     * 予期しないエラーが発生した (500)
+     */
     case INTERNAL_ERROR = 'internal_error';
 
 }

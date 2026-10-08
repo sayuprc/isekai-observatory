@@ -40,8 +40,14 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum VenueKindValue: int
 {
+    /**
+     * 現地
+     */
     case NUMBER_1 = 1;
 
+    /**
+     * オンライン
+     */
     case NUMBER_2 = 2;
 
 }

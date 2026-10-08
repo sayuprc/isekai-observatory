@@ -89,9 +89,15 @@ model SongSummary {
   releaseCount: int32;
 }
 
+@IsekaiObservatory.Shared.enumDescriptions
 enum SongPersonRole {
+  @doc("作詞")
   Lyricist: 1,
+
+  @doc("作曲")
   Composer: 2,
+
+  @doc("編曲")
   Arranger: 3,
 }
 

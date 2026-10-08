@@ -39,6 +39,9 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
  */
 enum Version: string
 {
+    /**
+     * バージョン 1
+     */
     case V1 = 'v1';
 
 }

@@ -40,14 +40,29 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum ReleaseFormatValue: int
 {
+    /**
+     * 配信
+     */
     case NUMBER_1 = 1;
 
+    /**
+     * CD
+     */
     case NUMBER_2 = 2;
 
+    /**
+     * DVD
+     */
     case NUMBER_3 = 3;
 
+    /**
+     * Blu-ray
+     */
     case NUMBER_4 = 4;
 
+    /**
+     * その他
+     */
     case NUMBER_99 = 99;
 
 }

@@ -40,20 +40,44 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum AuditAction: string
 {
+    /**
+     * 作成
+     */
     case CREATE = 'create';
 
+    /**
+     * 更新
+     */
     case UPDATE = 'update';
 
+    /**
+     * 削除
+     */
     case DELETE = 'delete';
 
+    /**
+     * 登録
+     */
     case REGISTER = 'register';
 
+    /**
+     * ログイン
+     */
     case LOGIN = 'login';
 
+    /**
+     * リフレッシュ
+     */
     case REFRESH = 'refresh';
 
+    /**
+     * リカバリーコード発行
+     */
     case RECOVERY_CODE_ISSUE = 'recovery_code_issue';
 
+    /**
+     * リカバリーコード使用
+     */
     case RECOVERY_CODE_USE = 'recovery_code_use';
 
 }

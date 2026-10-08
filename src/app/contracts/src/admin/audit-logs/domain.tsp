@@ -8,28 +8,64 @@ namespace IsekaiObservatory.Admin;
 scalar auditLogId extends uuid;
 
 @doc("監査ログの操作種別")
+@IsekaiObservatory.Shared.enumDescriptions
 enum AuditAction {
+  @doc("作成")
   create: "create",
+
+  @doc("更新")
   update: "update",
+
+  @doc("削除")
   delete: "delete",
+
+  @doc("登録")
   register: "register",
+
+  @doc("ログイン")
   login: "login",
+
+  @doc("リフレッシュ")
   refresh: "refresh",
+
+  @doc("リカバリーコード発行")
   recoveryCodeIssue: "recovery_code_issue",
+
+  @doc("リカバリーコード使用")
   recoveryCodeUse: "recovery_code_use",
 }
 
 @doc("監査ログの対象種別")
+@IsekaiObservatory.Shared.enumDescriptions
 enum AuditTargetType {
+  @doc("管理ユーザー")
   adminUser: "AdminUser",
+
+  @doc("メディア")
   media: "Media",
+
+  @doc("人物")
   person: "Person",
+
+  @doc("人物グループ")
   personGroup: "PersonGroup",
+
+  @doc("リリース")
   release: "Release",
+
+  @doc("リリースグループ")
   releaseGroup: "ReleaseGroup",
+
+  @doc("楽曲")
   song: "Song",
+
+  @doc("楽曲タグ")
   songTag: "SongTag",
+
+  @doc("開催先")
   venue: "Venue",
+
+  @doc("イベント")
   event: "Event",
 }
 

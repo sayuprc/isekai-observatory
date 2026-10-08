@@ -40,8 +40,14 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
  */
 enum SongSearchSortBy: string
 {
+    /**
+     * 楽曲名
+     */
     case TITLE = 'title';
 
+    /**
+     * 表示順
+     */
     case ORDER_NO = 'order_no';
 
 }
