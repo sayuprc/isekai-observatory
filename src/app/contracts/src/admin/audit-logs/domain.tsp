@@ -8,7 +8,7 @@ namespace IsekaiObservatory.Admin;
 scalar auditLogId extends uuid;
 
 @doc("監査ログの操作種別")
-@IsekaiObservatory.Shared.enumDescriptions
+@IsekaiObservatory.Shared.enumExtensions
 enum AuditAction {
   @doc("作成")
   create: "create",
@@ -36,7 +36,7 @@ enum AuditAction {
 }
 
 @doc("監査ログの対象種別")
-@IsekaiObservatory.Shared.enumDescriptions
+@IsekaiObservatory.Shared.enumExtensions
 enum AuditTargetType {
   @doc("管理ユーザー")
   adminUser: "AdminUser",

@@ -193,6 +193,13 @@ components:
         - business_rule_violation
         - internal_error
       description: エラー分類を表す機械可読なコード
+      x-enum-varnames:
+        - Unauthenticated
+        - PermissionDenied
+        - NotFound
+        - ValidationFailed
+        - BusinessRuleViolation
+        - InternalError
       x-enum-descriptions:
         - 認証されていない (401)
         - 権限がない (403)
@@ -354,6 +361,10 @@ components:
         - 2
         - 3
       description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+      x-enum-varnames:
+        - Normal
+        - Postponed
+        - Cancelled
       x-enum-descriptions:
         - 通常
         - 延期
@@ -368,6 +379,12 @@ components:
         - 4
         - 99
       description: イベント種別
+      x-enum-varnames:
+        - Live
+        - Stream
+        - Exhibition
+        - Radio
+        - Other
       x-enum-descriptions:
         - ライブ
         - 配信
@@ -405,6 +422,8 @@ components:
     IsekaiObservatory.Viewer.Version:
       type: string
       enum:
+        - v1
+      x-enum-varnames:
         - v1
       x-enum-descriptions:
         - バージョン 1
@@ -510,6 +529,13 @@ components:
         - 5
         - 99
       description: メディア種別の値
+      x-enum-varnames:
+        - Mv
+        - AudioVideo
+        - LiveStream
+        - Short
+        - Post
+        - Other
       x-enum-descriptions:
         - MV
         - 音源動画
@@ -562,6 +588,12 @@ components:
         - 4
         - 99
       description: 提供形態の値
+      x-enum-varnames:
+        - Digital
+        - Cd
+        - Dvd
+        - BluRay
+        - Other
       x-enum-descriptions:
         - 配信
         - CD
@@ -640,6 +672,11 @@ components:
         - 3
         - 99
       description: リリースグループ種別の値
+      x-enum-varnames:
+        - Single
+        - Album
+        - Ep
+        - Other
       x-enum-descriptions:
         - シングル
         - アルバム
@@ -978,6 +1015,9 @@ components:
         - 1
         - 2
       description: 楽曲種別の値
+      x-enum-varnames:
+        - Original
+        - Cover
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
@@ -988,12 +1028,17 @@ components:
         - 1
         - 2
       description: 開催先種別の値
+      x-enum-varnames:
+        - Physical
+        - Online
       x-enum-descriptions:
         - 現地
         - オンライン
     Version:
       type: string
       enum:
+        - v1
+      x-enum-varnames:
         - v1
       x-enum-descriptions:
         - バージョン 1

@@ -8,7 +8,7 @@ using Http;
 namespace IsekaiObservatory.Admin;
 
 @doc("楽曲検索のソート条件")
-@enumDescriptions
+@enumExtensions
 enum SongSearchSortBy {
   @doc("楽曲名")
   title: "title",
@@ -18,7 +18,7 @@ enum SongSearchSortBy {
 }
 
 @doc("楽曲検索API用の楽曲種別")
-@enumDescriptions
+@enumExtensions
 enum SongSearchTypeValue {
   @doc("オリジナル曲")
   Original: "1",

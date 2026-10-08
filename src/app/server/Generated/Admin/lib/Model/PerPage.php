@@ -43,17 +43,17 @@ enum PerPage: int
     /**
      * 25 件
      */
-    case NUMBER_25 = 25;
+    case TWENTY_FIVE = 25;
 
     /**
      * 50 件
      */
-    case NUMBER_50 = 50;
+    case FIFTY = 50;
 
     /**
      * 100 件
      */
-    case NUMBER_100 = 100;
+    case ONE_HUNDRED = 100;
 
 }
 

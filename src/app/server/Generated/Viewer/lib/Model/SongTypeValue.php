@@ -43,12 +43,12 @@ enum SongTypeValue: int
     /**
      * オリジナル曲
      */
-    case NUMBER_1 = 1;
+    case ORIGINAL = 1;
 
     /**
      * カバー曲
      */
-    case NUMBER_2 = 2;
+    case COVER = 2;
 
 }
 

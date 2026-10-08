@@ -43,27 +43,27 @@ enum EventTypeValue: int
     /**
      * ライブ
      */
-    case NUMBER_1 = 1;
+    case LIVE = 1;
 
     /**
      * 配信
      */
-    case NUMBER_2 = 2;
+    case STREAM = 2;
 
     /**
      * 展覧会
      */
-    case NUMBER_3 = 3;
+    case EXHIBITION = 3;
 
     /**
      * ラジオ
      */
-    case NUMBER_4 = 4;
+    case RADIO = 4;
 
     /**
      * その他
      */
-    case NUMBER_99 = 99;
+    case OTHER = 99;
 
 }
 

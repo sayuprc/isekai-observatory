@@ -52,7 +52,7 @@ scalar performanceCreditName extends string;
 
 @doc("イベント種別")
 @friendlyName("EventTypeValue")
-@enumDescriptions
+@enumExtensions
 enum EventTypeValue {
   @doc("ライブ")
   Live: 1,
@@ -84,7 +84,7 @@ model EventType {
 
 @doc("イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する")
 @friendlyName("EventStatusValue")
-@enumDescriptions
+@enumExtensions
 enum EventStatusValue {
   @doc("通常")
   Normal: 1,

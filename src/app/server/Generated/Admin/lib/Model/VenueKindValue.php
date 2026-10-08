@@ -43,12 +43,12 @@ enum VenueKindValue: int
     /**
      * 現地
      */
-    case NUMBER_1 = 1;
+    case PHYSICAL = 1;
 
     /**
      * オンライン
      */
-    case NUMBER_2 = 2;
+    case ONLINE = 2;
 
 }
 

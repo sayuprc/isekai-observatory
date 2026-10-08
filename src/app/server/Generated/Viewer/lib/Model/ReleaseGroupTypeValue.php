@@ -43,22 +43,22 @@ enum ReleaseGroupTypeValue: int
     /**
      * シングル
      */
-    case NUMBER_1 = 1;
+    case SINGLE = 1;
 
     /**
      * アルバム
      */
-    case NUMBER_2 = 2;
+    case ALBUM = 2;
 
     /**
      * EP
      */
-    case NUMBER_3 = 3;
+    case EP = 3;
 
     /**
      * その他
      */
-    case NUMBER_99 = 99;
+    case OTHER = 99;
 
 }
 

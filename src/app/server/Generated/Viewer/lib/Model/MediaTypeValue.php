@@ -43,32 +43,32 @@ enum MediaTypeValue: int
     /**
      * MV
      */
-    case NUMBER_1 = 1;
+    case MV = 1;
 
     /**
      * 音源動画
      */
-    case NUMBER_2 = 2;
+    case AUDIO_VIDEO = 2;
 
     /**
      * 配信
      */
-    case NUMBER_3 = 3;
+    case LIVE_STREAM = 3;
 
     /**
      * ショート
      */
-    case NUMBER_4 = 4;
+    case SHORT = 4;
 
     /**
      * 投稿
      */
-    case NUMBER_5 = 5;
+    case POST = 5;
 
     /**
      * その他
      */
-    case NUMBER_99 = 99;
+    case OTHER = 99;
 
 }
 
