@@ -26,6 +26,12 @@ pub suberror ParseError {
   InvalidBase64(String)
   InvalidPayload(String)
 } derive(Eq, @debug.Debug)
+#deprecated
+pub fn ParseError::equal(Self, Self) -> Bool
+#deprecated
+pub fn ParseError::not_equal(Self, Self) -> Bool
+#deprecated
+pub fn ParseError::to_repr(Self) -> @debug.Repr
 pub fn ParseError::to_string(Self) -> String
 
 // Types and methods
@@ -42,14 +48,26 @@ pub(all) struct Config {
   cloud_build_trigger_name : String
   port : Int
 } derive(Eq, @debug.Debug)
+#deprecated
+pub fn Config::equal(Self, Self) -> Bool
 pub fn Config::from_env() -> Self raise
+#deprecated
+pub fn Config::not_equal(Self, Self) -> Bool
 pub fn Config::resolve_channel(Self, String) -> String
 pub fn Config::resolve_webhook_url(Self, String) -> String?
+#deprecated
+pub fn Config::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Outcome {
   Ack
   Retry(String)
 } derive(Eq, @debug.Debug)
+#deprecated
+pub fn Outcome::equal(Self, Self) -> Bool
+#deprecated
+pub fn Outcome::not_equal(Self, Self) -> Bool
+#deprecated
+pub fn Outcome::to_repr(Self) -> @debug.Repr
 
 pub struct StartedBuildDeduper {
   seen : @hashset.HashSet[String]

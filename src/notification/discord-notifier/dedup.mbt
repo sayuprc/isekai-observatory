@@ -7,7 +7,7 @@ pub struct StartedBuildDeduper {
 
 ///|
 pub fn StartedBuildDeduper::new() -> StartedBuildDeduper {
-  { seen: @hashset.HashSet([]) }
+  { seen: @hashset.HashSet([]), }
 }
 
 ///|

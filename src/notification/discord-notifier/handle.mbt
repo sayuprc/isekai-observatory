@@ -6,7 +6,7 @@ pub struct App {
 
 ///|
 pub fn App::new(config : Config) -> App {
-  { config, deduper: StartedBuildDeduper::new() }
+  { config, deduper: StartedBuildDeduper::new(), }
 }
 
 ///|

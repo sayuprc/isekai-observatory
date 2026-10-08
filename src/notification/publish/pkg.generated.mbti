@@ -26,8 +26,14 @@ pub(all) struct Config {
   metadata_base_url : String
 } derive(Eq, @debug.Debug)
 pub fn Config::access_token_url(Self) -> String
+#deprecated
+pub fn Config::equal(Self, Self) -> Bool
 pub fn Config::from_env() -> Self raise
+#deprecated
+pub fn Config::not_equal(Self, Self) -> Bool
 pub fn Config::publish_url(Self) -> String
+#deprecated
+pub fn Config::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 

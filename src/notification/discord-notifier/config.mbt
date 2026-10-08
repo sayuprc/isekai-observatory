@@ -7,6 +7,14 @@ pub(all) struct Config {
 } derive(Eq, Debug)
 
 ///|
+#deprecated
+pub extend Config with Eq::{not_equal, equal}
+
+///|
+#deprecated
+pub extend Config with @debug.Debug::{to_repr}
+
+///|
 pub fn Config::from_env() -> Config raise {
   let default_channel = match @env.get_env_var("DISCORD_DEFAULT_CHANNEL") {
     Some(value) => if value == "" { "app" } else { value }
@@ -35,7 +43,7 @@ pub fn Config::from_env() -> Config raise {
         _ => raise Failure("PORT must be an integer: \{raw}")
       }
   }
-  { default_channel, action_routing, cloud_build_trigger_name, port }
+  { default_channel, action_routing, cloud_build_trigger_name, port, }
 }
 
 ///|
