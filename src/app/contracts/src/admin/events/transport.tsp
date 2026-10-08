@@ -24,9 +24,9 @@ model EventGetResponse {
 model EventCreateRequest {
   title: eventTitle;
   description: eventDescription;
-  typeValue: EventTypeValue;
+  type: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue;
+  status: EventStatusValue;
   isDisplay: boolean;
   venues: RequestEventVenueLink[];
   media: RequestEventMediaLink[];
@@ -43,9 +43,9 @@ model EventCreateResponse {
 model EventUpdateRequest {
   title: eventTitle;
   description: eventDescription;
-  typeValue: EventTypeValue;
+  type: EventTypeValue;
   schedule: EventSchedule;
-  statusValue: EventStatusValue;
+  status: EventStatusValue;
   isDisplay: boolean;
   venues: RequestEventVenueLink[];
   media: RequestEventMediaLink[];

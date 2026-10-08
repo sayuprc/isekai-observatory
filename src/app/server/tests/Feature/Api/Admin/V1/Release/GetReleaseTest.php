@@ -70,7 +70,7 @@ class GetReleaseTest extends DatabaseTestCase
                     'isDisplay' => true,
                     'orderNo' => 10,
                     // 提供形態は値順で返る (配信=1, CD=2)
-                    'formatValues' => [ReleaseFormat::Digital->value, ReleaseFormat::Cd->value],
+                    'formats' => [ReleaseFormat::Digital->value, ReleaseFormat::Cd->value],
                     'media' => [
                         [
                             'position' => 1,

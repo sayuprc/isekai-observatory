@@ -28,7 +28,7 @@ class Converter
             ->setColor($release->color->value)
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo->value)
-            ->setFormatValues($release->formats->toGeneric()->map(
+            ->setFormats($release->formats->toGeneric()->map(
                 static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
             )->toArray())
             ->setMedia($release->media->toGeneric()->map($this->toOpenApiMedium(...))->toArray());

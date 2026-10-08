@@ -75,7 +75,7 @@ scalar mediumName extends string;
 model ReleaseGroup {
   releaseGroupId: releaseGroupId;
   title: releaseGroupTitle;
-  typeValue: ReleaseGroupTypeValue;
+  type: ReleaseGroupTypeValue;
   description: string;
   isDisplay: boolean;
   orderNo: orderNo;
@@ -85,7 +85,7 @@ model ReleaseGroup {
 model ReleaseGroupSummary {
   releaseGroupId: releaseGroupId;
   title: releaseGroupTitle;
-  typeValue: ReleaseGroupTypeValue;
+  type: ReleaseGroupTypeValue;
   description: string;
   isDisplay: boolean;
   orderNo: orderNo;
@@ -106,7 +106,7 @@ model ReleaseGroupReferencedRelease {
   color: color;
   isDisplay: boolean;
   orderNo: orderNo;
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
 }
 
 @doc("収録曲。songId / title の少なくとも一方を指定する(検証はサーバー側の責務)。songId ありは Song 集約を参照する参照トラックで、title を併記すると表示名を上書きする。songId なしは表示専用のタイトルのみトラック")
@@ -135,7 +135,7 @@ model Release {
   orderNo: orderNo;
 
   @minItems(1)
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
 
   media: Medium[];
 }

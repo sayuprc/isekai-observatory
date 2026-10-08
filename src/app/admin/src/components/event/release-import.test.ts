@@ -17,7 +17,7 @@ const data: Pick<ReleaseGetResponse, 'release' | 'songs'> = {
     color: '#000000',
     isDisplay: true,
     orderNo: 1,
-    formatValues: [2],
+    formats: [2],
     media: [
       {
         position: 1,

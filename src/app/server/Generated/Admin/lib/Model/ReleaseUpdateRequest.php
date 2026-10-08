@@ -63,7 +63,7 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'color' => 'string',
         'is_display' => 'bool',
         'order_no' => 'int',
-        'format_values' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]',
+        'formats' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]',
         'media' => '\OpenAPI\Admin\Client\Model\Medium[]'
     ];
 
@@ -81,7 +81,7 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'color' => null,
         'is_display' => null,
         'order_no' => 'int32',
-        'format_values' => null,
+        'formats' => null,
         'media' => null
     ];
 
@@ -97,7 +97,7 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'color' => false,
         'is_display' => false,
         'order_no' => false,
-        'format_values' => false,
+        'formats' => false,
         'media' => false
     ];
 
@@ -193,7 +193,7 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'color' => 'color',
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo',
-        'format_values' => 'formatValues',
+        'formats' => 'formats',
         'media' => 'media'
     ];
 
@@ -209,7 +209,7 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'color' => 'setColor',
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo',
-        'format_values' => 'setFormatValues',
+        'formats' => 'setFormats',
         'media' => 'setMedia'
     ];
 
@@ -225,7 +225,7 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'color' => 'getColor',
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo',
-        'format_values' => 'getFormatValues',
+        'formats' => 'getFormats',
         'media' => 'getMedia'
     ];
 
@@ -292,7 +292,7 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         $this->setIfExists('color', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
-        $this->setIfExists('format_values', $data ?? [], null);
+        $this->setIfExists('formats', $data ?? [], null);
         $this->setIfExists('media', $data ?? [], null);
     }
 
@@ -349,11 +349,11 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
-        if ($this->container['format_values'] === null) {
-            $invalidProperties[] = "'format_values' can't be null";
+        if ($this->container['formats'] === null) {
+            $invalidProperties[] = "'formats' can't be null";
         }
-        if ((count($this->container['format_values']) < 1)) {
-            $invalidProperties[] = "invalid value for 'format_values', number of items must be greater than or equal to 1.";
+        if ((count($this->container['formats']) < 1)) {
+            $invalidProperties[] = "invalid value for 'formats', number of items must be greater than or equal to 1.";
         }
 
         if ($this->container['media'] === null) {
@@ -547,33 +547,33 @@ class ReleaseUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     }
 
     /**
-     * Gets format_values
+     * Gets formats
      *
      * @return \OpenAPI\Admin\Client\Model\ReleaseFormatValue[]
      */
-    public function getFormatValues()
+    public function getFormats()
     {
-        return $this->container['format_values'];
+        return $this->container['formats'];
     }
 
     /**
-     * Sets format_values
+     * Sets formats
      *
-     * @param \OpenAPI\Admin\Client\Model\ReleaseFormatValue[] $format_values format_values
+     * @param \OpenAPI\Admin\Client\Model\ReleaseFormatValue[] $formats formats
      *
      * @return self
      */
-    public function setFormatValues($format_values)
+    public function setFormats($formats)
     {
-        if (is_null($format_values)) {
-            throw new \InvalidArgumentException('non-nullable format_values cannot be null');
+        if (is_null($formats)) {
+            throw new \InvalidArgumentException('non-nullable formats cannot be null');
         }
 
 
-        if ((count($format_values) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $format_values when calling ReleaseUpdateRequest., number of items must be greater than or equal to 1.');
+        if ((count($formats) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $formats when calling ReleaseUpdateRequest., number of items must be greater than or equal to 1.');
         }
-        $this->container['format_values'] = $format_values;
+        $this->container['formats'] = $formats;
 
         return $this;
     }

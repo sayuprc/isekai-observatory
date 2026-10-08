@@ -30,7 +30,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $result = $this->getInstance()->handle(new UpdateInputData(
             releaseGroupId: $releaseGroupId,
             title: '新タイトル',
-            typeValue: ReleaseGroupType::Single->value,
+            type: ReleaseGroupType::Single->value,
             description: '更新後の説明',
             isDisplay: false,
             orderNo: 3,
@@ -55,7 +55,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $result = $this->getInstance()->handle(new UpdateInputData(
             releaseGroupId: $this->generateUuid(),
             title: '新タイトル',
-            typeValue: ReleaseGroupType::Album->value,
+            type: ReleaseGroupType::Album->value,
             description: '説明',
             isDisplay: true,
             orderNo: 1,

@@ -46,11 +46,11 @@ export const toEventReleases = (
     name: release.name,
     releasedOn: release.releasedOn,
     isDisplay: releaseGroup.isDisplay && release.isDisplay,
-    formatValues: release.formatValues,
+    formats: release.formats,
   }));
 
 export const releaseLabel = (release: EventRelease): string => {
-  const formats = release.formatValues.map((value) => RELEASE_FORMAT_NAMES[value]).join('・');
+  const formats = release.formats.map((value) => RELEASE_FORMAT_NAMES[value]).join('・');
   const name = release.name === '' ? release.releaseGroupTitle : `${release.releaseGroupTitle} ${release.name}`;
 
   return `${name} (${normalizeDateValue(release.releasedOn)} / ${formats})`;

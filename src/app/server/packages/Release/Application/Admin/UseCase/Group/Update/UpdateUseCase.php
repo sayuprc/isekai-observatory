@@ -40,7 +40,7 @@ readonly class UpdateUseCase
             $releaseGroup = $this->service->prepareForUpdate(
                 $inputData->releaseGroupId,
                 $inputData->title,
-                $inputData->typeValue,
+                $inputData->type,
                 $inputData->description,
                 $inputData->isDisplay,
                 $inputData->orderNo,

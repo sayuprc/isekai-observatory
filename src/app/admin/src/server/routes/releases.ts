@@ -8,7 +8,7 @@ import {
 import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
-const formatValuesSchema = t.Array(t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(4), t.Literal(99)]), {
+const formatsSchema = t.Array(t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(4), t.Literal(99)]), {
   minItems: 1,
 });
 
@@ -42,7 +42,7 @@ export const releases = new Elysia({ prefix: '/releases' })
         color: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
-        formatValues: formatValuesSchema,
+        formats: formatsSchema,
         media: mediaSchema,
       }),
     },
@@ -80,7 +80,7 @@ export const releases = new Elysia({ prefix: '/releases' })
         color: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
-        formatValues: formatValuesSchema,
+        formats: formatsSchema,
         media: mediaSchema,
       }),
     },

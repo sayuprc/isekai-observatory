@@ -39,7 +39,7 @@ class CreateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => 'https://example.com/lyrics',
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'persons' => [
                     ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
@@ -110,7 +110,7 @@ class CreateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'persons' => [],
                 'tags' => [],
@@ -128,7 +128,7 @@ class CreateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'persons' => [],
                 'tags' => [['songTagId' => $this->generateUuid()]],
@@ -147,7 +147,7 @@ class CreateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'persons' => [],
                 'tags' => [
@@ -171,7 +171,7 @@ class CreateSongTest extends DatabaseTestCase
                 'title' => '',
                 'description' => '',
                 'lyricsLink' => null,
-                'typeValue' => 0,
+                'type' => 0,
                 'isDisplay' => true,
                 'persons' => [],
                 'tags' => [],
@@ -184,7 +184,7 @@ class CreateSongTest extends DatabaseTestCase
                     ->has('details', 2)
                     ->where('details.0.field', 'title')
                     ->whereType('details.0.message', 'string')
-                    ->where('details.1.field', 'typeValue')
+                    ->where('details.1.field', 'type')
                     ->whereType('details.1.message', 'string'),
             );
     }

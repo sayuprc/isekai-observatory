@@ -3612,9 +3612,9 @@ components:
       required:
         - title
         - description
-        - typeValue
+        - type
         - schedule
-        - statusValue
+        - status
         - isDisplay
         - venues
         - media
@@ -3627,11 +3627,11 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
-        typeValue:
+        type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
-        statusValue:
+        status:
           $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
@@ -3682,7 +3682,7 @@ components:
         - name
         - releasedOn
         - isDisplay
-        - formatValues
+        - formats
       properties:
         releaseId:
           $ref: '#/components/schemas/releaseId'
@@ -3696,7 +3696,7 @@ components:
           $ref: '#/components/schemas/releasedOn'
         isDisplay:
           type: boolean
-        formatValues:
+        formats:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseFormatValue'
@@ -3827,9 +3827,9 @@ components:
       required:
         - title
         - description
-        - typeValue
+        - type
         - schedule
-        - statusValue
+        - status
         - isDisplay
         - venues
         - media
@@ -3842,11 +3842,11 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
-        typeValue:
+        type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
-        statusValue:
+        status:
           $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
@@ -3983,7 +3983,7 @@ components:
         - title
         - url
         - publishedAt
-        - typeValue
+        - type
         - isDisplay
       properties:
         title:
@@ -3992,7 +3992,7 @@ components:
           $ref: '#/components/schemas/mediaUrl'
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
-        typeValue:
+        type:
           $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
@@ -4120,7 +4120,7 @@ components:
         - title
         - url
         - publishedAt
-        - typeValue
+        - type
         - isDisplay
       properties:
         title:
@@ -4129,7 +4129,7 @@ components:
           $ref: '#/components/schemas/mediaUrl'
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
-        typeValue:
+        type:
           $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
@@ -4622,7 +4622,7 @@ components:
         - color
         - isDisplay
         - orderNo
-        - formatValues
+        - formats
         - media
       properties:
         releaseId:
@@ -4641,7 +4641,7 @@ components:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
-        formatValues:
+        formats:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseFormatValue'
@@ -4661,7 +4661,7 @@ components:
         - color
         - isDisplay
         - orderNo
-        - formatValues
+        - formats
         - media
       properties:
         releaseGroupId:
@@ -4678,7 +4678,7 @@ components:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
-        formatValues:
+        formats:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseFormatValue'
@@ -4737,7 +4737,7 @@ components:
       required:
         - releaseGroupId
         - title
-        - typeValue
+        - type
         - description
         - isDisplay
         - orderNo
@@ -4746,7 +4746,7 @@ components:
           $ref: '#/components/schemas/releaseGroupId'
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
@@ -4759,14 +4759,14 @@ components:
       type: object
       required:
         - title
-        - typeValue
+        - type
         - description
         - isDisplay
         - orderNo
       properties:
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
@@ -4802,7 +4802,7 @@ components:
         - color
         - isDisplay
         - orderNo
-        - formatValues
+        - formats
       properties:
         releaseId:
           $ref: '#/components/schemas/releaseId'
@@ -4816,7 +4816,7 @@ components:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
-        formatValues:
+        formats:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseFormatValue'
@@ -4851,7 +4851,7 @@ components:
       required:
         - releaseGroupId
         - title
-        - typeValue
+        - type
         - description
         - isDisplay
         - orderNo
@@ -4863,7 +4863,7 @@ components:
           $ref: '#/components/schemas/releaseGroupId'
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
@@ -4907,14 +4907,14 @@ components:
       type: object
       required:
         - title
-        - typeValue
+        - type
         - description
         - isDisplay
         - orderNo
       properties:
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
@@ -4957,7 +4957,7 @@ components:
         - color
         - isDisplay
         - orderNo
-        - formatValues
+        - formats
         - media
       properties:
         name:
@@ -4972,7 +4972,7 @@ components:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
-        formatValues:
+        formats:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseFormatValue'
@@ -5242,7 +5242,7 @@ components:
         - title
         - description
         - lyricsLink
-        - typeValue
+        - type
         - isDisplay
         - persons
         - tags
@@ -5256,7 +5256,7 @@ components:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
             - type: 'null'
-        typeValue:
+        type:
           $ref: '#/components/schemas/SongTypeValue'
         isDisplay:
           type: boolean
@@ -5585,7 +5585,7 @@ components:
         - title
         - description
         - lyricsLink
-        - typeValue
+        - type
         - isDisplay
         - orderNo
         - persons
@@ -5600,7 +5600,7 @@ components:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
             - type: 'null'
-        typeValue:
+        type:
           $ref: '#/components/schemas/SongTypeValue'
         isDisplay:
           type: boolean

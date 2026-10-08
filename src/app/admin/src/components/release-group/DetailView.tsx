@@ -25,8 +25,8 @@ const ReleaseNameLink = (props: { release: ReleaseGroupReferencedRelease }) => (
 
 const ReleaseFormatBadges = (props: { release: ReleaseGroupReferencedRelease }) => (
   <div class="flex flex-wrap gap-1">
-    <Show when={props.release.formatValues.length > 0} fallback={<span class="text-sm text-base-content/60">—</span>}>
-      <For each={props.release.formatValues}>
+    <Show when={props.release.formats.length > 0} fallback={<span class="text-sm text-base-content/60">—</span>}>
+      <For each={props.release.formats}>
         {(formatValue) => <span class="badge badge-outline badge-sm">{RELEASE_FORMAT_NAMES[formatValue]}</span>}
       </For>
     </Show>

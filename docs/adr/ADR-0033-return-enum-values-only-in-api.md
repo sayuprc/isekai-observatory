@@ -19,6 +19,7 @@ ADR-0032 で Viewer API は種別や状態を数値だけで返すようにし�
 
 - Admin API と Viewer API は、種別・状態・役割・権限を TypeSpec の enum の値だけで返す
   - 表示名を返す `{ name, value }` の型は契約で使わない
+  - フィールド名は `type` / `status` / `kind` / `formats` のように `Value` を付けない。リクエストもレスポンスも同じ名前にする
 - 表示名は各画面が `Record<XxxValue, string>` の対応表として持つ
   - 一覧の表示とフォームや絞り込みの選択肢は同じ対応表から作る
 - サーバーは表示名を持たない

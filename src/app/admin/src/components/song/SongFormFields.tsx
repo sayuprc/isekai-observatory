@@ -122,7 +122,7 @@ const SongBasicInfo = (props: SongFormFieldsProps) => (
         value={props.form.typeValue()}
         onChange={props.form.setTypeValue}
       />
-      <Show when={props.getFieldError('typeValue')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
+      <Show when={props.getFieldError('type')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
     </FormRow>
     <FormRow label="説明" for="description">
       <input

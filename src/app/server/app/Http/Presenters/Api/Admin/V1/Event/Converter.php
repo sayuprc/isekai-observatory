@@ -102,7 +102,7 @@ class Converter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setIsDisplay($release->isDisplay)
-            ->setFormatValues(array_map(
+            ->setFormats(array_map(
                 static fn (int $formatValue): ReleaseFormatValue => ReleaseFormatValue::from($formatValue),
                 $release->formatValues,
             ));

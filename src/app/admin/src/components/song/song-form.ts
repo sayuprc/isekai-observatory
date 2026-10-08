@@ -73,7 +73,7 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
     title: title(),
     description: description(),
     lyricsLink: normalizeOptionalString(lyricsLink()),
-    typeValue: typeValue() as SongTypeValue,
+    type: typeValue() as SongTypeValue,
     isDisplay: isDisplay(),
     persons: buildPersons(),
     tags: tags(),

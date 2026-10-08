@@ -64,7 +64,7 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'string',
         'released_on' => '\DateTime',
         'is_display' => 'bool',
-        'format_values' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]'
+        'formats' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]'
     ];
 
     /**
@@ -81,7 +81,7 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => null,
         'released_on' => 'date',
         'is_display' => null,
-        'format_values' => null
+        'formats' => null
     ];
 
     /**
@@ -96,7 +96,7 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => false,
         'released_on' => false,
         'is_display' => false,
-        'format_values' => false
+        'formats' => false
     ];
 
     /**
@@ -191,7 +191,7 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'name',
         'released_on' => 'releasedOn',
         'is_display' => 'isDisplay',
-        'format_values' => 'formatValues'
+        'formats' => 'formats'
     ];
 
     /**
@@ -206,7 +206,7 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'setName',
         'released_on' => 'setReleasedOn',
         'is_display' => 'setIsDisplay',
-        'format_values' => 'setFormatValues'
+        'formats' => 'setFormats'
     ];
 
     /**
@@ -221,7 +221,7 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'getName',
         'released_on' => 'getReleasedOn',
         'is_display' => 'getIsDisplay',
-        'format_values' => 'getFormatValues'
+        'formats' => 'getFormats'
     ];
 
     /**
@@ -287,7 +287,7 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('released_on', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
-        $this->setIfExists('format_values', $data ?? [], null);
+        $this->setIfExists('formats', $data ?? [], null);
     }
 
     /**
@@ -339,8 +339,8 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
         }
-        if ($this->container['format_values'] === null) {
-            $invalidProperties[] = "'format_values' can't be null";
+        if ($this->container['formats'] === null) {
+            $invalidProperties[] = "'formats' can't be null";
         }
         return $invalidProperties;
     }
@@ -525,28 +525,28 @@ class EventRelease implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets format_values
+     * Gets formats
      *
      * @return \OpenAPI\Admin\Client\Model\ReleaseFormatValue[]
      */
-    public function getFormatValues()
+    public function getFormats()
     {
-        return $this->container['format_values'];
+        return $this->container['formats'];
     }
 
     /**
-     * Sets format_values
+     * Sets formats
      *
-     * @param \OpenAPI\Admin\Client\Model\ReleaseFormatValue[] $format_values format_values
+     * @param \OpenAPI\Admin\Client\Model\ReleaseFormatValue[] $formats formats
      *
      * @return self
      */
-    public function setFormatValues($format_values)
+    public function setFormats($formats)
     {
-        if (is_null($format_values)) {
-            throw new \InvalidArgumentException('non-nullable format_values cannot be null');
+        if (is_null($formats)) {
+            throw new \InvalidArgumentException('non-nullable formats cannot be null');
         }
-        $this->container['format_values'] = $format_values;
+        $this->container['formats'] = $formats;
 
         return $this;
     }

@@ -53,9 +53,9 @@ const setlistItemSchema = t.Object({
 const eventBodySchema = t.Object({
   title: t.String({ minLength: 1, maxLength: 255 }),
   description: t.String(),
-  typeValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(4), t.Literal(99)]),
+  type: t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(4), t.Literal(99)]),
   schedule: eventScheduleSchema,
-  statusValue: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]),
+  status: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]),
   isDisplay: t.Boolean(),
   venues: t.Array(eventVenueLinkSchema),
   media: t.Array(eventMediaLinkSchema),

@@ -10,7 +10,7 @@ export interface ReleaseInitialValues {
   color: string;
   isDisplay: boolean;
   orderNo: number;
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
   media: MediumForm[];
 }
 
@@ -21,7 +21,7 @@ export const EMPTY_RELEASE_INITIAL_VALUES: ReleaseInitialValues = {
   color: '#989899',
   isDisplay: true,
   orderNo: 1,
-  formatValues: [1],
+  formats: [1],
   media: [{ name: '', tracks: [] }],
 };
 
@@ -33,7 +33,7 @@ export const createReleaseForm = (initial: ReleaseInitialValues) => {
   const [color, setColor] = createSignal(initial.color);
   const [isDisplay, setIsDisplay] = createSignal(initial.isDisplay);
   const [orderNo, setOrderNo] = createSignal(initial.orderNo);
-  const [formatValues, setFormatValues] = createSignal<ReleaseFormatValue[]>([...initial.formatValues]);
+  const [formatValues, setFormatValues] = createSignal<ReleaseFormatValue[]>([...initial.formats]);
   const [media, setMedia] = createSignal<MediumForm[]>(initial.media);
 
   const trackCount = () => media().reduce((total, medium) => total + medium.tracks.length, 0);
@@ -45,7 +45,7 @@ export const createReleaseForm = (initial: ReleaseInitialValues) => {
     color: color(),
     isDisplay: isDisplay(),
     orderNo: orderNo(),
-    formatValues: formatValues(),
+    formats: formatValues(),
     media: toMediaPayload(media()),
   });
 

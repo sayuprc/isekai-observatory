@@ -26,7 +26,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'title' => 'テストメディアMV',
                 'url' => 'https://example.com/media',
                 'publishedAt' => '2024-03-01T12:34:56+09:00',
-                'typeValue' => MediaType::Mv->value,
+                'type' => MediaType::Mv->value,
                 'isDisplay' => true,
             ])->assertStatus(200)
             ->assertJson(static fn (AssertableJson $json) => $json
@@ -57,7 +57,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'title' => '別タイトル',
                 'url' => 'https://example.com/media',
                 'publishedAt' => '2024-03-01T12:34:56+09:00',
-                'typeValue' => MediaType::Mv->value,
+                'type' => MediaType::Mv->value,
                 'isDisplay' => true,
             ])->assertStatus(400)
             ->assertJson(

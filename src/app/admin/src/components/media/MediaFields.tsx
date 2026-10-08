@@ -72,8 +72,8 @@ export const MediaFields = (props: MediaFieldsProps) => (
         value={props.typeValue}
         onChange={props.onTypeValueChange}
       />
-      <input type="hidden" name="typeValue" value={props.typeValue} />
-      <Show when={props.getFieldError('typeValue')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
+      <input type="hidden" name="type" value={props.typeValue} />
+      <Show when={props.getFieldError('type')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
     </FormRow>
     <FormRow label="公開">
       <SegmentedControl

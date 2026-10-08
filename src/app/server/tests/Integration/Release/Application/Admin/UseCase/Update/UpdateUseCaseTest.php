@@ -61,7 +61,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             color: '#2e62a0',
             isDisplay: false,
             orderNo: 20,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [
                 [
                     'position' => 1,
@@ -128,7 +128,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 1,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [
                 [
                     'position' => 1,
@@ -162,7 +162,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 1,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [],
         ));
     }
@@ -196,7 +196,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 1,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [
                 [
                     'position' => 1,

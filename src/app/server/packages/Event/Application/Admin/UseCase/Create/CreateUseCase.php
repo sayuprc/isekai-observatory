@@ -34,9 +34,9 @@ readonly class CreateUseCase
             $event = $this->integrityService->prepareForCreate(
                 $inputData->title,
                 $inputData->description,
-                $inputData->typeValue,
+                $inputData->type,
                 $inputData->schedule,
-                $inputData->statusValue,
+                $inputData->status,
                 $inputData->isDisplay,
                 $inputData->venues,
                 $inputData->media,

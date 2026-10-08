@@ -206,7 +206,7 @@ export const MediaSection = (props: Props) => {
       title,
       url,
       publishedAt,
-      typeValue: createTypeValue(),
+      type: createTypeValue(),
       isDisplay: createIsDisplay(),
     });
 

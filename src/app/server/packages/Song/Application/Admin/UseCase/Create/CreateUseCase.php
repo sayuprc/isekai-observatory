@@ -35,7 +35,7 @@ readonly class CreateUseCase
                 $inputData->title,
                 $inputData->description,
                 $inputData->lyricsLink,
-                $inputData->typeValue,
+                $inputData->type,
                 $inputData->isDisplay,
                 $inputData->tags,
                 $inputData->persons,

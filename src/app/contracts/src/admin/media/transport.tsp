@@ -18,7 +18,7 @@ model MediaCreateRequest {
   title: mediaTitle;
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
-  typeValue: MediaTypeValue;
+  type: MediaTypeValue;
   isDisplay: boolean;
 }
 
@@ -30,7 +30,7 @@ model MediaUpdateRequest {
   title: mediaTitle;
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
-  typeValue: MediaTypeValue;
+  type: MediaTypeValue;
   isDisplay: boolean;
 }
 

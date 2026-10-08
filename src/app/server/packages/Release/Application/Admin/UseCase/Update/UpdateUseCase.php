@@ -47,7 +47,7 @@ readonly class UpdateUseCase
                 $inputData->color,
                 $inputData->isDisplay,
                 $inputData->orderNo,
-                $inputData->formatValues,
+                $inputData->formats,
                 $inputData->media,
             );
 

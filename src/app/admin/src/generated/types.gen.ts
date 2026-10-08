@@ -112,9 +112,9 @@ export type Event = {
 export type EventCreateRequest = {
     title: EventTitle;
     description: EventDescription;
-    typeValue: EventTypeValue;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    statusValue: EventStatusValue;
+    status: EventStatusValue;
     isDisplay: boolean;
     venues: Array<RequestEventVenueLink>;
     media: Array<RequestEventMediaLink>;
@@ -142,7 +142,7 @@ export type EventRelease = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     isDisplay: boolean;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
 };
 
 export type EventSearchResponse = {
@@ -205,9 +205,9 @@ export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 export type EventUpdateRequest = {
     title: EventTitle;
     description: EventDescription;
-    typeValue: EventTypeValue;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    statusValue: EventStatusValue;
+    status: EventStatusValue;
     isDisplay: boolean;
     venues: Array<RequestEventVenueLink>;
     media: Array<RequestEventMediaLink>;
@@ -272,7 +272,7 @@ export type MediaCreateRequest = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
     isDisplay: boolean;
 };
 
@@ -331,7 +331,7 @@ export type MediaUpdateRequest = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
     isDisplay: boolean;
 };
 
@@ -569,7 +569,7 @@ export type Release = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
     media: Array<Medium>;
 };
 
@@ -581,7 +581,7 @@ export type ReleaseCreateRequest = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
     media: Array<Medium>;
 };
 
@@ -609,7 +609,7 @@ export type ReleaseGetResponse = {
 export type ReleaseGroup = {
     releaseGroupId: ReleaseGroupId;
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -617,7 +617,7 @@ export type ReleaseGroup = {
 
 export type ReleaseGroupCreateRequest = {
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -642,7 +642,7 @@ export type ReleaseGroupReferencedRelease = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
 };
 
 export type ReleaseGroupSearchResponse = {
@@ -661,7 +661,7 @@ export type ReleaseGroupSearchSortBy = 'first_released_on' | 'title';
 export type ReleaseGroupSummary = {
     releaseGroupId: ReleaseGroupId;
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -683,7 +683,7 @@ export type ReleaseGroupTypeValue = 1 | 2 | 3 | 99;
 
 export type ReleaseGroupUpdateRequest = {
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -710,7 +710,7 @@ export type ReleaseUpdateRequest = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
     media: Array<Medium>;
 };
 
@@ -820,7 +820,7 @@ export type SongCreateRequest = {
     title: Title;
     description: Description;
     lyricsLink: LyricsLink | null;
-    typeValue: SongTypeValue;
+    type: SongTypeValue;
     isDisplay: boolean;
     persons: Array<RequestSongPerson>;
     tags: Array<RequestSongTag>;
@@ -967,7 +967,7 @@ export type SongUpdateRequest = {
     title: Title;
     description: Description;
     lyricsLink: LyricsLink | null;
-    typeValue: SongTypeValue;
+    type: SongTypeValue;
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<RequestSongPerson>;

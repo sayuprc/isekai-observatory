@@ -271,7 +271,7 @@ export const SearchList = () => {
                             {releaseGroup.title}
                           </a>
                         </td>
-                        <td class="whitespace-nowrap">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.typeValue]}</td>
+                        <td class="whitespace-nowrap">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}</td>
                         <td class="whitespace-nowrap text-sm">
                           {releaseGroup.firstReleasedOn ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn) : '—'}
                         </td>

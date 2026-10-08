@@ -31,7 +31,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
         $this->withAuth()
             ->putJson(route(ReleaseGroupRouteMap::Update, $releaseGroupId), [
                 'title' => '新タイトル',
-                'typeValue' => ReleaseGroupType::Single->value,
+                'type' => ReleaseGroupType::Single->value,
                 'description' => '更新後の説明',
                 'isDisplay' => false,
                 'orderNo' => 3,
@@ -43,7 +43,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                         static fn (AssertableJson $json) => $json
                             ->where('releaseGroupId', $releaseGroupId)
                             ->where('title', '新タイトル')
-                            ->where('typeValue', ReleaseGroupType::Single->value)
+                            ->where('type', ReleaseGroupType::Single->value)
                             ->where('description', '更新後の説明')
                             ->where('isDisplay', false)
                             ->where('orderNo', 3),
@@ -64,7 +64,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
         $this->withAuth()
             ->putJson(route(ReleaseGroupRouteMap::Update, $this->generateUuid()), [
                 'title' => '新タイトル',
-                'typeValue' => ReleaseGroupType::Album->value,
+                'type' => ReleaseGroupType::Album->value,
                 'description' => '説明',
                 'isDisplay' => true,
                 'orderNo' => 1,
@@ -83,7 +83,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
         $this->withGeneralAuth()
             ->putJson(route(ReleaseGroupRouteMap::Update, $releaseGroupId), [
                 'title' => '新タイトル',
-                'typeValue' => ReleaseGroupType::Album->value,
+                'type' => ReleaseGroupType::Album->value,
                 'description' => '説明',
                 'isDisplay' => true,
                 'orderNo' => 1,

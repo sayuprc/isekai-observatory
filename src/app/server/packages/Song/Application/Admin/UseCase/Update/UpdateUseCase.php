@@ -44,7 +44,7 @@ readonly class UpdateUseCase
                 $inputData->title,
                 $inputData->description,
                 $inputData->lyricsLink,
-                $inputData->typeValue,
+                $inputData->type,
                 $inputData->isDisplay,
                 $inputData->orderNo,
                 $inputData->tags,

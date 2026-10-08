@@ -67,7 +67,7 @@ export const media = new Elysia({ prefix: '/media' })
   )
   .post(
     '/',
-    async ({ body: { title, url, publishedAt, typeValue, isDisplay }, authSession }) => {
+    async ({ body: { title, url, publishedAt, type, isDisplay }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
         mediaServiceCreateMedia({
           client,
@@ -75,7 +75,7 @@ export const media = new Elysia({ prefix: '/media' })
             title,
             url,
             publishedAt: normalizeDateTimeApiValue(publishedAt),
-            typeValue: typeValue as MediaTypeValue,
+            type: type as MediaTypeValue,
             isDisplay,
           },
         }),
@@ -86,14 +86,14 @@ export const media = new Elysia({ prefix: '/media' })
         title: t.String(),
         url: t.String(),
         publishedAt: t.String(),
-        typeValue: MediaTypeValueSchema,
+        type: MediaTypeValueSchema,
         isDisplay: t.Boolean(),
       }),
     },
   )
   .put(
     '/:mediaId',
-    async ({ params: { mediaId }, body: { title, url, publishedAt, typeValue, isDisplay }, authSession }) => {
+    async ({ params: { mediaId }, body: { title, url, publishedAt, type, isDisplay }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
         mediaServiceUpdateMedia({
           client,
@@ -102,7 +102,7 @@ export const media = new Elysia({ prefix: '/media' })
             title,
             url,
             publishedAt: normalizeDateTimeApiValue(publishedAt),
-            typeValue: typeValue as MediaTypeValue,
+            type: type as MediaTypeValue,
             isDisplay,
           },
         }),
@@ -116,7 +116,7 @@ export const media = new Elysia({ prefix: '/media' })
         title: t.String(),
         url: t.String(),
         publishedAt: t.String(),
-        typeValue: MediaTypeValueSchema,
+        type: MediaTypeValueSchema,
         isDisplay: t.Boolean(),
       }),
     },

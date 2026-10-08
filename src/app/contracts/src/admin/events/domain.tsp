@@ -62,7 +62,7 @@ model EventRelease {
   name: releaseName;
   releasedOn: releasedOn;
   isDisplay: boolean;
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
 }
 
 @doc("イベント")

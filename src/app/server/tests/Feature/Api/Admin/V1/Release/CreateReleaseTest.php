@@ -43,7 +43,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#4a5a78',
                 'isDisplay' => true,
                 'orderNo' => 10,
-                'formatValues' => [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
+                'formats' => [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -72,7 +72,7 @@ class CreateReleaseTest extends DatabaseTestCase
                             ->where('color', '#4a5a78')
                             ->where('isDisplay', true)
                             ->where('orderNo', 10)
-                            ->where('formatValues', [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value])
+                            ->where('formats', [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value])
                             ->where('media.0.position', 1)
                             ->where('media.0.name', null)
                             ->where('media.0.tracks.0.songId', $songId)
@@ -110,7 +110,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 10,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -166,7 +166,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 10,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -217,7 +217,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 10,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -264,7 +264,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 10,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -300,7 +300,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Digital->value],
+                'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
             ])->assertStatus(200)
             ->assertJson(
@@ -316,7 +316,7 @@ class CreateReleaseTest extends DatabaseTestCase
                             ->where('color', '#989899')
                             ->where('isDisplay', true)
                             ->where('orderNo', 1)
-                            ->where('formatValues', [ReleaseFormat::Digital->value])
+                            ->where('formats', [ReleaseFormat::Digital->value])
                             ->where('media', []),
                     ),
             );
@@ -346,7 +346,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [],
+                'formats' => [],
                 'media' => [],
             ])->assertStatus(422);
     }
@@ -363,7 +363,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Digital->value],
+                'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
             ])->assertStatus(400)
             ->assertJson(['message' => '指定されたリリースグループが存在しません。']);
@@ -381,7 +381,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Digital->value],
+                'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
             ])->assertStatus(422)
             ->assertJson(

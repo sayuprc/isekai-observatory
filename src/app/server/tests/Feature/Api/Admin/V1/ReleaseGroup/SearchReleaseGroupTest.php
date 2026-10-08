@@ -52,7 +52,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                     [
                         'releaseGroupId' => $releaseGroupId2,
                         'title' => '新しい作品',
-                        'typeValue' => ReleaseGroupType::Album->value,
+                        'type' => ReleaseGroupType::Album->value,
                         'description' => 'テスト用リリースグループ',
                         'isDisplay' => true,
                         'orderNo' => 1,
@@ -65,7 +65,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                     [
                         'releaseGroupId' => $releaseGroupId1,
                         'title' => '古い作品',
-                        'typeValue' => ReleaseGroupType::Single->value,
+                        'type' => ReleaseGroupType::Single->value,
                         'description' => 'テスト用リリースグループ',
                         'isDisplay' => true,
                         'orderNo' => 1,
@@ -78,7 +78,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                     [
                         'releaseGroupId' => $releaseGroupId3,
                         'title' => 'リリース未登録の作品',
-                        'typeValue' => ReleaseGroupType::Ep->value,
+                        'type' => ReleaseGroupType::Ep->value,
                         'description' => 'テスト用リリースグループ',
                         'isDisplay' => true,
                         'orderNo' => 1,

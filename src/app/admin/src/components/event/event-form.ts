@@ -87,12 +87,12 @@ export const createEventForm = (event?: Event) => {
   const toRequestBody = (): EventRequestBody => ({
     title: title(),
     description: description(),
-    typeValue: typeValue(),
+    type: typeValue(),
     schedule: {
       startOn: startOn() || null,
       endOn: endOn() || null,
     },
-    statusValue: statusValue(),
+    status: statusValue(),
     isDisplay: isDisplay(),
     venues: venues().map((venue, index) => ({ venueId: venue.venueId, orderNo: index + 1 })),
     media: mediaEntries().map((media, index) => ({ mediaId: media.mediaId, orderNo: index + 1 })),

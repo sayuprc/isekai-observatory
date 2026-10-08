@@ -103,7 +103,7 @@ export const songs = new Elysia({ prefix: '/songs' })
   )
   .post(
     '/',
-    async ({ body: { title, description, lyricsLink, typeValue, isDisplay, persons, tags, media }, authSession }) => {
+    async ({ body: { title, description, lyricsLink, type, isDisplay, persons, tags, media }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
         songServiceCreateSong({
           client,
@@ -111,7 +111,7 @@ export const songs = new Elysia({ prefix: '/songs' })
             title,
             description,
             lyricsLink,
-            typeValue,
+            type,
             isDisplay,
             persons,
             tags,
@@ -125,7 +125,7 @@ export const songs = new Elysia({ prefix: '/songs' })
         title: t.String(),
         description: t.String(),
         lyricsLink: NullableStringSchema,
-        typeValue: SongTypeValueSchema,
+        type: SongTypeValueSchema,
         isDisplay: t.Boolean(),
         persons: SongPersonRefSchema,
         tags: SongTagRefSchema,
@@ -137,7 +137,7 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId',
     async ({
       params: { songId },
-      body: { title, description, lyricsLink, typeValue, isDisplay, orderNo, persons, tags, media },
+      body: { title, description, lyricsLink, type, isDisplay, orderNo, persons, tags, media },
       authSession,
     }) => {
       return requestWithAuth(authSession, (client) =>
@@ -148,7 +148,7 @@ export const songs = new Elysia({ prefix: '/songs' })
             title,
             description,
             lyricsLink,
-            typeValue,
+            type,
             isDisplay,
             orderNo,
             persons,
@@ -166,7 +166,7 @@ export const songs = new Elysia({ prefix: '/songs' })
         title: t.String(),
         description: t.String(),
         lyricsLink: NullableStringSchema,
-        typeValue: SongTypeValueSchema,
+        type: SongTypeValueSchema,
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
         persons: SongPersonRefSchema,

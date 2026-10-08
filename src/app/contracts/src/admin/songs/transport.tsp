@@ -19,7 +19,7 @@ model SongCreateRequest {
   title: title;
   description: description;
   lyricsLink: lyricsLink | null;
-  typeValue: SongTypeValue;
+  type: SongTypeValue;
   isDisplay: boolean;
   persons: RequestSongPerson[];
   tags: RequestSongTag[];
@@ -34,7 +34,7 @@ model SongUpdateRequest {
   title: title;
   description: description;
   lyricsLink: lyricsLink | null;
-  typeValue: SongTypeValue;
+  type: SongTypeValue;
   isDisplay: boolean;
   orderNo: orderNo;
   persons: RequestSongPerson[];

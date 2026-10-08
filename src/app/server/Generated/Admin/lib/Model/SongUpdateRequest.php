@@ -60,7 +60,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'string',
         'description' => 'string',
         'lyrics_link' => 'string',
-        'type_value' => '\OpenAPI\Admin\Client\Model\SongTypeValue',
+        'type' => '\OpenAPI\Admin\Client\Model\SongTypeValue',
         'is_display' => 'bool',
         'order_no' => 'int',
         'persons' => '\OpenAPI\Admin\Client\Model\RequestSongPerson[]',
@@ -79,7 +79,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => null,
         'description' => null,
         'lyrics_link' => 'uri',
-        'type_value' => null,
+        'type' => null,
         'is_display' => null,
         'order_no' => 'int32',
         'persons' => null,
@@ -96,7 +96,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => false,
         'description' => false,
         'lyrics_link' => true,
-        'type_value' => false,
+        'type' => false,
         'is_display' => false,
         'order_no' => false,
         'persons' => false,
@@ -193,7 +193,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'title',
         'description' => 'description',
         'lyrics_link' => 'lyricsLink',
-        'type_value' => 'typeValue',
+        'type' => 'type',
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo',
         'persons' => 'persons',
@@ -210,7 +210,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'setTitle',
         'description' => 'setDescription',
         'lyrics_link' => 'setLyricsLink',
-        'type_value' => 'setTypeValue',
+        'type' => 'setType',
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo',
         'persons' => 'setPersons',
@@ -227,7 +227,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'getTitle',
         'description' => 'getDescription',
         'lyrics_link' => 'getLyricsLink',
-        'type_value' => 'getTypeValue',
+        'type' => 'getType',
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo',
         'persons' => 'getPersons',
@@ -295,7 +295,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('lyrics_link', $data ?? [], null);
-        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
         $this->setIfExists('persons', $data ?? [], null);
@@ -343,8 +343,8 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['lyrics_link'] === null) {
             $invalidProperties[] = "'lyrics_link' can't be null";
         }
-        if ($this->container['type_value'] === null) {
-            $invalidProperties[] = "'type_value' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
@@ -474,28 +474,28 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     }
 
     /**
-     * Gets type_value
+     * Gets type
      *
      * @return \OpenAPI\Admin\Client\Model\SongTypeValue
      */
-    public function getTypeValue()
+    public function getType()
     {
-        return $this->container['type_value'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets type_value
+     * Sets type
      *
-     * @param \OpenAPI\Admin\Client\Model\SongTypeValue $type_value type_value
+     * @param \OpenAPI\Admin\Client\Model\SongTypeValue $type type
      *
      * @return self
      */
-    public function setTypeValue($type_value)
+    public function setType($type)
     {
-        if (is_null($type_value)) {
-            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['type_value'] = $type_value;
+        $this->container['type'] = $type;
 
         return $this;
     }
