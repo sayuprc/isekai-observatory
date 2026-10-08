@@ -1,4 +1,4 @@
-import "./decorators.js";
+import "./decorators.ts";
 
 namespace IsekaiObservatory.Shared;
 

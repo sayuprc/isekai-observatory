@@ -76,7 +76,7 @@
 
 ## Minimum Validation
 
-- `src/app/contracts`: `mise run contract:format:check`, `mise run contract:test`
+- `src/app/contracts`: `mise run contract:format:check`, `mise run contract:test`, `mise run contract:typecheck`
 - `src/app/server`: `mise run api:ecs`, `mise run api:phpstan`, `mise run api:test`
 - `src/app/admin`: `cd src/app && bun --filter admin lint:check`, `cd src/app && bun --filter admin build`
 - `src/app/viewer`: `cd src/app && bun --filter viewer lint:check`, `cd src/app && bun --filter viewer build`

@@ -42,7 +42,7 @@
 
 | 変更したいもの | 最初に触る場所 | 続けて触る場所 | 代表的な確認 |
 |---|---|---|---|
-| API の request / response 形状 | `src/app/contracts` | `mise run generate` の影響先 | `mise run contract:format:check`, `contract:test`, `contract:compile:*` |
+| API の request / response 形状 | `src/app/contracts` | `mise run generate` の影響先 | `mise run contract:format:check`, `contract:test`, `contract:typecheck`, `contract:compile:*` |
 | サーバーの業務ロジック | `src/app/server` | 必要なら `src/app/contracts` | `mise run ecs`, `phpstan`, `arkitect`, `test` |
 | 管理画面の UI / BFF | `src/app/admin` | 必要なら `src/app/contracts` | `mise run admin:check`, `cd src/app && bun --filter admin build` |
 | 閲覧サイトの UI | `src/app/viewer` | 必要なら `src/app/contracts` | `mise run viewer:check`, `cd src/app && bun --filter viewer build` |

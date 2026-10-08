@@ -53,3 +53,8 @@ pre-commit:
       root: "src/app/"
       glob: "contracts/scripts/**/*.ts"
       run: mise run contract:test
+
+    contracts-typecheck:
+      root: "src/app/"
+      glob: "contracts/{scripts,src}/**/*.ts"
+      run: mise run contract:typecheck
