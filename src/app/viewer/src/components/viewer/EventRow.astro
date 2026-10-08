@@ -1,6 +1,6 @@
 ---
 import type { Event } from '../../features/events/types';
-import { eventDateColumn, eventStatusName } from '../../features/events/types';
+import { EVENT_TYPE_NAMES, eventDateColumn, eventStatusName } from '../../features/events/types';
 
 interface Props {
   event: Event;
@@ -22,7 +22,7 @@ const venueNames = event.venues.map((venue) => venue.name).join(' / ');
     <span class="event-line-date-main">{date?.main ?? '— —'}</span>
     {date && <span class="event-line-date-sub">{date.sub}</span>}
   </span>
-  <span class="event-line-type">{event.type.name}</span>
+  <span class="event-line-type">{EVENT_TYPE_NAMES[event.type]}</span>
   <span class="event-line-body">
     <span class="event-line-title">
       {event.title}

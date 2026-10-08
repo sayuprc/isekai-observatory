@@ -20,20 +20,17 @@ use OpenAPI\Viewer\Client\Model\EventListResponse;
 use OpenAPI\Viewer\Client\Model\EventMediaSummary as OpenApiEventMediaSummary;
 use OpenAPI\Viewer\Client\Model\EventReleaseSummary as OpenApiEventReleaseSummary;
 use OpenAPI\Viewer\Client\Model\EventSource as OpenApiEventSource;
-use OpenAPI\Viewer\Client\Model\EventStatus as OpenApiEventStatus;
 use OpenAPI\Viewer\Client\Model\EventStatusValue;
-use OpenAPI\Viewer\Client\Model\EventType as OpenApiEventType;
 use OpenAPI\Viewer\Client\Model\EventTypeValue;
 use OpenAPI\Viewer\Client\Model\EventVenueSummary as OpenApiEventVenueSummary;
 use OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as OpenApiEventSchedule;
-use OpenAPI\Viewer\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Viewer\Client\Model\MediaTypeValue;
 use OpenAPI\Viewer\Client\Model\PerformancePerson as OpenApiPerformancePerson;
 use OpenAPI\Viewer\Client\Model\PerformancePersonGroup as OpenApiPerformancePersonGroup;
-use OpenAPI\Viewer\Client\Model\ReleaseFormat as OpenApiReleaseFormat;
 use OpenAPI\Viewer\Client\Model\ReleaseFormatValue;
 use OpenAPI\Viewer\Client\Model\SetlistItem as OpenApiSetlistItem;
 use OpenAPI\Viewer\Client\Model\SongPerformance as OpenApiSongPerformance;
+use OpenAPI\Viewer\Client\Model\VenueKindValue;
 use Release\Domain\Models\ReleaseFormat;
 
 class ListPresenter
@@ -53,12 +50,12 @@ class ListPresenter
             ->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
-            ->setType(new OpenApiEventType()->setName($event->type->getName())->setValue(EventTypeValue::from($event->type->value)))
+            ->setType(EventTypeValue::from($event->type->value))
             ->setSchedule(new OpenApiEventSchedule([
                 'start_on' => $event->startOn === null ? null : new DateTime($event->startOn),
                 'end_on' => $event->endOn === null ? null : new DateTime($event->endOn),
             ]))
-            ->setStatus(new OpenApiEventStatus()->setName($event->status->getName())->setValue(EventStatusValue::from($event->status->value)))
+            ->setStatus(EventStatusValue::from($event->status->value))
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
             ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
             ->setReleases(array_map($this->toOpenApiRelease(...), $event->releases))
@@ -72,7 +69,7 @@ class ListPresenter
         return new OpenApiEventVenueSummary()
             ->setVenueId($venue->venueId)
             ->setName($venue->name)
-            ->setKindName($venue->kind->getName());
+            ->setKind(VenueKindValue::from($venue->kind->value));
     }
 
     private function toOpenApiMedia(EventMediaSummary $media): OpenApiEventMediaSummary
@@ -82,7 +79,7 @@ class ListPresenter
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
-            ->setType(new OpenApiMediaType()->setName($media->type->getName())->setValue(MediaTypeValue::from($media->type->value)));
+            ->setType(MediaTypeValue::from($media->type->value));
     }
 
     private function toOpenApiRelease(EventReleaseSummary $release): OpenApiEventReleaseSummary
@@ -94,9 +91,7 @@ class ListPresenter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setFormats(array_map(
-                static fn (ReleaseFormat $format): OpenApiReleaseFormat => new OpenApiReleaseFormat()
-                    ->setName($format->getName())
-                    ->setValue(ReleaseFormatValue::from($format->value)),
+                static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
                 $release->formats,
             ));
     }

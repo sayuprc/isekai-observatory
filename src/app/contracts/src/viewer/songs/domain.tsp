@@ -23,7 +23,7 @@ model SongRelationCounts {
 model SongPerformanceHistory {
   eventId: eventId;
   eventTitle: eventTitle;
-  typeValue: EventTypeValue;
+  type: EventTypeValue;
   schedule: EventSchedule;
 
   @doc("共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる")
@@ -34,7 +34,7 @@ model SongPerformanceHistory {
   songId: "3cd42c09-ff3c-4cd2-913f-a279c4ea89b4",
   title: "テスト楽曲",
   description: "テスト楽曲説明",
-  type: #{ name: "オリジナル曲", value: SongTypeValue.Original },
+  type: SongTypeValue.Original,
   counts: #{ releaseCount: 1, mediaCount: 1 },
   lyricists: #["テスト作詞者"],
   composers: #["テスト作曲者"],
@@ -43,7 +43,7 @@ model SongPerformanceHistory {
     #{
       mediaId: "11111111-1111-1111-1111-111111111111",
       title: "テストメディアMV",
-      type: #{ name: "MV", value: MediaTypeValue.Mv },
+      type: MediaTypeValue.Mv,
       url: "https://www.youtube.com/watch?v=dummy",
       publishedAt: mediaPublishedAt.fromISO("2024-03-01T12:00:00+09:00"),
     }
@@ -52,7 +52,7 @@ model SongPerformanceHistory {
     #{
       releaseGroupId: "0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2",
       title: "テストアルバム",
-      type: #{ name: "アルバム", value: ReleaseGroupTypeValue.Album },
+      type: ReleaseGroupTypeValue.Album,
       firstReleasedOn: "2026-05-01",
       color: "#4a5a78",
     }
@@ -63,7 +63,7 @@ model SongListItem {
   songId: songId;
   title: title;
   description: description;
-  type: SongType;
+  type: SongTypeValue;
   counts: SongRelationCounts;
   lyricists: string[];
   composers: string[];
@@ -81,7 +81,7 @@ model SongListItem {
 model SongReleaseGroupSummary {
   releaseGroupId: releaseGroupId;
   title: releaseGroupTitle;
-  type: ReleaseGroupType;
+  type: ReleaseGroupTypeValue;
   firstReleasedOn: releasedOn;
 
   @doc("代表色(公開リリースを発売日順に見て最初のもの)")
@@ -91,14 +91,14 @@ model SongReleaseGroupSummary {
 @example(#{
   mediaId: "11111111-1111-1111-1111-111111111111",
   title: "テストメディアMV",
-  type: #{ name: "MV", value: MediaTypeValue.Mv },
+  type: MediaTypeValue.Mv,
   url: "https://www.youtube.com/watch?v=dummy",
   publishedAt: mediaPublishedAt.fromISO("2024-03-01T12:00:00+09:00"),
 })
 model SongMediaSummary {
   mediaId: mediaId;
   title: mediaTitle;
-  type: MediaType;
+  type: MediaTypeValue;
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
 }

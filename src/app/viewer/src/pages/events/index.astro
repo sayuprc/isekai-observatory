@@ -6,7 +6,7 @@ import FilterBar from '../../components/viewer/FilterBar';
 import SectionHead from '../../components/viewer/SectionHead.astro';
 import { eventContentRepository } from '../../features/events/content';
 import type { Event } from '../../features/events/types';
-import { eventDate } from '../../features/events/types';
+import { EVENT_TYPE_NAMES, eventDate } from '../../features/events/types';
 import Layout from '../../layouts/Layout.astro';
 
 const { undated, byYear } = await eventContentRepository.grouped();
@@ -17,7 +17,7 @@ const groups = [
 const total = groups.reduce((sum, group) => sum + group.events.length, 0);
 
 const searchText = (event: Event) =>
-  [event.title, event.type.name, eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
+  [event.title, EVENT_TYPE_NAMES[event.type], eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
     .join(' ')
     .toLowerCase();
 ---
@@ -30,11 +30,7 @@ const searchText = (event: Event) =>
       client:idle
       filters={[
         { value: 'all', label: 'すべて' },
-        { value: '1', label: 'ライブ' },
-        { value: '2', label: '配信' },
-        { value: '3', label: '展覧会' },
-        { value: '4', label: 'ラジオ' },
-        { value: '99', label: 'その他' },
+        ...Object.entries(EVENT_TYPE_NAMES).map(([value, label]) => ({ value, label })),
       ]}
       entrySelector="[data-event-entry]"
       categoryAttrs={['eventType']}
@@ -72,7 +68,7 @@ const searchText = (event: Event) =>
         </h2>
         <ol class="event-group-list">
           {group.events.map((event) => (
-            <li data-event-entry data-event-type={String(event.type.value)} data-event-search={searchText(event)}>
+            <li data-event-entry data-event-type={String(event.type)} data-event-search={searchText(event)}>
               <EventRow event={event} />
             </li>
           ))}

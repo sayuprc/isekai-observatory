@@ -8,9 +8,7 @@ use DateTime;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Viewer\Client\Model\EventTypeValue;
 use OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule;
-use OpenAPI\Viewer\Client\Model\MediaType;
 use OpenAPI\Viewer\Client\Model\MediaTypeValue;
-use OpenAPI\Viewer\Client\Model\ReleaseGroupType as OpenApiReleaseGroupType;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue;
 use OpenAPI\Viewer\Client\Model\SongListItem as OpenApiSongListItem;
 use OpenAPI\Viewer\Client\Model\SongListResponse;
@@ -18,9 +16,7 @@ use OpenAPI\Viewer\Client\Model\SongMediaSummary as OpenApiSongMediaSummary;
 use OpenAPI\Viewer\Client\Model\SongPerformanceHistory as OpenApiSongPerformanceHistory;
 use OpenAPI\Viewer\Client\Model\SongRelationCounts;
 use OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary as OpenApiSongReleaseGroupSummary;
-use OpenAPI\Viewer\Client\Model\SongType;
 use OpenAPI\Viewer\Client\Model\SongTypeValue;
-use Release\Domain\Models\ReleaseGroupType;
 use Song\Application\Viewer\Query\SongListItem;
 use Song\Application\Viewer\Query\SongMediaSummary;
 use Song\Application\Viewer\Query\SongPerformanceHistory;
@@ -47,7 +43,7 @@ class ListPresenter
             ->setSongId($song->songId)
             ->setTitle($song->title)
             ->setDescription($song->description)
-            ->setType(new SongType()->setName($song->type->getName())->setValue(SongTypeValue::from($song->type->value)))
+            ->setType(SongTypeValue::from($song->type->value))
             ->setLyricists($song->lyricists)
             ->setComposers($song->composers)
             ->setArrangers($song->arrangers)
@@ -63,12 +59,10 @@ class ListPresenter
 
     private function toOpenApiSongReleaseGroupSummary(SongReleaseGroupSummary $releaseGroup): OpenApiSongReleaseGroupSummary
     {
-        $type = ReleaseGroupType::from($releaseGroup->typeValue);
-
         return new OpenApiSongReleaseGroupSummary()
             ->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
-            ->setType(new OpenApiReleaseGroupType()->setName($type->getName())->setValue(ReleaseGroupTypeValue::from($type->value)))
+            ->setType(ReleaseGroupTypeValue::from($releaseGroup->typeValue))
             ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn))
             ->setColor($releaseGroup->color);
     }
@@ -78,7 +72,7 @@ class ListPresenter
         return new OpenApiSongMediaSummary()
             ->setMediaId($media->mediaId)
             ->setTitle($media->title)
-            ->setType(new MediaType()->setName($media->type->getName())->setValue(MediaTypeValue::from($media->type->value)))
+            ->setType(MediaTypeValue::from($media->type->value))
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt));
     }
@@ -95,7 +89,7 @@ class ListPresenter
         return new OpenApiSongPerformanceHistory()
             ->setEventId($performance->eventId)
             ->setEventTitle($performance->eventTitle)
-            ->setTypeValue(EventTypeValue::from($performance->typeValue))
+            ->setType(EventTypeValue::from($performance->typeValue))
             ->setSchedule($scheduleModel)
             ->setCoVocalistNames($performance->coVocalistNames);
     }

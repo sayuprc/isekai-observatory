@@ -5,6 +5,7 @@ import SectionHead from '../../components/viewer/SectionHead.astro';
 import SongTile from '../../components/viewer/SongTile.astro';
 import { YOUTUBE_THUMBNAIL_ORIGIN } from '../../features/media/labels';
 import { songContentRepository } from '../../features/songs/content';
+import { SONG_TYPE_NAMES } from '../../features/songs/types';
 import Layout from '../../layouts/Layout.astro';
 
 const songs = await songContentRepository.all();
@@ -22,8 +23,7 @@ const songs = await songContentRepository.all();
       client:idle
       filters={[
         { value: 'all', label: `すべて` },
-        { value: '1', label: 'オリジナル曲' },
-        { value: '2', label: 'カバー曲' },
+        ...Object.entries(SONG_TYPE_NAMES).map(([value, label]) => ({ value, label })),
       ]}
       entrySelector="[data-song-entry]"
       categoryAttrs={['songCategory']}
@@ -49,7 +49,7 @@ const songs = await songContentRepository.all();
             href={`/songs/${song.songId}`}
             class="song-grid-card"
             data-song-entry
-            data-song-category={song.type.value}
+            data-song-category={song.type}
             data-song-search={[song.title, ...song.lyricists, ...song.composers, ...song.arrangers]
               .join(' ')
               .toLowerCase()}
@@ -64,8 +64,8 @@ const songs = await songContentRepository.all();
             />
             <div class="song-grid-body">
               <div class="song-grid-meta">
-                <span class="pill" data-song-type={song.type.value}>
-                  {song.type.name}
+                <span class="pill" data-song-type={song.type}>
+                  {SONG_TYPE_NAMES[song.type]}
                 </span>
               </div>
               <div class="song-grid-title">{song.title}</div>

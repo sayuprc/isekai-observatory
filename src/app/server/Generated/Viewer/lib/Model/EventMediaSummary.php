@@ -61,7 +61,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
         'title' => 'string',
         'url' => 'string',
         'published_at' => '\DateTime',
-        'type' => '\OpenAPI\Viewer\Client\Model\MediaType'
+        'type' => '\OpenAPI\Viewer\Client\Model\MediaTypeValue'
     ];
 
     /**
@@ -452,7 +452,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\MediaType
+     * @return \OpenAPI\Viewer\Client\Model\MediaTypeValue
      */
     public function getType()
     {
@@ -462,7 +462,7 @@ class EventMediaSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\MediaType $type type
+     * @param \OpenAPI\Viewer\Client\Model\MediaTypeValue $type type
      *
      * @return self
      */

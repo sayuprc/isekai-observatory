@@ -61,7 +61,7 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'string',
         'url' => 'string',
         'published_at' => '\DateTime',
-        'type' => '\OpenAPI\Viewer\Client\Model\MediaType',
+        'type' => '\OpenAPI\Viewer\Client\Model\MediaTypeValue',
         'counts' => '\OpenAPI\Viewer\Client\Model\MediaRelationCounts',
         'songs' => '\OpenAPI\Viewer\Client\Model\MediaSongSummary[]'
     ];
@@ -472,7 +472,7 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\MediaType
+     * @return \OpenAPI\Viewer\Client\Model\MediaTypeValue
      */
     public function getType()
     {
@@ -482,7 +482,7 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\MediaType $type type
+     * @param \OpenAPI\Viewer\Client\Model\MediaTypeValue $type type
      *
      * @return self
      */

@@ -60,7 +60,7 @@ class ReleaseGroupListItem implements ModelInterface, ArrayAccess, \JsonSerializ
     protected static $openAPITypes = [
         'release_group_id' => 'string',
         'title' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\ReleaseGroupType',
+        'type' => '\OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue',
         'description' => 'string',
         'first_released_on' => '\DateTime',
         'releases' => '\OpenAPI\Viewer\Client\Model\ReleaseListItem[]'
@@ -409,7 +409,7 @@ class ReleaseGroupListItem implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\ReleaseGroupType
+     * @return \OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue
      */
     public function getType()
     {
@@ -419,7 +419,7 @@ class ReleaseGroupListItem implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseGroupType $type type
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue $type type
      *
      * @return self
      */

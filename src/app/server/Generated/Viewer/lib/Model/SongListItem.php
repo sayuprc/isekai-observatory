@@ -60,7 +60,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'song_id' => 'string',
         'title' => 'string',
         'description' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\SongType',
+        'type' => '\OpenAPI\Viewer\Client\Model\SongTypeValue',
         'counts' => '\OpenAPI\Viewer\Client\Model\SongRelationCounts',
         'lyricists' => 'string[]',
         'composers' => 'string[]',
@@ -485,7 +485,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongType
+     * @return \OpenAPI\Viewer\Client\Model\SongTypeValue
      */
     public function getType()
     {
@@ -495,7 +495,7 @@ class SongListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongType $type type
+     * @param \OpenAPI\Viewer\Client\Model\SongTypeValue $type type
      *
      * @return self
      */

@@ -59,7 +59,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'song_id' => 'string',
         'title' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\SongType'
+        'type' => '\OpenAPI\Viewer\Client\Model\SongTypeValue'
     ];
 
     /**
@@ -378,7 +378,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\SongType
+     * @return \OpenAPI\Viewer\Client\Model\SongTypeValue
      */
     public function getType()
     {
@@ -388,7 +388,7 @@ class MediaSongSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\SongType $type type
+     * @param \OpenAPI\Viewer\Client\Model\SongTypeValue $type type
      *
      * @return self
      */

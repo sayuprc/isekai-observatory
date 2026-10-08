@@ -1,6 +1,7 @@
 ---
 import type { Event } from '../../../features/events/types';
-import { coVocalistNames, eventDetailDate, eventStatusName } from '../../../features/events/types';
+import { EVENT_TYPE_NAMES, coVocalistNames, eventDetailDate, eventStatusName } from '../../../features/events/types';
+import { releaseFormatText } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import EventSetlistSongs from './EventSetlistSongs.astro';
@@ -43,9 +44,7 @@ const looseTitle = setlistItems.length > 0 ? 'セットリスト外の楽曲披�
 const releases = event.releases.map((release) => ({
   href: `/releases/${release.releaseGroupId}`,
   title: release.name === '' ? release.releaseGroupTitle : `${release.releaseGroupTitle} ${release.name}`,
-  sub: [dottedDate(release.releasedOn), release.formats.map((format) => format.name).join('・')]
-    .filter((part) => part !== '')
-    .join(' · '),
+  sub: [dottedDate(release.releasedOn), releaseFormatText(release.formats)].filter((part) => part !== '').join(' · '),
 }));
 
 const hostname = (url: string): string => {
@@ -59,7 +58,7 @@ const hostname = (url: string): string => {
 
 <div class="detail-page-content event-detail-content" data-share-title={event.title}>
   <div class="event-detail-meta">
-    <span class="label-mono">{event.type.name}</span>
+    <span class="label-mono">{EVENT_TYPE_NAMES[event.type]}</span>
     {statusName && <span class="event-detail-status">{statusName}</span>}
   </div>
   <h1 class="detail-title">{event.title}</h1>

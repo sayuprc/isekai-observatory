@@ -64,7 +64,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'string',
         'color' => 'string',
         'order_no' => 'int',
-        'formats' => '\OpenAPI\Viewer\Client\Model\ReleaseFormat[]',
+        'formats' => '\OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]',
         'media' => '\OpenAPI\Viewer\Client\Model\ReleaseMediumItem[]'
     ];
 
@@ -546,7 +546,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets formats
      *
-     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormat[]
+     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]
      */
     public function getFormats()
     {
@@ -556,7 +556,7 @@ class ReleaseListItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets formats
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormat[] $formats formats
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[] $formats formats
      *
      * @return self
      */

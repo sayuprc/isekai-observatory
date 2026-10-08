@@ -63,7 +63,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'release_group_title' => 'string',
         'name' => 'string',
         'released_on' => '\DateTime',
-        'formats' => '\OpenAPI\Viewer\Client\Model\ReleaseFormat[]'
+        'formats' => '\OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]'
     ];
 
     /**
@@ -490,7 +490,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets formats
      *
-     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormat[]
+     * @return \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[]
      */
     public function getFormats()
     {
@@ -500,7 +500,7 @@ class EventReleaseSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Sets formats
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormat[] $formats formats
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseFormatValue[] $formats formats
      *
      * @return self
      */

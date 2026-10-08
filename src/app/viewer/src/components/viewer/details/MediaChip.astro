@@ -1,5 +1,7 @@
 ---
 import { mediaPlatformLabel, youtubeThumbnailFromUrl, youtubeThumbnailSrcset } from '../../../features/media/labels';
+import { MEDIA_TYPE_NAMES } from '../../../features/media/types';
+import type { MediaTypeValue } from '../../../generated/types.gen.js';
 import { dottedDateOfDateTime } from '../../../shared/date';
 
 interface Props {
@@ -8,7 +10,7 @@ interface Props {
     title: string;
     url: string;
     publishedAt: string;
-    type: { name: string };
+    type: MediaTypeValue;
   };
 }
 
@@ -40,7 +42,7 @@ const publishedAt = dottedDateOfDateTime(media.publishedAt);
   <div class="rel-copy">
     <div class="rel-main">{media.title}</div>
     <div class="label-mono rel-sub">
-      {publishedAt} · {platformName} · {media.type.name}
+      {publishedAt} · {platformName} · {MEDIA_TYPE_NAMES[media.type]}
     </div>
   </div>
   <span class="rel-arrow rel-arrow-muted">→</span>

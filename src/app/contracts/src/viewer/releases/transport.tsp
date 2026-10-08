@@ -11,7 +11,7 @@ namespace IsekaiObservatory.Viewer;
     #{
       releaseGroupId: "0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2",
       title: "テストアルバム",
-      type: #{ name: "アルバム", value: ReleaseGroupTypeValue.Album },
+      type: ReleaseGroupTypeValue.Album,
       description: "1st アルバム",
       firstReleasedOn: "2026-05-01",
       releases: #[
@@ -22,7 +22,7 @@ namespace IsekaiObservatory.Viewer;
           description: "",
           color: "#4a5a78",
           orderNo: 1,
-          formats: #[#{ name: "CD", value: ReleaseFormatValue.Cd }],
+          formats: #[ReleaseFormatValue.Cd],
           media: #[
             #{
               position: 1,

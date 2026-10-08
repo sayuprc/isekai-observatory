@@ -242,11 +242,11 @@ components:
         description:
           $ref: '#/components/schemas/eventDescription'
         type:
-          $ref: '#/components/schemas/EventType'
+          $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
         status:
-          $ref: '#/components/schemas/EventStatus'
+          $ref: '#/components/schemas/EventStatusValue'
         venues:
           type: array
           items:
@@ -300,7 +300,7 @@ components:
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
         type:
-          $ref: '#/components/schemas/MediaType'
+          $ref: '#/components/schemas/MediaTypeValue'
     EventReleaseSummary:
       type: object
       required:
@@ -324,7 +324,7 @@ components:
         formats:
           type: array
           items:
-            $ref: '#/components/schemas/ReleaseFormat'
+            $ref: '#/components/schemas/ReleaseFormatValue'
       description: イベントに関連づけた公開リリース(版)。リリースとリリースグループがともに公開のものだけが載る
     EventSource:
       type: object
@@ -339,19 +339,6 @@ components:
           $ref: '#/components/schemas/eventSourceUrl'
         orderNo:
           $ref: '#/components/schemas/orderNo'
-    EventStatus:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/eventStatusName'
-        value:
-          $ref: '#/components/schemas/EventStatusValue'
-      examples:
-        - name: 通常
-          value: 1
     EventStatusValue:
       type: integer
       format: int32
@@ -360,19 +347,6 @@ components:
         - 2
         - 3
       description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
-    EventType:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/eventTypeName'
-        value:
-          $ref: '#/components/schemas/EventTypeValue'
-      examples:
-        - name: ライブ
-          value: 1
     EventTypeValue:
       type: integer
       format: int32
@@ -388,14 +362,14 @@ components:
       required:
         - venueId
         - name
-        - kindName
+        - kind
       properties:
         venueId:
           $ref: '#/components/schemas/uuid'
         name:
           type: string
-        kindName:
-          type: string
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
     IsekaiObservatory.Packages.Event.EventSchedule:
       type: object
       required:
@@ -435,7 +409,7 @@ components:
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
         type:
-          $ref: '#/components/schemas/MediaType'
+          $ref: '#/components/schemas/MediaTypeValue'
         counts:
           $ref: '#/components/schemas/MediaRelationCounts'
         songs:
@@ -447,17 +421,13 @@ components:
           title: テストメディアMV
           url: https://example.com/media/1
           publishedAt: '2024-03-01T12:00:00+09:00'
-          type:
-            name: MV
-            value: 1
+          type: 1
           counts:
             songCount: 1
           songs:
             - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
               title: テスト楽曲
-              type:
-                name: オリジナル曲
-                value: 1
+              type: 1
     MediaListResponse:
       type: object
       required:
@@ -476,17 +446,13 @@ components:
               title: テストメディアMV
               url: https://example.com/media/1
               publishedAt: '2024-03-01T12:00:00+09:00'
-              type:
-                name: MV
-                value: 1
+              type: 1
               counts:
                 songCount: 1
               songs:
                 - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
                   title: テスト楽曲
-                  type:
-                    name: オリジナル曲
-                    value: 1
+                  type: 1
           nextCursor: eyJwdWJsaXNoZWRBdCI6IjIwMjQtMDMtMDEiLCJtZWRpYUlkIjoiMTExMTExMTEtMTExMS0xMTExLTExMTEtMTExMTExMTExMTExIn0=
     MediaRelationCounts:
       type: object
@@ -509,26 +475,11 @@ components:
         title:
           $ref: '#/components/schemas/title'
         type:
-          $ref: '#/components/schemas/SongType'
+          $ref: '#/components/schemas/SongTypeValue'
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
-          type:
-            name: オリジナル曲
-            value: 1
-    MediaType:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/mediaTypeName'
-        value:
-          $ref: '#/components/schemas/MediaTypeValue'
-      examples:
-        - name: MV
-          value: 1
+          type: 1
     MediaTypeValue:
       type: integer
       format: int32
@@ -575,19 +526,6 @@ components:
         name:
           type: string
       description: 共演者が出演したグループ
-    ReleaseFormat:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          type: string
-        value:
-          $ref: '#/components/schemas/ReleaseFormatValue'
-      examples:
-        - name: CD
-          value: 2
     ReleaseFormatValue:
       type: integer
       format: int32
@@ -613,7 +551,7 @@ components:
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
         type:
-          $ref: '#/components/schemas/ReleaseGroupType'
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
         firstReleasedOn:
@@ -640,9 +578,7 @@ components:
         - releaseGroups:
             - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
               title: テストアルバム
-              type:
-                name: アルバム
-                value: 2
+              type: 2
               description: 1st アルバム
               firstReleasedOn: '2026-05-01'
               releases:
@@ -653,8 +589,7 @@ components:
                   color: '#4a5a78'
                   orderNo: 1
                   formats:
-                    - name: CD
-                      value: 2
+                    - 2
                   media:
                     - position: 1
                       name: null
@@ -664,19 +599,6 @@ components:
                           title: テスト楽曲
                           isDisplay: true
           nextCursor: eyJmaXJzdFJlbGVhc2VkT24iOiIyMDI2LTA1LTAxIiwicmVsZWFzZUdyb3VwSWQiOiIwZjIxODVjZC1iNGFiLTRmMjItYjBhMy1mZDkzY2JiZDJkZjIifQ==
-    ReleaseGroupType:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          type: string
-        value:
-          $ref: '#/components/schemas/ReleaseGroupTypeValue'
-      examples:
-        - name: アルバム
-          value: 2
     ReleaseGroupTypeValue:
       type: integer
       format: int32
@@ -713,7 +635,7 @@ components:
         formats:
           type: array
           items:
-            $ref: '#/components/schemas/ReleaseFormat'
+            $ref: '#/components/schemas/ReleaseFormatValue'
         media:
           type: array
           items:
@@ -812,7 +734,7 @@ components:
         description:
           $ref: '#/components/schemas/description'
         type:
-          $ref: '#/components/schemas/SongType'
+          $ref: '#/components/schemas/SongTypeValue'
         counts:
           $ref: '#/components/schemas/SongRelationCounts'
         lyricists:
@@ -845,9 +767,7 @@ components:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
           description: テスト楽曲説明
-          type:
-            name: オリジナル曲
-            value: 1
+          type: 1
           counts:
             releaseCount: 1
             mediaCount: 1
@@ -860,17 +780,13 @@ components:
           media:
             - mediaId: 11111111-1111-1111-1111-111111111111
               title: テストメディアMV
-              type:
-                name: MV
-                value: 1
+              type: 1
               url: https://www.youtube.com/watch?v=dummy
               publishedAt: '2024-03-01T12:00:00+09:00'
           releaseGroups:
             - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
               title: テストアルバム
-              type:
-                name: アルバム
-                value: 2
+              type: 2
               firstReleasedOn: '2026-05-01'
               color: '#4a5a78'
           performances: []
@@ -891,9 +807,7 @@ components:
             - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
               title: テスト楽曲
               description: テスト楽曲説明
-              type:
-                name: オリジナル曲
-                value: 1
+              type: 1
               counts:
                 releaseCount: 1
                 mediaCount: 1
@@ -906,17 +820,13 @@ components:
               media:
                 - mediaId: 11111111-1111-1111-1111-111111111111
                   title: テストメディアMV
-                  type:
-                    name: MV
-                    value: 1
+                  type: 1
                   url: https://www.youtube.com/watch?v=dummy
                   publishedAt: '2024-03-01T12:00:00+09:00'
               releaseGroups:
                 - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
                   title: テストアルバム
-                  type:
-                    name: アルバム
-                    value: 2
+                  type: 2
                   firstReleasedOn: '2026-05-01'
                   color: '#4a5a78'
               performances: []
@@ -935,7 +845,7 @@ components:
         title:
           $ref: '#/components/schemas/mediaTitle'
         type:
-          $ref: '#/components/schemas/MediaType'
+          $ref: '#/components/schemas/MediaTypeValue'
         url:
           $ref: '#/components/schemas/mediaUrl'
         publishedAt:
@@ -943,9 +853,7 @@ components:
       examples:
         - mediaId: 11111111-1111-1111-1111-111111111111
           title: テストメディアMV
-          type:
-            name: MV
-            value: 1
+          type: 1
           url: https://www.youtube.com/watch?v=dummy
           publishedAt: '2024-03-01T12:00:00+09:00'
     SongPerformance:
@@ -973,7 +881,7 @@ components:
       required:
         - eventId
         - eventTitle
-        - typeValue
+        - type
         - schedule
         - coVocalistNames
       properties:
@@ -981,7 +889,7 @@ components:
           $ref: '#/components/schemas/eventId'
         eventTitle:
           $ref: '#/components/schemas/eventTitle'
-        typeValue:
+        type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
@@ -1019,26 +927,13 @@ components:
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
         type:
-          $ref: '#/components/schemas/ReleaseGroupType'
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
         firstReleasedOn:
           $ref: '#/components/schemas/releasedOn'
         color:
           $ref: '#/components/schemas/color'
           description: 代表色(公開リリースを発売日順に見て最初のもの)
       description: 楽曲が収録されている公開リリースグループの概要
-    SongType:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/songTypeName'
-        value:
-          $ref: '#/components/schemas/SongTypeValue'
-      examples:
-        - name: オリジナル曲
-          value: 1
     SongTypeValue:
       type: integer
       format: int32
@@ -1046,6 +941,13 @@ components:
         - 1
         - 2
       description: 楽曲種別の値
+    VenueKindValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+      description: 開催先種別の値
     Version:
       type: string
       enum:
@@ -1079,18 +981,10 @@ components:
       type: string
       format: uri
       description: イベントの出典URL
-    eventStatusName:
-      type: string
-      minLength: 1
-      description: イベントの開催状態名
     eventTitle:
       type: string
       minLength: 1
       description: イベントタイトル
-    eventTypeName:
-      type: string
-      minLength: 1
-      description: イベント種別名
     limit:
       type: integer
       format: int32
@@ -1109,10 +1003,6 @@ components:
       type: string
       minLength: 1
       description: メディアタイトル
-    mediaTypeName:
-      type: string
-      minLength: 1
-      description: メディア種別名
     mediaUrl:
       type: string
       format: uri
@@ -1149,10 +1039,6 @@ components:
       type: string
       format: uuid
       description: 楽曲ID
-    songTypeName:
-      type: string
-      minLength: 1
-      description: 楽曲種別名
     title:
       type: string
       minLength: 1

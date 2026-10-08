@@ -33,12 +33,6 @@ enum ReleaseGroupTypeValue {
   Other: 99,
 }
 
-@example(#{ name: "アルバム", value: ReleaseGroupTypeValue.Album })
-model ReleaseGroupType {
-  name: string;
-  value: ReleaseGroupTypeValue;
-}
-
 @doc("提供形態の値")
 enum ReleaseFormatValue {
   Digital: 1,
@@ -46,12 +40,6 @@ enum ReleaseFormatValue {
   Dvd: 3,
   BluRay: 4,
   Other: 99,
-}
-
-@example(#{ name: "CD", value: ReleaseFormatValue.Cd })
-model ReleaseFormat {
-  name: string;
-  value: ReleaseFormatValue;
 }
 
 @doc("収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する")
@@ -77,7 +65,7 @@ model ReleaseListItem {
   description: string;
   color: color;
   orderNo: orderNo;
-  formats: ReleaseFormat[];
+  formats: ReleaseFormatValue[];
   media: ReleaseMediumItem[];
 }
 
@@ -85,7 +73,7 @@ model ReleaseListItem {
 model ReleaseGroupListItem {
   releaseGroupId: releaseGroupId;
   title: releaseGroupTitle;
-  type: ReleaseGroupType;
+  type: ReleaseGroupTypeValue;
   description: string;
 
   @doc("傘下の公開リリースの最古発売日")

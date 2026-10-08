@@ -4,7 +4,11 @@ import EntryStatus from '../../components/viewer/EntryStatus';
 import FilterBar from '../../components/viewer/FilterBar';
 import SectionHead from '../../components/viewer/SectionHead.astro';
 import { releaseGroupContentRepository } from '../../features/releases/content';
-import { representativeColor } from '../../features/releases/types';
+import {
+  RELEASE_GROUP_TYPE_FILTER_ORDER,
+  RELEASE_GROUP_TYPE_NAMES,
+  representativeColor,
+} from '../../features/releases/types';
 import Layout from '../../layouts/Layout.astro';
 import { dottedDate } from '../../shared/date';
 
@@ -22,10 +26,10 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
       client:idle
       filters={[
         { value: 'all', label: `すべて` },
-        { value: '2', label: 'アルバム' },
-        { value: '1', label: 'シングル' },
-        { value: '3', label: 'EP' },
-        { value: '99', label: 'その他' },
+        ...RELEASE_GROUP_TYPE_FILTER_ORDER.map((value) => ({
+          value: String(value),
+          label: RELEASE_GROUP_TYPE_NAMES[value],
+        })),
       ]}
       entrySelector="[data-release-entry]"
       categoryAttrs={['releaseType']}
@@ -73,8 +77,8 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
               return (
                 <li
                   data-release-entry
-                  data-release-type={String(releaseGroup.type.value)}
-                  data-release-search={[releaseGroup.title, releaseGroup.type.name, ...trackTitles]
+                  data-release-type={String(releaseGroup.type)}
+                  data-release-search={[releaseGroup.title, RELEASE_GROUP_TYPE_NAMES[releaseGroup.type], ...trackTitles]
                     .join(' ')
                     .toLowerCase()}
                 >
@@ -84,7 +88,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
                     style={`--release-color:${representativeColor(releaseGroup)};`}
                   >
                     <span class="release-row-title">{releaseGroup.title}</span>
-                    <span class="release-row-type">{releaseGroup.type.name}</span>
+                    <span class="release-row-type">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}</span>
                     <span class="label-mono release-row-date">{dottedDate(releaseGroup.firstReleasedOn.slice(5))}</span>
                   </a>
                 </li>

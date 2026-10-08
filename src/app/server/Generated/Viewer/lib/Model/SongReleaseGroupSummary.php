@@ -60,7 +60,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     protected static $openAPITypes = [
         'release_group_id' => 'string',
         'title' => 'string',
-        'type' => '\OpenAPI\Viewer\Client\Model\ReleaseGroupType',
+        'type' => '\OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue',
         'first_released_on' => '\DateTime',
         'color' => 'string'
     ];
@@ -403,7 +403,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\ReleaseGroupType
+     * @return \OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue
      */
     public function getType()
     {
@@ -413,7 +413,7 @@ class SongReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseGroupType $type type
+     * @param \OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue $type type
      *
      * @return self
      */

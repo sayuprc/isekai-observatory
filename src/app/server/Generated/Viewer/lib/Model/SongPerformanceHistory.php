@@ -60,7 +60,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $openAPITypes = [
         'event_id' => 'string',
         'event_title' => 'string',
-        'type_value' => '\OpenAPI\Viewer\Client\Model\EventTypeValue',
+        'type' => '\OpenAPI\Viewer\Client\Model\EventTypeValue',
         'schedule' => '\OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
         'co_vocalist_names' => 'string[]'
     ];
@@ -75,7 +75,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $openAPIFormats = [
         'event_id' => 'uuid',
         'event_title' => null,
-        'type_value' => null,
+        'type' => null,
         'schedule' => null,
         'co_vocalist_names' => null
     ];
@@ -88,7 +88,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     protected static array $openAPINullables = [
         'event_id' => false,
         'event_title' => false,
-        'type_value' => false,
+        'type' => false,
         'schedule' => false,
         'co_vocalist_names' => false
     ];
@@ -181,7 +181,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $attributeMap = [
         'event_id' => 'eventId',
         'event_title' => 'eventTitle',
-        'type_value' => 'typeValue',
+        'type' => 'type',
         'schedule' => 'schedule',
         'co_vocalist_names' => 'coVocalistNames'
     ];
@@ -194,7 +194,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $setters = [
         'event_id' => 'setEventId',
         'event_title' => 'setEventTitle',
-        'type_value' => 'setTypeValue',
+        'type' => 'setType',
         'schedule' => 'setSchedule',
         'co_vocalist_names' => 'setCoVocalistNames'
     ];
@@ -207,7 +207,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $getters = [
         'event_id' => 'getEventId',
         'event_title' => 'getEventTitle',
-        'type_value' => 'getTypeValue',
+        'type' => 'getType',
         'schedule' => 'getSchedule',
         'co_vocalist_names' => 'getCoVocalistNames'
     ];
@@ -271,7 +271,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     {
         $this->setIfExists('event_id', $data ?? [], null);
         $this->setIfExists('event_title', $data ?? [], null);
-        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('schedule', $data ?? [], null);
         $this->setIfExists('co_vocalist_names', $data ?? [], null);
     }
@@ -313,8 +313,8 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
             $invalidProperties[] = "invalid value for 'event_title', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['type_value'] === null) {
-            $invalidProperties[] = "'type_value' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
         if ($this->container['schedule'] === null) {
             $invalidProperties[] = "'schedule' can't be null";
@@ -397,28 +397,28 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     }
 
     /**
-     * Gets type_value
+     * Gets type
      *
      * @return \OpenAPI\Viewer\Client\Model\EventTypeValue
      */
-    public function getTypeValue()
+    public function getType()
     {
-        return $this->container['type_value'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets type_value
+     * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\EventTypeValue $type_value type_value
+     * @param \OpenAPI\Viewer\Client\Model\EventTypeValue $type type
      *
      * @return self
      */
-    public function setTypeValue($type_value)
+    public function setType($type)
     {
-        if (is_null($type_value)) {
-            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['type_value'] = $type_value;
+        $this->container['type'] = $type;
 
         return $this;
     }
