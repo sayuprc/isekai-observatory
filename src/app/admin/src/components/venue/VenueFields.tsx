@@ -1,12 +1,10 @@
 import { Show } from 'solid-js';
 import type { VenueKindValue } from '../../generated';
+import { toOptions, VENUE_KIND_NAMES } from '../../utils/enum-names';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 
-const VENUE_KIND_OPTIONS: { value: VenueKindValue; label: string }[] = [
-  { value: 1, label: '現地' },
-  { value: 2, label: 'オンライン' },
-];
+const VENUE_KIND_OPTIONS = toOptions(VENUE_KIND_NAMES);
 
 interface VenueFieldsProps {
   name?: string;

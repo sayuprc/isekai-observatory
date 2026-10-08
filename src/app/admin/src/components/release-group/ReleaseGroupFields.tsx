@@ -1,14 +1,10 @@
 import { createSignal, Show } from 'solid-js';
 import type { ReleaseGroup, ReleaseGroupTypeValue } from '../../generated';
+import { RELEASE_GROUP_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 
-export const RELEASE_GROUP_TYPE_OPTIONS: Array<{ value: ReleaseGroupTypeValue; label: string }> = [
-  { value: 1, label: 'シングル' },
-  { value: 2, label: 'アルバム' },
-  { value: 3, label: 'EP' },
-  { value: 99, label: 'その他' },
-];
+const RELEASE_GROUP_TYPE_OPTIONS = toOptions(RELEASE_GROUP_TYPE_NAMES);
 
 const DISPLAY_OPTIONS = [
   { value: 'true', label: '表示' },

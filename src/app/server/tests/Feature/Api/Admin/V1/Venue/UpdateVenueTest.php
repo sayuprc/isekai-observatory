@@ -35,7 +35,7 @@ class UpdateVenueTest extends DatabaseTestCase
                 'venue' => [
                     'venueId' => $venueId,
                     'name' => '配信先サンプルB',
-                    'kind' => ['name' => 'オンライン', 'value' => 2],
+                    'kind' => 2,
                 ],
             ]);
 

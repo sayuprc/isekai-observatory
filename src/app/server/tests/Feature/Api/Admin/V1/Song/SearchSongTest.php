@@ -35,10 +35,7 @@ class SearchSongTest extends DatabaseTestCase
                     [
                         'songId' => $uuid,
                         'title' => 'テスト楽曲',
-                        'type' => [
-                            'name' => 'オリジナル曲',
-                            'value' => 1,
-                        ],
+                        'type' => 1,
                         'isDisplay' => true,
                         'orderNo' => 1,
                         'performanceCount' => 0,
@@ -71,10 +68,7 @@ class SearchSongTest extends DatabaseTestCase
                     [
                         'songId' => $uuid1,
                         'title' => 'テスト楽曲',
-                        'type' => [
-                            'name' => 'オリジナル曲',
-                            'value' => 1,
-                        ],
+                        'type' => 1,
                         'isDisplay' => true,
                         'orderNo' => 1,
                         'performanceCount' => 0,
@@ -85,10 +79,7 @@ class SearchSongTest extends DatabaseTestCase
                     [
                         'songId' => $uuid2,
                         'title' => '比較テスト楽曲B',
-                        'type' => [
-                            'name' => 'カバー曲',
-                            'value' => 2,
-                        ],
+                        'type' => 2,
                         'isDisplay' => true,
                         'orderNo' => 2,
                         'performanceCount' => 0,
@@ -120,10 +111,7 @@ class SearchSongTest extends DatabaseTestCase
                     [
                         'songId' => $uuid1,
                         'title' => 'テスト楽曲',
-                        'type' => [
-                            'name' => 'オリジナル曲',
-                            'value' => 1,
-                        ],
+                        'type' => 1,
                         'isDisplay' => true,
                         'orderNo' => 1,
                         'performanceCount' => 0,
@@ -155,10 +143,7 @@ class SearchSongTest extends DatabaseTestCase
                     [
                         'songId' => $hiddenSongId,
                         'title' => '比較テスト楽曲B',
-                        'type' => [
-                            'name' => 'カバー曲',
-                            'value' => 2,
-                        ],
+                        'type' => 2,
                         'isDisplay' => false,
                         'orderNo' => 2,
                         'performanceCount' => 0,

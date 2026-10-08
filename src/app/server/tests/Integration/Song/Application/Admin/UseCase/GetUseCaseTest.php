@@ -54,7 +54,6 @@ class GetUseCaseTest extends DatabaseTestCase
         $this->assertSame($songId, $response->song->songId);
         $this->assertSame('テスト楽曲', $response->song->title);
         $this->assertSame('テスト楽曲説明', $response->song->description);
-        $this->assertSame(SongType::Original->getName(), $response->song->typeName);
         $this->assertSame(SongType::Original->value, $response->song->typeValue);
         $this->assertSame(1, $response->song->orderNo);
         $this->assertCount(3, $response->song->persons);

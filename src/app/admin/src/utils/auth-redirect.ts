@@ -1,4 +1,4 @@
-export const DEFAULT_AUTH_RETURN_TO = '/song-types';
+export const DEFAULT_AUTH_RETURN_TO = '/songs';
 const PUBLIC_ROUTE_PREFIXES = ['/api/', '/auth/', '/_astro/'] as const satisfies readonly string[];
 const PUBLIC_ROUTE_PATHS = ['/api', '/auth', '/favicon.svg'] as const satisfies readonly string[];
 const PUBLIC_ROUTE_PATH_SET: ReadonlySet<string> = new Set(PUBLIC_ROUTE_PATHS);

@@ -85,10 +85,7 @@ class UpdateSongTest extends DatabaseTestCase
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
                     'lyricsLink' => 'https://example.com/new-lyrics',
-                    'type' => [
-                        'name' => SongType::Cover->getName(),
-                        'value' => SongType::Cover->value,
-                    ],
+                    'type' => SongType::Cover->value,
                     'isDisplay' => false,
                     'orderNo' => 2,
                     'persons' => [
@@ -117,10 +114,7 @@ class UpdateSongTest extends DatabaseTestCase
                             'title' => $newMedia->title->value,
                             'url' => $newMedia->url->value,
                             'publishedAt' => $newMedia->publishedAt->value->format('Y-m-d\TH:i:sP'),
-                            'type' => [
-                                'name' => $newMedia->type->getName(),
-                                'value' => $newMedia->type->value,
-                            ],
+                            'type' => $newMedia->type->value,
                             'isDisplay' => true,
                             'orderNo' => 1,
                         ],
@@ -223,10 +217,7 @@ class UpdateSongTest extends DatabaseTestCase
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
                     'lyricsLink' => null,
-                    'type' => [
-                        'name' => SongType::Cover->getName(),
-                        'value' => SongType::Cover->value,
-                    ],
+                    'type' => SongType::Cover->value,
                     'isDisplay' => false,
                     'orderNo' => 2,
                     'persons' => [

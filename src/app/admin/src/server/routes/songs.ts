@@ -7,7 +7,6 @@ import {
   songServiceSearchSongs,
   songServiceUpdateSong,
   songTagServiceListSongTags,
-  songTypeServiceListSongTypes,
 } from '../../generated';
 import type { PerPage, SongSearchSortBy, SongSearchTypeValue, SortOrder } from '../../generated';
 import { requestWithAuth, withAuthRetry } from '../client';
@@ -27,14 +26,12 @@ export const songs = new Elysia({ prefix: '/songs' })
   .use(authGuard)
   .get('/create-form', async ({ authSession }) => {
     return withAuthRetry(authSession, async (client) => {
-      const [types, tags, media] = await Promise.all([
-        songTypeServiceListSongTypes({ client }),
+      const [tags, media] = await Promise.all([
         songTagServiceListSongTags({ client }),
         mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
       ]);
 
       return {
-        types: resolveApiResponse(types).types,
         tags: resolveApiResponse(tags).tags,
         media: resolveApiResponse(media).media,
       };
@@ -43,28 +40,20 @@ export const songs = new Elysia({ prefix: '/songs' })
   .get(
     '/search',
     async ({ query, authSession }) => {
-      return withAuthRetry(authSession, async (client) => {
-        const [searchResult, types] = await Promise.all([
-          songServiceSearchSongs({
-            client,
-            query: {
-              title: query.title || undefined,
-              type: query.type as SongSearchTypeValue | undefined,
-              is_display: query.is_display,
-              sort: (query.sort ?? 'order_no') as SongSearchSortBy,
-              order: (query.order ?? 'asc') as SortOrder,
-              page: query.page ?? 1,
-              per_page: (query.per_page ?? 25) as PerPage,
-            },
-          }),
-          songTypeServiceListSongTypes({ client }),
-        ]);
-
-        return {
-          ...resolveApiResponse(searchResult),
-          types: resolveApiResponse(types).types,
-        };
-      });
+      return requestWithAuth(authSession, (client) =>
+        songServiceSearchSongs({
+          client,
+          query: {
+            title: query.title || undefined,
+            type: query.type as SongSearchTypeValue | undefined,
+            is_display: query.is_display,
+            sort: (query.sort ?? 'order_no') as SongSearchSortBy,
+            order: (query.order ?? 'asc') as SortOrder,
+            page: query.page ?? 1,
+            per_page: (query.per_page ?? 25) as PerPage,
+          },
+        }),
+      );
     },
     {
       query: t.Object({
@@ -82,16 +71,14 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId/edit-form',
     async ({ params: { songId }, authSession }) => {
       return withAuthRetry(authSession, async (client) => {
-        const [song, types, tags, media] = await Promise.all([
+        const [song, tags, media] = await Promise.all([
           songServiceGetSong({ client, path: { songId } }),
-          songTypeServiceListSongTypes({ client }),
           songTagServiceListSongTags({ client }),
           mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
         ]);
 
         return {
           ...resolveApiResponse(song),
-          types: resolveApiResponse(types).types,
           tags: resolveApiResponse(tags).tags,
           media: resolveApiResponse(media).media,
         };

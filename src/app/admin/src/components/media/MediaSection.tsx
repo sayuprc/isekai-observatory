@@ -1,13 +1,14 @@
 import { createSignal, For, Show, type Accessor, type Setter } from 'solid-js';
 import type { Media, MediaTypeValue } from '../../generated';
 import { client } from '../../utils/client';
+import { MEDIA_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { createSortable, reorderItems } from '../sortable';
 
 export type MediaEntry = {
   mediaId: string;
   title: string;
   url: string;
-  typeName: string;
+  type: MediaTypeValue;
   isDisplay: boolean;
 };
 
@@ -21,14 +22,7 @@ interface Props {
 type DisplayFilter = '' | 'true' | 'false';
 type PerPage = 25 | 50 | 100;
 
-const mediaTypeOptions: Array<{ value: MediaTypeValue; label: string }> = [
-  { value: 1, label: 'MV' },
-  { value: 2, label: '音源動画' },
-  { value: 3, label: '配信' },
-  { value: 4, label: 'ショート' },
-  { value: 5, label: '投稿' },
-  { value: 99, label: 'その他' },
-];
+const mediaTypeOptions = toOptions(MEDIA_TYPE_NAMES);
 
 const perPageOptions: PerPage[] = [25, 50, 100];
 
@@ -53,7 +47,7 @@ export const toMediaEntry = (item: Pick<Media, 'mediaId' | 'title' | 'url' | 'ty
   mediaId: item.mediaId,
   title: item.title,
   url: item.url,
-  typeName: item.type.name,
+  type: item.type,
   isDisplay: item.isDisplay,
 });
 
@@ -335,7 +329,7 @@ export const MediaSection = (props: Props) => {
                             <span class="badge badge-sm badge-primary badge-soft">選択中</span>
                           </Show>
                         </div>
-                        <p class="text-xs text-base-content/60">{item.type.name}</p>
+                        <p class="text-xs text-base-content/60">{MEDIA_TYPE_NAMES[item.type]}</p>
                         <a href={item.url} target="_blank" rel="noreferrer" class="link link-hover break-all text-xs">
                           {item.url}
                         </a>
@@ -413,7 +407,7 @@ export const MediaSection = (props: Props) => {
                               {(reason) => <span class="badge badge-warning badge-sm badge-outline">{reason}</span>}
                             </For>
                           </div>
-                          <p class="text-xs text-base-content/60">{candidate.item.type.name}</p>
+                          <p class="text-xs text-base-content/60">{MEDIA_TYPE_NAMES[candidate.item.type]}</p>
                           <a
                             href={candidate.item.url}
                             target="_blank"
@@ -504,7 +498,7 @@ export const MediaSection = (props: Props) => {
                       <button {...sortable.dragHandleProps('media', index(), entry.title)}>⠿</button>
                       <div class="min-w-0">
                         <p class="font-medium">{entry.title}</p>
-                        <p class="text-xs text-base-content/60">{entry.typeName}</p>
+                        <p class="text-xs text-base-content/60">{MEDIA_TYPE_NAMES[entry.type]}</p>
                         <a href={entry.url} target="_blank" rel="noreferrer" class="link link-hover break-all text-xs">
                           {entry.url}
                         </a>

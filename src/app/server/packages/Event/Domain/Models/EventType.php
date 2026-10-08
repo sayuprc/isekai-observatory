@@ -16,17 +16,6 @@ enum EventType: int
 
     case Other = 99;
 
-    public function getName(): string
-    {
-        return match ($this) {
-            self::Live => 'ライブ',
-            self::Stream => '配信',
-            self::Exhibition => '展覧会',
-            self::Radio => 'ラジオ',
-            self::Other => 'その他',
-        };
-    }
-
     /**
      * セットリストはライブと配信だけが持てる
      */

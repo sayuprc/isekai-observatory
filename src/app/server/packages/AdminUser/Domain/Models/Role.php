@@ -26,13 +26,4 @@ enum Role: int
     {
         return in_array($this, [self::Privilege, self::Console], true);
     }
-
-    public function getName(): string
-    {
-        return match ($this) {
-            self::Privilege => '特権',
-            self::Console => 'コンソール',
-            self::General => '一般',
-        };
-    }
 }

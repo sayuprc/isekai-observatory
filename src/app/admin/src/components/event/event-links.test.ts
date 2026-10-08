@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import type { EventRelease, ReleaseGroupReferencedRelease, Venue } from '../../generated';
 import { addRelease, addVenue, releaseLabel, toEventReleases, toSourcesPayload, validateSources } from './event-links';
 
-const venue = (venueId: string): Venue => ({ venueId, name: `会場${venueId}`, kind: { name: '現地', value: 1 } });
+const venue = (venueId: string): Venue => ({ venueId, name: `会場${venueId}`, kind: 1 });
 const release = (releaseId: string): EventRelease => ({
   releaseId,
   releaseGroupId: 'group',

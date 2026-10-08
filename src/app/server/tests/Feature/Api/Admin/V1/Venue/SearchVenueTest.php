@@ -41,7 +41,7 @@ class SearchVenueTest extends DatabaseTestCase
                 'venues' => [[
                     'venueId' => $onlineId,
                     'name' => '配信先サンプルB',
-                    'kind' => ['name' => 'オンライン', 'value' => 2],
+                    'kind' => 2,
                     'eventCount' => 0,
                 ]],
                 'maxPage' => 1,

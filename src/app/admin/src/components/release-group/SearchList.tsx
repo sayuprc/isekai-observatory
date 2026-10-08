@@ -1,6 +1,7 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { ReleaseGroupSearchSortBy, ReleaseGroupTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
+import { RELEASE_GROUP_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
@@ -19,10 +20,7 @@ type Order = SortOrder;
 
 const RELEASE_GROUP_TYPE_OPTIONS: Array<{ value: '' | `${ReleaseGroupTypeValue}`; label: string }> = [
   { value: '', label: 'すべて' },
-  { value: '1', label: 'シングル' },
-  { value: '2', label: 'アルバム' },
-  { value: '3', label: 'EP' },
-  { value: '99', label: 'その他' },
+  ...toOptions(RELEASE_GROUP_TYPE_NAMES).map((option) => ({ value: `${option.value}` as const, label: option.label })),
 ];
 
 const normalizeDateDisplayValue = (value: unknown): string => {
@@ -114,8 +112,6 @@ export const SearchList = () => {
     }),
   );
 
-  const typeLabelOf = (typeValue: ReleaseGroupTypeValue) =>
-    RELEASE_GROUP_TYPE_OPTIONS.find((option) => option.value === String(typeValue))?.label ?? '不明';
   return (
     <>
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
@@ -275,7 +271,7 @@ export const SearchList = () => {
                             {releaseGroup.title}
                           </a>
                         </td>
-                        <td class="whitespace-nowrap">{typeLabelOf(releaseGroup.typeValue)}</td>
+                        <td class="whitespace-nowrap">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.typeValue]}</td>
                         <td class="whitespace-nowrap text-sm">
                           {releaseGroup.firstReleasedOn ? normalizeDateDisplayValue(releaseGroup.firstReleasedOn) : '—'}
                         </td>

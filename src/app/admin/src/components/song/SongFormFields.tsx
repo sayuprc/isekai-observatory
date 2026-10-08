@@ -1,5 +1,6 @@
 import { children, createSignal, For, type JSX, Show } from 'solid-js';
-import type { SongTag, SongType } from '../../generated';
+import type { SongTag } from '../../generated';
+import { SONG_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { FormColumns } from '../FormColumns';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
@@ -8,6 +9,8 @@ import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
 import { PersonSearchSection } from './PersonSearchSection';
 import type { SongFormState } from './song-form';
+
+const SONG_TYPE_OPTIONS = toOptions(SONG_TYPE_NAMES);
 
 export const SONG_TABS = ['overview', 'persons', 'media', 'history'] as const;
 export type SongTab = (typeof SONG_TABS)[number];
@@ -49,7 +52,6 @@ export const SongTabList = (props: SongTabListProps) => {
 interface SongFormFieldsProps {
   form: SongFormState;
   tab: SongTab;
-  types: SongType[];
   availableTags: SongTag[];
   getFieldError: (field: string) => string | undefined;
   // 編集画面だけ表示順を出す
@@ -116,7 +118,7 @@ const SongBasicInfo = (props: SongFormFieldsProps) => (
     <FormRow label="楽曲種別">
       <SegmentedControl
         label="楽曲種別"
-        options={props.types.map((type) => ({ value: type.value, label: type.name }))}
+        options={SONG_TYPE_OPTIONS}
         value={props.form.typeValue()}
         onChange={props.form.setTypeValue}
       />

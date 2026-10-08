@@ -70,9 +70,9 @@ model Event {
   eventId: eventId;
   title: eventTitle;
   description: eventDescription;
-  type: EventType;
+  type: EventTypeValue;
   schedule: EventSchedule;
-  status: EventStatus;
+  status: EventStatusValue;
   isDisplay: boolean;
   venues: Venue[];
   media: Media[];
@@ -86,9 +86,9 @@ model Event {
 model EventSummary {
   eventId: eventId;
   title: eventTitle;
-  type: EventType;
+  type: EventTypeValue;
   schedule: EventSchedule;
-  status: EventStatus;
+  status: EventStatusValue;
   isDisplay: boolean;
 
   @doc("開催先名。登録順に並べる")

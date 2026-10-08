@@ -20,14 +20,6 @@ enum SongType: int
         return self::tryFrom($value) ?? throw new InvalidDomainException("不正な楽曲種別です: {$value}");
     }
 
-    public function getName(): string
-    {
-        return match ($this) {
-            self::Original => 'オリジナル曲',
-            self::Cover => 'カバー曲',
-        };
-    }
-
     public function equals(self $other): bool
     {
         return $this === $other;

@@ -48,10 +48,7 @@ class UpdateMediaTest extends DatabaseTestCase
                     'title' => 'テストメディア配信アーカイブ',
                     'url' => 'https://example.com/archive',
                     'publishedAt' => '2024-04-02T10:20:30+09:00',
-                    'type' => [
-                        'name' => MediaType::LiveStream->getName(),
-                        'value' => MediaType::LiveStream->value,
-                    ],
+                    'type' => MediaType::LiveStream->value,
                     'isDisplay' => false,
                 ],
             ]);

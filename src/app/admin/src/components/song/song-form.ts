@@ -48,7 +48,7 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
   const [title, setTitle] = createSignal(song?.title ?? '');
   const [description, setDescription] = createSignal(song?.description ?? '');
   const [lyricsLink, setLyricsLink] = createSignal(song?.lyricsLink ?? '');
-  const [typeValue, setTypeValue] = createSignal<SongTypeValue | ''>(song?.type.value ?? '');
+  const [typeValue, setTypeValue] = createSignal<SongTypeValue | ''>(song?.type ?? '');
   const [isDisplay, setIsDisplay] = createSignal(song?.isDisplay ?? true);
   const [orderNo, setOrderNo] = createSignal(song?.orderNo ?? 1);
   const persons = song?.persons ?? [];

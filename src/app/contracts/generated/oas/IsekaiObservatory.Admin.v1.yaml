@@ -16,7 +16,6 @@ tags:
   - name: Release
   - name: Venue
   - name: Event
-  - name: SongType
 paths:
   /admin-users:
     get:
@@ -2692,44 +2691,6 @@ paths:
         - SongTag
       security:
         - BearerAuth: []
-  /song-types:
-    get:
-      operationId: SongTypeService_listSongTypes
-      description: 楽曲種別一覧取得API
-      parameters: []
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SongTypeListResponse'
-        '401':
-          description: Access is unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Access is forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '503':
-          description: Service unavailable.
-        '504':
-          description: Server error
-      tags:
-        - SongType
-      security:
-        - BearerAuth: []
   /songs:
     post:
       operationId: SongService_createSong
@@ -3373,22 +3334,19 @@ components:
         createdAt:
           $ref: '#/components/schemas/createdAt'
         role:
-          $ref: '#/components/schemas/Role'
+          $ref: '#/components/schemas/RoleValue'
         permissions:
           type: array
           items:
-            $ref: '#/components/schemas/Permission'
+            $ref: '#/components/schemas/PermissionValue'
       examples:
         - adminUserId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
           name: テスト管理ユーザー
           email: example@example.com
           createdAt: '2019-12-09T10:30:20+09:00'
-          role:
-            name: 一般
-            value: 3
+          role: 3
           permissions:
-            - name: 管理ユーザー読み取り
-              value: read_admin_user
+            - read_admin_user
     AdminUserListResponse:
       type: object
       required:
@@ -3617,11 +3575,11 @@ components:
         description:
           $ref: '#/components/schemas/eventDescription'
         type:
-          $ref: '#/components/schemas/EventType'
+          $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
         status:
-          $ref: '#/components/schemas/EventStatus'
+          $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
         venues:
@@ -3782,19 +3740,6 @@ components:
         orderNo:
           $ref: '#/components/schemas/orderNo'
       description: イベント出典
-    EventStatus:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/eventStatusName'
-        value:
-          $ref: '#/components/schemas/EventStatusValue'
-      examples:
-        - name: 通常
-          value: 1
     EventStatusValue:
       type: integer
       format: int32
@@ -3830,11 +3775,11 @@ components:
         title:
           $ref: '#/components/schemas/eventTitle'
         type:
-          $ref: '#/components/schemas/EventType'
+          $ref: '#/components/schemas/EventTypeValue'
         schedule:
           $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
         status:
-          $ref: '#/components/schemas/EventStatus'
+          $ref: '#/components/schemas/EventStatusValue'
         isDisplay:
           type: boolean
         venueNames:
@@ -3855,19 +3800,6 @@ components:
           format: int32
           description: 出典の件数
       description: イベント一覧の 1 行分
-    EventType:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/eventTypeName'
-        value:
-          $ref: '#/components/schemas/EventTypeValue'
-      examples:
-        - name: ライブ
-          value: 1
     EventTypeValue:
       type: integer
       format: int32
@@ -4042,7 +3974,7 @@ components:
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
         type:
-          $ref: '#/components/schemas/MediaType'
+          $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
     MediaCreateRequest:
@@ -4145,7 +4077,7 @@ components:
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
         type:
-          $ref: '#/components/schemas/MediaType'
+          $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
         songCount:
@@ -4157,19 +4089,6 @@ components:
           format: int32
           description: このメディアを関連づけているイベントの件数
       description: メディア一覧の 1 行分
-    MediaType:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/mediaTypeName'
-        value:
-          $ref: '#/components/schemas/MediaTypeValue'
-      examples:
-        - name: MV
-          value: 1
     MediaTypeValue:
       type: integer
       format: int32
@@ -4290,19 +4209,6 @@ components:
         name:
           $ref: '#/components/schemas/personGroupName'
       description: 共演者が出演したグループ
-    Permission:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/permissionName'
-        value:
-          $ref: '#/components/schemas/PermissionValue'
-      examples:
-        - name: 管理ユーザー読み取り
-          value: read_admin_user
     PermissionValue:
       type: string
       enum:
@@ -4312,6 +4218,7 @@ components:
         - write_person
         - read_song
         - write_song
+        - read_audit_log
         - read_media
         - write_media
         - read_release
@@ -4328,6 +4235,7 @@ components:
         - WritePerson
         - ReadSong
         - WriteSong
+        - ReadAuditLog
         - ReadMedia
         - WriteMedia
         - ReadRelease
@@ -4343,6 +4251,7 @@ components:
         - 人物編集
         - 楽曲閲覧
         - 楽曲編集
+        - 監査ログ閲覧
         - メディア閲覧
         - メディア編集
         - リリース閲覧
@@ -5210,19 +5119,6 @@ components:
         songTagId:
           $ref: '#/components/schemas/songTagId'
       description: The template for picking properties.
-    Role:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/roleName'
-        value:
-          $ref: '#/components/schemas/RoleValue'
-      examples:
-        - name: 特権
-          value: 1
     RoleValue:
       type: integer
       format: int32
@@ -5285,7 +5181,7 @@ components:
             - $ref: '#/components/schemas/lyricsLink'
             - type: 'null'
         type:
-          $ref: '#/components/schemas/SongType'
+          $ref: '#/components/schemas/SongTypeValue'
         isDisplay:
           type: boolean
         orderNo:
@@ -5307,9 +5203,7 @@ components:
           title: テスト楽曲
           description: テスト楽曲説明
           lyricsLink: https://example.com/lyrics
-          type:
-            name: オリジナル曲
-            value: 1
+          type: 1
           isDisplay: true
           orderNo: 1
           persons:
@@ -5329,9 +5223,7 @@ components:
               title: テストメディアMV
               url: https://example.com/media
               publishedAt: '2024-03-01T12:00:00+09:00'
-              type:
-                name: MV
-                value: 1
+              type: 1
               isDisplay: true
               orderNo: 1
     SongAttachedTag:
@@ -5414,7 +5306,7 @@ components:
         publishedAt:
           $ref: '#/components/schemas/mediaPublishedAt'
         type:
-          $ref: '#/components/schemas/MediaType'
+          $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
         orderNo:
@@ -5424,9 +5316,7 @@ components:
           title: テストメディアMV
           url: https://example.com/media
           publishedAt: '2024-03-01T12:00:00+09:00'
-          type:
-            name: MV
-            value: 1
+          type: 1
           isDisplay: true
           orderNo: 1
     SongPerformance:
@@ -5537,7 +5427,7 @@ components:
         title:
           $ref: '#/components/schemas/title'
         type:
-          $ref: '#/components/schemas/SongType'
+          $ref: '#/components/schemas/SongTypeValue'
         isDisplay:
           type: boolean
         orderNo:
@@ -5561,9 +5451,7 @@ components:
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
-          type:
-            name: オリジナル曲
-            value: 1
+          type: 1
           isDisplay: true
           orderNo: 1
           performanceCount: 3
@@ -5678,28 +5566,6 @@ components:
       properties:
         tag:
           $ref: '#/components/schemas/SongTag'
-    SongType:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/songTypeName'
-        value:
-          $ref: '#/components/schemas/SongTypeValue'
-      examples:
-        - name: オリジナル曲
-          value: 1
-    SongTypeListResponse:
-      type: object
-      required:
-        - types
-      properties:
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/SongType'
     SongTypeValue:
       type: integer
       format: int32
@@ -5801,13 +5667,11 @@ components:
         name:
           $ref: '#/components/schemas/venueName'
         kind:
-          $ref: '#/components/schemas/VenueKind'
+          $ref: '#/components/schemas/VenueKindValue'
       examples:
         - venueId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
           name: 会場サンプルA
-          kind:
-            name: 現地
-            value: 1
+          kind: 1
     VenueCreateRequest:
       type: object
       required:
@@ -5832,19 +5696,6 @@ components:
       properties:
         venue:
           $ref: '#/components/schemas/Venue'
-    VenueKind:
-      type: object
-      required:
-        - name
-        - value
-      properties:
-        name:
-          $ref: '#/components/schemas/venueKindName'
-        value:
-          $ref: '#/components/schemas/VenueKindValue'
-      examples:
-        - name: 現地
-          value: 1
     VenueKindValue:
       type: integer
       format: int32
@@ -5893,7 +5744,7 @@ components:
         name:
           $ref: '#/components/schemas/venueName'
         kind:
-          $ref: '#/components/schemas/VenueKind'
+          $ref: '#/components/schemas/VenueKindValue'
         eventCount:
           type: integer
           format: int32
@@ -5977,18 +5828,10 @@ components:
       type: string
       format: uri
       description: イベントの出典URL
-    eventStatusName:
-      type: string
-      minLength: 1
-      description: イベントの開催状態名
     eventTitle:
       type: string
       minLength: 1
       description: イベントタイトル
-    eventTypeName:
-      type: string
-      minLength: 1
-      description: イベント種別名
     lyricsLink:
       type: string
       format: uri
@@ -6013,10 +5856,6 @@ components:
       type: string
       minLength: 1
       description: メディアタイトル
-    mediaTypeName:
-      type: string
-      minLength: 1
-      description: メディア種別名
     mediaUrl:
       type: string
       format: uri
@@ -6043,10 +5882,6 @@ components:
       type: string
       format: uuid
       description: 楽曲披露ID
-    permissionName:
-      type: string
-      minLength: 1
-      description: 権限名
     personGroupId:
       type: string
       format: uuid
@@ -6098,10 +5933,6 @@ components:
       type: string
       format: date
       description: 発売日
-    roleName:
-      type: string
-      minLength: 1
-      description: 役割名
     setlistItemId:
       type: string
       format: uuid
@@ -6122,10 +5953,6 @@ components:
       type: string
       minLength: 1
       description: 楽曲タグ名
-    songTypeName:
-      type: string
-      minLength: 1
-      description: 楽曲種別名
     title:
       type: string
       minLength: 1
@@ -6142,10 +5969,6 @@ components:
       type: string
       format: uuid
       description: 開催先ID
-    venueKindName:
-      type: string
-      minLength: 1
-      description: 開催先種別名
     venueName:
       type: string
       minLength: 1

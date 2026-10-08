@@ -12,22 +12,6 @@ use Tests\TestCase;
 class RoleTest extends TestCase
 {
     #[Test]
-    #[DataProvider('getNameDataProvider')]
-    public function getName(Role $role, string $expected): void
-    {
-        $this->assertSame($expected, $role->getName());
-    }
-
-    public static function getNameDataProvider(): array
-    {
-        return [
-            [Role::Privilege, '特権'],
-            [Role::Console, 'コンソール'],
-            [Role::General, '一般'],
-        ];
-    }
-
-    #[Test]
     #[DataProvider('isPrivilegeDataProvider')]
     public function isPrivilege(Role $role, bool $expected): void
     {

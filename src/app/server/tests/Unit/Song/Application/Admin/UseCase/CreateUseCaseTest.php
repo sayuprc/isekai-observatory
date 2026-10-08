@@ -103,7 +103,6 @@ class CreateUseCaseTest extends TestCase
                     $song->title->value,
                     $song->description->value,
                     $song->lyricsLink?->value,
-                    $song->type->name,
                     $song->type->value,
                     $song->isDisplay,
                     $song->orderNo->value,

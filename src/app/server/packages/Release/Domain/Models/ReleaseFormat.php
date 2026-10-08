@@ -16,17 +16,6 @@ enum ReleaseFormat: int
 
     case Other = 99;
 
-    public function getName(): string
-    {
-        return match ($this) {
-            self::Digital => '配信',
-            self::Cd => 'CD',
-            self::Dvd => 'DVD',
-            self::BluRay => 'Blu-ray',
-            self::Other => 'その他',
-        };
-    }
-
     public function equals(self $other): bool
     {
         return $this === $other;

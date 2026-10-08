@@ -34,10 +34,7 @@ class CreateMediaTest extends DatabaseTestCase
                 ->where('media.title', 'テストメディアMV')
                 ->where('media.url', 'https://example.com/media')
                 ->where('media.publishedAt', '2024-03-01T12:34:56+09:00')
-                ->where('media.type', [
-                    'name' => MediaType::Mv->getName(),
-                    'value' => MediaType::Mv->value,
-                ])
+                ->where('media.type', MediaType::Mv->value)
                 ->where('media.isDisplay', true));
     }
 

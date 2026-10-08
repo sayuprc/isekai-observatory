@@ -11,7 +11,6 @@ use Media\Domain\Models\Media;
 use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
 use OpenAPI\Admin\Client\Model\MediaReferencedSong as OpenApiMediaReferencedSong;
 use OpenAPI\Admin\Client\Model\MediaSummary as OpenApiMediaSummary;
-use OpenAPI\Admin\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Admin\Client\Model\MediaTypeValue;
 
 class Converter
@@ -23,7 +22,7 @@ class Converter
             ->setTitle($media->title->value)
             ->setUrl($media->url->value)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt->value))
-            ->setType($this->toOpenApiMediaType($media))
+            ->setType(MediaTypeValue::from($media->type->value))
             ->setIsDisplay($media->isDisplay);
     }
 
@@ -34,7 +33,7 @@ class Converter
             ->setTitle($media->title->value)
             ->setUrl($media->url->value)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt->value))
-            ->setType($this->toOpenApiMediaType($media))
+            ->setType(MediaTypeValue::from($media->type->value))
             ->setIsDisplay($media->isDisplay)
             ->setSongCount($usage->songCount)
             ->setEventCount($usage->eventCount);
@@ -47,12 +46,5 @@ class Converter
             ->setTitle($song->title)
             ->setSongOrderNo($song->songOrderNo)
             ->setMediaOrderNo($song->mediaOrderNo);
-    }
-
-    private function toOpenApiMediaType(Media $media): OpenApiMediaType
-    {
-        return new OpenApiMediaType()
-            ->setName($media->type->getName())
-            ->setValue(MediaTypeValue::from($media->type->value));
     }
 }

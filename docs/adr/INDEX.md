@@ -35,4 +35,5 @@
 | ADR-0029 | accepted | 共演者は人単位で保存し出演グループは共演者ごとの任意参照で表す | [api, admin, viewer] |
 | ADR-0030 | accepted | 管理画面の詳細・作成画面は固定見出しと保存操作、セクションの多い画面はタブで構成する | [admin] |
 | ADR-0031 | accepted | 管理画面の一覧の件数は検索用の Summary 型で返し、Application 層のクエリで数える | [api, admin] |
-| ADR-0032 | accepted | Viewer API は種別や状態を数値だけで返し、表示名は Viewer が持つ | [api, viewer] |
+| ADR-0032 | superseded | Viewer API は種別や状態を数値だけで返し、表示名は Viewer が持つ | [api, viewer] |
+| ADR-0033 | accepted | API は種別や状態を値だけで返し、表示名は画面が持つ | [api, admin, viewer] |

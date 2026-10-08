@@ -60,7 +60,7 @@ class VenueSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'venue_id' => 'string',
         'name' => 'string',
-        'kind' => '\OpenAPI\Admin\Client\Model\VenueKind',
+        'kind' => '\OpenAPI\Admin\Client\Model\VenueKindValue',
         'event_count' => 'int'
     ];
 
@@ -395,7 +395,7 @@ class VenueSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets kind
      *
-     * @return \OpenAPI\Admin\Client\Model\VenueKind
+     * @return \OpenAPI\Admin\Client\Model\VenueKindValue
      */
     public function getKind()
     {
@@ -405,7 +405,7 @@ class VenueSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets kind
      *
-     * @param \OpenAPI\Admin\Client\Model\VenueKind $kind kind
+     * @param \OpenAPI\Admin\Client\Model\VenueKindValue $kind kind
      *
      * @return self
      */

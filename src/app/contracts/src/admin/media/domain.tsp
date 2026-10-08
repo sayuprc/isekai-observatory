@@ -11,7 +11,7 @@ model Media {
   title: mediaTitle;
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
-  type: MediaType;
+  type: MediaTypeValue;
   isDisplay: boolean;
 }
 

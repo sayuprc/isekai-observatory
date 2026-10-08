@@ -94,7 +94,7 @@ const EditableForm = (props: EditableFormProps) => {
 
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
-  const [typeValue, setTypeValue] = createSignal<MediaTypeValue>(props.data.media.type.value);
+  const [typeValue, setTypeValue] = createSignal<MediaTypeValue>(props.data.media.type);
   const [isDisplay, setIsDisplay] = createSignal(props.data.media.isDisplay);
   const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(() => [typeValue(), isDisplay()]);
 

@@ -30,8 +30,8 @@ export const createEventForm = (event?: Event) => {
   const [description, setDescription] = createSignal(event?.description ?? '');
   const [startOn, setStartOn] = createSignal(normalizeDateValue(event?.schedule.startOn));
   const [endOn, setEndOn] = createSignal(normalizeDateValue(event?.schedule.endOn));
-  const [typeValue, setTypeValue] = createSignal<EventTypeValue>(event?.type.value ?? 1);
-  const [statusValue, setStatusValue] = createSignal<EventStatusValue>(event?.status.value ?? 1);
+  const [typeValue, setTypeValue] = createSignal<EventTypeValue>(event?.type ?? 1);
+  const [statusValue, setStatusValue] = createSignal<EventStatusValue>(event?.status ?? 1);
   const [isDisplay, setIsDisplay] = createSignal(event?.isDisplay ?? true);
   const [performances, setPerformances] = createSignal<PerformanceForm[]>(
     toPerformanceForms(event?.performances ?? []),

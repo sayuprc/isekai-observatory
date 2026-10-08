@@ -71,6 +71,11 @@ enum PermissionValue: string
     case WRITE_SONG = 'write_song';
 
     /**
+     * 監査ログ閲覧
+     */
+    case READ_AUDIT_LOG = 'read_audit_log';
+
+    /**
      * メディア閲覧
      */
     case READ_MEDIA = 'read_media';

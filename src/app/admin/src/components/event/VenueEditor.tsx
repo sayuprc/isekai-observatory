@@ -1,6 +1,7 @@
 import { Index, Show } from 'solid-js';
 import type { Venue } from '../../generated';
 import { client } from '../../utils/client';
+import { VENUE_KIND_NAMES } from '../../utils/enum-names';
 import { createKeywordSearch } from '../keyword-search';
 import { KeywordSearchPanel } from '../KeywordSearchPanel';
 import { ListItemActions } from '../ListItemActions';
@@ -38,7 +39,7 @@ export const VenueEditor = (props: VenueEditorProps) => {
           title="開催先を追加"
           placeholder="開催先名で検索"
           search={venueSearch}
-          itemLabel={(venue) => `${venue.name} (${venue.kind.name})`}
+          itemLabel={(venue) => `${venue.name} (${VENUE_KIND_NAMES[venue.kind]})`}
           onAdd={(venue) => props.onChange((prev) => addVenue(prev, venue))}
           emptyResultMessage="該当する開催先がありません。開催先の管理画面で先に登録してください"
         />
@@ -63,7 +64,7 @@ export const VenueEditor = (props: VenueEditorProps) => {
                   <button {...sortable.dragHandleProps('venues', index, venue().name)}>⠿</button>
                   <span class="badge badge-neutral badge-sm">{index + 1}</span>
                   <span class="truncate font-medium">{venue().name}</span>
-                  <span class="badge badge-ghost badge-sm">{venue().kindName}</span>
+                  <span class="badge badge-ghost badge-sm">{VENUE_KIND_NAMES[venue().kind]}</span>
                 </div>
                 <ListItemActions
                   label={venue().name}

@@ -214,7 +214,7 @@ class EventAssembler
         // Event が成立している時点で参照先の開催先は存在する
         assert($venue instanceof Venue);
 
-        return new AssembledVenue($venue->venueId->value, $venue->name->value, $venue->kind->getName(), $venue->kind->value);
+        return new AssembledVenue($venue->venueId->value, $venue->name->value, $venue->kind->value);
     }
 
     private function toAssembledMedia(?Media $media): AssembledMedia
@@ -227,7 +227,6 @@ class EventAssembler
             $media->title->value,
             $media->url->value,
             $media->publishedAt->value,
-            $media->type->getName(),
             $media->type->value,
             $media->isDisplay,
         );

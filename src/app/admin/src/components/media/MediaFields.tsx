@@ -1,16 +1,10 @@
 import { Show } from 'solid-js';
 import type { MediaTypeValue } from '../../generated';
+import { MEDIA_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 
-export const MEDIA_TYPE_OPTIONS: Array<{ value: MediaTypeValue; label: string }> = [
-  { value: 1, label: 'MV' },
-  { value: 2, label: '音源動画' },
-  { value: 3, label: '配信' },
-  { value: 4, label: 'ショート' },
-  { value: 5, label: '投稿' },
-  { value: 99, label: 'その他' },
-];
+const MEDIA_TYPE_OPTIONS = toOptions(MEDIA_TYPE_NAMES);
 
 const DISPLAY_OPTIONS = [
   { value: 'true', label: '表示' },

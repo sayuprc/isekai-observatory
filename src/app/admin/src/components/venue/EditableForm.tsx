@@ -73,7 +73,7 @@ const EditableForm = (props: EditableFormProps) => {
   const { formError, setFormError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const venueId = props.data.venue.venueId;
-  const [kind, setKind] = createSignal<VenueKindValue>(props.data.venue.kind.value);
+  const [kind, setKind] = createSignal<VenueKindValue>(props.data.venue.kind);
   const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(kind);
 
   const save = async (payload: Payload) => {

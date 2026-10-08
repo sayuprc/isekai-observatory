@@ -31,7 +31,7 @@ class GetVenueTest extends DatabaseTestCase
                 'venue' => [
                     'venueId' => $venueId,
                     'name' => '会場サンプルA',
-                    'kind' => ['name' => '現地', 'value' => 1],
+                    'kind' => 1,
                 ],
             ]);
     }

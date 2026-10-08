@@ -55,7 +55,6 @@ use App\Http\Controllers\Api\Admin\V1\SongTag\GetSongTagController;
 use App\Http\Controllers\Api\Admin\V1\SongTag\ListSongTagController;
 use App\Http\Controllers\Api\Admin\V1\SongTag\SearchSongTagController;
 use App\Http\Controllers\Api\Admin\V1\SongTag\UpdateSongTagController;
-use App\Http\Controllers\Api\Admin\V1\SongType\ListSongTypeController;
 use App\Http\Controllers\Api\Admin\V1\Venue\CreateVenueController;
 use App\Http\Controllers\Api\Admin\V1\Venue\DeleteVenueController;
 use App\Http\Controllers\Api\Admin\V1\Venue\GetVenueController;
@@ -72,7 +71,6 @@ use Person\Route\PersonRouteMap;
 use Release\Route\ReleaseGroupRouteMap;
 use Release\Route\ReleaseRouteMap;
 use Song\Route\SongRouteMap;
-use Song\Route\SongTypeRouteMap;
 use Song\Route\Tag\SongTagRouteMap;
 use Support\Route\AuditLogRouteMap;
 use Venue\Route\VenueRouteMap;
@@ -169,10 +167,6 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                     Route::put('/{releaseId}', [UpdateReleaseController::class, 'handle'])->name(ReleaseRouteMap::Update);
                     Route::delete('/{releaseId}', [DeleteReleaseController::class, 'handle'])->name(ReleaseRouteMap::Delete);
                     Route::get('/{releaseId}', [GetReleaseController::class, 'handle'])->name(ReleaseRouteMap::Get);
-                });
-
-                Route::prefix('song-types')->group(static function () {
-                    Route::get('/', [ListSongTypeController::class, 'handle'])->name(SongTypeRouteMap::List);
                 });
 
                 Route::prefix('audit-logs')->group(static function () {

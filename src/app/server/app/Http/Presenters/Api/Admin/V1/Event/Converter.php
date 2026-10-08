@@ -14,19 +14,14 @@ use Event\Application\Admin\Assemble\AssembledSetlistItem;
 use Event\Application\Admin\Assemble\AssembledSource;
 use Event\Application\Admin\Assemble\AssembledVenue;
 use Event\Application\Admin\Query\EventSummary;
-use Event\Domain\Models\EventStatus;
-use Event\Domain\Models\EventType;
 use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Admin\Client\Model\EventRelease as OpenApiEventRelease;
 use OpenAPI\Admin\Client\Model\EventSource as OpenApiEventSource;
-use OpenAPI\Admin\Client\Model\EventStatus as OpenApiEventStatus;
 use OpenAPI\Admin\Client\Model\EventStatusValue;
 use OpenAPI\Admin\Client\Model\EventSummary as OpenApiEventSummary;
-use OpenAPI\Admin\Client\Model\EventType as OpenApiEventType;
 use OpenAPI\Admin\Client\Model\EventTypeValue;
 use OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as OpenApiEventSchedule;
 use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
-use OpenAPI\Admin\Client\Model\MediaType as OpenApiMediaType;
 use OpenAPI\Admin\Client\Model\MediaTypeValue;
 use OpenAPI\Admin\Client\Model\PerformancePerson as OpenApiPerformancePerson;
 use OpenAPI\Admin\Client\Model\PerformancePersonGroup as OpenApiPerformancePersonGroup;
@@ -34,7 +29,6 @@ use OpenAPI\Admin\Client\Model\ReleaseFormatValue;
 use OpenAPI\Admin\Client\Model\SetlistItem as OpenApiSetlistItem;
 use OpenAPI\Admin\Client\Model\SongPerformance as OpenApiSongPerformance;
 use OpenAPI\Admin\Client\Model\Venue as OpenApiVenue;
-use OpenAPI\Admin\Client\Model\VenueKind as OpenApiVenueKind;
 use OpenAPI\Admin\Client\Model\VenueKindValue;
 
 class Converter
@@ -44,9 +38,9 @@ class Converter
         return new OpenApiEventSummary()
             ->setEventId($event->eventId)
             ->setTitle($event->title)
-            ->setType($this->toOpenApiType($event->type))
+            ->setType(EventTypeValue::from($event->type->value))
             ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
-            ->setStatus($this->toOpenApiStatus($event->status))
+            ->setStatus(EventStatusValue::from($event->status->value))
             ->setIsDisplay($event->isDisplay)
             ->setVenueNames($event->venueNames)
             ->setPerformanceCount($event->performanceCount)
@@ -60,9 +54,9 @@ class Converter
             ->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
-            ->setType($this->toOpenApiType($event->type))
+            ->setType(EventTypeValue::from($event->type->value))
             ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
-            ->setStatus($this->toOpenApiStatus($event->status))
+            ->setStatus(EventStatusValue::from($event->status->value))
             ->setIsDisplay($event->isDisplay)
             ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
             ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
@@ -70,20 +64,6 @@ class Converter
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
             ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
-    }
-
-    private function toOpenApiType(EventType $type): OpenApiEventType
-    {
-        return new OpenApiEventType()
-            ->setName($type->getName())
-            ->setValue(EventTypeValue::from($type->value));
-    }
-
-    private function toOpenApiStatus(EventStatus $status): OpenApiEventStatus
-    {
-        return new OpenApiEventStatus()
-            ->setName($status->getName())
-            ->setValue(EventStatusValue::from($status->value));
     }
 
     private function toOpenApiSchedule(?string $startOn, ?string $endOn): OpenApiEventSchedule
@@ -99,11 +79,7 @@ class Converter
         return new OpenApiVenue()
             ->setVenueId($venue->venueId)
             ->setName($venue->name)
-            ->setKind(
-                new OpenApiVenueKind()
-                    ->setName($venue->kindName)
-                    ->setValue(VenueKindValue::from($venue->kindValue)),
-            );
+            ->setKind(VenueKindValue::from($venue->kindValue));
     }
 
     private function toOpenApiMedia(AssembledMedia $media): OpenApiMedia
@@ -113,11 +89,7 @@ class Converter
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
-            ->setType(
-                new OpenApiMediaType()
-                    ->setName($media->typeName)
-                    ->setValue(MediaTypeValue::from($media->typeValue)),
-            )
+            ->setType(MediaTypeValue::from($media->typeValue))
             ->setIsDisplay($media->isDisplay);
     }
 

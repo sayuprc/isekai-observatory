@@ -62,7 +62,7 @@ class MediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'string',
         'url' => 'string',
         'published_at' => '\DateTime',
-        'type' => '\OpenAPI\Admin\Client\Model\MediaType',
+        'type' => '\OpenAPI\Admin\Client\Model\MediaTypeValue',
         'is_display' => 'bool',
         'song_count' => 'int',
         'event_count' => 'int'
@@ -483,7 +483,7 @@ class MediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Admin\Client\Model\MediaType
+     * @return \OpenAPI\Admin\Client\Model\MediaTypeValue
      */
     public function getType()
     {
@@ -493,7 +493,7 @@ class MediaSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Admin\Client\Model\MediaType $type type
+     * @param \OpenAPI\Admin\Client\Model\MediaTypeValue $type type
      *
      * @return self
      */

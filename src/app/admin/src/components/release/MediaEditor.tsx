@@ -2,6 +2,7 @@ import { For, Index, Show, createSignal } from 'solid-js';
 import type { ReleaseGetResponse, SongSummary } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { SONG_TYPE_NAMES } from '../../utils/enum-names';
 import type { SongCandidate } from '../song-import';
 import { createSortable, reorderItems } from '../sortable';
 import { toTrackForms } from './event-import';
@@ -485,7 +486,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                         <div class="min-w-0">
                           <p class="truncate text-sm font-medium">{song.title}</p>
                           <p class="mt-1 text-xs text-base-content/60">
-                            {song.type.name}
+                            {SONG_TYPE_NAMES[song.type]}
                             {' · '}
                             {song.isDisplay ? '表示' : '非表示'}
                           </p>
@@ -523,7 +524,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                         {(song) => (
                           <tr>
                             <td>{song.title}</td>
-                            <td>{song.type.name}</td>
+                            <td>{SONG_TYPE_NAMES[song.type]}</td>
                             <td>{song.isDisplay ? '表示' : '非表示'}</td>
                             <td class="text-right">
                               <button type="button" class="btn btn-primary btn-xs" onClick={() => addTrack(song)}>

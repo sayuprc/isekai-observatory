@@ -63,10 +63,7 @@ class GetMediaTest extends DatabaseTestCase
                     'title' => 'テストメディアMV',
                     'url' => 'https://example.com/media',
                     'publishedAt' => '2024-03-01T12:00:00+09:00',
-                    'type' => [
-                        'name' => MediaType::Mv->getName(),
-                        'value' => MediaType::Mv->value,
-                    ],
+                    'type' => MediaType::Mv->value,
                     'isDisplay' => true,
                 ],
                 'songs' => [[

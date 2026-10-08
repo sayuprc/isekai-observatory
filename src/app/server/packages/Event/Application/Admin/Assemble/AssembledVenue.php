@@ -9,7 +9,6 @@ readonly class AssembledVenue
     public function __construct(
         public string $venueId,
         public string $name,
-        public string $kindName,
         public int $kindValue,
     ) {
     }

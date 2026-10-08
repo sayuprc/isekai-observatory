@@ -60,7 +60,7 @@ class CreateEventTest extends DatabaseTestCase
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
-            ->assertJsonPath('event.status.value', 1)
+            ->assertJsonPath('event.status', 1)
             ->assertJsonPath('event.venues.0.venueId', $venueId)
             ->assertJsonPath('event.venues.0.name', '会場')
             ->assertJsonPath('event.media.0.mediaId', $mediaId)

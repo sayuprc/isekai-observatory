@@ -74,7 +74,6 @@ class GetUseCaseTest extends TestCase
                     $song->title->value,
                     $song->description->value,
                     $song->lyricsLink?->value,
-                    $song->type->getName(),
                     $song->type->value,
                     $song->isDisplay,
                     $song->orderNo->value,
@@ -94,7 +93,6 @@ class GetUseCaseTest extends TestCase
         $this->assertSame($songId, $response->song->songId);
         $this->assertSame('テスト楽曲', $response->song->title);
         $this->assertSame('テスト楽曲説明', $response->song->description);
-        $this->assertSame(SongType::Original->getName(), $response->song->typeName);
         $this->assertSame(SongType::Original->value, $response->song->typeValue);
         $this->assertTrue($response->song->isDisplay);
         $this->assertSame(1, $response->song->orderNo);

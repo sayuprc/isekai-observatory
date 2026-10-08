@@ -1,4 +1,5 @@
 import { Show } from 'solid-js';
+import { DEFAULT_AUTH_RETURN_TO } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormErrors } from '../../utils/form-error';
 import { createSubmitting } from '../../utils/use-submitting';
@@ -57,7 +58,7 @@ export const RegisterForm = (props: RegisterFormProps) => {
       }
 
       setFlash('登録しました');
-      window.location.href = '/song-types';
+      window.location.href = DEFAULT_AUTH_RETURN_TO;
     } catch (error) {
       setFormError(passkeyErrorMessage(error, 'パスキー登録に失敗しました'));
     }

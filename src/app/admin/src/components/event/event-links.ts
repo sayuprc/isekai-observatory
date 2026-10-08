@@ -4,14 +4,15 @@ import type {
   ReleaseGroupReferencedRelease,
   ReleaseGroupSummary,
   Venue,
+  VenueKindValue,
 } from '../../generated';
 import { normalizeDateValue } from '../../utils/date';
-import { RELEASE_FORMAT_OPTIONS } from '../release/FormatCheckboxes';
+import { RELEASE_FORMAT_NAMES } from '../../utils/enum-names';
 
 export type VenueEntry = {
   venueId: string;
   name: string;
-  kindName: string;
+  kind: VenueKindValue;
 };
 
 export type SourceForm = {
@@ -22,7 +23,7 @@ export type SourceForm = {
 export const toVenueEntry = (venue: Venue): VenueEntry => ({
   venueId: venue.venueId,
   name: venue.name,
-  kindName: venue.kind.name,
+  kind: venue.kind,
 });
 
 // 同じ開催先は Event 内で重複できないので、追加済みなら何もしない
@@ -49,10 +50,7 @@ export const toEventReleases = (
   }));
 
 export const releaseLabel = (release: EventRelease): string => {
-  const formats = release.formatValues
-    .map((value) => RELEASE_FORMAT_OPTIONS.find((option) => option.value === value)?.label ?? '')
-    .filter((label) => label !== '')
-    .join('・');
+  const formats = release.formatValues.map((value) => RELEASE_FORMAT_NAMES[value]).join('・');
   const name = release.name === '' ? release.releaseGroupTitle : `${release.releaseGroupTitle} ${release.name}`;
 
   return `${name} (${normalizeDateValue(release.releasedOn)} / ${formats})`;
