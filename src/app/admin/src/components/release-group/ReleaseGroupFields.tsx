@@ -1,14 +1,10 @@
 import { createSignal, Show } from 'solid-js';
 import type { ReleaseGroup, ReleaseGroupTypeValue } from '../../generated';
+import { RELEASE_GROUP_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 
-export const RELEASE_GROUP_TYPE_OPTIONS: Array<{ value: ReleaseGroupTypeValue; label: string }> = [
-  { value: 1, label: 'シングル' },
-  { value: 2, label: 'アルバム' },
-  { value: 3, label: 'EP' },
-  { value: 99, label: 'その他' },
-];
+const RELEASE_GROUP_TYPE_OPTIONS = toOptions(RELEASE_GROUP_TYPE_NAMES);
 
 const DISPLAY_OPTIONS = [
   { value: 'true', label: '表示' },
@@ -18,14 +14,14 @@ const DISPLAY_OPTIONS = [
 // 作成と編集で共通の入力状態
 export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
   const [title, setTitle] = createSignal(initial?.title ?? '');
-  const [typeValue, setTypeValue] = createSignal<ReleaseGroupTypeValue>(initial?.typeValue ?? 1);
+  const [typeValue, setTypeValue] = createSignal<ReleaseGroupTypeValue>(initial?.type ?? 1);
   const [description, setDescription] = createSignal(initial?.description ?? '');
   const [isDisplay, setIsDisplay] = createSignal(initial?.isDisplay ?? true);
   const [orderNo, setOrderNo] = createSignal(initial?.orderNo ?? 1);
 
   const toRequestBody = () => ({
     title: title(),
-    typeValue: typeValue(),
+    type: typeValue(),
     description: description(),
     isDisplay: isDisplay(),
     orderNo: orderNo(),
@@ -75,7 +71,7 @@ export const ReleaseGroupFields = (props: ReleaseGroupFieldsProps) => (
         value={props.form.typeValue()}
         onChange={props.form.setTypeValue}
       />
-      <Show when={props.getFieldError('typeValue')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
+      <Show when={props.getFieldError('type')}>{(message) => <p class="text-xs text-error">{message()}</p>}</Show>
     </FormRow>
     <FormRow label="説明" for="description">
       <textarea

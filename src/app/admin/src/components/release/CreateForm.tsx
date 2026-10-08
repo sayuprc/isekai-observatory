@@ -87,7 +87,7 @@ export const CreateForm = () => {
         color: data.release.color,
         isDisplay: data.release.isDisplay,
         orderNo: data.release.orderNo,
-        formatValues: [...data.release.formatValues],
+        formats: [...data.release.formats],
         media: toMediumForms(data),
       },
     };

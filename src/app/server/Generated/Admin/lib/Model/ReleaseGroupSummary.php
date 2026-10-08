@@ -60,7 +60,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     protected static $openAPITypes = [
         'release_group_id' => 'string',
         'title' => 'string',
-        'type_value' => '\OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue',
+        'type' => '\OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue',
         'description' => 'string',
         'is_display' => 'bool',
         'order_no' => 'int',
@@ -79,7 +79,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     protected static $openAPIFormats = [
         'release_group_id' => 'uuid',
         'title' => null,
-        'type_value' => null,
+        'type' => null,
         'description' => null,
         'is_display' => null,
         'order_no' => 'int32',
@@ -96,7 +96,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     protected static array $openAPINullables = [
         'release_group_id' => false,
         'title' => false,
-        'type_value' => false,
+        'type' => false,
         'description' => false,
         'is_display' => false,
         'order_no' => false,
@@ -193,7 +193,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     protected static $attributeMap = [
         'release_group_id' => 'releaseGroupId',
         'title' => 'title',
-        'type_value' => 'typeValue',
+        'type' => 'type',
         'description' => 'description',
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo',
@@ -210,7 +210,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     protected static $setters = [
         'release_group_id' => 'setReleaseGroupId',
         'title' => 'setTitle',
-        'type_value' => 'setTypeValue',
+        'type' => 'setType',
         'description' => 'setDescription',
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo',
@@ -227,7 +227,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     protected static $getters = [
         'release_group_id' => 'getReleaseGroupId',
         'title' => 'getTitle',
-        'type_value' => 'getTypeValue',
+        'type' => 'getType',
         'description' => 'getDescription',
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo',
@@ -295,7 +295,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     {
         $this->setIfExists('release_group_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
@@ -341,8 +341,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['type_value'] === null) {
-            $invalidProperties[] = "'type_value' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
@@ -441,28 +441,28 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     }
 
     /**
-     * Gets type_value
+     * Gets type
      *
      * @return \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue
      */
-    public function getTypeValue()
+    public function getType()
     {
-        return $this->container['type_value'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets type_value
+     * Sets type
      *
-     * @param \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue $type_value type_value
+     * @param \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue $type type
      *
      * @return self
      */
-    public function setTypeValue($type_value)
+    public function setType($type)
     {
-        if (is_null($type_value)) {
-            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['type_value'] = $type_value;
+        $this->container['type'] = $type;
 
         return $this;
     }

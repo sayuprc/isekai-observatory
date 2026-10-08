@@ -13,7 +13,6 @@ readonly class AssembledMedia
         public string $title,
         public string $url,
         public DateTimeImmutable $publishedAt,
-        public string $typeName,
         public int $typeValue,
         public bool $isDisplay,
     ) {

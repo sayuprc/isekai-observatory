@@ -1,6 +1,7 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { EventSearchSortBy, EventStatusValue, EventSummary, EventTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
+import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES } from '../../utils/enum-names';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
@@ -266,21 +267,21 @@ export const SearchList = () => {
                             {event.title}
                           </a>
                         </td>
-                        <td class="whitespace-nowrap">{event.type.name}</td>
+                        <td class="whitespace-nowrap">{EVENT_TYPE_NAMES[event.type]}</td>
                         <td>{formatSchedule(event.schedule)}</td>
                         <td class="max-w-48 truncate text-base-content/70">{event.venueNames.join(' · ')}</td>
                         <CountCell
                           count={event.performanceCount}
-                          applicable={allowsPerformances(event.status.value)}
+                          applicable={allowsPerformances(event.status)}
                           warnWhenZero
                         />
                         <CountCell
                           count={event.setlistItemCount}
-                          applicable={allowsPerformances(event.status.value) && allowsSetlist(event.type.value)}
+                          applicable={allowsPerformances(event.status) && allowsSetlist(event.type)}
                           warnWhenZero
                         />
                         <CountCell count={event.sourceCount} warnWhenZero />
-                        <td class="whitespace-nowrap">{event.status.name}</td>
+                        <td class="whitespace-nowrap">{EVENT_STATUS_NAMES[event.status]}</td>
                         <td>
                           <span
                             class={`badge badge-sm whitespace-nowrap ${event.isDisplay ? 'badge-success badge-soft' : 'badge-ghost'}`}

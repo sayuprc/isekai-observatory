@@ -1,7 +1,7 @@
 ---
 id: ADR-0032
-status: accepted
-superseded_by: null
+status: superseded
+superseded_by: ADR-0033
 applies_to: [api, viewer]
 ---
 

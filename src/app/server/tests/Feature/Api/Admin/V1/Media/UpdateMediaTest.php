@@ -39,7 +39,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'title' => 'テストメディア配信アーカイブ',
                 'url' => 'https://example.com/archive',
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
-                'typeValue' => MediaType::LiveStream->value,
+                'type' => MediaType::LiveStream->value,
                 'isDisplay' => false,
             ])->assertStatus(200)
             ->assertExactJson([
@@ -48,10 +48,7 @@ class UpdateMediaTest extends DatabaseTestCase
                     'title' => 'テストメディア配信アーカイブ',
                     'url' => 'https://example.com/archive',
                     'publishedAt' => '2024-04-02T10:20:30+09:00',
-                    'type' => [
-                        'name' => MediaType::LiveStream->getName(),
-                        'value' => MediaType::LiveStream->value,
-                    ],
+                    'type' => MediaType::LiveStream->value,
                     'isDisplay' => false,
                 ],
             ]);
@@ -80,7 +77,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'title' => 'テストメディア配信アーカイブ',
                 'url' => 'https://example.com/archive',
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
-                'typeValue' => MediaType::Mv->value,
+                'type' => MediaType::Mv->value,
                 'isDisplay' => true,
             ])->assertStatus(200)
             ->assertJsonPath('media.mediaId', $routeMediaId);
@@ -96,7 +93,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'title' => 'テストメディア',
                 'url' => 'https://example.com/media',
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
-                'typeValue' => MediaType::Mv->value,
+                'type' => MediaType::Mv->value,
                 'isDisplay' => true,
             ])->assertStatus(404);
     }
@@ -122,7 +119,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'title' => '',
                 'url' => '',
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
-                'typeValue' => 0,
+                'type' => 0,
                 'isDisplay' => true,
             ])->assertStatus(422)
             ->assertJson(
@@ -134,7 +131,7 @@ class UpdateMediaTest extends DatabaseTestCase
                     ->whereType('details.0.message', 'string')
                     ->where('details.1.field', 'url')
                     ->whereType('details.1.message', 'string')
-                    ->where('details.2.field', 'typeValue')
+                    ->where('details.2.field', 'type')
                     ->whereType('details.2.message', 'string'),
             );
     }
@@ -170,7 +167,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'title' => '更新対象メディア',
                 'url' => 'https://example.com/existing',
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
-                'typeValue' => MediaType::Mv->value,
+                'type' => MediaType::Mv->value,
                 'isDisplay' => true,
             ])->assertStatus(400)
             ->assertJson(

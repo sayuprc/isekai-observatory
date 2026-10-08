@@ -117,7 +117,7 @@ const ReleaseForm = (props: ReleaseFormProps) => {
     color: props.data.release.color,
     isDisplay: props.data.release.isDisplay,
     orderNo: props.data.release.orderNo,
-    formatValues: props.data.release.formatValues,
+    formats: props.data.release.formats,
     media: toMediumForms(props.data),
   });
   const { isDirty, allowLeave } = createDirtyTracker(form.toRequestBody);

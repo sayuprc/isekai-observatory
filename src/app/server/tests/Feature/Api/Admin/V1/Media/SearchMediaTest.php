@@ -82,7 +82,7 @@ class SearchMediaTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonCount(1, 'media')
             ->assertJsonPath('media.0.title', 'MV')
-            ->assertJsonPath('media.0.type.value', MediaType::Mv->value)
+            ->assertJsonPath('media.0.type', MediaType::Mv->value)
             ->assertJsonPath('media.0.isDisplay', true)
             ->assertJsonPath('maxPage', 1);
     }

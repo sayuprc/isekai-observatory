@@ -23,9 +23,9 @@ readonly class CreateInputData
     public function __construct(
         public string $title,
         public string $description,
-        public int $typeValue,
+        public int $type,
         public array $schedule,
-        public int $statusValue,
+        public int $status,
         public bool $isDisplay,
         public array $venues,
         public array $media,

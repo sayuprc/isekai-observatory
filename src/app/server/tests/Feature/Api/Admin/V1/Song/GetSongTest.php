@@ -74,10 +74,7 @@ class GetSongTest extends DatabaseTestCase
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
                     'lyricsLink' => 'https://example.com/lyrics',
-                    'type' => [
-                        'name' => 'オリジナル曲',
-                        'value' => 1,
-                    ],
+                    'type' => 1,
                     'isDisplay' => true,
                     'orderNo' => 1,
                     'persons' => [
@@ -95,10 +92,7 @@ class GetSongTest extends DatabaseTestCase
                             'title' => $media->title->value,
                             'url' => $media->url->value,
                             'publishedAt' => $media->publishedAt->value->format('Y-m-d\TH:i:sP'),
-                            'type' => [
-                                'name' => $media->type->getName(),
-                                'value' => $media->type->value,
-                            ],
+                            'type' => $media->type->value,
                             'isDisplay' => true,
                             'orderNo' => 1,
                         ],

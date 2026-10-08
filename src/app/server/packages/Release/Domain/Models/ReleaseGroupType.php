@@ -14,16 +14,6 @@ enum ReleaseGroupType: int
 
     case Other = 99;
 
-    public function getName(): string
-    {
-        return match ($this) {
-            self::Single => 'シングル',
-            self::Album => 'アルバム',
-            self::Ep => 'EP',
-            self::Other => 'その他',
-        };
-    }
-
     public function equals(self $other): bool
     {
         return $this === $other;

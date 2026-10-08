@@ -29,7 +29,7 @@ export const CreateForm = () => {
       title: formData.get('title')?.toString() ?? '',
       url: formData.get('url')?.toString() ?? '',
       publishedAt: formData.get('publishedAt')?.toString() ?? '',
-      typeValue: Number(formData.get('typeValue')) as MediaTypeValue,
+      type: Number(formData.get('type')) as MediaTypeValue,
       isDisplay: formData.get('isDisplay') === 'true',
     });
 

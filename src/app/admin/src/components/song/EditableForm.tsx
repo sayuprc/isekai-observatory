@@ -1,5 +1,5 @@
 import { createResource, Match, Switch } from 'solid-js';
-import type { Media, Song, SongTag, SongType } from '../../generated';
+import type { Media, Song, SongTag } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
@@ -19,7 +19,7 @@ interface DetailViewProps {
   songId: string;
 }
 
-type EditableFormData = { song: Song; types: SongType[]; tags: SongTag[]; media: Media[] };
+type EditableFormData = { song: Song; tags: SongTag[]; media: Media[] };
 
 interface EditableFormProps {
   data: EditableFormData;
@@ -177,7 +177,6 @@ export const EditableForm = (props: EditableFormProps) => {
         <SongFormFields
           form={form}
           tab={tab()}
-          types={props.data.types}
           availableTags={props.data.tags}
           getFieldError={getFieldError}
           withOrderNo

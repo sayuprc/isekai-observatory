@@ -1,20 +1,10 @@
 import type { EventStatusValue, EventTypeValue } from '../../generated';
 import { normalizeDateValue } from '../../utils/date';
+import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 
-// フォームの選択肢。登録済みイベントの表示名は API の name を使う
-export const EVENT_TYPE_OPTIONS: { value: EventTypeValue; label: string }[] = [
-  { value: 1, label: 'ライブ' },
-  { value: 2, label: '配信' },
-  { value: 3, label: '展覧会' },
-  { value: 4, label: 'ラジオ' },
-  { value: 99, label: 'その他' },
-];
+export const EVENT_TYPE_OPTIONS = toOptions(EVENT_TYPE_NAMES);
 
-export const EVENT_STATUS_OPTIONS: { value: EventStatusValue; label: string }[] = [
-  { value: 1, label: '通常' },
-  { value: 2, label: '延期' },
-  { value: 3, label: '中止' },
-];
+export const EVENT_STATUS_OPTIONS = toOptions(EVENT_STATUS_NAMES);
 
 // セットリストはライブと配信だけが持てる
 export const allowsSetlist = (typeValue: EventTypeValue): boolean => typeValue === 1 || typeValue === 2;

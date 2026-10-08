@@ -1,6 +1,7 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { SortOrder, VenueKindValue, VenueSearchSortBy } from '../../generated';
 import { client } from '../../utils/client';
+import { toOptions, VENUE_KIND_NAMES } from '../../utils/enum-names';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
@@ -14,6 +15,12 @@ import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
 
 type KindFilter = '' | `${VenueKindValue}`;
+
+const KIND_OPTIONS: Array<{ value: KindFilter; label: string }> = [
+  { value: '', label: 'すべて' },
+  ...toOptions(VENUE_KIND_NAMES).map((option) => ({ value: `${option.value}` as const, label: option.label })),
+];
+
 type SortBy = VenueSearchSortBy;
 
 type SearchParams = {
@@ -36,7 +43,11 @@ const DEFAULT_PARAMS: SearchParams = {
 
 const parseParams = (query: URLSearchParams): SearchParams => ({
   name: query.get('name') ?? '',
-  kind: pickParam(query.get('kind'), ['1', '2'] as const, ''),
+  kind: pickParam(
+    query.get('kind'),
+    KIND_OPTIONS.map((option) => option.value),
+    '',
+  ),
   sort: pickParam(query.get('sort'), ['name'] as const, DEFAULT_PARAMS.sort),
   order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
   page: parsePage(query.get('page')),
@@ -100,15 +111,13 @@ export const SearchList = () => {
             class="select select-bordered select-sm"
             onChange={(e) => updateInput({ kind: e.currentTarget.value as KindFilter })}
           >
-            <option value="" selected={input().kind === ''}>
-              すべて
-            </option>
-            <option value="1" selected={input().kind === '1'}>
-              現地
-            </option>
-            <option value="2" selected={input().kind === '2'}>
-              オンライン
-            </option>
+            <For each={KIND_OPTIONS}>
+              {(option) => (
+                <option value={option.value} selected={input().kind === option.value}>
+                  {option.label}
+                </option>
+              )}
+            </For>
           </select>
         </fieldset>
         <fieldset class="fieldset">
@@ -202,7 +211,7 @@ export const SearchList = () => {
                             {venue.name}
                           </a>
                         </td>
-                        <td class="whitespace-nowrap">{venue.kind.name}</td>
+                        <td class="whitespace-nowrap">{VENUE_KIND_NAMES[venue.kind]}</td>
                         <CountCell count={venue.eventCount} />
                       </tr>
                     )}

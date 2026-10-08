@@ -60,7 +60,7 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'title' => 'string',
         'url' => 'string',
         'published_at' => '\DateTime',
-        'type_value' => '\OpenAPI\Admin\Client\Model\MediaTypeValue',
+        'type' => '\OpenAPI\Admin\Client\Model\MediaTypeValue',
         'is_display' => 'bool'
     ];
 
@@ -75,7 +75,7 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'title' => null,
         'url' => 'uri',
         'published_at' => 'date-time',
-        'type_value' => null,
+        'type' => null,
         'is_display' => null
     ];
 
@@ -88,7 +88,7 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'title' => false,
         'url' => false,
         'published_at' => false,
-        'type_value' => false,
+        'type' => false,
         'is_display' => false
     ];
 
@@ -181,7 +181,7 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'title' => 'title',
         'url' => 'url',
         'published_at' => 'publishedAt',
-        'type_value' => 'typeValue',
+        'type' => 'type',
         'is_display' => 'isDisplay'
     ];
 
@@ -194,7 +194,7 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'title' => 'setTitle',
         'url' => 'setUrl',
         'published_at' => 'setPublishedAt',
-        'type_value' => 'setTypeValue',
+        'type' => 'setType',
         'is_display' => 'setIsDisplay'
     ];
 
@@ -207,7 +207,7 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'title' => 'getTitle',
         'url' => 'getUrl',
         'published_at' => 'getPublishedAt',
-        'type_value' => 'getTypeValue',
+        'type' => 'getType',
         'is_display' => 'getIsDisplay'
     ];
 
@@ -271,7 +271,7 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('url', $data ?? [], null);
         $this->setIfExists('published_at', $data ?? [], null);
-        $this->setIfExists('type_value', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
     }
 
@@ -315,8 +315,8 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         if ($this->container['published_at'] === null) {
             $invalidProperties[] = "'published_at' can't be null";
         }
-        if ($this->container['type_value'] === null) {
-            $invalidProperties[] = "'type_value' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
@@ -423,28 +423,28 @@ class MediaUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     }
 
     /**
-     * Gets type_value
+     * Gets type
      *
      * @return \OpenAPI\Admin\Client\Model\MediaTypeValue
      */
-    public function getTypeValue()
+    public function getType()
     {
-        return $this->container['type_value'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets type_value
+     * Sets type
      *
-     * @param \OpenAPI\Admin\Client\Model\MediaTypeValue $type_value type_value
+     * @param \OpenAPI\Admin\Client\Model\MediaTypeValue $type type
      *
      * @return self
      */
-    public function setTypeValue($type_value)
+    public function setType($type)
     {
-        if (is_null($type_value)) {
-            throw new \InvalidArgumentException('non-nullable type_value cannot be null');
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['type_value'] = $type_value;
+        $this->container['type'] = $type;
 
         return $this;
     }

@@ -60,9 +60,9 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'event_id' => 'string',
         'title' => 'string',
-        'type' => '\OpenAPI\Admin\Client\Model\EventType',
+        'type' => '\OpenAPI\Admin\Client\Model\EventTypeValue',
         'schedule' => '\OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
-        'status' => '\OpenAPI\Admin\Client\Model\EventStatus',
+        'status' => '\OpenAPI\Admin\Client\Model\EventStatusValue',
         'is_display' => 'bool',
         'venue_names' => 'string[]',
         'performance_count' => 'int',
@@ -449,7 +449,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Admin\Client\Model\EventType
+     * @return \OpenAPI\Admin\Client\Model\EventTypeValue
      */
     public function getType()
     {
@@ -459,7 +459,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Admin\Client\Model\EventType $type type
+     * @param \OpenAPI\Admin\Client\Model\EventTypeValue $type type
      *
      * @return self
      */
@@ -503,7 +503,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets status
      *
-     * @return \OpenAPI\Admin\Client\Model\EventStatus
+     * @return \OpenAPI\Admin\Client\Model\EventStatusValue
      */
     public function getStatus()
     {
@@ -513,7 +513,7 @@ class EventSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets status
      *
-     * @param \OpenAPI\Admin\Client\Model\EventStatus $status status
+     * @param \OpenAPI\Admin\Client\Model\EventStatusValue $status status
      *
      * @return self
      */

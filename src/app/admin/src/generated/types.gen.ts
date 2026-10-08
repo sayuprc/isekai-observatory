@@ -9,8 +9,8 @@ export type AdminUser = {
     name: AdminUserName;
     email: Email;
     createdAt: CreatedAt;
-    role: Role;
-    permissions: Array<Permission>;
+    role: RoleValue;
+    permissions: Array<PermissionValue>;
 };
 
 export type AdminUserListResponse = {
@@ -97,9 +97,9 @@ export type Event = {
     eventId: EventId;
     title: EventTitle;
     description: EventDescription;
-    type: EventType;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    status: EventStatus;
+    status: EventStatusValue;
     isDisplay: boolean;
     venues: Array<Venue>;
     media: Array<Media>;
@@ -112,9 +112,9 @@ export type Event = {
 export type EventCreateRequest = {
     title: EventTitle;
     description: EventDescription;
-    typeValue: EventTypeValue;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    statusValue: EventStatusValue;
+    status: EventStatusValue;
     isDisplay: boolean;
     venues: Array<RequestEventVenueLink>;
     media: Array<RequestEventMediaLink>;
@@ -142,7 +142,7 @@ export type EventRelease = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     isDisplay: boolean;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
 };
 
 export type EventSearchResponse = {
@@ -164,11 +164,6 @@ export type EventSource = {
     orderNo: OrderNo;
 };
 
-export type EventStatus = {
-    name: EventStatusName;
-    value: EventStatusValue;
-};
-
 /**
  * イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
  */
@@ -180,9 +175,9 @@ export type EventStatusValue = 1 | 2 | 3;
 export type EventSummary = {
     eventId: EventId;
     title: EventTitle;
-    type: EventType;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    status: EventStatus;
+    status: EventStatusValue;
     isDisplay: boolean;
     /**
      * 開催先名。登録順に並べる
@@ -202,11 +197,6 @@ export type EventSummary = {
     sourceCount: number;
 };
 
-export type EventType = {
-    name: EventTypeName;
-    value: EventTypeValue;
-};
-
 /**
  * イベント種別
  */
@@ -215,9 +205,9 @@ export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 export type EventUpdateRequest = {
     title: EventTitle;
     description: EventDescription;
-    typeValue: EventTypeValue;
+    type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
-    statusValue: EventStatusValue;
+    status: EventStatusValue;
     isDisplay: boolean;
     venues: Array<RequestEventVenueLink>;
     media: Array<RequestEventMediaLink>;
@@ -274,7 +264,7 @@ export type Media = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    type: MediaType;
+    type: MediaTypeValue;
     isDisplay: boolean;
 };
 
@@ -282,7 +272,7 @@ export type MediaCreateRequest = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
     isDisplay: boolean;
 };
 
@@ -320,7 +310,7 @@ export type MediaSummary = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    type: MediaType;
+    type: MediaTypeValue;
     isDisplay: boolean;
     /**
      * このメディアをリンクしている楽曲の件数
@@ -332,11 +322,6 @@ export type MediaSummary = {
     eventCount: number;
 };
 
-export type MediaType = {
-    name: MediaTypeName;
-    value: MediaTypeValue;
-};
-
 /**
  * メディア種別の値
  */
@@ -346,7 +331,7 @@ export type MediaUpdateRequest = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    typeValue: MediaTypeValue;
+    type: MediaTypeValue;
     isDisplay: boolean;
 };
 
@@ -387,15 +372,10 @@ export type PerformancePersonGroup = {
     name: PersonGroupName;
 };
 
-export type Permission = {
-    name: PermissionName;
-    value: PermissionValue;
-};
-
 /**
  * 権限の値
  */
-export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_media' | 'write_media' | 'read_release' | 'write_release' | 'read_venue' | 'write_venue' | 'read_event' | 'write_event';
+export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_audit_log' | 'read_media' | 'write_media' | 'read_release' | 'write_release' | 'read_venue' | 'write_venue' | 'read_event' | 'write_event';
 
 export type Person = {
     personId: PersonId;
@@ -589,7 +569,7 @@ export type Release = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
     media: Array<Medium>;
 };
 
@@ -601,7 +581,7 @@ export type ReleaseCreateRequest = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
     media: Array<Medium>;
 };
 
@@ -629,7 +609,7 @@ export type ReleaseGetResponse = {
 export type ReleaseGroup = {
     releaseGroupId: ReleaseGroupId;
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -637,7 +617,7 @@ export type ReleaseGroup = {
 
 export type ReleaseGroupCreateRequest = {
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -662,7 +642,7 @@ export type ReleaseGroupReferencedRelease = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
 };
 
 export type ReleaseGroupSearchResponse = {
@@ -681,7 +661,7 @@ export type ReleaseGroupSearchSortBy = 'first_released_on' | 'title';
 export type ReleaseGroupSummary = {
     releaseGroupId: ReleaseGroupId;
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -703,7 +683,7 @@ export type ReleaseGroupTypeValue = 1 | 2 | 3 | 99;
 
 export type ReleaseGroupUpdateRequest = {
     title: ReleaseGroupTitle;
-    typeValue: ReleaseGroupTypeValue;
+    type: ReleaseGroupTypeValue;
     description: string;
     isDisplay: boolean;
     orderNo: OrderNo;
@@ -730,7 +710,7 @@ export type ReleaseUpdateRequest = {
     color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
-    formatValues: Array<ReleaseFormatValue>;
+    formats: Array<ReleaseFormatValue>;
     media: Array<Medium>;
 };
 
@@ -803,11 +783,6 @@ export type RequestSongTag = {
     songTagId: SongTagId;
 };
 
-export type Role = {
-    name: RoleName;
-    value: RoleValue;
-};
-
 /**
  * 役割の値
  */
@@ -828,7 +803,7 @@ export type Song = {
     title: Title;
     description: Description;
     lyricsLink: LyricsLink | null;
-    type: SongType;
+    type: SongTypeValue;
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<SongPerson>;
@@ -845,7 +820,7 @@ export type SongCreateRequest = {
     title: Title;
     description: Description;
     lyricsLink: LyricsLink | null;
-    typeValue: SongTypeValue;
+    type: SongTypeValue;
     isDisplay: boolean;
     persons: Array<RequestSongPerson>;
     tags: Array<RequestSongTag>;
@@ -865,7 +840,7 @@ export type SongLinkedMedia = {
     title: MediaTitle;
     url: MediaUrl;
     publishedAt: MediaPublishedAt;
-    type: MediaType;
+    type: MediaTypeValue;
     isDisplay: boolean;
     orderNo: OrderNo;
 };
@@ -908,7 +883,7 @@ export type SongSearchTypeValue = '1' | '2';
 export type SongSummary = {
     songId: SongId;
     title: Title;
-    type: SongType;
+    type: SongTypeValue;
     isDisplay: boolean;
     orderNo: OrderNo;
     /**
@@ -983,15 +958,6 @@ export type SongTagUpdateResponse = {
     tag: SongTag;
 };
 
-export type SongType = {
-    name: SongTypeName;
-    value: SongTypeValue;
-};
-
-export type SongTypeListResponse = {
-    types: Array<SongType>;
-};
-
 /**
  * 楽曲種別の値
  */
@@ -1001,7 +967,7 @@ export type SongUpdateRequest = {
     title: Title;
     description: Description;
     lyricsLink: LyricsLink | null;
-    typeValue: SongTypeValue;
+    type: SongTypeValue;
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<RequestSongPerson>;
@@ -1030,7 +996,7 @@ export type Track = {
 export type Venue = {
     venueId: VenueId;
     name: VenueName;
-    kind: VenueKind;
+    kind: VenueKindValue;
 };
 
 export type VenueCreateRequest = {
@@ -1044,11 +1010,6 @@ export type VenueCreateResponse = {
 
 export type VenueGetResponse = {
     venue: Venue;
-};
-
-export type VenueKind = {
-    name: VenueKindName;
-    value: VenueKindValue;
 };
 
 /**
@@ -1072,7 +1033,7 @@ export type VenueSearchSortBy = 'name';
 export type VenueSummary = {
     venueId: VenueId;
     name: VenueName;
-    kind: VenueKind;
+    kind: VenueKindValue;
     /**
      * この開催先を使っているイベントの件数
      */
@@ -1161,19 +1122,9 @@ export type EventSourceName = string;
 export type EventSourceUrl = string;
 
 /**
- * イベントの開催状態名
- */
-export type EventStatusName = string;
-
-/**
  * イベントタイトル
  */
 export type EventTitle = string;
-
-/**
- * イベント種別名
- */
-export type EventTypeName = string;
 
 /**
  * 歌詞リンク
@@ -1206,11 +1157,6 @@ export type MediaReferencedSongTitle = string;
 export type MediaTitle = string;
 
 /**
- * メディア種別名
- */
-export type MediaTypeName = string;
-
-/**
  * メディアURL
  */
 export type MediaUrl = string;
@@ -1239,11 +1185,6 @@ export type PerformanceCreditName = string;
  * 楽曲披露ID
  */
 export type PerformanceId = string;
-
-/**
- * 権限名
- */
-export type PermissionName = string;
 
 /**
  * 人物グループID
@@ -1311,11 +1252,6 @@ export type ReleaseName = string;
 export type ReleasedOn = string;
 
 /**
- * 役割名
- */
-export type RoleName = string;
-
-/**
  * セットリスト項目ID
  */
 export type SetlistItemId = string;
@@ -1341,11 +1277,6 @@ export type SongTagId = string;
 export type SongTagName = string;
 
 /**
- * 楽曲種別名
- */
-export type SongTypeName = string;
-
-/**
  * 楽曲名
  */
 export type Title = string;
@@ -1364,11 +1295,6 @@ export type Uuid = string;
  * 開催先ID
  */
 export type VenueId = string;
-
-/**
- * 開催先種別名
- */
-export type VenueKindName = string;
 
 /**
  * 開催先名
@@ -3679,47 +3605,6 @@ export type SongTagServiceUpdateSongTagResponses = {
 };
 
 export type SongTagServiceUpdateSongTagResponse = SongTagServiceUpdateSongTagResponses[keyof SongTagServiceUpdateSongTagResponses];
-
-export type SongTypeServiceListSongTypesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/song-types';
-};
-
-export type SongTypeServiceListSongTypesErrors = {
-    /**
-     * Access is unauthorized.
-     */
-    401: ErrorResponse;
-    /**
-     * Access is forbidden.
-     */
-    403: ErrorResponse;
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-    /**
-     * Service unavailable.
-     */
-    503: unknown;
-    /**
-     * Server error
-     */
-    504: unknown;
-};
-
-export type SongTypeServiceListSongTypesError = SongTypeServiceListSongTypesErrors[keyof SongTypeServiceListSongTypesErrors];
-
-export type SongTypeServiceListSongTypesResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SongTypeListResponse;
-};
-
-export type SongTypeServiceListSongTypesResponse = SongTypeServiceListSongTypesResponses[keyof SongTypeServiceListSongTypesResponses];
 
 export type SongServiceCreateSongData = {
     body: SongCreateRequest;

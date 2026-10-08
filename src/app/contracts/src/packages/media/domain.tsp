@@ -22,11 +22,6 @@ scalar mediaUrl extends string;
 @friendlyName("mediaPublishedAt")
 scalar mediaPublishedAt extends utcDateTime;
 
-@doc("メディア種別名")
-@minLength(1)
-@friendlyName("mediaTypeName")
-scalar mediaTypeName extends string;
-
 @doc("メディア種別の値")
 @friendlyName("MediaTypeValue")
 @enumExtensions
@@ -48,11 +43,4 @@ enum MediaTypeValue {
 
   @doc("その他")
   Other: 99,
-}
-
-@example(#{ name: "MV", value: MediaTypeValue.Mv })
-@friendlyName("MediaType")
-model MediaType {
-  name: mediaTypeName;
-  value: MediaTypeValue;
 }

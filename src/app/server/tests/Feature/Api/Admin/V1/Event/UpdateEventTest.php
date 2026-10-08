@@ -35,9 +35,9 @@ class UpdateEventTest extends DatabaseTestCase
             ->putJson(route(EventRouteMap::Update, ['eventId' => $eventId]), [
                 'title' => '更新後のライブ',
                 'description' => '説明',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => '2026-10-02'],
-                'statusValue' => 1,
+                'status' => 1,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
@@ -67,9 +67,9 @@ class UpdateEventTest extends DatabaseTestCase
             ->putJson(route(EventRouteMap::Update, ['eventId' => $eventId]), [
                 'title' => '中止されたライブ',
                 'description' => '',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 3,
+                'status' => 3,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],

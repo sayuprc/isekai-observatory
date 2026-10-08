@@ -6,7 +6,7 @@ namespace IsekaiObservatory.Admin;
 
 model ReleaseGroupCreateRequest {
   title: releaseGroupTitle;
-  typeValue: ReleaseGroupTypeValue;
+  type: ReleaseGroupTypeValue;
   description: string;
   isDisplay: boolean;
   orderNo: orderNo;
@@ -18,7 +18,7 @@ model ReleaseGroupCreateResponse {
 
 model ReleaseGroupUpdateRequest {
   title: releaseGroupTitle;
-  typeValue: ReleaseGroupTypeValue;
+  type: ReleaseGroupTypeValue;
   description: string;
   isDisplay: boolean;
   orderNo: orderNo;
@@ -48,7 +48,7 @@ model ReleaseCreateRequest {
   orderNo: orderNo;
 
   @minItems(1)
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
 
   media: Medium[];
 }
@@ -66,7 +66,7 @@ model ReleaseUpdateRequest {
   orderNo: orderNo;
 
   @minItems(1)
-  formatValues: ReleaseFormatValue[];
+  formats: ReleaseFormatValue[];
 
   media: Medium[];
 }

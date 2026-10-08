@@ -31,7 +31,7 @@ readonly class CreateUseCase
         return $this->transaction->scope(function () use ($inputData): CreateOutputData {
             $releaseGroup = $this->service->prepareForCreate(
                 $inputData->title,
-                $inputData->typeValue,
+                $inputData->type,
                 $inputData->description,
                 $inputData->isDisplay,
                 $inputData->orderNo,

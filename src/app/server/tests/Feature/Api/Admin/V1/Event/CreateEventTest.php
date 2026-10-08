@@ -47,9 +47,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => 'テストライブ',
                 'description' => '説明',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 1,
+                'status' => 1,
                 'isDisplay' => true,
                 'venues' => [['venueId' => $venueId, 'orderNo' => 1]],
                 'media' => [['mediaId' => $mediaId, 'orderNo' => 1]],
@@ -60,7 +60,7 @@ class CreateEventTest extends DatabaseTestCase
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
-            ->assertJsonPath('event.status.value', 1)
+            ->assertJsonPath('event.status', 1)
             ->assertJsonPath('event.venues.0.venueId', $venueId)
             ->assertJsonPath('event.venues.0.name', '会場')
             ->assertJsonPath('event.media.0.mediaId', $mediaId)
@@ -70,7 +70,7 @@ class CreateEventTest extends DatabaseTestCase
             ->assertJsonPath('event.releases.0.releaseGroupTitle', 'ライブ映像作品')
             ->assertJsonPath('event.releases.0.name', 'Blu-ray')
             ->assertJsonPath('event.releases.0.isDisplay', true)
-            ->assertJsonPath('event.releases.0.formatValues', [ReleaseFormat::BluRay->value])
+            ->assertJsonPath('event.releases.0.formats', [ReleaseFormat::BluRay->value])
             ->assertJsonPath('event.performances.0.songId', $songId)
             ->assertJsonPath('event.performances.0.songTitle', '披露曲')
             ->assertJsonPath('event.performances.0.coVocalists.0.name', '共演者')
@@ -99,9 +99,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => 'テストライブ',
                 'description' => '',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 1,
+                'status' => 1,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
@@ -127,9 +127,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => '展示',
                 'description' => '',
-                'typeValue' => 3,
+                'type' => 3,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 1,
+                'status' => 1,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
@@ -152,9 +152,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => '中止されたライブ',
                 'description' => '',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 3,
+                'status' => 3,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
@@ -174,9 +174,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => '延期されたライブ',
                 'description' => '',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => 2,
+                'status' => 2,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
@@ -196,9 +196,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => '状態なしのイベント',
                 'description' => '',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
-                'statusValue' => null,
+                'status' => null,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
@@ -217,9 +217,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => '日付未定のイベント',
                 'description' => '',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => null, 'endOn' => null],
-                'statusValue' => 1,
+                'status' => 1,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],
@@ -240,9 +240,9 @@ class CreateEventTest extends DatabaseTestCase
             ->postJson(route(EventRouteMap::Create), [
                 'title' => '終了日だけのイベント',
                 'description' => '',
-                'typeValue' => 1,
+                'type' => 1,
                 'schedule' => ['startOn' => null, 'endOn' => '2026-10-03'],
-                'statusValue' => 1,
+                'status' => 1,
                 'isDisplay' => true,
                 'venues' => [],
                 'media' => [],

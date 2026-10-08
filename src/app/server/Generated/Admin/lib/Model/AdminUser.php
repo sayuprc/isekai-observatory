@@ -61,8 +61,8 @@ class AdminUser implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'string',
         'email' => 'string',
         'created_at' => '\DateTime',
-        'role' => '\OpenAPI\Admin\Client\Model\Role',
-        'permissions' => '\OpenAPI\Admin\Client\Model\Permission[]'
+        'role' => '\OpenAPI\Admin\Client\Model\RoleValue',
+        'permissions' => '\OpenAPI\Admin\Client\Model\PermissionValue[]'
     ];
 
     /**
@@ -453,7 +453,7 @@ class AdminUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets role
      *
-     * @return \OpenAPI\Admin\Client\Model\Role
+     * @return \OpenAPI\Admin\Client\Model\RoleValue
      */
     public function getRole()
     {
@@ -463,7 +463,7 @@ class AdminUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets role
      *
-     * @param \OpenAPI\Admin\Client\Model\Role $role role
+     * @param \OpenAPI\Admin\Client\Model\RoleValue $role role
      *
      * @return self
      */
@@ -480,7 +480,7 @@ class AdminUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets permissions
      *
-     * @return \OpenAPI\Admin\Client\Model\Permission[]
+     * @return \OpenAPI\Admin\Client\Model\PermissionValue[]
      */
     public function getPermissions()
     {
@@ -490,7 +490,7 @@ class AdminUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets permissions
      *
-     * @param \OpenAPI\Admin\Client\Model\Permission[] $permissions permissions
+     * @param \OpenAPI\Admin\Client\Model\PermissionValue[] $permissions permissions
      *
      * @return self
      */

@@ -83,7 +83,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                 'releaseGroup' => [
                     'releaseGroupId' => $releaseGroupId,
                     'title' => '観測された春',
-                    'typeValue' => ReleaseGroupType::Album->value,
+                    'type' => ReleaseGroupType::Album->value,
                     'description' => '1st アルバム',
                     'isDisplay' => true,
                     'orderNo' => 5,
@@ -96,7 +96,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                         'color' => '#989899',
                         'isDisplay' => true,
                         'orderNo' => 20,
-                        'formatValues' => [ReleaseFormat::Digital->value],
+                        'formats' => [ReleaseFormat::Digital->value],
                     ],
                     [
                         'releaseId' => $releaseId2,
@@ -105,7 +105,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                         'color' => '#4a5a78',
                         'isDisplay' => true,
                         'orderNo' => 10,
-                        'formatValues' => [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
+                        'formats' => [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
                     ],
                 ],
             ]);

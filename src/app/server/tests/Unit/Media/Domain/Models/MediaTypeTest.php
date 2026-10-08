@@ -12,24 +12,23 @@ use Tests\TestCase;
 class MediaTypeTest extends TestCase
 {
     /**
-     * @return iterable<string, array{MediaType, int, string}>
+     * @return iterable<string, array{MediaType, int}>
      */
     public static function provideTypes(): iterable
     {
-        yield 'MV' => [MediaType::Mv, 1, 'MV'];
-        yield 'AudioVideo' => [MediaType::AudioVideo, 2, '音源動画'];
-        yield 'LiveStream' => [MediaType::LiveStream, 3, '配信'];
-        yield 'Short' => [MediaType::Short, 4, 'ショート'];
-        yield 'Post' => [MediaType::Post, 5, '投稿'];
-        yield 'Other' => [MediaType::Other, 99, 'その他'];
+        yield 'MV' => [MediaType::Mv, 1];
+        yield 'AudioVideo' => [MediaType::AudioVideo, 2];
+        yield 'LiveStream' => [MediaType::LiveStream, 3];
+        yield 'Short' => [MediaType::Short, 4];
+        yield 'Post' => [MediaType::Post, 5];
+        yield 'Other' => [MediaType::Other, 99];
     }
 
     #[Test]
     #[DataProvider('provideTypes')]
-    public function valueAndName(MediaType $type, int $value, string $name): void
+    public function value(MediaType $type, int $value): void
     {
         $this->assertSame($value, $type->value);
-        $this->assertSame($name, $type->getName());
     }
 
     #[Test]

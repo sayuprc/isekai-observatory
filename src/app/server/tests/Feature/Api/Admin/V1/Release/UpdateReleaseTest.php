@@ -69,7 +69,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#2e62a0',
                 'isDisplay' => false,
                 'orderNo' => 20,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -94,7 +94,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                             ->where('color', '#2e62a0')
                             ->where('isDisplay', false)
                             ->where('orderNo', 20)
-                            ->where('formatValues', [ReleaseFormat::Cd->value])
+                            ->where('formats', [ReleaseFormat::Cd->value])
                             ->where('media.0.position', 1)
                             ->where('media.0.name', null)
                             ->where('media.0.tracks.0.songId', $songId3)
@@ -152,7 +152,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -221,7 +221,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,
@@ -271,7 +271,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [],
+                'formats' => [],
                 'media' => [],
             ])->assertStatus(422);
     }
@@ -287,7 +287,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
             ])->assertStatus(404);
     }
@@ -303,7 +303,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
             ])->assertStatus(404);
     }
@@ -329,7 +329,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
             ])->assertStatus(403);
     }
@@ -359,7 +359,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'color' => '#989899',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'formatValues' => [ReleaseFormat::Cd->value],
+                'formats' => [ReleaseFormat::Cd->value],
                 'media' => [
                     [
                         'position' => 1,

@@ -32,8 +32,7 @@ class CreateVenueTest extends DatabaseTestCase
                     ->has('venue', static fn (AssertableJson $json) => $json
                         ->whereType('venueId', 'string')
                         ->where('name', '配信先サンプルB')
-                        ->where('kind.name', 'オンライン')
-                        ->where('kind.value', 2)),
+                        ->where('kind', 2)),
             );
 
         $venueId = $response->json('venue.venueId');

@@ -1,8 +1,9 @@
 import { For, Match, Show, Switch, createResource } from 'solid-js';
-import type { ReleaseFormatValue, ReleaseGroupGetResponse, ReleaseGroupReferencedRelease } from '../../generated';
+import type { ReleaseGroupGetResponse, ReleaseGroupReferencedRelease } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
+import { RELEASE_FORMAT_NAMES } from '../../utils/enum-names';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
@@ -12,14 +13,6 @@ import { setFlash } from '../Flash';
 import { FormColumns } from '../FormColumns';
 import { FormError } from '../FormError';
 import { createReleaseGroupForm, ReleaseGroupFields } from './ReleaseGroupFields';
-
-const RELEASE_FORMAT_LABELS: Record<ReleaseFormatValue, string> = {
-  1: '配信',
-  2: 'CD',
-  3: 'DVD',
-  4: 'Blu-ray',
-  99: 'その他',
-};
 
 /** 版名は空になりうるため、リンクのラベルとして意味を持つ代替文言を出す */
 const ReleaseNameLink = (props: { release: ReleaseGroupReferencedRelease }) => (
@@ -32,11 +25,9 @@ const ReleaseNameLink = (props: { release: ReleaseGroupReferencedRelease }) => (
 
 const ReleaseFormatBadges = (props: { release: ReleaseGroupReferencedRelease }) => (
   <div class="flex flex-wrap gap-1">
-    <Show when={props.release.formatValues.length > 0} fallback={<span class="text-sm text-base-content/60">—</span>}>
-      <For each={props.release.formatValues}>
-        {(formatValue) => (
-          <span class="badge badge-outline badge-sm">{RELEASE_FORMAT_LABELS[formatValue] ?? '不明'}</span>
-        )}
+    <Show when={props.release.formats.length > 0} fallback={<span class="text-sm text-base-content/60">—</span>}>
+      <For each={props.release.formats}>
+        {(formatValue) => <span class="badge badge-outline badge-sm">{RELEASE_FORMAT_NAMES[formatValue]}</span>}
       </For>
     </Show>
   </div>

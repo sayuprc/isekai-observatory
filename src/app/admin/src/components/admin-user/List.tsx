@@ -2,6 +2,7 @@ import { createResource, For, Match, Switch } from 'solid-js';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
+import { ROLE_NAMES } from '../../utils/enum-names';
 import { ListState } from '../ListState';
 
 export const AdminUserList = () => {
@@ -50,7 +51,7 @@ export const AdminUserList = () => {
                     <tr>
                       <td>{adminUser.name}</td>
                       <td>{adminUser.email}</td>
-                      <td>{adminUser.role.name}</td>
+                      <td>{ROLE_NAMES[adminUser.role]}</td>
                       <td>{formatter.format(new Date(adminUser.createdAt))}</td>
                     </tr>
                   )}

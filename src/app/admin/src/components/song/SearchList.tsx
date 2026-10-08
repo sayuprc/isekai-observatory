@@ -1,6 +1,7 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { SongSearchTypeValue, SongTypeValue } from '../../generated';
 import { client } from '../../utils/client';
+import { SONG_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
@@ -17,6 +18,11 @@ const SONG_TYPE_BADGE_CLASS: Record<SongTypeValue, string> = {
   1: 'badge-warning',
   2: 'badge-info',
 };
+
+const SONG_TYPE_OPTIONS = toOptions(SONG_TYPE_NAMES).map((option) => ({
+  value: `${option.value}` as const,
+  label: option.label,
+}));
 
 type Sort = 'title' | 'order_no';
 type Order = 'asc' | 'desc';
@@ -46,7 +52,12 @@ const parseParams = (query: URLSearchParams): SearchParams => {
 
   return {
     title: query.get('title') ?? '',
-    type: pickParam<SongSearchTypeValue | ''>(query.get('type'), ['1', '2'], '') || undefined,
+    type:
+      pickParam<SongSearchTypeValue | ''>(
+        query.get('type'),
+        SONG_TYPE_OPTIONS.map((option) => option.value),
+        '',
+      ) || undefined,
     isDisplay: isDisplay === 'true' ? true : isDisplay === 'false' ? false : undefined,
     sort: pickParam(query.get('sort'), ['title', 'order_no'] as const, DEFAULT_PARAMS.sort),
     order: pickParam(query.get('order'), ['asc', 'desc'] as const, DEFAULT_PARAMS.order),
@@ -121,10 +132,10 @@ export const SearchList = () => {
             <option value="" selected={input().type === undefined}>
               すべて
             </option>
-            <For each={data()?.types ?? []}>
-              {(t) => (
-                <option value={String(t.value)} selected={input().type === String(t.value)}>
-                  {t.name}
+            <For each={SONG_TYPE_OPTIONS}>
+              {(option) => (
+                <option value={option.value} selected={input().type === option.value}>
+                  {option.label}
                 </option>
               )}
             </For>
@@ -256,8 +267,8 @@ export const SearchList = () => {
                           </a>
                         </td>
                         <td class="whitespace-nowrap">
-                          <span class={`badge badge-sm badge-soft ${SONG_TYPE_BADGE_CLASS[song.type.value]}`}>
-                            {song.type.name}
+                          <span class={`badge badge-sm badge-soft ${SONG_TYPE_BADGE_CLASS[song.type]}`}>
+                            {SONG_TYPE_NAMES[song.type]}
                           </span>
                         </td>
                         <CountCell count={song.performanceCount} />

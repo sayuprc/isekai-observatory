@@ -2,6 +2,7 @@ import { For, Match, Show, Switch } from 'solid-js';
 import type { MediaSearchSortBy, MediaTypeValue, SortOrder } from '../../generated';
 import { client } from '../../utils/client';
 import { normalizeDateTimeDisplayValue } from '../../utils/date';
+import { MEDIA_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
@@ -20,12 +21,7 @@ type Order = SortOrder;
 
 const MEDIA_TYPE_OPTIONS: Array<{ value: '' | `${MediaTypeValue}`; label: string }> = [
   { value: '', label: 'すべて' },
-  { value: '1', label: 'MV' },
-  { value: '2', label: '音源動画' },
-  { value: '3', label: '配信' },
-  { value: '4', label: 'ショート' },
-  { value: '5', label: '投稿' },
-  { value: '99', label: 'その他' },
+  ...toOptions(MEDIA_TYPE_NAMES).map((option) => ({ value: `${option.value}` as const, label: option.label })),
 ];
 
 /** 一覧では URL 全体は幅に見合わないため、投稿先が分かるホスト名だけを出す(解析できない値は素のまま表示する) */
@@ -264,7 +260,7 @@ export const SearchList = () => {
                           </a>
                         </td>
                         <td class="whitespace-nowrap text-sm">{normalizeDateTimeDisplayValue(media.publishedAt)}</td>
-                        <td class="whitespace-nowrap">{media.type.name}</td>
+                        <td class="whitespace-nowrap">{MEDIA_TYPE_NAMES[media.type]}</td>
                         <CountCell count={media.songCount} />
                         <CountCell count={media.eventCount} />
                         <td class="whitespace-nowrap">

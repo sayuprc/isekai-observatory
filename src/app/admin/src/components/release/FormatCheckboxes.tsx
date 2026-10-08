@@ -1,13 +1,8 @@
 import { For, Show } from 'solid-js';
 import type { ReleaseFormatValue } from '../../generated';
+import { RELEASE_FORMAT_NAMES, toOptions } from '../../utils/enum-names';
 
-export const RELEASE_FORMAT_OPTIONS: Array<{ value: ReleaseFormatValue; label: string }> = [
-  { value: 1, label: '配信' },
-  { value: 2, label: 'CD' },
-  { value: 3, label: 'DVD' },
-  { value: 4, label: 'Blu-ray' },
-  { value: 99, label: 'その他' },
-];
+const RELEASE_FORMAT_OPTIONS = toOptions(RELEASE_FORMAT_NAMES);
 
 interface FormatCheckboxesProps {
   formatValues: ReleaseFormatValue[];

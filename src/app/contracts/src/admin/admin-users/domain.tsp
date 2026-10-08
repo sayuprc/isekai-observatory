@@ -19,21 +19,17 @@ scalar createdAt extends utcDateTime;
   name: "テスト管理ユーザー",
   email: "example@example.com",
   createdAt: createdAt.fromISO("2019-12-09T10:30:20+09:00"),
-  role: #{ name: "一般", value: RoleValue.General },
-  permissions: #[#{ name: "管理ユーザー読み取り", value: PermissionValue.ReadAdminUser }],
+  role: RoleValue.General,
+  permissions: #[PermissionValue.ReadAdminUser],
 })
 model AdminUser {
   adminUserId: adminUserId;
   name: adminUserName;
   email: email;
   createdAt: createdAt;
-  role: Role;
-  permissions: Permission[];
+  role: RoleValue;
+  permissions: PermissionValue[];
 }
-
-@doc("役割名")
-@minLength(1)
-scalar roleName extends string;
 
 @doc("役割の値")
 @IsekaiObservatory.Shared.enumExtensions
@@ -47,16 +43,6 @@ enum RoleValue {
   @doc("一般")
   General: 3,
 }
-
-@example(#{ name: "特権", value: RoleValue.Privilege })
-model Role {
-  name: roleName;
-  value: RoleValue;
-}
-
-@doc("権限名")
-@minLength(1)
-scalar permissionName extends string;
 
 @doc("権限の値")
 @IsekaiObservatory.Shared.enumExtensions
@@ -78,6 +64,9 @@ enum PermissionValue {
 
   @doc("楽曲編集")
   WriteSong: "write_song",
+
+  @doc("監査ログ閲覧")
+  ReadAuditLog: "read_audit_log",
 
   @doc("メディア閲覧")
   ReadMedia: "read_media",
@@ -102,10 +91,4 @@ enum PermissionValue {
 
   @doc("イベント編集")
   WriteEvent: "write_event",
-}
-
-@example(#{ name: "管理ユーザー読み取り", value: PermissionValue.ReadAdminUser })
-model Permission {
-  name: permissionName;
-  value: PermissionValue;
 }

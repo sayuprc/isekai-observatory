@@ -64,7 +64,7 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
         'color' => 'string',
         'is_display' => 'bool',
         'order_no' => 'int',
-        'format_values' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]'
+        'formats' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]'
     ];
 
     /**
@@ -81,7 +81,7 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
         'color' => null,
         'is_display' => null,
         'order_no' => 'int32',
-        'format_values' => null
+        'formats' => null
     ];
 
     /**
@@ -96,7 +96,7 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
         'color' => false,
         'is_display' => false,
         'order_no' => false,
-        'format_values' => false
+        'formats' => false
     ];
 
     /**
@@ -191,7 +191,7 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
         'color' => 'color',
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo',
-        'format_values' => 'formatValues'
+        'formats' => 'formats'
     ];
 
     /**
@@ -206,7 +206,7 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
         'color' => 'setColor',
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo',
-        'format_values' => 'setFormatValues'
+        'formats' => 'setFormats'
     ];
 
     /**
@@ -221,7 +221,7 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
         'color' => 'getColor',
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo',
-        'format_values' => 'getFormatValues'
+        'formats' => 'getFormats'
     ];
 
     /**
@@ -287,7 +287,7 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
         $this->setIfExists('color', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
-        $this->setIfExists('format_values', $data ?? [], null);
+        $this->setIfExists('formats', $data ?? [], null);
     }
 
     /**
@@ -343,8 +343,8 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
-        if ($this->container['format_values'] === null) {
-            $invalidProperties[] = "'format_values' can't be null";
+        if ($this->container['formats'] === null) {
+            $invalidProperties[] = "'formats' can't be null";
         }
         return $invalidProperties;
     }
@@ -534,28 +534,28 @@ class ReleaseGroupReferencedRelease implements ModelInterface, ArrayAccess, \Jso
     }
 
     /**
-     * Gets format_values
+     * Gets formats
      *
      * @return \OpenAPI\Admin\Client\Model\ReleaseFormatValue[]
      */
-    public function getFormatValues()
+    public function getFormats()
     {
-        return $this->container['format_values'];
+        return $this->container['formats'];
     }
 
     /**
-     * Sets format_values
+     * Sets formats
      *
-     * @param \OpenAPI\Admin\Client\Model\ReleaseFormatValue[] $format_values format_values
+     * @param \OpenAPI\Admin\Client\Model\ReleaseFormatValue[] $formats formats
      *
      * @return self
      */
-    public function setFormatValues($format_values)
+    public function setFormats($formats)
     {
-        if (is_null($format_values)) {
-            throw new \InvalidArgumentException('non-nullable format_values cannot be null');
+        if (is_null($formats)) {
+            throw new \InvalidArgumentException('non-nullable formats cannot be null');
         }
-        $this->container['format_values'] = $format_values;
+        $this->container['formats'] = $formats;
 
         return $this;
     }

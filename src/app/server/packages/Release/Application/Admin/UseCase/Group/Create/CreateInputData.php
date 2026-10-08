@@ -8,7 +8,7 @@ readonly class CreateInputData
 {
     public function __construct(
         public string $title,
-        public int $typeValue,
+        public int $type,
         public string $description,
         public bool $isDisplay,
         public int $orderNo,

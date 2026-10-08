@@ -124,7 +124,7 @@ const ReleaseBasicInfo = (props: { form: ReleaseFormState; getFieldError: (field
       <FormatCheckboxes
         formatValues={props.form.formatValues()}
         onChange={props.form.setFormatValues}
-        fieldError={props.getFieldError('formatValues')}
+        fieldError={props.getFieldError('formats')}
       />
     </div>
     <FormRow label="表示順" for="orderNo">

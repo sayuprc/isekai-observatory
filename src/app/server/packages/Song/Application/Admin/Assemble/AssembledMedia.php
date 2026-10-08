@@ -11,7 +11,6 @@ readonly class AssembledMedia
         public string $title,
         public string $url,
         public string $publishedAt,
-        public string $typeName,
         public int $typeValue,
         public bool $isDisplay,
         public int $orderNo,

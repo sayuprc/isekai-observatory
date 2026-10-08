@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import type { EventRelease, ReleaseGroupReferencedRelease, Venue } from '../../generated';
 import { addRelease, addVenue, releaseLabel, toEventReleases, toSourcesPayload, validateSources } from './event-links';
 
-const venue = (venueId: string): Venue => ({ venueId, name: `会場${venueId}`, kind: { name: '現地', value: 1 } });
+const venue = (venueId: string): Venue => ({ venueId, name: `会場${venueId}`, kind: 1 });
 const release = (releaseId: string): EventRelease => ({
   releaseId,
   releaseGroupId: 'group',
@@ -10,7 +10,7 @@ const release = (releaseId: string): EventRelease => ({
   name: `版${releaseId}`,
   releasedOn: '2026-03-01',
   isDisplay: true,
-  formatValues: [4],
+  formats: [4],
 });
 
 describe('イベントの開催先と出典', () => {
@@ -37,7 +37,7 @@ describe('イベントの開催先と出典', () => {
         color: '#000000',
         isDisplay: true,
         orderNo: 1,
-        formatValues: [4],
+        formats: [4],
       },
       {
         releaseId: 'b',
@@ -46,7 +46,7 @@ describe('イベントの開催先と出典', () => {
         color: '#000000',
         isDisplay: false,
         orderNo: 2,
-        formatValues: [3],
+        formats: [3],
       },
     ];
 
@@ -58,7 +58,7 @@ describe('イベントの開催先と出典', () => {
         name: '通常盤',
         releasedOn: '2026-03-01',
         isDisplay: true,
-        formatValues: [4],
+        formats: [4],
       },
       {
         releaseId: 'b',
@@ -67,7 +67,7 @@ describe('イベントの開催先と出典', () => {
         name: '限定盤',
         releasedOn: '2026-03-01',
         isDisplay: false,
-        formatValues: [3],
+        formats: [3],
       },
     ]);
     expect(
@@ -78,7 +78,7 @@ describe('イベントの開催先と出典', () => {
   });
 
   it('リリースをグループ名・版名・発売日・提供形態で表示する', () => {
-    expect(releaseLabel({ ...release('1'), name: '通常盤', formatValues: [3, 4] })).toBe(
+    expect(releaseLabel({ ...release('1'), name: '通常盤', formats: [3, 4] })).toBe(
       'ライブ映像 通常盤 (2026-03-01 / DVD・Blu-ray)',
     );
     expect(releaseLabel({ ...release('1'), name: '' })).toBe('ライブ映像 (2026-03-01 / Blu-ray)');

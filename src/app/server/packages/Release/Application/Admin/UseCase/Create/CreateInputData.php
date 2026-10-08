@@ -10,7 +10,7 @@ namespace Release\Application\Admin\UseCase\Create;
 readonly class CreateInputData
 {
     /**
-     * @param list<int>          $formatValues
+     * @param list<int>          $formats
      * @param list<_mediumInput> $media
      */
     public function __construct(
@@ -21,7 +21,7 @@ readonly class CreateInputData
         public string $color,
         public bool $isDisplay,
         public int $orderNo,
-        public array $formatValues,
+        public array $formats,
         public array $media,
     ) {
     }

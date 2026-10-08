@@ -42,7 +42,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             color: '#4a5a78',
             isDisplay: true,
             orderNo: 10,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [
                 [
                     'position' => 1,
@@ -90,7 +90,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             color: '#4a5a78',
             isDisplay: true,
             orderNo: 1,
-            formatValues: [ReleaseFormat::Digital->value],
+            formats: [ReleaseFormat::Digital->value],
             media: [],
         ));
 
@@ -124,7 +124,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 10,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [
                 [
                     'position' => 1,
@@ -167,7 +167,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 10,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [
                 [
                     'position' => 1,
@@ -202,7 +202,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 10,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [
                 [
                     'position' => 1,
@@ -226,7 +226,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 1,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [],
         ));
     }
@@ -250,7 +250,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             color: '#989899',
             isDisplay: true,
             orderNo: 1,
-            formatValues: [ReleaseFormat::Cd->value],
+            formats: [ReleaseFormat::Cd->value],
             media: [],
         ));
     }

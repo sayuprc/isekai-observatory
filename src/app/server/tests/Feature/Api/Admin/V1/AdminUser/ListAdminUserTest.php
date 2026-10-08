@@ -48,10 +48,7 @@ class ListAdminUserTest extends DatabaseTestCase
                     'name' => 'コンソールユーザー',
                     'email' => 'admin@example.com',
                     'createdAt' => '2019-12-09T10:20:30+09:00',
-                    'role' => [
-                        'name' => Role::Console->getName(),
-                        'value' => Role::Console->value,
-                    ],
+                    'role' => Role::Console->value,
                     'permissions' => [],
                 ],
                 [
@@ -59,10 +56,7 @@ class ListAdminUserTest extends DatabaseTestCase
                     'name' => 'テストユーザー',
                     'email' => 'root@example.com',
                     'createdAt' => $authUser['createdAt'],
-                    'role' => [
-                        'name' => Role::Privilege->getName(),
-                        'value' => Role::Privilege->value,
-                    ],
+                    'role' => Role::Privilege->value,
                     'permissions' => [],
                 ],
             ],

@@ -21,7 +21,7 @@ class Converter
         return new OpenApiReleaseGroup()
             ->setReleaseGroupId($releaseGroup->releaseGroupId->value)
             ->setTitle($releaseGroup->title->value)
-            ->setTypeValue(ReleaseGroupTypeValue::from($releaseGroup->type->value))
+            ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description->value)
             ->setIsDisplay($releaseGroup->isDisplay)
             ->setOrderNo($releaseGroup->orderNo->value);
@@ -34,7 +34,7 @@ class Converter
         ])
             ->setReleaseGroupId($summary->releaseGroupId)
             ->setTitle($summary->title)
-            ->setTypeValue(ReleaseGroupTypeValue::from($summary->typeValue))
+            ->setType(ReleaseGroupTypeValue::from($summary->typeValue))
             ->setDescription($summary->description)
             ->setIsDisplay($summary->isDisplay)
             ->setOrderNo($summary->orderNo)
@@ -51,7 +51,7 @@ class Converter
             ->setColor($release->color)
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo)
-            ->setFormatValues(array_map(
+            ->setFormats(array_map(
                 static fn (int $formatValue): ReleaseFormatValue => ReleaseFormatValue::from($formatValue),
                 $release->formatValues,
             ));

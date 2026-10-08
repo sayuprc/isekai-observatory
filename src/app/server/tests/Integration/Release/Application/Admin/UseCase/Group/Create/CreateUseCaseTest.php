@@ -23,7 +23,7 @@ class CreateUseCaseTest extends DatabaseTestCase
     {
         $result = $this->getInstance()->handle(new CreateInputData(
             title: '観測された春',
-            typeValue: ReleaseGroupType::Album->value,
+            type: ReleaseGroupType::Album->value,
             description: '1st アルバム',
             isDisplay: true,
             orderNo: 1,
@@ -49,7 +49,7 @@ class CreateUseCaseTest extends DatabaseTestCase
 
         $result = $this->getInstance()->handle(new CreateInputData(
             title: '観測された春',
-            typeValue: ReleaseGroupType::Album->value,
+            type: ReleaseGroupType::Album->value,
             description: '',
             isDisplay: true,
             orderNo: 7,
@@ -65,7 +65,7 @@ class CreateUseCaseTest extends DatabaseTestCase
 
         $result = $this->getInstance()->handle(new CreateInputData(
             title: '観測された春',
-            typeValue: 0,
+            type: 0,
             description: '',
             isDisplay: true,
             orderNo: 1,

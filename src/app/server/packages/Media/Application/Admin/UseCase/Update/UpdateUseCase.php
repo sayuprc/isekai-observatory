@@ -42,7 +42,7 @@ readonly class UpdateUseCase
                 $inputData->title,
                 $inputData->url,
                 $inputData->publishedAt,
-                $inputData->typeValue,
+                $inputData->type,
                 $inputData->isDisplay,
             );
 

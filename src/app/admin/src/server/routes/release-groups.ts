@@ -10,7 +10,7 @@ import type { PerPage, ReleaseGroupSearchSortBy, ReleaseGroupTypeValue, SortOrde
 import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
-const typeValueSchema = t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(99)]);
+const typeSchema = t.Union([t.Literal(1), t.Literal(2), t.Literal(3), t.Literal(99)]);
 
 export const releaseGroups = new Elysia({ prefix: '/release-groups' })
   .use(authGuard)
@@ -27,7 +27,7 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
     {
       body: t.Object({
         title: t.String(),
-        typeValue: typeValueSchema,
+        type: typeSchema,
         description: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
@@ -94,7 +94,7 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
       }),
       body: t.Object({
         title: t.String(),
-        typeValue: typeValueSchema,
+        type: typeSchema,
         description: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),

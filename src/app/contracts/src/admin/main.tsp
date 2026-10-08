@@ -12,7 +12,6 @@ import "./persons";
 import "./person-groups";
 import "./releases";
 import "./song-tags";
-import "./song-types";
 import "./songs";
 import "./venues";
 

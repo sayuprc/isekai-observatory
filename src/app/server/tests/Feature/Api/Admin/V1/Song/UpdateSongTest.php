@@ -69,7 +69,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => 'https://example.com/new-lyrics',
-                'typeValue' => SongType::Cover->value,
+                'type' => SongType::Cover->value,
                 'isDisplay' => false,
                 'orderNo' => 2,
                 'persons' => [
@@ -85,10 +85,7 @@ class UpdateSongTest extends DatabaseTestCase
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
                     'lyricsLink' => 'https://example.com/new-lyrics',
-                    'type' => [
-                        'name' => SongType::Cover->getName(),
-                        'value' => SongType::Cover->value,
-                    ],
+                    'type' => SongType::Cover->value,
                     'isDisplay' => false,
                     'orderNo' => 2,
                     'persons' => [
@@ -117,10 +114,7 @@ class UpdateSongTest extends DatabaseTestCase
                             'title' => $newMedia->title->value,
                             'url' => $newMedia->url->value,
                             'publishedAt' => $newMedia->publishedAt->value->format('Y-m-d\TH:i:sP'),
-                            'type' => [
-                                'name' => $newMedia->type->getName(),
-                                'value' => $newMedia->type->value,
-                            ],
+                            'type' => $newMedia->type->value,
                             'isDisplay' => true,
                             'orderNo' => 1,
                         ],
@@ -155,7 +149,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'persons' => [],
@@ -207,7 +201,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Cover->value,
+                'type' => SongType::Cover->value,
                 'isDisplay' => false,
                 'orderNo' => 2,
                 'persons' => [
@@ -223,10 +217,7 @@ class UpdateSongTest extends DatabaseTestCase
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
                     'lyricsLink' => null,
-                    'type' => [
-                        'name' => SongType::Cover->getName(),
-                        'value' => SongType::Cover->value,
-                    ],
+                    'type' => SongType::Cover->value,
                     'isDisplay' => false,
                     'orderNo' => 2,
                     'persons' => [
@@ -259,7 +250,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'persons' => [],
@@ -282,7 +273,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'persons' => [],
@@ -308,7 +299,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
                 'lyricsLink' => null,
-                'typeValue' => SongType::Original->value,
+                'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'persons' => [],
@@ -339,7 +330,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'title' => '',
                 'description' => '',
                 'lyricsLink' => null,
-                'typeValue' => 0,
+                'type' => 0,
                 'isDisplay' => true,
                 'orderNo' => 0,
                 'persons' => [],
@@ -353,7 +344,7 @@ class UpdateSongTest extends DatabaseTestCase
                     ->has('details', 3)
                     ->where('details.0.field', 'title')
                     ->whereType('details.0.message', 'string')
-                    ->where('details.1.field', 'typeValue')
+                    ->where('details.1.field', 'type')
                     ->whereType('details.1.message', 'string')
                     ->where('details.2.field', 'orderNo')
                     ->whereType('details.2.message', 'string'),

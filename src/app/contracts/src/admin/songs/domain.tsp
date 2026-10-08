@@ -20,7 +20,7 @@ scalar lyricsLink extends string;
   title: "テスト楽曲",
   description: "テスト楽曲説明",
   lyricsLink: "https://example.com/lyrics",
-  type: #{ name: "オリジナル曲", value: SongTypeValue.Original },
+  type: SongTypeValue.Original,
   isDisplay: true,
   orderNo: 1,
   persons: #[
@@ -39,7 +39,7 @@ scalar lyricsLink extends string;
       title: "テストメディアMV",
       url: "https://example.com/media",
       publishedAt: mediaPublishedAt.fromISO("2024-03-01T12:00:00+09:00"),
-      type: #{ name: "MV", value: MediaTypeValue.Mv },
+      type: MediaTypeValue.Mv,
       isDisplay: true,
       orderNo: 1,
     }
@@ -50,7 +50,7 @@ model Song {
   title: title;
   description: description;
   lyricsLink: lyricsLink | null;
-  type: SongType;
+  type: SongTypeValue;
   isDisplay: boolean;
   orderNo: orderNo;
   persons: SongPerson[];
@@ -61,7 +61,7 @@ model Song {
 @example(#{
   songId: "3cd42c09-ff3c-4cd2-913f-a279c4ea89b4",
   title: "テスト楽曲",
-  type: #{ name: "オリジナル曲", value: SongTypeValue.Original },
+  type: SongTypeValue.Original,
   isDisplay: true,
   orderNo: 1,
   performanceCount: 3,
@@ -72,7 +72,7 @@ model Song {
 model SongSummary {
   songId: songId;
   title: title;
-  type: SongType;
+  type: SongTypeValue;
   isDisplay: boolean;
   orderNo: orderNo;
 
@@ -118,7 +118,7 @@ model SongAttachedTag {
   title: "テストメディアMV",
   url: "https://example.com/media",
   publishedAt: mediaPublishedAt.fromISO("2024-03-01T12:00:00+09:00"),
-  type: #{ name: "MV", value: MediaTypeValue.Mv },
+  type: MediaTypeValue.Mv,
   isDisplay: true,
   orderNo: 1,
 })
