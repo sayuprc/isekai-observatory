@@ -1,8 +1,10 @@
 import { createSignal, For, Show } from 'solid-js';
 import type { Accessor, Setter } from 'solid-js';
 import type { Person, SongPersonRole } from '../../generated';
+import { SONG_PERSON_ROLE_NAMES } from '../../generated/enum-names.gen';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { toOptions } from '../../utils/enum-options';
 import { createSortable, reorderItems } from '../sortable';
 import { addSelectedPersonToRole, type PersonSelections } from './person-selection';
 
@@ -12,11 +14,7 @@ interface Props {
 }
 
 const PER_PAGE = 25;
-const ROLE_OPTIONS: { role: SongPersonRole; label: string }[] = [
-  { role: 1, label: '作詞' },
-  { role: 2, label: '作曲' },
-  { role: 3, label: '編曲' },
-];
+const ROLE_OPTIONS = toOptions(SONG_PERSON_ROLE_NAMES);
 
 export const PersonSearchSection = (props: Props) => {
   const reorderPersons = (role: SongPersonRole, fromIndex: number, toIndex: number) => {
@@ -151,11 +149,11 @@ export const PersonSearchSection = (props: Props) => {
                           type="button"
                           class="btn btn-xs join-item"
                           classList={{
-                            'btn-primary': isSelected(option.role, person.personId),
-                            'btn-outline': !isSelected(option.role, person.personId),
+                            'btn-primary': isSelected(option.value, person.personId),
+                            'btn-outline': !isSelected(option.value, person.personId),
                           }}
-                          aria-pressed={isSelected(option.role, person.personId)}
-                          onClick={() => togglePerson(option.role, person)}
+                          aria-pressed={isSelected(option.value, person.personId)}
+                          onClick={() => togglePerson(option.value, person)}
                         >
                           {option.label}
                         </button>
@@ -201,22 +199,22 @@ export const PersonSearchSection = (props: Props) => {
             <div class="rounded-box border border-base-300 p-3">
               <p class="font-semibold">{option.label}</p>
               <Show
-                when={props.selections()[option.role].length > 0}
+                when={props.selections()[option.value].length > 0}
                 fallback={<p class="mt-2 text-sm text-base-content/60">まだ追加されていません。</p>}
               >
                 <div class="mt-2 space-y-2">
-                  <For each={props.selections()[option.role]}>
+                  <For each={props.selections()[option.value]}>
                     {(person, index) => (
                       <div
-                        {...sortable.dropTargetProps(option.role, index())}
+                        {...sortable.dropTargetProps(option.value, index())}
                         class="flex items-center justify-between gap-3 rounded-box border border-base-300 p-3 transition-colors"
                         classList={{
-                          'opacity-50': sortable.isDragging(option.role, index()),
-                          'border-primary bg-primary/5': sortable.isDropTarget(option.role, index()),
+                          'opacity-50': sortable.isDragging(option.value, index()),
+                          'border-primary bg-primary/5': sortable.isDropTarget(option.value, index()),
                         }}
                       >
                         <div class="flex min-w-0 items-center gap-2">
-                          <button {...sortable.dragHandleProps(option.role, index(), person.name)}>⠿</button>
+                          <button {...sortable.dragHandleProps(option.value, index(), person.name)}>⠿</button>
                           <span class="min-w-0 truncate">{person.name}</span>
                         </div>
                         <div class="flex shrink-0 gap-1">
@@ -225,7 +223,7 @@ export const PersonSearchSection = (props: Props) => {
                             class="btn btn-ghost btn-xs"
                             aria-label={`${person.name}を上へ移動`}
                             disabled={index() === 0}
-                            onClick={() => reorderPersons(option.role, index(), index() - 1)}
+                            onClick={() => reorderPersons(option.value, index(), index() - 1)}
                           >
                             ↑
                           </button>
@@ -233,15 +231,15 @@ export const PersonSearchSection = (props: Props) => {
                             type="button"
                             class="btn btn-ghost btn-xs"
                             aria-label={`${person.name}を下へ移動`}
-                            disabled={index() === props.selections()[option.role].length - 1}
-                            onClick={() => reorderPersons(option.role, index(), index() + 1)}
+                            disabled={index() === props.selections()[option.value].length - 1}
+                            onClick={() => reorderPersons(option.value, index(), index() + 1)}
                           >
                             ↓
                           </button>
                           <button
                             type="button"
                             class="btn btn-ghost btn-xs text-error"
-                            onClick={() => removePerson(option.role, person.personId)}
+                            onClick={() => removePerson(option.value, person.personId)}
                           >
                             削除
                           </button>

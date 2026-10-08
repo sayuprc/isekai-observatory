@@ -1,9 +1,9 @@
 import { For, Match, Show, Switch, createResource } from 'solid-js';
 import type { ReleaseGroupGetResponse, ReleaseGroupReferencedRelease } from '../../generated';
+import { RELEASE_FORMAT_NAMES } from '../../generated/enum-names.gen';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
-import { RELEASE_FORMAT_NAMES } from '../../utils/enum-names';
 import { createFormErrors } from '../../utils/form-error';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';

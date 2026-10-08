@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 import type { MediaTypeValue } from '../../generated';
-import { MEDIA_TYPE_NAMES, toOptions } from '../../utils/enum-names';
+import { MEDIA_TYPE_NAMES } from '../../generated/enum-names.gen';
+import { toOptions } from '../../utils/enum-options';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 

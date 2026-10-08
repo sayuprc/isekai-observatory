@@ -1,7 +1,8 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { SongSearchTypeValue, SongTypeValue } from '../../generated';
+import { SONG_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { client } from '../../utils/client';
-import { SONG_TYPE_NAMES, toOptions } from '../../utils/enum-names';
+import { toOptions } from '../../utils/enum-options';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,

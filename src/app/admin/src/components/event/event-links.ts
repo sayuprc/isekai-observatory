@@ -6,8 +6,8 @@ import type {
   Venue,
   VenueKindValue,
 } from '../../generated';
+import { RELEASE_FORMAT_NAMES } from '../../generated/enum-names.gen';
 import { normalizeDateValue } from '../../utils/date';
-import { RELEASE_FORMAT_NAMES } from '../../utils/enum-names';
 
 export type VenueEntry = {
   venueId: string;

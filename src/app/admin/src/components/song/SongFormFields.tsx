@@ -1,6 +1,7 @@
 import { children, createSignal, For, type JSX, Show } from 'solid-js';
 import type { SongTag } from '../../generated';
-import { SONG_TYPE_NAMES, toOptions } from '../../utils/enum-names';
+import { SONG_TYPE_NAMES } from '../../generated/enum-names.gen';
+import { toOptions } from '../../utils/enum-options';
 import { FormColumns } from '../FormColumns';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';

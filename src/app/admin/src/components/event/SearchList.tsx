@@ -1,7 +1,7 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { EventSearchSortBy, EventStatusValue, EventSummary, EventTypeValue, SortOrder } from '../../generated';
+import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { client } from '../../utils/client';
-import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES } from '../../utils/enum-names';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,

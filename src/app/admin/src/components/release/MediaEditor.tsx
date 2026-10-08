@@ -1,8 +1,8 @@
 import { For, Index, Show, createSignal } from 'solid-js';
 import type { ReleaseGetResponse, SongSummary } from '../../generated';
+import { SONG_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
-import { SONG_TYPE_NAMES } from '../../utils/enum-names';
 import type { SongCandidate } from '../song-import';
 import { createSortable, reorderItems } from '../sortable';
 import { toTrackForms } from './event-import';

@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 import type { VenueKindValue } from '../../generated';
-import { toOptions, VENUE_KIND_NAMES } from '../../utils/enum-names';
+import { VENUE_KIND_NAMES } from '../../generated/enum-names.gen';
+import { toOptions } from '../../utils/enum-options';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 

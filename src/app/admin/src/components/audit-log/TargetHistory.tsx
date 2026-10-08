@@ -1,9 +1,9 @@
 import { createResource, For, Match, Switch } from 'solid-js';
 import type { AuditLogSummary, AuditTargetType } from '../../generated';
+import { AUDIT_ACTION_NAMES } from '../../generated/enum-names.gen';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
-import { ACTION_LABEL } from './audit-log-labels';
 
 interface TargetHistoryProps {
   targetType: AuditTargetType;
@@ -86,7 +86,7 @@ export const TargetHistory = (props: TargetHistoryProps) => {
                         {(log) => (
                           <tr>
                             <td class="font-mono text-xs">{formatter.format(new Date(log.createdAt))}</td>
-                            <td>{ACTION_LABEL[log.action] ?? log.action}</td>
+                            <td>{AUDIT_ACTION_NAMES[log.action] ?? log.action}</td>
                             <td>{log.adminUserName}</td>
                             <td class="text-right">
                               <a href={`/audit-logs/${log.auditLogId}`} class="btn btn-ghost btn-xs">

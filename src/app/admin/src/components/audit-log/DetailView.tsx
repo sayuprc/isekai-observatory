@@ -1,24 +1,10 @@
 import { createResource, Match, Show, Switch } from 'solid-js';
 import type { AuditAction, AuditTargetType } from '../../generated';
+import { AUDIT_ACTION_NAMES, AUDIT_TARGET_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
 import { getListUrl } from '../../utils/list-url';
-import { ACTION_LABEL } from './audit-log-labels';
-
-// 生成型に対象種別が増えたらコンパイルエラーで気付けるよう、網羅性を satisfies で検査する
-const TARGET_TYPE_LABEL: Record<string, string> = {
-  AdminUser: '管理ユーザー',
-  Media: 'メディア',
-  Person: '人物',
-  PersonGroup: '人物グループ',
-  Release: 'リリース',
-  ReleaseGroup: 'リリースグループ',
-  Song: '楽曲',
-  SongTag: '楽曲タグ',
-  Venue: '開催先',
-  Event: 'イベント',
-} satisfies Record<AuditTargetType, string>;
 
 interface Props {
   auditLogId: string;
@@ -110,9 +96,9 @@ export const DetailView = (props: Props) => {
                 <dt class="font-semibold">実行者</dt>
                 <dd>{data().adminUserName}</dd>
                 <dt class="font-semibold">操作</dt>
-                <dd>{ACTION_LABEL[data().action as AuditAction] ?? data().action}</dd>
+                <dd>{AUDIT_ACTION_NAMES[data().action as AuditAction] ?? data().action}</dd>
                 <dt class="font-semibold">対象種別</dt>
-                <dd>{TARGET_TYPE_LABEL[data().targetType] ?? data().targetType}</dd>
+                <dd>{AUDIT_TARGET_TYPE_NAMES[data().targetType as AuditTargetType] ?? data().targetType}</dd>
                 <dt class="font-semibold">対象ID</dt>
                 <dd class="font-mono text-sm break-all">{data().targetId}</dd>
                 <dt class="font-semibold">監査ログID</dt>

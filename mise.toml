@@ -331,6 +331,7 @@ run = '''
 rm -rf src/generated
 
 bun run generate:api
+bun run generate:enum-names
 '''
 
 [tasks."admin:format"]
@@ -411,6 +412,7 @@ run = '''
 rm -rf src/generated
 
 bun run generate:api
+bun run generate:enum-names
 '''
 
 [tasks."viewer:format"]

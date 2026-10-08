@@ -1,8 +1,8 @@
 import { createResource, For, Match, Switch } from 'solid-js';
+import { ROLE_NAMES } from '../../generated/enum-names.gen';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
-import { ROLE_NAMES } from '../../utils/enum-names';
 import { ListState } from '../ListState';
 
 export const AdminUserList = () => {
