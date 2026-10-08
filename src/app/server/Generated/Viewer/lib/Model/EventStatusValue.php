@@ -43,10 +43,19 @@ enum EventStatusValue: int
     /**
      * Possible values of this enum
      */
+    /**
+     * 通常
+     */
     case NUMBER_1 = 1;
 
+    /**
+     * 延期
+     */
     case NUMBER_2 = 2;
 
+    /**
+     * 中止
+     */
     case NUMBER_3 = 3;
 
 }

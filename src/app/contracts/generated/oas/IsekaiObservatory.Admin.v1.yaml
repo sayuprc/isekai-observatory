@@ -3743,6 +3743,10 @@ components:
         - 2
         - 3
       description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+      x-enum-descriptions:
+        - 通常
+        - 延期
+        - 中止
     EventSummary:
       type: object
       required:
@@ -3810,6 +3814,12 @@ components:
         - 4
         - 99
       description: イベント種別
+      x-enum-descriptions:
+        - ライブ
+        - 配信
+        - 展覧会
+        - ラジオ
+        - その他
     EventUpdateRequest:
       type: object
       required:
@@ -4091,6 +4101,13 @@ components:
         - 5
         - 99
       description: メディア種別の値
+      x-enum-descriptions:
+        - MV
+        - 音源動画
+        - 配信
+        - ショート
+        - 投稿
+        - その他
     MediaUpdateRequest:
       type: object
       required:
@@ -5497,6 +5514,9 @@ components:
         - 1
         - 2
       description: 楽曲種別の値
+      x-enum-descriptions:
+        - オリジナル曲
+        - カバー曲
     SongUpdateRequest:
       type: object
       required:

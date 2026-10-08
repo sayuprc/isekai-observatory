@@ -347,6 +347,10 @@ components:
         - 2
         - 3
       description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+      x-enum-descriptions:
+        - 通常
+        - 延期
+        - 中止
     EventTypeValue:
       type: integer
       format: int32
@@ -357,6 +361,12 @@ components:
         - 4
         - 99
       description: イベント種別
+      x-enum-descriptions:
+        - ライブ
+        - 配信
+        - 展覧会
+        - ラジオ
+        - その他
     EventVenueSummary:
       type: object
       required:
@@ -491,6 +501,13 @@ components:
         - 5
         - 99
       description: メディア種別の値
+      x-enum-descriptions:
+        - MV
+        - 音源動画
+        - 配信
+        - ショート
+        - 投稿
+        - その他
     PerformancePerson:
       type: object
       required:
@@ -536,6 +553,12 @@ components:
         - 4
         - 99
       description: 提供形態の値
+      x-enum-descriptions:
+        - 配信
+        - CD
+        - DVD
+        - Blu-ray
+        - その他
     ReleaseGroupListItem:
       type: object
       required:
@@ -608,6 +631,11 @@ components:
         - 3
         - 99
       description: リリースグループ種別の値
+      x-enum-descriptions:
+        - シングル
+        - アルバム
+        - EP
+        - その他
     ReleaseListItem:
       type: object
       required:
@@ -941,6 +969,9 @@ components:
         - 1
         - 2
       description: 楽曲種別の値
+      x-enum-descriptions:
+        - オリジナル曲
+        - カバー曲
     VenueKindValue:
       type: integer
       format: int32
@@ -948,6 +979,9 @@ components:
         - 1
         - 2
       description: 開催先種別の値
+      x-enum-descriptions:
+        - 現地
+        - オンライン
     Version:
       type: string
       enum:
