@@ -17,8 +17,12 @@ scalar venueName extends string;
 scalar venueKindName extends string;
 
 @doc("開催先種別の値")
+@IsekaiObservatory.Shared.enumDescriptions
 enum VenueKindValue {
+  @doc("現地")
   Physical: 1,
+
+  @doc("オンライン")
   Online: 2,
 }
 

@@ -41,26 +41,53 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum AuditTargetType: string
 {
     /**
-     * Possible values of this enum
+     * 管理ユーザー
      */
     case ADMIN_USER = 'AdminUser';
 
+    /**
+     * メディア
+     */
     case MEDIA = 'Media';
 
+    /**
+     * 人物
+     */
     case PERSON = 'Person';
 
+    /**
+     * 人物グループ
+     */
     case PERSON_GROUP = 'PersonGroup';
 
+    /**
+     * リリース
+     */
     case RELEASE = 'Release';
 
+    /**
+     * リリースグループ
+     */
     case RELEASE_GROUP = 'ReleaseGroup';
 
+    /**
+     * 楽曲
+     */
     case SONG = 'Song';
 
+    /**
+     * 楽曲タグ
+     */
     case SONG_TAG = 'SongTag';
 
+    /**
+     * 開催先
+     */
     case VENUE = 'Venue';
 
+    /**
+     * イベント
+     */
     case EVENT = 'Event';
 
 }

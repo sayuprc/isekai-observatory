@@ -41,14 +41,23 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum ReleaseGroupTypeValue: int
 {
     /**
-     * Possible values of this enum
+     * シングル
      */
     case NUMBER_1 = 1;
 
+    /**
+     * アルバム
+     */
     case NUMBER_2 = 2;
 
+    /**
+     * EP
+     */
     case NUMBER_3 = 3;
 
+    /**
+     * その他
+     */
     case NUMBER_99 = 99;
 
 }

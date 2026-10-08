@@ -41,12 +41,18 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum PerPage: int
 {
     /**
-     * Possible values of this enum
+     * 25 件
      */
     case NUMBER_25 = 25;
 
+    /**
+     * 50 件
+     */
     case NUMBER_50 = 50;
 
+    /**
+     * 100 件
+     */
     case NUMBER_100 = 100;
 
 }

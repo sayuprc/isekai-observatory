@@ -41,18 +41,33 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
 enum MediaTypeValue: int
 {
     /**
-     * Possible values of this enum
+     * MV
      */
     case NUMBER_1 = 1;
 
+    /**
+     * 音源動画
+     */
     case NUMBER_2 = 2;
 
+    /**
+     * 配信
+     */
     case NUMBER_3 = 3;
 
+    /**
+     * ショート
+     */
     case NUMBER_4 = 4;
 
+    /**
+     * 投稿
+     */
     case NUMBER_5 = 5;
 
+    /**
+     * その他
+     */
     case NUMBER_99 = 99;
 
 }

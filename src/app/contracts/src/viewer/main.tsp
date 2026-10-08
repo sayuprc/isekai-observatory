@@ -23,6 +23,8 @@ using Versioning;
 @versioned(Version)
 namespace IsekaiObservatory.Viewer;
 
+@IsekaiObservatory.Shared.enumDescriptions
 enum Version {
+  @doc("バージョン 1")
   v1,
 }

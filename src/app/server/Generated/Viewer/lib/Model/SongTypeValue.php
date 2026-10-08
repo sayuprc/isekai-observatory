@@ -41,10 +41,13 @@ use \OpenAPI\Viewer\Client\ObjectSerializer;
 enum SongTypeValue: int
 {
     /**
-     * Possible values of this enum
+     * オリジナル曲
      */
     case NUMBER_1 = 1;
 
+    /**
+     * カバー曲
+     */
     case NUMBER_2 = 2;
 
 }

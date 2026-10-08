@@ -29,12 +29,24 @@ scalar mediaTypeName extends string;
 
 @doc("メディア種別の値")
 @friendlyName("MediaTypeValue")
+@enumDescriptions
 enum MediaTypeValue {
+  @doc("MV")
   Mv: 1,
+
+  @doc("音源動画")
   AudioVideo: 2,
+
+  @doc("配信")
   LiveStream: 3,
+
+  @doc("ショート")
   Short: 4,
+
+  @doc("投稿")
   Post: 5,
+
+  @doc("その他")
   Other: 99,
 }
 

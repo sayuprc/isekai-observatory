@@ -36,9 +36,15 @@ model AdminUser {
 scalar roleName extends string;
 
 @doc("役割の値")
+@IsekaiObservatory.Shared.enumDescriptions
 enum RoleValue {
+  @doc("特権")
   Privilege: 1,
+
+  @doc("コンソール")
   Console: 2,
+
+  @doc("一般")
   General: 3,
 }
 
@@ -53,20 +59,48 @@ model Role {
 scalar permissionName extends string;
 
 @doc("権限の値")
+@IsekaiObservatory.Shared.enumDescriptions
 enum PermissionValue {
+  @doc("管理ユーザー閲覧")
   ReadAdminUser: "read_admin_user",
+
+  @doc("管理ユーザー編集")
   WriteAdminUser: "write_admin_user",
+
+  @doc("人物閲覧")
   ReadPerson: "read_person",
+
+  @doc("人物編集")
   WritePerson: "write_person",
+
+  @doc("楽曲閲覧")
   ReadSong: "read_song",
+
+  @doc("楽曲編集")
   WriteSong: "write_song",
+
+  @doc("メディア閲覧")
   ReadMedia: "read_media",
+
+  @doc("メディア編集")
   WriteMedia: "write_media",
+
+  @doc("リリース閲覧")
   ReadRelease: "read_release",
+
+  @doc("リリース編集")
   WriteRelease: "write_release",
+
+  @doc("開催先閲覧")
   ReadVenue: "read_venue",
+
+  @doc("開催先編集")
   WriteVenue: "write_venue",
+
+  @doc("イベント閲覧")
   ReadEvent: "read_event",
+
+  @doc("イベント編集")
   WriteEvent: "write_event",
 }
 

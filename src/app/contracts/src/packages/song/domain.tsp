@@ -24,8 +24,12 @@ scalar songTypeName extends string;
 
 @doc("楽曲種別の値")
 @friendlyName("SongTypeValue")
+@enumDescriptions
 enum SongTypeValue {
+  @doc("オリジナル曲")
   Original: 1,
+
+  @doc("カバー曲")
   Cover: 2,
 }
 

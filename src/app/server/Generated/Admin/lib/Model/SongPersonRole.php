@@ -40,12 +40,18 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum SongPersonRole: int
 {
     /**
-     * Possible values of this enum
+     * 作詞
      */
     case NUMBER_1 = 1;
 
+    /**
+     * 作曲
+     */
     case NUMBER_2 = 2;
 
+    /**
+     * 編曲
+     */
     case NUMBER_3 = 3;
 
 }

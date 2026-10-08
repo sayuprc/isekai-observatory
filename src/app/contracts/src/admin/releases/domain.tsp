@@ -33,19 +33,37 @@ scalar color extends string;
 scalar trackTitle extends string;
 
 @doc("リリースグループ種別")
+@IsekaiObservatory.Shared.enumDescriptions
 enum ReleaseGroupTypeValue {
+  @doc("シングル")
   Single: 1,
+
+  @doc("アルバム")
   Album: 2,
+
+  @doc("EP")
   Ep: 3,
+
+  @doc("その他")
   Other: 99,
 }
 
 @doc("提供形態")
+@IsekaiObservatory.Shared.enumDescriptions
 enum ReleaseFormatValue {
+  @doc("配信")
   Digital: 1,
+
+  @doc("CD")
   Cd: 2,
+
+  @doc("DVD")
   Dvd: 3,
+
+  @doc("Blu-ray")
   BluRay: 4,
+
+  @doc("その他")
   Other: 99,
 }
 

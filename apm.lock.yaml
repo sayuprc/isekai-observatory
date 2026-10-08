@@ -1,5 +1,5 @@
 lockfile_version: '1'
-generated_at: '2026-09-24T05:58:53.729357+00:00'
+generated_at: '2026-10-08T12:20:25.857490+00:00'
 apm_version: 0.26.0
 dependencies: []
 deployments:
@@ -218,7 +218,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:5d896d75c547b15cc61201236e34d4f38d5e8343202b13a66905e6b8f0e4c562
+  content_hash: sha256:e125be0e841f07e85109b5ca8e863b47343a08a31bc6e9da9c00b1ed07c0b019
 - kind: project-relative
   target: claude
   value: .claude/rules/04-docs.md
@@ -488,7 +488,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:3047c08e80809f746ccfda1150e6ed09e899cc16914c757dd7069b05361056aa
+  content_hash: sha256:828432205ff9321015218f7ea9a77ee7354c0f03475e7c9f880ed56dace2266f
 - kind: project-relative
   target: cursor
   value: .cursor/rules/04-docs.mdc
@@ -612,7 +612,7 @@ local_deployed_file_hashes:
   .claude/agents/docs-curator.md: sha256:74a098313fa00048bfd3e5cce164eeb77d7aa3af43b9a7346c9884bc496b4479
   .claude/rules/01-backend.md: sha256:63d719f081d842b9f1962e22616d12bf1a2e6ed4ad7de415cd3e8611684563f7
   .claude/rules/02-admin.md: sha256:d9ffbd7edbc9ab6ac95d31f631fc61ccabfa7ee22635f357d82dcfb890f9fa0f
-  .claude/rules/03-contracts.md: sha256:5d896d75c547b15cc61201236e34d4f38d5e8343202b13a66905e6b8f0e4c562
+  .claude/rules/03-contracts.md: sha256:e125be0e841f07e85109b5ca8e863b47343a08a31bc6e9da9c00b1ed07c0b019
   .claude/rules/04-docs.md: sha256:4e37ca24f3bc92afe73fa205fcc8010b3106aab53a8336d76fcc1fd7904766ea
   .claude/rules/05-viewer.md: sha256:f49c98d27e38b4279b71f84399497812773d0a1b7e128d8bb9df9c254de42a23
   .claude/rules/06-discord-notifier.md: sha256:676a482b3c9f254fa1c21028025d80afd7bd4a424cff8f17fcf587357d74c1b8
@@ -636,7 +636,7 @@ local_deployed_file_hashes:
   .cursor/agents/docs-curator.md: sha256:74a098313fa00048bfd3e5cce164eeb77d7aa3af43b9a7346c9884bc496b4479
   .cursor/rules/01-backend.mdc: sha256:0fa02290cd2ce4bc740ee1fd85f207090c576802a233b5e1d5e7535e20d245f2
   .cursor/rules/02-admin.mdc: sha256:4c88bcc41111d2d1216d798e243ccd7146d0773d3705aac117393f58c6a7757a
-  .cursor/rules/03-contracts.mdc: sha256:3047c08e80809f746ccfda1150e6ed09e899cc16914c757dd7069b05361056aa
+  .cursor/rules/03-contracts.mdc: sha256:828432205ff9321015218f7ea9a77ee7354c0f03475e7c9f880ed56dace2266f
   .cursor/rules/04-docs.mdc: sha256:6c95f8a67f136c7d8e304352f12612f5e2b28ba9f64d074e179691955a29b808
   .cursor/rules/05-viewer.mdc: sha256:e0d08e41fb28b013eb1fc7544f015ea9cdc0cbd131013ba0df11a3e0eedae345
   .cursor/rules/06-discord-notifier.mdc: sha256:d4feabd07d3857c90e7121e1b80e96347eb4382368e52937a070fd8462362473

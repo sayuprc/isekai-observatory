@@ -41,34 +41,73 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum PermissionValue: string
 {
     /**
-     * Possible values of this enum
+     * 管理ユーザー閲覧
      */
     case READ_ADMIN_USER = 'read_admin_user';
 
+    /**
+     * 管理ユーザー編集
+     */
     case WRITE_ADMIN_USER = 'write_admin_user';
 
+    /**
+     * 人物閲覧
+     */
     case READ_PERSON = 'read_person';
 
+    /**
+     * 人物編集
+     */
     case WRITE_PERSON = 'write_person';
 
+    /**
+     * 楽曲閲覧
+     */
     case READ_SONG = 'read_song';
 
+    /**
+     * 楽曲編集
+     */
     case WRITE_SONG = 'write_song';
 
+    /**
+     * メディア閲覧
+     */
     case READ_MEDIA = 'read_media';
 
+    /**
+     * メディア編集
+     */
     case WRITE_MEDIA = 'write_media';
 
+    /**
+     * リリース閲覧
+     */
     case READ_RELEASE = 'read_release';
 
+    /**
+     * リリース編集
+     */
     case WRITE_RELEASE = 'write_release';
 
+    /**
+     * 開催先閲覧
+     */
     case READ_VENUE = 'read_venue';
 
+    /**
+     * 開催先編集
+     */
     case WRITE_VENUE = 'write_venue';
 
+    /**
+     * イベント閲覧
+     */
     case READ_EVENT = 'read_event';
 
+    /**
+     * イベント編集
+     */
     case WRITE_EVENT = 'write_event';
 
 }

@@ -41,10 +41,13 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum SongSearchTypeValue: string
 {
     /**
-     * Possible values of this enum
+     * オリジナル曲
      */
     case _1 = '1';
 
+    /**
+     * カバー曲
+     */
     case _2 = '2';
 
 }

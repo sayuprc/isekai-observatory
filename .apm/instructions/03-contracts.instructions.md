@@ -33,4 +33,5 @@ applyTo: 'src/app/contracts/**'
 
 - `mise run contract:format:check`
 - `mise run contract:test`
+- `mise run contract:typecheck`
 - 影響範囲に応じて `mise run contract:compile:admin` または `mise run contract:compile:viewer`

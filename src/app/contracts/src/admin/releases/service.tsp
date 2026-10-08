@@ -8,8 +8,12 @@ using Http;
 namespace IsekaiObservatory.Admin;
 
 @doc("リリースグループ検索のソート条件")
+@enumDescriptions
 enum ReleaseGroupSearchSortBy {
+  @doc("初リリース日")
   firstReleasedOn: "first_released_on",
+
+  @doc("タイトル")
   title: "title",
 }
 

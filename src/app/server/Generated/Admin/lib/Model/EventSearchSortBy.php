@@ -41,10 +41,13 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum EventSearchSortBy: string
 {
     /**
-     * Possible values of this enum
+     * 開催時期
      */
     case SCHEDULE = 'schedule';
 
+    /**
+     * タイトル
+     */
     case TITLE = 'title';
 
 }

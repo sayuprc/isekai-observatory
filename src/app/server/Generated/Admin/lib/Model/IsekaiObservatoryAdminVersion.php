@@ -40,7 +40,7 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum IsekaiObservatoryAdminVersion: string
 {
     /**
-     * Possible values of this enum
+     * バージョン 1
      */
     case V1 = 'v1';
 

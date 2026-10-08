@@ -41,12 +41,18 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum RoleValue: int
 {
     /**
-     * Possible values of this enum
+     * 特権
      */
     case NUMBER_1 = 1;
 
+    /**
+     * コンソール
+     */
     case NUMBER_2 = 2;
 
+    /**
+     * 一般
+     */
     case NUMBER_3 = 3;
 
 }

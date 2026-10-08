@@ -41,16 +41,28 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum EventTypeValue: int
 {
     /**
-     * Possible values of this enum
+     * ライブ
      */
     case NUMBER_1 = 1;
 
+    /**
+     * 配信
+     */
     case NUMBER_2 = 2;
 
+    /**
+     * 展覧会
+     */
     case NUMBER_3 = 3;
 
+    /**
+     * ラジオ
+     */
     case NUMBER_4 = 4;
 
+    /**
+     * その他
+     */
     case NUMBER_99 = 99;
 
 }

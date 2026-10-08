@@ -41,10 +41,13 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum SortOrder: string
 {
     /**
-     * Possible values of this enum
+     * 昇順
      */
     case ASC = 'asc';
 
+    /**
+     * 降順
+     */
     case DESC = 'desc';
 
 }

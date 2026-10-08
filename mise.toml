@@ -129,6 +129,11 @@ description = "TypeSpec のフォーマットを検証する"
 dir = "src/app"
 run = "bun --filter contracts format:check"
 
+[tasks."contract:typecheck"]
+description = "contracts の TypeScript をチェックする"
+dir = "src/app"
+run = "bun --filter contracts typecheck"
+
 [tasks."contract:test"]
 description = "contracts のテストを実行する"
 dir = "src/app"

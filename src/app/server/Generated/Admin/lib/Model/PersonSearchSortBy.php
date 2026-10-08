@@ -41,10 +41,13 @@ use \OpenAPI\Admin\Client\ObjectSerializer;
 enum PersonSearchSortBy: string
 {
     /**
-     * Possible values of this enum
+     * 人物名
      */
     case NAME = 'name';
 
+    /**
+     * 表示順
+     */
     case ORDER_NO = 'order_no';
 
 }
