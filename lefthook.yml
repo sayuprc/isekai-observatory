@@ -1,17 +1,19 @@
 # Lefthook pre-commit hooks
 # https://github.com/evilmartians/lefthook
 
+glob_matcher: doublestar
+
 pre-commit:
   parallel: true
   commands:
     api-ecs:
       root: "src/app/server/"
-      glob: "{app,bootstrap,config,database,packages,routes,tests,tools}/**/*.php"
+      glob: "src/app/server/{app,bootstrap,config,database,packages,routes,tests,tools}/**/*.php"
       run: mise run api:ecs -- {staged_files}
 
     api-phpstan:
       root: "src/app/server/"
-      glob: "{app,bootstrap,packages}/**/*.php"
+      glob: "src/app/server/{app,bootstrap,packages}/**/*.php"
       run: mise run api:phpstan -- {staged_files}
 
     admin-lint:
@@ -46,10 +48,10 @@ pre-commit:
 
     contracts-format:
       root: "src/app/"
-      glob: "contracts/src/**/*.tsp"
+      glob: "src/app/contracts/src/**/*.tsp"
       run: mise run contract:format:check
 
     contracts-test:
       root: "src/app/"
-      glob: "contracts/scripts/**/*.ts"
+      glob: "src/app/contracts/scripts/**/*.ts"
       run: mise run contract:test
