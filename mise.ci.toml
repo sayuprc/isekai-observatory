@@ -64,7 +64,7 @@ _.file = "src/app/server/.env"
 description = "CI 環境でクライアントコード生成を行い、差分をチェックする"
 dir = "src/app"
 run = '''
-bun --filter admin generate:api
+bun --filter admin generate
 if [ -n "$(git status --porcelain)" ]; then
   echo "自動生成コードに差分があります"
   git status
