@@ -28,7 +28,7 @@ pub fn parse_notification(
       guard content is Some(_) || embeds is Some(_) else {
         raise InvalidPayload("content or non-empty embeds is required")
       }
-      { action, status, content, embeds }
+      { action, status, content, embeds, }
     }
     _ => raise InvalidPayload("expected notification with action/status")
   }

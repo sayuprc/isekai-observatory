@@ -8,11 +8,27 @@ pub(all) enum Outcome {
 } derive(Eq, Debug)
 
 ///|
+#deprecated
+pub extend Outcome with Eq::{not_equal, equal}
+
+///|
+#deprecated
+pub extend Outcome with @debug.Debug::{to_repr}
+
+///|
 pub suberror ParseError {
   InvalidJson(String)
   InvalidBase64(String)
   InvalidPayload(String)
 } derive(Eq, Debug)
+
+///|
+#deprecated
+pub extend ParseError with Eq::{not_equal, equal}
+
+///|
+#deprecated
+pub extend ParseError with @debug.Debug::{to_repr}
 
 ///|
 pub fn ParseError::to_string(self : ParseError) -> String {

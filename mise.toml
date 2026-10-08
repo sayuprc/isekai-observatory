@@ -9,7 +9,7 @@ pnpm = "12.4.1"
 
 [vars]
 # moonc の version 文字列 (moon version --all の moonc 行)
-moonbit_version = "0.10.6+80dc50f24"
+moonbit_version = "v0.10.14+7d59c7ec9"
 uid = "`id -u`"
 user_name = "`id -un`"
 gid = "`id -g`"

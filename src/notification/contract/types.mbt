@@ -11,11 +11,27 @@ pub(all) struct Notification {
 } derive(Eq, Debug)
 
 ///|
+#deprecated
+pub extend Notification with Eq::{not_equal, equal}
+
+///|
+#deprecated
+pub extend Notification with @debug.Debug::{to_repr}
+
+///|
 /// アプリ通知 JSON の検証・パースエラー
 pub suberror NotificationError {
   InvalidJson(String)
   InvalidPayload(String)
 } derive(Eq, Debug)
+
+///|
+#deprecated
+pub extend NotificationError with Eq::{not_equal, equal}
+
+///|
+#deprecated
+pub extend NotificationError with @debug.Debug::{to_repr}
 
 ///|
 pub fn NotificationError::to_string(self : NotificationError) -> String {

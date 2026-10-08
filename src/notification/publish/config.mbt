@@ -6,6 +6,14 @@ pub(all) struct Config {
 } derive(Eq, Debug)
 
 ///|
+#deprecated
+pub extend Config with Eq::{not_equal, equal}
+
+///|
+#deprecated
+pub extend Config with @debug.Debug::{to_repr}
+
+///|
 pub fn Config::from_env() -> Config raise {
   let project = required_env("GOOGLE_CLOUD_PROJECT")
   let topic = required_env("NOTIFICATION_TOPIC")
@@ -18,7 +26,7 @@ pub fn Config::from_env() -> Config raise {
       }
     None => "http://metadata.google.internal"
   }
-  { project, topic, metadata_base_url }
+  { project, topic, metadata_base_url, }
 }
 
 ///|

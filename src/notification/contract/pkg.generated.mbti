@@ -19,6 +19,12 @@ pub suberror NotificationError {
   InvalidJson(String)
   InvalidPayload(String)
 } derive(Eq, @debug.Debug)
+#deprecated
+pub fn NotificationError::equal(Self, Self) -> Bool
+#deprecated
+pub fn NotificationError::not_equal(Self, Self) -> Bool
+#deprecated
+pub fn NotificationError::to_repr(Self) -> @debug.Repr
 pub fn NotificationError::to_string(Self) -> String
 
 // Types and methods
@@ -28,6 +34,12 @@ pub(all) struct Notification {
   content : String?
   embeds : Json?
 } derive(Eq, @debug.Debug)
+#deprecated
+pub fn Notification::equal(Self, Self) -> Bool
+#deprecated
+pub fn Notification::not_equal(Self, Self) -> Bool
+#deprecated
+pub fn Notification::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
