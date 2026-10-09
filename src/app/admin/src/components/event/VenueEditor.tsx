@@ -1,7 +1,7 @@
 import { Index, Show } from 'solid-js';
 import type { Venue } from '../../generated';
+import { VENUE_KIND_NAMES } from '../../generated/enum-names.gen';
 import { client } from '../../utils/client';
-import { VENUE_KIND_NAMES } from '../../utils/enum-names';
 import { createKeywordSearch } from '../keyword-search';
 import { KeywordSearchPanel } from '../KeywordSearchPanel';
 import { ListItemActions } from '../ListItemActions';

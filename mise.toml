@@ -330,7 +330,7 @@ dir = "src/app/admin"
 run = '''
 rm -rf src/generated
 
-bun run generate:api
+bun run generate
 '''
 
 [tasks."admin:format"]

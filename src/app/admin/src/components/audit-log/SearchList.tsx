@@ -1,5 +1,6 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { AuditAction, AuditTargetType } from '../../generated';
+import { AUDIT_ACTION_NAMES, AUDIT_TARGET_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { client } from '../../utils/client';
 import { formatter } from '../../utils/date';
 import {
@@ -12,49 +13,13 @@ import {
 import type { PerPageOption as PerPage } from '../../utils/search-list';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
-import { ACTION_LABEL } from './audit-log-labels';
 
 type Action = AuditAction;
 type TargetType = AuditTargetType;
 
-// 生成された型 (AuditAction / AuditTargetType) を網羅する const タプル
-// 型注釈で完全性を担保し、生成型に値が増減したらコンパイルエラーで気付ける形にする
-const ACTION_OPTIONS = [
-  'create',
-  'update',
-  'delete',
-  'register',
-  'login',
-  'refresh',
-  'recovery_code_issue',
-  'recovery_code_use',
-] as const satisfies readonly Action[];
+const ACTION_OPTIONS = Object.keys(AUDIT_ACTION_NAMES) as Action[];
 
-const TARGET_TYPE_OPTIONS = [
-  'AdminUser',
-  'Media',
-  'Person',
-  'PersonGroup',
-  'Release',
-  'ReleaseGroup',
-  'Song',
-  'SongTag',
-  'Venue',
-  'Event',
-] as const satisfies readonly TargetType[];
-
-const TARGET_TYPE_LABEL: Record<TargetType, string> = {
-  AdminUser: '管理ユーザー',
-  Media: 'メディア',
-  Person: '人物',
-  PersonGroup: '人物グループ',
-  Release: 'リリース',
-  ReleaseGroup: 'リリースグループ',
-  Song: '楽曲',
-  SongTag: '楽曲タグ',
-  Venue: '開催先',
-  Event: 'イベント',
-};
+const TARGET_TYPE_OPTIONS = Object.keys(AUDIT_TARGET_TYPE_NAMES) as TargetType[];
 
 interface Params {
   from: string;
@@ -186,7 +151,7 @@ export const SearchList = () => {
             <For each={ACTION_OPTIONS}>
               {(a) => (
                 <option value={a} selected={input().action === a}>
-                  {ACTION_LABEL[a]}
+                  {AUDIT_ACTION_NAMES[a]}
                 </option>
               )}
             </For>
@@ -212,7 +177,7 @@ export const SearchList = () => {
             <For each={TARGET_TYPE_OPTIONS}>
               {(t) => (
                 <option value={t} selected={input().targetType === t}>
-                  {TARGET_TYPE_LABEL[t]}
+                  {AUDIT_TARGET_TYPE_NAMES[t]}
                 </option>
               )}
             </For>
@@ -302,8 +267,8 @@ export const SearchList = () => {
                       <tr class="hover:bg-primary/30 focus-within:bg-primary/30 transition-colors">
                         <td>{formatter.format(new Date(log.createdAt))}</td>
                         <td>{log.adminUserName}</td>
-                        <td>{ACTION_LABEL[log.action as Action] ?? log.action}</td>
-                        <td>{TARGET_TYPE_LABEL[log.targetType as TargetType] ?? log.targetType}</td>
+                        <td>{AUDIT_ACTION_NAMES[log.action as Action] ?? log.action}</td>
+                        <td>{AUDIT_TARGET_TYPE_NAMES[log.targetType as TargetType] ?? log.targetType}</td>
                         <td class="font-mono text-xs">{log.targetId}</td>
                         <td>
                           <a

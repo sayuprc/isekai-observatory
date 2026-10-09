@@ -1,6 +1,7 @@
 import { createSignal, Show } from 'solid-js';
 import type { ReleaseGroup, ReleaseGroupTypeValue } from '../../generated';
-import { RELEASE_GROUP_TYPE_NAMES, toOptions } from '../../utils/enum-names';
+import { RELEASE_GROUP_TYPE_NAMES } from '../../generated/enum-names.gen';
+import { toOptions } from '../../utils/enum-options';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 

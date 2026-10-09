@@ -21,7 +21,9 @@
     "lint:check": "bun run eslint:check",
     "style": "bun run stylelint:fix",
     "style:check": "bun run stylelint:check",
+    "generate": "bun run generate:api && bun run generate:enum-names",
     "generate:api": "openapi-ts",
+    "generate:enum-names": "bun run scripts/generate-enum-names.ts ../contracts/generated/oas/IsekaiObservatory.Admin.v1.yaml src/generated/enum-names.gen.ts",
     "prism": "prism mock ../contracts/generated/oas/${ADMIN_OAS_FILE} -h 0.0.0.0",
     "redis": "redis-commander"
   },

@@ -1,6 +1,7 @@
 import type { EventStatusValue, EventTypeValue } from '../../generated';
+import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { normalizeDateValue } from '../../utils/date';
-import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES, toOptions } from '../../utils/enum-names';
+import { toOptions } from '../../utils/enum-options';
 
 export const EVENT_TYPE_OPTIONS = toOptions(EVENT_TYPE_NAMES);
 

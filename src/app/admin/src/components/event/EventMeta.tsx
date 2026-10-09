@@ -1,4 +1,4 @@
-import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES } from '../../utils/enum-names';
+import { EVENT_STATUS_NAMES, EVENT_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { MetaChip } from '../EntityHeader';
 import type { EventFormState } from './event-form';
 import { formatSchedule } from './event-options';

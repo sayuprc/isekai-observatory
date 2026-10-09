@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 import type { ReleaseFormatValue } from '../../generated';
-import { RELEASE_FORMAT_NAMES, toOptions } from '../../utils/enum-names';
+import { RELEASE_FORMAT_NAMES } from '../../generated/enum-names.gen';
+import { toOptions } from '../../utils/enum-options';
 
 const RELEASE_FORMAT_OPTIONS = toOptions(RELEASE_FORMAT_NAMES);
 

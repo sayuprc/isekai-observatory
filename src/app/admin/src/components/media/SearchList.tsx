@@ -1,8 +1,9 @@
 import { For, Match, Show, Switch } from 'solid-js';
 import type { MediaSearchSortBy, MediaTypeValue, SortOrder } from '../../generated';
+import { MEDIA_TYPE_NAMES } from '../../generated/enum-names.gen';
 import { client } from '../../utils/client';
 import { normalizeDateTimeDisplayValue } from '../../utils/date';
-import { MEDIA_TYPE_NAMES, toOptions } from '../../utils/enum-names';
+import { toOptions } from '../../utils/enum-options';
 import {
   PER_PAGE_OPTIONS,
   createSearchResource,
