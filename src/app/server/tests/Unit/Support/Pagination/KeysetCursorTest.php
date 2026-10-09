@@ -25,7 +25,7 @@ class KeysetCursorTest extends TestCase
     #[Test]
     public function encodesAsBase64Json(): void
     {
-        // 既に発行済みのカーソルを読めるよう、形式を変えない
+        // 発行済みのカーソルと同じ base64 JSON 形式になる
         $this->assertSame(base64_encode('{"orderNo":1,"id":"abc"}'), KeysetCursor::encode(['orderNo' => 1, 'id' => 'abc']));
     }
 

@@ -37,7 +37,6 @@ readonly class UpdateUseCase
                 throw new ResourceNotFoundException('Release', $releaseId->value);
             }
 
-            // リリースの所属先グループは更新では変更しない
             $release = $this->service->prepareForUpdate(
                 $inputData->releaseId,
                 $found->releaseGroupId->value,

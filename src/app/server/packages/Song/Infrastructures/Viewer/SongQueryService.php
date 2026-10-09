@@ -40,7 +40,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
         if (is_string($cursor)) {
             $decoded = SongListCursor::decode($cursor);
 
-            // キーセットページング: (order_no 降順, song_id 昇順) で cursor より後ろを取る
+            // 降順と昇順が混在し行値比較では表せないため、条件を展開して書く
             $query = $query->where(Sql::format(
                 '(order_no < %s OR (order_no = %s AND song_id > %s))',
                 Sql::value($decoded->orderNo),
@@ -193,7 +193,6 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $linkRows,
         )));
 
-        // グループごとの最古公開リリースから代表発売日と代表色を引く
         $releaseRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
                 ->withSelect(['release_group_id', 'released_on', 'color'])
@@ -218,7 +217,6 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $binSongId = Row::string($row, 'song_id');
             $binGroupId = Row::string($row, 'release_group_id');
 
-            // 同一グループ内の複数リリースに収録されていても 1 件にまとめる
             if (isset($seen[$binSongId][$binGroupId])) {
                 continue;
             }
@@ -239,7 +237,6 @@ readonly class SongQueryService implements SongQueryServiceInterface
             );
         }
 
-        // 最古発売日の降順で並べる
         foreach ($grouped as &$summaries) {
             usort(
                 $summaries,
@@ -362,7 +359,6 @@ readonly class SongQueryService implements SongQueryServiceInterface
                 ->orderBy('song_performance_persons.order_no'),
         );
 
-        // グループとして出演した共演者は、最初のメンバーの位置にグループ名 1 つでまとめる
         $grouped = [];
         foreach ($rows as $row) {
             $performanceId = Row::string($row, 'performance_id');

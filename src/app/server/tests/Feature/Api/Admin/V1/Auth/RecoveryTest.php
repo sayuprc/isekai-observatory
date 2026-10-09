@@ -95,14 +95,12 @@ class RecoveryTest extends DatabaseTestCase
     #[Test]
     public function consumedCodeCannotBeReusedForSecondRecovery(): void
     {
-        // 2 個以上のコードを発行し、コード A で復元成功 → 同じコード A での 2 回目は失敗し、
-        // かつ未使用コード (A 以外) が過剰に消費されていないことを検証する
+        // 入力したコードだけが消費され、同じコードでの 2 回目の復元は失敗する
         $this->bindPasskeyAuthenticator();
         $adminUserId = $this->storeAdminUserWithPasskey('example@example.com');
         $codeAId = $this->storeRecoveryCode($adminUserId, 'A3KP-9QXR');
         $this->storeRecoveryCode($adminUserId, 'B7MN-2WYZ');
 
-        // コード A で復元成功
         $authCeremonyId = $this->startRecovery('example@example.com', 'A3KP-9QXR');
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $authCeremonyId,

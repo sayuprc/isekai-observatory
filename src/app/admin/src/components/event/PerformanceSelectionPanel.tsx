@@ -41,7 +41,7 @@ const fetchPersonGroups = async (name: string) => {
 
 // 選択中の楽曲披露の要約と、共演者をまとめて追加する操作
 export const PerformanceSelectionPanel = (props: PerformanceSelectionPanelProps) => {
-  // 削除済みの披露は数えない
+  // 披露を削除しても selectedIds には ID が残るため、selectedIds の件数ではなく現存する披露から数える
   const selected = () =>
     props.performances.filter((performance) => props.selection.selectedIds.has(performance.performanceId));
 

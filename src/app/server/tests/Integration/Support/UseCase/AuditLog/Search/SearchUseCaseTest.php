@@ -109,7 +109,7 @@ class SearchUseCaseTest extends DatabaseTestCase
         $this->assertSame($targetId, $resultByActor->auditLogs[0]->targetId);
         $this->assertSame('検索テストユーザーB', $resultByActor->auditLogs[0]->adminUserName);
 
-        // 名前完全一致
+        // 名前の完全一致でもヒットする
         $resultExact = $this->getInstance()->handle(new SearchInputData(adminUserName: '監査テストユーザーA'));
         $this->assertCount(2, $resultExact->auditLogs);
 
@@ -117,7 +117,7 @@ class SearchUseCaseTest extends DatabaseTestCase
         $resultSuffix = $this->getInstance()->handle(new SearchInputData(adminUserName: 'テストユーザーA'));
         $this->assertCount(2, $resultSuffix->auditLogs);
 
-        // 不一致
+        // どの名前にも含まれない語ではヒットしない
         $resultNoHit = $this->getInstance()->handle(new SearchInputData(adminUserName: '存在しない'));
         $this->assertCount(0, $resultNoHit->auditLogs);
     }
@@ -140,19 +140,18 @@ class SearchUseCaseTest extends DatabaseTestCase
     #[Test]
     public function escapesLikeMetacharactersInAdminUserName(): void
     {
-        // メタ文字を含む名前と、含まない名前の両方を seed
         $actorWithPercent = $this->seedActor(name: '100%担当');
         $plainActor = $this->seedActor(email: 'plain@example.com', name: 'プレーン');
 
         $this->insertAuditLog($actorWithPercent, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-01 10:00:00'));
         $this->insertAuditLog($plainActor, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 10:00:00'));
 
-        // '%' を素のメタ文字として扱うと全件ヒットしてしまう。エスケープされていればリテラル '%' を含む名前のみヒット
+        // '%' はメタ文字ではなくリテラルとして扱われ、'%' を含む名前だけがヒットする
         $resultPercent = $this->getInstance()->handle(new SearchInputData(adminUserName: '%'));
         $this->assertCount(1, $resultPercent->auditLogs, '"%" がメタ文字として解釈されないこと');
         $this->assertSame('100%担当', $resultPercent->auditLogs[0]->adminUserName);
 
-        // 名前内の '%' をリテラルとして扱うので '100%' で部分一致がヒット
+        // '%' を含む語でも、リテラルとして部分一致する
         $resultLiteral = $this->getInstance()->handle(new SearchInputData(adminUserName: '100%'));
         $this->assertCount(1, $resultLiteral->auditLogs);
         $this->assertSame('100%担当', $resultLiteral->auditLogs[0]->adminUserName);

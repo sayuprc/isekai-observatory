@@ -141,7 +141,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
                 ->orderBy('release_groups.order_no', 'desc');
         }
 
-        // リリース未登録のグループは末尾にする
+        // MySQL には NULLS LAST が無いため、IS NULL で並べてリリース未登録のグループを昇順・降順どちらでも末尾にする
         return $query
             ->orderBy(new Sql('first_released_on IS NULL'))
             ->orderBy('first_released_on', $criteria->order->value)

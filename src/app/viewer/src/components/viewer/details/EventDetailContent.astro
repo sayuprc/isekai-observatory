@@ -40,7 +40,6 @@ const referencedIds = new Set(event.setlist.flatMap((item) => item.performances.
 const looseSongs = event.performances.filter((p) => !referencedIds.has(p.performanceId)).map(toSong);
 const looseTitle = setlistItems.length > 0 ? 'セットリスト外の楽曲披露' : '楽曲披露';
 
-// 版名が無いリリースはグループのタイトルだけを出す
 const releases = event.releases.map((release) => ({
   href: `/releases/${release.releaseGroupId}`,
   title: release.name === '' ? release.releaseGroupTitle : `${release.releaseGroupTitle} ${release.name}`,

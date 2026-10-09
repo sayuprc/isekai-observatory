@@ -30,7 +30,6 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
     #[Override]
     public function list(?string $cursor, int $limit): ReleaseGroupListPage
     {
-        // 公開リリースを 1 件以上持つ公開グループのみを対象にする
         $query = $this->queryFactory->select()
             ->withSelect([
                 'release_groups.release_group_id',
@@ -53,7 +52,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
         if (is_string($cursor)) {
             $decoded = ReleaseGroupListCursor::decode($cursor);
 
-            // キーセットページング: (first_released_on DESC, order_no DESC, release_group_id ASC) で cursor より後ろを取る
+            // 降順と昇順が混在し行値比較では表せないため、条件を展開して書く
             $query = $query->having(Sql::format(
                 '(MIN(releases.released_on) < %s OR (MIN(releases.released_on) = %s AND (release_groups.order_no < %s OR (release_groups.order_no = %s AND release_groups.release_group_id > %s))))',
                 Sql::value($decoded->firstReleasedOn),
@@ -205,7 +204,6 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
                     'release_tracks.song_id',
                     'songs.is_display',
                 ])
-                // 上書き名 (release_tracks.title) を優先し、なければ楽曲名で表示する
                 ->select(new Sql('COALESCE(release_tracks.title, songs.title)'), 'title')
                 ->from('release_tracks')
                 ->outerJoin('songs', 'songs.song_id = release_tracks.song_id')

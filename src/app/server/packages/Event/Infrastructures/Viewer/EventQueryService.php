@@ -105,7 +105,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
         $decoded = EventListCursor::decode($cursor);
         $binEventId = Sql::value($this->converter->toBin($decoded->eventId));
 
-        // キーセットページング: (start_on 昇順 NULL 先頭, event_id 昇順) で cursor より後ろを取る
+        // 行値比較 ((start_on, event_id) > (...)) は NULL を比較できないため、日付未定の扱いを分岐で展開する
         if ($decoded->startOn === null) {
             return $query->where(Sql::format('((start_on IS NULL AND event_id > %s) OR start_on IS NOT NULL)', $binEventId));
         }

@@ -62,7 +62,6 @@ export const PerformanceEditor = (props: PerformanceEditorProps) => {
     props.onSelectionChange((current) => clickPerformance(current, performanceIds, index, extendRange));
   };
 
-  // 楽曲披露 ID からセットリストの項目番号 (1 始まり) を引く
   const setlistNumbersOf = (performanceId: string) =>
     props.setlist.flatMap((item, index) => (item.performanceIds.includes(performanceId) ? [index + 1] : []));
 

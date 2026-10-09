@@ -60,8 +60,7 @@ readonly class EventRepository implements EventRepositoryInterface
         $now = now()->toDateTimeString();
         $data = $event->toArray();
 
-        // 子テーブルは洗い替えする
-        // 共演者とセットリスト項目の披露参照は、親の削除で CASCADE される
+        // 共演者とセットリスト項目の披露参照は親の削除で CASCADE されるため、削除対象に含めない
         $this->queryFactory->deleteFromTables(
             ['event_setlist_items', 'song_performances', 'event_sources', 'event_releases', 'event_media', 'event_venues'],
             'event_id',

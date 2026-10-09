@@ -57,7 +57,6 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
         $id = $this->converter->toBin($personGroup->personGroupId->value);
         $now = now()->toDateTimeString();
 
-        // メンバーは洗い替えする
         $this->queryFactory->deleteFromTables([self::MEMBER_TABLE], 'person_group_id', $id);
 
         $this->queryFactory->insert()

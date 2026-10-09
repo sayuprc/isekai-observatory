@@ -21,7 +21,7 @@ final class BodyErrorFormatter
         $errors = [];
 
         foreach ($leaves as $leaf) {
-            // required は親のパスに missing の field 名を連結して報告する
+            // required 違反は親オブジェクトのパスで報告され、そのままでは欠落したフィールドを指せない
             if ($leaf['keyword'] === 'required') {
                 foreach ($this->missingFields($leaf) as $path) {
                     $errors[$path][] = SchemaErrorMessages::translate('required', []);

@@ -52,7 +52,6 @@ export function eventDateColumn(event: Event, withYear = false): { main: string;
   const monthDay = (value: string) => dottedDate(value.slice(5));
   const main = withYear ? dottedDate(startOn) : monthDay(startOn);
 
-  // 終了日は開始日と同じ年なら月日だけにする
   if (endOn) {
     const sameYear = startOn.slice(0, 4) === endOn.slice(0, 4);
     return { main, sub: `– ${sameYear ? monthDay(endOn) : dottedDate(endOn)}` };

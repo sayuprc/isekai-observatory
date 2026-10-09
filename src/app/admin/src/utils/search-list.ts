@@ -45,7 +45,7 @@ export const createSearchState = <P extends { page: number }>(options: SearchSta
 
   const handleSearch = (event: Event) => {
     event.preventDefault();
-    // 検索時は必ず 1 ページ目に戻る
+    // ページ番号を引き継ぐと、条件を変えて件数が減ったときに範囲外のページを開いてしまう
     apply({ ...input(), page: 1 });
   };
 
