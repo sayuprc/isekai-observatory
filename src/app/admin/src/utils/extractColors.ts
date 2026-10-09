@@ -87,7 +87,6 @@ export const extractColorsFromImage = async (file: Blob): Promise<ExtractedColor
       throw new Error('No color candidates extracted');
     }
 
-    // UI もスコア順(彩度×面積)で並べる
     const ordered = [...candidates].toSorted((a, b) => b.score - a.score);
 
     return { candidates: ordered, defaultHex: best.hex };

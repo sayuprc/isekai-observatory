@@ -26,7 +26,7 @@ readonly class SiteStatsQueryService implements SiteStatsQueryServiceInterface
                 ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
         );
 
-        // 公開リリースを 1 件以上持つ公開リリースグループのみを数える
+        // 公開リリースが無いグループは閲覧サイトの一覧に出ないため、件数にも含めない
         $releaseCount = Row::intValue(
             $this->queryFactory->select()
                 ->from('release_groups')

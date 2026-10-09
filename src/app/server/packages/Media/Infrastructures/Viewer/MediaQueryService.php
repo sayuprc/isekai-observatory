@@ -37,7 +37,7 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
         if (is_string($cursor)) {
             $decoded = MediaListCursor::decode($cursor);
 
-            // キーセットページング: (published_at 降順, media_id 昇順) で cursor より後ろを取る
+            // 降順と昇順が混在し行値比較では表せないため、条件を展開して書く
             $query = $query->where(Sql::format(
                 '(published_at < %s OR (published_at = %s AND media_id > %s))',
                 Sql::value($decoded->publishedAt),

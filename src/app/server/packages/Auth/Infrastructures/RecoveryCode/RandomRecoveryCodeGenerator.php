@@ -24,8 +24,7 @@ readonly class RandomRecoveryCodeGenerator implements RandomRecoveryCodeGenerato
     #[Override]
     public function generate(): string
     {
-        // Randomizer の既定エンジンは CSPRNG (Random\Engine\Secure)
-        // getBytesFromString で文字集合から一様にサンプリングし、4 文字ごとにハイフン区切りにする
+        // Randomizer の既定エンジンは CSPRNG (Random\Engine\Secure) のため、エンジンを明示しない
         $raw = $this->randomizer->getBytesFromString(self::ALPHABET, self::GROUP_LENGTH * self::GROUP_COUNT);
 
         return implode('-', str_split($raw, self::GROUP_LENGTH));

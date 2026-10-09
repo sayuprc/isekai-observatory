@@ -87,7 +87,7 @@ readonly class RecoveryFinishUseCase
             throw new UnauthenticatedException();
         }
 
-        // start で検証・束縛した当該コードのみを消費する。既に使用済み/存在しない場合は失敗
+        // ユーザーの未使用コードを任意に選ぶと入力していないコードが消費されるため、start で束縛したコードに限る
         $recoveryCode = $this->recoveryCodeRepository->findUnusedByIdForUpdate(
             new RecoveryCodeId($state->recoveryCodeId),
             $adminUser->adminUserId,

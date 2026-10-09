@@ -139,7 +139,6 @@ readonly class SongRepository implements SongRepositoryInterface
         $id = $this->converter->toBin($song->songId->value);
         $data = $song->toArray();
 
-        // 子テーブルは洗い替えする
         $this->queryFactory->deleteFromTables(['song_persons', 'song_taggings', 'song_media_links'], 'song_id', $id);
 
         $now = now()->toDateTimeString();
