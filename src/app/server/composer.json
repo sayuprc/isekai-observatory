@@ -54,7 +54,8 @@
       "Auth\\": "packages/Auth/",
       "Tools\\": "tools/",
       "OpenAPI\\Admin\\Client\\": "Generated/Admin/lib/",
-      "OpenAPI\\Viewer\\Client\\": "Generated/Viewer/lib/"
+      "OpenAPI\\Viewer\\Client\\": "Generated/Viewer/lib/",
+      "OpenAPI\\Public\\Client\\": "Generated/Public/lib/"
     }
   },
   "autoload-dev": {

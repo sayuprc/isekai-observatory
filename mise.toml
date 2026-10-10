@@ -23,6 +23,7 @@ MYSQL_IMAGE = "isekai-observatory-mysql:local"
 NODE_EXTRA_CA_CERTS = "{{config_root}}/infra/local/docker/php/certs/rootCA.pem"
 ADMIN_OAS_FILE = "IsekaiObservatory.Admin.v1.yaml"
 VIEWER_OAS_FILE = "IsekaiObservatory.Viewer.v1.yaml"
+PUBLIC_OAS_FILE = "IsekaiObservatory.Public.v1.yaml"
 
 # -- 環境構築 / コンテナ --
 
@@ -141,7 +142,7 @@ run = "bun --filter contracts test"
 
 [tasks."contract:compile:all"]
 description = "contracts の OAS を一括生成する"
-depends = ["contract:compile:viewer", "contract:compile:admin"]
+depends = ["contract:compile:viewer", "contract:compile:admin", "contract:compile:public"]
 
 [tasks."contract:compile:viewer"]
 description = "Viewer 用 OAS を生成する"
@@ -163,6 +164,16 @@ description = "Admin 用 OAS を監視付きで生成する"
 dir = "src/app"
 run = "bun --filter contracts compile:admin:watch"
 
+[tasks."contract:compile:public"]
+description = "Public API 用 OAS を生成する"
+dir = "src/app"
+run = "bun --filter contracts compile:public"
+
+[tasks."contract:compile:public:watch"]
+description = "Public API 用 OAS を監視付きで生成する"
+dir = "src/app"
+run = "bun --filter contracts compile:public:watch"
+
 [tasks."contract:re-compile"]
 description = "contracts の OAS を生成し直す"
 dir = "src/app"
@@ -170,6 +181,7 @@ run = '''
 rm -rf contracts/generated/oas
 bun --filter contracts compile:viewer
 bun --filter contracts compile:admin
+bun --filter contracts compile:public
 '''
 
 # -- generate --
@@ -220,6 +232,19 @@ docker run --rm -u {{vars.uid}}:{{vars.gid}} -v ".:/local" ${OPENAPI_IMAGE} gene
   -t /local/src/app/server/tools/openapi-generator/templates \
   -o /local/src/app/server/Generated/Viewer \
   -p invokerPackage=OpenAPI\\Viewer\\Client
+'''
+
+[tasks."api:generate:public"]
+description = "OAS から Public API のコードを生成する"
+run = '''
+rm -rf ./src/app/server/Generated/Public
+
+docker run --rm -u {{vars.uid}}:{{vars.gid}} -v ".:/local" ${OPENAPI_IMAGE} generate \
+  -i /local/src/app/contracts/generated/oas/${PUBLIC_OAS_FILE} \
+  -g php \
+  -t /local/src/app/server/tools/openapi-generator/templates \
+  -o /local/src/app/server/Generated/Public \
+  -p invokerPackage=OpenAPI\\Public\\Client
 '''
 
 # 可変長引数は usage.path を 1 件ずつ quote して渡す
