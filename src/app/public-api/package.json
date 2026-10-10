@@ -1,0 +1,33 @@
+{
+  "name": "public-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "snapshot": "node src/snapshot/main.ts",
+    "deploy": "wrangler deploy",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "prettier:format": "prettier --write .",
+    "prettier:format:check": "prettier --check .",
+    "eslint:fix": "eslint --fix",
+    "eslint:check": "eslint",
+    "format": "bun run prettier:format",
+    "format:check": "bun run prettier:format:check",
+    "lint": "bun run eslint:fix",
+    "lint:check": "bun run eslint:check"
+  },
+  "dependencies": {
+    "wrangler": "catalog:"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:lint",
+    "@types/bun": "catalog:",
+    "eslint": "catalog:lint",
+    "eslint-config-prettier": "catalog:lint",
+    "eslint-plugin-import-x": "catalog:lint",
+    "prettier": "catalog:lint",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:lint"
+  }
+}
