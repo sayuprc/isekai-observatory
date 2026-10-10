@@ -2,7 +2,7 @@
 
 ## Overview
 
-`isekai-observatory` は、API サーバー、API コントラクト、管理画面、閲覧サイトを 1 つのモノレポで管理します
+`isekai-observatory` は、API サーバー、API コントラクト、管理画面、閲覧サイト、外部向けの Public API を 1 つのモノレポで管理します
 
 このリポジトリでは、API 契約は `src/app/contracts` の TypeSpec を起点にし、生成物を各実装へ配布します。コード変更時は「どの層が Source of Truth か」を先に見極めることが重要です。この文書は上位マップにとどめ、ローカル実行構成や各サブプロジェクトの中身は下位文書へ分けます
 
@@ -13,11 +13,12 @@
 - `infra/staging/`: ステージング向け Cloud Build 定義とアプリケーション用 Dockerfile
 - `infra/production/`: 本番向け Cloud Build 定義とアプリケーション用 Dockerfile
 - `docs/`: ADR、設計原則、仕様、参照メモ、実行計画、運用手順
-- `src/app/`: `admin` / `viewer` / `contracts` を束ねる pnpm workspace のルート
+- `src/app/`: `admin` / `viewer` / `public-api` / `contracts` を束ねる pnpm workspace のルート
 - `src/app/server/`: PHP 8.5 / Laravel API サーバー
 - `src/app/contracts/`: TypeSpec による API 契約
 - `src/app/admin/`: Astro / SolidJS / Elysia による管理画面
 - `src/app/viewer/`: Astro / SolidJS による閲覧サイト
+- `src/app/public-api/`: 外部向け Public API の静的スナップショット書き出しと配信用 Cloudflare Worker
 - `src/notification/discord-notifier/`: MoonBit 製 Discord 通知配達サービス (Cloud Run)
 - `src/notification/publish/`: MoonBit 製の通知 JSON → Pub/Sub publish CLI
 - `src/notification/contract/`: MoonBit 製のアプリ通知 JSON 共有契約 (`notify-publish` / `discord-notifier` が依存)
@@ -26,7 +27,7 @@
 
 ## Source-Of-Truth Flow
 
-1. API 契約は `src/app/contracts/src/admin/main.tsp` と `src/app/contracts/src/viewer/main.tsp` から始まる
+1. API 契約は `src/app/contracts/src/admin/main.tsp`、`src/app/contracts/src/viewer/main.tsp`、`src/app/contracts/src/public/main.tsp` から始まる
 2. TypeSpec から `src/app/contracts/generated/oas/` に OpenAPI を生成する
 3. OpenAPI から次の生成物を更新する
   - `src/app/server/Generated/`
@@ -46,6 +47,7 @@
 | サーバーの業務ロジック | `src/app/server` | 必要なら `src/app/contracts` | `mise run ecs`, `phpstan`, `arkitect`, `test` |
 | 管理画面の UI / BFF | `src/app/admin` | 必要なら `src/app/contracts` | `mise run admin:check`, `cd src/app && bun --filter admin build` |
 | 閲覧サイトの UI | `src/app/viewer` | 必要なら `src/app/contracts` | `mise run viewer:check`, `cd src/app && bun --filter viewer build` |
+| Public API の書き出し / 配信 | `src/app/public-api` | 必要なら `src/app/contracts`、各 env の `docker/viewer` | `mise run public-api:check` |
 | Discord 通知配達 | `src/notification/discord-notifier` | 各 env の `docker/discord-notifier`、Cloud Build | `mise run discord-notifier:check` |
 | 通知 Pub/Sub publish | `src/notification/publish` | 各 env の `docker/viewer` (viewer-deploy から利用) | `mise run notify-publish:check` |
 | アプリ通知 JSON 契約 | `src/notification/contract` | `notify-publish` / `discord-notifier` | `mise run notify-contract:check` |

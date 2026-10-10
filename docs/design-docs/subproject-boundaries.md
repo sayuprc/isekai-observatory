@@ -9,6 +9,7 @@
 - `src/app/contracts/`: TypeSpec による API 契約の Source of Truth
 - `src/app/contracts/src/admin/main.tsp`: 管理画面向け契約の入口
 - `src/app/contracts/src/viewer/main.tsp`: 閲覧サイト向け契約の入口
+- `src/app/contracts/src/public/main.tsp`: 外部向け Public API 契約の入口
 - `src/app/contracts/generated/`: 生成物。手動編集しない
 
 ## Server
@@ -44,6 +45,17 @@ UI 実装方針の詳細は `FRONTEND.md` を参照します
 - `src/app/viewer/src/styles/`: スタイル
 
 UI 実装方針の詳細は `FRONTEND.md` を参照します
+
+## Public API
+
+- `src/app/public-api/`: 外部向け Public API の静的スナップショット書き出しと配信
+- `src/app/public-api/src/snapshot/`: build 時に server の Public 一覧を全件たどり、100 件ずつの静的ファイルへ書き出す
+- `src/app/public-api/src/worker/`: `pageToken` / `pageSize` を解釈し、静的ファイルから 1 ページを切り出して返す Cloudflare Worker
+- `src/app/public-api/src/shared/`: 書き出しと配信が共有するファイル配置
+- Worker は API サーバーと DB へ問い合わせない。データは `viewer-deploy` で書き出したスナップショットだけを使う
+- item の中身は解釈しない。形状は Public 契約と server が保証する
+
+配信方針の判断は ADR-0034 を参照します
 
 ## Notify Contract
 
