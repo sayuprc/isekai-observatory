@@ -1011,7 +1011,7 @@ components:
       format: uuid
       description: 開催先ID
 servers:
-  - url: https://local.api.isekaijoucho.fan/{version}
+  - url: https://local.api.isekaijoucho.fan/public/{version}
     description: ローカル環境
     variables:
       version:
