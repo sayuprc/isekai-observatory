@@ -579,3 +579,34 @@ run = "bun run typecheck"
 [tasks."admin-proxy:check"]
 description = "admin-proxy の format / lint / typecheck を実行する"
 depends = ["admin-proxy:format:check", "admin-proxy:lint", "admin-proxy:typecheck"]
+
+# -- public-api --
+
+[tasks."public-api:format"]
+description = "public-api の formatter を実行し、フォーマットを自動修正する"
+dir = "src/app/public-api"
+run = "bun run format"
+
+[tasks."public-api:format:check"]
+description = "public-api の formatter をチェックする"
+dir = "src/app/public-api"
+run = "bun run format:check"
+
+[tasks."public-api:lint"]
+description = "public-api の linter を実行する"
+dir = "src/app/public-api"
+run = "bun run lint:check"
+
+[tasks."public-api:typecheck"]
+description = "public-api の TypeScript をチェックする"
+dir = "src/app/public-api"
+run = "bun run typecheck"
+
+[tasks."public-api:test"]
+description = "public-api のテストを実行する"
+dir = "src/app/public-api"
+run = "bun run test"
+
+[tasks."public-api:check"]
+description = "public-api の format / lint / typecheck / test を実行する"
+depends = ["public-api:format:check", "public-api:lint", "public-api:typecheck", "public-api:test"]
