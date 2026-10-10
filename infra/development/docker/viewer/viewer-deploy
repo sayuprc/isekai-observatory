@@ -4,6 +4,7 @@ set -euo pipefail
 : "${API_URL:?}"
 : "${SITE_URL:?}"
 : "${CLOUDFLARE_WORKER_NAME:?}"
+: "${CLOUDFLARE_PUBLIC_API_WORKER_NAME:?}"
 : "${CLOUDFLARE_ACCOUNT_ID:?}"
 : "${CLOUDFLARE_API_TOKEN:?}"
 : "${GOOGLE_CLOUD_PROJECT:?}"
@@ -17,6 +18,14 @@ pnpm --filter viewer run deploy \
   --name "${CLOUDFLARE_WORKER_NAME}" \
   --compatibility-date "$(date -u '+%Y-%m-%d')" \
   --message "${DEPLOY_MESSAGE}"
+
+# Public API は API サーバーへ問い合わせずに配信するため、ここで書き出した静的スナップショットだけを載せる
+pnpm --filter public-api run snapshot
+
+pnpm --filter public-api run deploy \
+  --name "${CLOUDFLARE_PUBLIC_API_WORKER_NAME}" \
+  --compatibility-date "$(date -u '+%Y-%m-%d')" \
+  --message "dev public-api deploy $(date --iso-8601=seconds)"
 
 notify-publish <<EOF
 {"action":"viewer.deploy","status":"succeeded","embeds":[{"title":"Viewer のデプロイが成功しました","fields":[{"name":"site_url","value":"${SITE_URL}","inline":true},{"name":"env","value":"development","inline":true}]}]}
