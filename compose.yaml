@@ -13,6 +13,8 @@ services:
       - ${WORKTREE_PROXY_HTTPS_PORT:-443}:443
     extra_hosts:
       - host.docker.internal:host-gateway
+    depends_on:
+      - php
 
   php:
     image: ${SERVER_IMAGE}
