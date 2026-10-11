@@ -1004,13 +1004,16 @@ components:
       enum:
         - 1
         - 2
+        - 3
       description: 楽曲種別の値
       x-enum-varnames:
         - Original
         - Cover
+        - Guest
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
+        - 参加曲
     VenueKindValue:
       type: integer
       format: int32

@@ -13,7 +13,7 @@ import { requestWithAuth, withAuthRetry } from '../client';
 import { resolveApiResponse } from '../errors';
 import { authGuard } from '../middleware';
 
-const SongTypeValueSchema = t.Union([t.Literal(1), t.Literal(2)]);
+const SongTypeValueSchema = t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]);
 const NullableStringSchema = t.Union([t.String(), t.Null()]);
 
 const SongPersonRefSchema = t.Array(
@@ -58,7 +58,7 @@ export const songs = new Elysia({ prefix: '/songs' })
     {
       query: t.Object({
         title: t.String(),
-        type: t.Optional(t.Union([t.Literal('1'), t.Literal('2')])),
+        type: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3')])),
         is_display: t.Optional(t.Boolean()),
         sort: t.Optional(t.Union([t.Literal('title'), t.Literal('order_no')])),
         order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),

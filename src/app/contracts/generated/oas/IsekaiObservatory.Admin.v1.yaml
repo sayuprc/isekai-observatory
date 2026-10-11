@@ -5390,13 +5390,16 @@ components:
       enum:
         - '1'
         - '2'
+        - '3'
       description: 楽曲検索API用の楽曲種別
       x-enum-varnames:
         - Original
         - Cover
+        - Guest
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
+        - 参加曲
     SongSummary:
       type: object
       required:
@@ -5560,13 +5563,16 @@ components:
       enum:
         - 1
         - 2
+        - 3
       description: 楽曲種別の値
       x-enum-varnames:
         - Original
         - Cover
+        - Guest
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
+        - 参加曲
     SongUpdateRequest:
       type: object
       required:

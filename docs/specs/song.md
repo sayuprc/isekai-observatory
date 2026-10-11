@@ -2,7 +2,7 @@
 
 ## 用語
 
-- **Song**: `songId` / `title` / `description` / `lyricsLink?` / `type` (Original / Cover) / `isDisplay` / `orderNo`
+- **Song**: `songId` / `title` / `description` / `lyricsLink?` / `type` (Original / Cover / Guest) / `isDisplay` / `orderNo`
 - **SongPerson**: `personId` + `role` (Lyricist / Composer / Arranger) + `orderNo`
 - **SongTag**: `songTagId` / `name` (一意) / `orderNo`。楽曲への添付はタグ ID 参照
 - **SongMediaLink**: `mediaId` + `orderNo`。リンクの所有は Song 側

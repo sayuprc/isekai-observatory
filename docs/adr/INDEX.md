@@ -38,3 +38,4 @@
 | ADR-0032 | superseded | Viewer API は種別や状態を数値だけで返し、表示名は Viewer が持つ | [api, viewer] |
 | ADR-0033 | accepted | API は種別や状態を値だけで返し、表示名は画面が持つ | [api, admin, viewer] |
 | ADR-0034 | accepted | リリースの代表色を持たない | [api, admin, viewer] |
+| ADR-0035 | accepted | 楽曲種別に参加曲を加える | [api, admin, viewer] |
