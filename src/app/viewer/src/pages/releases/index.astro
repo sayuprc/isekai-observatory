@@ -4,7 +4,11 @@ import EntryStatus from '../../components/viewer/EntryStatus';
 import FilterBar from '../../components/viewer/FilterBar';
 import SectionHead from '../../components/viewer/SectionHead.astro';
 import { releaseGroupContentRepository } from '../../features/releases/content';
-import { RELEASE_GROUP_TYPE_FILTER_ORDER, RELEASE_GROUP_TYPE_NAMES } from '../../features/releases/types';
+import {
+  RELEASE_GROUP_TYPE_FILTER_ORDER,
+  RELEASE_GROUP_TYPE_NAMES,
+  releaseFormatText,
+} from '../../features/releases/types';
 import Layout from '../../layouts/Layout.astro';
 import { dottedDate } from '../../shared/date';
 
@@ -69,6 +73,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
               const trackTitles = releaseGroup.releases.flatMap((release) =>
                 release.media.flatMap((medium) => medium.tracks.map((track) => track.title)),
               );
+              const formats = [...new Set(releaseGroup.releases.flatMap((release) => release.formats))];
 
               return (
                 <li
@@ -79,9 +84,16 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
                     .toLowerCase()}
                 >
                   <a href={`/releases/${releaseGroup.releaseGroupId}`} class="release-row">
-                    <span class="release-row-title">{releaseGroup.title}</span>
-                    <span class="release-row-type">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}</span>
                     <span class="label-mono release-row-date">{dottedDate(releaseGroup.firstReleasedOn.slice(5))}</span>
+                    <span class="release-row-body">
+                      <span class="release-row-title">{releaseGroup.title}</span>
+                      <span class="release-row-meta">
+                        <span class="pill" data-release-type={String(releaseGroup.type)}>
+                          {RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}
+                        </span>
+                        {formats.length > 0 && <span>{releaseFormatText(formats)}</span>}
+                      </span>
+                    </span>
                   </a>
                 </li>
               );
