@@ -194,7 +194,6 @@ export type ReleaseListItem = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
-    color: Color;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
     media: Array<ReleaseMediumItem>;
@@ -312,10 +311,6 @@ export type SongReleaseGroupSummary = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     firstReleasedOn: ReleasedOn;
-    /**
-     * 代表色(公開リリースを発売日順に見て最初のもの)
-     */
-    color: Color;
 };
 
 /**
@@ -329,11 +324,6 @@ export type SongTypeValue = 1 | 2;
 export type VenueKindValue = 1 | 2;
 
 export type Version = 'v1';
-
-/**
- * 代表色
- */
-export type Color = string;
 
 /**
  * 次ページを記すキー

@@ -49,7 +49,6 @@ class ListPresenter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setDescription($release->description)
-            ->setColor($release->color)
             ->setOrderNo($release->orderNo)
             ->setFormats(array_map($this->toOpenApiReleaseFormatValue(...), $release->formats))
             ->setMedia(array_map($this->toOpenApiReleaseMediumItem(...), $release->media));

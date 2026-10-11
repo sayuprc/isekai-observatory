@@ -239,7 +239,6 @@ class ListSongTest extends DatabaseTestCase
                                 'title' => '公開リリース',
                                 'type' => 1,
                                 'firstReleasedOn' => '2024-01-01',
-                                'color' => '#989899',
                             ],
                         ],
                     ],

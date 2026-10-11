@@ -115,7 +115,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
 
         $releaseRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['release_id', 'release_group_id', 'name', 'released_on', 'description', 'color', 'order_no'])
+                ->withSelect(['release_id', 'release_group_id', 'name', 'released_on', 'description', 'order_no'])
                 ->from('releases')
                 ->where('release_group_id', 'IN', $binGroupIds)
                 ->where('is_display', '=', true)
@@ -138,7 +138,6 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
                 Row::string($row, 'name'),
                 Row::string($row, 'released_on'),
                 Row::string($row, 'description'),
-                Row::string($row, 'color'),
                 Row::int($row, 'order_no'),
                 $formatsByRelease[$binReleaseId] ?? [],
                 $mediaByRelease[$binReleaseId] ?? [],

@@ -43,7 +43,6 @@ readonly class UpdateUseCase
                 $inputData->name,
                 $inputData->releasedOn,
                 $inputData->description,
-                $inputData->color,
                 $inputData->isDisplay,
                 $inputData->orderNo,
                 $inputData->formats,

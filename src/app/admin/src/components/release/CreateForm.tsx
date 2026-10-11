@@ -84,7 +84,6 @@ export const CreateForm = () => {
         name: data.release.name,
         releasedOn: normalizeDateValue(data.release.releasedOn),
         description: data.release.description,
-        color: data.release.color,
         isDisplay: data.release.isDisplay,
         orderNo: data.release.orderNo,
         formats: [...data.release.formats],

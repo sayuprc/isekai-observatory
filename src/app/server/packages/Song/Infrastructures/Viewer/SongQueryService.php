@@ -195,7 +195,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $releaseRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['release_group_id', 'released_on', 'color'])
+                ->withSelect(['release_group_id', 'released_on'])
                 ->from('releases')
                 ->where('release_group_id', 'IN', $binGroupIds)
                 ->where('is_display', '=', true)
@@ -233,7 +233,6 @@ readonly class SongQueryService implements SongQueryServiceInterface
                 Row::string($row, 'title'),
                 Row::int($row, 'type'),
                 Row::string($firstRelease, 'released_on'),
-                Row::string($firstRelease, 'color'),
             );
         }
 

@@ -63,8 +63,7 @@ class ListPresenter
             ->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->typeValue))
-            ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn))
-            ->setColor($releaseGroup->color);
+            ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn));
     }
 
     private function toOpenApiSongMediaSummary(SongMediaSummary $media): OpenApiSongMediaSummary
