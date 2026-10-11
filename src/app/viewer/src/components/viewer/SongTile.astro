@@ -1,13 +1,12 @@
 ---
 import { youtubeThumbnailFromUrl, youtubeThumbnailSrcset } from '../../features/media/labels';
-import type { SongMedia, SongReleaseGroup } from '../../features/songs/types';
+import type { SongMedia } from '../../features/songs/types';
 
 interface Props {
   songId: string;
   title: string;
   index: number;
   media?: SongMedia[];
-  releaseGroups?: SongReleaseGroup[];
   aspectRatio?: string;
   sizes?: string;
   /** ファーストビューに入る画像だけ eager にする。遅延したままだと LCP が伸びる */
@@ -19,7 +18,6 @@ interface Props {
 const {
   index,
   media = [],
-  releaseGroups = [],
   aspectRatio = '16 / 9',
   sizes = '(max-width: 720px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 124px) / 2), calc((min(1480px, 100vw) - 180px) / 4)',
   loading = 'lazy',
@@ -30,19 +28,11 @@ const thumbnailUrl = media.reduce<string | null>((found, entry) => found ?? yout
 
 const thumbnailSrcset = thumbnailUrl === null ? undefined : youtubeThumbnailSrcset(thumbnailUrl);
 
-const fallbackColor =
-  thumbnailUrl === null ? releaseGroups.reduce<string | null>((found, entry) => found ?? entry.color, null) : null;
-
 const sequence = String(index + 1).padStart(2, '0');
-const tileStyle = [
-  `--song-tile-aspect:${aspectRatio}`,
-  fallbackColor === null ? null : `--song-tile-color:${fallbackColor}`,
-]
-  .filter(Boolean)
-  .join(';');
+const tileStyle = `--song-tile-aspect:${aspectRatio}`;
 ---
 
-<div class:list={['song-tile', { 'has-color-fallback': fallbackColor !== null }]} style={tileStyle} aria-hidden="true">
+<div class="song-tile" style={tileStyle} aria-hidden="true">
   {thumbnailUrl ? (
     <img
       class="song-tile-image"

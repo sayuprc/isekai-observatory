@@ -69,8 +69,7 @@ const formatPerformanceSub = (value: Song['performances'][number]): string =>
       <DetailSectionHead title="収録リリース" count={releaseGroups.length} />
       <div class="rel-list">
         {releaseGroups.map((releaseGroup) => (
-          <a class="rel-chip" href={`/releases/${releaseGroup.releaseGroupId}`} style={`--c:${releaseGroup.color};`}>
-            <span class="rel-swatch" aria-hidden="true" />
+          <a class="rel-chip" href={`/releases/${releaseGroup.releaseGroupId}`}>
             <div class="rel-copy">
               <div class="rel-main">{releaseGroup.title}</div>
               <div class="label-mono rel-sub">

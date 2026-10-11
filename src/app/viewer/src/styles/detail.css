@@ -44,18 +44,6 @@
   transform: translateX(2px);
 }
 
-.rel-chip[data-unlinked] {
-  cursor: default;
-  border-left: 2px dashed var(--line);
-  opacity: 0.72;
-}
-
-.rel-chip[data-unlinked]:hover {
-  background: var(--bg-elev-2);
-  border-color: var(--line);
-  transform: none;
-}
-
 .detail-page-content .rel-chip {
   min-width: 0;
   padding: 20px;
@@ -68,39 +56,10 @@
     transform 0.18s ease;
 }
 
-.release-medium .rel-list {
-  gap: 0;
-}
-
-.release-medium .rel-chip {
-  padding: 16px 12px;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--line-soft);
-  border-radius: 0;
-}
-
-.release-medium .rel-chip[href] {
-  border-left: 2px solid var(--accent);
-}
-
-.release-medium .rel-chip[data-unlinked] {
-  border-left: 2px dashed var(--line);
-  opacity: 1;
-}
-
-.detail-page-content .rel-chip[href]:hover,
-.home-feature .release-medium .rel-chip[href]:hover {
+.detail-page-content .rel-chip[href]:hover {
   background: var(--bg-elev-2);
   border-color: var(--accent-strong);
   transform: translateY(-2px);
-}
-
-.detail-page-content .rel-chip[data-unlinked] {
-  cursor: default;
-  border-left: 2px dashed var(--line);
-  opacity: 1;
-  transform: none;
 }
 
 .rel-arrow {
@@ -188,8 +147,98 @@
   color: var(--accent-strong);
 }
 
-.rel-chip .detail-index {
-  min-width: 28px;
+/* イベントのセットリストとリリースの収録曲で共有する、番号付きの 1 列リスト。メドレーは 1 項目に複数の曲を並べる */
+
+.detail-song-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.detail-song-list-item {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.detail-song-list-item:last-child {
+  border-bottom: 0;
+}
+
+.detail-song-list-item[data-unnumbered] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.detail-song-list-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.detail-song-list-label {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* イベントで本人が歌唱しない演目は曲と区別して控えめに出す */
+
+.detail-song-list-item[data-label-only] .detail-song-list-label {
+  color: var(--fg-muted);
+}
+
+.detail-song-list-songs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.detail-song-list-label + .detail-song-list-songs {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.detail-song-list-song {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+
+.detail-song-list-song-title {
+  font-size: 16px;
+  line-height: 1.6;
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+a.detail-song-list-song-title {
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+a.detail-song-list-song-title::after {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  content: '→';
+}
+
+a.detail-song-list-song-title:hover {
+  color: var(--accent-strong);
+}
+
+.detail-song-list-song-note {
+  font-size: 11px;
 }
 
 .feature-summary,

@@ -133,14 +133,13 @@
   flex-direction: column;
 }
 
-/* 最新リリース: 大きな色面は置かず、左ボーダーで代表色を示す */
+/* 最新リリース */
 
 .feature-release {
   display: flex;
   flex-direction: column;
   max-width: 720px;
   padding-left: 16px;
-  border-left: 3px solid var(--c);
 }
 
 /* 最新楽曲: サムネ縦幅に本文を揃え、収まらない分はフェード */
@@ -227,10 +226,6 @@
   overflow-wrap: anywhere;
 }
 
-.home-feature .release-medium {
-  margin-bottom: 0;
-}
-
 .home-feature .feature-track-list {
   grid-template-columns: 1fr;
   gap: 0;
@@ -279,7 +274,6 @@
   max-width: none;
   padding: 24px 0 0;
   border: 0;
-  border-top: 4px solid var(--c);
 }
 
 .home-feature .feature-more {

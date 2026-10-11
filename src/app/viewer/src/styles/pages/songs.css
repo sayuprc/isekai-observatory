@@ -164,21 +164,6 @@
   overflow-wrap: anywhere;
 }
 
-/* 楽曲詳細の収録リリース一覧。画像の代わりに色見本を置く */
-
-.rel-swatch {
-  flex: none;
-  width: 26px;
-  height: 26px;
-  background: var(--c);
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 7%);
-}
-
-.song-detail-content .rel-swatch {
-  display: none;
-}
-
 /* サムネイルが無い楽曲は収録リリースの代表色を地に敷く */
 
 .song-tile {
@@ -201,13 +186,6 @@
 .song-grid-card:has(.song-tile-image) .song-tile {
   border: 0;
   border-radius: 2px;
-}
-
-.song-tile.has-color-fallback {
-  background:
-    radial-gradient(ellipse at 30% 20%, color-mix(in oklab, var(--song-tile-color) 66%, transparent), transparent 50%),
-    radial-gradient(ellipse at 70% 80%, color-mix(in oklab, var(--song-tile-color) 40%, transparent), transparent 60%),
-    linear-gradient(135deg, var(--song-tile-color), color-mix(in oklab, var(--song-tile-color) 55%, var(--bg-elev-2)));
 }
 
 .song-tile-image {
