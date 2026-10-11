@@ -1,0 +1,14 @@
+enum {{classname}}: {{#isInteger}}int{{/isInteger}}{{#isNumber}}int{{/isNumber}}{{#isString}}string{{/isString}}
+{
+    {{#allowableValues}}
+    {{#enumVars}}
+    {{#enumDescription}}
+    /**
+     * {{enumDescription}}
+     */
+    {{/enumDescription}}
+    case {{{name}}} = {{{value}}};
+
+    {{/enumVars}}
+    {{/allowableValues}}
+}

@@ -1,0 +1,32 @@
+import "../../shared";
+
+using IsekaiObservatory.Shared;
+
+namespace IsekaiObservatory.Packages.Song;
+
+@doc("楽曲ID")
+@friendlyName("songId")
+scalar songId extends uuid;
+
+@doc("楽曲名")
+@minLength(1)
+@friendlyName("title")
+scalar title extends string;
+
+@doc("楽曲の説明")
+@friendlyName("description")
+scalar description extends string;
+
+@doc("楽曲種別の値")
+@friendlyName("SongTypeValue")
+@enumExtensions
+enum SongTypeValue {
+  @doc("オリジナル曲")
+  Original: 1,
+
+  @doc("カバー曲")
+  Cover: 2,
+
+  @doc("参加曲")
+  Guest: 3,
+}

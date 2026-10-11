@@ -1,48 +1,53 @@
 ---
 name: code-reviewer
-description: isekai-observatory 管理パネルの包括的なコードレビュー。バックエンド(PHP/Laravel)とフロントエンド(Astro/SolidJS/TS)の両方に対して、アーキテクチャ、セキュリティ、パフォーマンス、スタイルのチェックを行います。コードのレビュー依頼、PRの確認、またはプロジェクト標準に対する実装の検証を求められたときにトリガーします
+description: >
+  isekai-observatory のコードレビュー。バックエンド(PHP/Laravel)、フロントエンド(Astro/SolidJS/TS)、
+  MoonBit (notify-contract / notify-publish / discord-notifier) に対して、
+  アーキテクチャ、セキュリティ、パフォーマンス、スタイルを確認する。
+  コードのレビュー依頼、PR の確認、またはプロジェクト標準に対する実装の検証を求められたときに使う
 ---
 
 # コードレビュー・スキル
 
-このスキルは、isekai-observatory 管理パネルプロジェクトに最適化された包括的なコードレビュープロセスを案内します
-
 ## ワークフロー
 
 ### 1. コンテキストの分析
-- 変更の範囲(新機能、バグ修正、リファクタリング)を理解する
-- 対象ファイルとその役割(バックエンドパッケージ、フロントエンドコンポーネント、API定義)を特定する
 
-### 2. 専門的なレビューの実行
-レビュー対象のコードに応じて、関連するリファレンスファイルを読み込んでください：
-- **バックエンド (PHP)**: [references/php-review.md](references/php-review.md) を参照
-- **フロントエンド (SolidJS/Astro)**: [references/frontend-review.md](references/frontend-review.md) を参照
-- **全般 (セキュリティ/パフォーマンス)**: [references/general-review.md](references/general-review.md) を参照
+- 変更の範囲 (新機能、バグ修正、リファクタリング) を理解する
+- 対象ファイルとその役割を特定する
 
-### 3. 構造分析 (ヘキサゴナルアーキテクチャ)
-変更がパッケージベースのヘキサゴナルアーキテクチャに従っているか検証します：
-- Domain レイヤーが Application や Infrastructure レイヤーに依存していないか
-- Application レイヤーが流れを調整しているが、ドメインロジックを含んでいないか
-- Infrastructures レイヤーが永続化や外部連携を処理しているか
+### 2. 専門的なレビュー
 
-### 4. フィードバックの提供
-以下の形式でレビュー結果を提供してください：
+対象に応じて参照する:
+
+- **バックエンド (PHP)**: [references/php-review.md](references/php-review.md)
+- **フロントエンド (SolidJS/Astro)**: [references/frontend-review.md](references/frontend-review.md)
+- **MoonBit**: [references/moonbit-review.md](references/moonbit-review.md)
+- **全般 (セキュリティ/パフォーマンス)**: [references/general-review.md](references/general-review.md)
+
+規約の本文は ADR と `docs/` を正とする。レビュー用チェックリストだけを references に置く
+
+### 3. 構造分析 (ADOP)
+
+PHP サーバー側は ADR-0006 と `docs/design-docs/subproject-boundaries.md` に従うかを見る
+MoonBit は ADOP 対象外。パッケージ境界は [references/moonbit-review.md](references/moonbit-review.md) を見る
+
+- Domain が Application / Infrastructures に依存していないか
+- Application が調整役でドメインロジックを抱えていないか
+- Infrastructures が永続化や外部連携に閉じているか
+
+### 4. フィードバック
 
 #### 概要
-レビュー結果の簡潔な概要(例：「軽微な提案を含む LGTM」または「重大な問題を発見」)
+
+簡潔な概要 (例: 「軽微な提案を含む LGTM」または「重大な問題を発見」)
 
 #### 指摘事項
-各指摘事項をカテゴリ分けします：
-- **[重大]**: セキュリティ脆弱性、重大なバグ、または深刻なアーキテクチャ違反。修正必須
-- **[警告]**: 潜在的なパフォーマンス問題、テストの不足、または最適でないパターン。対処が推奨される
-- **[提案]**: 可読性の向上、軽微なスタイル違反、またはより良い代替案。品質向上のための推奨事項
+
+- **[重大]**: セキュリティ脆弱性、重大なバグ、深刻なアーキテクチャ違反。修正必須
+- **[警告]**: パフォーマンス懸念、テスト不足、最適でないパターン。対処推奨
+- **[提案]**: 可読性や軽微な改善
 
 #### 具体例
-変更を提案する場合は、修正や改善を示す簡潔なコード例を提供してください
 
-## トリガー
-- 「このコードをレビューして」
-- 「PRの確認をお願いします」
-- 「この実装で大丈夫ですか？」
-- 「プロジェクトのヘキサゴナルアーキテクチャに従っているか確認して」
-- 「[機能名] のコードレビュー」
+変更を提案する場合は簡潔なコード例を添える

@@ -9,22 +9,24 @@ on:
       - main
       - stg
     paths:
-      - "src/notify-contract/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/notify-contract-qa.yaml"
       - ".github/actions/setup-mise/**"
       - ".github/actions/setup-moonbit/**"
+      - "tools/read-mise-value.sh"
   push:
     branches:
       - dev
     paths:
-      - "src/notify-contract/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/notify-contract-qa.yaml"
       - ".github/actions/setup-mise/**"
       - ".github/actions/setup-moonbit/**"
+      - "tools/read-mise-value.sh"
   workflow_call:
 
 env:

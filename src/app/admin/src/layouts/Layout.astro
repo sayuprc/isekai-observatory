@@ -1,0 +1,63 @@
+---
+import EnvironmentBadge from '../components/EnvironmentBadge.astro';
+import { Sidebar } from '../components/Sidebar';
+import '../styles/app.css';
+
+interface Props {
+  pageTitle: string;
+}
+
+const { pageTitle } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const siteTitle = '管理画面';
+
+const generateTitle = (title: string): string => {
+  return title ? `${title} | ${siteTitle}` : siteTitle;
+};
+
+const title = generateTitle(pageTitle);
+const heading = pageTitle || siteTitle;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <EnvironmentBadge />
+    <div class="drawer lg:drawer-open">
+      <input id="admin-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex min-h-screen min-w-0 flex-col">
+        <header class="bg-base-100 border-base-300 sticky top-0 z-30 flex h-14 items-center gap-2 border-b px-3 sm:gap-3 sm:px-6">
+          <label for="admin-drawer" class="btn btn-ghost btn-square btn-sm lg:hidden" aria-label="メニューを開く">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </label>
+          <h1 class="min-w-0 flex-1 truncate pr-12 text-lg font-bold sm:text-xl lg:pr-0">{heading}</h1>
+        </header>
+        <main class="min-w-0 flex-1 p-4 sm:p-6 has-[[data-mobile-actionbar]]:pb-24 sm:has-[[data-mobile-actionbar]]:pb-6">
+          <slot />
+        </main>
+      </div>
+      <div class="drawer-side z-40">
+        <label for="admin-drawer" aria-label="メニューを閉じる" class="drawer-overlay"></label>
+        <Sidebar currentPath={currentPath} />
+      </div>
+    </div>
+  </body>
+</html>

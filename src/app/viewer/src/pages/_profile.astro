@@ -1,0 +1,90 @@
+---
+import SectionHead from '../components/viewer/SectionHead.astro';
+import { SITE_DATA } from '../data/mock/site-data';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout pageTitle="人物録">
+  <section class="shell page-section">
+    <SectionHead title="人物録" />
+
+    <div class="profile-grid">
+      <div>
+        <div class="profile-portrait"></div>
+        <div class="profile-portrait-meta">
+          <span>FIG. PORTRAIT</span>
+          <span>{SITE_DATA.artist.debut}—</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow" style="margin-bottom: 16px;">
+          SINGER · VIRTUAL
+        </div>
+        <h1 class="detail-title">{SITE_DATA.artist.name}</h1>
+        <div class="detail-title-en">{SITE_DATA.artist.nameEn}</div>
+
+        <hr class="hairline" style="margin: 40px 0;" />
+
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:20px 32px;font-size:14px;">
+          <div class="label-mono">DEBUT</div>
+          <div>{SITE_DATA.artist.debut}</div>
+          <div class="label-mono">CATEGORY</div>
+          <div>バーチャルシンガー / 歌い手</div>
+          <div class="label-mono">GENRE</div>
+          <div>J-POP, バラード, アンビエント, ロック</div>
+          <div class="label-mono">SONGS</div>
+          <div>{SITE_DATA.songs.length}+ tracks</div>
+          <div class="label-mono">MUSIC VIDEOS</div>
+          <div>{SITE_DATA.media.filter((entry) => entry.type === 'mv').length}+ films</div>
+          <div class="label-mono">RELEASES</div>
+          <div>{SITE_DATA.releases.length}+ titles</div>
+        </div>
+
+        <hr class="hairline" style="margin: 40px 0;" />
+
+        <div style="font-family:'Shippori Mincho', serif;font-size:16px;line-height:2.1;color:var(--fg);">
+          <p style="margin-top:0;">
+            {SITE_DATA.artist.tagline} —— 夜と詩の間にあるような声で歌うアーティスト。
+            <br />
+            オリジナル楽曲・カバーともに、静謐で物語性のある歌世界を編む。
+          </p>
+          <p>※ このプロフィール文はサンプルです。後で公式情報やファン目線の紹介に差し替えてください。</p>
+        </div>
+
+        <div class="hero-actions" style="margin-top: 40px;">
+          <a class="btn" href="#">
+            YouTube ↗
+          </a>
+          <a class="btn" href="#">
+            Twitter / X ↗
+          </a>
+          <a class="btn" href="#">
+            Streaming ↗
+          </a>
+          <a class="btn" href="#">
+            Official ↗
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 96px;">
+      <SectionHead title="軌跡" />
+      <div class="chronology-grid chronology-grid-mock">
+        <div>2020</div>
+        <div>活動開始 / デビュー</div>
+        <div>2021</div>
+        <div>初のシングル多数リリース、配信ライブ複数回</div>
+        <div>2022</div>
+        <div>初アルバム『残響アーカイブ』リリース、初ワンマンライブ</div>
+        <div>2023</div>
+        <div>シリーズ公演「幻奏夜会」開始、海外配信</div>
+        <div>2024</div>
+        <div>大型フェス出演、メディア露出増、新作続々</div>
+        <div>2025</div>
+        <div>Spring Voyage 2025 開催予定</div>
+      </div>
+    </div>
+  </section>
+</Layout>

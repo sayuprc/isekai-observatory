@@ -1,0 +1,143 @@
+---
+import DetailSongList from '../components/viewer/details/DetailSongList.astro';
+import EventRow from '../components/viewer/EventRow.astro';
+import SectionHead from '../components/viewer/SectionHead.astro';
+import SongTile from '../components/viewer/SongTile.astro';
+import { eventContentRepository } from '../features/events/content';
+import { EVENT_STATUS } from '../features/events/types';
+import { YOUTUBE_THUMBNAIL_ORIGIN, youtubeThumbnailFromUrl } from '../features/media/labels';
+import { releaseGroupContentRepository } from '../features/releases/content';
+import { RELEASE_GROUP_TYPE_NAMES, trackSongListItem } from '../features/releases/types';
+import { siteStatsRepository } from '../features/site-stats/api';
+import { songContentRepository } from '../features/songs/content';
+import { SONG_TYPE_NAMES } from '../features/songs/types';
+import Layout from '../layouts/Layout.astro';
+import { dottedDate } from '../shared/date';
+import { SITE_DESCRIPTION } from '../shared/site';
+
+const latestReleaseGroup = await releaseGroupContentRepository.latest();
+const latestSong = await songContentRepository.latest();
+const latestReleaseTracks = latestReleaseGroup?.releases[0]?.media.flatMap((medium) => medium.tracks) ?? [];
+// 延期・中止は除く。どれを出すかはブラウザ上の現在日付で下のスクリプトが決める
+const upcomingEvents = (await eventContentRepository.upcoming()).filter(
+  (event) => event.status === EVENT_STATUS.normal,
+);
+
+const siteStats = await siteStatsRepository.get();
+const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(entry.url) !== null)
+  ? [YOUTUBE_THUMBNAIL_ORIGIN]
+  : [];
+---
+
+<Layout pageTitle="" pageDescription={SITE_DESCRIPTION} preconnect={preconnect}>
+  <section class="hero-data">
+    <div class="shell">
+      <h1 class="hero-mark hero-mark-data">ヰ世界観測所</h1>
+      <p class="hero-tagline">{SITE_DESCRIPTION}</p>
+      <div class="hero-ledger">
+        <div class="hero-ledger-row">
+          <span class="hero-ledger-label">観測開始</span>
+          <span class="hero-ledger-leader"></span>
+          <span class="hero-ledger-value">2019.12.09</span>
+        </div>
+        <a class="hero-ledger-row hero-ledger-link" href="/songs">
+          <span class="hero-ledger-label">楽曲</span>
+          <span class="hero-ledger-leader"></span>
+          <span class="hero-ledger-value">{siteStats.songCount}</span>
+        </a>
+        <a class="hero-ledger-row hero-ledger-link" href="/releases">
+          <span class="hero-ledger-label">リリース</span>
+          <span class="hero-ledger-leader"></span>
+          <span class="hero-ledger-value">{siteStats.releaseCount}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell home-feature-row">
+    {latestSong && (
+      <section class="home-feature">
+        <SectionHead title="最新楽曲" />
+        <div class="feature-grid-link">
+          <a href={`/songs/${latestSong.songId}`} class="feature-art-link" aria-label={latestSong.title}>
+            <SongTile
+              songId={latestSong.songId}
+              title={latestSong.title}
+              index={0}
+              media={latestSong.media}
+              aspectRatio="1 / 1"
+              sizes="(max-width: 720px) calc(100vw - 90px), (max-width: 900px) calc(100vw - 106px), calc((min(1480px, 100vw) - 260px) / 2)"
+              loading="eager"
+            />
+          </a>
+          <div class="feature-body">
+            <div class="eyebrow">{SONG_TYPE_NAMES[latestSong.type]}</div>
+            <h3 class="feature-title">
+              <a href={`/songs/${latestSong.songId}`}>{latestSong.title}</a>
+            </h3>
+            {latestSong.description && <p class="feature-summary feature-summary-fill">{latestSong.description}</p>}
+            <a class="btn feature-more" href={`/songs/${latestSong.songId}`}>
+              楽曲詳細 →
+            </a>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {latestReleaseGroup && (
+      <section class="home-feature">
+        <SectionHead title="最新リリース" />
+        <div class="feature-release">
+          <div class="eyebrow">
+            {RELEASE_GROUP_TYPE_NAMES[latestReleaseGroup.type]} — {dottedDate(latestReleaseGroup.firstReleasedOn)}
+          </div>
+          <h3 class="feature-title">
+            <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>
+          </h3>
+          {latestReleaseGroup.description && <p class="feature-summary">{latestReleaseGroup.description}</p>}
+          <div class="feature-track-list" aria-label="収録曲">
+            <DetailSongList items={latestReleaseTracks.map(trackSongListItem)} />
+          </div>
+          <a class="btn feature-more" href={`/releases/${latestReleaseGroup.releaseGroupId}`}>
+            リリース詳細 →
+          </a>
+        </div>
+      </section>
+    )}
+
+    {upcomingEvents.length > 0 && (
+      <section class="home-feature home-feature-wide" data-upcoming-section hidden>
+        <SectionHead title="今後の予定" />
+        <ol class="event-home-list">
+          {upcomingEvents.map((event) => (
+            <li data-upcoming-event data-start={event.schedule.startOn}>
+              <EventRow event={event} withYear />
+            </li>
+          ))}
+        </ol>
+        <a class="btn feature-more" href="/events">
+          イベント一覧 →
+        </a>
+      </section>
+    )}
+  </div>
+</Layout>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-upcoming-section]');
+  if (section) {
+    const entries = [...section.querySelectorAll<HTMLElement>('[data-upcoming-event]')];
+    const startTime = (entry: HTMLElement): number => new Date(entry.dataset.start ?? '').getTime();
+    const future = entries
+      .filter((entry) => {
+        const time = startTime(entry);
+        return !Number.isNaN(time) && time >= Date.now();
+      })
+      .sort((left, right) => startTime(left) - startTime(right))
+      .slice(0, 3);
+    entries.forEach((entry) => {
+      entry.hidden = !future.includes(entry);
+    });
+    section.hidden = future.length === 0;
+  }
+</script>

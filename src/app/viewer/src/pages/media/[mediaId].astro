@@ -1,0 +1,26 @@
+---
+import MediaDetailContent from '../../components/viewer/details/MediaDetailContent.astro';
+import { mediaContentRepository } from '../../features/media/content';
+import { YOUTUBE_THUMBNAIL_ORIGIN, youtubeThumbnailFromUrl } from '../../features/media/labels';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return (await mediaContentRepository.all()).map((media) => ({
+    params: { mediaId: media.mediaId },
+    props: { media },
+  }));
+}
+
+const { media } = Astro.props;
+
+const pageDescription = `ヰ世界情緒が出演するメディア「${media.title}」の情報`;
+const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
+const ogImage = thumbnailUrl === null ? null : { url: thumbnailUrl, alt: `${media.title}のサムネイル` };
+const preconnect = thumbnailUrl === null ? [] : [YOUTUBE_THUMBNAIL_ORIGIN];
+---
+
+<Layout pageTitle={media.title} pageDescription={pageDescription} ogImage={ogImage} preconnect={preconnect}>
+  <section class="shell page-section detail-page">
+    <MediaDetailContent media={media} />
+  </section>
+</Layout>

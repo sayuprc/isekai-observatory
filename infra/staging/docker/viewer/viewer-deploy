@@ -19,5 +19,5 @@ pnpm --filter viewer run deploy \
   --message "${DEPLOY_MESSAGE}"
 
 notify-publish <<EOF
-{"action":"viewer.deploy","status":"succeeded","embeds":[{"title":"Viewer deploy succeeded","fields":[{"name":"site_url","value":"${SITE_URL}","inline":true},{"name":"env","value":"staging","inline":true}]}]}
+{"action":"viewer.deploy","status":"succeeded","embeds":[{"title":"Viewer のデプロイが成功しました","fields":[{"name":"site_url","value":"${SITE_URL}","inline":true},{"name":"env","value":"staging","inline":true}]}]}
 EOF

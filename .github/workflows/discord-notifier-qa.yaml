@@ -9,24 +9,26 @@ on:
       - main
       - stg
     paths:
-      - "src/discord-notifier/**"
-      - "src/notify-contract/**"
+      - "src/notification/discord-notifier/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/discord-notifier-qa.yaml"
       - ".github/actions/setup-mise/**"
       - ".github/actions/setup-moonbit/**"
+      - "tools/read-mise-value.sh"
   push:
     branches:
       - dev
     paths:
-      - "src/discord-notifier/**"
-      - "src/notify-contract/**"
+      - "src/notification/discord-notifier/**"
+      - "src/notification/contract/**"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/discord-notifier-qa.yaml"
       - ".github/actions/setup-mise/**"
       - ".github/actions/setup-moonbit/**"
+      - "tools/read-mise-value.sh"
   workflow_call:
 
 env:

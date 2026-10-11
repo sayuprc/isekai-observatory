@@ -1,5 +1,4 @@
-ARG TAG=8.5.7
-FROM dunglas/frankenphp:php${TAG}
+FROM dunglas/frankenphp:php8.5.7
 
 COPY certs/rootCA.pem /usr/share/ca-certificates/
 
@@ -21,7 +20,7 @@ RUN echo 'rootCA.pem' >> /etc/ca-certificates.conf \
     xdebug \
   && echo "[client]\nssl-verify-server-cert=false" > /etc/mysql/conf.d/skip-ssl.cnf
 
-COPY --from=composer:2.10.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.10.3 /usr/bin/composer /usr/bin/composer
 
 ARG UID=1000
 ARG GID=1000

@@ -1,18 +1,13 @@
 # PHP ユニットテストパターン
 
-このプロジェクトでは PHPUnit と Mockery を使用し、特定のアーキテクチャパターンに従っています
+共通規約は [common.md](common.md) を正とする。ここでは Unit 固有のパターンだけを書く
 
-## 一般的な構造
+## 場所と基底
 
-- **場所**: ユニットテストは `src/server/tests/Unit/` に配置されます。ディレクトリ構造は `src/server/app/` または `src/server/packages/` の構造と一致させます
-- **厳密な型**: 常に `declare(strict_types=1);` を含めます
-- **基底クラス**: `Tests\TestCase` を継承します
-- **PHP 8 アトリビュート**: `/** @test */` や `test` プレフィックスの代わりに `#[Test]` を使用します
-- **テストケース**: 起こりうるパターンをできるだけ記述してください
+- `src/app/server/tests/Unit/` (対象クラスのディレクトリ構造に合わせる)
+- 基底は `Tests\TestCase`
 
-## Mockery によるモック化
-
-依存関係は `Mockery::mock()` を使用してモック化します
+## Mockery
 
 ```php
 private MockInterface&RepositoryInterface $repository;
@@ -24,10 +19,6 @@ protected function setUp(): void
 }
 ```
 
-### エクスペクテーション (期待値)
-
-`shouldReceive`, `with` (複雑なロジックの場合は `withArgs`), `andReturn` を使用します
-
 ```php
 $this->repository->shouldReceive('find')
     ->with($id)
@@ -35,22 +26,53 @@ $this->repository->shouldReceive('find')
     ->once();
 ```
 
-## エンティティファクトリ
-
-ドメインモデルを生成するには `Tests\Support\Domain\EntityFactory` トレイトを使用します
+## getInstance
 
 ```php
-use Tests\Support\Domain\EntityFactory;
-
-class MyTest extends TestCase
+private function getInstance(): CreateUseCase
 {
-    use EntityFactory;
-
-    // ...
-    $song = $this->createSong(...);
+    return new CreateUseCase($this->service);
 }
 ```
 
-## アサーション
+## 例
 
-- 標準的な PHPUnit アサーション(`assertEquals`, `assertSame`, `assertInstanceOf` など)も使用します
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Song\Application\Admin\UseCase;
+
+use Mockery;
+use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
+use Song\Application\Admin\UseCase\Create\CreateUseCase;
+use Song\Domain\Services\SongIntegrityService;
+use Tests\Support\Domain\EntityFactory;
+use Tests\TestCase;
+
+class CreateUseCaseTest extends TestCase
+{
+    use EntityFactory;
+
+    private MockInterface&SongIntegrityService $service;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->service = Mockery::mock(SongIntegrityService::class);
+    }
+
+    #[Test]
+    public function create(): void
+    {
+        // ...
+    }
+
+    private function getInstance(): CreateUseCase
+    {
+        return new CreateUseCase($this->service);
+    }
+}
+```

@@ -1,0 +1,1136 @@
+openapi: 3.1.0
+info:
+  title: ヰ世界観測所 API
+  version: v1
+tags:
+  - name: ReleaseGroup
+  - name: Event
+  - name: Media
+  - name: SiteStats
+  - name: Song
+paths:
+  /events:
+    get:
+      operationId: EventService_listEvents
+      description: 公開イベント一覧取得API
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/cursor'
+          explode: false
+        - name: limit
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Event
+  /media:
+    get:
+      operationId: MediaService_listMedia
+      description: メディア一覧取得API
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/cursor'
+          explode: false
+        - name: limit
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaListResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Media
+  /release-groups:
+    get:
+      operationId: ReleaseGroupService_listReleaseGroups
+      description: リリースグループ一覧取得API
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/cursor'
+          explode: false
+        - name: limit
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseGroupListResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - ReleaseGroup
+  /site-stats:
+    get:
+      operationId: SiteStatsService_getSiteStats
+      description: サイト集計取得API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteStatsResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - SiteStats
+  /songs:
+    get:
+      operationId: SongService_listSongs
+      description: 楽曲一覧取得API
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/cursor'
+          explode: false
+        - name: limit
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongListResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Song
+components:
+  schemas:
+    ErrorCode:
+      type: string
+      enum:
+        - unauthenticated
+        - permission_denied
+        - not_found
+        - validation_failed
+        - business_rule_violation
+        - internal_error
+      description: エラー分類を表す機械可読なコード
+      x-enum-varnames:
+        - Unauthenticated
+        - PermissionDenied
+        - NotFound
+        - ValidationFailed
+        - BusinessRuleViolation
+        - InternalError
+      x-enum-descriptions:
+        - 認証されていない (401)
+        - 権限がない (403)
+        - 対象が見つからない (404)
+        - 入力形式の検証に失敗した (422)
+        - 業務ルールに違反した (400)
+        - 予期しないエラーが発生した (500)
+    ErrorDetail:
+      type: object
+      required:
+        - field
+        - message
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+      description: フィールド単位のエラー詳細
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      description: 全エラーステータス共通のレスポンス
+    Event:
+      type: object
+      required:
+        - eventId
+        - title
+        - description
+        - type
+        - schedule
+        - status
+        - venues
+        - media
+        - releases
+        - sources
+        - performances
+        - setlist
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          $ref: '#/components/schemas/eventDescription'
+        type:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        status:
+          $ref: '#/components/schemas/EventStatusValue'
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventVenueSummary'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventMediaSummary'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventReleaseSummary'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetlistItem'
+    EventListResponse:
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        nextCursor:
+          $ref: '#/components/schemas/cursor'
+    EventMediaSummary:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+    EventReleaseSummary:
+      type: object
+      required:
+        - releaseId
+        - releaseGroupId
+        - releaseGroupTitle
+        - name
+        - releasedOn
+        - formats
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        releaseGroupTitle:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+      description: イベントに関連づけた公開リリース(版)。リリースとリリースグループがともに公開のものだけが載る
+    EventSource:
+      type: object
+      required:
+        - displayName
+        - url
+        - orderNo
+      properties:
+        displayName:
+          $ref: '#/components/schemas/eventSourceName'
+        url:
+          $ref: '#/components/schemas/eventSourceUrl'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    EventStatusValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+      description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+      x-enum-varnames:
+        - Normal
+        - Postponed
+        - Cancelled
+      x-enum-descriptions:
+        - 通常
+        - 延期
+        - 中止
+    EventTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 99
+      description: イベント種別
+      x-enum-varnames:
+        - Live
+        - Stream
+        - Exhibition
+        - Radio
+        - Other
+      x-enum-descriptions:
+        - ライブ
+        - 配信
+        - 展覧会
+        - ラジオ
+        - その他
+    EventVenueSummary:
+      type: object
+      required:
+        - venueId
+        - name
+        - kind
+      properties:
+        venueId:
+          $ref: '#/components/schemas/uuid'
+        name:
+          type: string
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
+    IsekaiObservatory.Packages.Event.EventSchedule:
+      type: object
+      required:
+        - startOn
+        - endOn
+      properties:
+        startOn:
+          anyOf:
+            - $ref: '#/components/schemas/eventOn'
+            - type: 'null'
+        endOn:
+          anyOf:
+            - $ref: '#/components/schemas/eventOn'
+            - type: 'null'
+      description: イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+    IsekaiObservatory.Viewer.Version:
+      type: string
+      enum:
+        - v1
+      x-enum-varnames:
+        - v1
+      x-enum-descriptions:
+        - バージョン 1
+    MediaListItem:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+        - counts
+        - songs
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+        counts:
+          $ref: '#/components/schemas/MediaRelationCounts'
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaSongSummary'
+      examples:
+        - mediaId: 11111111-1111-1111-1111-111111111111
+          title: テストメディアMV
+          url: https://example.com/media/1
+          publishedAt: '2024-03-01T12:00:00+09:00'
+          type: 1
+          counts:
+            songCount: 1
+          songs:
+            - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+              title: テスト楽曲
+              type: 1
+    MediaListResponse:
+      type: object
+      required:
+        - media
+      properties:
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaListItem'
+        nextCursor:
+          $ref: '#/components/schemas/cursor'
+          description: 続きがある場合のみ返す
+      examples:
+        - media:
+            - mediaId: 11111111-1111-1111-1111-111111111111
+              title: テストメディアMV
+              url: https://example.com/media/1
+              publishedAt: '2024-03-01T12:00:00+09:00'
+              type: 1
+              counts:
+                songCount: 1
+              songs:
+                - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+                  title: テスト楽曲
+                  type: 1
+          nextCursor: eyJwdWJsaXNoZWRBdCI6IjIwMjQtMDMtMDEiLCJtZWRpYUlkIjoiMTExMTExMTEtMTExMS0xMTExLTExMTEtMTExMTExMTExMTExIn0=
+    MediaRelationCounts:
+      type: object
+      required:
+        - songCount
+      properties:
+        songCount:
+          type: integer
+          format: int32
+          description: 関連楽曲数
+    MediaSongSummary:
+      type: object
+      required:
+        - songId
+        - title
+        - type
+      properties:
+        songId:
+          $ref: '#/components/schemas/songId'
+        title:
+          $ref: '#/components/schemas/title'
+        type:
+          $ref: '#/components/schemas/SongTypeValue'
+      examples:
+        - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+          title: テスト楽曲
+          type: 1
+    MediaTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 99
+      description: メディア種別の値
+      x-enum-varnames:
+        - Mv
+        - AudioVideo
+        - LiveStream
+        - Short
+        - Post
+        - Other
+      x-enum-descriptions:
+        - MV
+        - 音源動画
+        - 配信
+        - ショート
+        - 投稿
+        - その他
+    PerformancePerson:
+      type: object
+      required:
+        - personId
+        - name
+        - creditName
+        - personGroup
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/uuid'
+        name:
+          type: string
+        creditName:
+          anyOf:
+            - $ref: '#/components/schemas/performanceCreditName'
+            - type: 'null'
+        personGroup:
+          anyOf:
+            - $ref: '#/components/schemas/PerformancePersonGroup'
+            - type: 'null'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
+    PerformancePersonGroup:
+      type: object
+      required:
+        - personGroupId
+        - name
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/uuid'
+        name:
+          type: string
+      description: 共演者が出演したグループ
+    ReleaseFormatValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 99
+      description: 提供形態の値
+      x-enum-varnames:
+        - Digital
+        - Cd
+        - Dvd
+        - BluRay
+        - Other
+      x-enum-descriptions:
+        - 配信
+        - CD
+        - DVD
+        - Blu-ray
+        - その他
+    ReleaseGroupListItem:
+      type: object
+      required:
+        - releaseGroupId
+        - title
+        - type
+        - description
+        - firstReleasedOn
+        - releases
+      properties:
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        title:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        type:
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
+        description:
+          type: string
+        firstReleasedOn:
+          $ref: '#/components/schemas/releasedOn'
+          description: 傘下の公開リリースの最古発売日
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseListItem'
+      description: リリースグループ。公開リリースを 1 件以上持つものだけが一覧に載る
+    ReleaseGroupListResponse:
+      type: object
+      required:
+        - releaseGroups
+      properties:
+        releaseGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseGroupListItem'
+        nextCursor:
+          $ref: '#/components/schemas/cursor'
+          description: 続きがある場合のみ返す
+      examples:
+        - releaseGroups:
+            - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
+              title: テストアルバム
+              type: 2
+              description: 1st アルバム
+              firstReleasedOn: '2026-05-01'
+              releases:
+                - releaseId: 8b53bfbc-c4be-4276-9d92-e2ee181e2b4f
+                  name: 初回限定盤
+                  releasedOn: '2026-05-01'
+                  description: ''
+                  orderNo: 1
+                  formats:
+                    - 2
+                  media:
+                    - position: 1
+                      name: null
+                      tracks:
+                        - trackNo: 1
+                          songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+                          title: テスト楽曲
+                          isDisplay: true
+          nextCursor: eyJmaXJzdFJlbGVhc2VkT24iOiIyMDI2LTA1LTAxIiwicmVsZWFzZUdyb3VwSWQiOiIwZjIxODVjZC1iNGFiLTRmMjItYjBhMy1mZDkzY2JiZDJkZjIifQ==
+    ReleaseGroupTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 99
+      description: リリースグループ種別の値
+      x-enum-varnames:
+        - Single
+        - Album
+        - Ep
+        - Other
+      x-enum-descriptions:
+        - シングル
+        - アルバム
+        - EP
+        - その他
+    ReleaseListItem:
+      type: object
+      required:
+        - releaseId
+        - name
+        - releasedOn
+        - description
+        - orderNo
+        - formats
+        - media
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        description:
+          type: string
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseMediumItem'
+      description: リリース(版)
+    ReleaseMediumItem:
+      type: object
+      required:
+        - position
+        - name
+        - tracks
+      properties:
+        position:
+          $ref: '#/components/schemas/orderNo'
+        name:
+          anyOf:
+            - type: string
+            - type: 'null'
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseTrackItem'
+      description: リリース内の媒体(トラックリストの区切り)。name は Disc 表示用の任意ラベル
+    ReleaseTrackItem:
+      type: object
+      required:
+        - trackNo
+        - songId
+        - title
+        - isDisplay
+      properties:
+        trackNo:
+          $ref: '#/components/schemas/orderNo'
+        songId:
+          anyOf:
+            - $ref: '#/components/schemas/uuid'
+            - type: 'null'
+        title:
+          type: string
+        isDisplay:
+          type: boolean
+      description: '収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する'
+    SetlistItem:
+      type: object
+      required:
+        - orderNo
+        - label
+        - performances
+      properties:
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        label:
+          anyOf:
+            - type: string
+            - type: 'null'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+    SiteStatsResponse:
+      type: object
+      required:
+        - songCount
+        - releaseCount
+      properties:
+        songCount:
+          type: integer
+          format: int32
+          description: 公開対象楽曲数
+        releaseCount:
+          type: integer
+          format: int32
+          description: 公開対象リリースグループ数
+      examples:
+        - songCount: 42
+          releaseCount: 12
+    SongListItem:
+      type: object
+      required:
+        - songId
+        - title
+        - description
+        - type
+        - counts
+        - lyricists
+        - composers
+        - arrangers
+        - media
+        - releaseGroups
+        - performances
+      properties:
+        songId:
+          $ref: '#/components/schemas/songId'
+        title:
+          $ref: '#/components/schemas/title'
+        description:
+          $ref: '#/components/schemas/description'
+        type:
+          $ref: '#/components/schemas/SongTypeValue'
+        counts:
+          $ref: '#/components/schemas/SongRelationCounts'
+        lyricists:
+          type: array
+          items:
+            type: string
+        composers:
+          type: array
+          items:
+            type: string
+        arrangers:
+          type: array
+          items:
+            type: string
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongMediaSummary'
+        releaseGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongReleaseGroupSummary'
+          description: 収録先の公開リリースグループ(最古発売日の降順)
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformanceHistory'
+          description: 公開イベントでの披露履歴(開催時期の新しい順)
+      examples:
+        - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+          title: テスト楽曲
+          description: テスト楽曲説明
+          type: 1
+          counts:
+            releaseCount: 1
+            mediaCount: 1
+          lyricists:
+            - テスト作詞者
+          composers:
+            - テスト作曲者
+          arrangers:
+            - テスト編曲者
+          media:
+            - mediaId: 11111111-1111-1111-1111-111111111111
+              title: テストメディアMV
+              type: 1
+              url: https://www.youtube.com/watch?v=dummy
+              publishedAt: '2024-03-01T12:00:00+09:00'
+          releaseGroups:
+            - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
+              title: テストアルバム
+              type: 2
+              firstReleasedOn: '2026-05-01'
+          performances: []
+    SongListResponse:
+      type: object
+      required:
+        - songs
+      properties:
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongListItem'
+        nextCursor:
+          $ref: '#/components/schemas/cursor'
+          description: 続きがある場合のみ返す
+      examples:
+        - songs:
+            - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+              title: テスト楽曲
+              description: テスト楽曲説明
+              type: 1
+              counts:
+                releaseCount: 1
+                mediaCount: 1
+              lyricists:
+                - テスト作詞者
+              composers:
+                - テスト作曲者
+              arrangers:
+                - テスト編曲者
+              media:
+                - mediaId: 11111111-1111-1111-1111-111111111111
+                  title: テストメディアMV
+                  type: 1
+                  url: https://www.youtube.com/watch?v=dummy
+                  publishedAt: '2024-03-01T12:00:00+09:00'
+              releaseGroups:
+                - releaseGroupId: 0f2185cd-b4ab-4f22-b0a3-fd93cbbd2df2
+                  title: テストアルバム
+                  type: 2
+                  firstReleasedOn: '2026-05-01'
+              performances: []
+          nextCursor: eyJvcmRlck5vIjoxLCJzb25nSWQiOiIzY2Q0MmMwOS1mZjNjLTRjZDItOTEzZi1hMjc5YzRlYTg5YjQifQ==
+    SongMediaSummary:
+      type: object
+      required:
+        - mediaId
+        - title
+        - type
+        - url
+        - publishedAt
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+      examples:
+        - mediaId: 11111111-1111-1111-1111-111111111111
+          title: テストメディアMV
+          type: 1
+          url: https://www.youtube.com/watch?v=dummy
+          publishedAt: '2024-03-01T12:00:00+09:00'
+    SongPerformance:
+      type: object
+      required:
+        - performanceId
+        - songId
+        - songTitle
+        - coVocalists
+      properties:
+        performanceId:
+          $ref: '#/components/schemas/uuid'
+        songId:
+          anyOf:
+            - $ref: '#/components/schemas/songId'
+            - type: 'null'
+        songTitle:
+          $ref: '#/components/schemas/title'
+        coVocalists:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerformancePerson'
+    SongPerformanceHistory:
+      type: object
+      required:
+        - eventId
+        - eventTitle
+        - type
+        - schedule
+        - coVocalistNames
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        eventTitle:
+          $ref: '#/components/schemas/eventTitle'
+        type:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        coVocalistNames:
+          type: array
+          items:
+            type: string
+          description: 共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる
+      description: 楽曲が公開イベントで披露された履歴
+    SongRelationCounts:
+      type: object
+      required:
+        - releaseCount
+        - mediaCount
+      properties:
+        releaseCount:
+          type: integer
+          format: int32
+          description: 関連リリースグループ数
+        mediaCount:
+          type: integer
+          format: int32
+          description: 関連メディア数
+    SongReleaseGroupSummary:
+      type: object
+      required:
+        - releaseGroupId
+        - title
+        - type
+        - firstReleasedOn
+      properties:
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        title:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        type:
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
+        firstReleasedOn:
+          $ref: '#/components/schemas/releasedOn'
+      description: 楽曲が収録されている公開リリースグループの概要
+    SongTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 楽曲種別の値
+      x-enum-varnames:
+        - Original
+        - Cover
+        - Guest
+      x-enum-descriptions:
+        - オリジナル曲
+        - カバー曲
+        - 参加曲
+    VenueKindValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+      description: 開催先種別の値
+      x-enum-varnames:
+        - Physical
+        - Online
+      x-enum-descriptions:
+        - 現地
+        - オンライン
+    Version:
+      type: string
+      enum:
+        - v1
+      x-enum-varnames:
+        - v1
+      x-enum-descriptions:
+        - バージョン 1
+    cursor:
+      type: string
+      description: 次ページを記すキー
+    description:
+      type: string
+      description: 楽曲の説明
+    eventDescription:
+      type: string
+      description: イベント説明
+    eventId:
+      type: string
+      format: uuid
+      description: イベントID
+    eventOn:
+      type: string
+      format: date
+      description: イベント日
+    eventSourceName:
+      type: string
+      minLength: 1
+      description: イベントの出典表示名
+    eventSourceUrl:
+      type: string
+      format: uri
+      description: イベントの出典URL
+    eventTitle:
+      type: string
+      minLength: 1
+      description: イベントタイトル
+    limit:
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 50
+      description: 1 度に取得する件数
+    mediaId:
+      type: string
+      format: uuid
+      description: メディアID
+    mediaPublishedAt:
+      type: string
+      format: date-time
+      description: 公開日時
+    mediaTitle:
+      type: string
+      minLength: 1
+      description: メディアタイトル
+    mediaUrl:
+      type: string
+      format: uri
+      description: メディアURL
+    orderNo:
+      type: integer
+      format: int32
+      minimum: 1
+      description: 表示順
+    performanceCreditName:
+      type: string
+      minLength: 1
+      description: 共演者としてのクレジット名
+    releaseGroupId:
+      type: string
+      format: uuid
+      description: リリースグループID
+    releaseGroupTitle:
+      type: string
+      minLength: 1
+      description: リリースグループタイトル
+    releaseId:
+      type: string
+      format: uuid
+      description: リリースID
+    releaseName:
+      type: string
+      description: リリース版名。任意項目で、無しは空文字
+    releasedOn:
+      type: string
+      format: date
+      description: 発売日
+    songId:
+      type: string
+      format: uuid
+      description: 楽曲ID
+    title:
+      type: string
+      minLength: 1
+      description: 楽曲名
+    uuid:
+      type: string
+      format: uuid
+      description: UUID v4
+servers:
+  - url: https://local.api.isekaijoucho.fan/{version}
+    description: ローカル環境
+    variables:
+      version:
+        default: ''
+        enum:
+          - v1

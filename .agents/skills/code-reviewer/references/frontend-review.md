@@ -1,5 +1,8 @@
 # フロントエンド コードレビューチェックリスト (Astro + SolidJS + TS)
 
+規約の詳細は `FRONTEND.md` と `docs/design-docs/subproject-boundaries.md` を正とする
+ここではレビュー時に見る観点だけを列挙する
+
 ## フレームワーク & コンポーネント
 - [ ] インタラクティブなコンポーネントに **SolidJS** を使用しているか
 - [ ] CSS クラスの指定に `className` ではなく `class` を使用しているか(SolidJS の規約)
@@ -12,7 +15,7 @@
 
 ## API & データフェッチ
 - [ ] バックエンド API との通信に `openapi-fetch` を使用しているか
-- [ ] `src/admin/src/generated` から生成された型が正しく使用されているか
+- [ ] `src/app/admin/src/generated` から生成された型が正しく使用されているか
 
 ## TypeScript
 - [ ] `any` 型を使用していないか。適切なインターフェース/型を使用しているか

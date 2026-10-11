@@ -9,12 +9,11 @@ on:
       - main
       - stg
     paths:
-      - "src/admin/**"
-      - "src/contracts/**"
-      - "src/package.json"
-      - "src/pnpm-lock.yaml"
-      - "src/pnpm-workspace.yaml"
-      - "src/biome.json"
+      - "src/app/admin/**"
+      - "src/app/contracts/**"
+      - "src/app/package.json"
+      - "src/app/pnpm-lock.yaml"
+      - "src/app/pnpm-workspace.yaml"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/admin-qa.yaml"
@@ -23,12 +22,11 @@ on:
     branches:
       - dev
     paths:
-      - "src/admin/**"
-      - "src/contracts/**"
-      - "src/package.json"
-      - "src/pnpm-lock.yaml"
-      - "src/pnpm-workspace.yaml"
-      - "src/biome.json"
+      - "src/app/admin/**"
+      - "src/app/contracts/**"
+      - "src/app/package.json"
+      - "src/app/pnpm-lock.yaml"
+      - "src/app/pnpm-workspace.yaml"
       - "mise.toml"
       - "mise.ci.toml"
       - ".github/workflows/admin-qa.yaml"
@@ -58,8 +56,8 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
-            src/node_modules
-            src/admin/node_modules
+            src/app/node_modules
+            src/app/admin/node_modules
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
@@ -87,8 +85,8 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
-            src/node_modules
-            src/admin/node_modules
+            src/app/node_modules
+            src/app/admin/node_modules
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
@@ -116,8 +114,8 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
-            src/node_modules
-            src/admin/node_modules
+            src/app/node_modules
+            src/app/admin/node_modules
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
@@ -125,6 +123,35 @@ jobs:
 
       - name: Run ESLint
         run: mise run admin:lint
+
+  typecheck:
+    name: Type Check
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup mise
+        uses: ./.github/actions/setup-mise
+
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            src/app/node_modules
+            src/app/admin/node_modules
+          key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install packages
+        run: mise run pnpm:install
+
+      - name: Run Type Check
+        run: mise run admin:typecheck
 
   style:
     name: Stylelint
@@ -145,8 +172,8 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
-            src/node_modules
-            src/admin/node_modules
+            src/app/node_modules
+            src/app/admin/node_modules
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages

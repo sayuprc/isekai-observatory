@@ -9,32 +9,22 @@
 | `README.md` | セットアップと主要コマンド |
 | `ARCHITECTURE.md` | Source of Truth と変更ルート |
 | `FRONTEND.md` | 管理画面と閲覧サイトの UI 方針 |
-| `PLANS.md` | 実行計画を書くタイミング |
+| `PLANS.md` | ローカル作業計画と ADR 昇格 |
+| `docs/specs/INDEX.md` | プロダクトの現行仕様 |
 | `docs/INDEX.md` | 文書の置き場所と一覧 |
 
-## 触り始め
+## 変更の入口
 
-| 変更したいもの | 最初に触る場所 |
-|---|---|
-| API の request / response / version | `src/contracts` |
-| サーバー側の業務ロジック | `src/server` |
-| 管理画面 UI / BFF | `src/admin` |
-| 閲覧サイト UI | `src/viewer` |
-| Discord 通知配達 | `src/discord-notifier` |
-| 通知 Pub/Sub publish | `src/notify-publish` |
-| アプリ通知 JSON 契約 | `src/notify-contract` |
-| ローカル / 環境別インフラ | `infra/README.md` |
-| それ以外 | `ARCHITECTURE.md` |
+コードを触るときの着手先と確認コマンドは `ARCHITECTURE.md` の Change Routing を見る
 
 ## よく辿る下位文書
 
 | 文書 | 内容 |
 |---|---|
 | `docs/design-docs/INDEX.md` | 設計原則 |
-| `docs/exec-plans/README.md` | 実行計画の詳細ルール |
+| `docs/exec-plans/README.md` | ローカル作業計画の詳細ルール |
 | `docs/operations/INDEX.md` | 運用手順 |
-| `docs/tech-debt-tracker.md` | 技術的負債 |
-| `docs/adr/INDEX.md` | ADR |
+| `docs/adr/INDEX.md` | ADR (Any Decision Record) |
 
 ## 文書の置き場所
 

@@ -1,35 +1,62 @@
 # Lefthook pre-commit hooks
 # https://github.com/evilmartians/lefthook
 
+glob_matcher: doublestar
+
 pre-commit:
   parallel: true
   commands:
     api-ecs:
-      root: "src/server/"
-      glob: "{app,bootstrap,config,database,packages,routes,tests,tools}/**/*.php"
+      root: "src/app/server/"
+      glob: "src/app/server/{app,bootstrap,config,database,packages,routes,tests,tools}/**/*.php"
       run: mise run api:ecs -- {staged_files}
 
     api-phpstan:
-      root: "src/server/"
-      glob: "{app,bootstrap,packages}/**/*.php"
+      root: "src/app/server/"
+      glob: "src/app/server/{app,bootstrap,packages}/**/*.php"
       run: mise run api:phpstan -- {staged_files}
 
     admin-lint:
-      root: "src/admin/"
-      glob: "src/**/*.{ts,tsx,js,jsx,mjs,astro}"
+      root: "src/app/admin/"
+      glob: "src/app/**/*.{ts,tsx,js,jsx,mjs,astro}"
       run: mise run admin:lint
 
     admin-style:
-      root: "src/admin/"
-      glob: "src/**/*.{css,astro}"
+      root: "src/app/admin/"
+      glob: "src/app/**/*.{css,astro}"
       run: mise run admin:style -- {staged_files}
 
+    admin-format:
+      root: "src/app/admin/"
+      glob: "src/app/admin/**/*.{ts,tsx,js,mjs,astro,css,json,jsonc}"
+      run: mise run admin:format:check -- {staged_files}
+
+    viewer-lint:
+      root: "src/app/viewer/"
+      glob: "src/app/viewer/**/*.{ts,tsx,js,jsx,mjs,astro}"
+      run: mise run viewer:lint
+
+    viewer-style:
+      root: "src/app/viewer/"
+      glob: "src/app/viewer/**/*.{css,astro}"
+      run: mise run viewer:style -- {staged_files}
+
+    viewer-format:
+      root: "src/app/viewer/"
+      glob: "src/app/viewer/**/*.{ts,tsx,js,mjs,astro,css,json,jsonc}"
+      run: mise run viewer:format:check -- {staged_files}
+
     contracts-format:
-      root: "src/"
-      glob: "contracts/src/**/*.tsp"
+      root: "src/app/"
+      glob: "src/app/contracts/src/**/*.tsp"
       run: mise run contract:format:check
 
     contracts-test:
-      root: "src/"
-      glob: "contracts/scripts/**/*.ts"
+      root: "src/app/"
+      glob: "src/app/contracts/scripts/**/*.ts"
       run: mise run contract:test
+
+    contracts-typecheck:
+      root: "src/app/"
+      glob: "src/app/contracts/{scripts,src}/**/*.ts"
+      run: mise run contract:typecheck

@@ -1,0 +1,147 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Presenters\Api\Admin\V1\Event;
+
+use DateTime;
+use Event\Application\Admin\Assemble\AssembledCoVocalist;
+use Event\Application\Admin\Assemble\AssembledEvent;
+use Event\Application\Admin\Assemble\AssembledMedia;
+use Event\Application\Admin\Assemble\AssembledPerformance;
+use Event\Application\Admin\Assemble\AssembledRelease;
+use Event\Application\Admin\Assemble\AssembledSetlistItem;
+use Event\Application\Admin\Assemble\AssembledSource;
+use Event\Application\Admin\Assemble\AssembledVenue;
+use Event\Application\Admin\Query\EventSummary;
+use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
+use OpenAPI\Admin\Client\Model\EventRelease as OpenApiEventRelease;
+use OpenAPI\Admin\Client\Model\EventSource as OpenApiEventSource;
+use OpenAPI\Admin\Client\Model\EventStatusValue;
+use OpenAPI\Admin\Client\Model\EventSummary as OpenApiEventSummary;
+use OpenAPI\Admin\Client\Model\EventTypeValue;
+use OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule as OpenApiEventSchedule;
+use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
+use OpenAPI\Admin\Client\Model\MediaTypeValue;
+use OpenAPI\Admin\Client\Model\PerformancePerson as OpenApiPerformancePerson;
+use OpenAPI\Admin\Client\Model\PerformancePersonGroup as OpenApiPerformancePersonGroup;
+use OpenAPI\Admin\Client\Model\ReleaseFormatValue;
+use OpenAPI\Admin\Client\Model\SetlistItem as OpenApiSetlistItem;
+use OpenAPI\Admin\Client\Model\SongPerformance as OpenApiSongPerformance;
+use OpenAPI\Admin\Client\Model\Venue as OpenApiVenue;
+use OpenAPI\Admin\Client\Model\VenueKindValue;
+
+class Converter
+{
+    public function toOpenApiEventSummary(EventSummary $event): OpenApiEventSummary
+    {
+        return new OpenApiEventSummary()
+            ->setEventId($event->eventId)
+            ->setTitle($event->title)
+            ->setType(EventTypeValue::from($event->type->value))
+            ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
+            ->setStatus(EventStatusValue::from($event->status->value))
+            ->setIsDisplay($event->isDisplay)
+            ->setVenueNames($event->venueNames)
+            ->setPerformanceCount($event->performanceCount)
+            ->setSetlistItemCount($event->setlistItemCount)
+            ->setSourceCount($event->sourceCount);
+    }
+
+    public function toOpenApiEvent(AssembledEvent $event): OpenApiEvent
+    {
+        return new OpenApiEvent()
+            ->setEventId($event->eventId)
+            ->setTitle($event->title)
+            ->setDescription($event->description)
+            ->setType(EventTypeValue::from($event->type->value))
+            ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
+            ->setStatus(EventStatusValue::from($event->status->value))
+            ->setIsDisplay($event->isDisplay)
+            ->setVenues(array_map($this->toOpenApiVenue(...), $event->venues))
+            ->setMedia(array_map($this->toOpenApiMedia(...), $event->media))
+            ->setReleases(array_map($this->toOpenApiRelease(...), $event->releases))
+            ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
+            ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
+            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
+    }
+
+    private function toOpenApiSchedule(?string $startOn, ?string $endOn): OpenApiEventSchedule
+    {
+        return new OpenApiEventSchedule([
+            'start_on' => $startOn === null ? null : new DateTime($startOn),
+            'end_on' => $endOn === null ? null : new DateTime($endOn),
+        ]);
+    }
+
+    private function toOpenApiVenue(AssembledVenue $venue): OpenApiVenue
+    {
+        return new OpenApiVenue()
+            ->setVenueId($venue->venueId)
+            ->setName($venue->name)
+            ->setKind(VenueKindValue::from($venue->kindValue));
+    }
+
+    private function toOpenApiMedia(AssembledMedia $media): OpenApiMedia
+    {
+        return new OpenApiMedia()
+            ->setMediaId($media->mediaId)
+            ->setTitle($media->title)
+            ->setUrl($media->url)
+            ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
+            ->setType(MediaTypeValue::from($media->typeValue))
+            ->setIsDisplay($media->isDisplay);
+    }
+
+    private function toOpenApiRelease(AssembledRelease $release): OpenApiEventRelease
+    {
+        return new OpenApiEventRelease()
+            ->setReleaseId($release->releaseId)
+            ->setReleaseGroupId($release->releaseGroupId)
+            ->setReleaseGroupTitle($release->releaseGroupTitle)
+            ->setName($release->name)
+            ->setReleasedOn(new DateTime($release->releasedOn))
+            ->setIsDisplay($release->isDisplay)
+            ->setFormats(array_map(
+                static fn (int $formatValue): ReleaseFormatValue => ReleaseFormatValue::from($formatValue),
+                $release->formatValues,
+            ));
+    }
+
+    private function toOpenApiSource(AssembledSource $source): OpenApiEventSource
+    {
+        return new OpenApiEventSource()
+            ->setDisplayName($source->displayName)
+            ->setUrl($source->url)
+            ->setOrderNo($source->orderNo);
+    }
+
+    private function toOpenApiPerformance(AssembledPerformance $performance): OpenApiSongPerformance
+    {
+        return new OpenApiSongPerformance()
+            ->setPerformanceId($performance->performanceId)
+            ->setSongId($performance->songId)
+            ->setSongTitle($performance->songTitle)
+            ->setOrderNo($performance->orderNo)
+            ->setCoVocalists(array_map(
+                static fn (AssembledCoVocalist $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson([
+                    'credit_name' => $coVocalist->creditName,
+                    'person_group' => $coVocalist->personGroup === null ? null : new OpenApiPerformancePersonGroup()
+                        ->setPersonGroupId($coVocalist->personGroup->personGroupId)
+                        ->setName($coVocalist->personGroup->name),
+                ])
+                    ->setPersonId($coVocalist->personId)
+                    ->setName($coVocalist->name)
+                    ->setOrderNo($coVocalist->orderNo),
+                $performance->coVocalists,
+            ));
+    }
+
+    private function toOpenApiSetlistItem(AssembledSetlistItem $item): OpenApiSetlistItem
+    {
+        return new OpenApiSetlistItem(['label' => $item->label])
+            ->setSetlistItemId($item->setlistItemId)
+            ->setOrderNo($item->orderNo)
+            ->setPerformances(array_map($this->toOpenApiPerformance(...), $item->performances));
+    }
+}

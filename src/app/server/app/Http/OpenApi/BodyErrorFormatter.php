@@ -1,0 +1,81 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\OpenApi;
+
+/**
+ * 収集した違反の葉を 422 details の field パス => メッセージ列へ整形する (ADR-0014)
+ *
+ * @phpstan-type _leaf array{path: string, keyword: string, args: array<string, mixed>}
+ */
+final class BodyErrorFormatter
+{
+    /**
+     * @param array<_leaf> $leaves
+     *
+     * @return array<string, array<string>>
+     */
+    public function format(array $leaves): array
+    {
+        $errors = [];
+
+        foreach ($leaves as $leaf) {
+            // required 違反は親オブジェクトのパスで報告され、そのままでは欠落したフィールドを指せない
+            if ($leaf['keyword'] === 'required') {
+                foreach ($this->missingFields($leaf) as $path) {
+                    $errors[$path][] = SchemaErrorMessages::translate('required', []);
+                }
+
+                continue;
+            }
+
+            // nullable (anyOf + type: null) の null 側違反は、実型の違反があるときはノイズなので落とす
+            if ($this->isNullBranchMismatch($leaf) && $this->hasOtherLeafAt($leaves, $leaf['path'])) {
+                continue;
+            }
+
+            $errors[$leaf['path']][] = SchemaErrorMessages::translate($leaf['keyword'], $leaf['args']);
+        }
+
+        return array_map(static fn (array $messages): array => array_values(array_unique($messages)), $errors);
+    }
+
+    /**
+     * @param _leaf $leaf
+     *
+     * @return array<string>
+     */
+    private function missingFields(array $leaf): array
+    {
+        /** @var array<string> $missing */
+        $missing = $leaf['args']['missing'] ?? [];
+
+        return array_map(
+            static fn (string $field): string => $leaf['path'] === '' ? $field : "{$leaf['path']}/{$field}",
+            $missing,
+        );
+    }
+
+    /**
+     * @param _leaf $leaf
+     */
+    private function isNullBranchMismatch(array $leaf): bool
+    {
+        return $leaf['keyword'] === 'type' && ($leaf['args']['expected'] ?? null) === 'null';
+    }
+
+    /**
+     * @param array<_leaf> $leaves
+     */
+    private function hasOtherLeafAt(array $leaves, string $path): bool
+    {
+        foreach ($leaves as $leaf) {
+            if ($leaf['path'] === $path && ! $this->isNullBranchMismatch($leaf)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

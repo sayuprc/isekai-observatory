@@ -1,0 +1,17 @@
+---
+const env = import.meta.env.APP_ENV;
+
+const labels: Record<string, string> = {
+  local: 'LOCAL',
+  development: 'DEV',
+  staging: 'STG',
+};
+
+const label = !env || env === 'production' ? null : (labels[env] ?? env.toUpperCase());
+---
+
+{label && (
+  <span class="env-badge" data-env={env}>
+    {label}
+  </span>
+)}

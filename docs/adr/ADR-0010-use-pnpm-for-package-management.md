@@ -9,7 +9,7 @@ applies_to: [api, admin, viewer]
 
 ## Context
 
-プロジェクトの TypeScript 領域は `src/` 配下に admin、viewer、contracts の workspace を持つ
+プロジェクトの TypeScript 領域は `src/app/` 配下に admin、viewer、contracts の workspace を持つ
 これらの依存関係はワークスペース横断で解決され、lockfile によって再現性を担保する必要がある
 
 もともと Bun は Elysia を使うために採用しており、ランタイムやテスト、dev コマンドの実行環境としては高速で扱いやすい
@@ -24,8 +24,8 @@ pnpm は Bun より実行速度で劣るが、workspace、lockfile、catalog に
 TypeScript 領域のパッケージ管理には pnpm を採用する
 
 - 依存関係のインストールは `pnpm install` を使う
-- lockfile は `src/pnpm-lock.yaml` を正とする
-- workspace 定義は `src/pnpm-workspace.yaml` を正とする
+- lockfile は `src/app/pnpm-lock.yaml` を正とする
+- workspace 定義は `src/app/pnpm-workspace.yaml` を正とする
 - workspace 共通の依存バージョンは pnpm catalog で管理する
 - Bun の lockfile は作成・更新しない
 

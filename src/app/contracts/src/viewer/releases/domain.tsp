@@ -1,0 +1,96 @@
+import "../../shared";
+
+using IsekaiObservatory.Shared;
+
+namespace IsekaiObservatory.Viewer;
+
+@doc("リリースグループID")
+scalar releaseGroupId extends uuid;
+
+@doc("リリースグループタイトル")
+@minLength(1)
+scalar releaseGroupTitle extends string;
+
+@doc("リリースID")
+scalar releaseId extends uuid;
+
+@doc("リリース版名。任意項目で、無しは空文字")
+scalar releaseName extends string;
+
+@doc("発売日")
+@format("date")
+scalar releasedOn extends string;
+
+@doc("リリースグループ種別の値")
+@enumExtensions
+enum ReleaseGroupTypeValue {
+  @doc("シングル")
+  Single: 1,
+
+  @doc("アルバム")
+  Album: 2,
+
+  @doc("EP")
+  Ep: 3,
+
+  @doc("その他")
+  Other: 99,
+}
+
+@doc("提供形態の値")
+@enumExtensions
+enum ReleaseFormatValue {
+  @doc("配信")
+  Digital: 1,
+
+  @doc("CD")
+  Cd: 2,
+
+  @doc("DVD")
+  Dvd: 3,
+
+  @doc("Blu-ray")
+  BluRay: 4,
+
+  @doc("その他")
+  Other: 99,
+}
+
+@doc("収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する")
+model ReleaseTrackItem {
+  trackNo: orderNo;
+  songId: uuid | null;
+  title: string;
+  isDisplay: boolean;
+}
+
+@doc("リリース内の媒体(トラックリストの区切り)。name は Disc 表示用の任意ラベル")
+model ReleaseMediumItem {
+  position: orderNo;
+  name: string | null;
+  tracks: ReleaseTrackItem[];
+}
+
+@doc("リリース(版)")
+model ReleaseListItem {
+  releaseId: releaseId;
+  name: releaseName;
+  releasedOn: releasedOn;
+  description: string;
+  orderNo: orderNo;
+  formats: ReleaseFormatValue[];
+  media: ReleaseMediumItem[];
+}
+
+@doc("リリースグループ。公開リリースを 1 件以上持つものだけが一覧に載る")
+model ReleaseGroupListItem {
+  releaseGroupId: releaseGroupId;
+  title: releaseGroupTitle;
+  type: ReleaseGroupTypeValue;
+  description: string;
+
+  @doc("傘下の公開リリースの最古発売日")
+  firstReleasedOn: releasedOn;
+
+  releases: ReleaseListItem[];
+}
