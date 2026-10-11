@@ -1,6 +1,7 @@
 # Execution Plan Template
 
-1 タスク 1 ファイル。`active/YYYYMMDD-<slug>.md` に置き、完了後に `completed/` へ移す
+1 タスク 1 ファイル。`active/YYYYMMDD-<slug>.md` に置く
+このファイルはコミットしない。拘束が残る判断は ADR へ書く
 
 ## Title
 
@@ -39,6 +40,8 @@ planned | in-progress | blocked | completed
 - [ ]
 
 ## Decision Log
+
+作業中の判断メモ。将来を拘束するものは ADR へ昇格する
 
 - YYYY-MM-DD: decision
 

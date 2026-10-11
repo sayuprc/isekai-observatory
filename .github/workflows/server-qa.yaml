@@ -9,8 +9,8 @@ on:
       - main
       - stg
     paths:
-      - "src/server/**"
-      - "src/contracts/**"
+      - "src/app/server/**"
+      - "src/app/contracts/**"
       - "infra/local/**"
       - "compose.yaml"
       - "mise.toml"
@@ -21,8 +21,8 @@ on:
     branches:
       - dev
     paths:
-      - "src/server/**"
-      - "src/contracts/**"
+      - "src/app/server/**"
+      - "src/app/contracts/**"
       - "infra/local/**"
       - "compose.yaml"
       - "mise.toml"
@@ -36,7 +36,7 @@ env:
   SERVER_DOCKER_PATH: /tmp/cache/docker/server
   OPENAPI_GENERATOR_CLI_DOCKER_PATH: /tmp/cache/docker/openapi-generator-cli
   MYSQL_DOCKER_PATH: /tmp/cache/docker/mysql
-  VENDOR_PATH: ./src/server/vendor
+  VENDOR_PATH: ./src/app/server/vendor
 
 permissions:
   contents: read
@@ -102,7 +102,7 @@ jobs:
           mkdir -p "${MYSQL_DOCKER_PATH}"
 
       - name: Copy .env
-        run: cp src/server/.env.example src/server/.env
+        run: cp src/app/server/.env.example src/app/server/.env
 
       - name: Run Container
         run: mise run up
@@ -112,7 +112,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
-          key: composer-${{ hashFiles('./src/server/composer.*') }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
       - name: Composer install
         run: mise run api:composer:install
@@ -158,7 +158,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
-          key: composer-${{ hashFiles('./src/server/composer.*') }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
       - name: Check Layer
         run: mise run api:arkitect
@@ -191,7 +191,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
-          key: composer-${{ hashFiles('./src/server/composer.*') }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
       - name: Run ecs
         run: mise run api:ecs
@@ -224,7 +224,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
-          key: composer-${{ hashFiles('./src/server/composer.*') }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
       - name: Run PHPStan
         run: mise run api:phpstan
@@ -286,7 +286,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
-          key: composer-${{ hashFiles('./src/server/composer.*') }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
       - name: Setup env
         run: mise run setup:env

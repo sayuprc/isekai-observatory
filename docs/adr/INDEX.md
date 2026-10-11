@@ -19,3 +19,23 @@
 | ADR-0013 | accepted | 業務エラーの表現を Result から例外へ移行する | [api, admin, viewer] |
 | ADR-0014 | accepted | 入力形式検証を契約境界へ集約する | [api, admin] |
 | ADR-0015 | accepted | 権利者の画像素材を保存・配信しない | [api, admin, viewer] |
+| ADR-0016 | accepted | 管理認証は passkey のみとする | [api, admin] |
+| ADR-0017 | accepted | passkey 紛失時はリカバリーコードで復旧する | [api, admin] |
+| ADR-0018 | accepted | 管理ユーザー登録は招待トークン経由とする | [api, admin] |
+| ADR-0019 | accepted | Release は MusicBrainz 型の階層と Release.formats を取る | [api, admin, viewer] |
+| ADR-0020 | accepted | Media は 6 フィールドと MediaType 1 軸に閉じる | [api, admin, viewer] |
+| ADR-0021 | accepted | Viewer API は Admin と分離した公開 read model とする | [api, viewer] |
+| ADR-0022 | accepted | 監査ログは Support の明示記録とする | [api, admin] |
+| ADR-0023 | accepted | 人物は Person に一本化し役割は関係の role で表す | [api, admin] |
+| ADR-0024 | accepted | コンテナイメージの版は Dockerfile に直接書く | [api, admin, viewer] |
+| ADR-0025 | accepted | 開催先は物理施設とオンライン配信プラットフォームを統合する | [api, admin, viewer] |
+| ADR-0026 | accepted | 開催単位は Event とし Activity 集約を導入しない | [api, admin, viewer] |
+| ADR-0027 | accepted | Event は時刻を保持せず日付で管理する | [api, admin, viewer] |
+| ADR-0028 | accepted | TypeScript パッケージの整形は Prettier に任せ、ESLint と Stylelint は lint だけを担う | [admin, viewer, admin-proxy] |
+| ADR-0029 | accepted | 共演者は人単位で保存し出演グループは共演者ごとの任意参照で表す | [api, admin, viewer] |
+| ADR-0030 | accepted | 管理画面の詳細・作成画面は固定見出しと保存操作、セクションの多い画面はタブで構成する | [admin] |
+| ADR-0031 | accepted | 管理画面の一覧の件数は検索用の Summary 型で返し、Application 層のクエリで数える | [api, admin] |
+| ADR-0032 | superseded | Viewer API は種別や状態を数値だけで返し、表示名は Viewer が持つ | [api, viewer] |
+| ADR-0033 | accepted | API は種別や状態を値だけで返し、表示名は画面が持つ | [api, admin, viewer] |
+| ADR-0034 | accepted | リリースの代表色を持たない | [api, admin, viewer] |
+| ADR-0035 | accepted | 楽曲種別に参加曲を加える | [api, admin, viewer] |

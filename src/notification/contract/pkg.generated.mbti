@@ -1,0 +1,46 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "isekai-observatory/notify-contract"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn has_embeds(Json) -> Bool
+
+pub fn parse_notification(Json) -> Notification raise NotificationError
+
+pub fn parse_notification_json(String) -> Notification raise NotificationError
+
+pub fn validate_notification_json(String) -> Unit raise NotificationError
+
+// Errors
+pub suberror NotificationError {
+  InvalidJson(String)
+  InvalidPayload(String)
+} derive(Eq, @debug.Debug)
+#deprecated
+pub fn NotificationError::equal(Self, Self) -> Bool
+#deprecated
+pub fn NotificationError::not_equal(Self, Self) -> Bool
+#deprecated
+pub fn NotificationError::to_repr(Self) -> @debug.Repr
+pub fn NotificationError::to_string(Self) -> String
+
+// Types and methods
+pub(all) struct Notification {
+  action : String
+  status : String
+  content : String?
+  embeds : Json?
+} derive(Eq, @debug.Debug)
+#deprecated
+pub fn Notification::equal(Self, Self) -> Bool
+#deprecated
+pub fn Notification::not_equal(Self, Self) -> Bool
+#deprecated
+pub fn Notification::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/notify-publish/**"
+  - "src/notification/publish/**"
 ---
 
 # Notify Publish 規約
@@ -20,8 +20,8 @@ paths:
 ## 実装規約
 
 - Discord 配達や channel 振り分けは持たない。発信側の publish CLI に責務を閉じる
-- アプリ通知 JSON の契約は `src/notify-contract/README.md` を Source of Truth とする
-- 使い方・環境変数は `src/notify-publish/README.md` を参照する
+- アプリ通知 JSON の契約は `src/notification/contract/README.md` を Source of Truth とする
+- 使い方・環境変数は `src/notification/publish/README.md` を参照する
 
 ## 検証
 

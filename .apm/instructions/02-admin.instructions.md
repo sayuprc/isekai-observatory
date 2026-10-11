@@ -1,7 +1,7 @@
 ---
 name: 'Admin Instructions'
-description: 'Use when editing Astro pages, SolidJS components, Elysia BFF routes, or generated API clients in src/admin. Covers admin-specific structure, regeneration flow, and validation.'
-applyTo: 'src/admin/**'
+description: 'Use when editing Astro pages, SolidJS components, Elysia BFF routes, or generated API clients in src/app/admin. Covers admin-specific structure, regeneration flow, and validation.'
+applyTo: 'src/app/admin/**'
 ---
 
 # 管理画面規約
@@ -15,18 +15,18 @@ applyTo: 'src/admin/**'
 
 ## 構成
 
-- `src/admin/src/pages/`: Astro のページとルーティング
-- `src/admin/src/layouts/`: ページレイアウト
-- `src/admin/src/components/`: SolidJS コンポーネント
-- `src/admin/src/server/`: 管理画面専用の BFF / サーバー側処理
-- `src/admin/src/schemas/`: フォームや入出力のスキーマ
-- `src/admin/src/generated/`: OpenAPI から生成された API クライアント
+- `src/app/admin/src/pages/`: Astro のページとルーティング
+- `src/app/admin/src/layouts/`: ページレイアウト
+- `src/app/admin/src/components/`: SolidJS コンポーネント
+- `src/app/admin/src/server/`: 管理画面専用の BFF / サーバー側処理
+- `src/app/admin/src/schemas/`: フォームや入出力のスキーマ
+- `src/app/admin/src/generated/`: OpenAPI から生成された API クライアント
 
 ## 実装規約
 
 - ページ責務は `.astro` に保ち、対話的な UI は `.tsx` に分離する
-- API クライアントや型は `src/admin/src/generated/` を Source of Truth とし、手動編集しない
-- API shape を変える場合は `src/contracts` を更新してから `mise run admin:generate` を使う
+- API クライアントや型は `src/app/admin/src/generated/` を Source of Truth とし、手動編集しない
+- API shape を変える場合は `src/app/contracts` を更新してから `mise run admin:generate` を使う
 
 ## 検証
 

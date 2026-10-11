@@ -1,0 +1,38 @@
+---
+import SectionHead from '../components/viewer/SectionHead.astro';
+import Layout from '../layouts/Layout.astro';
+import { CONTACT_X_HANDLE, CONTACT_X_URL } from '../shared/contact';
+---
+
+<Layout
+  pageTitle="お問い合わせ"
+  pageDescription="ヰ世界観測所へのお問い合わせ窓口。掲載内容のご指摘や権利者からのご連絡を受け付けています"
+>
+  <section class="shell page-section">
+    <SectionHead title="お問い合わせ" level={1} />
+
+    <div class="policy-doc">
+      <p>
+        当サイトに関するご連絡は、
+        <a href={CONTACT_X_URL} target="_blank" rel="noopener noreferrer">
+          X(旧 Twitter) {CONTACT_X_HANDLE}
+        </a>
+        までお願いします。
+      </p>
+
+      <h2>ご指摘・ご要望</h2>
+      <p>
+        掲載内容の誤りのご指摘、掲載してほしい情報や機能のご要望を受け付けています。
+        <br />
+        すべてにお応えできるとは限りませんが、いただいた内容は今後の更新の参考にします。
+      </p>
+
+      <h2>権利者の方へ</h2>
+      <p>
+        掲載内容の修正・削除のご要望は、確認のうえ速やかに対応します。
+        <br />
+        ご連絡の際は、対象のページと該当箇所をお知らせください。
+      </p>
+    </div>
+  </section>
+</Layout>

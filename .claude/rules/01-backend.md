@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/server/**"
+  - "src/app/server/**"
 ---
 
 # サーバー規約
@@ -12,11 +12,11 @@ paths:
 
 ## 構成
 
-- `src/server/app/`: Laravel のエントリポイント、HTTP、Console、Provider などのフレームワーク接続
-- `src/server/packages/{Package}/Domain`: ビジネスルール。ほかのレイヤーに依存しない
-- `src/server/packages/{Package}/Application`: ユースケース。Domain にのみ依存する
-- `src/server/packages/{Package}/Infrastructures`: 永続化や外部接続。Domain に依存し、Application には依存しない
-- `src/server/Generated/`: OpenAPI から生成されたコード
+- `src/app/server/app/`: Laravel のエントリポイント、HTTP、Console、Provider などのフレームワーク接続
+- `src/app/server/packages/{Package}/Domain`: ビジネスルール。ほかのレイヤーに依存しない
+- `src/app/server/packages/{Package}/Application`: ユースケース。Domain にのみ依存する
+- `src/app/server/packages/{Package}/Infrastructures`: 永続化や外部接続。Domain に依存し、Application には依存しない
+- `src/app/server/Generated/`: OpenAPI から生成されたコード
 
 ## 実装規約
 
@@ -30,8 +30,8 @@ paths:
   - 不正値の `InvalidDomainException` は契約とドメインの不整合 = バグとして 500 で表面化する。catch して 4xx に変換しない
   - 例外は契約境界を通らない CLI のみ。Console 側が入力エラーとして表示する
   - 一度 VO になった値は primitive に戻さず VO のまま流す。境界の検証は一度きり
-- API 契約が変わる変更は `src/contracts` を起点に考える
-- `src/server/Generated/` は手動編集しない
+- API 契約が変わる変更は `src/app/contracts` を起点に考える
+- `src/app/server/Generated/` は手動編集しない
 
 ## テスト
 

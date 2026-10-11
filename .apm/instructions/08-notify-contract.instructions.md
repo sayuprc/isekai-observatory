@@ -1,7 +1,7 @@
 ---
 name: 'Notify Contract Instructions'
-description: 'Use when editing the MoonBit notify-contract package in src/notify-contract. Covers shared app notification JSON contract, parse/validate API, and validation.'
-applyTo: "src/notify-contract/**"
+description: 'Use when editing the MoonBit notify-contract package in src/notification/contract. Covers shared app notification JSON contract, parse/validate API, and validation.'
+applyTo: "src/notification/contract/**"
 ---
 
 # Notify Contract 規約
@@ -19,7 +19,7 @@ applyTo: "src/notify-contract/**"
 ## 実装規約
 
 - Discord 配達や Pub/Sub publish は持たない。契約と検証だけに閉じる
-- 契約の詳細は `src/notify-contract/README.md` を Source of Truth とする
+- 契約の詳細は `src/notification/contract/README.md` を Source of Truth とする
 - `notify-publish` / `discord-notifier` は `moon.work` 経由でこのモジュールに依存する
 
 ## 検証

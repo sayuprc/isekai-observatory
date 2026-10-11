@@ -1,0 +1,5978 @@
+openapi: 3.1.0
+info:
+  title: ヰ世界観測所 管理画面向け API
+  version: v1
+tags:
+  - name: AdminUser
+  - name: Authenticate
+  - name: RecoveryCode
+  - name: AuditLog
+  - name: Media
+  - name: Person
+  - name: PersonGroup
+  - name: SongTag
+  - name: Song
+  - name: ReleaseGroup
+  - name: Release
+  - name: Venue
+  - name: Event
+paths:
+  /admin-users:
+    get:
+      operationId: AdminUserService_listAdminUsers
+      description: 管理ユーザー一覧取得API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserListResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - AdminUser
+      security:
+        - BearerAuth: []
+  /audit-logs/search:
+    get:
+      operationId: AuditLogService_searchAuditLogs
+      description: 監査ログ検索API
+      parameters:
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          explode: false
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          explode: false
+        - name: action
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditAction'
+          explode: false
+        - name: target_type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditTargetType'
+          explode: false
+        - name: target_id
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/uuid'
+          explode: false
+        - name: admin_user_name
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 50
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - AuditLog
+      security:
+        - BearerAuth: []
+  /audit-logs/{auditLogId}:
+    get:
+      operationId: AuditLogService_getAuditLog
+      description: 監査ログ取得API
+      parameters:
+        - name: auditLogId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - AuditLog
+      security:
+        - BearerAuth: []
+  /auth/login/finish:
+    post:
+      operationId: AuthenticateService_loginFinish
+      description: 認証完了API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginFinishResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginFinishRequest'
+  /auth/login/start:
+    post:
+      operationId: AuthenticateService_loginStart
+      description: 認証開始API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginStartResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginStartRequest'
+  /auth/recovery/finish:
+    post:
+      operationId: AuthenticateService_recoveryFinish
+      description: リカバリー完了API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryFinishResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryFinishRequest'
+  /auth/recovery/start:
+    post:
+      operationId: AuthenticateService_recoveryStart
+      description: リカバリー開始API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryStartResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryStartRequest'
+  /auth/refresh:
+    post:
+      operationId: AuthenticateService_refresh
+      description: アクセストークン再発行API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+  /auth/register/finish:
+    post:
+      operationId: AuthenticateService_registerFinish
+      description: 管理ユーザー登録完了API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterFinishResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterFinishRequest'
+  /auth/register/start:
+    post:
+      operationId: AuthenticateService_registerStart
+      description: 管理ユーザー登録開始API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterStartResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterStartRequest'
+  /events:
+    post:
+      operationId: EventService_createEvent
+      description: イベント作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreateRequest'
+      security:
+        - BearerAuth: []
+  /events/search:
+    get:
+      operationId: EventService_searchEvents
+      description: イベント検索API
+      parameters:
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EventTypeValue'
+          explode: false
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EventStatusValue'
+          explode: false
+        - name: is_display
+          in: query
+          required: false
+          schema:
+            type: boolean
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EventSearchSortBy'
+            default: schedule
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 25
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+  /events/{eventId}:
+    get:
+      operationId: EventService_getEvent
+      description: イベント取得API
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+    put:
+      operationId: EventService_updateEvent
+      description: イベント更新API
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: EventService_deleteEvent
+      description: イベント削除API
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+  /media:
+    post:
+      operationId: MediaService_createMedia
+      description: メディア作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Media
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediaCreateRequest'
+      security:
+        - BearerAuth: []
+  /media/search:
+    get:
+      operationId: MediaService_searchMedia
+      description: メディア検索API
+      parameters:
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/MediaTypeValue'
+          explode: false
+        - name: is_display
+          in: query
+          required: false
+          schema:
+            type: boolean
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/MediaSearchSortBy'
+            default: published_at
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 25
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Media
+      security:
+        - BearerAuth: []
+  /media/{mediaId}:
+    get:
+      operationId: MediaService_getMedia
+      description: メディア取得API
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Media
+      security:
+        - BearerAuth: []
+    put:
+      operationId: MediaService_updateMedia
+      description: メディア更新API
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Media
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediaUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: MediaService_deleteMedia
+      description: メディア削除API
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Media
+      security:
+        - BearerAuth: []
+  /person-groups:
+    post:
+      operationId: PersonGroupService_createPersonGroup
+      description: 人物グループ作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonGroupCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - PersonGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonGroupCreateRequest'
+      security:
+        - BearerAuth: []
+  /person-groups/search:
+    get:
+      operationId: PersonGroupService_searchPersonGroups
+      description: 人物グループ検索API。名前の昇順で返す
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 50
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonGroupSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - PersonGroup
+      security:
+        - BearerAuth: []
+  /person-groups/{personGroupId}:
+    get:
+      operationId: PersonGroupService_getPersonGroup
+      description: 人物グループ取得API
+      parameters:
+        - name: personGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonGroupGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - PersonGroup
+      security:
+        - BearerAuth: []
+    put:
+      operationId: PersonGroupService_updatePersonGroup
+      description: 人物グループ更新API
+      parameters:
+        - name: personGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonGroupUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - PersonGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonGroupUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: PersonGroupService_deletePersonGroup
+      description: 人物グループ削除API。楽曲披露から参照中のグループは削除できない
+      parameters:
+        - name: personGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - PersonGroup
+      security:
+        - BearerAuth: []
+  /persons:
+    get:
+      operationId: PersonService_listPersons
+      description: 人物一覧取得API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonListResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Person
+      security:
+        - BearerAuth: []
+    post:
+      operationId: PersonService_createPerson
+      description: 人物作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonCreateRequest'
+      security:
+        - BearerAuth: []
+  /persons/search:
+    get:
+      operationId: PersonService_searchPersons
+      description: 人物検索API
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PersonSearchSortBy'
+            default: order_no
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 50
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Person
+      security:
+        - BearerAuth: []
+  /persons/{personId}:
+    get:
+      operationId: PersonService_getPerson
+      description: 人物取得API
+      parameters:
+        - name: personId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Person
+      security:
+        - BearerAuth: []
+    put:
+      operationId: PersonService_updatePerson
+      description: 人物更新API
+      parameters:
+        - name: personId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: PersonService_deletePerson
+      description: 人物削除API
+      parameters:
+        - name: personId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Person
+      security:
+        - BearerAuth: []
+  /recovery-codes:
+    post:
+      operationId: RecoveryCodeService_generate
+      description: リカバリーコード発行/再生成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateRecoveryCodesResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - RecoveryCode
+      security:
+        - BearerAuth: []
+  /release-groups:
+    post:
+      operationId: ReleaseGroupService_createReleaseGroup
+      description: リリースグループ作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseGroupCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - ReleaseGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseGroupCreateRequest'
+      security:
+        - BearerAuth: []
+  /release-groups/search:
+    get:
+      operationId: ReleaseGroupService_searchReleaseGroups
+      description: リリースグループ検索API
+      parameters:
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ReleaseGroupTypeValue'
+          explode: false
+        - name: is_display
+          in: query
+          required: false
+          schema:
+            type: boolean
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ReleaseGroupSearchSortBy'
+            default: first_released_on
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: desc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 25
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseGroupSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - ReleaseGroup
+      security:
+        - BearerAuth: []
+  /release-groups/{releaseGroupId}:
+    get:
+      operationId: ReleaseGroupService_getReleaseGroup
+      description: リリースグループ取得API
+      parameters:
+        - name: releaseGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseGroupGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - ReleaseGroup
+      security:
+        - BearerAuth: []
+    put:
+      operationId: ReleaseGroupService_updateReleaseGroup
+      description: リリースグループ更新API
+      parameters:
+        - name: releaseGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseGroupUpdateResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - ReleaseGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseGroupUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: ReleaseGroupService_deleteReleaseGroup
+      description: リリースグループ削除API
+      parameters:
+        - name: releaseGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - ReleaseGroup
+      security:
+        - BearerAuth: []
+  /releases:
+    post:
+      operationId: ReleaseService_createRelease
+      description: リリース作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Release
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseCreateRequest'
+      security:
+        - BearerAuth: []
+  /releases/{releaseId}:
+    get:
+      operationId: ReleaseService_getRelease
+      description: リリース取得API
+      parameters:
+        - name: releaseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Release
+      security:
+        - BearerAuth: []
+    put:
+      operationId: ReleaseService_updateRelease
+      description: リリース更新API
+      parameters:
+        - name: releaseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Release
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: ReleaseService_deleteRelease
+      description: リリース削除API
+      parameters:
+        - name: releaseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Release
+      security:
+        - BearerAuth: []
+  /song-tags:
+    get:
+      operationId: SongTagService_listSongTags
+      description: 楽曲タグ一覧取得API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongTagListResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - SongTag
+      security:
+        - BearerAuth: []
+    post:
+      operationId: SongTagService_createSongTag
+      description: 楽曲タグ作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongTagCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - SongTag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SongTagCreateRequest'
+      security:
+        - BearerAuth: []
+  /song-tags/search:
+    get:
+      operationId: SongTagService_searchSongTags
+      description: 楽曲タグ検索API
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SongTagSearchSortBy'
+            default: order_no
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 50
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongTagSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - SongTag
+      security:
+        - BearerAuth: []
+  /song-tags/{songTagId}:
+    get:
+      operationId: SongTagService_getSongTag
+      description: 楽曲タグ取得API
+      parameters:
+        - name: songTagId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongTagGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - SongTag
+      security:
+        - BearerAuth: []
+    put:
+      operationId: SongTagService_updateSongTag
+      description: 楽曲タグ更新API
+      parameters:
+        - name: songTagId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongTagUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - SongTag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SongTagUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: SongTagService_deleteSongTag
+      description: 楽曲タグ削除API
+      parameters:
+        - name: songTagId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - SongTag
+      security:
+        - BearerAuth: []
+  /songs:
+    post:
+      operationId: SongService_createSong
+      description: 楽曲作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Song
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SongCreateRequest'
+      security:
+        - BearerAuth: []
+  /songs/search:
+    get:
+      operationId: SongService_searchSongs
+      description: 楽曲検索API
+      parameters:
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SongSearchTypeValue'
+          explode: false
+        - name: is_display
+          in: query
+          required: false
+          schema:
+            type: boolean
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SongSearchSortBy'
+            default: order_no
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 50
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Song
+      security:
+        - BearerAuth: []
+  /songs/{songId}:
+    get:
+      operationId: SongService_getSong
+      description: 楽曲取得API
+      parameters:
+        - name: songId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Song
+      security:
+        - BearerAuth: []
+    put:
+      operationId: SongService_updateSong
+      description: 楽曲更新API
+      parameters:
+        - name: songId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Song
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SongUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: SongService_deleteSong
+      description: 楽曲削除API
+      parameters:
+        - name: songId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Song
+      security:
+        - BearerAuth: []
+  /venues:
+    post:
+      operationId: VenueService_createVenue
+      description: 開催先作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenueCreateRequest'
+      security:
+        - BearerAuth: []
+  /venues/search:
+    get:
+      operationId: VenueService_searchVenues
+      description: 開催先検索API
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: kind
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/VenueKindValue'
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/VenueSearchSortBy'
+            default: name
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 25
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      security:
+        - BearerAuth: []
+  /venues/{venueId}:
+    get:
+      operationId: VenueService_getVenue
+      description: 開催先取得API
+      parameters:
+        - name: venueId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      security:
+        - BearerAuth: []
+    put:
+      operationId: VenueService_updateVenue
+      description: 開催先更新API
+      parameters:
+        - name: venueId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenueUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: VenueService_deleteVenue
+      description: 開催先削除API
+      parameters:
+        - name: venueId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/uuid'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Venue
+      security:
+        - BearerAuth: []
+components:
+  schemas:
+    AdminUser:
+      type: object
+      required:
+        - adminUserId
+        - name
+        - email
+        - createdAt
+        - role
+        - permissions
+      properties:
+        adminUserId:
+          $ref: '#/components/schemas/adminUserId'
+        name:
+          $ref: '#/components/schemas/adminUserName'
+        email:
+          $ref: '#/components/schemas/email'
+        createdAt:
+          $ref: '#/components/schemas/createdAt'
+        role:
+          $ref: '#/components/schemas/RoleValue'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionValue'
+      examples:
+        - adminUserId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
+          name: テスト管理ユーザー
+          email: example@example.com
+          createdAt: '2019-12-09T10:30:20+09:00'
+          role: 3
+          permissions:
+            - read_admin_user
+    AdminUserListResponse:
+      type: object
+      required:
+        - adminUsers
+      properties:
+        adminUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminUser'
+    AuditAction:
+      type: string
+      enum:
+        - create
+        - update
+        - delete
+        - register
+        - login
+        - refresh
+        - recovery_code_issue
+        - recovery_code_use
+      description: 監査ログの操作種別
+      x-enum-varnames:
+        - create
+        - update
+        - delete
+        - register
+        - login
+        - refresh
+        - recoveryCodeIssue
+        - recoveryCodeUse
+      x-enum-descriptions:
+        - 作成
+        - 更新
+        - 削除
+        - 登録
+        - ログイン
+        - リフレッシュ
+        - リカバリーコード発行
+        - リカバリーコード使用
+    AuditLog:
+      type: object
+      required:
+        - auditLogId
+        - adminUserId
+        - adminUserName
+        - action
+        - targetType
+        - targetId
+        - createdAt
+        - snapshot
+      properties:
+        auditLogId:
+          $ref: '#/components/schemas/auditLogId'
+        adminUserId:
+          $ref: '#/components/schemas/uuid'
+        adminUserName:
+          type: string
+        action:
+          $ref: '#/components/schemas/AuditAction'
+        targetType:
+          $ref: '#/components/schemas/AuditTargetType'
+        targetId:
+          $ref: '#/components/schemas/uuid'
+        createdAt:
+          type: string
+          format: date-time
+        snapshot:
+          type: object
+          unevaluatedProperties: {}
+          description: 対象の変更後スナップショット。target_type ごとに構造が異なるため任意の JSON とする
+      description: 監査ログ詳細
+    AuditLogGetResponse:
+      type: object
+      required:
+        - auditLog
+      properties:
+        auditLog:
+          $ref: '#/components/schemas/AuditLog'
+    AuditLogSearchResponse:
+      type: object
+      required:
+        - auditLogs
+        - maxPage
+      properties:
+        auditLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogSummary'
+        maxPage:
+          type: integer
+          format: int32
+    AuditLogSummary:
+      type: object
+      required:
+        - auditLogId
+        - adminUserId
+        - adminUserName
+        - action
+        - targetType
+        - targetId
+        - createdAt
+      properties:
+        auditLogId:
+          $ref: '#/components/schemas/auditLogId'
+        adminUserId:
+          $ref: '#/components/schemas/uuid'
+        adminUserName:
+          type: string
+        action:
+          $ref: '#/components/schemas/AuditAction'
+        targetType:
+          $ref: '#/components/schemas/AuditTargetType'
+        targetId:
+          $ref: '#/components/schemas/uuid'
+        createdAt:
+          type: string
+          format: date-time
+      description: 監査ログ一覧の 1 行分
+    AuditTargetType:
+      type: string
+      enum:
+        - AdminUser
+        - Media
+        - Person
+        - PersonGroup
+        - Release
+        - ReleaseGroup
+        - Song
+        - SongTag
+        - Venue
+        - Event
+      description: 監査ログの対象種別
+      x-enum-varnames:
+        - adminUser
+        - media
+        - person
+        - personGroup
+        - release
+        - releaseGroup
+        - song
+        - songTag
+        - venue
+        - event
+      x-enum-descriptions:
+        - 管理ユーザー
+        - メディア
+        - 人物
+        - 人物グループ
+        - リリース
+        - リリースグループ
+        - 楽曲
+        - 楽曲タグ
+        - 開催先
+        - イベント
+    ErrorCode:
+      type: string
+      enum:
+        - unauthenticated
+        - permission_denied
+        - not_found
+        - validation_failed
+        - business_rule_violation
+        - internal_error
+      description: エラー分類を表す機械可読なコード
+      x-enum-varnames:
+        - Unauthenticated
+        - PermissionDenied
+        - NotFound
+        - ValidationFailed
+        - BusinessRuleViolation
+        - InternalError
+      x-enum-descriptions:
+        - 認証されていない (401)
+        - 権限がない (403)
+        - 対象が見つからない (404)
+        - 入力形式の検証に失敗した (422)
+        - 業務ルールに違反した (400)
+        - 予期しないエラーが発生した (500)
+    ErrorDetail:
+      type: object
+      required:
+        - field
+        - message
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+      description: フィールド単位のエラー詳細
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      description: 全エラーステータス共通のレスポンス
+    Event:
+      type: object
+      required:
+        - eventId
+        - title
+        - description
+        - type
+        - schedule
+        - status
+        - isDisplay
+        - venues
+        - media
+        - releases
+        - sources
+        - performances
+        - setlist
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          $ref: '#/components/schemas/eventDescription'
+        type:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        status:
+          $ref: '#/components/schemas/EventStatusValue'
+        isDisplay:
+          type: boolean
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Venue'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventRelease'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetlistItem'
+      description: イベント
+    EventCreateRequest:
+      type: object
+      required:
+        - title
+        - description
+        - type
+        - schedule
+        - status
+        - isDisplay
+        - venues
+        - media
+        - releases
+        - sources
+        - performances
+        - setlist
+      properties:
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          $ref: '#/components/schemas/eventDescription'
+        type:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        status:
+          $ref: '#/components/schemas/EventStatusValue'
+        isDisplay:
+          type: boolean
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventVenueLink'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventMediaLink'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventReleaseLink'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSetlistItem'
+    EventCreateResponse:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/Event'
+    EventGetResponse:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/Event'
+    EventRelease:
+      type: object
+      required:
+        - releaseId
+        - releaseGroupId
+        - releaseGroupTitle
+        - name
+        - releasedOn
+        - isDisplay
+        - formats
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        releaseGroupTitle:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        isDisplay:
+          type: boolean
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+      description: イベントに関連づけたリリース(版)。isDisplay はリリースとリリースグループがともに公開のとき true
+    EventSearchResponse:
+      type: object
+      required:
+        - events
+        - maxPage
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSummary'
+        maxPage:
+          type: integer
+          format: int32
+    EventSearchSortBy:
+      type: string
+      enum:
+        - schedule
+        - title
+      description: イベント検索のソート条件
+      x-enum-varnames:
+        - schedule
+        - title
+      x-enum-descriptions:
+        - 開催時期
+        - タイトル
+    EventSource:
+      type: object
+      required:
+        - displayName
+        - url
+        - orderNo
+      properties:
+        displayName:
+          $ref: '#/components/schemas/eventSourceName'
+        url:
+          $ref: '#/components/schemas/eventSourceUrl'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: イベント出典
+    EventStatusValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+      description: イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+      x-enum-varnames:
+        - Normal
+        - Postponed
+        - Cancelled
+      x-enum-descriptions:
+        - 通常
+        - 延期
+        - 中止
+    EventSummary:
+      type: object
+      required:
+        - eventId
+        - title
+        - type
+        - schedule
+        - status
+        - isDisplay
+        - venueNames
+        - performanceCount
+        - setlistItemCount
+        - sourceCount
+      properties:
+        eventId:
+          $ref: '#/components/schemas/eventId'
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        type:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        status:
+          $ref: '#/components/schemas/EventStatusValue'
+        isDisplay:
+          type: boolean
+        venueNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/venueName'
+          description: 開催先名。登録順に並べる
+        performanceCount:
+          type: integer
+          format: int32
+          description: 楽曲披露の件数
+        setlistItemCount:
+          type: integer
+          format: int32
+          description: セットリスト項目の件数
+        sourceCount:
+          type: integer
+          format: int32
+          description: 出典の件数
+      description: イベント一覧の 1 行分
+    EventTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 99
+      description: イベント種別
+      x-enum-varnames:
+        - Live
+        - Stream
+        - Exhibition
+        - Radio
+        - Other
+      x-enum-descriptions:
+        - ライブ
+        - 配信
+        - 展覧会
+        - ラジオ
+        - その他
+    EventUpdateRequest:
+      type: object
+      required:
+        - title
+        - description
+        - type
+        - schedule
+        - status
+        - isDisplay
+        - venues
+        - media
+        - releases
+        - sources
+        - performances
+        - setlist
+      properties:
+        title:
+          $ref: '#/components/schemas/eventTitle'
+        description:
+          $ref: '#/components/schemas/eventDescription'
+        type:
+          $ref: '#/components/schemas/EventTypeValue'
+        schedule:
+          $ref: '#/components/schemas/IsekaiObservatory.Packages.Event.EventSchedule'
+        status:
+          $ref: '#/components/schemas/EventStatusValue'
+        isDisplay:
+          type: boolean
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventVenueLink'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventMediaLink'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestEventReleaseLink'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSource'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongPerformance'
+        setlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSetlistItem'
+    EventUpdateResponse:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/Event'
+    GenerateRecoveryCodesResponse:
+      type: object
+      required:
+        - recoveryCodes
+      properties:
+        recoveryCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/recoveryCode'
+    IsekaiObservatory.Admin.Version:
+      type: string
+      enum:
+        - v1
+      x-enum-varnames:
+        - v1
+      x-enum-descriptions:
+        - バージョン 1
+    IsekaiObservatory.Packages.Event.EventSchedule:
+      type: object
+      required:
+        - startOn
+        - endOn
+      properties:
+        startOn:
+          anyOf:
+            - $ref: '#/components/schemas/eventOn'
+            - type: 'null'
+        endOn:
+          anyOf:
+            - $ref: '#/components/schemas/eventOn'
+            - type: 'null'
+      description: イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+    LoginFinishRequest:
+      type: object
+      required:
+        - authCeremonyId
+        - credential
+      properties:
+        authCeremonyId:
+          $ref: '#/components/schemas/authCeremonyId'
+        credential:
+          type: object
+          unevaluatedProperties: {}
+    LoginFinishResponse:
+      type: object
+      required:
+        - accessToken
+        - refreshTokenId
+        - refreshToken
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/accessToken'
+        refreshTokenId:
+          $ref: '#/components/schemas/refreshTokenId'
+        refreshToken:
+          $ref: '#/components/schemas/refreshToken'
+    LoginStartRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          $ref: '#/components/schemas/email'
+    LoginStartResponse:
+      type: object
+      required:
+        - authCeremonyId
+        - publicKey
+      properties:
+        authCeremonyId:
+          $ref: '#/components/schemas/authCeremonyId'
+        publicKey:
+          type: object
+          unevaluatedProperties: {}
+    Media:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+        - isDisplay
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+        isDisplay:
+          type: boolean
+    MediaCreateRequest:
+      type: object
+      required:
+        - title
+        - url
+        - publishedAt
+        - type
+        - isDisplay
+      properties:
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+        isDisplay:
+          type: boolean
+    MediaCreateResponse:
+      type: object
+      required:
+        - media
+      properties:
+        media:
+          $ref: '#/components/schemas/Media'
+    MediaGetResponse:
+      type: object
+      required:
+        - media
+        - songs
+      properties:
+        media:
+          $ref: '#/components/schemas/Media'
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaReferencedSong'
+    MediaReferencedSong:
+      type: object
+      required:
+        - songId
+        - title
+        - songOrderNo
+        - mediaOrderNo
+      properties:
+        songId:
+          $ref: '#/components/schemas/mediaReferencedSongId'
+        title:
+          $ref: '#/components/schemas/mediaReferencedSongTitle'
+        songOrderNo:
+          $ref: '#/components/schemas/orderNo'
+        mediaOrderNo:
+          $ref: '#/components/schemas/orderNo'
+    MediaSearchResponse:
+      type: object
+      required:
+        - media
+        - maxPage
+      properties:
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaSummary'
+        maxPage:
+          type: integer
+          format: int32
+    MediaSearchSortBy:
+      type: string
+      enum:
+        - published_at
+        - title
+      description: メディア検索のソート条件
+      x-enum-varnames:
+        - publishedAt
+        - title
+      x-enum-descriptions:
+        - 公開日
+        - タイトル
+    MediaSummary:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+        - isDisplay
+        - songCount
+        - eventCount
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+        isDisplay:
+          type: boolean
+        songCount:
+          type: integer
+          format: int32
+          description: このメディアをリンクしている楽曲の件数
+        eventCount:
+          type: integer
+          format: int32
+          description: このメディアを関連づけているイベントの件数
+      description: メディア一覧の 1 行分
+    MediaTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 99
+      description: メディア種別の値
+      x-enum-varnames:
+        - Mv
+        - AudioVideo
+        - LiveStream
+        - Short
+        - Post
+        - Other
+      x-enum-descriptions:
+        - MV
+        - 音源動画
+        - 配信
+        - ショート
+        - 投稿
+        - その他
+    MediaUpdateRequest:
+      type: object
+      required:
+        - title
+        - url
+        - publishedAt
+        - type
+        - isDisplay
+      properties:
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+        isDisplay:
+          type: boolean
+    MediaUpdateResponse:
+      type: object
+      required:
+        - media
+      properties:
+        media:
+          $ref: '#/components/schemas/Media'
+    Medium:
+      type: object
+      required:
+        - position
+        - name
+        - tracks
+      properties:
+        position:
+          $ref: '#/components/schemas/orderNo'
+        name:
+          anyOf:
+            - $ref: '#/components/schemas/mediumName'
+            - type: 'null'
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Track'
+      description: リリース内の媒体(トラックリストの区切り)。name は Disc 表示用の任意ラベル
+    PerPage:
+      type: integer
+      format: int32
+      enum:
+        - 25
+        - 50
+        - 100
+      description: 1ページあたりの件数
+      x-enum-varnames:
+        - twentyFive
+        - fifty
+        - oneHundred
+      x-enum-descriptions:
+        - 25 件
+        - 50 件
+        - 100 件
+    PerformancePerson:
+      type: object
+      required:
+        - personId
+        - name
+        - creditName
+        - personGroup
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        creditName:
+          anyOf:
+            - $ref: '#/components/schemas/performanceCreditName'
+            - type: 'null'
+        personGroup:
+          anyOf:
+            - $ref: '#/components/schemas/PerformancePersonGroup'
+            - type: 'null'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
+    PerformancePersonGroup:
+      type: object
+      required:
+        - personGroupId
+        - name
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/personGroupId'
+        name:
+          $ref: '#/components/schemas/personGroupName'
+      description: 共演者が出演したグループ
+    PermissionValue:
+      type: string
+      enum:
+        - read_admin_user
+        - write_admin_user
+        - read_person
+        - write_person
+        - read_song
+        - write_song
+        - read_audit_log
+        - read_media
+        - write_media
+        - read_release
+        - write_release
+        - read_venue
+        - write_venue
+        - read_event
+        - write_event
+      description: 権限の値
+      x-enum-varnames:
+        - ReadAdminUser
+        - WriteAdminUser
+        - ReadPerson
+        - WritePerson
+        - ReadSong
+        - WriteSong
+        - ReadAuditLog
+        - ReadMedia
+        - WriteMedia
+        - ReadRelease
+        - WriteRelease
+        - ReadVenue
+        - WriteVenue
+        - ReadEvent
+        - WriteEvent
+      x-enum-descriptions:
+        - 管理ユーザー閲覧
+        - 管理ユーザー編集
+        - 人物閲覧
+        - 人物編集
+        - 楽曲閲覧
+        - 楽曲編集
+        - 監査ログ閲覧
+        - メディア閲覧
+        - メディア編集
+        - リリース閲覧
+        - リリース編集
+        - 開催先閲覧
+        - 開催先編集
+        - イベント閲覧
+        - イベント編集
+    Person:
+      type: object
+      required:
+        - personId
+        - name
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      examples:
+        - personId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
+          name: テスト人物
+          orderNo: 10
+    PersonCreateRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          $ref: '#/components/schemas/personName'
+    PersonCreateResponse:
+      type: object
+      required:
+        - person
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+    PersonGetResponse:
+      type: object
+      required:
+        - person
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+    PersonGroup:
+      type: object
+      required:
+        - personGroupId
+        - name
+        - members
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/personGroupId'
+        name:
+          $ref: '#/components/schemas/personGroupName'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonGroupMember'
+      description: 共演者をまとめて入力・表示するための人物グループ
+      examples:
+        - personGroupId: 6f0f4c1e-5d6a-4c55-9a43-0d7c2b1a8e10
+          name: テストグループ
+          members:
+            - personId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
+              name: テスト人物
+              orderNo: 1
+    PersonGroupCreateRequest:
+      type: object
+      required:
+        - name
+        - members
+      properties:
+        name:
+          $ref: '#/components/schemas/personGroupName'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestPersonGroupMember'
+    PersonGroupCreateResponse:
+      type: object
+      required:
+        - personGroup
+      properties:
+        personGroup:
+          $ref: '#/components/schemas/PersonGroup'
+    PersonGroupGetResponse:
+      type: object
+      required:
+        - personGroup
+      properties:
+        personGroup:
+          $ref: '#/components/schemas/PersonGroup'
+    PersonGroupMember:
+      type: object
+      required:
+        - personId
+        - name
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: 人物グループのメンバー
+    PersonGroupSearchResponse:
+      type: object
+      required:
+        - personGroups
+        - maxPage
+      properties:
+        personGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonGroupSummary'
+        maxPage:
+          type: integer
+          format: int32
+    PersonGroupSummary:
+      type: object
+      required:
+        - personGroupId
+        - name
+        - members
+        - performanceCount
+      properties:
+        personGroupId:
+          $ref: '#/components/schemas/personGroupId'
+        name:
+          $ref: '#/components/schemas/personGroupName'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonGroupMember'
+        performanceCount:
+          type: integer
+          format: int32
+          description: このグループとして共演が記録されている楽曲披露の件数
+      description: 人物グループ一覧の 1 行分
+    PersonGroupUpdateRequest:
+      type: object
+      required:
+        - name
+        - members
+      properties:
+        name:
+          $ref: '#/components/schemas/personGroupName'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestPersonGroupMember'
+    PersonGroupUpdateResponse:
+      type: object
+      required:
+        - personGroup
+      properties:
+        personGroup:
+          $ref: '#/components/schemas/PersonGroup'
+    PersonListResponse:
+      type: object
+      required:
+        - persons
+      properties:
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+    PersonSearchResponse:
+      type: object
+      required:
+        - persons
+        - maxPage
+      properties:
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonSummary'
+        maxPage:
+          type: integer
+          format: int32
+    PersonSearchSortBy:
+      type: string
+      enum:
+        - name
+        - order_no
+      description: 人物検索のソート条件
+      x-enum-varnames:
+        - name
+        - orderNo
+      x-enum-descriptions:
+        - 人物名
+        - 表示順
+    PersonSummary:
+      type: object
+      required:
+        - personId
+        - name
+        - orderNo
+        - songCount
+        - performanceCount
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: 作詞・作曲・編曲として関わっている楽曲の件数
+        performanceCount:
+          type: integer
+          format: int32
+          description: 共演者として記録されている楽曲披露の件数
+      description: 人物一覧の 1 行分
+    PersonUpdateRequest:
+      type: object
+      required:
+        - name
+        - orderNo
+      properties:
+        name:
+          $ref: '#/components/schemas/personName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    PersonUpdateResponse:
+      type: object
+      required:
+        - person
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+    RecoveryFinishRequest:
+      type: object
+      required:
+        - authCeremonyId
+        - credential
+      properties:
+        authCeremonyId:
+          $ref: '#/components/schemas/authCeremonyId'
+        credential:
+          type: object
+          unevaluatedProperties: {}
+    RecoveryFinishResponse:
+      type: object
+      required:
+        - accessToken
+        - refreshTokenId
+        - refreshToken
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/accessToken'
+        refreshTokenId:
+          $ref: '#/components/schemas/refreshTokenId'
+        refreshToken:
+          $ref: '#/components/schemas/refreshToken'
+    RecoveryStartRequest:
+      type: object
+      required:
+        - email
+        - recoveryCode
+        - name
+      properties:
+        email:
+          $ref: '#/components/schemas/email'
+        recoveryCode:
+          $ref: '#/components/schemas/recoveryCode'
+        name:
+          $ref: '#/components/schemas/adminUserName'
+    RecoveryStartResponse:
+      type: object
+      required:
+        - authCeremonyId
+        - publicKey
+      properties:
+        authCeremonyId:
+          $ref: '#/components/schemas/authCeremonyId'
+        publicKey:
+          type: object
+          unevaluatedProperties: {}
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refreshTokenId
+        - refreshToken
+      properties:
+        refreshTokenId:
+          $ref: '#/components/schemas/refreshTokenId'
+        refreshToken:
+          $ref: '#/components/schemas/refreshToken'
+    RefreshTokenResponse:
+      type: object
+      required:
+        - accessToken
+        - refreshTokenId
+        - refreshToken
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/accessToken'
+        refreshTokenId:
+          $ref: '#/components/schemas/refreshTokenId'
+        refreshToken:
+          $ref: '#/components/schemas/refreshToken'
+    RegisterFinishRequest:
+      type: object
+      required:
+        - authCeremonyId
+        - token
+        - credential
+      properties:
+        authCeremonyId:
+          $ref: '#/components/schemas/authCeremonyId'
+        token:
+          $ref: '#/components/schemas/registrationToken'
+        credential:
+          type: object
+          unevaluatedProperties: {}
+    RegisterFinishResponse:
+      type: object
+      required:
+        - accessToken
+        - refreshTokenId
+        - refreshToken
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/accessToken'
+        refreshTokenId:
+          $ref: '#/components/schemas/refreshTokenId'
+        refreshToken:
+          $ref: '#/components/schemas/refreshToken'
+    RegisterStartRequest:
+      type: object
+      required:
+        - token
+        - email
+        - name
+      properties:
+        token:
+          $ref: '#/components/schemas/registrationToken'
+        email:
+          $ref: '#/components/schemas/email'
+        name:
+          $ref: '#/components/schemas/adminUserName'
+    RegisterStartResponse:
+      type: object
+      required:
+        - authCeremonyId
+        - publicKey
+      properties:
+        authCeremonyId:
+          $ref: '#/components/schemas/authCeremonyId'
+        publicKey:
+          type: object
+          unevaluatedProperties: {}
+    Release:
+      type: object
+      required:
+        - releaseId
+        - releaseGroupId
+        - name
+        - releasedOn
+        - description
+        - isDisplay
+        - orderNo
+        - formats
+        - media
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        description:
+          type: string
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+          minItems: 1
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Medium'
+      description: リリース(実際に世に出た版・盤)
+    ReleaseCreateRequest:
+      type: object
+      required:
+        - releaseGroupId
+        - name
+        - releasedOn
+        - description
+        - isDisplay
+        - orderNo
+        - formats
+        - media
+      properties:
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        description:
+          type: string
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+          minItems: 1
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Medium'
+    ReleaseCreateResponse:
+      type: object
+      required:
+        - release
+      properties:
+        release:
+          $ref: '#/components/schemas/Release'
+    ReleaseFormatValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 99
+      description: 提供形態
+      x-enum-varnames:
+        - Digital
+        - Cd
+        - Dvd
+        - BluRay
+        - Other
+      x-enum-descriptions:
+        - 配信
+        - CD
+        - DVD
+        - Blu-ray
+        - その他
+    ReleaseGetResponse:
+      type: object
+      required:
+        - release
+        - releaseGroupTitle
+        - songs
+      properties:
+        release:
+          $ref: '#/components/schemas/Release'
+        releaseGroupTitle:
+          $ref: '#/components/schemas/releaseGroupTitle'
+          description: 所属リリースグループのタイトル。編集対象の文脈表示用
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseReferencedSong'
+    ReleaseGroup:
+      type: object
+      required:
+        - releaseGroupId
+        - title
+        - type
+        - description
+        - isDisplay
+        - orderNo
+      properties:
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        title:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        type:
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
+        description:
+          type: string
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: リリースグループ(作品)
+    ReleaseGroupCreateRequest:
+      type: object
+      required:
+        - title
+        - type
+        - description
+        - isDisplay
+        - orderNo
+      properties:
+        title:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        type:
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
+        description:
+          type: string
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    ReleaseGroupCreateResponse:
+      type: object
+      required:
+        - releaseGroup
+      properties:
+        releaseGroup:
+          $ref: '#/components/schemas/ReleaseGroup'
+    ReleaseGroupGetResponse:
+      type: object
+      required:
+        - releaseGroup
+        - releases
+      properties:
+        releaseGroup:
+          $ref: '#/components/schemas/ReleaseGroup'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseGroupReferencedRelease'
+    ReleaseGroupReferencedRelease:
+      type: object
+      required:
+        - releaseId
+        - name
+        - releasedOn
+        - isDisplay
+        - orderNo
+        - formats
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+      description: リリースグループ傘下のリリース 1 件分の概要
+    ReleaseGroupSearchResponse:
+      type: object
+      required:
+        - releaseGroups
+        - maxPage
+      properties:
+        releaseGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseGroupSummary'
+        maxPage:
+          type: integer
+          format: int32
+    ReleaseGroupSearchSortBy:
+      type: string
+      enum:
+        - first_released_on
+        - title
+      description: リリースグループ検索のソート条件
+      x-enum-varnames:
+        - firstReleasedOn
+        - title
+      x-enum-descriptions:
+        - 初リリース日
+        - タイトル
+    ReleaseGroupSummary:
+      type: object
+      required:
+        - releaseGroupId
+        - title
+        - type
+        - description
+        - isDisplay
+        - orderNo
+        - firstReleasedOn
+        - releaseCount
+        - songCount
+      properties:
+        releaseGroupId:
+          $ref: '#/components/schemas/releaseGroupId'
+        title:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        type:
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
+        description:
+          type: string
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        firstReleasedOn:
+          anyOf:
+            - $ref: '#/components/schemas/releasedOn'
+            - type: 'null'
+        releaseCount:
+          type: integer
+          format: int32
+          description: 傘下のリリース (版) の件数
+        songCount:
+          type: integer
+          format: int32
+          description: 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
+      description: リリースグループ一覧の 1 行分。firstReleasedOn は傘下リリースの最古発売日(リリース未登録なら null)
+    ReleaseGroupTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+        - 99
+      description: リリースグループ種別
+      x-enum-varnames:
+        - Single
+        - Album
+        - Ep
+        - Other
+      x-enum-descriptions:
+        - シングル
+        - アルバム
+        - EP
+        - その他
+    ReleaseGroupUpdateRequest:
+      type: object
+      required:
+        - title
+        - type
+        - description
+        - isDisplay
+        - orderNo
+      properties:
+        title:
+          $ref: '#/components/schemas/releaseGroupTitle'
+        type:
+          $ref: '#/components/schemas/ReleaseGroupTypeValue'
+        description:
+          type: string
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    ReleaseGroupUpdateResponse:
+      type: object
+      required:
+        - releaseGroup
+      properties:
+        releaseGroup:
+          $ref: '#/components/schemas/ReleaseGroup'
+    ReleaseReferencedSong:
+      type: object
+      required:
+        - mediumPosition
+        - trackNo
+        - songId
+        - title
+      properties:
+        mediumPosition:
+          $ref: '#/components/schemas/orderNo'
+        trackNo:
+          $ref: '#/components/schemas/orderNo'
+        songId:
+          anyOf:
+            - $ref: '#/components/schemas/uuid'
+            - type: 'null'
+        title:
+          $ref: '#/components/schemas/title'
+      description: 'リリース収録曲の read model。参照トラックの title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る'
+    ReleaseUpdateRequest:
+      type: object
+      required:
+        - name
+        - releasedOn
+        - description
+        - isDisplay
+        - orderNo
+        - formats
+        - media
+      properties:
+        name:
+          $ref: '#/components/schemas/releaseName'
+        releasedOn:
+          $ref: '#/components/schemas/releasedOn'
+        description:
+          type: string
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseFormatValue'
+          minItems: 1
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Medium'
+    ReleaseUpdateResponse:
+      type: object
+      required:
+        - release
+      properties:
+        release:
+          $ref: '#/components/schemas/Release'
+    RequestEventMediaLink:
+      type: object
+      required:
+        - mediaId
+        - orderNo
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    RequestEventReleaseLink:
+      type: object
+      required:
+        - releaseId
+        - orderNo
+      properties:
+        releaseId:
+          $ref: '#/components/schemas/releaseId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    RequestEventVenueLink:
+      type: object
+      required:
+        - venueId
+        - orderNo
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    RequestPerformancePerson:
+      type: object
+      required:
+        - personId
+        - creditName
+        - orderNo
+        - personGroupId
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        creditName:
+          anyOf:
+            - $ref: '#/components/schemas/performanceCreditName'
+            - type: 'null'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        personGroupId:
+          anyOf:
+            - $ref: '#/components/schemas/personGroupId'
+            - type: 'null'
+    RequestPersonGroupMember:
+      type: object
+      required:
+        - personId
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: The template for picking properties.
+    RequestSetlistItem:
+      type: object
+      required:
+        - setlistItemId
+        - orderNo
+        - label
+        - performanceIds
+      properties:
+        setlistItemId:
+          $ref: '#/components/schemas/setlistItemId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        label:
+          anyOf:
+            - $ref: '#/components/schemas/setlistLabel'
+            - type: 'null'
+        performanceIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/performanceId'
+    RequestSongMediaLink:
+      type: object
+      required:
+        - mediaId
+        - orderNo
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    RequestSongPerformance:
+      type: object
+      required:
+        - performanceId
+        - songId
+        - orderNo
+        - coVocalists
+      properties:
+        performanceId:
+          $ref: '#/components/schemas/performanceId'
+        songId:
+          $ref: '#/components/schemas/songId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        coVocalists:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestPerformancePerson'
+    RequestSongPerson:
+      type: object
+      required:
+        - personId
+        - role
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        role:
+          $ref: '#/components/schemas/SongPersonRole'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      description: The template for picking properties.
+    RequestSongTag:
+      type: object
+      required:
+        - songTagId
+      properties:
+        songTagId:
+          $ref: '#/components/schemas/songTagId'
+      description: The template for picking properties.
+    RoleValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 役割の値
+      x-enum-varnames:
+        - Privilege
+        - Console
+        - General
+      x-enum-descriptions:
+        - 特権
+        - コンソール
+        - 一般
+    SetlistItem:
+      type: object
+      required:
+        - setlistItemId
+        - orderNo
+        - label
+        - performances
+      properties:
+        setlistItemId:
+          $ref: '#/components/schemas/setlistItemId'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        label:
+          anyOf:
+            - $ref: '#/components/schemas/setlistLabel'
+            - type: 'null'
+        performances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerformance'
+      description: セットリストの 1 項目
+    Song:
+      type: object
+      required:
+        - songId
+        - title
+        - description
+        - lyricsLink
+        - type
+        - isDisplay
+        - orderNo
+        - persons
+        - tags
+        - media
+      properties:
+        songId:
+          $ref: '#/components/schemas/songId'
+        title:
+          $ref: '#/components/schemas/title'
+        description:
+          $ref: '#/components/schemas/description'
+        lyricsLink:
+          anyOf:
+            - $ref: '#/components/schemas/lyricsLink'
+            - type: 'null'
+        type:
+          $ref: '#/components/schemas/SongTypeValue'
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongPerson'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongAttachedTag'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongLinkedMedia'
+      examples:
+        - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+          title: テスト楽曲
+          description: テスト楽曲説明
+          lyricsLink: https://example.com/lyrics
+          type: 1
+          isDisplay: true
+          orderNo: 1
+          persons:
+            - personId: a4d01e9d-e593-4bd9-ba83-e9a7dd3887cd
+              name: テスト人物
+              role: 1
+              orderNo: 1
+            - personId: a4d01e9d-e593-4bd9-ba83-e9a7dd3887cd
+              name: テスト人物
+              role: 2
+              orderNo: 2
+          tags:
+            - songTagId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+              name: テストタグA
+          media:
+            - mediaId: 11111111-1111-1111-1111-111111111111
+              title: テストメディアMV
+              url: https://example.com/media
+              publishedAt: '2024-03-01T12:00:00+09:00'
+              type: 1
+              isDisplay: true
+              orderNo: 1
+    SongAttachedTag:
+      type: object
+      required:
+        - songTagId
+        - name
+      properties:
+        songTagId:
+          $ref: '#/components/schemas/songTagId'
+        name:
+          $ref: '#/components/schemas/songTagName'
+    SongCreateRequest:
+      type: object
+      required:
+        - title
+        - description
+        - lyricsLink
+        - type
+        - isDisplay
+        - persons
+        - tags
+        - media
+      properties:
+        title:
+          $ref: '#/components/schemas/title'
+        description:
+          $ref: '#/components/schemas/description'
+        lyricsLink:
+          anyOf:
+            - $ref: '#/components/schemas/lyricsLink'
+            - type: 'null'
+        type:
+          $ref: '#/components/schemas/SongTypeValue'
+        isDisplay:
+          type: boolean
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongPerson'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongTag'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongMediaLink'
+    SongCreateResponse:
+      type: object
+      required:
+        - song
+      properties:
+        song:
+          $ref: '#/components/schemas/Song'
+    SongGetResponse:
+      type: object
+      required:
+        - song
+      properties:
+        song:
+          $ref: '#/components/schemas/Song'
+    SongLinkedMedia:
+      type: object
+      required:
+        - mediaId
+        - title
+        - url
+        - publishedAt
+        - type
+        - isDisplay
+        - orderNo
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/mediaId'
+        title:
+          $ref: '#/components/schemas/mediaTitle'
+        url:
+          $ref: '#/components/schemas/mediaUrl'
+        publishedAt:
+          $ref: '#/components/schemas/mediaPublishedAt'
+        type:
+          $ref: '#/components/schemas/MediaTypeValue'
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      examples:
+        - mediaId: 11111111-1111-1111-1111-111111111111
+          title: テストメディアMV
+          url: https://example.com/media
+          publishedAt: '2024-03-01T12:00:00+09:00'
+          type: 1
+          isDisplay: true
+          orderNo: 1
+    SongPerformance:
+      type: object
+      required:
+        - performanceId
+        - songId
+        - songTitle
+        - orderNo
+        - coVocalists
+      properties:
+        performanceId:
+          $ref: '#/components/schemas/performanceId'
+        songId:
+          $ref: '#/components/schemas/songId'
+        songTitle:
+          $ref: '#/components/schemas/title'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        coVocalists:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerformancePerson'
+      description: イベントに紐づく楽曲披露
+    SongPerson:
+      type: object
+      required:
+        - personId
+        - name
+        - role
+        - orderNo
+      properties:
+        personId:
+          $ref: '#/components/schemas/personId'
+        name:
+          $ref: '#/components/schemas/personName'
+        role:
+          $ref: '#/components/schemas/SongPersonRole'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    SongPersonRole:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+      x-enum-varnames:
+        - Lyricist
+        - Composer
+        - Arranger
+      x-enum-descriptions:
+        - 作詞
+        - 作曲
+        - 編曲
+    SongSearchResponse:
+      type: object
+      required:
+        - songs
+        - maxPage
+      properties:
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongSummary'
+        maxPage:
+          type: integer
+          format: int32
+    SongSearchSortBy:
+      type: string
+      enum:
+        - title
+        - order_no
+      description: 楽曲検索のソート条件
+      x-enum-varnames:
+        - title
+        - orderNo
+      x-enum-descriptions:
+        - 楽曲名
+        - 表示順
+    SongSearchTypeValue:
+      type: string
+      enum:
+        - '1'
+        - '2'
+        - '3'
+      description: 楽曲検索API用の楽曲種別
+      x-enum-varnames:
+        - Original
+        - Cover
+        - Guest
+      x-enum-descriptions:
+        - オリジナル曲
+        - カバー曲
+        - 参加曲
+    SongSummary:
+      type: object
+      required:
+        - songId
+        - title
+        - type
+        - isDisplay
+        - orderNo
+        - performanceCount
+        - mediaCount
+        - personCount
+        - releaseCount
+      properties:
+        songId:
+          $ref: '#/components/schemas/songId'
+        title:
+          $ref: '#/components/schemas/title'
+        type:
+          $ref: '#/components/schemas/SongTypeValue'
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        performanceCount:
+          type: integer
+          format: int32
+          description: 楽曲披露の件数
+        mediaCount:
+          type: integer
+          format: int32
+          description: リンクしているメディアの件数
+        personCount:
+          type: integer
+          format: int32
+          description: 作詞・作曲・編曲として登録されている人物の人数。役割が重なる人物は 1 人と数える
+        releaseCount:
+          type: integer
+          format: int32
+          description: 収録しているリリースの件数
+      examples:
+        - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+          title: テスト楽曲
+          type: 1
+          isDisplay: true
+          orderNo: 1
+          performanceCount: 3
+          mediaCount: 1
+          personCount: 2
+          releaseCount: 1
+    SongTag:
+      type: object
+      required:
+        - songTagId
+        - name
+        - orderNo
+      properties:
+        songTagId:
+          $ref: '#/components/schemas/songTagId'
+        name:
+          $ref: '#/components/schemas/songTagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      examples:
+        - songTagId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+          name: テストタグA
+          orderNo: 10
+    SongTagCreateRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          $ref: '#/components/schemas/songTagName'
+    SongTagCreateResponse:
+      type: object
+      required:
+        - tag
+      properties:
+        tag:
+          $ref: '#/components/schemas/SongTag'
+    SongTagGetResponse:
+      type: object
+      required:
+        - tag
+      properties:
+        tag:
+          $ref: '#/components/schemas/SongTag'
+    SongTagListResponse:
+      type: object
+      required:
+        - tags
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongTag'
+    SongTagSearchResponse:
+      type: object
+      required:
+        - tags
+        - maxPage
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongTagSummary'
+        maxPage:
+          type: integer
+          format: int32
+    SongTagSearchSortBy:
+      type: string
+      enum:
+        - name
+        - order_no
+      description: 楽曲タグ検索のソート条件
+      x-enum-varnames:
+        - name
+        - orderNo
+      x-enum-descriptions:
+        - 楽曲タグ名
+        - 表示順
+    SongTagSummary:
+      type: object
+      required:
+        - songTagId
+        - name
+        - orderNo
+        - songCount
+      properties:
+        songTagId:
+          $ref: '#/components/schemas/songTagId'
+        name:
+          $ref: '#/components/schemas/songTagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: このタグが付いている楽曲の件数
+      description: 楽曲タグ一覧の 1 行分
+    SongTagUpdateRequest:
+      type: object
+      required:
+        - name
+        - orderNo
+      properties:
+        name:
+          $ref: '#/components/schemas/songTagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    SongTagUpdateResponse:
+      type: object
+      required:
+        - tag
+      properties:
+        tag:
+          $ref: '#/components/schemas/SongTag'
+    SongTypeValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 楽曲種別の値
+      x-enum-varnames:
+        - Original
+        - Cover
+        - Guest
+      x-enum-descriptions:
+        - オリジナル曲
+        - カバー曲
+        - 参加曲
+    SongUpdateRequest:
+      type: object
+      required:
+        - title
+        - description
+        - lyricsLink
+        - type
+        - isDisplay
+        - orderNo
+        - persons
+        - tags
+        - media
+      properties:
+        title:
+          $ref: '#/components/schemas/title'
+        description:
+          $ref: '#/components/schemas/description'
+        lyricsLink:
+          anyOf:
+            - $ref: '#/components/schemas/lyricsLink'
+            - type: 'null'
+        type:
+          $ref: '#/components/schemas/SongTypeValue'
+        isDisplay:
+          type: boolean
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongPerson'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongTag'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSongMediaLink'
+    SongUpdateResponse:
+      type: object
+      required:
+        - song
+      properties:
+        song:
+          $ref: '#/components/schemas/Song'
+    SortOrder:
+      type: string
+      enum:
+        - asc
+        - desc
+      description: ソート順
+      x-enum-varnames:
+        - asc
+        - desc
+      x-enum-descriptions:
+        - 昇順
+        - 降順
+    Track:
+      type: object
+      required:
+        - songId
+        - title
+        - trackNo
+      properties:
+        songId:
+          anyOf:
+            - $ref: '#/components/schemas/uuid'
+            - type: 'null'
+        title:
+          anyOf:
+            - $ref: '#/components/schemas/trackTitle'
+            - type: 'null'
+        trackNo:
+          $ref: '#/components/schemas/orderNo'
+      description: 収録曲。songId / title の少なくとも一方を指定する(検証はサーバー側の責務)。songId ありは Song 集約を参照する参照トラックで、title を併記すると表示名を上書きする。songId なしは表示専用のタイトルのみトラック
+    Venue:
+      type: object
+      required:
+        - venueId
+        - name
+        - kind
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
+      examples:
+        - venueId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
+          name: 会場サンプルA
+          kind: 1
+    VenueCreateRequest:
+      type: object
+      required:
+        - name
+        - kind
+      properties:
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
+    VenueCreateResponse:
+      type: object
+      required:
+        - venue
+      properties:
+        venue:
+          $ref: '#/components/schemas/Venue'
+    VenueGetResponse:
+      type: object
+      required:
+        - venue
+      properties:
+        venue:
+          $ref: '#/components/schemas/Venue'
+    VenueKindValue:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+      description: 開催先種別の値
+      x-enum-varnames:
+        - Physical
+        - Online
+      x-enum-descriptions:
+        - 現地
+        - オンライン
+    VenueSearchResponse:
+      type: object
+      required:
+        - venues
+        - maxPage
+      properties:
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/VenueSummary'
+        maxPage:
+          type: integer
+          format: int32
+    VenueSearchSortBy:
+      type: string
+      enum:
+        - name
+      description: 開催先検索のソート条件
+      x-enum-varnames:
+        - name
+      x-enum-descriptions:
+        - 開催先名
+    VenueSummary:
+      type: object
+      required:
+        - venueId
+        - name
+        - kind
+        - eventCount
+      properties:
+        venueId:
+          $ref: '#/components/schemas/venueId'
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
+        eventCount:
+          type: integer
+          format: int32
+          description: この開催先を使っているイベントの件数
+      description: 開催先一覧の 1 行分
+    VenueUpdateRequest:
+      type: object
+      required:
+        - name
+        - kind
+      properties:
+        name:
+          $ref: '#/components/schemas/venueName'
+        kind:
+          $ref: '#/components/schemas/VenueKindValue'
+    VenueUpdateResponse:
+      type: object
+      required:
+        - venue
+      properties:
+        venue:
+          $ref: '#/components/schemas/Venue'
+    Version:
+      type: string
+      enum:
+        - v1
+      x-enum-varnames:
+        - v1
+      x-enum-descriptions:
+        - バージョン 1
+    accessToken:
+      type: string
+      format: password
+      description: アクセストークン(JWT)
+    adminUserId:
+      type: string
+      format: uuid
+      description: 管理ユーザーID
+    adminUserName:
+      type: string
+      description: 管理ユーザー名
+    auditLogId:
+      type: string
+      format: uuid
+      description: 監査ログID
+    authCeremonyId:
+      type: string
+      format: uuid
+      description: 認証セッションID
+    createdAt:
+      type: string
+      format: date-time
+      description: 作成日時
+    description:
+      type: string
+      description: 楽曲の説明
+    email:
+      type: string
+      format: email
+      description: メールアドレス
+    eventDescription:
+      type: string
+      description: イベント説明
+    eventId:
+      type: string
+      format: uuid
+      description: イベントID
+    eventOn:
+      type: string
+      format: date
+      description: イベント日
+    eventSourceName:
+      type: string
+      minLength: 1
+      description: イベントの出典表示名
+    eventSourceUrl:
+      type: string
+      format: uri
+      description: イベントの出典URL
+    eventTitle:
+      type: string
+      minLength: 1
+      description: イベントタイトル
+    lyricsLink:
+      type: string
+      format: uri
+      description: 歌詞リンク
+    mediaId:
+      type: string
+      format: uuid
+      description: メディアID
+    mediaPublishedAt:
+      type: string
+      format: date-time
+      description: 公開日時
+    mediaReferencedSongId:
+      type: string
+      format: uuid
+      description: メディアを参照している楽曲ID
+    mediaReferencedSongTitle:
+      type: string
+      minLength: 1
+      description: メディアを参照している楽曲名
+    mediaTitle:
+      type: string
+      minLength: 1
+      description: メディアタイトル
+    mediaUrl:
+      type: string
+      format: uri
+      description: メディアURL
+    mediumName:
+      type: string
+      minLength: 1
+      description: 媒体の表示ラベル(CD1 / Blu-ray など)
+    orderNo:
+      type: integer
+      format: int32
+      minimum: 1
+      description: 表示順
+    page:
+      type: integer
+      format: int32
+      minimum: 1
+      description: ページ番号
+    performanceCreditName:
+      type: string
+      minLength: 1
+      description: 共演者としてのクレジット名
+    performanceId:
+      type: string
+      format: uuid
+      description: 楽曲披露ID
+    personGroupId:
+      type: string
+      format: uuid
+      description: 人物グループID
+    personGroupName:
+      type: string
+      minLength: 1
+      description: 人物グループ名
+    personId:
+      type: string
+      format: uuid
+      description: 人物ID
+    personName:
+      type: string
+      minLength: 1
+      description: 人物名
+    recoveryCode:
+      type: string
+      format: password
+      description: リカバリーコード(平文)
+    refreshToken:
+      type: string
+      format: password
+      description: リフレッシュトークン
+    refreshTokenId:
+      type: string
+      format: uuid
+      description: リフレッシュトークンID
+    registrationToken:
+      type: string
+      format: password
+      description: 管理ユーザー登録トークン(平文)
+    releaseGroupId:
+      type: string
+      format: uuid
+      description: リリースグループID
+    releaseGroupTitle:
+      type: string
+      minLength: 1
+      description: リリースグループタイトル
+    releaseId:
+      type: string
+      format: uuid
+      description: リリースID
+    releaseName:
+      type: string
+      description: リリース版名。任意項目で、無しは空文字
+    releasedOn:
+      type: string
+      format: date
+      description: 発売日
+    setlistItemId:
+      type: string
+      format: uuid
+      description: セットリスト項目ID
+    setlistLabel:
+      type: string
+      minLength: 1
+      description: セットリスト項目の表示名
+    songId:
+      type: string
+      format: uuid
+      description: 楽曲ID
+    songTagId:
+      type: string
+      format: uuid
+      description: 楽曲タグID
+    songTagName:
+      type: string
+      minLength: 1
+      description: 楽曲タグ名
+    title:
+      type: string
+      minLength: 1
+      description: 楽曲名
+    trackTitle:
+      type: string
+      minLength: 1
+      description: トラックの表示名。参照トラックでは楽曲名の上書き、タイトルのみトラックでは必須のタイトル
+    uuid:
+      type: string
+      format: uuid
+      description: UUID v4
+    venueId:
+      type: string
+      format: uuid
+      description: 開催先ID
+    venueName:
+      type: string
+      minLength: 1
+      maxLength: 255
+      description: 開催先名
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: Bearer
+servers:
+  - url: https://local.api.isekaijoucho.fan/admin/{version}
+    description: ローカル環境
+    variables:
+      version:
+        default: ''
+        enum:
+          - v1

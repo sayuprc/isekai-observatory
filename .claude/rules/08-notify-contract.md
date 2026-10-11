@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/notify-contract/**"
+  - "src/notification/contract/**"
 ---
 
 # Notify Contract 規約
@@ -18,7 +18,7 @@ paths:
 ## 実装規約
 
 - Discord 配達や Pub/Sub publish は持たない。契約と検証だけに閉じる
-- 契約の詳細は `src/notify-contract/README.md` を Source of Truth とする
+- 契約の詳細は `src/notification/contract/README.md` を Source of Truth とする
 - `notify-publish` / `discord-notifier` は `moon.work` 経由でこのモジュールに依存する
 
 ## 検証

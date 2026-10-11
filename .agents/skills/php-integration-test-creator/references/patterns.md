@@ -1,39 +1,9 @@
 # PHP インテグレーションテストパターン
 
-このプロジェクトでは、実際のデータベースを使用したインテグレーションテストを実施しています
-
-## 一般的な構造
-
-- **場所**: `src/server/tests/Integration/` に配置されます。ディレクトリ構造は対象クラスと一致させます
-- **基底クラス**: `Tests\Support\DatabaseTestCase` を継承します
-- **トレイト**: `Tests\Support\Domain\EntityFactory` と `Tests\Support\Domain\EntityStore` を使用します
-- **テストケース**: Unit テストがある場合、ハッピーパスのみを記述してください
-
-## データ準備 (シード)
-
-テスト実行前に必要なデータを `EntityFactory` で生成し、`EntityStore` または実際のリポジトリで保存します
-
-```php
-use Tests\Support\Domain\EntityFactory;
-use Tests\Support\Domain\EntityStore;
-
-class MyTest extends DatabaseTestCase
-{
-    use EntityFactory;
-    use EntityStore;
-
-    // EntityStore のヘルパーを使う
-    $creator = $this->createCreator($this->generateUuid(), '名前');
-    $this->storeCreators($creator);
-
-    // または直接リポジトリを使う
-    $this->app->make(CreatorRepository::class)->save($creator);
-}
-```
+共通規約は [../php-unit-test-creator/references/common.md](../php-unit-test-creator/references/common.md) を正とする
+Unit がある場合、Integration はハッピーパス中心でよい
 
 ## インスタンス化
-
-モックではなく、Laravel のサービスコンテナから実体を解決します
 
 ```php
 private function getInstance(): CreateUseCase
@@ -42,18 +12,15 @@ private function getInstance(): CreateUseCase
 }
 ```
 
-## 検証 (アサーション)
-
-戻り値の検証に加え、リポジトリの状態を確認します
+## データ準備と検証
 
 ```php
-// 結果の確認 (OutputData、または expectException() で例外)
-$this->assertSame('テスト楽曲', $result->song->title->value);
+$this->storeSongs($this->createSong(/* ... */));
 
-// 永続化されたデータの確認
+$result = $this->getInstance()->handle(new CreateInputData(/* ... */));
+
+$this->assertSame('テスト楽曲', $result->song->title->value);
 $this->assertDatabaseHas('songs', ['title' => 'テスト楽曲']);
 ```
 
-## 注意点
-
-- `DatabaseTestCase` が `DatabaseTransactions` トレイトを持ち、各テスト後にロールバックします
+`DatabaseTestCase` は各テスト後にロールバックする

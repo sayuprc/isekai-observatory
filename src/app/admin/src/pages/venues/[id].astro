@@ -1,0 +1,14 @@
+---
+import { DetailView } from '../../components/venue/EditableForm';
+import Layout from '../../layouts/Layout.astro';
+
+const { id } = Astro.params;
+
+if (typeof id !== 'string') {
+  throw new Error('URL が不正');
+}
+---
+
+<Layout pageTitle="開催先詳細">
+  <DetailView venueId={id} client:only="solid-js" />
+</Layout>

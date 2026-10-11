@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shared helpers for agent hooks (Claude / Codex / Cursor).
+# Shared helpers for agent hooks (Codex / Cursor).
 
 hook_input="${hook_input-}"
 

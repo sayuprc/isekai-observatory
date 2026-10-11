@@ -1,5 +1,4 @@
-ARG BUN_VERSION
-FROM oven/bun:${BUN_VERSION} AS build
+FROM oven/bun:1.4.2 AS build
 
 ENV MISE_AUTO_INSTALL=false
 
@@ -25,12 +24,12 @@ RUN mise trust \
 
 WORKDIR /app/src
 
-COPY src/package.json src/pnpm-lock.yaml src/pnpm-workspace.yaml ./
-COPY src/admin/package.json admin/package.json
+COPY src/app/package.json src/app/pnpm-lock.yaml src/app/pnpm-workspace.yaml ./
+COPY src/app/admin/package.json admin/package.json
 
 RUN mise exec -- pnpm install --frozen-lockfile --filter admin --prod
 
-COPY src/admin admin
+COPY src/app/admin admin
 
 ARG PUBLIC_APP_URL
 ENV PUBLIC_APP_URL=${PUBLIC_APP_URL}
@@ -38,8 +37,7 @@ ENV ADMIN_SSR_NO_EXTERNAL=true
 
 RUN bun --filter admin build
 
-ARG BUN_VERSION
-FROM oven/bun:${BUN_VERSION}-slim AS runtime
+FROM oven/bun:1.4.2-slim AS runtime
 
 ENV TZ=Asia/Tokyo
 

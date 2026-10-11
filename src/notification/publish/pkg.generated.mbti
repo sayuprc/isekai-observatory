@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "isekai-observatory/notify-publish"
+
+import {
+  "isekai-observatory/notify-contract",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn build_publish_body(String) -> Json
+
+pub async fn fetch_access_token(Config) -> String
+
+pub async fn publish_notification(Config, String) -> Unit
+
+pub async fn run() -> Unit
+
+pub fn validate_notification_json(String) -> Unit raise @notify-contract.NotificationError
+
+// Errors
+
+// Types and methods
+pub(all) struct Config {
+  project : String
+  topic : String
+  metadata_base_url : String
+} derive(Eq, @debug.Debug)
+pub fn Config::access_token_url(Self) -> String
+#deprecated
+pub fn Config::equal(Self, Self) -> Bool
+pub fn Config::from_env() -> Self raise
+#deprecated
+pub fn Config::not_equal(Self, Self) -> Bool
+pub fn Config::publish_url(Self) -> String
+#deprecated
+pub fn Config::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

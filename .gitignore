@@ -5,3 +5,7 @@ mise.*.toml
 
 # APM dependencies
 apm_modules/
+
+# Local execution plans
+docs/exec-plans/active/*
+!docs/exec-plans/active/README.md

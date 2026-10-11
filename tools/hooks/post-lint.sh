@@ -40,14 +40,14 @@ case "$file" in
 esac
 
 case "$file" in
-  src/contracts/*.tsp|*/src/contracts/*.tsp|src/contracts/scripts/*.ts|*/src/contracts/scripts/*.ts|src/contracts/scripts/*.js|*/src/contracts/scripts/*.js|src/contracts/package.json|*/src/contracts/package.json|src/pnpm-lock.yaml|*/src/pnpm-lock.yaml|src/pnpm-workspace.yaml|*/src/pnpm-workspace.yaml|src/contracts/tspconfig.yaml|*/src/contracts/tspconfig.yaml)
+  src/app/contracts/*.tsp|*/src/app/contracts/*.tsp|src/app/contracts/scripts/*.ts|*/src/app/contracts/scripts/*.ts|src/app/contracts/scripts/*.js|*/src/app/contracts/scripts/*.js|src/app/contracts/package.json|*/src/app/contracts/package.json|src/app/pnpm-lock.yaml|*/src/app/pnpm-lock.yaml|src/app/pnpm-workspace.yaml|*/src/app/pnpm-workspace.yaml|src/app/contracts/tspconfig.yaml|*/src/app/contracts/tspconfig.yaml)
     mkdir -p "$hook_state_dir"
     : > "$contracts_stop_marker"
     ;;
 esac
 
 case "$file" in
-  */src/server/*.php)
+  */src/app/server/*.php)
     cd "$repo_root"
 
     # Docker コンテナが起動していなければエラーフィードバック
@@ -59,7 +59,7 @@ FIX: mise run up を実行してコンテナを起動してください。"
     fi
 
     # コンテナ内パスに変換
-    container_path="${file#*src/server/}"
+    container_path="${file#*src/app/server/}"
 
     # 自動修正
     mise run api:ecs:fix -- "$container_path" >/dev/null 2>&1 || true
@@ -81,8 +81,8 @@ ${mago_diag}"
     fi
     ;;
 
-  */src/admin/*.ts|*/src/admin/*.tsx|*/src/admin/*.js|*/src/admin/*.jsx|*/src/admin/*.mjs)
-    cd "$repo_root/src/admin"
+  */src/app/admin/*.ts|*/src/app/admin/*.tsx|*/src/app/admin/*.js|*/src/app/admin/*.jsx|*/src/app/admin/*.mjs)
+    cd "$repo_root/src/app/admin"
 
     # Oxlint 自動修正
     bunx oxlint --fix "$file" >/dev/null 2>&1 || true
@@ -95,8 +95,8 @@ ${mago_diag}"
     fi
     ;;
 
-  */src/admin/*.astro)
-    cd "$repo_root/src/admin"
+  */src/app/admin/*.astro)
+    cd "$repo_root/src/app/admin"
 
     # ESLint
     bunx eslint --fix "$file" >/dev/null 2>&1 || true
@@ -120,8 +120,8 @@ ${mago_diag}"
     fi
     ;;
 
-  */src/admin/*.css)
-    cd "$repo_root/src/admin"
+  */src/app/admin/*.css)
+    cd "$repo_root/src/app/admin"
 
     # Stylelint 自動修正
     bunx stylelint --fix "$file" >/dev/null 2>&1 || true
@@ -134,8 +134,8 @@ ${mago_diag}"
     fi
     ;;
 
-  */src/viewer/*.ts|*/src/viewer/*.tsx|*/src/viewer/*.js|*/src/viewer/*.jsx|*/src/viewer/*.mjs)
-    cd "$repo_root/src/viewer"
+  */src/app/viewer/*.ts|*/src/app/viewer/*.tsx|*/src/app/viewer/*.js|*/src/app/viewer/*.jsx|*/src/app/viewer/*.mjs)
+    cd "$repo_root/src/app/viewer"
 
     # Biome フォーマット + ESLint 自動修正
     bunx biome format --write "$file" >/dev/null 2>&1 || true
@@ -149,8 +149,8 @@ ${mago_diag}"
     fi
     ;;
 
-  */src/viewer/*.astro)
-    cd "$repo_root/src/viewer"
+  */src/app/viewer/*.astro)
+    cd "$repo_root/src/app/viewer"
 
     # Biome フォーマット
     bunx biome format --write "$file" >/dev/null 2>&1 || true
@@ -177,8 +177,8 @@ ${mago_diag}"
     fi
     ;;
 
-  */src/viewer/*.css)
-    cd "$repo_root/src/viewer"
+  */src/app/viewer/*.css)
+    cd "$repo_root/src/app/viewer"
 
     # Biome フォーマット + Stylelint 自動修正
     bunx biome format --write "$file" >/dev/null 2>&1 || true
@@ -192,7 +192,7 @@ ${mago_diag}"
     fi
     ;;
 
-  src/contracts/*.tsp|*/src/contracts/*.tsp)
+  src/app/contracts/*.tsp|*/src/app/contracts/*.tsp)
     cd "$repo_root"
 
     mise run contract:format >/dev/null 2>&1 || true

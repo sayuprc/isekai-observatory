@@ -1,0 +1,111 @@
+{
+  "name": "sayuprc/isekai-observatory-api",
+  "version": "1.0.0",
+  "type": "project",
+  "description": "API for Isekaijoucho.",
+  "keywords": [
+    "isekaijoucho"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "^8.5",
+    "cuyz/valinor": "^2.3",
+    "emonkak/orm": "^5.0",
+    "firebase/php-jwt": "^7.0",
+    "google/apiclient": "^2.19",
+    "google/cloud-pubsub": "^2.20",
+    "guzzlehttp/guzzle": "^7.13",
+    "laravel/framework": "^12.0",
+    "league/openapi-psr7-validator": "^0.24.0",
+    "nyholm/psr7": "^1.8",
+    "opis/json-schema": "^2.6",
+    "sayuprc/date-type": "^0.2.0",
+    "symfony/cache": "^8.1",
+    "symfony/psr-http-message-bridge": "^8.0",
+    "web-auth/webauthn-lib": "^5.2.5"
+  },
+  "require-dev": {
+    "brianium/paratest": "^7.15",
+    "infection/infection": "^0.35.0",
+    "larastan/larastan": "^3.0",
+    "laravel/tinker": "^2.10",
+    "mockery/mockery": "^1.6",
+    "nunomaduro/collision": "^8.7",
+    "phparkitect/phparkitect": "^1.2.0",
+    "phpmetrics/phpmetrics": "^2.9",
+    "symplify/easy-coding-standard": "^13.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/",
+      "Database\\Factories\\": "database/factories/",
+      "Database\\Seeders\\": "database/seeders/",
+      "JourneyLog\\": "packages/JourneyLog/",
+      "JourneyLogLinkType\\": "packages/JourneyLogLinkType/",
+      "Support\\": "packages/Support/",
+      "SiteStats\\": "packages/SiteStats/",
+      "Song\\": "packages/Song/",
+      "Media\\": "packages/Media/",
+      "Release\\": "packages/Release/",
+      "Person\\": "packages/Person/",
+      "Venue\\": "packages/Venue/",
+      "Event\\": "packages/Event/",
+      "AdminUser\\": "packages/AdminUser/",
+      "Auth\\": "packages/Auth/",
+      "Tools\\": "tools/",
+      "OpenAPI\\Admin\\Client\\": "Generated/Admin/lib/",
+      "OpenAPI\\Viewer\\Client\\": "Generated/Viewer/lib/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan package:discover --ansi"
+    ],
+    "post-update-cmd": [
+      "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+    ],
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ],
+    "post-create-project-cmd": [
+      "@php artisan key:generate --ansi",
+      "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+      "@php artisan migrate --graceful --ansi"
+    ],
+    "phpstan": "phpstan analyse --memory-limit=-1 --no-progress",
+    "phpstan-clear-cache": "phpstan clear-result-cache",
+    "arkitect": "phparkitect check",
+    "ecs": "vendor/bin/ecs check --ansi --no-progress-bar",
+    "ecs-fix": "vendor/bin/ecs check --fix --ansi --no-progress-bar",
+    "test-all": "paratest",
+    "test-unit": "paratest tests/Unit",
+    "test-integration": "paratest tests/Integration",
+    "test-feature": "paratest tests/Feature",
+    "coverage": "php artisan test --env=testing --coverage-html=\"reports/coverage\"",
+    "infection": "infection --threads=4",
+    "metrics": "phpmetrics --config=phpmetrics.json"
+  },
+  "extra": {
+    "laravel": {
+      "dont-discover": []
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "allow-plugins": {
+      "infection/extension-installer": true,
+      "pestphp/pest-plugin": true,
+      "php-http/discovery": true
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
