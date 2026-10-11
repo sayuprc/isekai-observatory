@@ -4,6 +4,7 @@ import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -148,7 +149,12 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
       />
       <FormError message={formError()} onClose={clearErrors} />
       <p class="mb-4 max-w-4xl text-sm text-base-content/60">楽曲披露で使われているグループは削除できません</p>
-      <form id="person-group-form" class="max-w-4xl space-y-6" onSubmit={handleUpdate}>
+      <form
+        id="person-group-form"
+        onKeyDown={preventImplicitSubmit}
+        class="max-w-4xl space-y-6"
+        onSubmit={handleUpdate}
+      >
         <PersonGroupFields
           name={name()}
           onNameChange={setName}

@@ -4,6 +4,7 @@ import { validateVenueName } from '../../schemas/venue';
 import { client } from '../../utils/client';
 import { createFormDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
@@ -65,7 +66,7 @@ export const CreateForm = () => {
         submittingLabel="作成中..."
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="venue-form" class="max-w-4xl" onSubmit={handleSubmit}>
+      <form ref={bindForm} id="venue-form" onKeyDown={preventImplicitSubmit} class="max-w-4xl" onSubmit={handleSubmit}>
         <VenueFields kind={kind()} onKindChange={setKind} nameError={getFieldError('name')} />
       </form>
     </>

@@ -25,6 +25,10 @@
 - 枠が複数ある画面やタブは `FormColumns` で組み、広い画面では主な入力と付随する一覧を左右に並べる
 - 未保存検知は、入力を状態で持つフォームは `createDirtyTracker`、`FormData` で読むフォームは `createFormDirtyTracker` を使う
 - 保存・削除・破棄のあとに画面を移るときは、離脱の確認を出さないよう `allowLeave()` を呼んでから移る
+- Enter は検索にだけ使い、保存には使わない
+- 作成・編集フォームには `onKeyDown={preventImplicitSubmit}` を付け、Enter による暗黙送信を止める
+- フォーム内の検索入力は `isEnterKey` で Enter を拾って検索し、IME の変換確定の Enter は無視する
+- 一覧画面の検索フォームは、Enter による送信をそのまま検索に使う
 - 一覧の件数列は ADR-0031 に従い、検索 API の `*Summary` 型から `CountCell` で出す
 
 ## client:load の部品で守ること

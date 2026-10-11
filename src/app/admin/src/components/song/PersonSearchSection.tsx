@@ -3,6 +3,7 @@ import type { Accessor, Setter } from 'solid-js';
 import type { Person, SongPersonRole } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
+import { isEnterKey } from '../../utils/keyboard';
 import { createSortable, reorderItems } from '../sortable';
 import { addSelectedPersonToRole, type PersonSelections } from './person-selection';
 
@@ -116,7 +117,7 @@ export const PersonSearchSection = (props: Props) => {
             placeholder="人物名で検索"
             onInput={(event) => setQuery(event.currentTarget.value)}
             onKeyDown={(event) => {
-              if (event.key === 'Enter') {
+              if (isEnterKey(event)) {
                 event.preventDefault();
                 void search(query().trim());
               }

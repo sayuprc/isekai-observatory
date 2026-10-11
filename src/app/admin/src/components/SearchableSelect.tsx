@@ -77,6 +77,9 @@ export const SearchableSelect = (props: Props) => {
       }
       case 'Enter': {
         e.preventDefault();
+        if (e.isComposing) {
+          break;
+        }
         const index = activeIndex();
         const item = items[index];
         if (index >= 0 && item) {

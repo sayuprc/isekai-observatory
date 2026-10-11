@@ -1,4 +1,5 @@
 import { For, Show, type JSX } from 'solid-js';
+import { isEnterKey } from '../utils/keyboard';
 import type { KeywordSearch } from './keyword-search';
 
 interface KeywordSearchPanelProps<T extends object> {
@@ -24,7 +25,7 @@ export const KeywordSearchPanel = <T extends object>(props: KeywordSearchPanelPr
         placeholder={props.placeholder}
         value={props.search.keyword()}
         onInput={(e) => props.search.setKeyword(e.currentTarget.value)}
-        onKeyDown={(e) => e.key === 'Enter' && props.search.search(e)}
+        onKeyDown={(e) => isEnterKey(e) && props.search.search(e)}
         disabled={props.disabled}
       />
       <button
