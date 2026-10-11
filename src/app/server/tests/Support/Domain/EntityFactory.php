@@ -33,7 +33,6 @@ use Person\Domain\Models\PersonGroupMembers;
 use Person\Domain\Models\PersonGroupName;
 use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonName;
-use Release\Domain\Models\Color;
 use Release\Domain\Models\Description as ReleaseDescription;
 use Release\Domain\Models\Media as ReleaseMedia;
 use Release\Domain\Models\Release;
@@ -322,7 +321,6 @@ trait EntityFactory
         bool $isDisplay,
         ?ImmutableDate $releasedOn = null,
         string $description = 'テスト用リリース',
-        string $color = '#989899',
         ?array $formats = null,
         array $media = [],
         int $orderNo = 1,
@@ -333,7 +331,6 @@ trait EntityFactory
             new ReleaseName($name),
             new ReleasedOn($releasedOn ?? new ImmutableDate('2024-01-01')),
             new ReleaseDescription($description),
-            new Color($color),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::reconstruct($formats ?? [ReleaseFormat::Cd->value]),

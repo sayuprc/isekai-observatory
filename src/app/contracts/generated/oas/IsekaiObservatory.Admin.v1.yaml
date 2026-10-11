@@ -4619,7 +4619,6 @@ components:
         - name
         - releasedOn
         - description
-        - color
         - isDisplay
         - orderNo
         - formats
@@ -4635,8 +4634,6 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
         isDisplay:
           type: boolean
         orderNo:
@@ -4658,7 +4655,6 @@ components:
         - name
         - releasedOn
         - description
-        - color
         - isDisplay
         - orderNo
         - formats
@@ -4672,8 +4668,6 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
         isDisplay:
           type: boolean
         orderNo:
@@ -4799,7 +4793,6 @@ components:
         - releaseId
         - name
         - releasedOn
-        - color
         - isDisplay
         - orderNo
         - formats
@@ -4810,8 +4803,6 @@ components:
           $ref: '#/components/schemas/releaseName'
         releasedOn:
           $ref: '#/components/schemas/releasedOn'
-        color:
-          $ref: '#/components/schemas/color'
         isDisplay:
           type: boolean
         orderNo:
@@ -4954,7 +4945,6 @@ components:
         - name
         - releasedOn
         - description
-        - color
         - isDisplay
         - orderNo
         - formats
@@ -4966,8 +4956,6 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
         isDisplay:
           type: boolean
         orderNo:
@@ -5794,10 +5782,6 @@ components:
       type: string
       format: uuid
       description: 認証セッションID
-    color:
-      type: string
-      pattern: ^#[0-9a-f]{6}$
-      description: 代表色
     createdAt:
       type: string
       format: date-time

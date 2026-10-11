@@ -242,10 +242,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
               <ul class="flex flex-col gap-2 md:hidden">
                 <For each={props.data.releases}>
                   {(release) => (
-                    <li
-                      class="rounded-box border-y border-r border-l-4 border-base-300 bg-base-100 p-3"
-                      style={{ 'border-left-color': release.color }}
-                    >
+                    <li class="rounded-box border border-base-300 bg-base-100 p-3">
                       <ReleaseNameLink release={release} />
                       <div class="mt-1 flex flex-wrap gap-x-3 text-sm text-base-content/60">
                         <span>{normalizeDateValue(release.releasedOn)}</span>
@@ -278,11 +275,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                     <For each={props.data.releases}>
                       {(release) => (
                         <tr>
-                          <td
-                            class="min-w-40 border-l-4 font-medium"
-                            style={{ 'border-left-color': release.color }}
-                            title={`代表色 ${release.color}`}
-                          >
+                          <td class="min-w-40 font-medium">
                             <ReleaseNameLink release={release} />
                           </td>
                           <td class="whitespace-nowrap text-sm">{normalizeDateValue(release.releasedOn)}</td>

@@ -52,17 +52,11 @@ export default function FilterBar(props: Props) {
 
   return (
     <div class="viewer-filters">
-      <For each={props.filters}>
-        {(option) => (
-          <button
-            class={`btn${filter() === option.value ? ' is-active' : ''}`}
-            type="button"
-            onClick={() => setFilter(option.value)}
-          >
-            {option.label}
-          </button>
-        )}
-      </For>
+      <div class="viewer-select">
+        <select aria-label="種別で絞り込む" value={filter()} onChange={(event) => setFilter(event.currentTarget.value)}>
+          <For each={props.filters}>{(option) => <option value={option.value}>{option.label}</option>}</For>
+        </select>
+      </div>
       <Show when={props.searchAttr}>
         <div class="viewer-filters-spacer" />
         <input

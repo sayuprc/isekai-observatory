@@ -1,0 +1,41 @@
+---
+type Song = { title: string; href: string | null; note: string | null };
+
+interface Props {
+  // index を持たない項目は番号の列を詰めて出す
+  items: { index: string | null; label: string | null; songs: Song[] }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="detail-song-list">
+  {items.map((item) => (
+    <li
+      class="detail-song-list-item"
+      data-unnumbered={item.index === null ? '' : undefined}
+      data-label-only={item.songs.length === 0 ? '' : undefined}
+    >
+      {item.index !== null && <span class="detail-index">{item.index}</span>}
+      <div class="detail-song-list-body">
+        {item.label && <div class="detail-song-list-label">{item.label}</div>}
+        {item.songs.length > 0 && (
+          <ul class="detail-song-list-songs">
+            {item.songs.map((song) => (
+              <li class="detail-song-list-song">
+                {song.href ? (
+                  <a class="detail-song-list-song-title" href={song.href}>
+                    {song.title}
+                  </a>
+                ) : (
+                  <span class="detail-song-list-song-title">{song.title}</span>
+                )}
+                {song.note && <span class="label-mono detail-song-list-song-note">{song.note}</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </li>
+  ))}
+</ol>

@@ -35,7 +35,6 @@ namespace IsekaiObservatory.Viewer;
           title: "テストアルバム",
           type: ReleaseGroupTypeValue.Album,
           firstReleasedOn: "2026-05-01",
-          color: "#4a5a78",
         }
       ],
       performances: #[],

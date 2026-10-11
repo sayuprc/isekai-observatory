@@ -20,7 +20,6 @@ namespace IsekaiObservatory.Viewer;
           name: "初回限定盤",
           releasedOn: "2026-05-01",
           description: "",
-          color: "#4a5a78",
           orderNo: 1,
           formats: #[ReleaseFormatValue.Cd],
           media: #[

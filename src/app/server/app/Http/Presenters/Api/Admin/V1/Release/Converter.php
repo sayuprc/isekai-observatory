@@ -25,7 +25,6 @@ class Converter
             ->setName($release->name->value)
             ->setReleasedOn($release->releasedOn->value->toMutable())
             ->setDescription($release->description->value)
-            ->setColor($release->color->value)
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo->value)
             ->setFormats($release->formats->toGeneric()->map(

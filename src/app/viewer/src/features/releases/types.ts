@@ -43,7 +43,11 @@ export function isLinkableTrack(track: ReleaseTrack): track is ReleaseTrack & { 
   return track.songId !== null && track.isDisplay;
 }
 
-/** 代表色: 公開リリースを発売日順に見て最初のもの */
-export function representativeColor(releaseGroup: ReleaseGroup): string {
-  return releaseGroup.releases[0].color;
+/** 曲の一覧に出す 1 項目。イベントのセットリストと同じ見た目にするため、1 トラックを 1 曲の項目にする */
+export function trackSongListItem(track: ReleaseTrack) {
+  return {
+    index: String(track.trackNo).padStart(2, '0'),
+    label: null,
+    songs: [{ title: track.title, href: isLinkableTrack(track) ? `/songs/${track.songId}` : null, note: null }],
+  };
 }

@@ -650,7 +650,6 @@ components:
                   name: 初回限定盤
                   releasedOn: '2026-05-01'
                   description: ''
-                  color: '#4a5a78'
                   orderNo: 1
                   formats:
                     - 2
@@ -689,7 +688,6 @@ components:
         - name
         - releasedOn
         - description
-        - color
         - orderNo
         - formats
         - media
@@ -702,8 +700,6 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
         orderNo:
           $ref: '#/components/schemas/orderNo'
         formats:
@@ -862,7 +858,6 @@ components:
               title: テストアルバム
               type: 2
               firstReleasedOn: '2026-05-01'
-              color: '#4a5a78'
           performances: []
     SongListResponse:
       type: object
@@ -902,7 +897,6 @@ components:
                   title: テストアルバム
                   type: 2
                   firstReleasedOn: '2026-05-01'
-                  color: '#4a5a78'
               performances: []
           nextCursor: eyJvcmRlck5vIjoxLCJzb25nSWQiOiIzY2Q0MmMwOS1mZjNjLTRjZDItOTEzZi1hMjc5YzRlYTg5YjQifQ==
     SongMediaSummary:
@@ -994,7 +988,6 @@ components:
         - title
         - type
         - firstReleasedOn
-        - color
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -1004,9 +997,6 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         firstReleasedOn:
           $ref: '#/components/schemas/releasedOn'
-        color:
-          $ref: '#/components/schemas/color'
-          description: 代表色(公開リリースを発売日順に見て最初のもの)
       description: 楽曲が収録されている公開リリースグループの概要
     SongTypeValue:
       type: integer
@@ -1042,10 +1032,6 @@ components:
         - v1
       x-enum-descriptions:
         - バージョン 1
-    color:
-      type: string
-      pattern: ^#[0-9a-f]{6}$
-      description: 代表色
     cursor:
       type: string
       description: 次ページを記すキー

@@ -21,10 +21,6 @@ scalar releaseName extends string;
 @format("date")
 scalar releasedOn extends string;
 
-@doc("代表色")
-@pattern("^#[0-9a-f]{6}$")
-scalar color extends string;
-
 @doc("リリースグループ種別の値")
 @enumExtensions
 enum ReleaseGroupTypeValue {
@@ -81,7 +77,6 @@ model ReleaseListItem {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
-  color: color;
   orderNo: orderNo;
   formats: ReleaseFormatValue[];
   media: ReleaseMediumItem[];

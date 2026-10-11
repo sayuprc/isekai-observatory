@@ -2,7 +2,6 @@ import { children, type JSX, Show } from 'solid-js';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
-import { ColorField } from './ColorField';
 import { FormatCheckboxes } from './FormatCheckboxes';
 import { MediaEditor } from './MediaEditor';
 import type { ReleaseFormState } from './release-form';
@@ -116,10 +115,7 @@ const ReleaseBasicInfo = (props: { form: ReleaseFormState; getFieldError: (field
       />
       <FieldError message={props.getFieldError('description')} />
     </FormRow>
-    {/* 代表色と提供形態は部品が自前でラベルを持つので、ラベル左の行に入れず並べる */}
-    <div class="border-b border-base-300 py-3">
-      <ColorField value={props.form.color()} onChange={props.form.setColor} fieldError={props.getFieldError('color')} />
-    </div>
+    {/* 提供形態は部品が自前でラベルを持つので、ラベル左の行に入れず並べる */}
     <div class="border-b border-base-300 py-3">
       <FormatCheckboxes
         formatValues={props.form.formatValues()}

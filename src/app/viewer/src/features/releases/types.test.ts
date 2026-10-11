@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'bun:test';
-import { RELEASE_GROUP_TYPE_FILTER_ORDER, RELEASE_GROUP_TYPE_NAMES, releaseFormatText } from './types';
+import {
+  RELEASE_GROUP_TYPE_FILTER_ORDER,
+  RELEASE_GROUP_TYPE_NAMES,
+  releaseFormatText,
+  trackSongListItem,
+} from './types';
 
 describe('リリース種別の絞り込み', () => {
   it('並び順はすべての種別を 1 回ずつ含む', () => {
@@ -13,5 +18,21 @@ describe('リリース種別の絞り込み', () => {
 describe('提供形態の表示名', () => {
   it('提供形態を表示名にして並べる', () => {
     expect(releaseFormatText([2, 3])).toBe('CD・DVD');
+  });
+});
+
+describe('トラックの曲一覧項目', () => {
+  const track = { trackNo: 3, title: '曲名', songId: 'song-1', isDisplay: true };
+
+  it('2 桁の番号と楽曲詳細へのリンクを持つ', () => {
+    expect(trackSongListItem(track)).toEqual({
+      index: '03',
+      label: null,
+      songs: [{ title: '曲名', href: '/songs/song-1', note: null }],
+    });
+  });
+
+  it('非表示のトラックはリンクを持たない', () => {
+    expect(trackSongListItem({ ...track, isDisplay: false }).songs[0].href).toBeNull();
   });
 });

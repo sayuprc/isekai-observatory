@@ -63,7 +63,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'string',
         'released_on' => '\DateTime',
         'description' => 'string',
-        'color' => 'string',
         'is_display' => 'bool',
         'order_no' => 'int',
         'formats' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]',
@@ -83,7 +82,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => null,
         'released_on' => 'date',
         'description' => null,
-        'color' => null,
         'is_display' => null,
         'order_no' => 'int32',
         'formats' => null,
@@ -101,7 +99,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => false,
         'released_on' => false,
         'description' => false,
-        'color' => false,
         'is_display' => false,
         'order_no' => false,
         'formats' => false,
@@ -199,7 +196,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'name',
         'released_on' => 'releasedOn',
         'description' => 'description',
-        'color' => 'color',
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo',
         'formats' => 'formats',
@@ -217,7 +213,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'setName',
         'released_on' => 'setReleasedOn',
         'description' => 'setDescription',
-        'color' => 'setColor',
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo',
         'formats' => 'setFormats',
@@ -235,7 +230,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'getName',
         'released_on' => 'getReleasedOn',
         'description' => 'getDescription',
-        'color' => 'getColor',
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo',
         'formats' => 'getFormats',
@@ -304,7 +298,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('released_on', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
-        $this->setIfExists('color', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
         $this->setIfExists('formats', $data ?? [], null);
@@ -353,13 +346,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
         }
-        if ($this->container['color'] === null) {
-            $invalidProperties[] = "'color' can't be null";
-        }
-        if (!preg_match("/^#[0-9a-f]{6}$/", $this->container['color'])) {
-            $invalidProperties[] = "invalid value for 'color', must be conform to the pattern /^#[0-9a-f]{6}$/.";
-        }
-
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
         }
@@ -526,38 +512,6 @@ class Release implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
-
-        return $this;
-    }
-
-    /**
-     * Gets color
-     *
-     * @return string
-     */
-    public function getColor()
-    {
-        return $this->container['color'];
-    }
-
-    /**
-     * Sets color
-     *
-     * @param string $color 代表色
-     *
-     * @return self
-     */
-    public function setColor($color)
-    {
-        if (is_null($color)) {
-            throw new \InvalidArgumentException('non-nullable color cannot be null');
-        }
-
-        if ((!preg_match("/^#[0-9a-f]{6}$/", ObjectSerializer::toString($color)))) {
-            throw new \InvalidArgumentException("invalid value for \$color when calling Release., must conform to the pattern /^#[0-9a-f]{6}$/.");
-        }
-
-        $this->container['color'] = $color;
 
         return $this;
     }

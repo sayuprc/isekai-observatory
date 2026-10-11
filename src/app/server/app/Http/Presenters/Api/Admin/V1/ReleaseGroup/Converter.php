@@ -48,7 +48,6 @@ class Converter
             ->setReleaseId($release->releaseId)
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
-            ->setColor($release->color)
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo)
             ->setFormats(array_map(

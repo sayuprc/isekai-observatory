@@ -566,7 +566,6 @@ export type Release = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
-    color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -578,7 +577,6 @@ export type ReleaseCreateRequest = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
-    color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -639,7 +637,6 @@ export type ReleaseGroupReferencedRelease = {
     releaseId: ReleaseId;
     name: ReleaseName;
     releasedOn: ReleasedOn;
-    color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -707,7 +704,6 @@ export type ReleaseUpdateRequest = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
-    color: Color;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -1075,11 +1071,6 @@ export type AuditLogId = string;
  * 認証セッションID
  */
 export type AuthCeremonyId = string;
-
-/**
- * 代表色
- */
-export type Color = string;
 
 /**
  * 作成日時

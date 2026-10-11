@@ -43,7 +43,6 @@ model ReleaseCreateRequest {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
-  color: color;
   isDisplay: boolean;
   orderNo: orderNo;
 
@@ -61,7 +60,6 @@ model ReleaseUpdateRequest {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
-  color: color;
   isDisplay: boolean;
   orderNo: orderNo;
 

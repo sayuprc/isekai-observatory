@@ -7,7 +7,6 @@ export interface ReleaseInitialValues {
   name: string;
   releasedOn: string;
   description: string;
-  color: string;
   isDisplay: boolean;
   orderNo: number;
   formats: ReleaseFormatValue[];
@@ -18,7 +17,6 @@ export const EMPTY_RELEASE_INITIAL_VALUES: ReleaseInitialValues = {
   name: '',
   releasedOn: '',
   description: '',
-  color: '#989899',
   isDisplay: true,
   orderNo: 1,
   formats: [1],
@@ -30,7 +28,6 @@ export const createReleaseForm = (initial: ReleaseInitialValues) => {
   const [name, setName] = createSignal(initial.name);
   const [releasedOn, setReleasedOn] = createSignal(initial.releasedOn);
   const [description, setDescription] = createSignal(initial.description);
-  const [color, setColor] = createSignal(initial.color);
   const [isDisplay, setIsDisplay] = createSignal(initial.isDisplay);
   const [orderNo, setOrderNo] = createSignal(initial.orderNo);
   const [formatValues, setFormatValues] = createSignal<ReleaseFormatValue[]>([...initial.formats]);
@@ -42,7 +39,6 @@ export const createReleaseForm = (initial: ReleaseInitialValues) => {
     name: name().trim(),
     releasedOn: releasedOn(),
     description: description(),
-    color: color(),
     isDisplay: isDisplay(),
     orderNo: orderNo(),
     formats: formatValues(),
@@ -56,8 +52,6 @@ export const createReleaseForm = (initial: ReleaseInitialValues) => {
     setReleasedOn,
     description,
     setDescription,
-    color,
-    setColor,
     isDisplay,
     setIsDisplay,
     orderNo,

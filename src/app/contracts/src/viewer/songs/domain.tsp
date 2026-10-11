@@ -54,7 +54,6 @@ model SongPerformanceHistory {
       title: "テストアルバム",
       type: ReleaseGroupTypeValue.Album,
       firstReleasedOn: "2026-05-01",
-      color: "#4a5a78",
     }
   ],
   performances: #[],
@@ -83,9 +82,6 @@ model SongReleaseGroupSummary {
   title: releaseGroupTitle;
   type: ReleaseGroupTypeValue;
   firstReleasedOn: releasedOn;
-
-  @doc("代表色(公開リリースを発売日順に見て最初のもの)")
-  color: color;
 }
 
 @example(#{

@@ -25,7 +25,7 @@ readonly class ReleaseGroupDetailQueryService implements ReleaseGroupDetailQuery
     {
         $releaseRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['release_id', 'name', 'released_on', 'color', 'is_display', 'order_no'])
+                ->withSelect(['release_id', 'name', 'released_on', 'is_display', 'order_no'])
                 ->from('releases')
                 ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
                 ->orderBy('released_on')
@@ -58,7 +58,6 @@ readonly class ReleaseGroupDetailQueryService implements ReleaseGroupDetailQuery
                 $this->converter->toUuid(Row::string($row, 'release_id')),
                 Row::string($row, 'name'),
                 Row::string($row, 'released_on'),
-                Row::string($row, 'color'),
                 Row::bool($row, 'is_display'),
                 Row::int($row, 'order_no'),
                 $formatsByRelease[Row::string($row, 'release_id')] ?? [],

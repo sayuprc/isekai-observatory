@@ -27,11 +27,6 @@ table "releases" {
     type    = text
     comment = "説明"
   }
-  column "color" {
-    null    = false
-    type    = varchar(7)
-    comment = "代表色"
-  }
   column "is_display" {
     null    = false
     type    = bool

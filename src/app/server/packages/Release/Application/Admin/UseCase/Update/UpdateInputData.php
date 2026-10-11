@@ -18,7 +18,6 @@ readonly class UpdateInputData
         public string $name,
         public string $releasedOn,
         public string $description,
-        public string $color,
         public bool $isDisplay,
         public int $orderNo,
         public array $formats,

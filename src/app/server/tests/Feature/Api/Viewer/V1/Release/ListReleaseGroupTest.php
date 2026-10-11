@@ -71,7 +71,6 @@ class ListReleaseGroupTest extends DatabaseTestCase
                 true,
                 new ImmutableDate('2026-06-01'),
                 description: 'CD+DVD',
-                color: '#4a5a78',
                 formats: [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
                 orderNo: 10,
                 media: [
@@ -110,7 +109,6 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                 'name' => '配信',
                                 'releasedOn' => '2026-05-01',
                                 'description' => '先行配信',
-                                'color' => '#989899',
                                 'orderNo' => 20,
                                 'formats' => [1],
                                 'media' => [
@@ -153,7 +151,6 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                 'name' => '初回限定盤',
                                 'releasedOn' => '2026-06-01',
                                 'description' => 'CD+DVD',
-                                'color' => '#4a5a78',
                                 'orderNo' => 10,
                                 'formats' => [2, 3],
                                 'media' => [
