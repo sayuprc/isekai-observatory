@@ -5,6 +5,7 @@ import { client } from '../../utils/client';
 import { normalizeDateTimeInputValue } from '../../utils/date';
 import { createFormDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -186,7 +187,7 @@ const EditableForm = (props: EditableFormProps) => {
       <FormError message={formError()} onClose={clearErrors} />
       <FormColumns
         main={
-          <form ref={bindForm} id="media-form" onSubmit={handleUpdate}>
+          <form ref={bindForm} id="media-form" onKeyDown={preventImplicitSubmit} onSubmit={handleUpdate}>
             <MediaFields
               title={props.data.media.title}
               url={props.data.media.url}

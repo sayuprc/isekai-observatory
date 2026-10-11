@@ -3,6 +3,7 @@ import type { ReleaseGetResponse, SongSummary } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { SONG_TYPE_NAMES } from '../../utils/enum-names';
+import { isEnterKey } from '../../utils/keyboard';
 import type { SongCandidate } from '../song-import';
 import { createSortable, reorderItems } from '../sortable';
 import { toTrackForms } from './event-import';
@@ -462,6 +463,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                   class="input input-bordered w-full"
                   value={searchTitle()}
                   onInput={(e) => setSearchTitle(e.currentTarget.value)}
+                  onKeyDown={(e) => isEnterKey(e) && void handleSongSearch(e)}
                   placeholder="楽曲名で検索"
                 />
               </div>

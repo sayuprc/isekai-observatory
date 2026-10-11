@@ -3,6 +3,7 @@ import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createTabState } from '../../utils/tab';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
@@ -184,7 +185,7 @@ const ReleaseCreateForm = (props: ReleaseCreateFormProps) => {
         tabs={<ReleaseTabList form={form} current={tab()} onChange={setTab} withHistory={false} />}
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="release-form" onSubmit={handleSubmit}>
+      <form ref={bindForm} id="release-form" onKeyDown={preventImplicitSubmit} onSubmit={handleSubmit}>
         <ReleaseFormFields form={form} tab={tab()} getFieldError={getFieldError} />
       </form>
     </>

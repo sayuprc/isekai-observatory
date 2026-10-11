@@ -4,6 +4,7 @@ import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createTabState } from '../../utils/tab';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
@@ -107,7 +108,7 @@ export const CreateForm = (props: CreateFormProps) => {
         tabs={<SongTabList form={form} current={tab()} onChange={setTab} withHistory={false} />}
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="song-form" onSubmit={handleSubmit}>
+      <form ref={bindForm} id="song-form" onKeyDown={preventImplicitSubmit} onSubmit={handleSubmit}>
         <SongFormFields
           form={form}
           tab={tab()}

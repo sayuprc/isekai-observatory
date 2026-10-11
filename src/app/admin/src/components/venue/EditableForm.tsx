@@ -5,6 +5,7 @@ import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -155,7 +156,7 @@ const EditableForm = (props: EditableFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="venue-form" class="max-w-4xl" onSubmit={handleUpdate}>
+      <form ref={bindForm} id="venue-form" onKeyDown={preventImplicitSubmit} class="max-w-4xl" onSubmit={handleUpdate}>
         <VenueFields
           name={props.data.venue.name}
           kind={kind()}

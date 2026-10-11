@@ -3,6 +3,7 @@ import type { MediaTypeValue } from '../../generated';
 import { client } from '../../utils/client';
 import { createFormDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
@@ -55,7 +56,7 @@ export const CreateForm = () => {
         submittingLabel="作成中..."
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="media-form" class="max-w-4xl" onSubmit={handleSubmit}>
+      <form ref={bindForm} id="media-form" onKeyDown={preventImplicitSubmit} class="max-w-4xl" onSubmit={handleSubmit}>
         <MediaFields
           typeValue={typeValue()}
           onTypeValueChange={setTypeValue}
