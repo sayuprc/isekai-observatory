@@ -241,6 +241,144 @@ export const MediaEditor = (props: MediaEditorProps) => {
       <legend class="px-2 text-sm font-semibold text-base-content/70">媒体と収録曲</legend>
       <Show when={props.fieldError}>{(message) => <p class="mb-4 text-sm text-error">{message()}</p>}</Show>
       <div class="space-y-6">
+        <Show when={props.media.length > 0}>
+          <div>
+            <label class="label">楽曲を追加</label>
+            <div class="flex flex-col gap-4 md:flex-row md:items-end">
+              <div>
+                <label class="label">追加先媒体</label>
+                <select
+                  class="select select-bordered select-sm"
+                  value={String(targetIndex())}
+                  onChange={(e) => setTargetMediumIndex(Number(e.currentTarget.value))}
+                >
+                  <Index each={props.media}>
+                    {(medium, index) => (
+                      <option value={index}>
+                        媒体 {index + 1}
+                        {medium().name.trim() !== '' ? `(${medium().name.trim()})` : ''}
+                      </option>
+                    )}
+                  </Index>
+                </select>
+              </div>
+              <div class="flex-1">
+                <label class="label">楽曲名</label>
+                <input
+                  type="text"
+                  class="input input-bordered w-full"
+                  value={searchTitle()}
+                  onInput={(e) => setSearchTitle(e.currentTarget.value)}
+                  onKeyDown={(e) => isEnterKey(e) && void handleSongSearch(e)}
+                  placeholder="楽曲名で検索"
+                />
+              </div>
+              <button type="button" class="btn btn-primary" disabled={isSearching()} onClick={handleSongSearch}>
+                {isSearching() ? '検索中...' : '検索'}
+              </button>
+            </div>
+
+            <Show when={searchError()}>{(message) => <p class="mt-3 text-sm text-error">{message()}</p>}</Show>
+
+            <Show when={hasSearched()}>
+              <ul class="mt-4 rounded-box border border-base-300 bg-base-100 md:hidden">
+                <Show
+                  when={searchResults().length > 0}
+                  fallback={
+                    <li class="p-3 text-center text-sm text-base-content/60">条件に一致する楽曲はありません。</li>
+                  }
+                >
+                  <For each={searchResults()}>
+                    {(song) => (
+                      <li class="flex items-center justify-between gap-3 border-b border-base-300 p-3 last:border-b-0">
+                        <div class="min-w-0">
+                          <p class="truncate text-sm font-medium">{song.title}</p>
+                          <p class="mt-1 text-xs text-base-content/60">
+                            {SONG_TYPE_NAMES[song.type]}
+                            {' · '}
+                            {song.isDisplay ? '表示' : '非表示'}
+                          </p>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-xs shrink-0" onClick={() => addTrack(song)}>
+                          追加
+                        </button>
+                      </li>
+                    )}
+                  </For>
+                </Show>
+              </ul>
+              <div class="mt-4 hidden overflow-x-auto rounded-box border border-base-300 bg-base-100 md:block">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>楽曲名</th>
+                      <th>種別</th>
+                      <th>表示設定</th>
+                      <th class="text-right">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <Show
+                      when={searchResults().length > 0}
+                      fallback={
+                        <tr>
+                          <td colSpan={4} class="text-center text-sm text-base-content/60">
+                            条件に一致する楽曲はありません。
+                          </td>
+                        </tr>
+                      }
+                    >
+                      <For each={searchResults()}>
+                        {(song) => (
+                          <tr>
+                            <td>{song.title}</td>
+                            <td>{SONG_TYPE_NAMES[song.type]}</td>
+                            <td>{song.isDisplay ? '表示' : '非表示'}</td>
+                            <td class="text-right">
+                              <button type="button" class="btn btn-primary btn-xs" onClick={() => addTrack(song)}>
+                                追加
+                              </button>
+                            </td>
+                          </tr>
+                        )}
+                      </For>
+                    </Show>
+                  </tbody>
+                </table>
+              </div>
+            </Show>
+          </div>
+
+          <EventImport targetLabel={`媒体 ${targetIndex() + 1}`} onImport={importFromEvent} />
+
+          <div>
+            <label class="label">管理対象外楽曲を追加</label>
+            <div class="flex flex-col gap-4 md:flex-row md:items-end">
+              <div class="flex-1">
+                <label class="label">タイトル</label>
+                <input
+                  type="text"
+                  class="input input-bordered w-full"
+                  value={manualTitle()}
+                  onInput={(e) => setManualTitle(e.currentTarget.value)}
+                  placeholder="タイトルを直接入力"
+                />
+              </div>
+              <button
+                type="button"
+                class="btn btn-outline"
+                disabled={manualTitle().trim() === ''}
+                onClick={addTitleOnlyTrack}
+              >
+                追加
+              </button>
+            </div>
+            <p class="mt-1 text-xs text-base-content/60">
+              管理していない楽曲をタイトルだけで収録曲に追加します(楽曲詳細へのリンクは付きません)。
+            </p>
+          </div>
+        </Show>
+
         <Show
           when={props.media.length > 0}
           fallback={<p class="text-sm text-base-content/60">媒体はまだ登録されていません。</p>}
@@ -434,144 +572,6 @@ export const MediaEditor = (props: MediaEditorProps) => {
             媒体を追加
           </button>
         </div>
-
-        <Show when={props.media.length > 0}>
-          <div>
-            <label class="label">楽曲を追加</label>
-            <div class="flex flex-col gap-4 md:flex-row md:items-end">
-              <div>
-                <label class="label">追加先媒体</label>
-                <select
-                  class="select select-bordered select-sm"
-                  value={String(targetIndex())}
-                  onChange={(e) => setTargetMediumIndex(Number(e.currentTarget.value))}
-                >
-                  <Index each={props.media}>
-                    {(medium, index) => (
-                      <option value={index}>
-                        媒体 {index + 1}
-                        {medium().name.trim() !== '' ? `(${medium().name.trim()})` : ''}
-                      </option>
-                    )}
-                  </Index>
-                </select>
-              </div>
-              <div class="flex-1">
-                <label class="label">楽曲名</label>
-                <input
-                  type="text"
-                  class="input input-bordered w-full"
-                  value={searchTitle()}
-                  onInput={(e) => setSearchTitle(e.currentTarget.value)}
-                  onKeyDown={(e) => isEnterKey(e) && void handleSongSearch(e)}
-                  placeholder="楽曲名で検索"
-                />
-              </div>
-              <button type="button" class="btn btn-primary" disabled={isSearching()} onClick={handleSongSearch}>
-                {isSearching() ? '検索中...' : '検索'}
-              </button>
-            </div>
-
-            <Show when={searchError()}>{(message) => <p class="mt-3 text-sm text-error">{message()}</p>}</Show>
-
-            <Show when={hasSearched()}>
-              <ul class="mt-4 rounded-box border border-base-300 bg-base-100 md:hidden">
-                <Show
-                  when={searchResults().length > 0}
-                  fallback={
-                    <li class="p-3 text-center text-sm text-base-content/60">条件に一致する楽曲はありません。</li>
-                  }
-                >
-                  <For each={searchResults()}>
-                    {(song) => (
-                      <li class="flex items-center justify-between gap-3 border-b border-base-300 p-3 last:border-b-0">
-                        <div class="min-w-0">
-                          <p class="truncate text-sm font-medium">{song.title}</p>
-                          <p class="mt-1 text-xs text-base-content/60">
-                            {SONG_TYPE_NAMES[song.type]}
-                            {' · '}
-                            {song.isDisplay ? '表示' : '非表示'}
-                          </p>
-                        </div>
-                        <button type="button" class="btn btn-primary btn-xs shrink-0" onClick={() => addTrack(song)}>
-                          追加
-                        </button>
-                      </li>
-                    )}
-                  </For>
-                </Show>
-              </ul>
-              <div class="mt-4 hidden overflow-x-auto rounded-box border border-base-300 bg-base-100 md:block">
-                <table class="table table-sm">
-                  <thead>
-                    <tr>
-                      <th>楽曲名</th>
-                      <th>種別</th>
-                      <th>表示設定</th>
-                      <th class="text-right">操作</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <Show
-                      when={searchResults().length > 0}
-                      fallback={
-                        <tr>
-                          <td colSpan={4} class="text-center text-sm text-base-content/60">
-                            条件に一致する楽曲はありません。
-                          </td>
-                        </tr>
-                      }
-                    >
-                      <For each={searchResults()}>
-                        {(song) => (
-                          <tr>
-                            <td>{song.title}</td>
-                            <td>{SONG_TYPE_NAMES[song.type]}</td>
-                            <td>{song.isDisplay ? '表示' : '非表示'}</td>
-                            <td class="text-right">
-                              <button type="button" class="btn btn-primary btn-xs" onClick={() => addTrack(song)}>
-                                追加
-                              </button>
-                            </td>
-                          </tr>
-                        )}
-                      </For>
-                    </Show>
-                  </tbody>
-                </table>
-              </div>
-            </Show>
-          </div>
-
-          <EventImport targetLabel={`媒体 ${targetIndex() + 1}`} onImport={importFromEvent} />
-
-          <div>
-            <label class="label">管理対象外楽曲を追加</label>
-            <div class="flex flex-col gap-4 md:flex-row md:items-end">
-              <div class="flex-1">
-                <label class="label">タイトル</label>
-                <input
-                  type="text"
-                  class="input input-bordered w-full"
-                  value={manualTitle()}
-                  onInput={(e) => setManualTitle(e.currentTarget.value)}
-                  placeholder="タイトルを直接入力"
-                />
-              </div>
-              <button
-                type="button"
-                class="btn btn-outline"
-                disabled={manualTitle().trim() === ''}
-                onClick={addTitleOnlyTrack}
-              >
-                追加
-              </button>
-            </div>
-            <p class="mt-1 text-xs text-base-content/60">
-              管理していない楽曲をタイトルだけで収録曲に追加します(楽曲詳細へのリンクは付きません)。
-            </p>
-          </div>
-        </Show>
       </div>
     </fieldset>
   );
