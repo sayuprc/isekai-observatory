@@ -316,7 +316,7 @@ export type SongReleaseGroupSummary = {
 /**
  * 楽曲種別の値
  */
-export type SongTypeValue = 1 | 2;
+export type SongTypeValue = 1 | 2 | 3;
 
 /**
  * 開催先種別の値

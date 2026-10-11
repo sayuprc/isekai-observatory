@@ -874,7 +874,7 @@ export type SongSearchSortBy = 'title' | 'order_no';
 /**
  * 楽曲検索API用の楽曲種別
  */
-export type SongSearchTypeValue = '1' | '2';
+export type SongSearchTypeValue = '1' | '2' | '3';
 
 export type SongSummary = {
     songId: SongId;
@@ -957,7 +957,7 @@ export type SongTagUpdateResponse = {
 /**
  * 楽曲種別の値
  */
-export type SongTypeValue = 1 | 2;
+export type SongTypeValue = 1 | 2 | 3;
 
 export type SongUpdateRequest = {
     title: Title;

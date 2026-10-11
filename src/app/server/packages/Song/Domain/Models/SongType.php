@@ -12,6 +12,8 @@ enum SongType: int
 
     case Cover = 2;
 
+    case Guest = 3;
+
     /**
      * @throws InvalidDomainException
      */

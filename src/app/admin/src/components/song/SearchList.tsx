@@ -17,6 +17,7 @@ import { Pagination } from '../Pagination';
 const SONG_TYPE_BADGE_CLASS: Record<SongTypeValue, string> = {
   1: 'badge-warning',
   2: 'badge-info',
+  3: 'badge-secondary',
 };
 
 const SONG_TYPE_OPTIONS = toOptions(SONG_TYPE_NAMES).map((option) => ({

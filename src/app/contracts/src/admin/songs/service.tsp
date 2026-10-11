@@ -25,6 +25,9 @@ enum SongSearchTypeValue {
 
   @doc("カバー曲")
   Cover: "2",
+
+  @doc("参加曲")
+  Guest: "3",
 }
 
 @tag("Song")

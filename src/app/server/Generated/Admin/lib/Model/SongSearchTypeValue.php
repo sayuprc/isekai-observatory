@@ -50,6 +50,11 @@ enum SongSearchTypeValue: string
      */
     case COVER = '2';
 
+    /**
+     * 参加曲
+     */
+    case GUEST = '3';
+
 }
 
 

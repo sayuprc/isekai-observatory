@@ -121,6 +121,23 @@ class CreateSongTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function canCreateGuestSong(): void
+    {
+        $this->withAuth()
+            ->postJson(route(SongRouteMap::Create), [
+                'title' => 'テスト参加曲',
+                'description' => 'テスト参加曲説明',
+                'lyricsLink' => null,
+                'type' => SongType::Guest->value,
+                'isDisplay' => true,
+                'persons' => [],
+                'tags' => [],
+                'media' => [],
+            ])->assertStatus(200)
+            ->assertJsonPath('song.type', SongType::Guest->value);
+    }
+
+    #[Test]
     public function createFailsWithNotExistsSongTag(): void
     {
         $this->withAuth()
