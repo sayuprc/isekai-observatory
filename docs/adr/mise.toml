@@ -11,11 +11,12 @@ set -euo pipefail
 
 # 連番を決定
 MAX_NUM=$(ls ADR-*.md 2>/dev/null \
-  | sed 's|.*/ADR-||' \
-  | grep -oE '^[0-9]+' \
+  | grep -oE '^ADR-[0-9]+' \
+  | sed 's/^ADR-//' \
   | sort -n \
   | tail -1 || true)
-NEXT=$(printf "%04d" $(( ${MAX_NUM:-0} + 1 )))
+# 0 埋めの番号を 8 進数として解釈させないため 10# を付ける
+NEXT=$(printf "%04d" $(( 10#${MAX_NUM:-0} + 1 )))
 
 # タイトル → ケバブケース
 SLUG=$(echo "${usage_title}" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
