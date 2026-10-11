@@ -25,14 +25,18 @@ export const Pagination = (props: Props) => {
               <button type="button" class="btn join-item btn-sm btn-disabled" tabIndex={-1}>
                 …
               </button>
-            ) : (
+            ) : item === props.page ? (
+              // disabled にすると灰色になり現在地が目立たなくなるため、色を保ったまま押せなくする
               <button
                 type="button"
-                class="btn join-item btn-sm"
-                classList={{ 'btn-active': item === props.page }}
-                aria-current={item === props.page ? 'page' : undefined}
-                onClick={() => props.onChange(item)}
+                class="btn join-item btn-sm btn-primary pointer-events-none"
+                aria-current="page"
+                aria-disabled="true"
               >
+                {item}
+              </button>
+            ) : (
+              <button type="button" class="btn join-item btn-sm" onClick={() => props.onChange(item)}>
                 {item}
               </button>
             )
