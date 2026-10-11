@@ -196,10 +196,55 @@ image-slot:hover {
   margin-bottom: 32px;
 }
 
-.viewer-filters .btn.is-active {
-  color: var(--accent-strong);
-  background: color-mix(in oklab, var(--accent) 18%, transparent);
+.viewer-select {
+  position: relative;
+  max-width: 100%;
+}
+
+.viewer-select::after {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+  content: '';
+  border-right: 1px solid var(--fg-muted);
+  border-bottom: 1px solid var(--fg-muted);
+  transform: translateY(-70%) rotate(45deg);
+}
+
+.viewer-select select {
+  min-width: 200px;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 8px 44px 8px 16px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 13px;
+  color: var(--fg);
+  letter-spacing: 0.1em;
+  appearance: none;
+  cursor: pointer;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.viewer-select option {
+  color: var(--fg);
+  background: var(--bg-elev);
+}
+
+.viewer-select select:hover {
   border-color: var(--accent);
+}
+
+.viewer-select select:focus {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 12%, transparent);
 }
 
 .viewer-filters-spacer {
