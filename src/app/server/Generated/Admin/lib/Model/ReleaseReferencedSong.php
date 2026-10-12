@@ -412,7 +412,7 @@ class ReleaseReferencedSong implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets song_id
      *
-     * @param string $song_id UUID v4
+     * @param string $song_id 楽曲ID
      *
      * @return self
      */

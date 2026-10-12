@@ -107,7 +107,7 @@ model ReleaseGroupReferencedRelease {
 
 @doc("収録曲。songIds / title の少なくとも一方を指定する(検証はサーバー側の責務)。songIds は Song 集約を収録順に参照し、2 件以上でメドレーになる。楽曲 1 件では title で表示名を上書きし、メドレーでは title をメドレーの表示名にする。songIds が空なら表示専用のタイトルのみトラック")
 model Track {
-  songIds: uuid[];
+  songIds: songId[];
   title: trackTitle | null;
   trackNo: orderNo;
 }
@@ -140,6 +140,6 @@ model Release {
 model ReleaseReferencedSong {
   mediumPosition: orderNo;
   trackNo: orderNo;
-  songId: uuid | null;
+  songId: songId | null;
   title: title;
 }

@@ -758,7 +758,7 @@ components:
         - isDisplay
       properties:
         songId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/songId'
         title:
           type: string
         isDisplay:

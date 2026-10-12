@@ -4971,7 +4971,7 @@ components:
           $ref: '#/components/schemas/orderNo'
         songId:
           anyOf:
-            - $ref: '#/components/schemas/uuid'
+            - $ref: '#/components/schemas/songId'
             - type: 'null'
         title:
           $ref: '#/components/schemas/title'
@@ -5691,7 +5691,7 @@ components:
         songIds:
           type: array
           items:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
         title:
           anyOf:
             - $ref: '#/components/schemas/trackTitle'

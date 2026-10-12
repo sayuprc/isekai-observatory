@@ -1,6 +1,8 @@
 import "../../shared";
+import "../../packages/song";
 
 using IsekaiObservatory.Shared;
+using IsekaiObservatory.Packages.Song;
 
 namespace IsekaiObservatory.Viewer;
 
@@ -58,7 +60,7 @@ enum ReleaseFormatValue {
 
 @doc("収録曲が参照する楽曲。リンク可否は isDisplay で判定する")
 model ReleaseTrackSong {
-  songId: uuid;
+  songId: songId;
   title: string;
   isDisplay: boolean;
 }

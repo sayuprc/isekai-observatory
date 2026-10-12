@@ -708,7 +708,7 @@ export type ReleaseGroupUpdateResponse = {
 export type ReleaseReferencedSong = {
     mediumPosition: OrderNo;
     trackNo: OrderNo;
-    songId: Uuid | null;
+    songId: SongId | null;
     title: Title;
 };
 
@@ -1000,7 +1000,7 @@ export type SortOrder = 'asc' | 'desc';
  * 収録曲。songIds / title の少なくとも一方を指定する(検証はサーバー側の責務)。songIds は Song 集約を収録順に参照し、2 件以上でメドレーになる。楽曲 1 件では title で表示名を上書きし、メドレーでは title をメドレーの表示名にする。songIds が空なら表示専用のタイトルのみトラック
  */
 export type Track = {
-    songIds: Array<Uuid>;
+    songIds: Array<SongId>;
     title: TrackTitle | null;
     trackNo: OrderNo;
 };
