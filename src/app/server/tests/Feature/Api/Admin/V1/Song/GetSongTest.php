@@ -73,6 +73,7 @@ class GetSongTest extends DatabaseTestCase
                     'songId' => $songId,
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
+                    'note' => '',
                     'lyricsLink' => 'https://example.com/lyrics',
                     'type' => 1,
                     'isDisplay' => true,

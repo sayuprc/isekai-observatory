@@ -24,6 +24,7 @@ model EventGetResponse {
 model EventCreateRequest {
   title: eventTitle;
   description: eventDescription;
+  note: note;
   type: EventTypeValue;
   schedule: EventSchedule;
   status: EventStatusValue;
@@ -43,6 +44,7 @@ model EventCreateResponse {
 model EventUpdateRequest {
   title: eventTitle;
   description: eventDescription;
+  note: note;
   type: EventTypeValue;
   schedule: EventSchedule;
   status: EventStatusValue;

@@ -5,7 +5,7 @@
 ## 用語
 
 - **Event (イベント)**: ヰ世界情緒による、または本人が公式に参加する、一回の開催または連続した開催期間
-- **Event** の主要フィールド: `eventId` / `title` / `description` / `type` / `schedule` / `status` / `isDisplay`
+- **Event** の主要フィールド: `eventId` / `title` / `description` / `note` / `type` / `schedule` / `status` / `isDisplay`
 - **EventType**: Live / Stream / Exhibition / Radio / Other。開催方法ではなく Event 全体の主目的を表す
   冠番組は番組を 1 件の Event として扱い、放送開始日を開催時期に入れる。放送回ごとの Event や番組の概念は持たない
 - **EventSchedule**: `startOn` / `endOn` で開催時期を表す。両方 null は日付未定、`startOn` のみは単日、両方指定は期間。`endOn` のみは許容しない。時刻とタイムゾーンは持たず、詳細な時刻は Event の説明に記載する
@@ -20,6 +20,7 @@
 - Admin: Event の検索・取得・作成・更新・削除
   タイトル、活動種別、延期・中止、公開状態で検索できる
 - Event はタイトル必須、改行可能なプレーンテキストの説明は空文字を許容する必須値。同じタイトル・日付を許容する
+- 説明は Viewer に公開し、備考 (`note`) は管理用のメモとして Viewer に出さない
 - 一回の開始を一つの Event とする。同日昼夜公演は別 Event、同時刻の現地会場と配信先は一つの Event とする
 - 開催先は 0 件以上。Venue / Media / Release / EventSource は Event 内で重複不可かつ `orderNo` を持つ
 - EventSource は 0 件でも Event を公開できる。Viewer には表示名と URL を公開する

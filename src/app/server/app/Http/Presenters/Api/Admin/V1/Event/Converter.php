@@ -54,6 +54,7 @@ class Converter
             ->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
+            ->setNote($event->note)
             ->setType(EventTypeValue::from($event->type->value))
             ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
             ->setStatus(EventStatusValue::from($event->status->value))

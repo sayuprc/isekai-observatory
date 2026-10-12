@@ -73,6 +73,7 @@ class GetUseCaseTest extends TestCase
                     $song->songId->value,
                     $song->title->value,
                     $song->description->value,
+                    $song->note->value,
                     $song->lyricsLink?->value,
                     $song->type->value,
                     $song->isDisplay,

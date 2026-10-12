@@ -137,6 +137,15 @@ const SongBasicInfo = (props: SongFormFieldsProps) => (
         {(message) => <p class="text-xs text-error">{message()}</p>}
       </Show>
     </FormRow>
+    <FormRow label="備考" for="note" hint="管理用のメモです。閲覧サイトには表示しません">
+      <textarea
+        id="note"
+        class="textarea w-full"
+        rows={3}
+        value={props.form.note()}
+        onInput={(e) => props.form.setNote(e.currentTarget.value)}
+      />
+    </FormRow>
     <FormRow label="歌詞リンク" for="lyricsLink">
       <input
         id="lyricsLink"

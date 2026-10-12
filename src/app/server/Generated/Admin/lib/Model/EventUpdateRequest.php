@@ -59,6 +59,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPITypes = [
         'title' => 'string',
         'description' => 'string',
+        'note' => 'string',
         'type' => '\OpenAPI\Admin\Client\Model\EventTypeValue',
         'schedule' => '\OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
         'status' => '\OpenAPI\Admin\Client\Model\EventStatusValue',
@@ -81,6 +82,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPIFormats = [
         'title' => null,
         'description' => null,
+        'note' => null,
         'type' => null,
         'schedule' => null,
         'status' => null,
@@ -101,6 +103,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static array $openAPINullables = [
         'title' => false,
         'description' => false,
+        'note' => false,
         'type' => false,
         'schedule' => false,
         'status' => false,
@@ -201,6 +204,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $attributeMap = [
         'title' => 'title',
         'description' => 'description',
+        'note' => 'note',
         'type' => 'type',
         'schedule' => 'schedule',
         'status' => 'status',
@@ -221,6 +225,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $setters = [
         'title' => 'setTitle',
         'description' => 'setDescription',
+        'note' => 'setNote',
         'type' => 'setType',
         'schedule' => 'setSchedule',
         'status' => 'setStatus',
@@ -241,6 +246,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $getters = [
         'title' => 'getTitle',
         'description' => 'getDescription',
+        'note' => 'getNote',
         'type' => 'getType',
         'schedule' => 'getSchedule',
         'status' => 'getStatus',
@@ -312,6 +318,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('note', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('schedule', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
@@ -360,6 +367,9 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
 
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
+        }
+        if ($this->container['note'] === null) {
+            $invalidProperties[] = "'note' can't be null";
         }
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";
@@ -461,6 +471,33 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
+
+        return $this;
+    }
+
+    /**
+     * Gets note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->container['note'];
+    }
+
+    /**
+     * Sets note
+     *
+     * @param string $note 管理用の備考。閲覧サイトには公開しない
+     *
+     * @return self
+     */
+    public function setNote($note)
+    {
+        if (is_null($note)) {
+            throw new \InvalidArgumentException('non-nullable note cannot be null');
+        }
+        $this->container['note'] = $note;
 
         return $this;
     }

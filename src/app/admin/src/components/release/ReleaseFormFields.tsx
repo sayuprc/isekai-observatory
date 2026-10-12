@@ -115,6 +115,15 @@ const ReleaseBasicInfo = (props: { form: ReleaseFormState; getFieldError: (field
       />
       <FieldError message={props.getFieldError('description')} />
     </FormRow>
+    <FormRow label="備考" for="note" hint="管理用のメモです。閲覧サイトには表示しません">
+      <textarea
+        id="note"
+        class="textarea w-full"
+        rows={3}
+        value={props.form.note()}
+        onInput={(e) => props.form.setNote(e.currentTarget.value)}
+      />
+    </FormRow>
     {/* 提供形態は部品が自前でラベルを持つので、ラベル左の行に入れず並べる */}
     <div class="border-b border-base-300 py-3">
       <FormatCheckboxes

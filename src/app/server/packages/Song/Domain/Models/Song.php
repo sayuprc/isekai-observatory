@@ -16,6 +16,7 @@ readonly class Song
         public SongId $songId,
         public Title $title,
         public Description $description,
+        public Note $note,
         public ?LyricsLink $lyricsLink,
         public SongType $type,
         public bool $isDisplay,
@@ -35,6 +36,7 @@ readonly class Song
         string $songId,
         string $title,
         string $description,
+        string $note,
         ?string $lyricsLink,
         int $type,
         bool $isDisplay,
@@ -47,6 +49,7 @@ readonly class Song
             new SongId($songId),
             new Title($title),
             new Description($description),
+            new Note($note),
             $lyricsLink === null ? null : new LyricsLink($lyricsLink),
             SongType::from($type),
             $isDisplay,
@@ -58,7 +61,7 @@ readonly class Song
     }
 
     /**
-     * @return array{song_id: string, title: string, description: string, lyrics_link: string|null, type: value-of<SongType>, is_display: bool, order_no: int, persons: array<int, array{person_id: string, role: value-of<SongPersonRole>, order_no: int}>, tags: array<int, array{song_tag_id: string}>, media: array<int, array{media_id: string, order_no: int}>}
+     * @return array{song_id: string, title: string, description: string, note: string, lyrics_link: string|null, type: value-of<SongType>, is_display: bool, order_no: int, persons: array<int, array{person_id: string, role: value-of<SongPersonRole>, order_no: int}>, tags: array<int, array{song_tag_id: string}>, media: array<int, array{media_id: string, order_no: int}>}
      */
     public function toArray(): array
     {
@@ -66,6 +69,7 @@ readonly class Song
             'song_id' => $this->songId->value,
             'title' => $this->title->value,
             'description' => $this->description->value,
+            'note' => $this->note->value,
             'lyrics_link' => $this->lyricsLink?->value,
             'type' => $this->type->value,
             'is_display' => $this->isDisplay,

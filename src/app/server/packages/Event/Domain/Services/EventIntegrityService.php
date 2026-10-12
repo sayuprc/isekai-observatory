@@ -7,6 +7,7 @@ namespace Event\Domain\Services;
 use Event\Domain\Models\Event;
 use Event\Domain\Models\EventDescription;
 use Event\Domain\Models\EventId;
+use Event\Domain\Models\EventNote;
 use Event\Domain\Models\EventSchedule;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventTitle;
@@ -48,6 +49,7 @@ readonly class EventIntegrityService
     public function prepareForCreate(
         string $title,
         string $description,
+        string $note,
         int $type,
         array $schedule,
         int $status,
@@ -63,6 +65,7 @@ readonly class EventIntegrityService
             $this->generator->generate(),
             $title,
             $description,
+            $note,
             $type,
             $schedule,
             $status,
@@ -91,6 +94,7 @@ readonly class EventIntegrityService
         string $eventId,
         string $title,
         string $description,
+        string $note,
         int $type,
         array $schedule,
         int $status,
@@ -106,6 +110,7 @@ readonly class EventIntegrityService
             $eventId,
             $title,
             $description,
+            $note,
             $type,
             $schedule,
             $status,
@@ -134,6 +139,7 @@ readonly class EventIntegrityService
         string $eventId,
         string $title,
         string $description,
+        string $note,
         int $type,
         array $schedule,
         int $status,
@@ -149,6 +155,7 @@ readonly class EventIntegrityService
             new EventId($eventId),
             new EventTitle($title),
             new EventDescription($description),
+            new EventNote($note),
             EventType::from($type),
             EventSchedule::fromArray($schedule['startOn'], $schedule['endOn']),
             EventStatus::from($status),

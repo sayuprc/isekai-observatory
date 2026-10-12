@@ -61,6 +61,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'string',
         'title' => 'string',
         'description' => 'string',
+        'note' => 'string',
         'type' => '\OpenAPI\Admin\Client\Model\EventTypeValue',
         'schedule' => '\OpenAPI\Admin\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
         'status' => '\OpenAPI\Admin\Client\Model\EventStatusValue',
@@ -84,6 +85,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'uuid',
         'title' => null,
         'description' => null,
+        'note' => null,
         'type' => null,
         'schedule' => null,
         'status' => null,
@@ -105,6 +107,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => false,
         'title' => false,
         'description' => false,
+        'note' => false,
         'type' => false,
         'schedule' => false,
         'status' => false,
@@ -206,6 +209,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'eventId',
         'title' => 'title',
         'description' => 'description',
+        'note' => 'note',
         'type' => 'type',
         'schedule' => 'schedule',
         'status' => 'status',
@@ -227,6 +231,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'setEventId',
         'title' => 'setTitle',
         'description' => 'setDescription',
+        'note' => 'setNote',
         'type' => 'setType',
         'schedule' => 'setSchedule',
         'status' => 'setStatus',
@@ -248,6 +253,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'event_id' => 'getEventId',
         'title' => 'getTitle',
         'description' => 'getDescription',
+        'note' => 'getNote',
         'type' => 'getType',
         'schedule' => 'getSchedule',
         'status' => 'getStatus',
@@ -320,6 +326,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('event_id', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('note', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('schedule', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
@@ -371,6 +378,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
+        }
+        if ($this->container['note'] === null) {
+            $invalidProperties[] = "'note' can't be null";
         }
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";
@@ -499,6 +509,33 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
+
+        return $this;
+    }
+
+    /**
+     * Gets note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->container['note'];
+    }
+
+    /**
+     * Sets note
+     *
+     * @param string $note 管理用の備考。閲覧サイトには公開しない
+     *
+     * @return self
+     */
+    public function setNote($note)
+    {
+        if (is_null($note)) {
+            throw new \InvalidArgumentException('non-nullable note cannot be null');
+        }
+        $this->container['note'] = $note;
 
         return $this;
     }

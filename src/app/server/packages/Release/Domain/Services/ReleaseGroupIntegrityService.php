@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Release\Domain\Services;
 
 use Release\Domain\Models\Description;
+use Release\Domain\Models\Note;
 use Release\Domain\Models\ReleaseGroup;
 use Release\Domain\Models\ReleaseGroupId;
 use Release\Domain\Models\ReleaseGroupTitle;
@@ -23,10 +24,11 @@ class ReleaseGroupIntegrityService
         string $title,
         int $typeValue,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
     ): ReleaseGroup {
-        return $this->build($this->generator->generate(), $title, $typeValue, $description, $isDisplay, $orderNo);
+        return $this->build($this->generator->generate(), $title, $typeValue, $description, $note, $isDisplay, $orderNo);
     }
 
     public function prepareForUpdate(
@@ -34,10 +36,11 @@ class ReleaseGroupIntegrityService
         string $title,
         int $typeValue,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
     ): ReleaseGroup {
-        return $this->build($releaseGroupId, $title, $typeValue, $description, $isDisplay, $orderNo);
+        return $this->build($releaseGroupId, $title, $typeValue, $description, $note, $isDisplay, $orderNo);
     }
 
     private function build(
@@ -45,6 +48,7 @@ class ReleaseGroupIntegrityService
         string $title,
         int $typeValue,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
     ): ReleaseGroup {
@@ -53,6 +57,7 @@ class ReleaseGroupIntegrityService
             new ReleaseGroupTitle($title),
             $this->toReleaseGroupType($typeValue),
             new Description($description),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
         );

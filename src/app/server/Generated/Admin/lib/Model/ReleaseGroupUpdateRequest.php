@@ -60,6 +60,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'title' => 'string',
         'type' => '\OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue',
         'description' => 'string',
+        'note' => 'string',
         'is_display' => 'bool',
         'order_no' => 'int'
     ];
@@ -75,6 +76,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'title' => null,
         'type' => null,
         'description' => null,
+        'note' => null,
         'is_display' => null,
         'order_no' => 'int32'
     ];
@@ -88,6 +90,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'title' => false,
         'type' => false,
         'description' => false,
+        'note' => false,
         'is_display' => false,
         'order_no' => false
     ];
@@ -181,6 +184,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'title' => 'title',
         'type' => 'type',
         'description' => 'description',
+        'note' => 'note',
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo'
     ];
@@ -194,6 +198,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'title' => 'setTitle',
         'type' => 'setType',
         'description' => 'setDescription',
+        'note' => 'setNote',
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo'
     ];
@@ -207,6 +212,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'title' => 'getTitle',
         'type' => 'getType',
         'description' => 'getDescription',
+        'note' => 'getNote',
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo'
     ];
@@ -271,6 +277,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('note', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
     }
@@ -314,6 +321,9 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         }
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
+        }
+        if ($this->container['note'] === null) {
+            $invalidProperties[] = "'note' can't be null";
         }
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
@@ -422,6 +432,33 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
             throw new \InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
+
+        return $this;
+    }
+
+    /**
+     * Gets note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->container['note'];
+    }
+
+    /**
+     * Sets note
+     *
+     * @param string $note 管理用の備考。閲覧サイトには公開しない
+     *
+     * @return self
+     */
+    public function setNote($note)
+    {
+        if (is_null($note)) {
+            throw new \InvalidArgumentException('non-nullable note cannot be null');
+        }
+        $this->container['note'] = $note;
 
         return $this;
     }

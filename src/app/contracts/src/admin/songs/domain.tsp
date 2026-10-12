@@ -19,6 +19,7 @@ scalar lyricsLink extends string;
   songId: "3cd42c09-ff3c-4cd2-913f-a279c4ea89b4",
   title: "テスト楽曲",
   description: "テスト楽曲説明",
+  note: "テスト楽曲備考",
   lyricsLink: "https://example.com/lyrics",
   type: SongTypeValue.Original,
   isDisplay: true,
@@ -49,6 +50,7 @@ model Song {
   songId: songId;
   title: title;
   description: description;
+  note: note;
   lyricsLink: lyricsLink | null;
   type: SongTypeValue;
   isDisplay: boolean;

@@ -57,6 +57,7 @@ class SongTest extends TestCase
             $songId,
             $title,
             $description,
+            '',
             null,
             $type->value,
             $isDisplay,

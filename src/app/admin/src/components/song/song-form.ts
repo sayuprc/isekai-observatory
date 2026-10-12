@@ -47,6 +47,7 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
   const song = options.song;
   const [title, setTitle] = createSignal(song?.title ?? '');
   const [description, setDescription] = createSignal(song?.description ?? '');
+  const [note, setNote] = createSignal(song?.note ?? '');
   const [lyricsLink, setLyricsLink] = createSignal(song?.lyricsLink ?? '');
   const [typeValue, setTypeValue] = createSignal<SongTypeValue | ''>(song?.type ?? '');
   const [isDisplay, setIsDisplay] = createSignal(song?.isDisplay ?? true);
@@ -72,6 +73,7 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
   const toCreateRequest = (): SongCreateRequest => ({
     title: title(),
     description: description(),
+    note: note(),
     lyricsLink: normalizeOptionalString(lyricsLink()),
     type: typeValue() as SongTypeValue,
     isDisplay: isDisplay(),
@@ -87,6 +89,8 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
     setTitle,
     description,
     setDescription,
+    note,
+    setNote,
     lyricsLink,
     setLyricsLink,
     typeValue,

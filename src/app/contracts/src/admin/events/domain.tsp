@@ -70,6 +70,7 @@ model Event {
   eventId: eventId;
   title: eventTitle;
   description: eventDescription;
+  note: note;
   type: EventTypeValue;
   schedule: EventSchedule;
   status: EventStatusValue;

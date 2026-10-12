@@ -42,6 +42,7 @@ readonly class UpdateUseCase
                 $inputData->title,
                 $inputData->type,
                 $inputData->description,
+                $inputData->note,
                 $inputData->isDisplay,
                 $inputData->orderNo,
             );

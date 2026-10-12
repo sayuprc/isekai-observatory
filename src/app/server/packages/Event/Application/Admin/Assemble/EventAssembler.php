@@ -67,6 +67,7 @@ class EventAssembler
             $event->eventId->value,
             $event->title->value,
             $event->description->value,
+            $event->note->value,
             $event->type,
             $event->schedule->startOn?->format('Y-m-d'),
             $event->schedule->endOn?->format('Y-m-d'),

@@ -15,6 +15,7 @@ readonly class Release
         public ReleaseName $name,
         public ReleasedOn $releasedOn,
         public Description $description,
+        public Note $note,
         public bool $isDisplay,
         public OrderNo $orderNo,
         public ReleaseFormats $formats,
@@ -32,6 +33,7 @@ readonly class Release
         string $name,
         ImmutableDate $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formats,
@@ -43,6 +45,7 @@ readonly class Release
             new ReleaseName($name),
             new ReleasedOn($releasedOn),
             new Description($description),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::reconstruct($formats),
@@ -51,7 +54,7 @@ readonly class Release
     }
 
     /**
-     * @return array{release_id: string, release_group_id: string, name: string, released_on: string, description: string, is_display: bool, order_no: int, formats: list<value-of<ReleaseFormat>>, media: list<array{position: int, name: ?string, tracks: list<array{song_id: ?string, title: ?string, track_no: int}>}>}
+     * @return array{release_id: string, release_group_id: string, name: string, released_on: string, description: string, note: string, is_display: bool, order_no: int, formats: list<value-of<ReleaseFormat>>, media: list<array{position: int, name: ?string, tracks: list<array{song_id: ?string, title: ?string, track_no: int}>}>}
      */
     public function toArray(): array
     {
@@ -61,6 +64,7 @@ readonly class Release
             'name' => $this->name->value,
             'released_on' => $this->releasedOn->value->format('Y-m-d'),
             'description' => $this->description->value,
+            'note' => $this->note->value,
             'is_display' => $this->isDisplay,
             'order_no' => $this->orderNo->value,
             'formats' => $this->formats->toArray(),

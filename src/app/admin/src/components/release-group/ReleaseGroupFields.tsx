@@ -16,6 +16,7 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
   const [title, setTitle] = createSignal(initial?.title ?? '');
   const [typeValue, setTypeValue] = createSignal<ReleaseGroupTypeValue>(initial?.type ?? 1);
   const [description, setDescription] = createSignal(initial?.description ?? '');
+  const [note, setNote] = createSignal(initial?.note ?? '');
   const [isDisplay, setIsDisplay] = createSignal(initial?.isDisplay ?? true);
   const [orderNo, setOrderNo] = createSignal(initial?.orderNo ?? 1);
 
@@ -23,6 +24,7 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
     title: title(),
     type: typeValue(),
     description: description(),
+    note: note(),
     isDisplay: isDisplay(),
     orderNo: orderNo(),
   });
@@ -34,6 +36,8 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
     setTypeValue,
     description,
     setDescription,
+    note,
+    setNote,
     isDisplay,
     setIsDisplay,
     orderNo,
@@ -84,6 +88,15 @@ export const ReleaseGroupFields = (props: ReleaseGroupFieldsProps) => (
       <Show when={props.getFieldError('description')}>
         {(message) => <p class="text-xs text-error">{message()}</p>}
       </Show>
+    </FormRow>
+    <FormRow label="備考" for="note" hint="管理用のメモです。閲覧サイトには表示しません">
+      <textarea
+        id="note"
+        class="textarea w-full"
+        rows={3}
+        value={props.form.note()}
+        onInput={(e) => props.form.setNote(e.currentTarget.value)}
+      />
     </FormRow>
     <FormRow label="表示順" for="orderNo">
       <input

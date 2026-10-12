@@ -68,6 +68,7 @@ class UpdateSongTest extends DatabaseTestCase
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '備考',
                 'lyricsLink' => 'https://example.com/new-lyrics',
                 'type' => SongType::Cover->value,
                 'isDisplay' => false,
@@ -84,6 +85,7 @@ class UpdateSongTest extends DatabaseTestCase
                     'songId' => $songId,
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
+                    'note' => '備考',
                     'lyricsLink' => 'https://example.com/new-lyrics',
                     'type' => SongType::Cover->value,
                     'isDisplay' => false,
@@ -148,6 +150,7 @@ class UpdateSongTest extends DatabaseTestCase
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -200,6 +203,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'songId' => $bodySongId,
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Cover->value,
                 'isDisplay' => false,
@@ -216,6 +220,7 @@ class UpdateSongTest extends DatabaseTestCase
                     'songId' => $routeSongId,
                     'title' => 'テスト楽曲',
                     'description' => 'テスト楽曲説明',
+                    'note' => '',
                     'lyricsLink' => null,
                     'type' => SongType::Cover->value,
                     'isDisplay' => false,
@@ -249,6 +254,7 @@ class UpdateSongTest extends DatabaseTestCase
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -272,6 +278,7 @@ class UpdateSongTest extends DatabaseTestCase
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -298,6 +305,7 @@ class UpdateSongTest extends DatabaseTestCase
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -329,6 +337,7 @@ class UpdateSongTest extends DatabaseTestCase
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => '',
                 'description' => '',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => 0,
                 'isDisplay' => true,

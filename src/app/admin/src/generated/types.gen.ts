@@ -97,6 +97,7 @@ export type Event = {
     eventId: EventId;
     title: EventTitle;
     description: EventDescription;
+    note: Note;
     type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatusValue;
@@ -112,6 +113,7 @@ export type Event = {
 export type EventCreateRequest = {
     title: EventTitle;
     description: EventDescription;
+    note: Note;
     type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatusValue;
@@ -205,6 +207,7 @@ export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 export type EventUpdateRequest = {
     title: EventTitle;
     description: EventDescription;
+    note: Note;
     type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatusValue;
@@ -566,6 +569,7 @@ export type Release = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -577,6 +581,7 @@ export type ReleaseCreateRequest = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -609,6 +614,7 @@ export type ReleaseGroup = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
 };
@@ -617,6 +623,7 @@ export type ReleaseGroupCreateRequest = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
 };
@@ -682,6 +689,7 @@ export type ReleaseGroupUpdateRequest = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
 };
@@ -704,6 +712,7 @@ export type ReleaseUpdateRequest = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -798,6 +807,7 @@ export type Song = {
     songId: SongId;
     title: Title;
     description: Description;
+    note: Note;
     lyricsLink: LyricsLink | null;
     type: SongTypeValue;
     isDisplay: boolean;
@@ -815,6 +825,7 @@ export type SongAttachedTag = {
 export type SongCreateRequest = {
     title: Title;
     description: Description;
+    note: Note;
     lyricsLink: LyricsLink | null;
     type: SongTypeValue;
     isDisplay: boolean;
@@ -962,6 +973,7 @@ export type SongTypeValue = 1 | 2 | 3;
 export type SongUpdateRequest = {
     title: Title;
     description: Description;
+    note: Note;
     lyricsLink: LyricsLink | null;
     type: SongTypeValue;
     isDisplay: boolean;
@@ -1156,6 +1168,11 @@ export type MediaUrl = string;
  * 媒体の表示ラベル(CD1 / Blu-ray など)
  */
 export type MediumName = string;
+
+/**
+ * 管理用の備考。閲覧サイトには公開しない
+ */
+export type Note = string;
 
 /**
  * 表示順

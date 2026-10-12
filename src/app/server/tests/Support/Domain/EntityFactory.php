@@ -35,6 +35,7 @@ use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonName;
 use Release\Domain\Models\Description as ReleaseDescription;
 use Release\Domain\Models\Media as ReleaseMedia;
+use Release\Domain\Models\Note as ReleaseNote;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleasedOn;
 use Release\Domain\Models\ReleaseFormat;
@@ -48,6 +49,7 @@ use Release\Domain\Models\ReleaseName;
 use Song\Domain\Models\Description;
 use Song\Domain\Models\LyricsLink;
 use Song\Domain\Models\Media\SongMediaLinks;
+use Song\Domain\Models\Note;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Song;
@@ -93,11 +95,13 @@ trait EntityFactory
         array $sources = [],
         array $performances = [],
         array $setlist = [],
+        string $note = '',
     ): Event {
         return Event::reconstruct(
             $eventId,
             $title,
             '',
+            $note,
             $type->value,
             $startOn,
             $endOn,
@@ -156,6 +160,7 @@ trait EntityFactory
         mixed $composersOrArrangers = [],
         mixed $arrangers = [],
         mixed $media = [],
+        string $note = '',
     ): Song {
         if ($lyricsLinkOrType instanceof SongType) {
             $lyricsLink = null;
@@ -201,6 +206,7 @@ trait EntityFactory
             new SongId($songId),
             new Title($title),
             new Description($description),
+            new Note($note),
             $lyricsLink === null ? null : new LyricsLink($lyricsLink),
             $type,
             $isDisplay,
@@ -300,12 +306,14 @@ trait EntityFactory
         bool $isDisplay = true,
         string $description = 'テスト用リリースグループ',
         int $orderNo = 1,
+        string $note = '',
     ): ReleaseGroup {
         return new ReleaseGroup(
             new ReleaseGroupId($releaseGroupId),
             new ReleaseGroupTitle($title),
             $type,
             new ReleaseDescription($description),
+            new ReleaseNote($note),
             $isDisplay,
             new OrderNo($orderNo),
         );
@@ -324,6 +332,7 @@ trait EntityFactory
         ?array $formats = null,
         array $media = [],
         int $orderNo = 1,
+        string $note = '',
     ): Release {
         return new Release(
             new ReleaseId($releaseId),
@@ -331,6 +340,7 @@ trait EntityFactory
             new ReleaseName($name),
             new ReleasedOn($releasedOn ?? new ImmutableDate('2024-01-01')),
             new ReleaseDescription($description),
+            new ReleaseNote($note),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::reconstruct($formats ?? [ReleaseFormat::Cd->value]),

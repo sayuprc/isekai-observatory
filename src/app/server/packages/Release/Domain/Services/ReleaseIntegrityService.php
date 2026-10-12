@@ -8,6 +8,7 @@ use DateMalformedStringException;
 use DateType\ImmutableDate;
 use Release\Domain\Models\Description;
 use Release\Domain\Models\Media;
+use Release\Domain\Models\Note;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleasedOn;
 use Release\Domain\Models\ReleaseFormats;
@@ -41,12 +42,13 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        return $this->prepare($this->generator->generate(), $releaseGroupId, $name, $releasedOn, $description, $isDisplay, $orderNo, $formatValues, $media);
+        return $this->prepare($this->generator->generate(), $releaseGroupId, $name, $releasedOn, $description, $note, $isDisplay, $orderNo, $formatValues, $media);
     }
 
     /**
@@ -61,12 +63,13 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        return $this->prepare($releaseId, $releaseGroupId, $name, $releasedOn, $description, $isDisplay, $orderNo, $formatValues, $media);
+        return $this->prepare($releaseId, $releaseGroupId, $name, $releasedOn, $description, $note, $isDisplay, $orderNo, $formatValues, $media);
     }
 
     /**
@@ -79,12 +82,13 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        $release = $this->build($releaseId, $releaseGroupId, $name, $releasedOn, $description, $isDisplay, $orderNo, $formatValues, $media);
+        $release = $this->build($releaseId, $releaseGroupId, $name, $releasedOn, $description, $note, $isDisplay, $orderNo, $formatValues, $media);
 
         if ($this->releaseGroupRepository->find($release->releaseGroupId) === null) {
             throw new BusinessRuleViolationException('指定されたリリースグループが存在しません。');
@@ -107,6 +111,7 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
@@ -118,6 +123,7 @@ class ReleaseIntegrityService
             new ReleaseName($name),
             $this->toReleasedOn($releasedOn),
             new Description($description),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::fromArray($formatValues),

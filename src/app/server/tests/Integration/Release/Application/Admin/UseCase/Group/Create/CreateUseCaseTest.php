@@ -25,6 +25,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             title: '観測された春',
             type: ReleaseGroupType::Album->value,
             description: '1st アルバム',
+            note: '',
             isDisplay: true,
             orderNo: 1,
         ));
@@ -35,6 +36,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             'title' => '観測された春',
             'type' => ReleaseGroupType::Album->value,
             'description' => '1st アルバム',
+            'note' => '',
             'is_display' => true,
             'order_no' => 1,
         ]);
@@ -51,6 +53,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             title: '観測された春',
             type: ReleaseGroupType::Album->value,
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 7,
         ));
@@ -67,6 +70,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             title: '観測された春',
             type: 0,
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 1,
         ));

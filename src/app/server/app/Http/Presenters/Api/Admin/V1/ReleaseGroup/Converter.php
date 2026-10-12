@@ -23,6 +23,7 @@ class Converter
             ->setTitle($releaseGroup->title->value)
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description->value)
+            ->setNote($releaseGroup->note->value)
             ->setIsDisplay($releaseGroup->isDisplay)
             ->setOrderNo($releaseGroup->orderNo->value);
     }

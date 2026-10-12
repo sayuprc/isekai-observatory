@@ -4,8 +4,8 @@
 
 ## 用語
 
-- **ReleaseGroup** (作品): `releaseGroupId` / `title` / `type` (Single / Album / Ep / Other) / `description` / `isDisplay` / `orderNo`
-- **Release** (版): `releaseId` / 所属 Group / `name` (空可) / `releasedOn` / `description` / `isDisplay` / `orderNo` / `formats` (非空集合)
+- **ReleaseGroup** (作品): `releaseGroupId` / `title` / `type` (Single / Album / Ep / Other) / `description` / `note` / `isDisplay` / `orderNo`
+- **Release** (版): `releaseId` / 所属 Group / `name` (空可) / `releasedOn` / `description` / `note` / `isDisplay` / `orderNo` / `formats` (非空集合)
 - **Medium** (トラックリストの区切り): `position` / `name?` / `tracks[]`
   契約上のフィールド名は `media` だが、Media パッケージの Media とは別物
 - **Track**: `songId?` + `title?` (少なくとも一方必須) + `trackNo`
@@ -22,6 +22,7 @@
 
 ## できないこと
 
+- 備考 (`note`) は管理用のメモとして Viewer に出さない
 - ジャケットなど権利者画像を保存・配信しない
 - 代表色を持たない
 - formats を空にできない。Medium に format を持たせない

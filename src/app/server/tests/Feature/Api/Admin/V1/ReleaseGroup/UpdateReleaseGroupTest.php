@@ -33,6 +33,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'title' => '新タイトル',
                 'type' => ReleaseGroupType::Single->value,
                 'description' => '更新後の説明',
+                'note' => '備考',
                 'isDisplay' => false,
                 'orderNo' => 3,
             ])->assertStatus(200)
@@ -45,6 +46,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                             ->where('title', '新タイトル')
                             ->where('type', ReleaseGroupType::Single->value)
                             ->where('description', '更新後の説明')
+                            ->where('note', '備考')
                             ->where('isDisplay', false)
                             ->where('orderNo', 3),
                     ),
@@ -66,6 +68,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'title' => '新タイトル',
                 'type' => ReleaseGroupType::Album->value,
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
             ])->assertStatus(404);
@@ -85,6 +88,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'title' => '新タイトル',
                 'type' => ReleaseGroupType::Album->value,
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
             ])->assertStatus(403);
