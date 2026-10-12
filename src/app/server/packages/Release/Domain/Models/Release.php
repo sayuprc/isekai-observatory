@@ -25,8 +25,8 @@ readonly class Release
     }
 
     /**
-     * @param list<int>                                                                                                     $formats
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param list<int>                                                                                                           $formats
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     public static function reconstruct(
         string $releaseId,
@@ -55,7 +55,7 @@ readonly class Release
     }
 
     /**
-     * @return array{release_id: string, release_group_id: string, name: string, released_on: string, description: string, note: string, is_display: bool, order_no: int, formats: list<value-of<ReleaseFormat>>, media: list<array{position: int, name: ?string, tracks: list<array{song_id: ?string, title: ?string, track_no: int}>}>}
+     * @return array{release_id: string, release_group_id: string, name: string, released_on: string, description: string, note: string, is_display: bool, order_no: int, formats: list<value-of<ReleaseFormat>>, media: list<array{position: int, name: ?string, tracks: list<array{song_ids: list<string>, title: ?string, track_no: int}>}>}
      */
     public function toArray(): array
     {

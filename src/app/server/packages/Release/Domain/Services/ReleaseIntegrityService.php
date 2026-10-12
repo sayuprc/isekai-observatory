@@ -32,8 +32,8 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param list<int>                                                                                                           $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -63,8 +63,8 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param list<int>                                                                                                           $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -95,8 +95,8 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param list<int>                                                                                                           $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function prepare(
         string $releaseId,
@@ -135,8 +135,8 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param list<int>                                                                                                           $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function build(
         string $releaseId,
@@ -168,13 +168,10 @@ class ReleaseIntegrityService
     {
         foreach ($media as $medium) {
             foreach ($medium->tracks as $track) {
-                // タイトルのみトラックは Song 集約を参照しない
-                if ($track->songId === null) {
-                    continue;
-                }
-
-                if ($this->songRepository->find($track->songId) === null) {
-                    return false;
+                foreach ($track->songIds as $songId) {
+                    if ($this->songRepository->find($songId) === null) {
+                        return false;
+                    }
                 }
             }
         }

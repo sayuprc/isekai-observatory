@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 import type { ReleaseFormatValue, ReleaseUpdateRequest } from '../../generated';
-import { toMediaPayload, type MediumForm } from './MediaEditor';
+import { toMediaPayload, type MediumForm } from './media-form';
 
 /** フォームの初期値。作成ではコピー元があればその内容、なければ空 */
 export interface ReleaseInitialValues {

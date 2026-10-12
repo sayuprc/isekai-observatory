@@ -29,15 +29,22 @@ readonly class ReleaseDetailQueryService implements ReleaseDetailQueryServiceInt
                 ->withSelect([
                     'release_tracks.position',
                     'release_tracks.track_no',
-                    'release_tracks.song_id',
+                    'release_track_songs.song_id',
                 ])
-                // 参照トラックは楽曲の正式名を返す (上書き名は Release 集約の tracks 側で扱う)
+                // 楽曲を参照するトラックは楽曲ごとに正式名を返す (上書き名は Release 集約の tracks 側で扱う)
                 ->select(new Sql('COALESCE(songs.title, release_tracks.title)'), 'title')
                 ->from('release_tracks')
-                ->outerJoin('songs', 'release_tracks.song_id = songs.song_id')
+                ->outerJoin(
+                    'release_track_songs',
+                    'release_track_songs.release_id = release_tracks.release_id'
+                    . ' AND release_track_songs.position = release_tracks.position'
+                    . ' AND release_track_songs.track_no = release_tracks.track_no',
+                )
+                ->outerJoin('songs', 'release_track_songs.song_id = songs.song_id')
                 ->where('release_tracks.release_id', '=', $this->converter->toBin($releaseId->value))
                 ->orderBy('release_tracks.position')
-                ->orderBy('release_tracks.track_no'),
+                ->orderBy('release_tracks.track_no')
+                ->orderBy('release_track_songs.order_no'),
         );
 
         return array_map(

@@ -24,7 +24,7 @@ scalar releaseName extends string;
 @format("date")
 scalar releasedOn extends string;
 
-@doc("トラックの表示名。参照トラックでは楽曲名の上書き、タイトルのみトラックでは必須のタイトル")
+@doc("トラックの表示名。楽曲 1 件では楽曲名の上書き、メドレーでは任意の表示名、タイトルのみトラックでは必須のタイトル")
 @minLength(1)
 scalar trackTitle extends string;
 
@@ -105,9 +105,9 @@ model ReleaseGroupReferencedRelease {
   formats: ReleaseFormatValue[];
 }
 
-@doc("収録曲。songId / title の少なくとも一方を指定する(検証はサーバー側の責務)。songId ありは Song 集約を参照する参照トラックで、title を併記すると表示名を上書きする。songId なしは表示専用のタイトルのみトラック")
+@doc("収録曲。songIds / title の少なくとも一方を指定する(検証はサーバー側の責務)。songIds は Song 集約を収録順に参照し、2 件以上でメドレーになる。楽曲 1 件では title で表示名を上書きし、メドレーでは title をメドレーの表示名にする。songIds が空なら表示専用のタイトルのみトラック")
 model Track {
-  songId: uuid | null;
+  songIds: uuid[];
   title: trackTitle | null;
   trackNo: orderNo;
 }
@@ -136,7 +136,7 @@ model Release {
   media: Medium[];
 }
 
-@doc("リリース収録曲の read model。参照トラックの title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る")
+@doc("リリース収録曲の read model。楽曲を参照するトラックは楽曲ごとに 1 行で title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る")
 model ReleaseReferencedSong {
   mediumPosition: orderNo;
   trackNo: orderNo;

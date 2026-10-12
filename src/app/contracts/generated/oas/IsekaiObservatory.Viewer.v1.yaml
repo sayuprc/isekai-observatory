@@ -659,9 +659,11 @@ components:
                       name: null
                       tracks:
                         - trackNo: 1
-                          songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
-                          title: テスト楽曲
-                          isDisplay: true
+                          title: null
+                          songs:
+                            - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+                              title: テスト楽曲
+                              isDisplay: true
           nextCursor: eyJmaXJzdFJlbGVhc2VkT24iOiIyMDI2LTA1LTAxIiwicmVsZWFzZUdyb3VwSWQiOiIwZjIxODVjZC1iNGFiLTRmMjItYjBhMy1mZDkzY2JiZDJkZjIifQ==
     ReleaseGroupTypeValue:
       type: integer
@@ -734,21 +736,34 @@ components:
       type: object
       required:
         - trackNo
+        - title
+        - songs
+      properties:
+        trackNo:
+          $ref: '#/components/schemas/orderNo'
+        title:
+          anyOf:
+            - type: string
+            - type: 'null'
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseTrackSong'
+      description: 収録曲。songs は収録順で、2 件以上ならメドレー。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null
+    ReleaseTrackSong:
+      type: object
+      required:
         - songId
         - title
         - isDisplay
       properties:
-        trackNo:
-          $ref: '#/components/schemas/orderNo'
         songId:
-          anyOf:
-            - $ref: '#/components/schemas/uuid'
-            - type: 'null'
+          $ref: '#/components/schemas/uuid'
         title:
           type: string
         isDisplay:
           type: boolean
-      description: '収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する'
+      description: 収録曲が参照する楽曲。リンク可否は isDisplay で判定する
     SetlistItem:
       type: object
       required:

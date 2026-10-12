@@ -56,10 +56,11 @@ class ListReleaseGroupTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $visibleSongId, 'title' => null, 'trackNo' => 1],
-                            ['songId' => $hiddenSongId, 'title' => null, 'trackNo' => 2],
-                            ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 3],
-                            ['songId' => $visibleSongId, 'title' => '公開楽曲 -acoustic-', 'trackNo' => 4],
+                            ['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [$hiddenSongId], 'title' => null, 'trackNo' => 2],
+                            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 3],
+                            ['songIds' => [$visibleSongId], 'title' => '公開楽曲 -acoustic-', 'trackNo' => 4],
+                            ['songIds' => [$hiddenSongId, $visibleSongId], 'title' => 'メドレー', 'trackNo' => 5],
                         ],
                     ],
                 ],
@@ -77,7 +78,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => 'CD',
-                        'tracks' => [['songId' => $visibleSongId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1]],
                     ],
                     [
                         'position' => 2,
@@ -118,29 +119,34 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                         'tracks' => [
                                             [
                                                 'trackNo' => 1,
-                                                'songId' => $visibleSongId,
-                                                'title' => '公開楽曲',
-                                                'isDisplay' => true,
+                                                'title' => null,
+                                                'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true]],
                                             ],
                                             [
                                                 'trackNo' => 2,
-                                                'songId' => $hiddenSongId,
-                                                'title' => '非公開楽曲',
-                                                'isDisplay' => false,
+                                                'title' => null,
+                                                'songs' => [['songId' => $hiddenSongId, 'title' => '非公開楽曲', 'isDisplay' => false]],
                                             ],
-                                            // タイトルのみトラックは songId: null / isDisplay: false で返る
+                                            // タイトルのみトラックは楽曲を持たない
                                             [
                                                 'trackNo' => 3,
-                                                'songId' => null,
                                                 'title' => '管理対象外の楽曲',
-                                                'isDisplay' => false,
+                                                'songs' => [],
                                             ],
-                                            // 上書き名を持つ参照トラックは楽曲名ではなく上書き名で返る
+                                            // 上書き名を持つトラックは上書き名と楽曲名を別々に返す
                                             [
                                                 'trackNo' => 4,
-                                                'songId' => $visibleSongId,
                                                 'title' => '公開楽曲 -acoustic-',
-                                                'isDisplay' => true,
+                                                'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true]],
+                                            ],
+                                            // メドレーは楽曲を収録順に返す
+                                            [
+                                                'trackNo' => 5,
+                                                'title' => 'メドレー',
+                                                'songs' => [
+                                                    ['songId' => $hiddenSongId, 'title' => '非公開楽曲', 'isDisplay' => false],
+                                                    ['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true],
+                                                ],
                                             ],
                                         ],
                                     ],
@@ -160,9 +166,8 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                         'tracks' => [
                                             [
                                                 'trackNo' => 1,
-                                                'songId' => $visibleSongId,
-                                                'title' => '公開楽曲',
-                                                'isDisplay' => true,
+                                                'title' => null,
+                                                'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true]],
                                             ],
                                         ],
                                     ],
@@ -205,8 +210,8 @@ class ListReleaseGroupTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 2],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 2],
                         ],
                     ],
                 ],
@@ -216,9 +221,9 @@ class ListReleaseGroupTest extends DatabaseTestCase
         $this->get(route(ViewerReleaseGroupRouteMap::List))
             ->assertStatus(200)
             ->assertJsonCount(2, 'releaseGroups.0.releases.0.media.0.tracks')
-            ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.0.songId', $songId)
+            ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.0.songs.0.songId', $songId)
             ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.0.trackNo', 1)
-            ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.1.songId', $songId)
+            ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.1.songs.0.songId', $songId)
             ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.1.trackNo', 2);
     }
 

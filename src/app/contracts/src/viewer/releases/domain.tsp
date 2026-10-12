@@ -56,12 +56,18 @@ enum ReleaseFormatValue {
   Other: 99,
 }
 
-@doc("収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する")
-model ReleaseTrackItem {
-  trackNo: orderNo;
-  songId: uuid | null;
+@doc("収録曲が参照する楽曲。リンク可否は isDisplay で判定する")
+model ReleaseTrackSong {
+  songId: uuid;
   title: string;
   isDisplay: boolean;
+}
+
+@doc("収録曲。songs は収録順で、2 件以上ならメドレー。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null")
+model ReleaseTrackItem {
+  trackNo: orderNo;
+  title: string | null;
+  songs: ReleaseTrackSong[];
 }
 
 @doc("リリース内の媒体(トラックリストの区切り)。name は Disc 表示用の任意ラベル")

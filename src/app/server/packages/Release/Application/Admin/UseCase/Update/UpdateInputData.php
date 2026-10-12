@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Release\Application\Admin\UseCase\Update;
 
 /**
- * @phpstan-type _mediumInput array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}
+ * @phpstan-type _mediumInput array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}
  */
 readonly class UpdateInputData
 {

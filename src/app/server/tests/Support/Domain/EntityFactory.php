@@ -326,7 +326,7 @@ trait EntityFactory
     }
 
     /**
-     * @param list<array{position: int, format: int, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param list<array{position: int, format: int, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     protected function createRelease(
         string $releaseId,

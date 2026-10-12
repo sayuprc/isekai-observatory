@@ -16,7 +16,7 @@ readonly class Medium
     }
 
     /**
-     * @param list<array{songId: ?string, title: ?string, trackNo: int}> $tracks
+     * @param list<array{songIds: list<string>, title: ?string, trackNo: int}> $tracks
      */
     public static function reconstruct(int $position, ?string $name, array $tracks): self
     {
@@ -28,7 +28,7 @@ readonly class Medium
     }
 
     /**
-     * @return array{position: int, name: ?string, tracks: list<array{song_id: ?string, title: ?string, track_no: int}>}
+     * @return array{position: int, name: ?string, tracks: list<array{song_ids: list<string>, title: ?string, track_no: int}>}
      */
     public function toArray(): array
     {
