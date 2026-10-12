@@ -1,7 +1,7 @@
 [env]
-SERVER_IMAGE = "ghcr.io/sayuprc/isekai-observatory-api:local"
-OPENAPI_IMAGE = "ghcr.io/sayuprc/openapi-generator:local"
-MYSQL_IMAGE = "ghcr.io/sayuprc/isekai-observatory-mysql:local"
+SERVER_IMAGE = "ghcr.io/sayuprc/isekai-observatory-api:{{vars.php_image_tag}}"
+OPENAPI_IMAGE = "ghcr.io/sayuprc/openapi-generator:{{vars.openapi_image_tag}}"
+MYSQL_IMAGE = "ghcr.io/sayuprc/isekai-observatory-mysql:{{vars.mysql_image_tag}}"
 
 [tasks."build:php"]
 description = "CI 向けに PHP イメージをビルドして GHCR にプッシュする"
