@@ -9,7 +9,6 @@ use Person\Domain\Models\PersonRepositoryInterface;
 use Song\Domain\Models\Description;
 use Song\Domain\Models\LyricsLink;
 use Song\Domain\Models\Media\SongMediaLinks;
-use Song\Domain\Models\Note;
 use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
@@ -20,6 +19,7 @@ use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 /**

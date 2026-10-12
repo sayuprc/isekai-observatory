@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Song\Domain\Models;
+namespace Support\Domain\ValueObjects;
 
 use Support\Domain\ValueObjects\String\TextValueObject;
 

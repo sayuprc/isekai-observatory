@@ -35,7 +35,6 @@ use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonName;
 use Release\Domain\Models\Description as ReleaseDescription;
 use Release\Domain\Models\Media as ReleaseMedia;
-use Release\Domain\Models\Note as ReleaseNote;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleasedOn;
 use Release\Domain\Models\ReleaseFormat;
@@ -49,7 +48,6 @@ use Release\Domain\Models\ReleaseName;
 use Song\Domain\Models\Description;
 use Song\Domain\Models\LyricsLink;
 use Song\Domain\Models\Media\SongMediaLinks;
-use Song\Domain\Models\Note;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Song;
@@ -60,6 +58,7 @@ use Song\Domain\Models\Tag\SongTagId;
 use Song\Domain\Models\Tag\SongTagName;
 use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueId;
@@ -313,7 +312,7 @@ trait EntityFactory
             new ReleaseGroupTitle($title),
             $type,
             new ReleaseDescription($description),
-            new ReleaseNote($note),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
         );
@@ -340,7 +339,7 @@ trait EntityFactory
             new ReleaseName($name),
             new ReleasedOn($releasedOn ?? new ImmutableDate('2024-01-01')),
             new ReleaseDescription($description),
-            new ReleaseNote($note),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::reconstruct($formats ?? [ReleaseFormat::Cd->value]),

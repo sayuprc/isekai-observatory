@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Release\Domain\Services;
 
 use Release\Domain\Models\Description;
-use Release\Domain\Models\Note;
 use Release\Domain\Models\ReleaseGroup;
 use Release\Domain\Models\ReleaseGroupId;
 use Release\Domain\Models\ReleaseGroupTitle;
 use Release\Domain\Models\ReleaseGroupType;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\InvalidDomainException;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 class ReleaseGroupIntegrityService

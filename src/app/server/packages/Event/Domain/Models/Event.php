@@ -10,6 +10,7 @@ use Event\Domain\Models\Releases\EventReleaseLinks;
 use Event\Domain\Models\Setlist\Setlist;
 use Event\Domain\Models\Sources\EventSources;
 use Event\Domain\Models\Venues\EventVenueLinks;
+use Support\Domain\ValueObjects\Note;
 
 /**
  * @phpstan-import-type _songPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
@@ -22,7 +23,7 @@ readonly class Event
         public EventId $eventId,
         public EventTitle $title,
         public EventDescription $description,
-        public EventNote $note,
+        public Note $note,
         public EventType $type,
         public EventSchedule $schedule,
         public EventStatus $status,
@@ -65,7 +66,7 @@ readonly class Event
             new EventId($eventId),
             new EventTitle($title),
             new EventDescription($description),
-            new EventNote($note),
+            new Note($note),
             EventType::from($type),
             EventSchedule::reconstruct($startOn, $endOn),
             EventStatus::from($status),

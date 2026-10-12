@@ -8,6 +8,7 @@ use Song\Domain\Models\Media\SongMediaLinks;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Tags\SongTagReferences;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 readonly class Song

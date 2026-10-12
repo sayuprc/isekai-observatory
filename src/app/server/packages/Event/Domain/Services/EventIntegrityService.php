@@ -7,7 +7,6 @@ namespace Event\Domain\Services;
 use Event\Domain\Models\Event;
 use Event\Domain\Models\EventDescription;
 use Event\Domain\Models\EventId;
-use Event\Domain\Models\EventNote;
 use Event\Domain\Models\EventSchedule;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventTitle;
@@ -20,6 +19,7 @@ use Event\Domain\Models\Sources\EventSources;
 use Event\Domain\Models\Venues\EventVenueLinks;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\ValueObjects\Note;
 
 /**
  * Event 集約内でしか判断できない不変条件を検証する。
@@ -155,7 +155,7 @@ readonly class EventIntegrityService
             new EventId($eventId),
             new EventTitle($title),
             new EventDescription($description),
-            new EventNote($note),
+            new Note($note),
             EventType::from($type),
             EventSchedule::fromArray($schedule['startOn'], $schedule['endOn']),
             EventStatus::from($status),

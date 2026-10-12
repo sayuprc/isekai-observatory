@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Release\Domain\Models;
 
 use DateType\ImmutableDate;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 readonly class Release
