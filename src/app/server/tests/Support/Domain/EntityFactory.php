@@ -28,6 +28,7 @@ use Media\Domain\Models\MediaUrl;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
 use Person\Domain\Models\Person;
 use Person\Domain\Models\PersonGroup;
+use Person\Domain\Models\PersonGroupDisplayName;
 use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonGroupMembers;
 use Person\Domain\Models\PersonGroupName;
@@ -130,13 +131,19 @@ trait EntityFactory
     }
 
     /**
-     * @param list<string> $memberIds メンバーの人物 ID。並び順を表示順にする
+     * @param list<string> $memberIds   メンバーの人物 ID。並び順を表示順にする
+     * @param ?string      $displayName 省略時は管理用名称と同じ
      */
-    protected function createPersonGroup(string $personGroupId, string $name, array $memberIds = []): PersonGroup
-    {
+    protected function createPersonGroup(
+        string $personGroupId,
+        string $name,
+        array $memberIds = [],
+        ?string $displayName = null,
+    ): PersonGroup {
         return new PersonGroup(
             new PersonGroupId($personGroupId),
             new PersonGroupName($name),
+            new PersonGroupDisplayName($displayName ?? $name),
             PersonGroupMembers::reconstruct(array_map(
                 static fn (string $personId, int $index): array => ['personId' => $personId, 'orderNo' => $index + 1],
                 $memberIds,

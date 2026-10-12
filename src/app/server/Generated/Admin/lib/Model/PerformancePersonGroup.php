@@ -347,7 +347,7 @@ class PerformancePersonGroup implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets name
      *
-     * @param string $name 人物グループ名
+     * @param string $name 人物グループの管理用名称。一意で、管理画面でグループを見分けるために使う
      *
      * @return self
      */

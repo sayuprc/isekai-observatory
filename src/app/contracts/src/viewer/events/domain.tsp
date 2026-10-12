@@ -54,6 +54,8 @@ model EventSource {
 @doc("共演者が出演したグループ")
 model PerformancePersonGroup {
   personGroupId: uuid;
+
+  @doc("グループの表示用名称。別のグループと重複することがある")
   name: string;
 }
 

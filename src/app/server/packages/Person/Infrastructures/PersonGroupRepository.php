@@ -6,6 +6,7 @@ namespace Person\Infrastructures;
 
 use Override;
 use Person\Domain\Models\PersonGroup;
+use Person\Domain\Models\PersonGroupDisplayName;
 use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonGroupMembers;
 use Person\Domain\Models\PersonGroupName;
@@ -60,10 +61,10 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
         $this->queryFactory->deleteFromTables([self::MEMBER_TABLE], 'person_group_id', $id);
 
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['person_group_id', 'name', 'created_at', 'updated_at'])
-            ->values([$id, $personGroup->name->value, $now, $now])
+            ->into(self::TABLE, ['person_group_id', 'name', 'display_name', 'created_at', 'updated_at'])
+            ->values([$id, $personGroup->name->value, $personGroup->displayName->value, $now, $now])
             ->build()
-            ->append('ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `updated_at` = VALUES(`updated_at`)')
+            ->append('ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `display_name` = VALUES(`display_name`), `updated_at` = VALUES(`updated_at`)')
             ->execute($this->queryFactory->pdo());
 
         $this->queryFactory->insertRows(
@@ -96,7 +97,7 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
     {
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['person_group_id', 'name'])
+                ->withSelect(['person_group_id', 'name', 'display_name'])
                 ->from(self::TABLE)
                 ->where($column, 'IN', $values),
         );
@@ -125,6 +126,7 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
             fn (array $row): PersonGroup => new PersonGroup(
                 new PersonGroupId($this->converter->toUuid(Row::string($row, 'person_group_id'))),
                 new PersonGroupName(Row::string($row, 'name')),
+                new PersonGroupDisplayName(Row::string($row, 'display_name')),
                 PersonGroupMembers::reconstruct($membersByGroup[Row::string($row, 'person_group_id')] ?? []),
             ),
             $rows,

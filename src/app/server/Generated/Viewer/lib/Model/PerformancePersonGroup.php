@@ -343,7 +343,7 @@ class PerformancePersonGroup implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets name
      *
-     * @param string $name name
+     * @param string $name グループの表示用名称。別のグループと重複することがある
      *
      * @return self
      */

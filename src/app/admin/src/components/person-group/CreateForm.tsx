@@ -14,8 +14,13 @@ export const CreateForm = () => {
   const { formError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const [name, setName] = createSignal('');
+  const [displayName, setDisplayName] = createSignal('');
   const [members, setMembers] = createSignal<MemberForm[]>([]);
-  const { isDirty, allowLeave } = createDirtyTracker(() => ({ name: name(), members: toMembersPayload(members()) }));
+  const { isDirty, allowLeave } = createDirtyTracker(() => ({
+    name: name(),
+    displayName: displayName(),
+    members: toMembersPayload(members()),
+  }));
 
   const handleSubmit = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
@@ -23,6 +28,7 @@ export const CreateForm = () => {
 
     const { data, error, status } = await client.api['person-groups'].post({
       name: name(),
+      displayName: displayName(),
       members: toMembersPayload(members()),
     });
 
@@ -57,9 +63,12 @@ export const CreateForm = () => {
         <PersonGroupFields
           name={name()}
           onNameChange={setName}
+          displayName={displayName()}
+          onDisplayNameChange={setDisplayName}
           members={members()}
           onMembersChange={setMembers}
           nameError={getFieldError('name')}
+          displayNameError={getFieldError('displayName')}
         />
       </form>
     </>

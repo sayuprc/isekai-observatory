@@ -78,14 +78,14 @@ class ListEventTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function listsPersonGroupOfCoVocalists(): void
+    public function listsPersonGroupOfCoVocalistsByDisplayName(): void
     {
         $songId = $this->generateUuid();
         $personId = $this->generateUuid();
         $personGroupId = $this->generateUuid();
         $this->storeSongs($this->createSong($songId, '楽曲', '説明', SongType::Original, true, 1));
         $this->storePersons($this->createPerson($personId, 'メンバー', 1));
-        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
+        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ (B不在)', [$personId], 'グループ'));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
             performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [

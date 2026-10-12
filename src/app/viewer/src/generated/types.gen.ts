@@ -150,6 +150,9 @@ export type PerformancePerson = {
  */
 export type PerformancePersonGroup = {
     personGroupId: Uuid;
+    /**
+     * グループの表示用名称。別のグループと重複することがある
+     */
     name: string;
 };
 
