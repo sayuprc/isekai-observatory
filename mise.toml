@@ -14,12 +14,19 @@ uid = "`id -u`"
 user_name = "`id -un`"
 gid = "`id -g`"
 group_name = "`id -gn`"
+# イメージタグは Dockerfile のベースイメージのタグに合わせる
+# ベースイメージ更新時に既存タグを上書きすると、更新前の Dockerfile を使う他ブランチの CI が新しいイメージを掴んでしまう
+# デプロイ用イメージのビルドでは mise.toml だけをコピーするため、Dockerfile が無い場合は空にする
+php_image_tag = "{% if config_root ~ '/infra/local/docker/php/Dockerfile' is file %}{{ read_file(path='infra/local/docker/php/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
+nginx_image_tag = "{% if config_root ~ '/infra/local/docker/nginx/Dockerfile' is file %}{{ read_file(path='infra/local/docker/nginx/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
+openapi_image_tag = "{% if config_root ~ '/infra/local/docker/openapi-generator/Dockerfile' is file %}{{ read_file(path='infra/local/docker/openapi-generator/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
+mysql_image_tag = "{% if config_root ~ '/infra/local/docker/mysql/Dockerfile' is file %}{{ read_file(path='infra/local/docker/mysql/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
 
 [env]
-SERVER_IMAGE = "isekai-observatory-api:local"
-PROXY_IMAGE = "isekai-observatory-proxy:local"
-OPENAPI_IMAGE = "openapi-generator:local"
-MYSQL_IMAGE = "isekai-observatory-mysql:local"
+SERVER_IMAGE = "isekai-observatory-api:{{vars.php_image_tag}}"
+PROXY_IMAGE = "isekai-observatory-proxy:{{vars.nginx_image_tag}}"
+OPENAPI_IMAGE = "openapi-generator:{{vars.openapi_image_tag}}"
+MYSQL_IMAGE = "isekai-observatory-mysql:{{vars.mysql_image_tag}}"
 NODE_EXTRA_CA_CERTS = "{{config_root}}/infra/local/docker/php/certs/rootCA.pem"
 ADMIN_OAS_FILE = "IsekaiObservatory.Admin.v1.yaml"
 VIEWER_OAS_FILE = "IsekaiObservatory.Viewer.v1.yaml"
