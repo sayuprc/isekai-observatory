@@ -1309,11 +1309,6 @@ export type Title = string;
 export type TrackTitle = string;
 
 /**
- * UUID v4
- */
-export type Uuid = string;
-
-/**
  * 開催先ID
  */
 export type VenueId = string;

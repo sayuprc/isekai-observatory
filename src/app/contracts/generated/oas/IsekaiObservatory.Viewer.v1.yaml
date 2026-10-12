@@ -1150,10 +1150,6 @@ components:
       type: string
       minLength: 1
       description: 楽曲名
-    uuid:
-      type: string
-      format: uuid
-      description: UUID v4
     venueId:
       type: string
       format: uuid

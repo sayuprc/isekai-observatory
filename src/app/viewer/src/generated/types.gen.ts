@@ -462,11 +462,6 @@ export type SongId = string;
 export type Title = string;
 
 /**
- * UUID v4
- */
-export type Uuid = string;
-
-/**
  * 開催先ID
  */
 export type VenueId = string;

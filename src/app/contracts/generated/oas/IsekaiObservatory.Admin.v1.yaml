@@ -6012,10 +6012,6 @@ components:
       type: string
       minLength: 1
       description: トラックの表示名。楽曲 1 件では楽曲名の上書き、メドレーでは任意の表示名、タイトルのみトラックでは必須のタイトル
-    uuid:
-      type: string
-      format: uuid
-      description: UUID v4
     venueId:
       type: string
       format: uuid
