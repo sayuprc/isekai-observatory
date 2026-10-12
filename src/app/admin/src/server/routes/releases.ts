@@ -18,7 +18,7 @@ const mediaSchema = t.Array(
     name: t.Union([t.String(), t.Null()]),
     tracks: t.Array(
       t.Object({
-        songId: t.Union([t.String(), t.Null()]),
+        songIds: t.Array(t.String()),
         title: t.Union([t.String(), t.Null()]),
         trackNo: t.Number(),
       }),

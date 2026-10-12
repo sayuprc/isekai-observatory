@@ -171,15 +171,15 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $linkRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
                 ->withSelect([
-                    'release_tracks.song_id',
+                    'release_track_songs.song_id',
                     'release_groups.release_group_id',
                     'release_groups.title',
                     'release_groups.type',
                 ])
-                ->from('release_tracks')
-                ->join('releases', 'releases.release_id = release_tracks.release_id')
+                ->from('release_track_songs')
+                ->join('releases', 'releases.release_id = release_track_songs.release_id')
                 ->join('release_groups', 'release_groups.release_group_id = releases.release_group_id')
-                ->where('release_tracks.song_id', 'IN', $binSongIds)
+                ->where('release_track_songs.song_id', 'IN', $binSongIds)
                 ->where('releases.is_display', '=', true)
                 ->where('release_groups.is_display', '=', true),
         );

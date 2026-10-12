@@ -9,7 +9,7 @@ import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-import { toMediumForms } from './MediaEditor';
+import { toMediumForms } from './media-form';
 import { createReleaseForm, EMPTY_RELEASE_INITIAL_VALUES, type ReleaseInitialValues } from './release-form';
 import { RELEASE_TABS, ReleaseFormFields, ReleaseTabList } from './ReleaseFormFields';
 

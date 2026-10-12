@@ -25,6 +25,8 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
     private const string TRACK_TABLE = 'release_tracks';
 
+    private const string TRACK_SONG_TABLE = 'release_track_songs';
+
     /** @var list<string> */
     private const array COLUMNS = [
         'release_id',
@@ -110,7 +112,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
         $data = $release->toArray();
         $now = now()->toDateTimeString();
 
-        // 収録曲は FK CASCADE で媒体と一緒に消えるため、削除対象に含めない
+        // 収録曲とその楽曲は FK CASCADE で媒体と一緒に消えるため、削除対象に含めない
         $this->queryFactory->deleteFromTables([self::FORMAT_TABLE, self::MEDIA_TABLE], 'release_id', $binReleaseId);
 
         $this->queryFactory->insert()
@@ -160,26 +162,32 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
         $mediumRows = [];
         $trackRows = [];
+        $trackSongRows = [];
 
         foreach ($data['media'] as $medium) {
             $mediumRows[] = [$binReleaseId, $medium['position'], $medium['name']];
 
             foreach ($medium['tracks'] as $track) {
-                $trackRows[] = [
-                    $binReleaseId,
-                    $medium['position'],
-                    $track['track_no'],
-                    $track['song_id'] === null ? null : $this->converter->toBin($track['song_id']),
-                    $track['title'],
-                ];
+                $trackRows[] = [$binReleaseId, $medium['position'], $track['track_no'], $track['title']];
+
+                foreach ($track['song_ids'] as $index => $songId) {
+                    $trackSongRows[] = [
+                        $binReleaseId,
+                        $medium['position'],
+                        $track['track_no'],
+                        $this->converter->toBin($songId),
+                        $index + 1,
+                    ];
+                }
             }
         }
 
         $this->queryFactory->insertRows(self::MEDIA_TABLE, ['release_id', 'position', 'name'], $mediumRows);
+        $this->queryFactory->insertRows(self::TRACK_TABLE, ['release_id', 'position', 'track_no', 'title'], $trackRows);
         $this->queryFactory->insertRows(
-            self::TRACK_TABLE,
-            ['release_id', 'position', 'track_no', 'song_id', 'title'],
-            $trackRows,
+            self::TRACK_SONG_TABLE,
+            ['release_id', 'position', 'track_no', 'song_id', 'order_no'],
+            $trackSongRows,
         );
 
         return $release;
@@ -227,7 +235,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     }
 
     /**
-     * @return list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}>
+     * @return list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}>
      */
     private function loadMedia(string $binReleaseId): array
     {
@@ -241,22 +249,38 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
         $trackRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['position', 'track_no', 'song_id', 'title'])
+                ->withSelect(['position', 'track_no', 'title'])
                 ->from(self::TRACK_TABLE)
                 ->where('release_id', '=', $binReleaseId)
                 ->orderBy('position')
                 ->orderBy('track_no'),
         );
 
+        $trackSongRows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['position', 'track_no', 'song_id'])
+                ->from(self::TRACK_SONG_TABLE)
+                ->where('release_id', '=', $binReleaseId)
+                ->orderBy('order_no'),
+        );
+
+        $songIdsByTrack = [];
+
+        foreach ($trackSongRows as $trackSongRow) {
+            $songIdsByTrack[Row::int($trackSongRow, 'position')][Row::int($trackSongRow, 'track_no')][]
+                = $this->converter->toUuid(Row::string($trackSongRow, 'song_id'));
+        }
+
         $tracksByPosition = [];
 
         foreach ($trackRows as $trackRow) {
-            $binSongId = Row::nullableString($trackRow, 'song_id');
+            $position = Row::int($trackRow, 'position');
+            $trackNo = Row::int($trackRow, 'track_no');
 
-            $tracksByPosition[Row::int($trackRow, 'position')][] = [
-                'songId' => $binSongId === null ? null : $this->converter->toUuid($binSongId),
+            $tracksByPosition[$position][] = [
+                'songIds' => $songIdsByTrack[$position][$trackNo] ?? [],
                 'title' => Row::nullableString($trackRow, 'title'),
-                'trackNo' => Row::int($trackRow, 'track_no'),
+                'trackNo' => $trackNo,
             ];
         }
 
@@ -271,9 +295,9 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     }
 
     /**
-     * @param array<string, mixed>                                                                                          $releaseRow
-     * @param list<int>                                                                                                     $formats
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param array<string, mixed>                                                                                                $releaseRow
+     * @param list<int>                                                                                                           $formats
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function hydrate(array $releaseRow, array $formats, array $media): Release
     {

@@ -12,7 +12,7 @@ import { TargetHistory } from '../audit-log/TargetHistory';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-import { toMediumForms } from './MediaEditor';
+import { toMediumForms } from './media-form';
 import { createReleaseForm } from './release-form';
 import { RELEASE_TABS, ReleaseFormFields, ReleaseTabList } from './ReleaseFormFields';
 

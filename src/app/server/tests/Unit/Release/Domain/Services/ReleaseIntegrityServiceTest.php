@@ -81,16 +81,16 @@ class ReleaseIntegrityServiceTest extends TestCase
                     'position' => 1,
                     'name' => null,
                     'tracks' => [
-                        ['songId' => self::SONG_ID, 'title' => null, 'trackNo' => 1],
-                        ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+                        ['songIds' => [self::SONG_ID], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
                     ],
                 ],
             ],
         );
 
         $this->assertSame([
-            ['song_id' => self::SONG_ID, 'title' => null, 'track_no' => 1],
-            ['song_id' => null, 'title' => '管理対象外の楽曲', 'track_no' => 2],
+            ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
+            ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
         ], $result->media->toArray()[0]['tracks']);
     }
 
@@ -127,7 +127,7 @@ class ReleaseIntegrityServiceTest extends TestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songId' => self::SONG_ID, 'title' => null, 'trackNo' => 1]],
+                    'tracks' => [['songIds' => [self::SONG_ID], 'title' => null, 'trackNo' => 1]],
                 ],
             ],
         );

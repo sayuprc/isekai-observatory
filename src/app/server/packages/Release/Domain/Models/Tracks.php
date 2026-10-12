@@ -15,7 +15,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class Tracks extends ImmutableCollection
 {
     /**
-     * @param list<array{songId: ?string, title: ?string, trackNo: int}> $items
+     * @param list<array{songIds: list<string>, title: ?string, trackNo: int}> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -26,7 +26,7 @@ readonly class Tracks extends ImmutableCollection
 
         foreach ($items as $item) {
             $track = Track::create(
-                $item['songId'] === null ? null : new SongId($item['songId']),
+                array_map(static fn (string $songId): SongId => new SongId($songId), $item['songIds']),
                 $item['title'] === null ? null : new TrackTitle($item['title']),
                 new OrderNo($item['trackNo']),
             );
@@ -43,13 +43,13 @@ readonly class Tracks extends ImmutableCollection
     }
 
     /**
-     * @param list<array{songId: ?string, title: ?string, trackNo: int}> $items
+     * @param list<array{songIds: list<string>, title: ?string, trackNo: int}> $items
      */
     public static function reconstruct(array $items): self
     {
         return new self(array_map(
             static fn (array $item): Track => Track::reconstruct(
-                $item['songId'],
+                $item['songIds'],
                 $item['title'],
                 $item['trackNo'],
             ),
@@ -58,7 +58,7 @@ readonly class Tracks extends ImmutableCollection
     }
 
     /**
-     * @return list<array{song_id: ?string, title: ?string, track_no: int}>
+     * @return list<array{song_ids: list<string>, title: ?string, track_no: int}>
      */
     public function toArray(): array
     {

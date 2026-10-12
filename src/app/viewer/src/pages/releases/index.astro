@@ -7,6 +7,7 @@ import { releaseGroupContentRepository } from '../../features/releases/content';
 import {
   RELEASE_GROUP_TYPE_FILTER_ORDER,
   RELEASE_GROUP_TYPE_NAMES,
+  trackSearchTitles,
   releaseFormatText,
 } from '../../features/releases/types';
 import Layout from '../../layouts/Layout.astro';
@@ -71,7 +72,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
           <ol class="release-year-list">
             {items.map((releaseGroup) => {
               const trackTitles = releaseGroup.releases.flatMap((release) =>
-                release.media.flatMap((medium) => medium.tracks.map((track) => track.title)),
+                release.media.flatMap((medium) => medium.tracks.flatMap(trackSearchTitles)),
               );
               const formats = [...new Set(releaseGroup.releases.flatMap((release) => release.formats))];
 

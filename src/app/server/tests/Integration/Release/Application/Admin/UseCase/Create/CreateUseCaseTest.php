@@ -47,7 +47,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                    'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                 ],
                 [
                     'position' => 2,
@@ -129,8 +129,8 @@ class CreateUseCaseTest extends DatabaseTestCase
                     'position' => 1,
                     'name' => null,
                     'tracks' => [
-                        ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                        ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+                        ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
                     ],
                 ],
             ],
@@ -139,7 +139,6 @@ class CreateUseCaseTest extends DatabaseTestCase
         $this->assertDatabaseCount('release_tracks', 2);
         $this->assertDatabaseHas('release_tracks', [
             'track_no' => 2,
-            'song_id' => null,
             'title' => '管理対象外の楽曲',
         ]);
     }
@@ -171,7 +170,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songId' => $songId, 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1]],
+                    'tracks' => [['songIds' => [$songId], 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1]],
                 ],
             ],
         ));
@@ -206,7 +205,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songId' => null, 'title' => null, 'trackNo' => 1]],
+                    'tracks' => [['songIds' => [], 'title' => null, 'trackNo' => 1]],
                 ],
             ],
         ));

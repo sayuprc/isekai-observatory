@@ -1,5 +1,5 @@
 import { For, Index, Show, createSignal } from 'solid-js';
-import type { ReleaseGetResponse, SongSummary } from '../../generated';
+import type { SongSummary } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { SONG_TYPE_NAMES } from '../../utils/enum-names';
@@ -8,63 +8,54 @@ import type { SongCandidate } from '../song-import';
 import { createSortable, reorderItems } from '../sortable';
 import { toTrackForms } from './event-import';
 import { EventImport } from './EventImport';
+import {
+  canMergeWithPrevious,
+  mergeWithPrevious,
+  splitFromMedley,
+  type MediumForm,
+  type TrackForm,
+} from './media-form';
 
-/**
- * songId が null のトラックは管理対象外楽曲(タイトルのみトラック)で title が必須
- * songId ありのトラックは title が空なら楽曲名で表示、入力があれば上書き名になる
- */
-export type TrackForm = {
-  songId: string | null;
-  songTitle: string | null;
-  title: string;
-};
-
-export type MediumForm = {
-  name: string;
-  tracks: TrackForm[];
-};
-
-/** API レスポンスからフォーム状態を組み立てる(参照トラックの楽曲名は収録曲 read model から引く) */
-export const toMediumForms = (data: ReleaseGetResponse): MediumForm[] => {
-  const titleBySongId = new Map(
-    data.songs.flatMap((song) => (song.songId !== null ? [[song.songId, song.title] as const] : [])),
-  );
-
-  return data.release.media.map((medium) => ({
-    name: medium.name ?? '',
-    tracks: medium.tracks.map((track) => ({
-      songId: track.songId,
-      songTitle: track.songId !== null ? (titleBySongId.get(track.songId) ?? track.songId) : null,
-      title: track.title ?? '',
-    })),
-  }));
-};
-
-/** フォーム状態を API の media リクエスト形へ変換する(position / trackNo は並び順から採番、空の title / name は null) */
-export const toMediaPayload = (media: MediumForm[]) =>
-  media.map((medium, mediumIndex) => ({
-    position: mediumIndex + 1,
-    name: medium.name.trim() === '' ? null : medium.name.trim(),
-    tracks: medium.tracks.map((track, trackIndex) => ({
-      songId: track.songId,
-      title: track.title.trim() === '' ? null : track.title.trim(),
-      trackNo: trackIndex + 1,
-    })),
-  }));
-
-const TrackSongLabel = (props: { track: TrackForm }) => (
-  <Show when={props.track.songId !== null} fallback={<span class="badge badge-ghost badge-sm">対象外</span>}>
-    {props.track.songTitle}
+const TrackSongLabel = (props: { track: TrackForm; onSplit: (songIndex: number) => void }) => (
+  <Show when={props.track.songs.length > 0} fallback={<span class="badge badge-ghost badge-sm">対象外</span>}>
+    <Show when={props.track.songs.length > 1} fallback={props.track.songs[0]?.title}>
+      <div class="flex flex-wrap items-center gap-1">
+        <span class="badge badge-neutral badge-sm">メドレー</span>
+        <Index each={props.track.songs}>
+          {(song, songIndex) => (
+            <span class="badge badge-primary badge-soft gap-1 whitespace-nowrap">
+              {song().title}
+              <button
+                type="button"
+                aria-label={`${song().title}をメドレーから外す`}
+                onClick={() => props.onSplit(songIndex)}
+              >
+                ×
+              </button>
+            </span>
+          )}
+        </Index>
+      </div>
+    </Show>
   </Show>
 );
+
+const trackTitlePlaceholder = (track: TrackForm): string => {
+  if (track.songs.length === 0) {
+    return 'トラック名を入力';
+  }
+  return track.songs.length > 1 ? 'メドレー名(任意)' : (track.songs[0]?.title ?? '');
+};
 
 interface TrackActionsProps {
   label: string;
   songId: string | null;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  canMerge: boolean;
   onMoveUp: () => void;
   onMoveDown: () => void;
+  onMerge: () => void;
   onRemove: () => void;
 }
 
@@ -88,6 +79,16 @@ const TrackActions = (props: TrackActionsProps) => (
     >
       ↓
     </button>
+    <Show when={props.canMerge}>
+      <button
+        type="button"
+        class="btn btn-ghost btn-xs"
+        aria-label={`${props.label}を前の曲とまとめてメドレーにする`}
+        onClick={props.onMerge}
+      >
+        前の曲とまとめる
+      </button>
+    </Show>
     <Show when={props.songId}>
       {(songId) => (
         <a href={`/songs/${songId()}`} class="btn btn-ghost btn-xs">
@@ -160,7 +161,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
   const importFromEvent = (candidates: SongCandidate[]) => appendTracks(toTrackForms(candidates));
 
   const addTrack = (song: SongSummary) => {
-    appendTrack({ songId: song.songId, songTitle: song.title, title: '' });
+    appendTrack({ songs: [{ songId: song.songId, title: song.title }], title: '' });
   };
 
   const addTitleOnlyTrack = () => {
@@ -170,7 +171,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
       return;
     }
 
-    appendTrack({ songId: null, songTitle: null, title });
+    appendTrack({ songs: [], title });
     setManualTitle('');
   };
 
@@ -181,6 +182,12 @@ export const MediaEditor = (props: MediaEditorProps) => {
           ? { ...medium, tracks: medium.tracks.map((track, j) => (j === trackIndex ? { ...track, title } : track)) }
           : medium,
       ),
+    );
+  };
+
+  const updateTracks = (mediumIndex: number, update: (tracks: TrackForm[]) => TrackForm[]) => {
+    props.onChange((prev) =>
+      prev.map((medium, i) => (i === mediumIndex ? { ...medium, tracks: update(medium.tracks) } : medium)),
     );
   };
 
@@ -467,7 +474,14 @@ export const MediaEditor = (props: MediaEditorProps) => {
                               </button>
                               <span class="text-sm">{trackIndex + 1}</span>
                               <span class="min-w-0 flex-1 truncate text-sm">
-                                <TrackSongLabel track={track()} />
+                                <TrackSongLabel
+                                  track={track()}
+                                  onSplit={(songIndex) =>
+                                    updateTracks(mediumIndex, (tracks) =>
+                                      splitFromMedley(tracks, trackIndex, songIndex),
+                                    )
+                                  }
+                                />
                               </span>
                             </div>
                             <input
@@ -475,16 +489,20 @@ export const MediaEditor = (props: MediaEditorProps) => {
                               class="input input-bordered input-sm mt-2 w-full"
                               value={track().title}
                               onInput={(e) => setTrackTitle(mediumIndex, trackIndex, e.currentTarget.value)}
-                              placeholder={track().songId !== null ? (track().songTitle ?? '') : 'トラック名を入力'}
+                              placeholder={trackTitlePlaceholder(track())}
                             />
                             <div class="mt-2">
                               <TrackActions
                                 label={`曲順${trackIndex + 1}`}
-                                songId={track().songId}
+                                songId={track().songs.length === 1 ? (track().songs[0]?.songId ?? null) : null}
                                 canMoveUp={trackIndex > 0}
                                 canMoveDown={trackIndex < medium().tracks.length - 1}
+                                canMerge={canMergeWithPrevious(medium().tracks, trackIndex)}
                                 onMoveUp={() => reorderTracks(mediumIndex, trackIndex, trackIndex - 1)}
                                 onMoveDown={() => reorderTracks(mediumIndex, trackIndex, trackIndex + 1)}
+                                onMerge={() =>
+                                  updateTracks(mediumIndex, (tracks) => mergeWithPrevious(tracks, trackIndex))
+                                }
                                 onRemove={() => removeTrack(mediumIndex, trackIndex)}
                               />
                             </div>
@@ -527,7 +545,14 @@ export const MediaEditor = (props: MediaEditorProps) => {
                                   </div>
                                 </td>
                                 <td>
-                                  <TrackSongLabel track={track()} />
+                                  <TrackSongLabel
+                                    track={track()}
+                                    onSplit={(songIndex) =>
+                                      updateTracks(mediumIndex, (tracks) =>
+                                        splitFromMedley(tracks, trackIndex, songIndex),
+                                      )
+                                    }
+                                  />
                                 </td>
                                 <td>
                                   <input
@@ -535,19 +560,21 @@ export const MediaEditor = (props: MediaEditorProps) => {
                                     class="input input-bordered input-sm w-full min-w-48"
                                     value={track().title}
                                     onInput={(e) => setTrackTitle(mediumIndex, trackIndex, e.currentTarget.value)}
-                                    placeholder={
-                                      track().songId !== null ? (track().songTitle ?? '') : 'トラック名を入力'
-                                    }
+                                    placeholder={trackTitlePlaceholder(track())}
                                   />
                                 </td>
                                 <td>
                                   <TrackActions
                                     label={`曲順${trackIndex + 1}`}
-                                    songId={track().songId}
+                                    songId={track().songs.length === 1 ? (track().songs[0]?.songId ?? null) : null}
                                     canMoveUp={trackIndex > 0}
                                     canMoveDown={trackIndex < medium().tracks.length - 1}
+                                    canMerge={canMergeWithPrevious(medium().tracks, trackIndex)}
                                     onMoveUp={() => reorderTracks(mediumIndex, trackIndex, trackIndex - 1)}
                                     onMoveDown={() => reorderTracks(mediumIndex, trackIndex, trackIndex + 1)}
+                                    onMerge={() =>
+                                      updateTracks(mediumIndex, (tracks) => mergeWithPrevious(tracks, trackIndex))
+                                    }
                                     onRemove={() => removeTrack(mediumIndex, trackIndex)}
                                   />
                                 </td>
@@ -558,7 +585,7 @@ export const MediaEditor = (props: MediaEditorProps) => {
                       </table>
                     </div>
                     <p class="mt-2 text-xs text-base-content/60">
-                      トラック名が空の場合は楽曲名で表示されます(管理対象外楽曲では必須です)。
+                      トラック名が空の場合は楽曲名で表示されます(管理対象外楽曲では必須です)。メドレーではメドレー名になります。
                     </p>
                   </Show>
                 </div>

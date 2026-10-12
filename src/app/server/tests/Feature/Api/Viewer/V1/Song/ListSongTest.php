@@ -141,7 +141,7 @@ class ListSongTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $visibleSongId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),
@@ -155,7 +155,7 @@ class ListSongTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $visibleSongId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),

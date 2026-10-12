@@ -18,26 +18,26 @@ class TracksTest extends TestCase
     public function canCreateFromMixedTracks(): void
     {
         $result = Tracks::fromArray([
-            ['songId' => self::SONG_ID, 'title' => null, 'trackNo' => 1],
-            ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
-            ['songId' => self::SONG_ID, 'title' => '楽曲A -instrumental-', 'trackNo' => 3],
+            ['songIds' => [self::SONG_ID], 'title' => null, 'trackNo' => 1],
+            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+            ['songIds' => [self::SONG_ID], 'title' => '楽曲A -instrumental-', 'trackNo' => 3],
         ]);
 
         $this->assertSame([
-            ['song_id' => self::SONG_ID, 'title' => null, 'track_no' => 1],
-            ['song_id' => null, 'title' => '管理対象外の楽曲', 'track_no' => 2],
-            ['song_id' => self::SONG_ID, 'title' => '楽曲A -instrumental-', 'track_no' => 3],
+            ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
+            ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
+            ['song_ids' => [self::SONG_ID], 'title' => '楽曲A -instrumental-', 'track_no' => 3],
         ], $result->toArray());
     }
 
     #[Test]
-    public function cannotCreateWithNeitherSongIdNorTitle(): void
+    public function cannotCreateWithNeitherSongsNorTitle(): void
     {
         $this->expectException(BusinessRuleViolationException::class);
         $this->expectExceptionMessage('収録曲には楽曲かタイトルの少なくとも一方を指定してください。');
 
         Tracks::fromArray([
-            ['songId' => null, 'title' => null, 'trackNo' => 1],
+            ['songIds' => [], 'title' => null, 'trackNo' => 1],
         ]);
     }
 
@@ -47,7 +47,7 @@ class TracksTest extends TestCase
         $this->expectException(InvalidDomainException::class);
 
         $result = Tracks::fromArray([
-            ['songId' => null, 'title' => '', 'trackNo' => 1],
+            ['songIds' => [], 'title' => '', 'trackNo' => 1],
         ]);
     }
 
@@ -58,8 +58,8 @@ class TracksTest extends TestCase
         $this->expectExceptionMessage('同じ曲順を複数指定することはできません。');
 
         Tracks::fromArray([
-            ['songId' => self::SONG_ID, 'title' => null, 'trackNo' => 1],
-            ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 1],
+            ['songIds' => [self::SONG_ID], 'title' => null, 'trackNo' => 1],
+            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 1],
         ]);
     }
 
@@ -67,13 +67,13 @@ class TracksTest extends TestCase
     public function canReconstruct(): void
     {
         $tracks = Tracks::reconstruct([
-            ['songId' => self::SONG_ID, 'title' => null, 'trackNo' => 1],
-            ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+            ['songIds' => [self::SONG_ID], 'title' => null, 'trackNo' => 1],
+            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
         ]);
 
         $this->assertSame([
-            ['song_id' => self::SONG_ID, 'title' => null, 'track_no' => 1],
-            ['song_id' => null, 'title' => '管理対象外の楽曲', 'track_no' => 2],
+            ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
+            ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
         ], $tracks->toArray());
     }
 }
