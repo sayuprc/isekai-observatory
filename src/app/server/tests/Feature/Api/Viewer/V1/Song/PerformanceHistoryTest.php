@@ -40,7 +40,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function collapsesCoVocalistsOfPersonGroupIntoGroupName(): void
+    public function collapsesCoVocalistsOfPersonGroupIntoDisplayName(): void
     {
         $songId = $this->generateUuid();
         $member1 = $this->generateUuid();
@@ -53,7 +53,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
             $this->createPerson($member2, 'メンバー2', 2),
             $this->createPerson($guest, 'ゲスト', 3),
         );
-        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$member1, $member2]));
+        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ (C不在)', [$member1, $member2], 'グループ'));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
             performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [

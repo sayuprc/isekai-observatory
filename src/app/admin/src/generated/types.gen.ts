@@ -404,11 +404,13 @@ export type PersonGetResponse = {
 export type PersonGroup = {
     personGroupId: PersonGroupId;
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<PersonGroupMember>;
 };
 
 export type PersonGroupCreateRequest = {
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<RequestPersonGroupMember>;
 };
 
@@ -440,6 +442,7 @@ export type PersonGroupSearchResponse = {
 export type PersonGroupSummary = {
     personGroupId: PersonGroupId;
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<PersonGroupMember>;
     /**
      * このグループとして共演が記録されている楽曲披露の件数
@@ -449,6 +452,7 @@ export type PersonGroupSummary = {
 
 export type PersonGroupUpdateRequest = {
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<RequestPersonGroupMember>;
 };
 
@@ -1195,12 +1199,17 @@ export type PerformanceCreditName = string;
 export type PerformanceId = string;
 
 /**
+ * 人物グループの表示用名称。閲覧サイトに出す名前で、重複してよい
+ */
+export type PersonGroupDisplayName = string;
+
+/**
  * 人物グループID
  */
 export type PersonGroupId = string;
 
 /**
- * 人物グループ名
+ * 人物グループの管理用名称。一意で、管理画面でグループを見分けるために使う
  */
 export type PersonGroupName = string;
 

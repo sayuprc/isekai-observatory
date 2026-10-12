@@ -54,23 +54,24 @@ export const personGroups = new Elysia({ prefix: '/person-groups' })
   )
   .post(
     '/',
-    async ({ body: { name, members }, authSession }) => {
+    async ({ body: { name, displayName, members }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
-        personGroupServiceCreatePersonGroup({ client, body: { name, members } }),
+        personGroupServiceCreatePersonGroup({ client, body: { name, displayName, members } }),
       );
     },
     {
       body: t.Object({
         name: t.String(),
+        displayName: t.String(),
         members: t.Array(memberSchema),
       }),
     },
   )
   .put(
     '/:personGroupId',
-    async ({ params: { personGroupId }, body: { name, members }, authSession }) => {
+    async ({ params: { personGroupId }, body: { name, displayName, members }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
-        personGroupServiceUpdatePersonGroup({ client, path: { personGroupId }, body: { name, members } }),
+        personGroupServiceUpdatePersonGroup({ client, path: { personGroupId }, body: { name, displayName, members } }),
       );
     },
     {
@@ -79,6 +80,7 @@ export const personGroups = new Elysia({ prefix: '/person-groups' })
       }),
       body: t.Object({
         name: t.String(),
+        displayName: t.String(),
         members: t.Array(memberSchema),
       }),
     },

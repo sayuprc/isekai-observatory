@@ -27,10 +27,12 @@ class PersonGroupApiTest extends DatabaseTestCase
 
         $this->withAuth()
             ->postJson(route(PersonGroupRouteMap::Create), [
-                'name' => 'グループ',
+                'name' => 'グループ (B不在)',
+                'displayName' => 'グループ',
                 'members' => [['personId' => $personId, 'orderNo' => 1]],
             ])->assertStatus(200)
-            ->assertJsonPath('personGroup.name', 'グループ')
+            ->assertJsonPath('personGroup.name', 'グループ (B不在)')
+            ->assertJsonPath('personGroup.displayName', 'グループ')
             ->assertJsonPath('personGroup.members.0.personId', $personId)
             ->assertJsonPath('personGroup.members.0.name', '人物')
             ->assertJsonPath('personGroup.members.0.orderNo', 1);
@@ -40,10 +42,20 @@ class PersonGroupApiTest extends DatabaseTestCase
     public function createFailsWhenNameIsEmpty(): void
     {
         $this->withAuth()
-            ->postJson(route(PersonGroupRouteMap::Create), ['name' => '', 'members' => []])
+            ->postJson(route(PersonGroupRouteMap::Create), ['name' => '', 'displayName' => 'グループ', 'members' => []])
             ->assertStatus(422)
             ->assertJsonPath('code', 'validation_failed')
             ->assertJsonPath('details.0.field', 'name');
+    }
+
+    #[Test]
+    public function createFailsWhenDisplayNameIsEmpty(): void
+    {
+        $this->withAuth()
+            ->postJson(route(PersonGroupRouteMap::Create), ['name' => 'グループ', 'displayName' => '', 'members' => []])
+            ->assertStatus(422)
+            ->assertJsonPath('code', 'validation_failed')
+            ->assertJsonPath('details.0.field', 'displayName');
     }
 
     #[Test]
@@ -83,10 +95,11 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this->storePersonGroups($this->createPersonGroup($personGroupId, '旧グループ'));
 
         $this->withAuth()
-            ->putJson(route(PersonGroupRouteMap::Update, $personGroupId), ['name' => '新グループ', 'members' => []])
+            ->putJson(route(PersonGroupRouteMap::Update, $personGroupId), ['name' => '新グループ', 'displayName' => '表示名', 'members' => []])
             ->assertStatus(200)
             ->assertJsonPath('personGroup.personGroupId', $personGroupId)
-            ->assertJsonPath('personGroup.name', '新グループ');
+            ->assertJsonPath('personGroup.name', '新グループ')
+            ->assertJsonPath('personGroup.displayName', '表示名');
     }
 
     #[Test]

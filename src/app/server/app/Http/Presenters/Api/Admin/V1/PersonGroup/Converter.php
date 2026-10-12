@@ -17,6 +17,7 @@ class Converter
         return new OpenApiPersonGroupSummary()
             ->setPersonGroupId($personGroup->personGroupId)
             ->setName($personGroup->name)
+            ->setDisplayName($personGroup->displayName)
             ->setMembers(array_map($this->toOpenApiMember(...), $personGroup->members))
             ->setPerformanceCount($performanceCount);
     }
@@ -26,6 +27,7 @@ class Converter
         return new OpenApiPersonGroup()
             ->setPersonGroupId($personGroup->personGroupId)
             ->setName($personGroup->name)
+            ->setDisplayName($personGroup->displayName)
             ->setMembers(array_map($this->toOpenApiMember(...), $personGroup->members));
     }
 

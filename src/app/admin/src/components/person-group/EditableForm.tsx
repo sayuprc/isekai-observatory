@@ -77,10 +77,15 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
   const { formError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const [name, setName] = createSignal(props.personGroup.name);
+  const [displayName, setDisplayName] = createSignal(props.personGroup.displayName);
   const [members, setMembers] = createSignal<MemberForm[]>(
     props.personGroup.members.map((member) => ({ personId: member.personId, name: member.name })),
   );
-  const { isDirty, allowLeave } = createDirtyTracker(() => ({ name: name(), members: toMembersPayload(members()) }));
+  const { isDirty, allowLeave } = createDirtyTracker(() => ({
+    name: name(),
+    displayName: displayName(),
+    members: toMembersPayload(members()),
+  }));
 
   const handleUpdate = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
@@ -88,6 +93,7 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
 
     const { data, error, status } = await client.api['person-groups']({ personGroupId }).put({
       name: name(),
+      displayName: displayName(),
       members: toMembersPayload(members()),
     });
 
@@ -131,7 +137,7 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
     <>
       <EntityHeader
         breadcrumb={{ href: listUrl, label: '人物グループ' }}
-        title={name() || '(グループ名未入力)'}
+        title={name() || '(管理用名称未入力)'}
         formId="person-group-form"
         isDirty={isDirty()}
         isSubmitting={isSubmitting()}
@@ -158,9 +164,12 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
         <PersonGroupFields
           name={name()}
           onNameChange={setName}
+          displayName={displayName()}
+          onDisplayNameChange={setDisplayName}
           members={members()}
           onMembersChange={setMembers}
           nameError={getFieldError('name')}
+          displayNameError={getFieldError('displayName')}
         />
       </form>
     </>

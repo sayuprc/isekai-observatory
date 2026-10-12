@@ -60,6 +60,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPITypes = [
         'person_group_id' => 'string',
         'name' => 'string',
+        'display_name' => 'string',
         'members' => '\OpenAPI\Admin\Client\Model\PersonGroupMember[]',
         'performance_count' => 'int'
     ];
@@ -74,6 +75,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPIFormats = [
         'person_group_id' => 'uuid',
         'name' => null,
+        'display_name' => null,
         'members' => null,
         'performance_count' => 'int32'
     ];
@@ -86,6 +88,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static array $openAPINullables = [
         'person_group_id' => false,
         'name' => false,
+        'display_name' => false,
         'members' => false,
         'performance_count' => false
     ];
@@ -178,6 +181,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $attributeMap = [
         'person_group_id' => 'personGroupId',
         'name' => 'name',
+        'display_name' => 'displayName',
         'members' => 'members',
         'performance_count' => 'performanceCount'
     ];
@@ -190,6 +194,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $setters = [
         'person_group_id' => 'setPersonGroupId',
         'name' => 'setName',
+        'display_name' => 'setDisplayName',
         'members' => 'setMembers',
         'performance_count' => 'setPerformanceCount'
     ];
@@ -202,6 +207,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $getters = [
         'person_group_id' => 'getPersonGroupId',
         'name' => 'getName',
+        'display_name' => 'getDisplayName',
         'members' => 'getMembers',
         'performance_count' => 'getPerformanceCount'
     ];
@@ -265,6 +271,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         $this->setIfExists('person_group_id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('display_name', $data ?? [], null);
         $this->setIfExists('members', $data ?? [], null);
         $this->setIfExists('performance_count', $data ?? [], null);
     }
@@ -304,6 +311,13 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
         }
         if ((mb_strlen($this->container['name']) < 1)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['display_name'] === null) {
+            $invalidProperties[] = "'display_name' can't be null";
+        }
+        if ((mb_strlen($this->container['display_name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'display_name', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['members'] === null) {
@@ -367,7 +381,7 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets name
      *
-     * @param string $name 人物グループ名
+     * @param string $name 人物グループの管理用名称。一意で、管理画面でグループを見分けるために使う
      *
      * @return self
      */
@@ -382,6 +396,38 @@ class PersonGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializab
         }
 
         $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets display_name
+     *
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->container['display_name'];
+    }
+
+    /**
+     * Sets display_name
+     *
+     * @param string $display_name 人物グループの表示用名称。閲覧サイトに出す名前で、重複してよい
+     *
+     * @return self
+     */
+    public function setDisplayName($display_name)
+    {
+        if (is_null($display_name)) {
+            throw new \InvalidArgumentException('non-nullable display_name cannot be null');
+        }
+
+        if ((mb_strlen($display_name) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $display_name when calling PersonGroupSummary., must be bigger than or equal to 1.');
+        }
+
+        $this->container['display_name'] = $display_name;
 
         return $this;
     }

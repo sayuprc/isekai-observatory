@@ -12,6 +12,7 @@ readonly class PersonGroupSummary
     public function __construct(
         public string $personGroupId,
         public string $name,
+        public string $displayName,
         public array $members,
     ) {
     }

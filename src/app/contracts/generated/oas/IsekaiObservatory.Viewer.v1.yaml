@@ -577,6 +577,7 @@ components:
           $ref: '#/components/schemas/uuid'
         name:
           type: string
+          description: グループの表示用名称。別のグループと重複することがある
       description: 共演者が出演したグループ
     ReleaseFormatValue:
       type: integer
