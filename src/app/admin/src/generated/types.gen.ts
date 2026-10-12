@@ -27,11 +27,11 @@ export type AuditAction = 'create' | 'update' | 'delete' | 'register' | 'login' 
  */
 export type AuditLog = {
     auditLogId: AuditLogId;
-    adminUserId: Uuid;
+    adminUserId: AdminUserId;
     adminUserName: string;
     action: AuditAction;
     targetType: AuditTargetType;
-    targetId: Uuid;
+    targetId: AuditTargetId;
     createdAt: string;
     /**
      * 対象の変更後スナップショット。target_type ごとに構造が異なるため任意の JSON とする
@@ -55,11 +55,11 @@ export type AuditLogSearchResponse = {
  */
 export type AuditLogSummary = {
     auditLogId: AuditLogId;
-    adminUserId: Uuid;
+    adminUserId: AdminUserId;
     adminUserName: string;
     action: AuditAction;
     targetType: AuditTargetType;
-    targetId: Uuid;
+    targetId: AuditTargetId;
     createdAt: string;
 };
 
@@ -1084,6 +1084,11 @@ export type AdminUserName = string;
 export type AuditLogId = string;
 
 /**
+ * 監査対象ID。targetType によって指す集約が変わる
+ */
+export type AuditTargetId = string;
+
+/**
  * 認証セッションID
  */
 export type AuthCeremonyId = string;
@@ -1304,11 +1309,6 @@ export type Title = string;
 export type TrackTitle = string;
 
 /**
- * UUID v4
- */
-export type Uuid = string;
-
-/**
  * 開催先ID
  */
 export type VenueId = string;
@@ -1367,7 +1367,7 @@ export type AuditLogServiceSearchAuditLogsData = {
         to?: string;
         action?: AuditAction;
         target_type?: AuditTargetType;
-        target_id?: Uuid;
+        target_id?: AuditTargetId;
         admin_user_name?: string;
         page?: Page;
         per_page?: PerPage;
@@ -1412,7 +1412,7 @@ export type AuditLogServiceSearchAuditLogsResponse = AuditLogServiceSearchAuditL
 export type AuditLogServiceGetAuditLogData = {
     body?: never;
     path: {
-        auditLogId: Uuid;
+        auditLogId: AuditLogId;
     };
     query?: never;
     url: '/audit-logs/{auditLogId}';
@@ -1869,7 +1869,7 @@ export type EventServiceSearchEventsResponse = EventServiceSearchEventsResponses
 export type EventServiceDeleteEventData = {
     body?: never;
     path: {
-        eventId: Uuid;
+        eventId: EventId;
     };
     query?: never;
     url: '/events/{eventId}';
@@ -1924,7 +1924,7 @@ export type EventServiceDeleteEventResponse = EventServiceDeleteEventResponses[k
 export type EventServiceGetEventData = {
     body?: never;
     path: {
-        eventId: Uuid;
+        eventId: EventId;
     };
     query?: never;
     url: '/events/{eventId}';
@@ -1975,7 +1975,7 @@ export type EventServiceGetEventResponse = EventServiceGetEventResponses[keyof E
 export type EventServiceUpdateEventData = {
     body: EventUpdateRequest;
     path: {
-        eventId: Uuid;
+        eventId: EventId;
     };
     query?: never;
     url: '/events/{eventId}';
@@ -2128,7 +2128,7 @@ export type MediaServiceSearchMediaResponse = MediaServiceSearchMediaResponses[k
 export type MediaServiceDeleteMediaData = {
     body?: never;
     path: {
-        mediaId: Uuid;
+        mediaId: MediaId;
     };
     query?: never;
     url: '/media/{mediaId}';
@@ -2179,7 +2179,7 @@ export type MediaServiceDeleteMediaResponse = MediaServiceDeleteMediaResponses[k
 export type MediaServiceGetMediaData = {
     body?: never;
     path: {
-        mediaId: Uuid;
+        mediaId: MediaId;
     };
     query?: never;
     url: '/media/{mediaId}';
@@ -2230,7 +2230,7 @@ export type MediaServiceGetMediaResponse = MediaServiceGetMediaResponses[keyof M
 export type MediaServiceUpdateMediaData = {
     body: MediaUpdateRequest;
     path: {
-        mediaId: Uuid;
+        mediaId: MediaId;
     };
     query?: never;
     url: '/media/{mediaId}';
@@ -2379,7 +2379,7 @@ export type PersonGroupServiceSearchPersonGroupsResponse = PersonGroupServiceSea
 export type PersonGroupServiceDeletePersonGroupData = {
     body?: never;
     path: {
-        personGroupId: Uuid;
+        personGroupId: PersonGroupId;
     };
     query?: never;
     url: '/person-groups/{personGroupId}';
@@ -2430,7 +2430,7 @@ export type PersonGroupServiceDeletePersonGroupResponse = PersonGroupServiceDele
 export type PersonGroupServiceGetPersonGroupData = {
     body?: never;
     path: {
-        personGroupId: Uuid;
+        personGroupId: PersonGroupId;
     };
     query?: never;
     url: '/person-groups/{personGroupId}';
@@ -2481,7 +2481,7 @@ export type PersonGroupServiceGetPersonGroupResponse = PersonGroupServiceGetPers
 export type PersonGroupServiceUpdatePersonGroupData = {
     body: PersonGroupUpdateRequest;
     path: {
-        personGroupId: Uuid;
+        personGroupId: PersonGroupId;
     };
     query?: never;
     url: '/person-groups/{personGroupId}';
@@ -2673,7 +2673,7 @@ export type PersonServiceSearchPersonsResponse = PersonServiceSearchPersonsRespo
 export type PersonServiceDeletePersonData = {
     body?: never;
     path: {
-        personId: Uuid;
+        personId: PersonId;
     };
     query?: never;
     url: '/persons/{personId}';
@@ -2724,7 +2724,7 @@ export type PersonServiceDeletePersonResponse = PersonServiceDeletePersonRespons
 export type PersonServiceGetPersonData = {
     body?: never;
     path: {
-        personId: Uuid;
+        personId: PersonId;
     };
     query?: never;
     url: '/persons/{personId}';
@@ -2775,7 +2775,7 @@ export type PersonServiceGetPersonResponse = PersonServiceGetPersonResponses[key
 export type PersonServiceUpdatePersonData = {
     body: PersonUpdateRequest;
     path: {
-        personId: Uuid;
+        personId: PersonId;
     };
     query?: never;
     url: '/persons/{personId}';
@@ -2965,7 +2965,7 @@ export type ReleaseGroupServiceSearchReleaseGroupsResponse = ReleaseGroupService
 export type ReleaseGroupServiceDeleteReleaseGroupData = {
     body?: never;
     path: {
-        releaseGroupId: Uuid;
+        releaseGroupId: ReleaseGroupId;
     };
     query?: never;
     url: '/release-groups/{releaseGroupId}';
@@ -3020,7 +3020,7 @@ export type ReleaseGroupServiceDeleteReleaseGroupResponse = ReleaseGroupServiceD
 export type ReleaseGroupServiceGetReleaseGroupData = {
     body?: never;
     path: {
-        releaseGroupId: Uuid;
+        releaseGroupId: ReleaseGroupId;
     };
     query?: never;
     url: '/release-groups/{releaseGroupId}';
@@ -3071,7 +3071,7 @@ export type ReleaseGroupServiceGetReleaseGroupResponse = ReleaseGroupServiceGetR
 export type ReleaseGroupServiceUpdateReleaseGroupData = {
     body: ReleaseGroupUpdateRequest;
     path: {
-        releaseGroupId: Uuid;
+        releaseGroupId: ReleaseGroupId;
     };
     query?: never;
     url: '/release-groups/{releaseGroupId}';
@@ -3171,7 +3171,7 @@ export type ReleaseServiceCreateReleaseResponse = ReleaseServiceCreateReleaseRes
 export type ReleaseServiceDeleteReleaseData = {
     body?: never;
     path: {
-        releaseId: Uuid;
+        releaseId: ReleaseId;
     };
     query?: never;
     url: '/releases/{releaseId}';
@@ -3226,7 +3226,7 @@ export type ReleaseServiceDeleteReleaseResponse = ReleaseServiceDeleteReleaseRes
 export type ReleaseServiceGetReleaseData = {
     body?: never;
     path: {
-        releaseId: Uuid;
+        releaseId: ReleaseId;
     };
     query?: never;
     url: '/releases/{releaseId}';
@@ -3277,7 +3277,7 @@ export type ReleaseServiceGetReleaseResponse = ReleaseServiceGetReleaseResponses
 export type ReleaseServiceUpdateReleaseData = {
     body: ReleaseUpdateRequest;
     path: {
-        releaseId: Uuid;
+        releaseId: ReleaseId;
     };
     query?: never;
     url: '/releases/{releaseId}';
@@ -3469,7 +3469,7 @@ export type SongTagServiceSearchSongTagsResponse = SongTagServiceSearchSongTagsR
 export type SongTagServiceDeleteSongTagData = {
     body?: never;
     path: {
-        songTagId: Uuid;
+        songTagId: SongTagId;
     };
     query?: never;
     url: '/song-tags/{songTagId}';
@@ -3520,7 +3520,7 @@ export type SongTagServiceDeleteSongTagResponse = SongTagServiceDeleteSongTagRes
 export type SongTagServiceGetSongTagData = {
     body?: never;
     path: {
-        songTagId: Uuid;
+        songTagId: SongTagId;
     };
     query?: never;
     url: '/song-tags/{songTagId}';
@@ -3571,7 +3571,7 @@ export type SongTagServiceGetSongTagResponse = SongTagServiceGetSongTagResponses
 export type SongTagServiceUpdateSongTagData = {
     body: SongTagUpdateRequest;
     path: {
-        songTagId: Uuid;
+        songTagId: SongTagId;
     };
     query?: never;
     url: '/song-tags/{songTagId}';
@@ -3724,7 +3724,7 @@ export type SongServiceSearchSongsResponse = SongServiceSearchSongsResponses[key
 export type SongServiceDeleteSongData = {
     body?: never;
     path: {
-        songId: Uuid;
+        songId: SongId;
     };
     query?: never;
     url: '/songs/{songId}';
@@ -3775,7 +3775,7 @@ export type SongServiceDeleteSongResponse = SongServiceDeleteSongResponses[keyof
 export type SongServiceGetSongData = {
     body?: never;
     path: {
-        songId: Uuid;
+        songId: SongId;
     };
     query?: never;
     url: '/songs/{songId}';
@@ -3826,7 +3826,7 @@ export type SongServiceGetSongResponse = SongServiceGetSongResponses[keyof SongS
 export type SongServiceUpdateSongData = {
     body: SongUpdateRequest;
     path: {
-        songId: Uuid;
+        songId: SongId;
     };
     query?: never;
     url: '/songs/{songId}';
@@ -3978,7 +3978,7 @@ export type VenueServiceSearchVenuesResponse = VenueServiceSearchVenuesResponses
 export type VenueServiceDeleteVenueData = {
     body?: never;
     path: {
-        venueId: Uuid;
+        venueId: VenueId;
     };
     query?: never;
     url: '/venues/{venueId}';
@@ -4033,7 +4033,7 @@ export type VenueServiceDeleteVenueResponse = VenueServiceDeleteVenueResponses[k
 export type VenueServiceGetVenueData = {
     body?: never;
     path: {
-        venueId: Uuid;
+        venueId: VenueId;
     };
     query?: never;
     url: '/venues/{venueId}';
@@ -4084,7 +4084,7 @@ export type VenueServiceGetVenueResponse = VenueServiceGetVenueResponses[keyof V
 export type VenueServiceUpdateVenueData = {
     body: VenueUpdateRequest;
     path: {
-        venueId: Uuid;
+        venueId: VenueId;
     };
     query?: never;
     url: '/venues/{venueId}';

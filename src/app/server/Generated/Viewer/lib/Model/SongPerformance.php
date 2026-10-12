@@ -339,7 +339,7 @@ class SongPerformance implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets performance_id
      *
-     * @param string $performance_id UUID v4
+     * @param string $performance_id 楽曲披露ID
      *
      * @return self
      */

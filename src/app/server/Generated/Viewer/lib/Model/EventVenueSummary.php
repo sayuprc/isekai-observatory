@@ -325,7 +325,7 @@ class EventVenueSummary implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets venue_id
      *
-     * @param string $venue_id UUID v4
+     * @param string $venue_id 開催先ID
      *
      * @return self
      */

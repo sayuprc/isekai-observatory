@@ -20,7 +20,7 @@ interface PersonGroupService {
   ): Ok<PersonGroupSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("人物グループ取得API")
-  getPersonGroup(@path personGroupId: uuid):
+  getPersonGroup(@path personGroupId: personGroupId):
     | Ok<PersonGroupGetResponse>
     | Unauthorized
     | Forbidden
@@ -39,7 +39,7 @@ interface PersonGroupService {
 
   @doc("人物グループ更新API")
   @put
-  updatePersonGroup(@path personGroupId: uuid, @body request: PersonGroupUpdateRequest):
+  updatePersonGroup(@path personGroupId: personGroupId, @body request: PersonGroupUpdateRequest):
     | Ok<PersonGroupUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -50,7 +50,7 @@ interface PersonGroupService {
 
   @doc("人物グループ削除API。楽曲披露から参照中のグループは削除できない")
   @delete
-  deletePersonGroup(@path personGroupId: uuid):
+  deletePersonGroup(@path personGroupId: personGroupId):
     | NoContent
     | BadRequest
     | Unauthorized

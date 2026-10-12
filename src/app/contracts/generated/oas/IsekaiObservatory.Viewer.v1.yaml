@@ -399,7 +399,7 @@ components:
         - kind
       properties:
         venueId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/venueId'
         name:
           type: string
         kind:
@@ -553,7 +553,7 @@ components:
         - orderNo
       properties:
         personId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/personId'
         name:
           type: string
         creditName:
@@ -574,7 +574,7 @@ components:
         - name
       properties:
         personGroupId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/personGroupId'
         name:
           type: string
           description: グループの表示用名称。別のグループと重複することがある
@@ -949,7 +949,7 @@ components:
         - coVocalists
       properties:
         performanceId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/performanceId'
         songId:
           anyOf:
             - $ref: '#/components/schemas/songId'
@@ -1111,6 +1111,18 @@ components:
       type: string
       minLength: 1
       description: 共演者としてのクレジット名
+    performanceId:
+      type: string
+      format: uuid
+      description: 楽曲披露ID
+    personGroupId:
+      type: string
+      format: uuid
+      description: 人物グループID
+    personId:
+      type: string
+      format: uuid
+      description: 人物ID
     releaseGroupId:
       type: string
       format: uuid
@@ -1138,10 +1150,10 @@ components:
       type: string
       minLength: 1
       description: 楽曲名
-    uuid:
+    venueId:
       type: string
       format: uuid
-      description: UUID v4
+      description: 開催先ID
 servers:
   - url: https://local.api.isekaijoucho.fan/{version}
     description: ローカル環境

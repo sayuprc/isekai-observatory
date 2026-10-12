@@ -316,7 +316,7 @@ class PerformancePersonGroup implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets person_group_id
      *
-     * @param string $person_group_id UUID v4
+     * @param string $person_group_id 人物グループID
      *
      * @return self
      */

@@ -30,7 +30,7 @@ interface VenueService {
   ): Ok<VenueSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("開催先取得API")
-  getVenue(@path venueId: uuid):
+  getVenue(@path venueId: venueId):
     | Ok<VenueGetResponse>
     | Unauthorized
     | Forbidden
@@ -49,7 +49,7 @@ interface VenueService {
 
   @doc("開催先更新API")
   @put
-  updateVenue(@path venueId: uuid, @body request: VenueUpdateRequest):
+  updateVenue(@path venueId: venueId, @body request: VenueUpdateRequest):
     | Ok<VenueUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -60,7 +60,7 @@ interface VenueService {
 
   @doc("開催先削除API")
   @delete
-  deleteVenue(@path venueId: uuid):
+  deleteVenue(@path venueId: venueId):
     | NoContent
     | BadRequest
     | Unauthorized
