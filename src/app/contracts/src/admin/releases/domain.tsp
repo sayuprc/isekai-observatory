@@ -73,6 +73,7 @@ model ReleaseGroup {
   title: releaseGroupTitle;
   type: ReleaseGroupTypeValue;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 }
@@ -125,6 +126,7 @@ model Release {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 

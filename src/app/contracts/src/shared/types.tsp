@@ -10,6 +10,10 @@ scalar uuid extends string;
 @friendlyName("email")
 scalar email extends string;
 
+@doc("管理用の備考。閲覧サイトには公開しない")
+@friendlyName("note")
+scalar note extends string;
+
 @doc("表示順")
 @minValue(1)
 @friendlyName("orderNo")

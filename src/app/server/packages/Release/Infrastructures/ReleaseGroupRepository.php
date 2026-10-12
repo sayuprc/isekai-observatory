@@ -17,7 +17,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     private const string TABLE = 'release_groups';
 
     /** @var list<string> */
-    private const array COLUMNS = ['release_group_id', 'title', 'type', 'description', 'is_display', 'order_no'];
+    private const array COLUMNS = ['release_group_id', 'title', 'type', 'description', 'note', 'is_display', 'order_no'];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -69,12 +69,23 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
         $now = now()->toDateTimeString();
 
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['release_group_id', 'title', 'type', 'description', 'is_display', 'order_no', 'created_at', 'updated_at'])
+            ->into(self::TABLE, [
+                'release_group_id',
+                'title',
+                'type',
+                'description',
+                'note',
+                'is_display',
+                'order_no',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $this->converter->toBin($releaseGroup->releaseGroupId->value),
                 $data['title'],
                 $data['type'],
                 $data['description'],
+                $data['note'],
                 $data['is_display'],
                 $data['order_no'],
                 $now,
@@ -86,6 +97,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
                 . '`title` = VALUES(`title`), '
                 . '`type` = VALUES(`type`), '
                 . '`description` = VALUES(`description`), '
+                . '`note` = VALUES(`note`), '
                 . '`is_display` = VALUES(`is_display`), '
                 . '`order_no` = VALUES(`order_no`), '
                 . '`updated_at` = VALUES(`updated_at`)',
@@ -114,6 +126,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
             Row::string($row, 'title'),
             Row::int($row, 'type'),
             Row::string($row, 'description'),
+            Row::string($row, 'note'),
             Row::bool($row, 'is_display'),
             Row::int($row, 'order_no'),
         );

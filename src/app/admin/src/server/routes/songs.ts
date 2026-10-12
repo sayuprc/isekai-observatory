@@ -103,13 +103,14 @@ export const songs = new Elysia({ prefix: '/songs' })
   )
   .post(
     '/',
-    async ({ body: { title, description, lyricsLink, type, isDisplay, persons, tags, media }, authSession }) => {
+    async ({ body: { title, description, note, lyricsLink, type, isDisplay, persons, tags, media }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
         songServiceCreateSong({
           client,
           body: {
             title,
             description,
+            note,
             lyricsLink,
             type,
             isDisplay,
@@ -124,6 +125,7 @@ export const songs = new Elysia({ prefix: '/songs' })
       body: t.Object({
         title: t.String(),
         description: t.String(),
+        note: t.String(),
         lyricsLink: NullableStringSchema,
         type: SongTypeValueSchema,
         isDisplay: t.Boolean(),
@@ -137,7 +139,7 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId',
     async ({
       params: { songId },
-      body: { title, description, lyricsLink, type, isDisplay, orderNo, persons, tags, media },
+      body: { title, description, note, lyricsLink, type, isDisplay, orderNo, persons, tags, media },
       authSession,
     }) => {
       return requestWithAuth(authSession, (client) =>
@@ -147,6 +149,7 @@ export const songs = new Elysia({ prefix: '/songs' })
           body: {
             title,
             description,
+            note,
             lyricsLink,
             type,
             isDisplay,
@@ -165,6 +168,7 @@ export const songs = new Elysia({ prefix: '/songs' })
       body: t.Object({
         title: t.String(),
         description: t.String(),
+        note: t.String(),
         lyricsLink: NullableStringSchema,
         type: SongTypeValueSchema,
         isDisplay: t.Boolean(),

@@ -155,6 +155,15 @@ const EventBasicInfo = (props: { form: EventFormState }) => {
           onInput={(e) => props.form.setDescription(e.currentTarget.value)}
         />
       </FormRow>
+      <FormRow label="備考" for="note" hint="管理用のメモです。閲覧サイトには表示しません">
+        <textarea
+          id="note"
+          class="textarea w-full"
+          rows={3}
+          value={props.form.note()}
+          onInput={(e) => props.form.setNote(e.currentTarget.value)}
+        />
+      </FormRow>
       <FormRow
         label="活動種別"
         hint="ライブと配信だけがセットリストを持てます。ほかの種別に変えるとセットリストは消えます"

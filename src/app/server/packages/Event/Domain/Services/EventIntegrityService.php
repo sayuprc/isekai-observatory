@@ -19,6 +19,7 @@ use Event\Domain\Models\Sources\EventSources;
 use Event\Domain\Models\Venues\EventVenueLinks;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\ValueObjects\Note;
 
 /**
  * Event 集約内でしか判断できない不変条件を検証する。
@@ -48,6 +49,7 @@ readonly class EventIntegrityService
     public function prepareForCreate(
         string $title,
         string $description,
+        string $note,
         int $type,
         array $schedule,
         int $status,
@@ -63,6 +65,7 @@ readonly class EventIntegrityService
             $this->generator->generate(),
             $title,
             $description,
+            $note,
             $type,
             $schedule,
             $status,
@@ -91,6 +94,7 @@ readonly class EventIntegrityService
         string $eventId,
         string $title,
         string $description,
+        string $note,
         int $type,
         array $schedule,
         int $status,
@@ -106,6 +110,7 @@ readonly class EventIntegrityService
             $eventId,
             $title,
             $description,
+            $note,
             $type,
             $schedule,
             $status,
@@ -134,6 +139,7 @@ readonly class EventIntegrityService
         string $eventId,
         string $title,
         string $description,
+        string $note,
         int $type,
         array $schedule,
         int $status,
@@ -149,6 +155,7 @@ readonly class EventIntegrityService
             new EventId($eventId),
             new EventTitle($title),
             new EventDescription($description),
+            new Note($note),
             EventType::from($type),
             EventSchedule::fromArray($schedule['startOn'], $schedule['endOn']),
             EventStatus::from($status),

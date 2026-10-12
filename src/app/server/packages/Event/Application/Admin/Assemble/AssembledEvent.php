@@ -21,6 +21,7 @@ readonly class AssembledEvent
         public string $eventId,
         public string $title,
         public string $description,
+        public string $note,
         public EventType $type,
         public ?string $startOn,
         public ?string $endOn,

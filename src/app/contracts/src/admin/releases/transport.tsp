@@ -8,6 +8,7 @@ model ReleaseGroupCreateRequest {
   title: releaseGroupTitle;
   type: ReleaseGroupTypeValue;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 }
@@ -20,6 +21,7 @@ model ReleaseGroupUpdateRequest {
   title: releaseGroupTitle;
   type: ReleaseGroupTypeValue;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 }
@@ -43,6 +45,7 @@ model ReleaseCreateRequest {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 
@@ -60,6 +63,7 @@ model ReleaseUpdateRequest {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 

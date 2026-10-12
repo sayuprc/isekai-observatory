@@ -65,6 +65,7 @@ class GetReleaseTest extends DatabaseTestCase
                     'name' => '初回限定盤',
                     'releasedOn' => '2024-01-01',
                     'description' => 'テスト用リリース',
+                    'note' => '',
                     'isDisplay' => true,
                     'orderNo' => 10,
                     // 提供形態は値順で返る (配信=1, CD=2)

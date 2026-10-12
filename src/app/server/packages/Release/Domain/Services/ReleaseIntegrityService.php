@@ -19,6 +19,7 @@ use Song\Domain\Models\SongRepositoryInterface;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Exceptions\InvalidDomainException;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 class ReleaseIntegrityService
@@ -41,12 +42,24 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        return $this->prepare($this->generator->generate(), $releaseGroupId, $name, $releasedOn, $description, $isDisplay, $orderNo, $formatValues, $media);
+        return $this->prepare(
+            $this->generator->generate(),
+            $releaseGroupId,
+            $name,
+            $releasedOn,
+            $description,
+            $note,
+            $isDisplay,
+            $orderNo,
+            $formatValues,
+            $media,
+        );
     }
 
     /**
@@ -61,12 +74,24 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        return $this->prepare($releaseId, $releaseGroupId, $name, $releasedOn, $description, $isDisplay, $orderNo, $formatValues, $media);
+        return $this->prepare(
+            $releaseId,
+            $releaseGroupId,
+            $name,
+            $releasedOn,
+            $description,
+            $note,
+            $isDisplay,
+            $orderNo,
+            $formatValues,
+            $media,
+        );
     }
 
     /**
@@ -79,12 +104,24 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        $release = $this->build($releaseId, $releaseGroupId, $name, $releasedOn, $description, $isDisplay, $orderNo, $formatValues, $media);
+        $release = $this->build(
+            $releaseId,
+            $releaseGroupId,
+            $name,
+            $releasedOn,
+            $description,
+            $note,
+            $isDisplay,
+            $orderNo,
+            $formatValues,
+            $media,
+        );
 
         if ($this->releaseGroupRepository->find($release->releaseGroupId) === null) {
             throw new BusinessRuleViolationException('指定されたリリースグループが存在しません。');
@@ -107,6 +144,7 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
@@ -118,6 +156,7 @@ class ReleaseIntegrityService
             new ReleaseName($name),
             $this->toReleasedOn($releasedOn),
             new Description($description),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::fromArray($formatValues),

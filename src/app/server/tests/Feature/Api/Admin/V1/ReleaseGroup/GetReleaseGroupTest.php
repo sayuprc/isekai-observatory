@@ -84,6 +84,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     'title' => '観測された春',
                     'type' => ReleaseGroupType::Album->value,
                     'description' => '1st アルバム',
+                    'note' => '',
                     'isDisplay' => true,
                     'orderNo' => 5,
                 ],

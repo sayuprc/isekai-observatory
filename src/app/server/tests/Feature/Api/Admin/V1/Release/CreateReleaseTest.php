@@ -40,6 +40,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '備考',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
@@ -68,6 +69,7 @@ class CreateReleaseTest extends DatabaseTestCase
                             ->where('name', '初回限定盤')
                             ->where('releasedOn', '2026-05-09')
                             ->where('description', '')
+                            ->where('note', '備考')
                             ->where('isDisplay', true)
                             ->where('orderNo', 10)
                             ->where('formats', [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value])
@@ -105,6 +107,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -160,6 +163,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => 'ライブ盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -210,6 +214,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -256,6 +261,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -291,6 +297,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
@@ -306,6 +313,7 @@ class CreateReleaseTest extends DatabaseTestCase
                             ->where('name', '')
                             ->where('releasedOn', '2026-05-09')
                             ->where('description', '')
+                            ->where('note', '')
                             ->where('isDisplay', true)
                             ->where('orderNo', 1)
                             ->where('formats', [ReleaseFormat::Digital->value])
@@ -335,6 +343,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '通常盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [],
@@ -351,6 +360,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '通常盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
@@ -368,6 +378,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '通常盤',
                 'releasedOn' => 'invalid-date',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],

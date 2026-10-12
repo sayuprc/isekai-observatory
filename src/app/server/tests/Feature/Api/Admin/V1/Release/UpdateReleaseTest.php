@@ -66,6 +66,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '更新後の説明',
+                'note' => '備考',
                 'isDisplay' => false,
                 'orderNo' => 20,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -90,6 +91,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                             ->where('name', '新版名')
                             ->where('releasedOn', '2026-05-09')
                             ->where('description', '更新後の説明')
+                            ->where('note', '備考')
                             ->where('isDisplay', false)
                             ->where('orderNo', 20)
                             ->where('formats', [ReleaseFormat::Cd->value])
@@ -147,6 +149,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -215,6 +218,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -264,6 +268,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [],
@@ -279,6 +284,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -294,6 +300,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -319,6 +326,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -348,6 +356,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],

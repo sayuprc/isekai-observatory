@@ -14,6 +14,7 @@ const data: Pick<ReleaseGetResponse, 'release' | 'songs'> = {
     name: '',
     releasedOn: '2026-01-01',
     description: '',
+    note: '',
     isDisplay: true,
     orderNo: 1,
     formats: [2],

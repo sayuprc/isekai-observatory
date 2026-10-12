@@ -3557,6 +3557,7 @@ components:
         - eventId
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3574,6 +3575,8 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -3612,6 +3615,7 @@ components:
       required:
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3627,6 +3631,8 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -3827,6 +3833,7 @@ components:
       required:
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3842,6 +3849,8 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -4619,6 +4628,7 @@ components:
         - name
         - releasedOn
         - description
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4634,6 +4644,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4655,6 +4667,7 @@ components:
         - name
         - releasedOn
         - description
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4668,6 +4681,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4733,6 +4748,7 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
       properties:
@@ -4744,6 +4760,8 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4755,6 +4773,7 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
       properties:
@@ -4764,6 +4783,8 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4900,6 +4921,7 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
       properties:
@@ -4909,6 +4931,8 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4945,6 +4969,7 @@ components:
         - name
         - releasedOn
         - description
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4956,6 +4981,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -5150,6 +5177,7 @@ components:
         - songId
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5164,6 +5192,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5190,6 +5220,7 @@ components:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
           description: テスト楽曲説明
+          note: テスト楽曲備考
           lyricsLink: https://example.com/lyrics
           type: 1
           isDisplay: true
@@ -5229,6 +5260,7 @@ components:
       required:
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5240,6 +5272,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5578,6 +5612,7 @@ components:
       required:
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5590,6 +5625,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5854,6 +5891,9 @@ components:
       type: string
       minLength: 1
       description: 媒体の表示ラベル(CD1 / Blu-ray など)
+    note:
+      type: string
+      description: 管理用の備考。閲覧サイトには公開しない
     orderNo:
       type: integer
       format: int32

@@ -59,6 +59,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $openAPITypes = [
         'title' => 'string',
         'description' => 'string',
+        'note' => 'string',
         'lyrics_link' => 'string',
         'type' => '\OpenAPI\Admin\Client\Model\SongTypeValue',
         'is_display' => 'bool',
@@ -77,6 +78,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $openAPIFormats = [
         'title' => null,
         'description' => null,
+        'note' => null,
         'lyrics_link' => 'uri',
         'type' => null,
         'is_display' => null,
@@ -93,6 +95,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static array $openAPINullables = [
         'title' => false,
         'description' => false,
+        'note' => false,
         'lyrics_link' => true,
         'type' => false,
         'is_display' => false,
@@ -189,6 +192,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $attributeMap = [
         'title' => 'title',
         'description' => 'description',
+        'note' => 'note',
         'lyrics_link' => 'lyricsLink',
         'type' => 'type',
         'is_display' => 'isDisplay',
@@ -205,6 +209,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $setters = [
         'title' => 'setTitle',
         'description' => 'setDescription',
+        'note' => 'setNote',
         'lyrics_link' => 'setLyricsLink',
         'type' => 'setType',
         'is_display' => 'setIsDisplay',
@@ -221,6 +226,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     protected static $getters = [
         'title' => 'getTitle',
         'description' => 'getDescription',
+        'note' => 'getNote',
         'lyrics_link' => 'getLyricsLink',
         'type' => 'getType',
         'is_display' => 'getIsDisplay',
@@ -288,6 +294,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('note', $data ?? [], null);
         $this->setIfExists('lyrics_link', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
@@ -332,6 +339,9 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
+        }
+        if ($this->container['note'] === null) {
+            $invalidProperties[] = "'note' can't be null";
         }
         if ($this->container['lyrics_link'] === null) {
             $invalidProperties[] = "'lyrics_link' can't be null";
@@ -421,6 +431,33 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
             throw new \InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
+
+        return $this;
+    }
+
+    /**
+     * Gets note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->container['note'];
+    }
+
+    /**
+     * Sets note
+     *
+     * @param string $note 管理用の備考。閲覧サイトには公開しない
+     *
+     * @return self
+     */
+    public function setNote($note)
+    {
+        if (is_null($note)) {
+            throw new \InvalidArgumentException('non-nullable note cannot be null');
+        }
+        $this->container['note'] = $note;
 
         return $this;
     }

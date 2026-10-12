@@ -115,6 +115,7 @@ const ReleaseForm = (props: ReleaseFormProps) => {
     name: props.data.release.name,
     releasedOn: normalizeDateValue(props.data.release.releasedOn),
     description: props.data.release.description,
+    note: props.data.release.note,
     isDisplay: props.data.release.isDisplay,
     orderNo: props.data.release.orderNo,
     formats: props.data.release.formats,
