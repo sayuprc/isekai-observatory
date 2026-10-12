@@ -90,7 +90,7 @@ paths:
           in: query
           required: false
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/auditTargetId'
           explode: false
         - name: admin_user_name
           in: query
@@ -154,7 +154,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/auditLogId'
       responses:
         '200':
           description: The request has succeeded.
@@ -679,7 +679,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '200':
           description: The request has succeeded.
@@ -733,7 +733,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '200':
           description: The request has succeeded.
@@ -799,7 +799,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -996,7 +996,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1050,7 +1050,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1116,7 +1116,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1281,7 +1281,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1335,7 +1335,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1401,7 +1401,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1617,7 +1617,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1671,7 +1671,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1737,7 +1737,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1960,7 +1960,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2014,7 +2014,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2074,7 +2074,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2187,7 +2187,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2241,7 +2241,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2307,7 +2307,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2529,7 +2529,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songTagId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2583,7 +2583,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songTagId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2649,7 +2649,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songTagId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2840,7 +2840,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2894,7 +2894,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2960,7 +2960,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -3145,7 +3145,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '200':
           description: The request has succeeded.
@@ -3199,7 +3199,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '200':
           description: The request has succeeded.
@@ -3265,7 +3265,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -3401,7 +3401,7 @@ components:
         auditLogId:
           $ref: '#/components/schemas/auditLogId'
         adminUserId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/adminUserId'
         adminUserName:
           type: string
         action:
@@ -3409,7 +3409,7 @@ components:
         targetType:
           $ref: '#/components/schemas/AuditTargetType'
         targetId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/auditTargetId'
         createdAt:
           type: string
           format: date-time
@@ -3452,7 +3452,7 @@ components:
         auditLogId:
           $ref: '#/components/schemas/auditLogId'
         adminUserId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/adminUserId'
         adminUserName:
           type: string
         action:
@@ -3460,7 +3460,7 @@ components:
         targetType:
           $ref: '#/components/schemas/AuditTargetType'
         targetId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/auditTargetId'
         createdAt:
           type: string
           format: date-time
@@ -5834,6 +5834,10 @@ components:
       type: string
       format: uuid
       description: 監査ログID
+    auditTargetId:
+      type: string
+      format: uuid
+      description: 監査対象ID。targetType によって指す集約が変わる
     authCeremonyId:
       type: string
       format: uuid

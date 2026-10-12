@@ -83,7 +83,7 @@ export type EventStatusValue = 1 | 2 | 3;
 export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 
 export type EventVenueSummary = {
-    venueId: Uuid;
+    venueId: VenueId;
     name: string;
     kind: VenueKindValue;
 };
@@ -138,7 +138,7 @@ export type MediaTypeValue = 1 | 2 | 3 | 4 | 5 | 99;
  * 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
  */
 export type PerformancePerson = {
-    personId: Uuid;
+    personId: PersonId;
     name: string;
     creditName: PerformanceCreditName | null;
     personGroup: PerformancePersonGroup | null;
@@ -149,7 +149,7 @@ export type PerformancePerson = {
  * 共演者が出演したグループ
  */
 export type PerformancePersonGroup = {
-    personGroupId: Uuid;
+    personGroupId: PersonGroupId;
     /**
      * グループの表示用名称。別のグループと重複することがある
      */
@@ -283,7 +283,7 @@ export type SongMediaSummary = {
 };
 
 export type SongPerformance = {
-    performanceId: Uuid;
+    performanceId: PerformanceId;
     songId: SongId | null;
     songTitle: Title;
     coVocalists: Array<PerformancePerson>;
@@ -412,6 +412,21 @@ export type OrderNo = number;
 export type PerformanceCreditName = string;
 
 /**
+ * 楽曲披露ID
+ */
+export type PerformanceId = string;
+
+/**
+ * 人物グループID
+ */
+export type PersonGroupId = string;
+
+/**
+ * 人物ID
+ */
+export type PersonId = string;
+
+/**
  * リリースグループID
  */
 export type ReleaseGroupId = string;
@@ -450,6 +465,11 @@ export type Title = string;
  * UUID v4
  */
 export type Uuid = string;
+
+/**
+ * 開催先ID
+ */
+export type VenueId = string;
 
 export type EventServiceListEventsData = {
     body?: never;

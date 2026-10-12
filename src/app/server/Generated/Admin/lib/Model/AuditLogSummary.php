@@ -393,7 +393,7 @@ class AuditLogSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets admin_user_id
      *
-     * @param string $admin_user_id UUID v4
+     * @param string $admin_user_id 管理ユーザーID
      *
      * @return self
      */
@@ -501,7 +501,7 @@ class AuditLogSummary implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets target_id
      *
-     * @param string $target_id UUID v4
+     * @param string $target_id 監査対象ID。targetType によって指す集約が変わる
      *
      * @return self
      */

@@ -35,7 +35,7 @@ interface SongTagService {
   ): Ok<SongTagSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("楽曲タグ取得API")
-  getSongTag(@path songTagId: uuid):
+  getSongTag(@path songTagId: songTagId):
     | Ok<SongTagGetResponse>
     | Unauthorized
     | Forbidden
@@ -54,7 +54,7 @@ interface SongTagService {
 
   @doc("楽曲タグ更新API")
   @put
-  updateSongTag(@path songTagId: uuid, @body request: SongTagUpdateRequest):
+  updateSongTag(@path songTagId: songTagId, @body request: SongTagUpdateRequest):
     | Ok<SongTagUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -65,5 +65,11 @@ interface SongTagService {
 
   @doc("楽曲タグ削除API")
   @delete
-  deleteSongTag(@path songTagId: uuid): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
+  deleteSongTag(@path songTagId: songTagId):
+    | NoContent
+    | BadRequest
+    | Unauthorized
+    | Forbidden
+    | Unprocessable
+    | ServerError;
 }

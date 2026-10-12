@@ -354,7 +354,7 @@ class PerformancePerson implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets person_id
      *
-     * @param string $person_id UUID v4
+     * @param string $person_id 人物ID
      *
      * @return self
      */
