@@ -16,10 +16,11 @@ gid = "`id -g`"
 group_name = "`id -gn`"
 # イメージタグは Dockerfile のベースイメージのタグに合わせる
 # ベースイメージ更新時に既存タグを上書きすると、更新前の Dockerfile を使う他ブランチの CI が新しいイメージを掴んでしまう
-php_image_tag = "{{ read_file(path='infra/local/docker/php/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}"
-nginx_image_tag = "{{ read_file(path='infra/local/docker/nginx/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}"
-openapi_image_tag = "{{ read_file(path='infra/local/docker/openapi-generator/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}"
-mysql_image_tag = "{{ read_file(path='infra/local/docker/mysql/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}"
+# デプロイ用イメージのビルドでは mise.toml だけをコピーするため、Dockerfile が無い場合は空にする
+php_image_tag = "{% if config_root ~ '/infra/local/docker/php/Dockerfile' is file %}{{ read_file(path='infra/local/docker/php/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
+nginx_image_tag = "{% if config_root ~ '/infra/local/docker/nginx/Dockerfile' is file %}{{ read_file(path='infra/local/docker/nginx/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
+openapi_image_tag = "{% if config_root ~ '/infra/local/docker/openapi-generator/Dockerfile' is file %}{{ read_file(path='infra/local/docker/openapi-generator/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
+mysql_image_tag = "{% if config_root ~ '/infra/local/docker/mysql/Dockerfile' is file %}{{ read_file(path='infra/local/docker/mysql/Dockerfile') | split(pat='\n') | first | split(pat=':') | last }}{% endif %}"
 
 [env]
 SERVER_IMAGE = "isekai-observatory-api:{{vars.php_image_tag}}"
