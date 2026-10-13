@@ -5,6 +5,7 @@ import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { RELEASE_FORMAT_NAMES } from '../../utils/enum-names';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -222,7 +223,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
       <FormError message={formError()} onClose={clearErrors} />
       <FormColumns
         main={
-          <form id="release-group-form" onSubmit={handleSubmit}>
+          <form id="release-group-form" onKeyDown={preventImplicitSubmit} onSubmit={handleSubmit}>
             <ReleaseGroupFields form={form} getFieldError={getFieldError} />
           </form>
         }

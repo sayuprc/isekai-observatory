@@ -2,7 +2,7 @@ import { For, Show, createSignal, type JSX } from 'solid-js';
 import { redirectToLogin } from '../utils/auth-redirect';
 import type { KeywordSearch } from './keyword-search';
 import { KeywordSearchPanel } from './KeywordSearchPanel';
-import { defaultSelectedKeys, pickSelectedCandidates, type SongCandidate } from './song-import';
+import { candidateTitle, defaultSelectedKeys, pickSelectedCandidates, type SongCandidate } from './song-import';
 
 interface SongImportPanelProps<S extends object> {
   title: string;
@@ -176,9 +176,12 @@ export const SongImportPanel = <S extends object>(props: SongImportPanelProps<S>
                             disabled={props.disabled || !candidate.selectable}
                             onChange={(e) => toggle(candidate.key, e.currentTarget.checked)}
                           />
-                          <span class="text-sm font-medium">{candidate.title}</span>
-                          <Show when={candidate.songId === null}>
+                          <span class="text-sm font-medium">{candidateTitle(candidate)}</span>
+                          <Show when={candidate.songs.length === 0}>
                             <span class="badge badge-ghost badge-sm">楽曲なし</span>
+                          </Show>
+                          <Show when={candidate.songs.length > 1}>
+                            <span class="badge badge-neutral badge-sm">メドレー</span>
                           </Show>
                           <span class="text-xs text-base-content/60">{candidate.note}</span>
                         </label>

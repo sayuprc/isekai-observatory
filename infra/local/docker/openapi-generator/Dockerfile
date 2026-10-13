@@ -1,2 +1,2 @@
-FROM openapitools/openapi-generator-cli:v7.25.0
+FROM openapitools/openapi-generator-cli:v7.26.0
 

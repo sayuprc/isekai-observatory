@@ -31,7 +31,7 @@ export const EventImport = (props: EventImportProps) => {
   return (
     <SongImportPanel
       title="イベントのセットリストから追加"
-      description="選んだイベントのセットリスト順に、楽曲を追加先媒体の末尾へ追加します。表示名だけの項目はタイトルのみトラックとして追加できます"
+      description="選んだイベントのセットリスト順に、楽曲を追加先媒体の末尾へ追加します。メドレーは 1 トラックにまとめ、表示名だけの項目はタイトルのみトラックとして追加できます"
       placeholder="イベントのタイトルで検索"
       search={search}
       sourceLabel={eventLabel}

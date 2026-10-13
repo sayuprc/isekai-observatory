@@ -26,6 +26,7 @@ readonly class EventRepository implements EventRepositoryInterface
         'event_id',
         'title',
         'description',
+        'note',
         'type',
         'start_on',
         'end_on',
@@ -62,7 +63,14 @@ readonly class EventRepository implements EventRepositoryInterface
 
         // 共演者とセットリスト項目の披露参照は親の削除で CASCADE されるため、削除対象に含めない
         $this->queryFactory->deleteFromTables(
-            ['event_setlist_items', 'song_performances', 'event_sources', 'event_releases', 'event_media', 'event_venues'],
+            [
+                'event_setlist_items',
+                'song_performances',
+                'event_sources',
+                'event_releases',
+                'event_media',
+                'event_venues',
+            ],
             'event_id',
             $binEventId,
         );
@@ -73,6 +81,7 @@ readonly class EventRepository implements EventRepositoryInterface
                 $binEventId,
                 $data['title'],
                 $data['description'],
+                $data['note'],
                 $data['type'],
                 $data['start_on'],
                 $data['end_on'],
@@ -86,6 +95,7 @@ readonly class EventRepository implements EventRepositoryInterface
                 'ON DUPLICATE KEY UPDATE '
                 . '`title` = VALUES(`title`), '
                 . '`description` = VALUES(`description`), '
+                . '`note` = VALUES(`note`), '
                 . '`type` = VALUES(`type`), '
                 . '`start_on` = VALUES(`start_on`), '
                 . '`end_on` = VALUES(`end_on`), '
@@ -233,6 +243,7 @@ readonly class EventRepository implements EventRepositoryInterface
             $this->converter->toUuid($binEventId),
             Row::string($row, 'title'),
             Row::string($row, 'description'),
+            Row::string($row, 'note'),
             Row::int($row, 'type'),
             Row::nullableString($row, 'start_on'),
             Row::nullableString($row, 'end_on'),

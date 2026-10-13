@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 import { client } from '../../utils/client';
 import { createFormDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
@@ -47,7 +48,13 @@ export const CreateForm = () => {
         submittingLabel="作成中..."
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="song-tag-form" class="max-w-4xl" onSubmit={handleSubmit}>
+      <form
+        ref={bindForm}
+        id="song-tag-form"
+        onKeyDown={preventImplicitSubmit}
+        class="max-w-4xl"
+        onSubmit={handleSubmit}
+      >
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border px-6 py-3">
           <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
           <FormRow label="楽曲タグ名" for="name">

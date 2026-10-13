@@ -40,7 +40,12 @@ readonly class UpdateUseCase
                 throw new ResourceNotFoundException('PersonGroup', $personGroupId->value);
             }
 
-            $personGroup = $this->service->prepareForUpdate($inputData->personGroupId, $inputData->name, $inputData->members);
+            $personGroup = $this->service->prepareForUpdate(
+                $inputData->personGroupId,
+                $inputData->name,
+                $inputData->displayName,
+                $inputData->members,
+            );
 
             $this->repository->save($personGroup);
 

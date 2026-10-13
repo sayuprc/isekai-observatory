@@ -41,6 +41,7 @@ readonly class UpdateUseCase
                 $inputData->eventId,
                 $inputData->title,
                 $inputData->description,
+                $inputData->note,
                 $inputData->type,
                 $inputData->schedule,
                 $inputData->status,

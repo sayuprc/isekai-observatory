@@ -48,7 +48,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),
@@ -64,7 +64,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => 'CD',
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                     [
                         'position' => 2,
@@ -84,6 +84,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     'title' => '観測された春',
                     'type' => ReleaseGroupType::Album->value,
                     'description' => '1st アルバム',
+                    'note' => '',
                     'isDisplay' => true,
                     'orderNo' => 5,
                 ],

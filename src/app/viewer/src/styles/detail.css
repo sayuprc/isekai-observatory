@@ -237,6 +237,12 @@ a.detail-song-list-song-title:hover {
   color: var(--accent-strong);
 }
 
+/* 楽曲ページへ移れない曲は、本人が歌唱しない演目と同じく控えめにして、押せる曲と見分けられるようにする */
+
+span.detail-song-list-song-title {
+  color: var(--fg-muted);
+}
+
 .detail-song-list-song-note {
   font-size: 11px;
 }

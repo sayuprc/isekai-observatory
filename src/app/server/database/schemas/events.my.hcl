@@ -26,6 +26,11 @@ table "events" {
     type    = text
     comment = "説明"
   }
+  column "note" {
+    null    = false
+    type    = text
+    comment = "備考"
+  }
   column "type" {
     null     = false
     type     = tinyint

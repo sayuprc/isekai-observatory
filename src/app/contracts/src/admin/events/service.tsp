@@ -37,7 +37,7 @@ interface EventService {
   ): Ok<EventSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("イベント取得API")
-  getEvent(@path eventId: uuid):
+  getEvent(@path eventId: eventId):
     | Ok<EventGetResponse>
     | Unauthorized
     | Forbidden
@@ -56,7 +56,7 @@ interface EventService {
 
   @doc("イベント更新API")
   @put
-  updateEvent(@path eventId: uuid, @body request: EventUpdateRequest):
+  updateEvent(@path eventId: eventId, @body request: EventUpdateRequest):
     | Ok<EventUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -67,7 +67,7 @@ interface EventService {
 
   @doc("イベント削除API")
   @delete
-  deleteEvent(@path eventId: uuid):
+  deleteEvent(@path eventId: eventId):
     | NoContent
     | BadRequest
     | Unauthorized

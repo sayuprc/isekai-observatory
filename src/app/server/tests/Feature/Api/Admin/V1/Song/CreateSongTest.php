@@ -38,6 +38,7 @@ class CreateSongTest extends DatabaseTestCase
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '備考',
                 'lyricsLink' => 'https://example.com/lyrics',
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -62,6 +63,7 @@ class CreateSongTest extends DatabaseTestCase
                             ->whereType('songId', 'string')
                             ->where('title', 'テスト楽曲')
                             ->where('description', 'テスト楽曲説明')
+                            ->where('note', '備考')
                             ->where('lyricsLink', 'https://example.com/lyrics')
                             ->where('type', SongType::Original->value)
                             ->where('isDisplay', true)
@@ -109,6 +111,7 @@ class CreateSongTest extends DatabaseTestCase
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -127,6 +130,7 @@ class CreateSongTest extends DatabaseTestCase
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト参加曲',
                 'description' => 'テスト参加曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Guest->value,
                 'isDisplay' => true,
@@ -144,6 +148,7 @@ class CreateSongTest extends DatabaseTestCase
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -163,6 +168,7 @@ class CreateSongTest extends DatabaseTestCase
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
@@ -187,6 +193,7 @@ class CreateSongTest extends DatabaseTestCase
             ->postJson(route(SongRouteMap::Create), [
                 'title' => '',
                 'description' => '',
+                'note' => '',
                 'lyricsLink' => null,
                 'type' => 0,
                 'isDisplay' => true,

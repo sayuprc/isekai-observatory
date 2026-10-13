@@ -11,6 +11,7 @@ readonly class UpdateInputData
         public string $title,
         public int $type,
         public string $description,
+        public string $note,
         public bool $isDisplay,
         public int $orderNo,
     ) {

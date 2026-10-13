@@ -72,7 +72,7 @@ class DeleteUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),

@@ -35,6 +35,7 @@ class UpdateEventTest extends DatabaseTestCase
             ->putJson(route(EventRouteMap::Update, ['eventId' => $eventId]), [
                 'title' => '更新後のライブ',
                 'description' => '説明',
+                'note' => '備考',
                 'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => '2026-10-02'],
                 'status' => 1,
@@ -49,6 +50,7 @@ class UpdateEventTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonPath('event.eventId', $eventId)
             ->assertJsonPath('event.title', '更新後のライブ')
+            ->assertJsonPath('event.note', '備考')
             ->assertJsonPath('event.schedule.endOn', '2026-10-02')
             ->assertJsonPath('event.setlist.0.performances.0.performanceId', $performanceId);
 
@@ -67,6 +69,7 @@ class UpdateEventTest extends DatabaseTestCase
             ->putJson(route(EventRouteMap::Update, ['eventId' => $eventId]), [
                 'title' => '中止されたライブ',
                 'description' => '',
+                'note' => '',
                 'type' => 1,
                 'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
                 'status' => 3,

@@ -14,7 +14,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class Media extends ImmutableCollection
 {
     /**
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $items
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -44,7 +44,7 @@ readonly class Media extends ImmutableCollection
     }
 
     /**
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $items
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $items
      */
     public static function reconstruct(array $items): self
     {
@@ -59,7 +59,7 @@ readonly class Media extends ImmutableCollection
     }
 
     /**
-     * @return list<array{position: int, name: ?string, tracks: list<array{song_id: ?string, title: ?string, track_no: int}>}>
+     * @return list<array{position: int, name: ?string, tracks: list<array{song_ids: list<string>, title: ?string, track_no: int}>}>
      */
     public function toArray(): array
     {

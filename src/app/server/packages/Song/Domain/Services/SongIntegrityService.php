@@ -19,6 +19,7 @@ use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 /**
@@ -47,6 +48,7 @@ class SongIntegrityService
     public function prepareForCreate(
         string $title,
         string $description,
+        string $note,
         ?string $lyricsLink,
         int $type,
         bool $isDisplay,
@@ -62,6 +64,7 @@ class SongIntegrityService
             $this->generator->generate(),
             $title,
             $description,
+            $note,
             $lyricsLink,
             $type,
             $isDisplay,
@@ -84,6 +87,7 @@ class SongIntegrityService
         string $songId,
         string $title,
         string $description,
+        string $note,
         ?string $lyricsLink,
         int $type,
         bool $isDisplay,
@@ -100,6 +104,7 @@ class SongIntegrityService
             $songId,
             $title,
             $description,
+            $note,
             $lyricsLink,
             $type,
             $isDisplay,
@@ -141,6 +146,7 @@ class SongIntegrityService
         string $songId,
         string $title,
         string $description,
+        string $note,
         ?string $lyricsLink,
         int $type,
         bool $isDisplay,
@@ -153,6 +159,7 @@ class SongIntegrityService
             new SongId($songId),
             new Title($title),
             new Description($description),
+            new Note($note),
             $this->toLyricsLink($lyricsLink),
             SongType::fromValue($type),
             $isDisplay,

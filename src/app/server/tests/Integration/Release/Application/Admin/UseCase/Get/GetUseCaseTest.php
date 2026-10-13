@@ -47,12 +47,12 @@ class GetUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 2,
                         'name' => null,
-                        'tracks' => [['songId' => $songId2, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId2], 'title' => null, 'trackNo' => 1]],
                     ],
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId1, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId1], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),

@@ -6,11 +6,13 @@ namespace Release\Application\Viewer\Query;
 
 readonly class ReleaseTrackItem
 {
+    /**
+     * @param list<ReleaseTrackSong> $songs
+     */
     public function __construct(
         public int $trackNo,
-        public ?string $songId,
-        public string $title,
-        public bool $isDisplay,
+        public ?string $title,
+        public array $songs,
     ) {
     }
 }

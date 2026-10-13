@@ -14,6 +14,7 @@ readonly class CreateInputData
     public function __construct(
         public string $title,
         public string $description,
+        public string $note,
         public ?string $lyricsLink,
         public int $type,
         public bool $isDisplay,

@@ -47,7 +47,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId1, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId1], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),
@@ -58,6 +58,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             name: '新版名',
             releasedOn: '2026-05-09',
             description: '更新後の説明',
+            note: '',
             isDisplay: false,
             orderNo: 20,
             formats: [ReleaseFormat::Cd->value],
@@ -66,8 +67,8 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     'position' => 1,
                     'name' => null,
                     'tracks' => [
-                        ['songId' => $songId2, 'title' => null, 'trackNo' => 1],
-                        ['songId' => $songId1, 'title' => null, 'trackNo' => 2],
+                        ['songIds' => [$songId2], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [$songId1], 'title' => null, 'trackNo' => 2],
                     ],
                 ],
             ],
@@ -81,6 +82,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $this->assertDatabaseHas('releases', [
             'name' => '新版名',
             'description' => '更新後の説明',
+            'note' => '',
             'is_display' => false,
             'order_no' => 20,
         ]);
@@ -112,7 +114,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),
@@ -123,6 +125,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             name: '新版名',
             releasedOn: '2026-05-09',
             description: '説明',
+            note: '',
             isDisplay: true,
             orderNo: 1,
             formats: [ReleaseFormat::Cd->value],
@@ -131,8 +134,8 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     'position' => 1,
                     'name' => null,
                     'tracks' => [
-                        ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                        ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+                        ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
                     ],
                 ],
             ],
@@ -141,7 +144,6 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $this->assertDatabaseCount('release_tracks', 2);
         $this->assertDatabaseHas('release_tracks', [
             'track_no' => 2,
-            'song_id' => null,
             'title' => '管理対象外の楽曲',
         ]);
     }
@@ -156,6 +158,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             name: '新版名',
             releasedOn: '2026-05-09',
             description: '説明',
+            note: '',
             isDisplay: true,
             orderNo: 1,
             formats: [ReleaseFormat::Cd->value],
@@ -189,6 +192,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             name: '新版名',
             releasedOn: '2026-05-09',
             description: '説明',
+            note: '',
             isDisplay: true,
             orderNo: 1,
             formats: [ReleaseFormat::Cd->value],
@@ -197,8 +201,8 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     'position' => 1,
                     'name' => null,
                     'tracks' => [
-                        ['songId' => $songId1, 'title' => null, 'trackNo' => 1],
-                        ['songId' => $songId2, 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [$songId1], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [$songId2], 'title' => null, 'trackNo' => 1],
                     ],
                 ],
             ],

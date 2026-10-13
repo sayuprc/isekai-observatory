@@ -28,6 +28,7 @@ use Media\Domain\Models\MediaUrl;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
 use Person\Domain\Models\Person;
 use Person\Domain\Models\PersonGroup;
+use Person\Domain\Models\PersonGroupDisplayName;
 use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonGroupMembers;
 use Person\Domain\Models\PersonGroupName;
@@ -58,6 +59,7 @@ use Song\Domain\Models\Tag\SongTagId;
 use Song\Domain\Models\Tag\SongTagName;
 use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueId;
@@ -93,11 +95,13 @@ trait EntityFactory
         array $sources = [],
         array $performances = [],
         array $setlist = [],
+        string $note = '',
     ): Event {
         return Event::reconstruct(
             $eventId,
             $title,
             '',
+            $note,
             $type->value,
             $startOn,
             $endOn,
@@ -127,13 +131,19 @@ trait EntityFactory
     }
 
     /**
-     * @param list<string> $memberIds メンバーの人物 ID。並び順を表示順にする
+     * @param list<string> $memberIds   メンバーの人物 ID。並び順を表示順にする
+     * @param ?string      $displayName 省略時は管理用名称と同じ
      */
-    protected function createPersonGroup(string $personGroupId, string $name, array $memberIds = []): PersonGroup
-    {
+    protected function createPersonGroup(
+        string $personGroupId,
+        string $name,
+        array $memberIds = [],
+        ?string $displayName = null,
+    ): PersonGroup {
         return new PersonGroup(
             new PersonGroupId($personGroupId),
             new PersonGroupName($name),
+            new PersonGroupDisplayName($displayName ?? $name),
             PersonGroupMembers::reconstruct(array_map(
                 static fn (string $personId, int $index): array => ['personId' => $personId, 'orderNo' => $index + 1],
                 $memberIds,
@@ -156,6 +166,7 @@ trait EntityFactory
         mixed $composersOrArrangers = [],
         mixed $arrangers = [],
         mixed $media = [],
+        string $note = '',
     ): Song {
         if ($lyricsLinkOrType instanceof SongType) {
             $lyricsLink = null;
@@ -201,6 +212,7 @@ trait EntityFactory
             new SongId($songId),
             new Title($title),
             new Description($description),
+            new Note($note),
             $lyricsLink === null ? null : new LyricsLink($lyricsLink),
             $type,
             $isDisplay,
@@ -300,19 +312,21 @@ trait EntityFactory
         bool $isDisplay = true,
         string $description = 'テスト用リリースグループ',
         int $orderNo = 1,
+        string $note = '',
     ): ReleaseGroup {
         return new ReleaseGroup(
             new ReleaseGroupId($releaseGroupId),
             new ReleaseGroupTitle($title),
             $type,
             new ReleaseDescription($description),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
         );
     }
 
     /**
-     * @param list<array{position: int, format: int, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param list<array{position: int, format: int, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     protected function createRelease(
         string $releaseId,
@@ -324,6 +338,7 @@ trait EntityFactory
         ?array $formats = null,
         array $media = [],
         int $orderNo = 1,
+        string $note = '',
     ): Release {
         return new Release(
             new ReleaseId($releaseId),
@@ -331,6 +346,7 @@ trait EntityFactory
             new ReleaseName($name),
             new ReleasedOn($releasedOn ?? new ImmutableDate('2024-01-01')),
             new ReleaseDescription($description),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::reconstruct($formats ?? [ReleaseFormat::Cd->value]),

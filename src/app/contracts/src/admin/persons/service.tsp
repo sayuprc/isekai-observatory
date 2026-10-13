@@ -35,7 +35,7 @@ interface PersonService {
   ): Ok<PersonSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("人物取得API")
-  getPerson(@path personId: uuid):
+  getPerson(@path personId: personId):
     | Ok<PersonGetResponse>
     | Unauthorized
     | Forbidden
@@ -54,7 +54,7 @@ interface PersonService {
 
   @doc("人物更新API")
   @put
-  updatePerson(@path personId: uuid, @body request: PersonUpdateRequest):
+  updatePerson(@path personId: personId, @body request: PersonUpdateRequest):
     | Ok<PersonUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -65,5 +65,11 @@ interface PersonService {
 
   @doc("人物削除API")
   @delete
-  deletePerson(@path personId: uuid): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
+  deletePerson(@path personId: personId):
+    | NoContent
+    | BadRequest
+    | Unauthorized
+    | Forbidden
+    | Unprocessable
+    | ServerError;
 }

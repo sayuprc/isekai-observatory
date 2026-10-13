@@ -10,7 +10,7 @@ table "person_groups" {
   column "name" {
     null    = false
     type    = varchar(255)
-    comment = "人物グループ名"
+    comment = "人物グループの管理用名称"
   }
   column "name_lower" {
     null = true
@@ -19,7 +19,12 @@ table "person_groups" {
       expr = "lower(`name`)"
       type = VIRTUAL
     }
-    comment = "人物グループ名(小文字)"
+    comment = "人物グループの管理用名称(小文字)"
+  }
+  column "display_name" {
+    null    = false
+    type    = varchar(255)
+    comment = "人物グループの表示用名称"
   }
   column "created_at" {
     null    = false

@@ -17,18 +17,25 @@ const venueNames = event.venues.map((venue) => venue.name).join(' / ');
   href={`/events/${event.eventId}`}
   class:list={['event-line', { 'event-line-with-year': withYear }]}
   data-inactive={statusName ? '' : undefined}
+  data-span={event.schedule.endOn ? '' : undefined}
+  data-undated={date ? undefined : ''}
 >
   <span class="event-line-date">
     <span class="event-line-date-main">{date?.main ?? '— —'}</span>
     {date && <span class="event-line-date-sub">{date.sub}</span>}
   </span>
-  <span class="event-line-type">{EVENT_TYPE_NAMES[event.type]}</span>
+  <span class="event-line-axis" aria-hidden="true">
+    <span class="event-line-dot"></span>
+  </span>
   <span class="event-line-body">
     <span class="event-line-title">
       {event.title}
       {statusName && <span class="event-line-status">{statusName}</span>}
     </span>
-    {venueNames && <span class="event-line-venue">{venueNames}</span>}
+    <span class="event-line-meta">
+      <span class="pill">{EVENT_TYPE_NAMES[event.type]}</span>
+      {venueNames && <span class="event-line-venue">{venueNames}</span>}
+    </span>
   </span>
   <span class="event-line-arrow" aria-hidden="true">
     →

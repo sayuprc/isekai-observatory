@@ -171,15 +171,15 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $linkRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
                 ->withSelect([
-                    'release_tracks.song_id',
+                    'release_track_songs.song_id',
                     'release_groups.release_group_id',
                     'release_groups.title',
                     'release_groups.type',
                 ])
-                ->from('release_tracks')
-                ->join('releases', 'releases.release_id = release_tracks.release_id')
+                ->from('release_track_songs')
+                ->join('releases', 'releases.release_id = release_track_songs.release_id')
                 ->join('release_groups', 'release_groups.release_group_id = releases.release_group_id')
-                ->where('release_tracks.song_id', 'IN', $binSongIds)
+                ->where('release_track_songs.song_id', 'IN', $binSongIds)
                 ->where('releases.is_display', '=', true)
                 ->where('release_groups.is_display', '=', true),
         );
@@ -350,7 +350,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
                 ->withSelect(['song_performance_persons.performance_id', 'song_performance_persons.credit_name', 'persons.name', 'person_groups.person_group_id'])
-                ->select('person_groups.name', 'person_group_name')
+                ->select('person_groups.display_name', 'person_group_name')
                 ->from('song_performance_persons')
                 ->join('persons', 'song_performance_persons.person_id = persons.person_id')
                 ->outerJoin('person_groups', 'song_performance_persons.person_group_id = person_groups.person_group_id')

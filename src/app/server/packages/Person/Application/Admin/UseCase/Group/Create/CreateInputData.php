@@ -11,6 +11,7 @@ readonly class CreateInputData
      */
     public function __construct(
         public string $name,
+        public string $displayName,
         public array $members,
     ) {
     }

@@ -18,7 +18,7 @@ const mediaSchema = t.Array(
     name: t.Union([t.String(), t.Null()]),
     tracks: t.Array(
       t.Object({
-        songId: t.Union([t.String(), t.Null()]),
+        songIds: t.Array(t.String()),
         title: t.Union([t.String(), t.Null()]),
         trackNo: t.Number(),
       }),
@@ -39,6 +39,7 @@ export const releases = new Elysia({ prefix: '/releases' })
         name: t.String(),
         releasedOn: t.String(),
         description: t.String(),
+        note: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
         formats: formatsSchema,
@@ -76,6 +77,7 @@ export const releases = new Elysia({ prefix: '/releases' })
         name: t.String(),
         releasedOn: t.String(),
         description: t.String(),
+        note: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
         formats: formatsSchema,

@@ -11,6 +11,7 @@ use Release\Domain\Models\ReleaseGroupTitle;
 use Release\Domain\Models\ReleaseGroupType;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\InvalidDomainException;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 class ReleaseGroupIntegrityService
@@ -23,10 +24,11 @@ class ReleaseGroupIntegrityService
         string $title,
         int $typeValue,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
     ): ReleaseGroup {
-        return $this->build($this->generator->generate(), $title, $typeValue, $description, $isDisplay, $orderNo);
+        return $this->build($this->generator->generate(), $title, $typeValue, $description, $note, $isDisplay, $orderNo);
     }
 
     public function prepareForUpdate(
@@ -34,10 +36,11 @@ class ReleaseGroupIntegrityService
         string $title,
         int $typeValue,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
     ): ReleaseGroup {
-        return $this->build($releaseGroupId, $title, $typeValue, $description, $isDisplay, $orderNo);
+        return $this->build($releaseGroupId, $title, $typeValue, $description, $note, $isDisplay, $orderNo);
     }
 
     private function build(
@@ -45,6 +48,7 @@ class ReleaseGroupIntegrityService
         string $title,
         int $typeValue,
         string $description,
+        string $note,
         bool $isDisplay,
         int $orderNo,
     ): ReleaseGroup {
@@ -53,6 +57,7 @@ class ReleaseGroupIntegrityService
             new ReleaseGroupTitle($title),
             $this->toReleaseGroupType($typeValue),
             new Description($description),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
         );

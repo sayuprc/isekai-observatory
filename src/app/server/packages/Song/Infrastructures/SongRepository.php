@@ -23,6 +23,7 @@ readonly class SongRepository implements SongRepositoryInterface
         'song_id',
         'title',
         'description',
+        'note',
         'lyrics_link',
         'type',
         'is_display',
@@ -144,11 +145,23 @@ readonly class SongRepository implements SongRepositoryInterface
         $now = now()->toDateTimeString();
 
         $this->queryFactory->insert()
-            ->into('songs', ['song_id', 'title', 'description', 'lyrics_link', 'type', 'is_display', 'order_no', 'created_at', 'updated_at'])
+            ->into('songs', [
+                'song_id',
+                'title',
+                'description',
+                'note',
+                'lyrics_link',
+                'type',
+                'is_display',
+                'order_no',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $id,
                 $data['title'],
                 $data['description'],
+                $data['note'],
                 $data['lyrics_link'],
                 $data['type'],
                 $data['is_display'],
@@ -161,6 +174,7 @@ readonly class SongRepository implements SongRepositoryInterface
                 'ON DUPLICATE KEY UPDATE '
                 . '`title` = VALUES(`title`), '
                 . '`description` = VALUES(`description`), '
+                . '`note` = VALUES(`note`), '
                 . '`lyrics_link` = VALUES(`lyrics_link`), '
                 . '`type` = VALUES(`type`), '
                 . '`is_display` = VALUES(`is_display`), '
@@ -274,6 +288,7 @@ readonly class SongRepository implements SongRepositoryInterface
             $this->converter->toUuid(Row::string($songRow, 'song_id')),
             Row::string($songRow, 'title'),
             Row::string($songRow, 'description'),
+            Row::string($songRow, 'note'),
             Row::nullableString($songRow, 'lyrics_link'),
             Row::int($songRow, 'type'),
             Row::bool($songRow, 'is_display'),

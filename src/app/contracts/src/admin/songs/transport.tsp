@@ -18,6 +18,7 @@ model SongGetResponse {
 model SongCreateRequest {
   title: title;
   description: description;
+  note: note;
   lyricsLink: lyricsLink | null;
   type: SongTypeValue;
   isDisplay: boolean;
@@ -33,6 +34,7 @@ model SongCreateResponse {
 model SongUpdateRequest {
   title: title;
   description: description;
+  note: note;
   lyricsLink: lyricsLink | null;
   type: SongTypeValue;
   isDisplay: boolean;

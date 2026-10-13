@@ -15,6 +15,7 @@ readonly class AssembledSong
         public string $songId,
         public string $title,
         public string $description,
+        public string $note,
         public ?string $lyricsLink,
         public int $typeValue,
         public bool $isDisplay,
