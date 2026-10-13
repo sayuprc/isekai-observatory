@@ -1,6 +1,7 @@
 import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createTabState } from '../../utils/tab';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
@@ -48,7 +49,7 @@ export const CreateForm = () => {
         tabs={<EventTabList form={form} current={tab()} onChange={setTab} withHistory={false} />}
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="event-form" onSubmit={submit}>
+      <form ref={bindForm} id="event-form" onKeyDown={preventImplicitSubmit} onSubmit={submit}>
         <EventFormFields form={form} tab={tab()} />
       </form>
     </>

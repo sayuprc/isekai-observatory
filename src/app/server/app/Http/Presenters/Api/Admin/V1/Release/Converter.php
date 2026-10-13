@@ -14,6 +14,7 @@ use Release\Domain\Models\Medium;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleaseFormat;
 use Release\Domain\Models\Track;
+use Song\Domain\Models\SongId;
 
 class Converter
 {
@@ -25,6 +26,7 @@ class Converter
             ->setName($release->name->value)
             ->setReleasedOn($release->releasedOn->value->toMutable())
             ->setDescription($release->description->value)
+            ->setNote($release->note->value)
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo->value)
             ->setFormats($release->formats->toGeneric()->map(
@@ -45,9 +47,9 @@ class Converter
     public function toOpenApiTrack(Track $track): OpenApiTrack
     {
         return new OpenApiTrack([
-            'song_id' => $track->songId?->value,
             'title' => $track->title?->value,
         ])
+            ->setSongIds(array_map(static fn (SongId $songId): string => $songId->value, $track->songIds))
             ->setTrackNo($track->trackNo->value);
     }
 

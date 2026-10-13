@@ -1,8 +1,10 @@
 import "@typespec/http";
 import "../../shared";
+import "../../packages/song";
 import "../auth";
 
 using IsekaiObservatory.Shared;
+using IsekaiObservatory.Packages.Song;
 using Http;
 
 namespace IsekaiObservatory.Admin;
@@ -47,7 +49,13 @@ interface SongService {
   ): Ok<SongSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("楽曲取得API")
-  getSong(@path songId: uuid): Ok<SongGetResponse> | Unauthorized | Forbidden | NotFound | Unprocessable | ServerError;
+  getSong(@path songId: songId):
+    | Ok<SongGetResponse>
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | Unprocessable
+    | ServerError;
 
   @doc("楽曲作成API")
   createSong(@body request: SongCreateRequest):
@@ -60,7 +68,7 @@ interface SongService {
 
   @doc("楽曲更新API")
   @put
-  updateSong(@path songId: uuid, @body request: SongUpdateRequest):
+  updateSong(@path songId: songId, @body request: SongUpdateRequest):
     | Ok<SongUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -71,5 +79,5 @@ interface SongService {
 
   @doc("楽曲削除API")
   @delete
-  deleteSong(@path songId: uuid): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
+  deleteSong(@path songId: songId): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
 }

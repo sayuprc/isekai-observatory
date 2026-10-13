@@ -24,7 +24,7 @@ enum MediaSearchSortBy {
 @useAuth(BearerAuth)
 interface MediaService {
   @doc("メディア取得API")
-  getMedia(@path mediaId: uuid):
+  getMedia(@path mediaId: mediaId):
     | Ok<MediaGetResponse>
     | Unauthorized
     | Forbidden
@@ -55,7 +55,7 @@ interface MediaService {
 
   @doc("メディア更新API")
   @put
-  updateMedia(@path mediaId: uuid, @body request: MediaUpdateRequest):
+  updateMedia(@path mediaId: mediaId, @body request: MediaUpdateRequest):
     | Ok<MediaUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -66,5 +66,5 @@ interface MediaService {
 
   @doc("メディア削除API")
   @delete
-  deleteMedia(@path mediaId: uuid): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
+  deleteMedia(@path mediaId: mediaId): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
 }

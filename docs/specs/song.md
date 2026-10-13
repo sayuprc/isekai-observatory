@@ -2,7 +2,7 @@
 
 ## 用語
 
-- **Song**: `songId` / `title` / `description` / `lyricsLink?` / `type` (Original / Cover / Guest) / `isDisplay` / `orderNo`
+- **Song**: `songId` / `title` / `description` / `note` / `lyricsLink?` / `type` (Original / Cover / Guest) / `isDisplay` / `orderNo`
 - **SongPerson**: `personId` + `role` (Lyricist / Composer / Arranger) + `orderNo`
 - **SongTag**: `songTagId` / `name` (一意) / `orderNo`。楽曲への添付はタグ ID 参照
 - **SongMediaLink**: `mediaId` + `orderNo`。リンクの所有は Song 側
@@ -18,7 +18,7 @@
 
 ## できないこと
 
-- Viewer にタグ・`lyricsLink`・`isDisplay`・管理用 shape を出さない
+- Viewer にタグ・`lyricsLink`・`note`・`isDisplay`・管理用 shape を出さない
 - 人物役割は song 文脈の Lyricist / Composer / Arranger のみ。Creator / Performer 互換は持たない
 - 収録トラックまたは SongPerformance から参照されている楽曲は削除できない
 - 非公開 Song が公開 Event から参照されても、Viewer の Song 一覧・ページは公開しない

@@ -22,7 +22,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
     use EntityStore;
 
     #[Test]
-    public function updateReplacesNameAndMembers(): void
+    public function updateReplacesNamesAndMembers(): void
     {
         $person1 = $this->generateUuid();
         $person2 = $this->generateUuid();
@@ -30,11 +30,12 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($person1, '人物1', 1), $this->createPerson($person2, '人物2', 2));
         $this->storePersonGroups($this->createPersonGroup($personGroupId, '旧グループ', [$person1, $person2]));
 
-        $result = $this->getInstance()->handle(new UpdateInputData($personGroupId, '新グループ', [
+        $result = $this->getInstance()->handle(new UpdateInputData($personGroupId, '新グループ', '新しい表示名', [
             ['personId' => $person2, 'orderNo' => 1],
         ]));
 
         $this->assertSame('新グループ', $result->personGroup->name);
+        $this->assertSame('新しい表示名', $result->personGroup->displayName);
         $this->assertSame([$person2], array_column($result->personGroup->members, 'personId'));
         $this->findAuditLog(AuditAction::Update, AuditTargetType::PersonGroup, $personGroupId);
     }
@@ -44,7 +45,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
     {
         $this->expectException(ResourceNotFoundException::class);
 
-        $this->getInstance()->handle(new UpdateInputData($this->generateUuid(), 'グループ', []));
+        $this->getInstance()->handle(new UpdateInputData($this->generateUuid(), 'グループ', 'グループ', []));
     }
 
     private function getInstance(): UpdateUseCase

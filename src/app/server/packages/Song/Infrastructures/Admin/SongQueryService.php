@@ -44,7 +44,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $performanceCounts = $this->queryFactory->countBy('song_performances', 'song_id', $binSongIds);
         $mediaCounts = $this->queryFactory->countBy('song_media_links', 'song_id', $binSongIds);
         $personCounts = $this->queryFactory->countBy('song_persons', 'song_id', $binSongIds, 'person_id');
-        $releaseCounts = $this->queryFactory->countBy('release_tracks', 'song_id', $binSongIds, 'release_id');
+        $releaseCounts = $this->queryFactory->countBy('release_track_songs', 'song_id', $binSongIds, 'release_id');
 
         return array_map(
             fn (array $row): SongSummary => $this->hydrate(

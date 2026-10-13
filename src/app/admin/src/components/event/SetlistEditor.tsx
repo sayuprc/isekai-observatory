@@ -86,7 +86,7 @@ export const SetlistEditor = (props: SetlistEditorProps) => {
       <div class="mb-4">
         <ReleaseImport
           title="リリースの収録曲から追加"
-          description="選んだリリースの収録曲を、曲順のまま 1 曲 1 項目でセットリストの末尾に追加します。楽曲は楽曲披露にも追加し、管理対象外楽曲は表示名だけの項目にします"
+          description="選んだリリースの収録曲を、曲順のまま 1 トラック 1 項目でセットリストの末尾に追加します。楽曲は楽曲披露にも追加し、メドレーは 1 項目にまとめ、管理対象外楽曲は表示名だけの項目にします"
           importLabel="セットリストに追加"
           toCandidates={toReleaseSetlistCandidates}
           relatedReleases={props.relatedReleases}

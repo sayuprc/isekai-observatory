@@ -23,6 +23,7 @@ readonly class CreateInputData
     public function __construct(
         public string $title,
         public string $description,
+        public string $note,
         public int $type,
         public array $schedule,
         public int $status,

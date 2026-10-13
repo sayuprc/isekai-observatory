@@ -30,6 +30,7 @@ variable "table_schemas" {
     "file://schemas/release-formats.my.hcl",
     "file://schemas/release-media.my.hcl",
     "file://schemas/release-tracks.my.hcl",
+    "file://schemas/release-track-songs.my.hcl",
     "file://schemas/refresh-tokens.my.hcl",
     "file://schemas/admin-user-registration-tokens.my.hcl",
     "file://schemas/admin-user-registration-token-permissions.my.hcl",

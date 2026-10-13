@@ -4,6 +4,7 @@ import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -76,10 +77,15 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
   const { formError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const [name, setName] = createSignal(props.personGroup.name);
+  const [displayName, setDisplayName] = createSignal(props.personGroup.displayName);
   const [members, setMembers] = createSignal<MemberForm[]>(
     props.personGroup.members.map((member) => ({ personId: member.personId, name: member.name })),
   );
-  const { isDirty, allowLeave } = createDirtyTracker(() => ({ name: name(), members: toMembersPayload(members()) }));
+  const { isDirty, allowLeave } = createDirtyTracker(() => ({
+    name: name(),
+    displayName: displayName(),
+    members: toMembersPayload(members()),
+  }));
 
   const handleUpdate = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
@@ -87,6 +93,7 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
 
     const { data, error, status } = await client.api['person-groups']({ personGroupId }).put({
       name: name(),
+      displayName: displayName(),
       members: toMembersPayload(members()),
     });
 
@@ -130,7 +137,7 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
     <>
       <EntityHeader
         breadcrumb={{ href: listUrl, label: '人物グループ' }}
-        title={name() || '(グループ名未入力)'}
+        title={name() || '(管理用名称未入力)'}
         formId="person-group-form"
         isDirty={isDirty()}
         isSubmitting={isSubmitting()}
@@ -148,13 +155,21 @@ const EditableForm = (props: { personGroup: PersonGroup }) => {
       />
       <FormError message={formError()} onClose={clearErrors} />
       <p class="mb-4 max-w-4xl text-sm text-base-content/60">楽曲披露で使われているグループは削除できません</p>
-      <form id="person-group-form" class="max-w-4xl space-y-6" onSubmit={handleUpdate}>
+      <form
+        id="person-group-form"
+        onKeyDown={preventImplicitSubmit}
+        class="max-w-4xl space-y-6"
+        onSubmit={handleUpdate}
+      >
         <PersonGroupFields
           name={name()}
           onNameChange={setName}
+          displayName={displayName()}
+          onDisplayNameChange={setDisplayName}
           members={members()}
           onMembersChange={setMembers}
           nameError={getFieldError('name')}
+          displayNameError={getFieldError('displayName')}
         />
       </form>
     </>

@@ -10,6 +10,7 @@ use Event\Domain\Models\Releases\EventReleaseLinks;
 use Event\Domain\Models\Setlist\Setlist;
 use Event\Domain\Models\Sources\EventSources;
 use Event\Domain\Models\Venues\EventVenueLinks;
+use Support\Domain\ValueObjects\Note;
 
 /**
  * @phpstan-import-type _songPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
@@ -22,6 +23,7 @@ readonly class Event
         public EventId $eventId,
         public EventTitle $title,
         public EventDescription $description,
+        public Note $note,
         public EventType $type,
         public EventSchedule $schedule,
         public EventStatus $status,
@@ -47,6 +49,7 @@ readonly class Event
         string $eventId,
         string $title,
         string $description,
+        string $note,
         int $type,
         ?string $startOn,
         ?string $endOn,
@@ -63,6 +66,7 @@ readonly class Event
             new EventId($eventId),
             new EventTitle($title),
             new EventDescription($description),
+            new Note($note),
             EventType::from($type),
             EventSchedule::reconstruct($startOn, $endOn),
             EventStatus::from($status),
@@ -77,7 +81,7 @@ readonly class Event
     }
 
     /**
-     * @return array{event_id: string, title: string, description: string, type: int, start_on: ?string, end_on: ?string, status: int, is_display: bool, venues: list<array{venue_id: string, order_no: int}>, media: list<array{media_id: string, order_no: int}>, releases: list<array{release_id: string, order_no: int}>, sources: list<array{name: string, url: string, order_no: int}>, performances: list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, person_group_id: ?string, order_no: int}>}>, setlist: list<array{setlist_item_id: string, order_no: int, label: ?string, performance_ids: list<string>}>}
+     * @return array{event_id: string, title: string, description: string, note: string, type: int, start_on: ?string, end_on: ?string, status: int, is_display: bool, venues: list<array{venue_id: string, order_no: int}>, media: list<array{media_id: string, order_no: int}>, releases: list<array{release_id: string, order_no: int}>, sources: list<array{name: string, url: string, order_no: int}>, performances: list<array{performance_id: string, song_id: string, order_no: int, co_vocalists: list<array{person_id: string, credit_name: ?string, person_group_id: ?string, order_no: int}>}>, setlist: list<array{setlist_item_id: string, order_no: int, label: ?string, performance_ids: list<string>}>}
      */
     public function toArray(): array
     {
@@ -85,6 +89,7 @@ readonly class Event
             'event_id' => $this->eventId->value,
             'title' => $this->title->value,
             'description' => $this->description->value,
+            'note' => $this->note->value,
             'type' => $this->type->value,
             ...$this->schedule->toArray(),
             'status' => $this->status->value,

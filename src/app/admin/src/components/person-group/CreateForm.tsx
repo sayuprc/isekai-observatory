@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js';
 import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
@@ -13,8 +14,13 @@ export const CreateForm = () => {
   const { formError, getFieldError, clearErrors, handleError } = createFormErrors();
   const { isSubmitting, withSubmitting } = createSubmitting();
   const [name, setName] = createSignal('');
+  const [displayName, setDisplayName] = createSignal('');
   const [members, setMembers] = createSignal<MemberForm[]>([]);
-  const { isDirty, allowLeave } = createDirtyTracker(() => ({ name: name(), members: toMembersPayload(members()) }));
+  const { isDirty, allowLeave } = createDirtyTracker(() => ({
+    name: name(),
+    displayName: displayName(),
+    members: toMembersPayload(members()),
+  }));
 
   const handleSubmit = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
@@ -22,6 +28,7 @@ export const CreateForm = () => {
 
     const { data, error, status } = await client.api['person-groups'].post({
       name: name(),
+      displayName: displayName(),
       members: toMembersPayload(members()),
     });
 
@@ -47,13 +54,21 @@ export const CreateForm = () => {
         submittingLabel="作成中..."
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form id="person-group-form" class="max-w-4xl space-y-6" onSubmit={handleSubmit}>
+      <form
+        id="person-group-form"
+        onKeyDown={preventImplicitSubmit}
+        class="max-w-4xl space-y-6"
+        onSubmit={handleSubmit}
+      >
         <PersonGroupFields
           name={name()}
           onNameChange={setName}
+          displayName={displayName()}
+          onDisplayNameChange={setDisplayName}
           members={members()}
           onMembersChange={setMembers}
           nameError={getFieldError('name')}
+          displayNameError={getFieldError('displayName')}
         />
       </form>
     </>

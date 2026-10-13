@@ -90,7 +90,7 @@ paths:
           in: query
           required: false
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/auditTargetId'
           explode: false
         - name: admin_user_name
           in: query
@@ -154,7 +154,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/auditLogId'
       responses:
         '200':
           description: The request has succeeded.
@@ -679,7 +679,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '200':
           description: The request has succeeded.
@@ -733,7 +733,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '200':
           description: The request has succeeded.
@@ -799,7 +799,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -996,7 +996,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1050,7 +1050,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1116,7 +1116,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1281,7 +1281,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1335,7 +1335,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1401,7 +1401,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1617,7 +1617,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1671,7 +1671,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1737,7 +1737,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1960,7 +1960,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2014,7 +2014,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2074,7 +2074,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2187,7 +2187,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2241,7 +2241,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2307,7 +2307,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2529,7 +2529,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songTagId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2583,7 +2583,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songTagId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2649,7 +2649,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songTagId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2840,7 +2840,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2894,7 +2894,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2960,7 +2960,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -3145,7 +3145,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '200':
           description: The request has succeeded.
@@ -3199,7 +3199,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '200':
           description: The request has succeeded.
@@ -3265,7 +3265,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -3401,7 +3401,7 @@ components:
         auditLogId:
           $ref: '#/components/schemas/auditLogId'
         adminUserId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/adminUserId'
         adminUserName:
           type: string
         action:
@@ -3409,7 +3409,7 @@ components:
         targetType:
           $ref: '#/components/schemas/AuditTargetType'
         targetId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/auditTargetId'
         createdAt:
           type: string
           format: date-time
@@ -3452,7 +3452,7 @@ components:
         auditLogId:
           $ref: '#/components/schemas/auditLogId'
         adminUserId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/adminUserId'
         adminUserName:
           type: string
         action:
@@ -3460,7 +3460,7 @@ components:
         targetType:
           $ref: '#/components/schemas/AuditTargetType'
         targetId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/auditTargetId'
         createdAt:
           type: string
           format: date-time
@@ -3557,6 +3557,7 @@ components:
         - eventId
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3574,6 +3575,8 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -3612,6 +3615,7 @@ components:
       required:
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3627,6 +3631,8 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -3827,6 +3833,7 @@ components:
       required:
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3842,6 +3849,8 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -4303,12 +4312,15 @@ components:
       required:
         - personGroupId
         - name
+        - displayName
         - members
       properties:
         personGroupId:
           $ref: '#/components/schemas/personGroupId'
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4316,7 +4328,8 @@ components:
       description: 共演者をまとめて入力・表示するための人物グループ
       examples:
         - personGroupId: 6f0f4c1e-5d6a-4c55-9a43-0d7c2b1a8e10
-          name: テストグループ
+          name: テストグループ (B不在)
+          displayName: テストグループ
           members:
             - personId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
               name: テスト人物
@@ -4325,10 +4338,13 @@ components:
       type: object
       required:
         - name
+        - displayName
         - members
       properties:
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4379,6 +4395,7 @@ components:
       required:
         - personGroupId
         - name
+        - displayName
         - members
         - performanceCount
       properties:
@@ -4386,6 +4403,8 @@ components:
           $ref: '#/components/schemas/personGroupId'
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4399,10 +4418,13 @@ components:
       type: object
       required:
         - name
+        - displayName
         - members
       properties:
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4619,6 +4641,7 @@ components:
         - name
         - releasedOn
         - description
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4634,6 +4657,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4655,6 +4680,7 @@ components:
         - name
         - releasedOn
         - description
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4668,6 +4694,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4733,6 +4761,7 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
       properties:
@@ -4744,6 +4773,8 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4755,6 +4786,7 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
       properties:
@@ -4764,6 +4796,8 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4900,6 +4934,7 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
       properties:
@@ -4909,6 +4944,8 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4934,17 +4971,18 @@ components:
           $ref: '#/components/schemas/orderNo'
         songId:
           anyOf:
-            - $ref: '#/components/schemas/uuid'
+            - $ref: '#/components/schemas/songId'
             - type: 'null'
         title:
           $ref: '#/components/schemas/title'
-      description: 'リリース収録曲の read model。参照トラックの title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る'
+      description: 'リリース収録曲の read model。楽曲を参照するトラックは楽曲ごとに 1 行で title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る'
     ReleaseUpdateRequest:
       type: object
       required:
         - name
         - releasedOn
         - description
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4956,6 +4994,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -5150,6 +5190,7 @@ components:
         - songId
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5164,6 +5205,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5190,6 +5233,7 @@ components:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
           description: テスト楽曲説明
+          note: テスト楽曲備考
           lyricsLink: https://example.com/lyrics
           type: 1
           isDisplay: true
@@ -5229,6 +5273,7 @@ components:
       required:
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5240,6 +5285,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5578,6 +5625,7 @@ components:
       required:
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5590,6 +5638,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5634,21 +5684,21 @@ components:
     Track:
       type: object
       required:
-        - songId
+        - songIds
         - title
         - trackNo
       properties:
-        songId:
-          anyOf:
-            - $ref: '#/components/schemas/uuid'
-            - type: 'null'
+        songIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/songId'
         title:
           anyOf:
             - $ref: '#/components/schemas/trackTitle'
             - type: 'null'
         trackNo:
           $ref: '#/components/schemas/orderNo'
-      description: 収録曲。songId / title の少なくとも一方を指定する(検証はサーバー側の責務)。songId ありは Song 集約を参照する参照トラックで、title を併記すると表示名を上書きする。songId なしは表示専用のタイトルのみトラック
+      description: 収録曲。songIds / title の少なくとも一方を指定する(検証はサーバー側の責務)。songIds は Song 集約を収録順に参照し、2 件以上でメドレーになる。楽曲 1 件では title で表示名を上書きし、メドレーでは title をメドレーの表示名にする。songIds が空なら表示専用のタイトルのみトラック
     Venue:
       type: object
       required:
@@ -5784,6 +5834,10 @@ components:
       type: string
       format: uuid
       description: 監査ログID
+    auditTargetId:
+      type: string
+      format: uuid
+      description: 監査対象ID。targetType によって指す集約が変わる
     authCeremonyId:
       type: string
       format: uuid
@@ -5854,6 +5908,9 @@ components:
       type: string
       minLength: 1
       description: 媒体の表示ラベル(CD1 / Blu-ray など)
+    note:
+      type: string
+      description: 管理用の備考。閲覧サイトには公開しない
     orderNo:
       type: integer
       format: int32
@@ -5872,6 +5929,10 @@ components:
       type: string
       format: uuid
       description: 楽曲披露ID
+    personGroupDisplayName:
+      type: string
+      minLength: 1
+      description: 人物グループの表示用名称。閲覧サイトに出す名前で、重複してよい
     personGroupId:
       type: string
       format: uuid
@@ -5879,7 +5940,7 @@ components:
     personGroupName:
       type: string
       minLength: 1
-      description: 人物グループ名
+      description: 人物グループの管理用名称。一意で、管理画面でグループを見分けるために使う
     personId:
       type: string
       format: uuid
@@ -5950,11 +6011,7 @@ components:
     trackTitle:
       type: string
       minLength: 1
-      description: トラックの表示名。参照トラックでは楽曲名の上書き、タイトルのみトラックでは必須のタイトル
-    uuid:
-      type: string
-      format: uuid
-      description: UUID v4
+      description: トラックの表示名。楽曲 1 件では楽曲名の上書き、メドレーでは任意の表示名、タイトルのみトラックでは必須のタイトル
     venueId:
       type: string
       format: uuid

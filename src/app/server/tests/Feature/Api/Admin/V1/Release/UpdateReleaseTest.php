@@ -53,8 +53,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId1, 'title' => null, 'trackNo' => 1],
-                            ['songId' => $songId2, 'title' => null, 'trackNo' => 2],
+                            ['songIds' => [$songId1], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [$songId2], 'title' => null, 'trackNo' => 2],
                         ],
                     ],
                 ],
@@ -66,6 +66,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '更新後の説明',
+                'note' => '備考',
                 'isDisplay' => false,
                 'orderNo' => 20,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -74,8 +75,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId3, 'title' => null, 'trackNo' => 1],
-                            ['songId' => $songId1, 'title' => null, 'trackNo' => 2],
+                            ['songIds' => [$songId3], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [$songId1], 'title' => null, 'trackNo' => 2],
                         ],
                     ],
                 ],
@@ -90,19 +91,20 @@ class UpdateReleaseTest extends DatabaseTestCase
                             ->where('name', '新版名')
                             ->where('releasedOn', '2026-05-09')
                             ->where('description', '更新後の説明')
+                            ->where('note', '備考')
                             ->where('isDisplay', false)
                             ->where('orderNo', 20)
                             ->where('formats', [ReleaseFormat::Cd->value])
                             ->where('media.0.position', 1)
                             ->where('media.0.name', null)
-                            ->where('media.0.tracks.0.songId', $songId3)
+                            ->where('media.0.tracks.0.songIds', [$songId3])
                             ->where('media.0.tracks.0.trackNo', 1)
-                            ->where('media.0.tracks.1.songId', $songId1)
+                            ->where('media.0.tracks.1.songIds', [$songId1])
                             ->where('media.0.tracks.1.trackNo', 2),
                     ),
             );
 
-        $tracks = DB::table('release_tracks')
+        $tracks = DB::table('release_track_songs')
             ->where('release_id', $converter->toBin($releaseId))
             ->orderBy('track_no')
             ->get()
@@ -136,7 +138,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),
@@ -147,6 +149,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -155,8 +158,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                            ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
                         ],
                     ],
                 ],
@@ -166,7 +169,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     ->has(
                         'release',
                         static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.1.songId', null)
+                            ->where('media.0.tracks.1.songIds', [])
                             ->where('media.0.tracks.1.title', '管理対象外の楽曲')
                             ->where('media.0.tracks.1.trackNo', 2)
                             ->etc(),
@@ -175,7 +178,6 @@ class UpdateReleaseTest extends DatabaseTestCase
 
         $this->assertDatabaseHas('release_tracks', [
             'track_no' => 2,
-            'song_id' => null,
             'title' => '管理対象外の楽曲',
         ]);
     }
@@ -203,7 +205,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),
@@ -215,6 +217,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -223,7 +226,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId, 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1],
+                            ['songIds' => [$songId], 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1],
                         ],
                     ],
                 ],
@@ -233,7 +236,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     ->has(
                         'release',
                         static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songId', $songId)
+                            ->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.title', 'テスト楽曲1 -instrumental-')
                             ->where('media.0.tracks.0.trackNo', 1)
                             ->etc(),
@@ -264,6 +267,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [],
@@ -279,6 +283,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -294,6 +299,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -319,6 +325,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -348,6 +355,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
                 'description' => '説明',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -355,12 +363,12 @@ class UpdateReleaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                     [
                         'position' => 2,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ])->assertStatus(200)
@@ -369,13 +377,13 @@ class UpdateReleaseTest extends DatabaseTestCase
                     ->has(
                         'release',
                         static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songId', $songId)
-                            ->where('media.1.tracks.0.songId', $songId)
+                            ->where('media.0.tracks.0.songIds', [$songId])
+                            ->where('media.1.tracks.0.songIds', [$songId])
                             ->etc(),
                     ),
             );
 
-        $tracks = DB::table('release_tracks')
+        $tracks = DB::table('release_track_songs')
             ->where('release_id', $converter->toBin($releaseId))
             ->orderBy('position')
             ->get()

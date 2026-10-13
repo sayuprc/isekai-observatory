@@ -30,7 +30,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->paginate(
                 $this->buildSearchQuery($criteria)
-                    ->withSelect(['person_group_id', 'name'])
+                    ->withSelect(['person_group_id', 'name', 'display_name'])
                     ->orderBy('name'),
                 $criteria->page,
                 $criteria->perPage,
@@ -51,7 +51,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
     {
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['person_group_id', 'name'])
+                ->withSelect(['person_group_id', 'name', 'display_name'])
                 ->from('person_groups')
                 ->where('person_group_id', '=', $this->converter->toBin($personGroupId->value))
                 ->limit(1),
@@ -117,6 +117,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
             fn (array $row): PersonGroupSummary => new PersonGroupSummary(
                 $this->converter->toUuid(Row::string($row, 'person_group_id')),
                 Row::string($row, 'name'),
+                Row::string($row, 'display_name'),
                 $membersByGroup[Row::string($row, 'person_group_id')] ?? [],
             ),
             $rows,

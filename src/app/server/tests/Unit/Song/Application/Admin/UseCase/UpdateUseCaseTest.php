@@ -60,6 +60,7 @@ class UpdateUseCaseTest extends TestCase
         $songId = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $title = 'テスト楽曲';
         $description = 'テスト楽曲説明';
+        $note = '備考';
         $lyricsLink = 'https://example.com/lyrics';
         $typeValue = SongType::Original->value;
         $isDisplay = false;
@@ -77,11 +78,11 @@ class UpdateUseCaseTest extends TestCase
 
         $this->repository->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
-            ->andReturn($this->createSong($songId, $title, $description, $lyricsLink, SongType::from($typeValue), true, 1))
+            ->andReturn($this->createSong($songId, $title, $description, $lyricsLink, SongType::from($typeValue), true, 1, note: $note))
             ->once();
 
         $this->service->shouldReceive('prepareForUpdate')
-            ->with($songId, $title, $description, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
+            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
             ->andReturn(
                 $song = $this->createSong(
                     $songId,
@@ -93,22 +94,24 @@ class UpdateUseCaseTest extends TestCase
                     $orderNo,
                     [],
                     $persons,
+                    note: $note,
                 ),
             )
             ->once();
 
         $this->repository->shouldReceive('save')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
             ->andReturn($song)
             ->once();
 
         $this->assembler->shouldReceive('assemble')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
             ->andReturn(
                 new AssembledSong(
                     $song->songId->value,
                     $song->title->value,
                     $song->description->value,
+                    $song->note->value,
                     $song->lyricsLink?->value,
                     $song->type->value,
                     $song->isDisplay,
@@ -127,6 +130,7 @@ class UpdateUseCaseTest extends TestCase
                 $songId,
                 $title,
                 $description,
+                $note,
                 $lyricsLink,
                 $typeValue,
                 $isDisplay,
@@ -143,6 +147,7 @@ class UpdateUseCaseTest extends TestCase
         $songId = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $title = '曲名';
         $description = '説明';
+        $note = '備考';
         $lyricsLink = null;
         $typeValue = 1;
         $isDisplay = false;
@@ -160,11 +165,11 @@ class UpdateUseCaseTest extends TestCase
 
         $this->repository->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
-            ->andReturn($this->createSong($songId, $title, $description, $lyricsLink, SongType::Original, true, 1))
+            ->andReturn($this->createSong($songId, $title, $description, $lyricsLink, SongType::Original, true, 1, note: $note))
             ->once();
 
         $this->service->shouldReceive('prepareForUpdate')
-            ->with($songId, $title, $description, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
+            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
             ->andThrow(new BusinessRuleViolationException('検証エラー'))
             ->once();
 
@@ -175,6 +180,7 @@ class UpdateUseCaseTest extends TestCase
                 $songId,
                 $title,
                 $description,
+                $note,
                 $lyricsLink,
                 $typeValue,
                 $isDisplay,
@@ -210,6 +216,7 @@ class UpdateUseCaseTest extends TestCase
                 $songId,
                 '曲名',
                 '説明',
+                '',
                 null,
                 SongType::Original->value,
                 true,
@@ -228,6 +235,7 @@ class UpdateUseCaseTest extends TestCase
         string $songId,
         string $title,
         string $description,
+        string $note,
         ?string $lyricsLink,
         int $typeValue,
         bool $isDisplay,
@@ -238,6 +246,7 @@ class UpdateUseCaseTest extends TestCase
             $song->songId->value !== $songId
             || $song->title->value !== $title
             || $song->description->value !== $description
+            || $song->note->value !== $note
             || $song->lyricsLink?->value !== $lyricsLink
             || $song->type->value !== $typeValue
             || $song->isDisplay !== $isDisplay

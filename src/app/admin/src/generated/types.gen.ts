@@ -27,11 +27,11 @@ export type AuditAction = 'create' | 'update' | 'delete' | 'register' | 'login' 
  */
 export type AuditLog = {
     auditLogId: AuditLogId;
-    adminUserId: Uuid;
+    adminUserId: AdminUserId;
     adminUserName: string;
     action: AuditAction;
     targetType: AuditTargetType;
-    targetId: Uuid;
+    targetId: AuditTargetId;
     createdAt: string;
     /**
      * 対象の変更後スナップショット。target_type ごとに構造が異なるため任意の JSON とする
@@ -55,11 +55,11 @@ export type AuditLogSearchResponse = {
  */
 export type AuditLogSummary = {
     auditLogId: AuditLogId;
-    adminUserId: Uuid;
+    adminUserId: AdminUserId;
     adminUserName: string;
     action: AuditAction;
     targetType: AuditTargetType;
-    targetId: Uuid;
+    targetId: AuditTargetId;
     createdAt: string;
 };
 
@@ -97,6 +97,7 @@ export type Event = {
     eventId: EventId;
     title: EventTitle;
     description: EventDescription;
+    note: Note;
     type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatusValue;
@@ -112,6 +113,7 @@ export type Event = {
 export type EventCreateRequest = {
     title: EventTitle;
     description: EventDescription;
+    note: Note;
     type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatusValue;
@@ -205,6 +207,7 @@ export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 export type EventUpdateRequest = {
     title: EventTitle;
     description: EventDescription;
+    note: Note;
     type: EventTypeValue;
     schedule: IsekaiObservatoryPackagesEventEventSchedule;
     status: EventStatusValue;
@@ -401,11 +404,13 @@ export type PersonGetResponse = {
 export type PersonGroup = {
     personGroupId: PersonGroupId;
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<PersonGroupMember>;
 };
 
 export type PersonGroupCreateRequest = {
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<RequestPersonGroupMember>;
 };
 
@@ -437,6 +442,7 @@ export type PersonGroupSearchResponse = {
 export type PersonGroupSummary = {
     personGroupId: PersonGroupId;
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<PersonGroupMember>;
     /**
      * このグループとして共演が記録されている楽曲披露の件数
@@ -446,6 +452,7 @@ export type PersonGroupSummary = {
 
 export type PersonGroupUpdateRequest = {
     name: PersonGroupName;
+    displayName: PersonGroupDisplayName;
     members: Array<RequestPersonGroupMember>;
 };
 
@@ -566,6 +573,7 @@ export type Release = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -577,6 +585,7 @@ export type ReleaseCreateRequest = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -609,6 +618,7 @@ export type ReleaseGroup = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
 };
@@ -617,6 +627,7 @@ export type ReleaseGroupCreateRequest = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
 };
@@ -682,6 +693,7 @@ export type ReleaseGroupUpdateRequest = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
 };
@@ -691,12 +703,12 @@ export type ReleaseGroupUpdateResponse = {
 };
 
 /**
- * リリース収録曲の read model。参照トラックの title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る
+ * リリース収録曲の read model。楽曲を参照するトラックは楽曲ごとに 1 行で title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る
  */
 export type ReleaseReferencedSong = {
     mediumPosition: OrderNo;
     trackNo: OrderNo;
-    songId: Uuid | null;
+    songId: SongId | null;
     title: Title;
 };
 
@@ -704,6 +716,7 @@ export type ReleaseUpdateRequest = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
+    note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
@@ -798,6 +811,7 @@ export type Song = {
     songId: SongId;
     title: Title;
     description: Description;
+    note: Note;
     lyricsLink: LyricsLink | null;
     type: SongTypeValue;
     isDisplay: boolean;
@@ -815,6 +829,7 @@ export type SongAttachedTag = {
 export type SongCreateRequest = {
     title: Title;
     description: Description;
+    note: Note;
     lyricsLink: LyricsLink | null;
     type: SongTypeValue;
     isDisplay: boolean;
@@ -962,6 +977,7 @@ export type SongTypeValue = 1 | 2 | 3;
 export type SongUpdateRequest = {
     title: Title;
     description: Description;
+    note: Note;
     lyricsLink: LyricsLink | null;
     type: SongTypeValue;
     isDisplay: boolean;
@@ -981,10 +997,10 @@ export type SongUpdateResponse = {
 export type SortOrder = 'asc' | 'desc';
 
 /**
- * 収録曲。songId / title の少なくとも一方を指定する(検証はサーバー側の責務)。songId ありは Song 集約を参照する参照トラックで、title を併記すると表示名を上書きする。songId なしは表示専用のタイトルのみトラック
+ * 収録曲。songIds / title の少なくとも一方を指定する(検証はサーバー側の責務)。songIds は Song 集約を収録順に参照し、2 件以上でメドレーになる。楽曲 1 件では title で表示名を上書きし、メドレーでは title をメドレーの表示名にする。songIds が空なら表示専用のタイトルのみトラック
  */
 export type Track = {
-    songId: Uuid | null;
+    songIds: Array<SongId>;
     title: TrackTitle | null;
     trackNo: OrderNo;
 };
@@ -1066,6 +1082,11 @@ export type AdminUserName = string;
  * 監査ログID
  */
 export type AuditLogId = string;
+
+/**
+ * 監査対象ID。targetType によって指す集約が変わる
+ */
+export type AuditTargetId = string;
 
 /**
  * 認証セッションID
@@ -1158,6 +1179,11 @@ export type MediaUrl = string;
 export type MediumName = string;
 
 /**
+ * 管理用の備考。閲覧サイトには公開しない
+ */
+export type Note = string;
+
+/**
  * 表示順
  */
 export type OrderNo = number;
@@ -1178,12 +1204,17 @@ export type PerformanceCreditName = string;
 export type PerformanceId = string;
 
 /**
+ * 人物グループの表示用名称。閲覧サイトに出す名前で、重複してよい
+ */
+export type PersonGroupDisplayName = string;
+
+/**
  * 人物グループID
  */
 export type PersonGroupId = string;
 
 /**
- * 人物グループ名
+ * 人物グループの管理用名称。一意で、管理画面でグループを見分けるために使う
  */
 export type PersonGroupName = string;
 
@@ -1273,14 +1304,9 @@ export type SongTagName = string;
 export type Title = string;
 
 /**
- * トラックの表示名。参照トラックでは楽曲名の上書き、タイトルのみトラックでは必須のタイトル
+ * トラックの表示名。楽曲 1 件では楽曲名の上書き、メドレーでは任意の表示名、タイトルのみトラックでは必須のタイトル
  */
 export type TrackTitle = string;
-
-/**
- * UUID v4
- */
-export type Uuid = string;
 
 /**
  * 開催先ID
@@ -1341,7 +1367,7 @@ export type AuditLogServiceSearchAuditLogsData = {
         to?: string;
         action?: AuditAction;
         target_type?: AuditTargetType;
-        target_id?: Uuid;
+        target_id?: AuditTargetId;
         admin_user_name?: string;
         page?: Page;
         per_page?: PerPage;
@@ -1386,7 +1412,7 @@ export type AuditLogServiceSearchAuditLogsResponse = AuditLogServiceSearchAuditL
 export type AuditLogServiceGetAuditLogData = {
     body?: never;
     path: {
-        auditLogId: Uuid;
+        auditLogId: AuditLogId;
     };
     query?: never;
     url: '/audit-logs/{auditLogId}';
@@ -1843,7 +1869,7 @@ export type EventServiceSearchEventsResponse = EventServiceSearchEventsResponses
 export type EventServiceDeleteEventData = {
     body?: never;
     path: {
-        eventId: Uuid;
+        eventId: EventId;
     };
     query?: never;
     url: '/events/{eventId}';
@@ -1898,7 +1924,7 @@ export type EventServiceDeleteEventResponse = EventServiceDeleteEventResponses[k
 export type EventServiceGetEventData = {
     body?: never;
     path: {
-        eventId: Uuid;
+        eventId: EventId;
     };
     query?: never;
     url: '/events/{eventId}';
@@ -1949,7 +1975,7 @@ export type EventServiceGetEventResponse = EventServiceGetEventResponses[keyof E
 export type EventServiceUpdateEventData = {
     body: EventUpdateRequest;
     path: {
-        eventId: Uuid;
+        eventId: EventId;
     };
     query?: never;
     url: '/events/{eventId}';
@@ -2102,7 +2128,7 @@ export type MediaServiceSearchMediaResponse = MediaServiceSearchMediaResponses[k
 export type MediaServiceDeleteMediaData = {
     body?: never;
     path: {
-        mediaId: Uuid;
+        mediaId: MediaId;
     };
     query?: never;
     url: '/media/{mediaId}';
@@ -2153,7 +2179,7 @@ export type MediaServiceDeleteMediaResponse = MediaServiceDeleteMediaResponses[k
 export type MediaServiceGetMediaData = {
     body?: never;
     path: {
-        mediaId: Uuid;
+        mediaId: MediaId;
     };
     query?: never;
     url: '/media/{mediaId}';
@@ -2204,7 +2230,7 @@ export type MediaServiceGetMediaResponse = MediaServiceGetMediaResponses[keyof M
 export type MediaServiceUpdateMediaData = {
     body: MediaUpdateRequest;
     path: {
-        mediaId: Uuid;
+        mediaId: MediaId;
     };
     query?: never;
     url: '/media/{mediaId}';
@@ -2353,7 +2379,7 @@ export type PersonGroupServiceSearchPersonGroupsResponse = PersonGroupServiceSea
 export type PersonGroupServiceDeletePersonGroupData = {
     body?: never;
     path: {
-        personGroupId: Uuid;
+        personGroupId: PersonGroupId;
     };
     query?: never;
     url: '/person-groups/{personGroupId}';
@@ -2404,7 +2430,7 @@ export type PersonGroupServiceDeletePersonGroupResponse = PersonGroupServiceDele
 export type PersonGroupServiceGetPersonGroupData = {
     body?: never;
     path: {
-        personGroupId: Uuid;
+        personGroupId: PersonGroupId;
     };
     query?: never;
     url: '/person-groups/{personGroupId}';
@@ -2455,7 +2481,7 @@ export type PersonGroupServiceGetPersonGroupResponse = PersonGroupServiceGetPers
 export type PersonGroupServiceUpdatePersonGroupData = {
     body: PersonGroupUpdateRequest;
     path: {
-        personGroupId: Uuid;
+        personGroupId: PersonGroupId;
     };
     query?: never;
     url: '/person-groups/{personGroupId}';
@@ -2647,7 +2673,7 @@ export type PersonServiceSearchPersonsResponse = PersonServiceSearchPersonsRespo
 export type PersonServiceDeletePersonData = {
     body?: never;
     path: {
-        personId: Uuid;
+        personId: PersonId;
     };
     query?: never;
     url: '/persons/{personId}';
@@ -2698,7 +2724,7 @@ export type PersonServiceDeletePersonResponse = PersonServiceDeletePersonRespons
 export type PersonServiceGetPersonData = {
     body?: never;
     path: {
-        personId: Uuid;
+        personId: PersonId;
     };
     query?: never;
     url: '/persons/{personId}';
@@ -2749,7 +2775,7 @@ export type PersonServiceGetPersonResponse = PersonServiceGetPersonResponses[key
 export type PersonServiceUpdatePersonData = {
     body: PersonUpdateRequest;
     path: {
-        personId: Uuid;
+        personId: PersonId;
     };
     query?: never;
     url: '/persons/{personId}';
@@ -2939,7 +2965,7 @@ export type ReleaseGroupServiceSearchReleaseGroupsResponse = ReleaseGroupService
 export type ReleaseGroupServiceDeleteReleaseGroupData = {
     body?: never;
     path: {
-        releaseGroupId: Uuid;
+        releaseGroupId: ReleaseGroupId;
     };
     query?: never;
     url: '/release-groups/{releaseGroupId}';
@@ -2994,7 +3020,7 @@ export type ReleaseGroupServiceDeleteReleaseGroupResponse = ReleaseGroupServiceD
 export type ReleaseGroupServiceGetReleaseGroupData = {
     body?: never;
     path: {
-        releaseGroupId: Uuid;
+        releaseGroupId: ReleaseGroupId;
     };
     query?: never;
     url: '/release-groups/{releaseGroupId}';
@@ -3045,7 +3071,7 @@ export type ReleaseGroupServiceGetReleaseGroupResponse = ReleaseGroupServiceGetR
 export type ReleaseGroupServiceUpdateReleaseGroupData = {
     body: ReleaseGroupUpdateRequest;
     path: {
-        releaseGroupId: Uuid;
+        releaseGroupId: ReleaseGroupId;
     };
     query?: never;
     url: '/release-groups/{releaseGroupId}';
@@ -3145,7 +3171,7 @@ export type ReleaseServiceCreateReleaseResponse = ReleaseServiceCreateReleaseRes
 export type ReleaseServiceDeleteReleaseData = {
     body?: never;
     path: {
-        releaseId: Uuid;
+        releaseId: ReleaseId;
     };
     query?: never;
     url: '/releases/{releaseId}';
@@ -3200,7 +3226,7 @@ export type ReleaseServiceDeleteReleaseResponse = ReleaseServiceDeleteReleaseRes
 export type ReleaseServiceGetReleaseData = {
     body?: never;
     path: {
-        releaseId: Uuid;
+        releaseId: ReleaseId;
     };
     query?: never;
     url: '/releases/{releaseId}';
@@ -3251,7 +3277,7 @@ export type ReleaseServiceGetReleaseResponse = ReleaseServiceGetReleaseResponses
 export type ReleaseServiceUpdateReleaseData = {
     body: ReleaseUpdateRequest;
     path: {
-        releaseId: Uuid;
+        releaseId: ReleaseId;
     };
     query?: never;
     url: '/releases/{releaseId}';
@@ -3443,7 +3469,7 @@ export type SongTagServiceSearchSongTagsResponse = SongTagServiceSearchSongTagsR
 export type SongTagServiceDeleteSongTagData = {
     body?: never;
     path: {
-        songTagId: Uuid;
+        songTagId: SongTagId;
     };
     query?: never;
     url: '/song-tags/{songTagId}';
@@ -3494,7 +3520,7 @@ export type SongTagServiceDeleteSongTagResponse = SongTagServiceDeleteSongTagRes
 export type SongTagServiceGetSongTagData = {
     body?: never;
     path: {
-        songTagId: Uuid;
+        songTagId: SongTagId;
     };
     query?: never;
     url: '/song-tags/{songTagId}';
@@ -3545,7 +3571,7 @@ export type SongTagServiceGetSongTagResponse = SongTagServiceGetSongTagResponses
 export type SongTagServiceUpdateSongTagData = {
     body: SongTagUpdateRequest;
     path: {
-        songTagId: Uuid;
+        songTagId: SongTagId;
     };
     query?: never;
     url: '/song-tags/{songTagId}';
@@ -3698,7 +3724,7 @@ export type SongServiceSearchSongsResponse = SongServiceSearchSongsResponses[key
 export type SongServiceDeleteSongData = {
     body?: never;
     path: {
-        songId: Uuid;
+        songId: SongId;
     };
     query?: never;
     url: '/songs/{songId}';
@@ -3749,7 +3775,7 @@ export type SongServiceDeleteSongResponse = SongServiceDeleteSongResponses[keyof
 export type SongServiceGetSongData = {
     body?: never;
     path: {
-        songId: Uuid;
+        songId: SongId;
     };
     query?: never;
     url: '/songs/{songId}';
@@ -3800,7 +3826,7 @@ export type SongServiceGetSongResponse = SongServiceGetSongResponses[keyof SongS
 export type SongServiceUpdateSongData = {
     body: SongUpdateRequest;
     path: {
-        songId: Uuid;
+        songId: SongId;
     };
     query?: never;
     url: '/songs/{songId}';
@@ -3952,7 +3978,7 @@ export type VenueServiceSearchVenuesResponse = VenueServiceSearchVenuesResponses
 export type VenueServiceDeleteVenueData = {
     body?: never;
     path: {
-        venueId: Uuid;
+        venueId: VenueId;
     };
     query?: never;
     url: '/venues/{venueId}';
@@ -4007,7 +4033,7 @@ export type VenueServiceDeleteVenueResponse = VenueServiceDeleteVenueResponses[k
 export type VenueServiceGetVenueData = {
     body?: never;
     path: {
-        venueId: Uuid;
+        venueId: VenueId;
     };
     query?: never;
     url: '/venues/{venueId}';
@@ -4058,7 +4084,7 @@ export type VenueServiceGetVenueResponse = VenueServiceGetVenueResponses[keyof V
 export type VenueServiceUpdateVenueData = {
     body: VenueUpdateRequest;
     path: {
-        venueId: Uuid;
+        venueId: VenueId;
     };
     query?: never;
     url: '/venues/{venueId}';

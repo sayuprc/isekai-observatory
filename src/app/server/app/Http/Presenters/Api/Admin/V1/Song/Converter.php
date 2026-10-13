@@ -25,6 +25,7 @@ readonly class Converter
             ->setSongId($song->songId)
             ->setTitle($song->title)
             ->setDescription($song->description)
+            ->setNote($song->note)
             ->setType(SongTypeValue::from($song->typeValue))
             ->setIsDisplay($song->isDisplay)
             ->setOrderNo($song->orderNo)

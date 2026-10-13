@@ -1,6 +1,7 @@
 import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
@@ -41,7 +42,7 @@ export const CreateForm = () => {
         submittingLabel="作成中..."
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form id="release-group-form" class="max-w-5xl" onSubmit={handleSubmit}>
+      <form id="release-group-form" onKeyDown={preventImplicitSubmit} class="max-w-5xl" onSubmit={handleSubmit}>
         <ReleaseGroupFields form={form} getFieldError={getFieldError} />
       </form>
     </>

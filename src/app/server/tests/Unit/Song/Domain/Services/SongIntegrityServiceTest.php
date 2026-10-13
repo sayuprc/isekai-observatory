@@ -56,6 +56,7 @@ class SongIntegrityServiceTest extends TestCase
         $currentMaxOrderNo = 100;
         $expectedOrderNo = 110;
         $description = '説明';
+        $note = '備考';
         $persons = [
             ['personId' => $lyricistId = 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'role' => 1, 'orderNo' => 1],
             ['personId' => $composerId = 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC', 'role' => 2, 'orderNo' => 2],
@@ -71,6 +72,7 @@ class SongIntegrityServiceTest extends TestCase
             $expectedOrderNo,
             [],
             $persons,
+            note: $note,
         );
 
         $this->personRepository->shouldReceive('findByIds')
@@ -103,6 +105,7 @@ class SongIntegrityServiceTest extends TestCase
         $result = $this->getInstance()->prepareForCreate(
             $title,
             $description,
+            $note,
             null,
             $type,
             $isDisplay,
@@ -121,6 +124,7 @@ class SongIntegrityServiceTest extends TestCase
         $type = SongType::Original->value;
         $isDisplay = true;
         $description = '説明';
+        $note = '備考';
         $persons = [
             ['personId' => 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'role' => 1, 'orderNo' => 1],
             ['personId' => 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC', 'role' => 2, 'orderNo' => 2],
@@ -148,6 +152,7 @@ class SongIntegrityServiceTest extends TestCase
         $result = $this->getInstance()->prepareForCreate(
             $title,
             $description,
+            $note,
             null,
             $type,
             $isDisplay,
@@ -163,6 +168,7 @@ class SongIntegrityServiceTest extends TestCase
         $songId = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $title = 'テスト楽曲';
         $description = '説明';
+        $note = '備考';
         $type = SongType::Original->value;
         $isDisplay = true;
         $orderNo = 1;
@@ -181,6 +187,7 @@ class SongIntegrityServiceTest extends TestCase
             $orderNo,
             [],
             $persons,
+            note: $note,
         );
 
         $this->personRepository->shouldReceive('findByIds')
@@ -204,6 +211,7 @@ class SongIntegrityServiceTest extends TestCase
             $songId,
             $title,
             $description,
+            $note,
             null,
             $type,
             $isDisplay,
@@ -222,6 +230,7 @@ class SongIntegrityServiceTest extends TestCase
         $songId = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $title = 'テスト楽曲';
         $description = '説明';
+        $note = '備考';
         $type = SongType::Original->value;
         $isDisplay = true;
         $orderNo = 1;
@@ -253,6 +262,7 @@ class SongIntegrityServiceTest extends TestCase
             $songId,
             $title,
             $description,
+            $note,
             null,
             $type,
             $isDisplay,

@@ -4,6 +4,7 @@ import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createFormDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -174,7 +175,7 @@ const EditableForm = (props: EditableFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="person-form" class="max-w-4xl" onSubmit={handleUpdate}>
+      <form ref={bindForm} id="person-form" onKeyDown={preventImplicitSubmit} class="max-w-4xl" onSubmit={handleUpdate}>
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border px-6 py-3">
           <legend class="px-2 text-sm font-semibold text-base-content/70">基本情報</legend>
           <FormRow label="人物名" for="name">

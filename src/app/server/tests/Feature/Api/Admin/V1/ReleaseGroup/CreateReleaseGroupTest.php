@@ -27,6 +27,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'title' => '観測された春',
                 'type' => ReleaseGroupType::Album->value,
                 'description' => '1st アルバム',
+                'note' => '備考',
                 'isDisplay' => true,
                 'orderNo' => 1,
             ])->assertStatus(200)
@@ -39,6 +40,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                             ->where('title', '観測された春')
                             ->where('type', ReleaseGroupType::Album->value)
                             ->where('description', '1st アルバム')
+                            ->where('note', '備考')
                             ->where('isDisplay', true)
                             ->where('orderNo', 1),
                     ),
@@ -48,6 +50,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
             'title' => '観測された春',
             'type' => ReleaseGroupType::Album->value,
             'description' => '1st アルバム',
+            'note' => '備考',
             'is_display' => true,
             'order_no' => 1,
         ]);
@@ -65,6 +68,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'title' => '観測された春',
                 'type' => ReleaseGroupType::Album->value,
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 7,
             ])->assertStatus(200)
@@ -79,6 +83,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'title' => '観測された春',
                 'type' => ReleaseGroupType::Album->value,
                 'description' => '',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
             ])->assertStatus(403);

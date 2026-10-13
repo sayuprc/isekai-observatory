@@ -28,6 +28,7 @@ export type EventRequestBody = EventCreateRequest;
 export const createEventForm = (event?: Event) => {
   const [title, setTitle] = createSignal(event?.title ?? '');
   const [description, setDescription] = createSignal(event?.description ?? '');
+  const [note, setNote] = createSignal(event?.note ?? '');
   const [startOn, setStartOn] = createSignal(normalizeDateValue(event?.schedule.startOn));
   const [endOn, setEndOn] = createSignal(normalizeDateValue(event?.schedule.endOn));
   const [typeValue, setTypeValue] = createSignal<EventTypeValue>(event?.type ?? 1);
@@ -87,6 +88,7 @@ export const createEventForm = (event?: Event) => {
   const toRequestBody = (): EventRequestBody => ({
     title: title(),
     description: description(),
+    note: note(),
     type: typeValue(),
     schedule: {
       startOn: startOn() || null,
@@ -107,6 +109,8 @@ export const createEventForm = (event?: Event) => {
     setTitle,
     description,
     setDescription,
+    note,
+    setNote,
     startOn,
     setStartOn,
     endOn,

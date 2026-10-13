@@ -24,6 +24,7 @@ readonly class UpdateInputData
         public string $eventId,
         public string $title,
         public string $description,
+        public string $note,
         public int $type,
         public array $schedule,
         public int $status,

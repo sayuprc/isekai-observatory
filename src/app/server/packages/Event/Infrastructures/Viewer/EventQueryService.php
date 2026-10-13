@@ -322,7 +322,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
                     'persons.name',
                     'person_groups.person_group_id',
                 ])
-                ->select('person_groups.name', 'person_group_name')
+                ->select('person_groups.display_name', 'person_group_name')
                 ->from('song_performance_persons')
                 ->join('persons', 'song_performance_persons.person_id = persons.person_id')
                 ->outerJoin('person_groups', 'song_performance_persons.person_group_id = person_groups.person_group_id')

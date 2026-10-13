@@ -39,6 +39,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             name: '初回限定盤',
             releasedOn: '2026-05-09',
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 10,
             formats: [ReleaseFormat::Cd->value],
@@ -46,7 +47,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                    'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                 ],
                 [
                     'position' => 2,
@@ -64,6 +65,7 @@ class CreateUseCaseTest extends DatabaseTestCase
         $this->assertDatabaseHas('releases', [
             'name' => '初回限定盤',
             'description' => '',
+            'note' => '',
             'is_display' => true,
             'order_no' => 10,
         ]);
@@ -85,6 +87,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             name: '',
             releasedOn: '2026-05-09',
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 1,
             formats: [ReleaseFormat::Digital->value],
@@ -117,6 +120,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             name: '初回限定盤',
             releasedOn: '2026-05-09',
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 10,
             formats: [ReleaseFormat::Cd->value],
@@ -125,8 +129,8 @@ class CreateUseCaseTest extends DatabaseTestCase
                     'position' => 1,
                     'name' => null,
                     'tracks' => [
-                        ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                        ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+                        ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
                     ],
                 ],
             ],
@@ -135,7 +139,6 @@ class CreateUseCaseTest extends DatabaseTestCase
         $this->assertDatabaseCount('release_tracks', 2);
         $this->assertDatabaseHas('release_tracks', [
             'track_no' => 2,
-            'song_id' => null,
             'title' => '管理対象外の楽曲',
         ]);
     }
@@ -159,6 +162,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             name: '初回限定盤',
             releasedOn: '2026-05-09',
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 10,
             formats: [ReleaseFormat::Cd->value],
@@ -166,7 +170,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songId' => $songId, 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1]],
+                    'tracks' => [['songIds' => [$songId], 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1]],
                 ],
             ],
         ));
@@ -193,6 +197,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             name: '初回限定盤',
             releasedOn: '2026-05-09',
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 10,
             formats: [ReleaseFormat::Cd->value],
@@ -200,7 +205,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songId' => null, 'title' => null, 'trackNo' => 1]],
+                    'tracks' => [['songIds' => [], 'title' => null, 'trackNo' => 1]],
                 ],
             ],
         ));
@@ -216,6 +221,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             name: '通常盤',
             releasedOn: '2026-05-09',
             description: '',
+            note: '',
             isDisplay: true,
             orderNo: 1,
             formats: [ReleaseFormat::Cd->value],
@@ -239,6 +245,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             name: '通常盤',
             releasedOn: 'invalid-date',
             description: '説明',
+            note: '',
             isDisplay: true,
             orderNo: 1,
             formats: [ReleaseFormat::Cd->value],
