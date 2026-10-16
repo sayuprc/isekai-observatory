@@ -390,4 +390,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
   # 費用を抑えるためにスペックを下げる
   # 費用と効果が見合うかを改めて試算してから設定する
-  # machineType: 'E2_HIGHCPU_8'
+  machineType: "E2_HIGHCPU_8"
