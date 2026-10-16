@@ -6,7 +6,6 @@ tags:
   - name: ReleaseGroup
   - name: Event
   - name: Media
-  - name: SiteStats
   - name: Song
 paths:
   /events:
@@ -123,26 +122,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - ReleaseGroup
-  /site-stats:
-    get:
-      operationId: SiteStatsService_getSiteStats
-      description: サイト集計取得API
-      parameters: []
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SiteStatsResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - SiteStats
   /songs:
     get:
       operationId: SongService_listSongs
@@ -781,23 +760,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SongPerformance'
-    SiteStatsResponse:
-      type: object
-      required:
-        - songCount
-        - releaseCount
-      properties:
-        songCount:
-          type: integer
-          format: int32
-          description: 公開対象楽曲数
-        releaseCount:
-          type: integer
-          format: int32
-          description: 公開対象リリースグループ数
-      examples:
-        - songCount: 42
-          releaseCount: 12
     SongListItem:
       type: object
       required:
