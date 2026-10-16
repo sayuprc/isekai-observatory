@@ -31,9 +31,9 @@
 
 .hero-ledger {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
   gap: 36px;
-  max-width: 780px;
+  max-width: 960px;
   margin: 56px auto 0;
   text-align: center;
 }

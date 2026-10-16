@@ -92,11 +92,6 @@
     gap: 20px;
   }
 
-  .release-year-head {
-    flex-direction: row;
-    align-items: baseline;
-  }
-
   .event-group-label {
     position: static;
   }
@@ -125,7 +120,7 @@
   }
 
   .hero-ledger {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: 36px;
   }
@@ -252,16 +247,24 @@
 
   .release-row {
     grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-    padding: 14px 4px;
+    column-gap: 0;
+    padding: 0 4px;
+  }
+
+  .release-row-date {
+    grid-column: 1;
+    padding-top: 14px;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .release-row-body {
+    grid-column: 1;
+    padding: 4px 0 16px;
   }
 
   .release-row-title {
     font-size: 16px;
-  }
-
-  .release-row-date {
-    font-size: 13px;
   }
 
   .release-row::after {

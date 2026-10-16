@@ -11,7 +11,6 @@ return [
     App\Providers\Domain\VenueServiceProvider::class,
     App\Providers\Domain\EventServiceProvider::class,
     App\Providers\Domain\ReleaseServiceProvider::class,
-    App\Providers\Domain\SiteStatsServiceProvider::class,
     App\Providers\Domain\SongServiceProvider::class,
     App\Providers\Domain\SupportServiceProvider::class,
     App\Providers\Domain\AdminUserServiceProvider::class,
