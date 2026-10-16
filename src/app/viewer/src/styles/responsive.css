@@ -125,7 +125,7 @@
   }
 
   .hero-ledger {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: 36px;
   }

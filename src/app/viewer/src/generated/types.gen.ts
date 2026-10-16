@@ -235,17 +235,6 @@ export type SetlistItem = {
     performances: Array<SongPerformance>;
 };
 
-export type SiteStatsResponse = {
-    /**
-     * 公開対象楽曲数
-     */
-    songCount: number;
-    /**
-     * 公開対象リリースグループ数
-     */
-    releaseCount: number;
-};
-
 export type SongListItem = {
     songId: SongId;
     title: Title;
@@ -561,31 +550,6 @@ export type ReleaseGroupServiceListReleaseGroupsResponses = {
 };
 
 export type ReleaseGroupServiceListReleaseGroupsResponse = ReleaseGroupServiceListReleaseGroupsResponses[keyof ReleaseGroupServiceListReleaseGroupsResponses];
-
-export type SiteStatsServiceGetSiteStatsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/site-stats';
-};
-
-export type SiteStatsServiceGetSiteStatsErrors = {
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-};
-
-export type SiteStatsServiceGetSiteStatsError = SiteStatsServiceGetSiteStatsErrors[keyof SiteStatsServiceGetSiteStatsErrors];
-
-export type SiteStatsServiceGetSiteStatsResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SiteStatsResponse;
-};
-
-export type SiteStatsServiceGetSiteStatsResponse = SiteStatsServiceGetSiteStatsResponses[keyof SiteStatsServiceGetSiteStatsResponses];
 
 export type SongServiceListSongsData = {
     body?: never;

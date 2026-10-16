@@ -5,14 +5,12 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\Viewer\V1\Event\ListEventController;
 use App\Http\Controllers\Api\Viewer\V1\Media\ListMediaController;
 use App\Http\Controllers\Api\Viewer\V1\Release\ListReleaseGroupController;
-use App\Http\Controllers\Api\Viewer\V1\SiteStats\GetSiteStatsController;
 use App\Http\Controllers\Api\Viewer\V1\Song\ListSongController;
 use App\Http\Middleware\Viewer\ViewerOpenApiValidator;
 use Event\Route\ViewerEventRouteMap;
 use Illuminate\Support\Facades\Route;
 use Media\Route\ViewerMediaRouteMap;
 use Release\Route\ViewerReleaseGroupRouteMap;
-use SiteStats\Route\ViewerSiteStatsRouteMap;
 use Song\Route\ViewerSongRouteMap;
 
 Route::middleware(ViewerOpenApiValidator::class)->group(static function () {
@@ -29,6 +27,5 @@ Route::middleware(ViewerOpenApiValidator::class)->group(static function () {
         Route::prefix('release-groups')->group(static function () {
             Route::get('/', [ListReleaseGroupController::class, 'handle'])->name(ViewerReleaseGroupRouteMap::List);
         });
-        Route::get('/site-stats', [GetSiteStatsController::class, 'handle'])->name(ViewerSiteStatsRouteMap::Get);
     });
 });
