@@ -20,7 +20,6 @@ Viewer 向け API は Admin と契約・route・use case・presenter を別建�
 - 公開対象のみを返す。`isDisplay` などの内部状態は契約に載せない
 - 一覧 item を詳細相当の唯一の表示用 DTO とし、個別 get 口は持たない
 - 件数増加時の分割取得は offset ではなく seek / cursor を前提にする
-- サイト横断の公開件数は `SiteStats` など専用置き場に集約し、個別ドメインへ寄せない
 
 ## Consequences
 

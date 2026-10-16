@@ -6,7 +6,6 @@ import "../shared";
 import "./events";
 import "./media";
 import "./releases";
-import "./site-stats";
 import "./songs";
 
 using Http;

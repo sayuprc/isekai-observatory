@@ -43,7 +43,6 @@
       "JourneyLog\\": "packages/JourneyLog/",
       "JourneyLogLinkType\\": "packages/JourneyLogLinkType/",
       "Support\\": "packages/Support/",
-      "SiteStats\\": "packages/SiteStats/",
       "Song\\": "packages/Song/",
       "Media\\": "packages/Media/",
       "Release\\": "packages/Release/",

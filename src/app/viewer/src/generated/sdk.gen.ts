@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { EventServiceListEventsData, EventServiceListEventsErrors, EventServiceListEventsResponses, MediaServiceListMediaData, MediaServiceListMediaErrors, MediaServiceListMediaResponses, ReleaseGroupServiceListReleaseGroupsData, ReleaseGroupServiceListReleaseGroupsErrors, ReleaseGroupServiceListReleaseGroupsResponses, SiteStatsServiceGetSiteStatsData, SiteStatsServiceGetSiteStatsErrors, SiteStatsServiceGetSiteStatsResponses, SongServiceListSongsData, SongServiceListSongsErrors, SongServiceListSongsResponses } from './types.gen';
+import type { EventServiceListEventsData, EventServiceListEventsErrors, EventServiceListEventsResponses, MediaServiceListMediaData, MediaServiceListMediaErrors, MediaServiceListMediaResponses, ReleaseGroupServiceListReleaseGroupsData, ReleaseGroupServiceListReleaseGroupsErrors, ReleaseGroupServiceListReleaseGroupsResponses, SongServiceListSongsData, SongServiceListSongsErrors, SongServiceListSongsResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -32,11 +32,6 @@ export const mediaServiceListMedia = <ThrowOnError extends boolean = false>(opti
  * リリースグループ一覧取得API
  */
 export const releaseGroupServiceListReleaseGroups = <ThrowOnError extends boolean = false>(options?: Options<ReleaseGroupServiceListReleaseGroupsData, ThrowOnError>): RequestResult<ReleaseGroupServiceListReleaseGroupsResponses, ReleaseGroupServiceListReleaseGroupsErrors, ThrowOnError> => (options?.client ?? client).get<ReleaseGroupServiceListReleaseGroupsResponses, ReleaseGroupServiceListReleaseGroupsErrors, ThrowOnError>({ url: '/release-groups', ...options });
-
-/**
- * サイト集計取得API
- */
-export const siteStatsServiceGetSiteStats = <ThrowOnError extends boolean = false>(options?: Options<SiteStatsServiceGetSiteStatsData, ThrowOnError>): RequestResult<SiteStatsServiceGetSiteStatsResponses, SiteStatsServiceGetSiteStatsErrors, ThrowOnError> => (options?.client ?? client).get<SiteStatsServiceGetSiteStatsResponses, SiteStatsServiceGetSiteStatsErrors, ThrowOnError>({ url: '/site-stats', ...options });
 
 /**
  * 楽曲一覧取得API
