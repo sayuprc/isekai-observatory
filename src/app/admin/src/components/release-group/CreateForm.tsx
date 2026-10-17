@@ -6,6 +6,7 @@ import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
+import { TagPicker } from '../tag/TagPicker';
 import { createReleaseGroupForm, ReleaseGroupFields } from './ReleaseGroupFields';
 
 export const CreateForm = () => {
@@ -42,8 +43,14 @@ export const CreateForm = () => {
         submittingLabel="作成中..."
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form id="release-group-form" onKeyDown={preventImplicitSubmit} class="max-w-5xl" onSubmit={handleSubmit}>
+      <form
+        id="release-group-form"
+        onKeyDown={preventImplicitSubmit}
+        class="max-w-5xl space-y-6"
+        onSubmit={handleSubmit}
+      >
         <ReleaseGroupFields form={form} getFieldError={getFieldError} />
+        <TagPicker tags={form.tags} setTags={form.setTags} />
       </form>
     </>
   );

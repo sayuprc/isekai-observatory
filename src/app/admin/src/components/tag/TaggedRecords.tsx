@@ -1,8 +1,8 @@
 import { createResource, createSignal, For, Match, Show, Switch, type JSX } from 'solid-js';
-import type { EventSummary, SongSummary } from '../../generated';
+import type { EventSummary, ReleaseGroupSummary, SongSummary } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
-import { EVENT_TYPE_NAMES, SONG_TYPE_NAMES } from '../../utils/enum-names';
+import { EVENT_TYPE_NAMES, RELEASE_GROUP_TYPE_NAMES, SONG_TYPE_NAMES } from '../../utils/enum-names';
 import { formatSchedule } from '../event/event-options';
 import { Pagination } from '../Pagination';
 
@@ -159,6 +159,33 @@ export const TaggedEvents = (props: TaggedProps) => (
         <td class="whitespace-nowrap">{formatSchedule(event.schedule)}</td>
         <td class="whitespace-nowrap">
           <DisplayBadge isDisplay={event.isDisplay} />
+        </td>
+      </>
+    )}
+  />
+);
+
+export const TaggedReleaseGroups = (props: TaggedProps) => (
+  <TaggedRecordList<ReleaseGroupSummary>
+    recordName="リリースグループ"
+    active={props.active}
+    fetchPage={async (page) => {
+      const { data, status } = await client.api['release-groups'].search.get({
+        query: { tag_id: props.tagId, page, per_page: PER_PAGE },
+      });
+      return toFetchState(status, data?.releaseGroups, data?.maxPage);
+    }}
+    columns={['タイトル', 'リリース種別', '公開']}
+    renderRow={(releaseGroup) => (
+      <>
+        <td>
+          <a href={`/release-groups/${releaseGroup.releaseGroupId}`} class="link link-hover font-medium">
+            {releaseGroup.title}
+          </a>
+        </td>
+        <td class="whitespace-nowrap">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}</td>
+        <td class="whitespace-nowrap">
+          <DisplayBadge isDisplay={releaseGroup.isDisplay} />
         </td>
       </>
     )}

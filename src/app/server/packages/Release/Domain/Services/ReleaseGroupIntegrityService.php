@@ -10,9 +10,11 @@ use Release\Domain\Models\ReleaseGroupId;
 use Release\Domain\Models\ReleaseGroupTitle;
 use Release\Domain\Models\ReleaseGroupType;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
+use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Exceptions\InvalidDomainException;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\TagReferences;
 
 class ReleaseGroupIntegrityService
 {
@@ -20,6 +22,11 @@ class ReleaseGroupIntegrityService
     {
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     *
+     * @throws BusinessRuleViolationException
+     */
     public function prepareForCreate(
         string $title,
         int $typeValue,
@@ -27,10 +34,16 @@ class ReleaseGroupIntegrityService
         string $note,
         bool $isDisplay,
         int $orderNo,
+        array $tags,
     ): ReleaseGroup {
-        return $this->build($this->generator->generate(), $title, $typeValue, $description, $note, $isDisplay, $orderNo);
+        return $this->build($this->generator->generate(), $title, $typeValue, $description, $note, $isDisplay, $orderNo, $tags);
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     *
+     * @throws BusinessRuleViolationException
+     */
     public function prepareForUpdate(
         string $releaseGroupId,
         string $title,
@@ -39,10 +52,14 @@ class ReleaseGroupIntegrityService
         string $note,
         bool $isDisplay,
         int $orderNo,
+        array $tags,
     ): ReleaseGroup {
-        return $this->build($releaseGroupId, $title, $typeValue, $description, $note, $isDisplay, $orderNo);
+        return $this->build($releaseGroupId, $title, $typeValue, $description, $note, $isDisplay, $orderNo, $tags);
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     private function build(
         string $releaseGroupId,
         string $title,
@@ -51,6 +68,7 @@ class ReleaseGroupIntegrityService
         string $note,
         bool $isDisplay,
         int $orderNo,
+        array $tags,
     ): ReleaseGroup {
         return new ReleaseGroup(
             new ReleaseGroupId($releaseGroupId),
@@ -60,6 +78,7 @@ class ReleaseGroupIntegrityService
             new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
+            TagReferences::fromArray($tags),
         );
     }
 

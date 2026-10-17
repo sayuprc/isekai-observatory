@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Admin\V1\Tag;
 
 use PHPUnit\Framework\Attributes\Test;
+use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
 use Tag\Infrastructures\TagRepository;
 use Tag\Route\TagRouteMap;
@@ -72,6 +73,19 @@ class DeleteTagTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
         $this->storeEvents($this->createEvent($this->generateUuid(), tags: [['tagId' => $tagId]]));
+
+        $this->withAuth()
+            ->delete(route(TagRouteMap::Delete, $tagId))
+            ->assertStatus(400)
+            ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
+    }
+
+    #[Test]
+    public function cannotDeleteWhenUsedInReleaseGroup(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
+        $this->storeReleaseGroups($this->createReleaseGroup($this->generateUuid(), '作品', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]));
 
         $this->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))

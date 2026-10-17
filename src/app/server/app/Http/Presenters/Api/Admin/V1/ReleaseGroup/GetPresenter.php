@@ -18,7 +18,7 @@ class GetPresenter
     {
         return response()->json(
             new ReleaseGroupGetResponse()
-                ->setReleaseGroup($this->converter->toOpenApiReleaseGroup($outputData->releaseGroup))
+                ->setReleaseGroup($this->converter->toOpenApiReleaseGroup($outputData->releaseGroup, $outputData->tags))
                 ->setReleases(array_map($this->converter->toOpenApiReferencedRelease(...), $outputData->releases)),
             200,
         );

@@ -27,6 +27,7 @@ variable "table_schemas" {
     "file://schemas/song-persons.my.hcl",
     "file://schemas/song-media-links.my.hcl",
     "file://schemas/release-groups.my.hcl",
+    "file://schemas/release-group-taggings.my.hcl",
     "file://schemas/releases.my.hcl",
     "file://schemas/release-formats.my.hcl",
     "file://schemas/release-media.my.hcl",

@@ -632,6 +632,7 @@ export type ReleaseGroup = {
     note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
+    tags: Array<AttachedTag>;
 };
 
 export type ReleaseGroupCreateRequest = {
@@ -641,6 +642,7 @@ export type ReleaseGroupCreateRequest = {
     note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
+    tags: Array<RequestTag>;
 };
 
 export type ReleaseGroupCreateResponse = {
@@ -707,6 +709,7 @@ export type ReleaseGroupUpdateRequest = {
     note: Note;
     isDisplay: boolean;
     orderNo: OrderNo;
+    tags: Array<RequestTag>;
 };
 
 export type ReleaseGroupUpdateResponse = {
@@ -995,6 +998,10 @@ export type TagSummary = {
      * このタグが付いているイベントの件数
      */
     eventCount: number;
+    /**
+     * このタグが付いているリリースグループの件数
+     */
+    releaseGroupCount: number;
 };
 
 export type TagUpdateRequest = {
@@ -2934,6 +2941,10 @@ export type ReleaseGroupServiceSearchReleaseGroupsData = {
         title?: string;
         type?: ReleaseGroupTypeValue;
         is_display?: boolean;
+        /**
+         * このタグが付いたリリースグループだけに絞り込む
+         */
+        tag_id?: TagId;
         sort?: ReleaseGroupSearchSortBy;
         order?: SortOrder;
         page?: Page;

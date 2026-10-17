@@ -308,6 +308,9 @@ trait EntityFactory
         return YouTubeChannel::reconstruct($channelId, $name);
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     protected function createReleaseGroup(
         string $releaseGroupId,
         string $title,
@@ -316,6 +319,7 @@ trait EntityFactory
         string $description = 'テスト用リリースグループ',
         int $orderNo = 1,
         string $note = '',
+        array $tags = [],
     ): ReleaseGroup {
         return new ReleaseGroup(
             new ReleaseGroupId($releaseGroupId),
@@ -325,6 +329,7 @@ trait EntityFactory
             new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
+            TagReferences::fromArray($tags),
         );
     }
 

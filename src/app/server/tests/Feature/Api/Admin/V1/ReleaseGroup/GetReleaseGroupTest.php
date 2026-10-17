@@ -87,6 +87,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     'note' => '',
                     'isDisplay' => true,
                     'orderNo' => 5,
+                    'tags' => [],
                 ],
                 'releases' => [
                     [

@@ -1,6 +1,7 @@
 import "../../shared";
 import "../../packages/song";
 import "../songs";
+import "../tags";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Song;
@@ -76,6 +77,7 @@ model ReleaseGroup {
   note: note;
   isDisplay: boolean;
   orderNo: orderNo;
+  tags: AttachedTag[];
 }
 
 @doc("リリースグループ一覧の 1 行分。firstReleasedOn は傘下リリースの最古発売日(リリース未登録なら null)")

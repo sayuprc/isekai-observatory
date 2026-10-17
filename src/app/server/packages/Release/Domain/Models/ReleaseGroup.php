@@ -6,6 +6,7 @@ namespace Release\Domain\Models;
 
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\TagReferences;
 
 readonly class ReleaseGroup
 {
@@ -17,9 +18,13 @@ readonly class ReleaseGroup
         public Note $note,
         public bool $isDisplay,
         public OrderNo $orderNo,
+        public TagReferences $tags,
     ) {
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     public static function reconstruct(
         string $releaseGroupId,
         string $title,
@@ -28,6 +33,7 @@ readonly class ReleaseGroup
         string $note,
         bool $isDisplay,
         int $orderNo,
+        array $tags = [],
     ): self {
         return new self(
             new ReleaseGroupId($releaseGroupId),
@@ -37,11 +43,12 @@ readonly class ReleaseGroup
             new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
+            TagReferences::reconstruct($tags),
         );
     }
 
     /**
-     * @return array{release_group_id: string, title: string, type: value-of<ReleaseGroupType>, description: string, note: string, is_display: bool, order_no: int}
+     * @return array{release_group_id: string, title: string, type: value-of<ReleaseGroupType>, description: string, note: string, is_display: bool, order_no: int, tags: list<array{tag_id: string}>}
      */
     public function toArray(): array
     {
@@ -53,6 +60,7 @@ readonly class ReleaseGroup
             'note' => $this->note->value,
             'is_display' => $this->isDisplay,
             'order_no' => $this->orderNo->value,
+            'tags' => $this->tags->toArray(),
         ];
     }
 
