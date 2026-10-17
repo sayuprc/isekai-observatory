@@ -77,7 +77,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
      * グループごとに、傘下のリリースへ収録された管理対象の楽曲を重複なく数える
      * タイトルだけのトラックは楽曲を持たないため数えない
      *
-     * @param list<string> $binGroupIds
+     * @param array<int, string> $binGroupIds
      *
      * @return array<string, int>
      */

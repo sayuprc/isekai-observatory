@@ -101,9 +101,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function loadPersons(array $binSongIds): array
     {
@@ -124,9 +124,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function loadMedia(array $binSongIds): array
     {
@@ -158,9 +158,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     /**
      * 楽曲 → 公開リリースグループの逆引き。公開リリース経由のもののみ
      *
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<SongReleaseGroupSummary>>
+     * @return array<string, array<int, SongReleaseGroupSummary>>
      */
     private function loadReleaseGroups(array $binSongIds): array
     {
@@ -247,9 +247,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<array<string, mixed>> $rows
+     * @param array<int, array<string, mixed>> $rows
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function groupBySongId(array $rows): array
     {
@@ -263,9 +263,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<array<string, mixed>> $personRows
+     * @param array<int, array<string, mixed>> $personRows
      *
-     * @return list<string>
+     * @return array<int, string>
      */
     private function personNamesByRole(array $personRows, SongPersonRole $role): array
     {
@@ -295,9 +295,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<SongPerformanceHistory>>
+     * @return array<string, array<int, SongPerformanceHistory>>
      */
     private function loadPerformances(array $binSongIds): array
     {
@@ -337,9 +337,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $performanceIds
+     * @param array<int, string> $performanceIds
      *
-     * @return array<string, list<string>>
+     * @return array<string, array<int, string>>
      */
     private function loadCoVocalists(array $performanceIds): array
     {

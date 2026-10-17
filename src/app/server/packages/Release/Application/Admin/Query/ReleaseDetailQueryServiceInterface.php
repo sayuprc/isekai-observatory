@@ -9,7 +9,7 @@ use Release\Domain\Models\ReleaseId;
 interface ReleaseDetailQueryServiceInterface
 {
     /**
-     * @return list<ReleaseReferencedSong>
+     * @return array<int, ReleaseReferencedSong>
      */
     public function findReferencedSongs(ReleaseId $releaseId): array;
 }

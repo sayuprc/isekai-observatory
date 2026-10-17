@@ -16,7 +16,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
 {
     private const string TABLE = 'release_groups';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['release_group_id', 'title', 'type', 'description', 'note', 'is_display', 'order_no'];
 
     public function __construct(
@@ -123,9 +123,9 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     }
 
     /**
-     * @param list<array<string, mixed>> $rows
+     * @param array<int, array<string, mixed>> $rows
      *
-     * @return list<ReleaseGroup>
+     * @return array<int, ReleaseGroup>
      */
     private function hydrateAll(array $rows): array
     {
@@ -155,8 +155,8 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     }
 
     /**
-     * @param array<string, mixed>       $row
-     * @param list<array{tagId: string}> $tags
+     * @param array<string, mixed>             $row
+     * @param array<int, array{tagId: string}> $tags
      */
     private function hydrate(array $row, array $tags): ReleaseGroup
     {

@@ -20,7 +20,7 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
 
     private const string PERMISSION_TABLE = 'admin_user_registration_token_permissions';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['admin_user_registration_token_id', 'token', 'email', 'role', 'expired_at', 'status'];
 
     public function __construct(
@@ -97,7 +97,7 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
     }
 
     /**
-     * @return list<RegistrationToken>
+     * @return array<int, RegistrationToken>
      */
     #[Override]
     public function findUnusedByEmailForUpdate(Email $email): array
@@ -138,9 +138,9 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
     }
 
     /**
-     * @param list<string> $binTokenIds
+     * @param array<int, string> $binTokenIds
      *
-     * @return array<string, list<string>>
+     * @return array<string, array<int, string>>
      */
     private function loadPermissions(array $binTokenIds): array
     {
@@ -166,7 +166,7 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
 
     /**
      * @param array<string, mixed> $row
-     * @param list<string>         $permissions
+     * @param array<int, string>   $permissions
      */
     private function hydrate(array $row, array $permissions): RegistrationToken
     {

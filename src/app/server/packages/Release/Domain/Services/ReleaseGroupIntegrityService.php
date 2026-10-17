@@ -23,7 +23,7 @@ class ReleaseGroupIntegrityService
     }
 
     /**
-     * @param list<array{tagId: string}> $tags
+     * @param array<int, array{tagId: string}> $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -40,7 +40,7 @@ class ReleaseGroupIntegrityService
     }
 
     /**
-     * @param list<array{tagId: string}> $tags
+     * @param array<int, array{tagId: string}> $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -58,7 +58,7 @@ class ReleaseGroupIntegrityService
     }
 
     /**
-     * @param list<array{tagId: string}> $tags
+     * @param array<int, array{tagId: string}> $tags
      */
     private function build(
         string $releaseGroupId,

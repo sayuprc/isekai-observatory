@@ -11,7 +11,7 @@ interface TagUsageCountQueryServiceInterface
     /**
      * 渡したタグそれぞれが付いている記録の件数を、タグ ID (UUID) をキーにして返す
      *
-     * @param list<TagId> $tagIds
+     * @param array<TagId> $tagIds
      *
      * @return array<string, TagUsageCount>
      */

@@ -21,7 +21,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
 {
     private const string TABLE = 'media';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = [
         'media_id',
         'title',
@@ -224,9 +224,9 @@ readonly class MediaRepository implements MediaRepositoryInterface
     }
 
     /**
-     * @param list<array<string, mixed>> $rows
+     * @param array<int, array<string, mixed>> $rows
      *
-     * @return list<Media>
+     * @return array<int, Media>
      */
     private function hydrateAll(array $rows): array
     {
@@ -256,8 +256,8 @@ readonly class MediaRepository implements MediaRepositoryInterface
     }
 
     /**
-     * @param array<string, mixed>       $row
-     * @param list<array{tagId: string}> $tags
+     * @param array<string, mixed>             $row
+     * @param array<int, array{tagId: string}> $tags
      */
     private function hydrate(array $row, array $tags): Media
     {

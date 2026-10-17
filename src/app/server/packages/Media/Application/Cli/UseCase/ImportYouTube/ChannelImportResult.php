@@ -9,7 +9,7 @@ use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
 readonly class ChannelImportResult
 {
     /**
-     * @param list<ImportedVideo> $importedVideos
+     * @param array<int, ImportedVideo> $importedVideos
      */
     private function __construct(
         public YouTubeChannel $channel,
@@ -20,7 +20,7 @@ readonly class ChannelImportResult
     }
 
     /**
-     * @param list<ImportedVideo> $importedVideos
+     * @param array<int, ImportedVideo> $importedVideos
      */
     public static function imported(YouTubeChannel $channel, array $importedVideos): self
     {

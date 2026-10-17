@@ -73,7 +73,7 @@ readonly class ImportYouTubeUseCase
         }
 
         $shortsByVideoId = $this->shortVideoQueryService->detectShorts(
-            array_values(array_filter($videosToImport, fn (YouTubeUploadedVideo $video): bool => ! $this->isKnownShort($video))),
+            array_filter($videosToImport, fn (YouTubeUploadedVideo $video): bool => ! $this->isKnownShort($video)),
         );
 
         $mediaList = [];

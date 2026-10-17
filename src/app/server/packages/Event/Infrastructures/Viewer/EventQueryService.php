@@ -119,9 +119,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventVenueSummary>>
+     * @return array<string, array<int, EventVenueSummary>>
      */
     private function loadVenues(array $binEventIds): array
     {
@@ -149,9 +149,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventMediaSummary>>
+     * @return array<string, array<int, EventMediaSummary>>
      */
     private function loadMedia(array $binEventIds): array
     {
@@ -184,9 +184,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     /**
      * リリースとリリースグループがともに公開のものだけを返す
      *
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventReleaseSummary>>
+     * @return array<string, array<int, EventReleaseSummary>>
      */
     private function loadReleases(array $binEventIds): array
     {
@@ -235,9 +235,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventSourceSummary>>
+     * @return array<string, array<int, EventSourceSummary>>
      */
     private function loadSources(array $binEventIds): array
     {
@@ -266,7 +266,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
     /**
      * 非公開の楽曲は曲名だけを出し、楽曲 ID を伏せる
      *
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
      * @return array<string, array<string, EventPerformanceSummary>> イベント ID ごとの、楽曲披露 ID をキーにした一覧
      */
@@ -301,9 +301,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binPerformanceIds
+     * @param array<int, string> $binPerformanceIds
      *
-     * @return array<string, list<EventCoVocalistSummary>>
+     * @return array<string, array<int, EventCoVocalistSummary>>
      */
     private function loadCoVocalists(array $binPerformanceIds): array
     {
@@ -344,10 +344,10 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string>                                          $binEventIds
+     * @param array<int, string>                                    $binEventIds
      * @param array<string, array<string, EventPerformanceSummary>> $performancesByEvent
      *
-     * @return array<string, list<EventSetlistItemSummary>>
+     * @return array<string, array<int, EventSetlistItemSummary>>
      */
     private function loadSetlist(array $binEventIds, array $performancesByEvent): array
     {

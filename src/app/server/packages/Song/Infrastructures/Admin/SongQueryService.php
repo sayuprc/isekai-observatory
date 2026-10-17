@@ -17,7 +17,7 @@ use Support\Infrastructures\Database\SqlHelper;
 
 readonly class SongQueryService implements SongQueryServiceInterface
 {
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['song_id', 'title', 'type', 'is_display', 'order_no'];
 
     public function __construct(

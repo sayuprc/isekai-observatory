@@ -32,7 +32,7 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                           $formatValues
+     * @param array<int, int>                                                                                                     $formatValues
      * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      *
      * @throws BusinessRuleViolationException
@@ -63,7 +63,7 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                           $formatValues
+     * @param array<int, int>                                                                                                     $formatValues
      * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      *
      * @throws BusinessRuleViolationException
@@ -95,7 +95,7 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                           $formatValues
+     * @param array<int, int>                                                                                                     $formatValues
      * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function prepare(
@@ -135,7 +135,7 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                           $formatValues
+     * @param array<int, int>                                                                                                     $formatValues
      * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function build(

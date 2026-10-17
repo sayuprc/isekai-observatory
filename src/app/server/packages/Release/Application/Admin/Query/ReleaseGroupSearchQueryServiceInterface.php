@@ -9,7 +9,7 @@ use Release\Domain\Criteria\ReleaseGroupSearchCriteria;
 interface ReleaseGroupSearchQueryServiceInterface
 {
     /**
-     * @return list<ReleaseGroupSummary>
+     * @return array<int, ReleaseGroupSummary>
      */
     public function search(ReleaseGroupSearchCriteria $criteria): array;
 

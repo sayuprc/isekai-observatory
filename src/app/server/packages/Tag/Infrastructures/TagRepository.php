@@ -20,7 +20,7 @@ readonly class TagRepository implements TagRepositoryInterface
 {
     private const string TABLE = 'tags';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['tag_id', 'name', 'order_no'];
 
     public function __construct(

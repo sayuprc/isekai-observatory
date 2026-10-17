@@ -7,7 +7,7 @@ namespace Release\Application\Admin\Query;
 readonly class ReleaseGroupReferencedRelease
 {
     /**
-     * @param list<int> $formatValues
+     * @param array<int, int> $formatValues
      */
     public function __construct(
         public string $releaseId,

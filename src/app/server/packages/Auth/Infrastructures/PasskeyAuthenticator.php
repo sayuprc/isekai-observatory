@@ -50,7 +50,7 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
     }
 
     /**
-     * @param list<AdminUserPasskey> $excludePasskeys
+     * @param array<int, AdminUserPasskey> $excludePasskeys
      */
     #[Override]
     public function startRegistration(

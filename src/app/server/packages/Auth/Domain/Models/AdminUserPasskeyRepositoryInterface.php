@@ -7,7 +7,7 @@ namespace Auth\Domain\Models;
 interface AdminUserPasskeyRepositoryInterface
 {
     /**
-     * @return list<AdminUserPasskey>
+     * @return array<int, AdminUserPasskey>
      */
     public function findByAdminUserId(string $adminUserId): array;
 

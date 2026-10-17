@@ -9,7 +9,7 @@ use Media\Domain\Models\MediaId;
 interface MediaDetailQueryServiceInterface
 {
     /**
-     * @return list<MediaReferencedSong>
+     * @return array<int, MediaReferencedSong>
      */
     public function findReferencedSongs(MediaId $mediaId): array;
 }

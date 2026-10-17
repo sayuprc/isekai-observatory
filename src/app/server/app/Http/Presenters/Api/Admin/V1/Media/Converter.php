@@ -20,7 +20,7 @@ class Converter
     /**
      * @param array<Tag> $tags
      *
-     * @return list<OpenApiAttachedTag>
+     * @return array<int, OpenApiAttachedTag>
      */
     public function toOpenApiTags(array $tags): array
     {

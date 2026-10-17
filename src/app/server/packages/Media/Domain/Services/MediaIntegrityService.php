@@ -28,7 +28,7 @@ class MediaIntegrityService
     }
 
     /**
-     * @param list<array{tagId: string}> $tags
+     * @param array<int, array{tagId: string}> $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -58,7 +58,7 @@ class MediaIntegrityService
     }
 
     /**
-     * @param list<array{tagId: string}> $tags
+     * @param array<int, array{tagId: string}> $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -91,7 +91,7 @@ class MediaIntegrityService
     }
 
     /**
-     * @param list<array{tagId: string}> $tags
+     * @param array<int, array{tagId: string}> $tags
      */
     private function build(
         string $mediaId,

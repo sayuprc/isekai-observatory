@@ -14,7 +14,7 @@ use Support\Domain\Exceptions\InvalidDomainException;
 readonly class ReleaseFormats extends ImmutableCollection
 {
     /**
-     * @param list<int> $values
+     * @param array<int, int> $values
      *
      * @throws BusinessRuleViolationException
      */
@@ -46,7 +46,7 @@ readonly class ReleaseFormats extends ImmutableCollection
     }
 
     /**
-     * @param list<int> $values
+     * @param array<int, int> $values
      */
     public static function reconstruct(array $values): self
     {
