@@ -32,6 +32,7 @@ export const media = new Elysia({ prefix: '/media' })
             title: query.title || undefined,
             type: query.type as MediaTypeValue | undefined,
             is_display: query.is_display,
+            tag_id: query.tag_id || undefined,
             sort: (query.sort ?? 'published_at') as MediaSearchSortBy,
             order: (query.order ?? 'asc') as SortOrder,
             page: query.page ?? 1,
@@ -47,6 +48,7 @@ export const media = new Elysia({ prefix: '/media' })
           t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('4'), t.Literal('5'), t.Literal('99')]),
         ),
         is_display: t.Optional(t.Boolean()),
+        tag_id: t.Optional(t.String()),
         sort: t.Optional(t.Union([t.Literal('published_at'), t.Literal('title')])),
         order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),
         page: t.Optional(t.Number()),
@@ -67,7 +69,7 @@ export const media = new Elysia({ prefix: '/media' })
   )
   .post(
     '/',
-    async ({ body: { title, url, publishedAt, type, isDisplay }, authSession }) => {
+    async ({ body: { title, url, publishedAt, type, isDisplay, tags }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
         mediaServiceCreateMedia({
           client,
@@ -77,6 +79,7 @@ export const media = new Elysia({ prefix: '/media' })
             publishedAt: normalizeDateTimeApiValue(publishedAt),
             type: type as MediaTypeValue,
             isDisplay,
+            tags,
           },
         }),
       );
@@ -88,12 +91,13 @@ export const media = new Elysia({ prefix: '/media' })
         publishedAt: t.String(),
         type: MediaTypeValueSchema,
         isDisplay: t.Boolean(),
+        tags: t.Array(t.Object({ tagId: t.String() })),
       }),
     },
   )
   .put(
     '/:mediaId',
-    async ({ params: { mediaId }, body: { title, url, publishedAt, type, isDisplay }, authSession }) => {
+    async ({ params: { mediaId }, body: { title, url, publishedAt, type, isDisplay, tags }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
         mediaServiceUpdateMedia({
           client,
@@ -104,6 +108,7 @@ export const media = new Elysia({ prefix: '/media' })
             publishedAt: normalizeDateTimeApiValue(publishedAt),
             type: type as MediaTypeValue,
             isDisplay,
+            tags,
           },
         }),
       );
@@ -118,6 +123,7 @@ export const media = new Elysia({ prefix: '/media' })
         publishedAt: t.String(),
         type: MediaTypeValueSchema,
         isDisplay: t.Boolean(),
+        tags: t.Array(t.Object({ tagId: t.String() })),
       }),
     },
   )

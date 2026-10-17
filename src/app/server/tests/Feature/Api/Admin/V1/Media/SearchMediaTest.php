@@ -145,4 +145,25 @@ class SearchMediaTest extends DatabaseTestCase
             ->assertJsonPath('media.1.songCount', 0)
             ->assertJsonPath('media.1.eventCount', 0);
     }
+
+    #[Test]
+    public function canSearchByTagId(): void
+    {
+        $tagId = $this->generateUuid();
+        $otherTagId = $this->generateUuid();
+        $taggedId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($otherTagId, 'タグB', 20));
+        $this->storeMedia(
+            $this->createMedia($taggedId, 'タグ付きのMV', 'https://example.com/tagged', MediaType::Mv, true, tags: [['tagId' => $tagId]]),
+            $this->createMedia($this->generateUuid(), '別タグのMV', 'https://example.com/other', MediaType::Mv, true, tags: [['tagId' => $otherTagId]]),
+            $this->createMedia($this->generateUuid(), 'タグなしのMV', 'https://example.com/none', MediaType::Mv, true),
+        );
+
+        $this->withAuth()
+            ->getJson(route(MediaRouteMap::Search, ['tag_id' => $tagId]))
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'media')
+            ->assertJsonPath('media.0.mediaId', $taggedId)
+            ->assertJsonPath('maxPage', 1);
+    }
 }

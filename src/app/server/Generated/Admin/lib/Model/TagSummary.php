@@ -63,7 +63,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'order_no' => 'int',
         'song_count' => 'int',
         'event_count' => 'int',
-        'release_group_count' => 'int'
+        'release_group_count' => 'int',
+        'media_count' => 'int'
     ];
 
     /**
@@ -79,7 +80,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'order_no' => 'int32',
         'song_count' => 'int32',
         'event_count' => 'int32',
-        'release_group_count' => 'int32'
+        'release_group_count' => 'int32',
+        'media_count' => 'int32'
     ];
 
     /**
@@ -93,7 +95,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'order_no' => false,
         'song_count' => false,
         'event_count' => false,
-        'release_group_count' => false
+        'release_group_count' => false,
+        'media_count' => false
     ];
 
     /**
@@ -187,7 +190,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'order_no' => 'orderNo',
         'song_count' => 'songCount',
         'event_count' => 'eventCount',
-        'release_group_count' => 'releaseGroupCount'
+        'release_group_count' => 'releaseGroupCount',
+        'media_count' => 'mediaCount'
     ];
 
     /**
@@ -201,7 +205,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'order_no' => 'setOrderNo',
         'song_count' => 'setSongCount',
         'event_count' => 'setEventCount',
-        'release_group_count' => 'setReleaseGroupCount'
+        'release_group_count' => 'setReleaseGroupCount',
+        'media_count' => 'setMediaCount'
     ];
 
     /**
@@ -215,7 +220,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'order_no' => 'getOrderNo',
         'song_count' => 'getSongCount',
         'event_count' => 'getEventCount',
-        'release_group_count' => 'getReleaseGroupCount'
+        'release_group_count' => 'getReleaseGroupCount',
+        'media_count' => 'getMediaCount'
     ];
 
     /**
@@ -281,6 +287,7 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('song_count', $data ?? [], null);
         $this->setIfExists('event_count', $data ?? [], null);
         $this->setIfExists('release_group_count', $data ?? [], null);
+        $this->setIfExists('media_count', $data ?? [], null);
     }
 
     /**
@@ -335,6 +342,9 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['release_group_count'] === null) {
             $invalidProperties[] = "'release_group_count' can't be null";
+        }
+        if ($this->container['media_count'] === null) {
+            $invalidProperties[] = "'media_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -519,6 +529,33 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable release_group_count cannot be null');
         }
         $this->container['release_group_count'] = $release_group_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets media_count
+     *
+     * @return int
+     */
+    public function getMediaCount()
+    {
+        return $this->container['media_count'];
+    }
+
+    /**
+     * Sets media_count
+     *
+     * @param int $media_count このタグが付いているメディアの件数
+     *
+     * @return self
+     */
+    public function setMediaCount($media_count)
+    {
+        if (is_null($media_count)) {
+            throw new \InvalidArgumentException('non-nullable media_count cannot be null');
+        }
+        $this->container['media_count'] = $media_count;
 
         return $this;
     }

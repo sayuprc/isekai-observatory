@@ -19,7 +19,8 @@ class Converter
             ->setOrderNo($tag->orderNo->value)
             ->setSongCount($usage->songCount)
             ->setEventCount($usage->eventCount)
-            ->setReleaseGroupCount($usage->releaseGroupCount);
+            ->setReleaseGroupCount($usage->releaseGroupCount)
+            ->setMediaCount($usage->mediaCount);
     }
 
     public function toOpenApiTag(Tag $tag): OpenApiTag

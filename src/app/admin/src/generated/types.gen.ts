@@ -288,14 +288,17 @@ export type MediaCreateRequest = {
     publishedAt: MediaPublishedAt;
     type: MediaTypeValue;
     isDisplay: boolean;
+    tags: Array<RequestTag>;
 };
 
 export type MediaCreateResponse = {
     media: Media;
+    tags: Array<AttachedTag>;
 };
 
 export type MediaGetResponse = {
     media: Media;
+    tags: Array<AttachedTag>;
     songs: Array<MediaReferencedSong>;
 };
 
@@ -347,10 +350,12 @@ export type MediaUpdateRequest = {
     publishedAt: MediaPublishedAt;
     type: MediaTypeValue;
     isDisplay: boolean;
+    tags: Array<RequestTag>;
 };
 
 export type MediaUpdateResponse = {
     media: Media;
+    tags: Array<AttachedTag>;
 };
 
 /**
@@ -1002,6 +1007,10 @@ export type TagSummary = {
      * このタグが付いているリリースグループの件数
      */
     releaseGroupCount: number;
+    /**
+     * このタグが付いているメディアの件数
+     */
+    mediaCount: number;
 };
 
 export type TagUpdateRequest = {
@@ -2104,6 +2113,10 @@ export type MediaServiceSearchMediaData = {
         title?: string;
         type?: MediaTypeValue;
         is_display?: boolean;
+        /**
+         * このタグが付いたメディアだけに絞り込む
+         */
+        tag_id?: TagId;
         sort?: MediaSearchSortBy;
         order?: SortOrder;
         page?: Page;

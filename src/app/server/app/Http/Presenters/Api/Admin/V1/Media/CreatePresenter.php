@@ -17,7 +17,9 @@ class CreatePresenter
     public function present(CreateOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new MediaCreateResponse()->setMedia($this->converter->toOpenApiMedia($outputData->media)),
+            new MediaCreateResponse()
+                ->setMedia($this->converter->toOpenApiMedia($outputData->media))
+                ->setTags($this->converter->toOpenApiTags($outputData->tags)),
             200,
         );
     }

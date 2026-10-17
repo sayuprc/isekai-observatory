@@ -1,8 +1,9 @@
 import { createResource, createSignal, For, Match, Show, Switch, type JSX } from 'solid-js';
-import type { EventSummary, ReleaseGroupSummary, SongSummary } from '../../generated';
+import type { EventSummary, MediaSummary, ReleaseGroupSummary, SongSummary } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
-import { EVENT_TYPE_NAMES, RELEASE_GROUP_TYPE_NAMES, SONG_TYPE_NAMES } from '../../utils/enum-names';
+import { normalizeDateTimeDisplayValue } from '../../utils/date';
+import { EVENT_TYPE_NAMES, MEDIA_TYPE_NAMES, RELEASE_GROUP_TYPE_NAMES, SONG_TYPE_NAMES } from '../../utils/enum-names';
 import { formatSchedule } from '../event/event-options';
 import { Pagination } from '../Pagination';
 
@@ -186,6 +187,34 @@ export const TaggedReleaseGroups = (props: TaggedProps) => (
         <td class="whitespace-nowrap">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}</td>
         <td class="whitespace-nowrap">
           <DisplayBadge isDisplay={releaseGroup.isDisplay} />
+        </td>
+      </>
+    )}
+  />
+);
+
+export const TaggedMedia = (props: TaggedProps) => (
+  <TaggedRecordList<MediaSummary>
+    recordName="メディア"
+    active={props.active}
+    fetchPage={async (page) => {
+      const { data, status } = await client.api.media.search.get({
+        query: { tag_id: props.tagId, page, per_page: PER_PAGE },
+      });
+      return toFetchState(status, data?.media, data?.maxPage);
+    }}
+    columns={['タイトル', 'メディア種別', '公開日時', '公開']}
+    renderRow={(media) => (
+      <>
+        <td class="max-w-72 min-w-44">
+          <a href={`/media/${media.mediaId}`} class="link link-hover block truncate font-medium">
+            {media.title}
+          </a>
+        </td>
+        <td class="whitespace-nowrap">{MEDIA_TYPE_NAMES[media.type]}</td>
+        <td class="whitespace-nowrap text-sm">{normalizeDateTimeDisplayValue(media.publishedAt)}</td>
+        <td class="whitespace-nowrap">
+          <DisplayBadge isDisplay={media.isDisplay} />
         </td>
       </>
     )}

@@ -13,6 +13,7 @@ readonly class TagUsageCount
         public int $songCount,
         public int $eventCount,
         public int $releaseGroupCount,
+        public int $mediaCount,
     ) {
     }
 }

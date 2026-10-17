@@ -61,7 +61,8 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'url' => 'string',
         'published_at' => '\DateTime',
         'type' => '\OpenAPI\Admin\Client\Model\MediaTypeValue',
-        'is_display' => 'bool'
+        'is_display' => 'bool',
+        'tags' => '\OpenAPI\Admin\Client\Model\RequestTag[]'
     ];
 
     /**
@@ -76,7 +77,8 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'url' => 'uri',
         'published_at' => 'date-time',
         'type' => null,
-        'is_display' => null
+        'is_display' => null,
+        'tags' => null
     ];
 
     /**
@@ -89,7 +91,8 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'url' => false,
         'published_at' => false,
         'type' => false,
-        'is_display' => false
+        'is_display' => false,
+        'tags' => false
     ];
 
     /**
@@ -182,7 +185,8 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'url' => 'url',
         'published_at' => 'publishedAt',
         'type' => 'type',
-        'is_display' => 'isDisplay'
+        'is_display' => 'isDisplay',
+        'tags' => 'tags'
     ];
 
     /**
@@ -195,7 +199,8 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'url' => 'setUrl',
         'published_at' => 'setPublishedAt',
         'type' => 'setType',
-        'is_display' => 'setIsDisplay'
+        'is_display' => 'setIsDisplay',
+        'tags' => 'setTags'
     ];
 
     /**
@@ -208,7 +213,8 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'url' => 'getUrl',
         'published_at' => 'getPublishedAt',
         'type' => 'getType',
-        'is_display' => 'getIsDisplay'
+        'is_display' => 'getIsDisplay',
+        'tags' => 'getTags'
     ];
 
     /**
@@ -273,6 +279,7 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         $this->setIfExists('published_at', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
+        $this->setIfExists('tags', $data ?? [], null);
     }
 
     /**
@@ -320,6 +327,9 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         }
         if ($this->container['is_display'] === null) {
             $invalidProperties[] = "'is_display' can't be null";
+        }
+        if ($this->container['tags'] === null) {
+            $invalidProperties[] = "'tags' can't be null";
         }
         return $invalidProperties;
     }
@@ -472,6 +482,33 @@ class MediaCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable is_display cannot be null');
         }
         $this->container['is_display'] = $is_display;
+
+        return $this;
+    }
+
+    /**
+     * Gets tags
+     *
+     * @return \OpenAPI\Admin\Client\Model\RequestTag[]
+     */
+    public function getTags()
+    {
+        return $this->container['tags'];
+    }
+
+    /**
+     * Sets tags
+     *
+     * @param \OpenAPI\Admin\Client\Model\RequestTag[] $tags tags
+     *
+     * @return self
+     */
+    public function setTags($tags)
+    {
+        if (is_null($tags)) {
+            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        }
+        $this->container['tags'] = $tags;
 
         return $this;
     }

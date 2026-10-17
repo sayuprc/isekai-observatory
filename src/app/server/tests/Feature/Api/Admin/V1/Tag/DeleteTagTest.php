@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin\V1\Tag;
 
+use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
@@ -86,6 +87,19 @@ class DeleteTagTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
         $this->storeReleaseGroups($this->createReleaseGroup($this->generateUuid(), '作品', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]));
+
+        $this->withAuth()
+            ->delete(route(TagRouteMap::Delete, $tagId))
+            ->assertStatus(400)
+            ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
+    }
+
+    #[Test]
+    public function cannotDeleteWhenUsedInMedia(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
+        $this->storeMedia($this->createMedia($this->generateUuid(), 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $tagId]]));
 
         $this->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))

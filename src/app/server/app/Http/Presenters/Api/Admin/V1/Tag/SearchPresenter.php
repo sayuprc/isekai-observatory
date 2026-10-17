@@ -24,7 +24,7 @@ class SearchPresenter
                 ->setTags(array_map(
                     fn (Tag $tag): TagSummary => $this->converter->toOpenApiTagSummary(
                         $tag,
-                        $outputData->usageCounts[$tag->tagId->value] ?? new TagUsageCount(0, 0, 0),
+                        $outputData->usageCounts[$tag->tagId->value] ?? new TagUsageCount(0, 0, 0, 0),
                     ),
                     $outputData->tags,
                 ))

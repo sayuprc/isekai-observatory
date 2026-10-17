@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin\V1\Tag;
 
+use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
@@ -47,6 +48,7 @@ class SearchTagTest extends DatabaseTestCase
                         'songCount' => 0,
                         'eventCount' => 0,
                         'releaseGroupCount' => 0,
+                        'mediaCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -76,6 +78,7 @@ class SearchTagTest extends DatabaseTestCase
                         'songCount' => 0,
                         'eventCount' => 0,
                         'releaseGroupCount' => 0,
+                        'mediaCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -132,6 +135,7 @@ class SearchTagTest extends DatabaseTestCase
                         'songCount' => 0,
                         'eventCount' => 0,
                         'releaseGroupCount' => 0,
+                        'mediaCount' => 0,
                     ],
                 ],
                 'maxPage' => 2,
@@ -184,5 +188,20 @@ class SearchTagTest extends DatabaseTestCase
             ->get(route(TagRouteMap::Search))
             ->assertStatus(200)
             ->assertJsonPath('tags.0.releaseGroupCount', 1);
+    }
+
+    #[Test]
+    public function returnsMediaCountTaggedWithEachTag(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグ', 1));
+        $this->storeMedia(
+            $this->createMedia($this->generateUuid(), 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $tagId]]),
+        );
+
+        $this->withAuth()
+            ->get(route(TagRouteMap::Search))
+            ->assertStatus(200)
+            ->assertJsonPath('tags.0.mediaCount', 1);
     }
 }

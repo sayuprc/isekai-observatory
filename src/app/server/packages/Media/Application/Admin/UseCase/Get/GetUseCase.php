@@ -10,6 +10,9 @@ use Media\Domain\Models\MediaId;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
+use Tag\Domain\Models\TagId;
+use Tag\Domain\Models\TagReference;
+use Tag\Domain\Models\TagRepositoryInterface;
 
 readonly class GetUseCase
 {
@@ -17,6 +20,7 @@ readonly class GetUseCase
         private UseCaseAuthorizer $authorizer,
         private MediaRepositoryInterface $repository,
         private MediaDetailQueryServiceInterface $query,
+        private TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -33,6 +37,7 @@ readonly class GetUseCase
         return new GetOutputData(
             $found,
             $this->query->findReferencedSongs($mediaId),
+            $this->tagRepository->findByIds(...$found->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray()),
         );
     }
 }

@@ -48,9 +48,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
                 ->limit(1),
         );
 
-        $row = $rows[0] ?? null;
-
-        return $row === null ? null : $this->hydrate($row);
+        return $this->hydrateAll($rows)[0] ?? null;
     }
 
     #[Override]
@@ -64,9 +62,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
                 ->limit(1),
         );
 
-        $row = $rows[0] ?? null;
-
-        return $row === null ? null : $this->hydrate($row);
+        return $this->hydrateAll($rows)[0] ?? null;
     }
 
     #[Override]
@@ -102,7 +98,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
             ),
         );
 
-        return array_map($this->hydrate(...), $rows);
+        return $this->hydrateAll($rows);
     }
 
     #[Override]
@@ -127,7 +123,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
                 ->where('media_id', 'IN', $binIds),
         );
 
-        return array_map($this->hydrate(...), $rows);
+        return $this->hydrateAll($rows);
     }
 
     #[Override]
@@ -135,6 +131,9 @@ readonly class MediaRepository implements MediaRepositoryInterface
     {
         $data = $media->toArray();
         $now = now()->toDateTimeString();
+        $binMediaId = $this->converter->toBin($media->mediaId->value);
+
+        $this->queryFactory->deleteFromTables(['media_taggings'], 'media_id', $binMediaId);
 
         $this->queryFactory->insert()
             ->into(self::TABLE, [
@@ -148,7 +147,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
                 'updated_at',
             ])
             ->values([
-                $this->converter->toBin($media->mediaId->value),
+                $binMediaId,
                 $data['title'],
                 $data['url'],
                 $data['published_at'],
@@ -168,6 +167,15 @@ readonly class MediaRepository implements MediaRepositoryInterface
                     . '`updated_at` = VALUES(`updated_at`)',
             )
             ->execute($this->queryFactory->pdo());
+
+        $this->queryFactory->insertRows(
+            'media_taggings',
+            ['media_id', 'tag_id'],
+            array_map(
+                fn (array $tag): array => [$binMediaId, $this->converter->toBin($tag['tag_id'])],
+                $data['tags'],
+            ),
+        );
 
         return $media;
     }
@@ -201,13 +209,57 @@ readonly class MediaRepository implements MediaRepositoryInterface
             $query = $query->where('is_display', '=', $criteria->isDisplay->get());
         }
 
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'media_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['media_id'])
+                    ->from('media_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
+        }
+
         return $query;
     }
 
     /**
-     * @param array<string, mixed> $row
+     * @param list<array<string, mixed>> $rows
+     *
+     * @return list<Media>
      */
-    private function hydrate(array $row): Media
+    private function hydrateAll(array $rows): array
+    {
+        if ($rows === []) {
+            return [];
+        }
+
+        // タグ付けはまとめて引き、メディアごとの問い合わせを避ける
+        $taggingRows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['media_taggings.media_id', 'media_taggings.tag_id'])
+                ->from('media_taggings')
+                ->join('tags', 'media_taggings.tag_id = tags.tag_id')
+                ->where('media_taggings.media_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'media_id'), $rows))
+                ->orderBy('tags.order_no'),
+        );
+
+        $tags = [];
+        foreach ($taggingRows as $taggingRow) {
+            $tags[Row::string($taggingRow, 'media_id')][] = ['tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id'))];
+        }
+
+        return array_map(
+            fn (array $row): Media => $this->hydrate($row, $tags[Row::string($row, 'media_id')] ?? []),
+            $rows,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>       $row
+     * @param list<array{tagId: string}> $tags
+     */
+    private function hydrate(array $row, array $tags): Media
     {
         return Media::reconstruct(
             $this->converter->toUuid(Row::string($row, 'media_id')),
@@ -216,6 +268,7 @@ readonly class MediaRepository implements MediaRepositoryInterface
             new DateTimeImmutable(Row::string($row, 'published_at')),
             Row::int($row, 'type'),
             Row::bool($row, 'is_display'),
+            $tags,
         );
     }
 }

@@ -1,4 +1,5 @@
 import "../../packages/media";
+import "../tags";
 
 using IsekaiObservatory.Packages.Media;
 
@@ -11,6 +12,7 @@ model MediaSearchResponse {
 
 model MediaGetResponse {
   media: Media;
+  tags: AttachedTag[];
   songs: MediaReferencedSong[];
 }
 
@@ -20,10 +22,12 @@ model MediaCreateRequest {
   publishedAt: mediaPublishedAt;
   type: MediaTypeValue;
   isDisplay: boolean;
+  tags: RequestTag[];
 }
 
 model MediaCreateResponse {
   media: Media;
+  tags: AttachedTag[];
 }
 
 model MediaUpdateRequest {
@@ -32,8 +36,10 @@ model MediaUpdateRequest {
   publishedAt: mediaPublishedAt;
   type: MediaTypeValue;
   isDisplay: boolean;
+  tags: RequestTag[];
 }
 
 model MediaUpdateResponse {
   media: Media;
+  tags: AttachedTag[];
 }

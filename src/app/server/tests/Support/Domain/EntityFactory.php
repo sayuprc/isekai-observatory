@@ -285,6 +285,9 @@ trait EntityFactory
         );
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     protected function createMedia(
         string $mediaId,
         string $title,
@@ -292,6 +295,7 @@ trait EntityFactory
         MediaType $type,
         bool $isDisplay,
         ?DateTimeImmutable $publishedAt = null,
+        array $tags = [],
     ): Media {
         return new Media(
             new MediaId($mediaId),
@@ -300,6 +304,7 @@ trait EntityFactory
             new MediaPublishedAt($publishedAt ?? new DateTimeImmutable('2024-01-01 00:00:00')),
             $type,
             $isDisplay,
+            TagReferences::fromArray($tags),
         );
     }
 
