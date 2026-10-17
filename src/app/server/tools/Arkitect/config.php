@@ -140,6 +140,7 @@ return [
 
     new Define(MediaComponent::Domain, [
         MediaComponent::Domain,
+        TagComponent::Domain,
         LibraryComponent::DateType,
         SupportComponent::Domain,
         SupportComponent::Contracts,

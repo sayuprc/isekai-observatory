@@ -21,6 +21,9 @@ Media の永続状態は次の 6 フィールドに閉じる
 分類は `MediaType` (Mv / AudioVideo / LiveStream / Short / Post / Other) の 1 軸のみとする
 入力経路の未知・不正な type は `Other` にフォールバックする。DB 復元経路は正しい値が入っている前提とする
 
+楽曲・イベントなどと横断的にまとめる管理用のタグ (ADR-0036) は、Media 自身のフィールドや分類軸に数えない
+タグ付けは `media_taggings` で Media 集約が持ち、契約上の Media モデルには含めない
+
 platform バッジと YouTube サムネイルは viewer が `url` から導出する
 ドメイン・DB・契約・admin には platform / thumbnail / 旧 format を保存しない
 

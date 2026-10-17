@@ -15,6 +15,7 @@ use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
+use Tag\Domain\Models\TagId;
 
 readonly class SearchUseCase
 {
@@ -43,6 +44,9 @@ readonly class SearchUseCase
             $inputData->order,
             $inputData->page,
             $inputData->perPage,
+            $inputData->tagId === Arg::Optional
+                ? new None()
+                : new Some(new TagId($inputData->tagId)),
         );
 
         $media = $this->repository->search($criteria);

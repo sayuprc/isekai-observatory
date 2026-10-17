@@ -27,6 +27,7 @@ readonly class TagUsageCountQueryService implements TagUsageCountQueryServiceInt
         $songCounts = $this->queryFactory->countBy('song_taggings', 'tag_id', $binTagIds);
         $eventCounts = $this->queryFactory->countBy('event_taggings', 'tag_id', $binTagIds);
         $releaseGroupCounts = $this->queryFactory->countBy('release_group_taggings', 'tag_id', $binTagIds);
+        $mediaCounts = $this->queryFactory->countBy('media_taggings', 'tag_id', $binTagIds);
 
         $usages = [];
         foreach ($binTagIds as $binTagId) {
@@ -34,6 +35,7 @@ readonly class TagUsageCountQueryService implements TagUsageCountQueryServiceInt
                 $songCounts[$binTagId] ?? 0,
                 $eventCounts[$binTagId] ?? 0,
                 $releaseGroupCounts[$binTagId] ?? 0,
+                $mediaCounts[$binTagId] ?? 0,
             );
         }
 

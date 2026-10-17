@@ -64,6 +64,7 @@ class MediaIntegrityServiceTest extends TestCase
                 '2024-03-01T12:34:56+09:00',
                 MediaType::Mv->value,
                 true,
+                [],
             );
             $this->fail('BusinessRuleViolationException が発生しませんでした');
         } catch (BusinessRuleViolationException $e) {
@@ -97,6 +98,7 @@ class MediaIntegrityServiceTest extends TestCase
             '2024-04-02T10:20:30+09:00',
             MediaType::Mv->value,
             false,
+            [],
         );
 
         $this->assertSame($mediaId, $result->mediaId->value);
@@ -122,6 +124,7 @@ class MediaIntegrityServiceTest extends TestCase
             '2024-03-01T12:34:56+09:00',
             12345,
             true,
+            [],
         );
 
         $this->assertSame(MediaType::Other, $result->type);

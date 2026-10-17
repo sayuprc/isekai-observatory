@@ -17,6 +17,7 @@ use Media\Domain\Models\MediaUrl;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Exceptions\InvalidDomainException;
+use Tag\Domain\Models\TagReferences;
 
 class MediaIntegrityService
 {
@@ -27,6 +28,8 @@ class MediaIntegrityService
     }
 
     /**
+     * @param list<array{tagId: string}> $tags
+     *
      * @throws BusinessRuleViolationException
      */
     public function prepareForCreate(
@@ -35,6 +38,7 @@ class MediaIntegrityService
         string $publishedAt,
         int $typeValue,
         bool $isDisplay,
+        array $tags,
     ): Media {
         $media = $this->build(
             $this->generator->generate(),
@@ -43,6 +47,7 @@ class MediaIntegrityService
             $publishedAt,
             $typeValue,
             $isDisplay,
+            $tags,
         );
 
         if ($this->repository->findByUrl($media->url) !== null) {
@@ -53,6 +58,8 @@ class MediaIntegrityService
     }
 
     /**
+     * @param list<array{tagId: string}> $tags
+     *
      * @throws BusinessRuleViolationException
      */
     public function prepareForUpdate(
@@ -62,6 +69,7 @@ class MediaIntegrityService
         string $publishedAt,
         int $typeValue,
         bool $isDisplay,
+        array $tags,
     ): Media {
         $media = $this->build(
             $mediaId,
@@ -70,6 +78,7 @@ class MediaIntegrityService
             $publishedAt,
             $typeValue,
             $isDisplay,
+            $tags,
         );
 
         $found = $this->repository->findByUrl($media->url);
@@ -81,6 +90,9 @@ class MediaIntegrityService
         return $media;
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     private function build(
         string $mediaId,
         string $title,
@@ -88,6 +100,7 @@ class MediaIntegrityService
         string $publishedAt,
         int $typeValue,
         bool $isDisplay,
+        array $tags,
     ): Media {
         return new Media(
             new MediaId($mediaId),
@@ -96,6 +109,7 @@ class MediaIntegrityService
             $this->toPublishedAt($publishedAt),
             $this->toMediaType($typeValue),
             $isDisplay,
+            TagReferences::fromArray($tags),
         );
     }
 

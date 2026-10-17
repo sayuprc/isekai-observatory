@@ -41,6 +41,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::LiveStream->value,
                 'isDisplay' => false,
+                'tags' => [],
             ])->assertStatus(200)
             ->assertExactJson([
                 'media' => [
@@ -51,6 +52,7 @@ class UpdateMediaTest extends DatabaseTestCase
                     'type' => MediaType::LiveStream->value,
                     'isDisplay' => false,
                 ],
+                'tags' => [],
             ]);
     }
 
@@ -79,6 +81,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(200)
             ->assertJsonPath('media.mediaId', $routeMediaId);
     }
@@ -95,6 +98,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(404);
     }
 
@@ -121,6 +125,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => 0,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(422)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
@@ -169,6 +174,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(400)
             ->assertJson(
                 static fn (AssertableJson $json) => $json

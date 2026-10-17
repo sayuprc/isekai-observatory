@@ -8,9 +8,9 @@ tags:
   - name: RecoveryCode
   - name: AuditLog
   - name: Media
+  - name: Tag
   - name: Person
   - name: PersonGroup
-  - name: Tag
   - name: Song
   - name: ReleaseGroup
   - name: Release
@@ -932,6 +932,13 @@ paths:
           required: false
           schema:
             type: boolean
+          explode: false
+        - name: tag_id
+          in: query
+          required: false
+          description: このタグが付いたメディアだけに絞り込む
+          schema:
+            $ref: '#/components/schemas/tagId'
           explode: false
         - name: sort
           in: query
@@ -4041,6 +4048,7 @@ components:
         - publishedAt
         - type
         - isDisplay
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/mediaTitle'
@@ -4052,21 +4060,35 @@ components:
           $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     MediaCreateResponse:
       type: object
       required:
         - media
+        - tags
       properties:
         media:
           $ref: '#/components/schemas/Media'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
     MediaGetResponse:
       type: object
       required:
         - media
+        - tags
         - songs
       properties:
         media:
           $ref: '#/components/schemas/Media'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
         songs:
           type: array
           items:
@@ -4178,6 +4200,7 @@ components:
         - publishedAt
         - type
         - isDisplay
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/mediaTitle'
@@ -4189,13 +4212,22 @@ components:
           $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     MediaUpdateResponse:
       type: object
       required:
         - media
+        - tags
       properties:
         media:
           $ref: '#/components/schemas/Media'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
     Medium:
       type: object
       required:
@@ -5712,6 +5744,7 @@ components:
         - songCount
         - eventCount
         - releaseGroupCount
+        - mediaCount
       properties:
         tagId:
           $ref: '#/components/schemas/tagId'
@@ -5731,6 +5764,10 @@ components:
           type: integer
           format: int32
           description: このタグが付いているリリースグループの件数
+        mediaCount:
+          type: integer
+          format: int32
+          description: このタグが付いているメディアの件数
       description: タグ一覧の 1 行分
     TagUpdateRequest:
       type: object

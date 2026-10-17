@@ -30,6 +30,9 @@ model TagSummary {
 
   @doc("このタグが付いているリリースグループの件数")
   releaseGroupCount: int32;
+
+  @doc("このタグが付いているメディアの件数")
+  mediaCount: int32;
 }
 
 @doc("記録に付いたタグ")

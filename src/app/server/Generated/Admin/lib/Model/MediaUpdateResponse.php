@@ -57,7 +57,8 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var string[]
       */
     protected static $openAPITypes = [
-        'media' => '\OpenAPI\Admin\Client\Model\Media'
+        'media' => '\OpenAPI\Admin\Client\Model\Media',
+        'tags' => '\OpenAPI\Admin\Client\Model\AttachedTag[]'
     ];
 
     /**
@@ -68,7 +69,8 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'media' => null
+        'media' => null,
+        'tags' => null
     ];
 
     /**
@@ -77,7 +79,8 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'media' => false
+        'media' => false,
+        'tags' => false
     ];
 
     /**
@@ -166,7 +169,8 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $attributeMap = [
-        'media' => 'media'
+        'media' => 'media',
+        'tags' => 'tags'
     ];
 
     /**
@@ -175,7 +179,8 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $setters = [
-        'media' => 'setMedia'
+        'media' => 'setMedia',
+        'tags' => 'setTags'
     ];
 
     /**
@@ -184,7 +189,8 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $getters = [
-        'media' => 'getMedia'
+        'media' => 'getMedia',
+        'tags' => 'getTags'
     ];
 
     /**
@@ -245,6 +251,7 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     public function __construct(?array $data = null)
     {
         $this->setIfExists('media', $data ?? [], null);
+        $this->setIfExists('tags', $data ?? [], null);
     }
 
     /**
@@ -276,6 +283,9 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
 
         if ($this->container['media'] === null) {
             $invalidProperties[] = "'media' can't be null";
+        }
+        if ($this->container['tags'] === null) {
+            $invalidProperties[] = "'tags' can't be null";
         }
         return $invalidProperties;
     }
@@ -315,6 +325,33 @@ class MediaUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
             throw new \InvalidArgumentException('non-nullable media cannot be null');
         }
         $this->container['media'] = $media;
+
+        return $this;
+    }
+
+    /**
+     * Gets tags
+     *
+     * @return \OpenAPI\Admin\Client\Model\AttachedTag[]
+     */
+    public function getTags()
+    {
+        return $this->container['tags'];
+    }
+
+    /**
+     * Sets tags
+     *
+     * @param \OpenAPI\Admin\Client\Model\AttachedTag[] $tags tags
+     *
+     * @return self
+     */
+    public function setTags($tags)
+    {
+        if (is_null($tags)) {
+            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        }
+        $this->container['tags'] = $tags;
 
         return $this;
     }

@@ -6,12 +6,16 @@ namespace Media\Application\Admin\UseCase\Create;
 
 readonly class CreateInputData
 {
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     public function __construct(
         public string $title,
         public string $url,
         public string $publishedAt,
         public int $type,
         public bool $isDisplay,
+        public array $tags = [],
     ) {
     }
 }

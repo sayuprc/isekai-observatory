@@ -147,7 +147,7 @@ readonly class TagRepository implements TagRepositoryInterface
     {
         $binTagId = $this->converter->toBin($tagId->value);
 
-        foreach (['song_taggings', 'event_taggings', 'release_group_taggings'] as $table) {
+        foreach (['song_taggings', 'event_taggings', 'release_group_taggings', 'media_taggings'] as $table) {
             $count = Row::intValue(
                 $this->queryFactory->select()
                     ->from($table)
