@@ -52,6 +52,7 @@ readonly class UpdateUseCase
                 $inputData->sources,
                 $inputData->performances,
                 $inputData->setlist,
+                $inputData->tags,
             );
 
             $event = $this->repository->save($event);

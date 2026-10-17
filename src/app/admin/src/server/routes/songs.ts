@@ -6,7 +6,6 @@ import {
   songServiceGetSong,
   songServiceSearchSongs,
   songServiceUpdateSong,
-  tagServiceListTags,
 } from '../../generated';
 import type { PerPage, SongSearchSortBy, SongSearchTypeValue, SortOrder } from '../../generated';
 import { requestWithAuth, withAuthRetry } from '../client';
@@ -26,13 +25,9 @@ export const songs = new Elysia({ prefix: '/songs' })
   .use(authGuard)
   .get('/create-form', async ({ authSession }) => {
     return withAuthRetry(authSession, async (client) => {
-      const [tags, media] = await Promise.all([
-        tagServiceListTags({ client }),
-        mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
-      ]);
+      const media = await mediaServiceSearchMedia({ client, query: { per_page: 50 } });
 
       return {
-        tags: resolveApiResponse(tags).tags,
         media: resolveApiResponse(media).media,
       };
     });
@@ -73,15 +68,13 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId/edit-form',
     async ({ params: { songId }, authSession }) => {
       return withAuthRetry(authSession, async (client) => {
-        const [song, tags, media] = await Promise.all([
+        const [song, media] = await Promise.all([
           songServiceGetSong({ client, path: { songId } }),
-          tagServiceListTags({ client }),
           mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
         ]);
 
         return {
           ...resolveApiResponse(song),
-          tags: resolveApiResponse(tags).tags,
           media: resolveApiResponse(media).media,
         };
       });

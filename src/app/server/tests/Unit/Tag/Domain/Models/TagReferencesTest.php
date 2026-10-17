@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Song\Domain\Models\Tags;
+namespace Tests\Unit\Tag\Domain\Models;
 
 use PHPUnit\Framework\Attributes\Test;
-use Song\Domain\Models\Tags\TagReferences;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Tag\Domain\Models\TagReferences;
 use Tests\TestCase;
 
 class TagReferencesTest extends TestCase

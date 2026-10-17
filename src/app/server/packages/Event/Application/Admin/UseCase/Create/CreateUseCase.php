@@ -45,6 +45,7 @@ readonly class CreateUseCase
                 $inputData->sources,
                 $inputData->performances,
                 $inputData->setlist,
+                $inputData->tags,
             );
 
             $event = $this->repository->save($event);

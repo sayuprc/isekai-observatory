@@ -126,6 +126,17 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
             $query = $query->where('is_display', '=', $criteria->isDisplay->get());
         }
 
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'event_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['event_id'])
+                    ->from('event_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
+        }
+
         return $query;
     }
 }

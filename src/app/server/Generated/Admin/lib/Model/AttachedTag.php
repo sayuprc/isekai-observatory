@@ -1,6 +1,6 @@
 <?php
 /**
- * RequestSongTag
+ * AttachedTag
  *
  * PHP version 8.1
  *
@@ -32,16 +32,16 @@ use \ArrayAccess;
 use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
- * RequestSongTag Class Doc Comment
+ * AttachedTag Class Doc Comment
  *
  * @category Class
- * @description The template for picking properties.
+ * @description 記録に付いたタグ
  * @package  OpenAPI\Admin\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
+class AttachedTag implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'RequestSongTag';
+    protected static $openAPIModelName = 'AttachedTag';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,7 +58,8 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'tag_id' => 'string'
+        'tag_id' => 'string',
+        'name' => 'string'
     ];
 
     /**
@@ -69,7 +70,8 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'tag_id' => 'uuid'
+        'tag_id' => 'uuid',
+        'name' => null
     ];
 
     /**
@@ -78,7 +80,8 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'tag_id' => false
+        'tag_id' => false,
+        'name' => false
     ];
 
     /**
@@ -167,7 +170,8 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'tag_id' => 'tagId'
+        'tag_id' => 'tagId',
+        'name' => 'name'
     ];
 
     /**
@@ -176,7 +180,8 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'tag_id' => 'setTagId'
+        'tag_id' => 'setTagId',
+        'name' => 'setName'
     ];
 
     /**
@@ -185,7 +190,8 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'tag_id' => 'getTagId'
+        'tag_id' => 'getTagId',
+        'name' => 'getName'
     ];
 
     /**
@@ -246,6 +252,7 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('tag_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
     }
 
     /**
@@ -278,6 +285,13 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['tag_id'] === null) {
             $invalidProperties[] = "'tag_id' can't be null";
         }
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ((mb_strlen($this->container['name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -316,6 +330,38 @@ class RequestSongTag implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable tag_id cannot be null');
         }
         $this->container['tag_id'] = $tag_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->container['name'];
+    }
+
+    /**
+     * Sets name
+     *
+     * @param string $name タグ名
+     *
+     * @return self
+     */
+    public function setName($name)
+    {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
+
+        if ((mb_strlen($name) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling AttachedTag., must be bigger than or equal to 1.');
+        }
+
+        $this->container['name'] = $name;
 
         return $this;
     }

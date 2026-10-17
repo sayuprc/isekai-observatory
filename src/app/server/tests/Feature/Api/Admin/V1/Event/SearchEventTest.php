@@ -54,4 +54,25 @@ class SearchEventTest extends DatabaseTestCase
             ->assertJsonPath('events.0.eventId', $secondId)
             ->assertJsonPath('events.1.eventId', $firstId);
     }
+
+    #[Test]
+    public function canSearchByTagId(): void
+    {
+        $tagId = $this->generateUuid();
+        $otherTagId = $this->generateUuid();
+        $taggedEventId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($otherTagId, 'タグB', 20));
+        $this->storeEvents(
+            $this->createEvent($taggedEventId, title: 'タグ付きのライブ', tags: [['tagId' => $tagId]]),
+            $this->createEvent($this->generateUuid(), title: '別タグのライブ', tags: [['tagId' => $otherTagId]]),
+            $this->createEvent($this->generateUuid(), title: 'タグなしのライブ'),
+        );
+
+        $this->withAuth()
+            ->getJson(route(EventRouteMap::Search, ['tag_id' => $tagId]))
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'events')
+            ->assertJsonPath('events.0.eventId', $taggedEventId)
+            ->assertJsonPath('maxPage', 1);
+    }
 }

@@ -23,6 +23,7 @@ variable "table_schemas" {
     "file://schemas/media.my.hcl",
     "file://schemas/tags.my.hcl",
     "file://schemas/song-taggings.my.hcl",
+    "file://schemas/event-taggings.my.hcl",
     "file://schemas/song-persons.my.hcl",
     "file://schemas/song-media-links.my.hcl",
     "file://schemas/release-groups.my.hcl",

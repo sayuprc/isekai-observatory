@@ -69,7 +69,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'releases' => '\OpenAPI\Admin\Client\Model\RequestEventReleaseLink[]',
         'sources' => '\OpenAPI\Admin\Client\Model\EventSource[]',
         'performances' => '\OpenAPI\Admin\Client\Model\RequestSongPerformance[]',
-        'setlist' => '\OpenAPI\Admin\Client\Model\RequestSetlistItem[]'
+        'setlist' => '\OpenAPI\Admin\Client\Model\RequestSetlistItem[]',
+        'tags' => '\OpenAPI\Admin\Client\Model\RequestTag[]'
     ];
 
     /**
@@ -92,7 +93,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'releases' => null,
         'sources' => null,
         'performances' => null,
-        'setlist' => null
+        'setlist' => null,
+        'tags' => null
     ];
 
     /**
@@ -113,7 +115,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'releases' => false,
         'sources' => false,
         'performances' => false,
-        'setlist' => false
+        'setlist' => false,
+        'tags' => false
     ];
 
     /**
@@ -214,7 +217,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'releases' => 'releases',
         'sources' => 'sources',
         'performances' => 'performances',
-        'setlist' => 'setlist'
+        'setlist' => 'setlist',
+        'tags' => 'tags'
     ];
 
     /**
@@ -235,7 +239,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'releases' => 'setReleases',
         'sources' => 'setSources',
         'performances' => 'setPerformances',
-        'setlist' => 'setSetlist'
+        'setlist' => 'setSetlist',
+        'tags' => 'setTags'
     ];
 
     /**
@@ -256,7 +261,8 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'releases' => 'getReleases',
         'sources' => 'getSources',
         'performances' => 'getPerformances',
-        'setlist' => 'getSetlist'
+        'setlist' => 'getSetlist',
+        'tags' => 'getTags'
     ];
 
     /**
@@ -329,6 +335,7 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         $this->setIfExists('sources', $data ?? [], null);
         $this->setIfExists('performances', $data ?? [], null);
         $this->setIfExists('setlist', $data ?? [], null);
+        $this->setIfExists('tags', $data ?? [], null);
     }
 
     /**
@@ -400,6 +407,9 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         }
         if ($this->container['setlist'] === null) {
             $invalidProperties[] = "'setlist' can't be null";
+        }
+        if ($this->container['tags'] === null) {
+            $invalidProperties[] = "'tags' can't be null";
         }
         return $invalidProperties;
     }
@@ -768,6 +778,33 @@ class EventUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable setlist cannot be null');
         }
         $this->container['setlist'] = $setlist;
+
+        return $this;
+    }
+
+    /**
+     * Gets tags
+     *
+     * @return \OpenAPI\Admin\Client\Model\RequestTag[]
+     */
+    public function getTags()
+    {
+        return $this->container['tags'];
+    }
+
+    /**
+     * Sets tags
+     *
+     * @param \OpenAPI\Admin\Client\Model\RequestTag[] $tags tags
+     *
+     * @return self
+     */
+    public function setTags($tags)
+    {
+        if (is_null($tags)) {
+            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        }
+        $this->container['tags'] = $tags;
 
         return $this;
     }

@@ -7,9 +7,9 @@ namespace Song\Domain\Models;
 use Song\Domain\Models\Media\SongMediaLinks;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\Persons\SongPersons;
-use Song\Domain\Models\Tags\TagReferences;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\TagReferences;
 
 readonly class Song
 {

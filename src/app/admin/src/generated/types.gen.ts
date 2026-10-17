@@ -18,6 +18,14 @@ export type AdminUserListResponse = {
 };
 
 /**
+ * 記録に付いたタグ
+ */
+export type AttachedTag = {
+    tagId: TagId;
+    name: TagName;
+};
+
+/**
  * 監査ログの操作種別
  */
 export type AuditAction = 'create' | 'update' | 'delete' | 'register' | 'login' | 'refresh' | 'recovery_code_issue' | 'recovery_code_use';
@@ -108,6 +116,7 @@ export type Event = {
     sources: Array<EventSource>;
     performances: Array<SongPerformance>;
     setlist: Array<SetlistItem>;
+    tags: Array<AttachedTag>;
 };
 
 export type EventCreateRequest = {
@@ -124,6 +133,7 @@ export type EventCreateRequest = {
     sources: Array<EventSource>;
     performances: Array<RequestSongPerformance>;
     setlist: Array<RequestSetlistItem>;
+    tags: Array<RequestTag>;
 };
 
 export type EventCreateResponse = {
@@ -218,6 +228,7 @@ export type EventUpdateRequest = {
     sources: Array<EventSource>;
     performances: Array<RequestSongPerformance>;
     setlist: Array<RequestSetlistItem>;
+    tags: Array<RequestTag>;
 };
 
 export type EventUpdateResponse = {
@@ -786,9 +797,9 @@ export type RequestSongPerson = {
 };
 
 /**
- * The template for picking properties.
+ * 記録に付けるタグの指定
  */
-export type RequestSongTag = {
+export type RequestTag = {
     tagId: TagId;
 };
 
@@ -817,13 +828,8 @@ export type Song = {
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<SongPerson>;
-    tags: Array<SongAttachedTag>;
+    tags: Array<AttachedTag>;
     media: Array<SongLinkedMedia>;
-};
-
-export type SongAttachedTag = {
-    tagId: TagId;
-    name: TagName;
 };
 
 export type SongCreateRequest = {
@@ -834,7 +840,7 @@ export type SongCreateRequest = {
     type: SongTypeValue;
     isDisplay: boolean;
     persons: Array<RequestSongPerson>;
-    tags: Array<RequestSongTag>;
+    tags: Array<RequestTag>;
     media: Array<RequestSongMediaLink>;
 };
 
@@ -929,7 +935,7 @@ export type SongUpdateRequest = {
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<RequestSongPerson>;
-    tags: Array<RequestSongTag>;
+    tags: Array<RequestTag>;
     media: Array<RequestSongMediaLink>;
 };
 
@@ -985,6 +991,10 @@ export type TagSummary = {
      * このタグが付いている楽曲の件数
      */
     songCount: number;
+    /**
+     * このタグが付いているイベントの件数
+     */
+    eventCount: number;
 };
 
 export type TagUpdateRequest = {
@@ -1824,6 +1834,10 @@ export type EventServiceSearchEventsData = {
         type?: EventTypeValue;
         status?: EventStatusValue;
         is_display?: boolean;
+        /**
+         * このタグが付いたイベントだけに絞り込む
+         */
+        tag_id?: TagId;
         sort?: EventSearchSortBy;
         order?: SortOrder;
         page?: Page;

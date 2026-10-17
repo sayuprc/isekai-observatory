@@ -1,5 +1,6 @@
 import "@typespec/http";
 import "../auth";
+import "../tags";
 import "../../packages/event";
 import "../../shared";
 
@@ -30,6 +31,11 @@ interface EventService {
     @query type?: EventTypeValue,
     @query status?: EventStatusValue,
     @query("is_display") isDisplay?: boolean,
+
+    @doc("このタグが付いたイベントだけに絞り込む")
+    @query("tag_id")
+    tagId?: tagId,
+
     @query sort?: EventSearchSortBy = EventSearchSortBy.schedule,
     @query order?: SortOrder = SortOrder.asc,
     @query page?: page = 1,

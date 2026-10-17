@@ -157,19 +157,20 @@ export const SearchList = () => {
             <tr>
               <th>タグ名</th>
               <th class="text-right">楽曲</th>
+              <th class="text-right">イベント</th>
               <th>表示順</th>
             </tr>
           </thead>
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={3} />
+                <ListState state="loading" colSpan={4} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={3} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.tags.length === 0}>
-                <ListState state="empty" colSpan={3} message="条件に一致するタグはありません。" />
+                <ListState state="empty" colSpan={4} message="条件に一致するタグはありません。" />
               </Match>
               <Match when={data()}>
                 {(result) => (
@@ -182,6 +183,7 @@ export const SearchList = () => {
                           </a>
                         </td>
                         <CountCell count={tag.songCount} />
+                        <CountCell count={tag.eventCount} />
                         <td>{tag.orderNo}</td>
                       </tr>
                     )}

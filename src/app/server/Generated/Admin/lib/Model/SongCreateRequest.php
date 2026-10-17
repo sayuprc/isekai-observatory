@@ -64,7 +64,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'type' => '\OpenAPI\Admin\Client\Model\SongTypeValue',
         'is_display' => 'bool',
         'persons' => '\OpenAPI\Admin\Client\Model\RequestSongPerson[]',
-        'tags' => '\OpenAPI\Admin\Client\Model\RequestSongTag[]',
+        'tags' => '\OpenAPI\Admin\Client\Model\RequestTag[]',
         'media' => '\OpenAPI\Admin\Client\Model\RequestSongMediaLink[]'
     ];
 
@@ -580,7 +580,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets tags
      *
-     * @return \OpenAPI\Admin\Client\Model\RequestSongTag[]
+     * @return \OpenAPI\Admin\Client\Model\RequestTag[]
      */
     public function getTags()
     {
@@ -590,7 +590,7 @@ class SongCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets tags
      *
-     * @param \OpenAPI\Admin\Client\Model\RequestSongTag[] $tags tags
+     * @param \OpenAPI\Admin\Client\Model\RequestTag[] $tags tags
      *
      * @return self
      */

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Song\Domain\Models\Tags;
-
-use Tag\Domain\Models\TagId;
+namespace Tag\Domain\Models;
 
 readonly class TagReference
 {
