@@ -33,7 +33,7 @@ readonly class ReleaseGroup
         string $note,
         bool $isDisplay,
         int $orderNo,
-        array $tags = [],
+        array $tags,
     ): self {
         return new self(
             new ReleaseGroupId($releaseGroupId),

@@ -36,13 +36,13 @@ readonly class SearchUseCase
             $inputData->isDisplay === Arg::Optional
                 ? new None()
                 : new Some($inputData->isDisplay),
+            $inputData->tagId === Arg::Optional
+                ? new None()
+                : new Some(new TagId($inputData->tagId)),
             $inputData->sort,
             $inputData->order,
             $inputData->page,
             $inputData->perPage,
-            $inputData->tagId === Arg::Optional
-                ? new None()
-                : new Some(new TagId($inputData->tagId)),
         );
 
         return new SearchOutputData(
