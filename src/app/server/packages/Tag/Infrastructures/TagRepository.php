@@ -145,14 +145,22 @@ readonly class TagRepository implements TagRepositoryInterface
     #[Override]
     public function isUsed(TagId $tagId): bool
     {
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from('song_taggings')
-                ->where('tag_id', '=', $this->converter->toBin($tagId->value))
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+        $binTagId = $this->converter->toBin($tagId->value);
 
-        return $count > 0;
+        foreach (['song_taggings', 'event_taggings'] as $table) {
+            $count = Row::intValue(
+                $this->queryFactory->select()
+                    ->from($table)
+                    ->where('tag_id', '=', $binTagId)
+                    ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
+            );
+
+            if ($count > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     #[Override]

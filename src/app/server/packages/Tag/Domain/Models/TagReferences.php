@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Song\Domain\Models\Tags;
+namespace Tag\Domain\Models;
 
 use Support\Collection\ImmutableCollection;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
-use Tag\Domain\Models\TagId;
 
 /**
  * @extends ImmutableCollection<int, TagReference>

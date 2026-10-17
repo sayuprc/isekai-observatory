@@ -119,6 +119,7 @@ return [
         TagComponent::Domain,
         SupportComponent::Domain,
         SupportComponent::Contracts,
+        SupportComponent::Collection,
         SupportComponent::Optional,
         LibraryComponent::ResultType,
     ]),

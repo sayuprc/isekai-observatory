@@ -61,7 +61,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'tag_id' => 'string',
         'name' => 'string',
         'order_no' => 'int',
-        'song_count' => 'int'
+        'song_count' => 'int',
+        'event_count' => 'int'
     ];
 
     /**
@@ -75,7 +76,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'tag_id' => 'uuid',
         'name' => null,
         'order_no' => 'int32',
-        'song_count' => 'int32'
+        'song_count' => 'int32',
+        'event_count' => 'int32'
     ];
 
     /**
@@ -87,7 +89,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'tag_id' => false,
         'name' => false,
         'order_no' => false,
-        'song_count' => false
+        'song_count' => false,
+        'event_count' => false
     ];
 
     /**
@@ -179,7 +182,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'tag_id' => 'tagId',
         'name' => 'name',
         'order_no' => 'orderNo',
-        'song_count' => 'songCount'
+        'song_count' => 'songCount',
+        'event_count' => 'eventCount'
     ];
 
     /**
@@ -191,7 +195,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'tag_id' => 'setTagId',
         'name' => 'setName',
         'order_no' => 'setOrderNo',
-        'song_count' => 'setSongCount'
+        'song_count' => 'setSongCount',
+        'event_count' => 'setEventCount'
     ];
 
     /**
@@ -203,7 +208,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'tag_id' => 'getTagId',
         'name' => 'getName',
         'order_no' => 'getOrderNo',
-        'song_count' => 'getSongCount'
+        'song_count' => 'getSongCount',
+        'event_count' => 'getEventCount'
     ];
 
     /**
@@ -267,6 +273,7 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
         $this->setIfExists('song_count', $data ?? [], null);
+        $this->setIfExists('event_count', $data ?? [], null);
     }
 
     /**
@@ -315,6 +322,9 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if ($this->container['song_count'] === null) {
             $invalidProperties[] = "'song_count' can't be null";
+        }
+        if ($this->container['event_count'] === null) {
+            $invalidProperties[] = "'event_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -445,6 +455,33 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable song_count cannot be null');
         }
         $this->container['song_count'] = $song_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets event_count
+     *
+     * @return int
+     */
+    public function getEventCount()
+    {
+        return $this->container['event_count'];
+    }
+
+    /**
+     * Sets event_count
+     *
+     * @param int $event_count このタグが付いているイベントの件数
+     *
+     * @return self
+     */
+    public function setEventCount($event_count)
+    {
+        if (is_null($event_count)) {
+            throw new \InvalidArgumentException('non-nullable event_count cannot be null');
+        }
+        $this->container['event_count'] = $event_count;
 
         return $this;
     }

@@ -25,11 +25,13 @@ readonly class TagUsageCountQueryService implements TagUsageCountQueryServiceInt
         // 件数は渡された ID でまとめて引き、タグごとの問い合わせを避ける
         $binTagIds = array_map(fn (TagId $tagId): string => $this->converter->toBin($tagId->value), $tagIds);
         $songCounts = $this->queryFactory->countBy('song_taggings', 'tag_id', $binTagIds);
+        $eventCounts = $this->queryFactory->countBy('event_taggings', 'tag_id', $binTagIds);
 
         $usages = [];
         foreach ($binTagIds as $binTagId) {
             $usages[$this->converter->toUuid($binTagId)] = new TagUsageCount(
                 $songCounts[$binTagId] ?? 0,
+                $eventCounts[$binTagId] ?? 0,
             );
         }
 

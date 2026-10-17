@@ -54,13 +54,13 @@ use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongType;
-use Song\Domain\Models\Tags\TagReferences;
 use Song\Domain\Models\Title;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 use Tag\Domain\Models\Tag;
 use Tag\Domain\Models\TagId;
 use Tag\Domain\Models\TagName;
+use Tag\Domain\Models\TagReferences;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueId;
 use Venue\Domain\Models\VenueKind;
@@ -80,6 +80,7 @@ trait EntityFactory
      * @param list<_eventSourceInput>                      $sources
      * @param list<_songPerformanceInput>                  $performances
      * @param list<_setlistItemInput>                      $setlist
+     * @param list<array{tagId: string}>                   $tags
      */
     protected function createEvent(
         string $eventId,
@@ -96,6 +97,7 @@ trait EntityFactory
         array $performances = [],
         array $setlist = [],
         string $note = '',
+        array $tags = [],
     ): Event {
         return Event::reconstruct(
             $eventId,
@@ -113,6 +115,7 @@ trait EntityFactory
             $sources,
             $performances,
             $setlist,
+            $tags,
         );
     }
 

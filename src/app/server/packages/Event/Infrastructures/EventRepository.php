@@ -68,6 +68,7 @@ readonly class EventRepository implements EventRepositoryInterface
                 'song_performances',
                 'event_sources',
                 'event_releases',
+                'event_taggings',
                 'event_media',
                 'event_venues',
             ],
@@ -115,6 +116,15 @@ readonly class EventRepository implements EventRepositoryInterface
                     $venue['order_no'],
                 ],
                 $data['venues'],
+            ),
+        );
+
+        $this->queryFactory->insertRows(
+            'event_taggings',
+            ['event_id', 'tag_id'],
+            array_map(
+                fn (array $tag): array => [$binEventId, $this->converter->toBin($tag['tag_id'])],
+                $data['tags'],
             ),
         );
 
@@ -255,6 +265,7 @@ readonly class EventRepository implements EventRepositoryInterface
             $this->loadSources($binEventId),
             $this->loadPerformances($binEventId),
             $this->loadSetlist($binEventId),
+            $this->loadTags($binEventId),
         );
     }
 
@@ -274,6 +285,24 @@ readonly class EventRepository implements EventRepositoryInterface
                 'venueId' => $this->converter->toUuid(Row::string($row, 'venue_id')),
                 'orderNo' => Row::int($row, 'order_no'),
             ],
+            $rows,
+        );
+    }
+
+    /** @return list<array{tagId: string}> */
+    private function loadTags(string $binEventId): array
+    {
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['event_taggings.tag_id'])
+                ->from('event_taggings')
+                ->join('tags', 'event_taggings.tag_id = tags.tag_id')
+                ->where('event_taggings.event_id', '=', $binEventId)
+                ->orderBy('tags.order_no'),
+        );
+
+        return array_map(
+            fn (array $row): array => ['tagId' => $this->converter->toUuid(Row::string($row, 'tag_id'))],
             $rows,
         );
     }

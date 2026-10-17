@@ -28,6 +28,7 @@
 - Event は複数の Release (版) を関連リリースとして関連づけられる。リンクの所有は Event 側
   同じ作品の通常盤と限定盤のように、Event を収録した版ごとに関連づける
   Admin はリリースグループのタイトルで検索し、傘下の版から選ぶ
+- Event には複数の Tag を付けられる。タグ付けの所有は Event 側で、重複は不可。並びは Tag の表示順で、Viewer には出さない
 - Postponed の Event は延期先 Event を参照しない。延期後の開催は別 Event として登録する
 - SongPerformance はすべての EventType に 0 件以上登録でき、必ず 1 件の Song を参照する
   同じ Event で同じ Song を複数回披露した場合も別 SongPerformance とする
@@ -85,6 +86,7 @@ classDiagram
   Event "N" --> "M" Media : order / リンク所有
   Event "N" --> "M" Release : 関連リリース / order / リンク所有
   Event "1" --> "N" EventSource : 所有
+  Event "N" --> "M" Tag : タグ付け所有
   Event "1" --> "N" SongPerformance : 所有
   SongPerformance "N" --> "1" Song
   SongPerformance "N" --> "M" Person : 共演者 / order

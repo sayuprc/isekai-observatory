@@ -67,6 +67,19 @@ class DeleteTagTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function cannotDeleteWhenUsedInEvent(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
+        $this->storeEvents($this->createEvent($this->generateUuid(), tags: [['tagId' => $tagId]]));
+
+        $this->withAuth()
+            ->delete(route(TagRouteMap::Delete, $tagId))
+            ->assertStatus(400)
+            ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
+    }
+
+    #[Test]
     public function canDeleteEvenIfTargetDoesNotExist(): void
     {
         $this->withAuth()

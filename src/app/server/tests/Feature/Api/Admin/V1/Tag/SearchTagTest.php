@@ -44,6 +44,7 @@ class SearchTagTest extends DatabaseTestCase
                         'name' => 'テストタグA',
                         'orderNo' => 1,
                         'songCount' => 0,
+                        'eventCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -71,6 +72,7 @@ class SearchTagTest extends DatabaseTestCase
                         'name' => 'テストタグA',
                         'orderNo' => 1,
                         'songCount' => 0,
+                        'eventCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -125,6 +127,7 @@ class SearchTagTest extends DatabaseTestCase
                         'name' => 'tag-01',
                         'orderNo' => 1,
                         'songCount' => 0,
+                        'eventCount' => 0,
                     ],
                 ],
                 'maxPage' => 2,
@@ -145,5 +148,22 @@ class SearchTagTest extends DatabaseTestCase
             ->get(route(TagRouteMap::Search))
             ->assertStatus(200)
             ->assertJsonPath('tags.0.songCount', 2);
+    }
+
+    #[Test]
+    public function returnsEventCountTaggedWithEachTag(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグ', 1));
+        $this->storeEvents(
+            $this->createEvent($this->generateUuid(), tags: [['tagId' => $tagId]]),
+            $this->createEvent($this->generateUuid(), tags: [['tagId' => $tagId]]),
+        );
+
+        $this->withAuth()
+            ->get(route(TagRouteMap::Search))
+            ->assertStatus(200)
+            ->assertJsonPath('tags.0.songCount', 0)
+            ->assertJsonPath('tags.0.eventCount', 2);
     }
 }

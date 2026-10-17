@@ -20,6 +20,7 @@ readonly class SearchInputData
         public Order $order = Order::Asc,
         public int $page = 1,
         public PerPage $perPage = PerPage::TwentyFive,
+        public Arg|string $tagId = Arg::Optional,
     ) {
     }
 }

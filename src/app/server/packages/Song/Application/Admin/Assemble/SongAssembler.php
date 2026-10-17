@@ -10,7 +10,7 @@ use Person\Domain\Models\PersonRepositoryInterface;
 use Song\Domain\Models\Media\SongMediaLink;
 use Song\Domain\Models\Persons\SongPerson;
 use Song\Domain\Models\Song;
-use Song\Domain\Models\Tags\TagReference;
+use Tag\Domain\Models\TagReference;
 use Tag\Domain\Models\TagRepositoryInterface;
 
 class SongAssembler

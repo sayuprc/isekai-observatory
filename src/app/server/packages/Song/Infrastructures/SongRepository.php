@@ -12,9 +12,6 @@ use Song\Domain\Models\SongRepositoryInterface;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
-use Tag\Domain\Models\Tag;
-use Tag\Domain\Models\TagId;
-use Tag\Domain\Models\TagRepositoryInterface;
 
 readonly class SongRepository implements SongRepositoryInterface
 {
@@ -33,7 +30,6 @@ readonly class SongRepository implements SongRepositoryInterface
     public function __construct(
         private QueryFactory $queryFactory,
         private UuidConverterInterface $converter,
-        private TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -73,9 +69,11 @@ readonly class SongRepository implements SongRepositoryInterface
 
         $taggingRows = $this->groupBySongId($this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_id', 'tag_id'])
+                ->withSelect(['song_taggings.song_id', 'song_taggings.tag_id'])
                 ->from('song_taggings')
-                ->where('song_id', 'IN', $binSongIds),
+                ->join('tags', 'song_taggings.tag_id = tags.tag_id')
+                ->where('song_taggings.song_id', 'IN', $binSongIds)
+                ->orderBy('tags.order_no'),
         ));
 
         $mediaRows = $this->groupBySongId($this->queryFactory->fetchAll(
@@ -269,11 +267,9 @@ readonly class SongRepository implements SongRepositoryInterface
             $personRows,
         );
 
-        $tags = $this->sortTagsByMasterOrder(
-            array_map(
-                fn (array $tag): array => ['tagId' => $this->converter->toUuid(Row::string($tag, 'tag_id'))],
-                $taggingRows,
-            ),
+        $tags = array_map(
+            fn (array $tag): array => ['tagId' => $this->converter->toUuid(Row::string($tag, 'tag_id'))],
+            $taggingRows,
         );
 
         $media = array_map(
@@ -297,29 +293,5 @@ readonly class SongRepository implements SongRepositoryInterface
             $persons,
             $media,
         );
-    }
-
-    /**
-     * @param list<array{tagId: string}> $tags
-     *
-     * @return list<array{tagId: string}>
-     */
-    private function sortTagsByMasterOrder(array $tags): array
-    {
-        if ($tags === []) {
-            return [];
-        }
-
-        $foundTags = $this->tagRepository->findByIds(
-            ...array_map(
-                static fn (array $tag): TagId => new TagId($tag['tagId']),
-                $tags,
-            ),
-        );
-
-        return array_map(
-            static fn (Tag $tag): array => ['tagId' => $tag->tagId->value],
-            $foundTags,
-        ) |> array_values(...);
     }
 }

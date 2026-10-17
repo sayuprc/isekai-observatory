@@ -15,9 +15,9 @@ import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
 import { FormRow } from '../FormRow';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
-import { TaggedSongs } from './TaggedSongs';
+import { TaggedEvents, TaggedSongs } from './TaggedRecords';
 
-const TAG_TABS = ['overview', 'songs', 'history'] as const;
+const TAG_TABS = ['overview', 'songs', 'events', 'history'] as const;
 type TagTab = (typeof TAG_TABS)[number];
 
 const TAB_ID_PREFIX = 'tag';
@@ -25,6 +25,7 @@ const TAB_ID_PREFIX = 'tag';
 const TAB_ITEMS: TabItem<TagTab>[] = [
   { key: 'overview', label: '概要' },
   { key: 'songs', label: '楽曲' },
+  { key: 'events', label: 'イベント' },
   { key: 'history', label: '履歴' },
 ];
 
@@ -225,6 +226,9 @@ export const EditableForm = (props: EditableFormProps) => {
       </TabPanel>
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="songs" current={tab()} class="max-w-4xl">
         <TaggedSongs tagId={tagId} active={tab() === 'songs'} />
+      </TabPanel>
+      <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="events" current={tab()} class="max-w-4xl">
+        <TaggedEvents tagId={tagId} active={tab() === 'events'} />
       </TabPanel>
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="history" current={tab()} class="max-w-4xl">
         <TargetHistory targetType="Tag" targetId={tagId} active={tab() === 'history'} />

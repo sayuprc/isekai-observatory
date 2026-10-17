@@ -9,7 +9,9 @@ namespace Tag\Application\Admin\Query;
  */
 readonly class TagUsageCount
 {
-    public function __construct(public int $songCount)
-    {
+    public function __construct(
+        public int $songCount,
+        public int $eventCount,
+    ) {
     }
 }

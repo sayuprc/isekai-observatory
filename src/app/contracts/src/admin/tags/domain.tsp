@@ -24,4 +24,13 @@ model TagSummary {
 
   @doc("このタグが付いている楽曲の件数")
   songCount: int32;
+
+  @doc("このタグが付いているイベントの件数")
+  eventCount: int32;
 }
+
+@doc("記録に付いたタグ")
+model AttachedTag is PickProperties<Tag, "tagId" | "name">;
+
+@doc("記録に付けるタグの指定")
+model RequestTag is PickProperties<Tag, "tagId">;

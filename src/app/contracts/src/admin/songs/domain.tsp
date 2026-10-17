@@ -56,7 +56,7 @@ model Song {
   isDisplay: boolean;
   orderNo: orderNo;
   persons: SongPerson[];
-  tags: SongAttachedTag[];
+  tags: AttachedTag[];
   media: SongLinkedMedia[];
 }
 
@@ -108,11 +108,6 @@ model SongPerson {
   name: personName;
   role: SongPersonRole;
   orderNo: orderNo;
-}
-
-model SongAttachedTag {
-  tagId: tagId;
-  name: tagName;
 }
 
 @example(#{

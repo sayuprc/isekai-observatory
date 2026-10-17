@@ -1089,6 +1089,7 @@ class EventApi
      * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type type (optional)
      * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status status (optional)
      * @param  bool|null $is_display is_display (optional)
+     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
      * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort sort (optional, default to 'schedule')
      * @param  \OpenAPIAdminClientModelSortOrder|null $order order (optional, default to 'asc')
      * @param  Int|null $page page (optional, default to 1)
@@ -1099,9 +1100,9 @@ class EventApi
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Admin\Client\Model\EventSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
      */
-    public function eventServiceSearchEvents($title = null, $type = null, $status = null, $is_display = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
+    public function eventServiceSearchEvents($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
     {
-        list($response) = $this->eventServiceSearchEventsWithHttpInfo($title, $type, $status, $is_display, $sort, $order, $page, $per_page, $contentType);
+        list($response) = $this->eventServiceSearchEventsWithHttpInfo($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
         return $response;
     }
 
@@ -1112,6 +1113,7 @@ class EventApi
      * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
      * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
      * @param  bool|null $is_display (optional)
+     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
      * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
      * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
      * @param  Int|null $page (optional, default to 1)
@@ -1122,9 +1124,9 @@ class EventApi
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Admin\Client\Model\EventSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function eventServiceSearchEventsWithHttpInfo($title = null, $type = null, $status = null, $is_display = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
+    public function eventServiceSearchEventsWithHttpInfo($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
     {
-        $request = $this->eventServiceSearchEventsRequest($title, $type, $status, $is_display, $sort, $order, $page, $per_page, $contentType);
+        $request = $this->eventServiceSearchEventsRequest($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1244,6 +1246,7 @@ class EventApi
      * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
      * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
      * @param  bool|null $is_display (optional)
+     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
      * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
      * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
      * @param  Int|null $page (optional, default to 1)
@@ -1253,9 +1256,9 @@ class EventApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function eventServiceSearchEventsAsync($title = null, $type = null, $status = null, $is_display = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
+    public function eventServiceSearchEventsAsync($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
     {
-        return $this->eventServiceSearchEventsAsyncWithHttpInfo($title, $type, $status, $is_display, $sort, $order, $page, $per_page, $contentType)
+        return $this->eventServiceSearchEventsAsyncWithHttpInfo($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1270,6 +1273,7 @@ class EventApi
      * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
      * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
      * @param  bool|null $is_display (optional)
+     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
      * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
      * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
      * @param  Int|null $page (optional, default to 1)
@@ -1279,10 +1283,10 @@ class EventApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function eventServiceSearchEventsAsyncWithHttpInfo($title = null, $type = null, $status = null, $is_display = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
+    public function eventServiceSearchEventsAsyncWithHttpInfo($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
     {
         $returnType = '\OpenAPI\Admin\Client\Model\EventSearchResponse';
-        $request = $this->eventServiceSearchEventsRequest($title, $type, $status, $is_display, $sort, $order, $page, $per_page, $contentType);
+        $request = $this->eventServiceSearchEventsRequest($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1327,6 +1331,7 @@ class EventApi
      * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
      * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
      * @param  bool|null $is_display (optional)
+     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
      * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
      * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
      * @param  Int|null $page (optional, default to 1)
@@ -1336,8 +1341,9 @@ class EventApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function eventServiceSearchEventsRequest($title = null, $type = null, $status = null, $is_display = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
+    public function eventServiceSearchEventsRequest($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
     {
+
 
 
 
@@ -1387,6 +1393,15 @@ class EventApi
             $is_display,
             'is_display', // param base name
             'boolean', // openApiType
+            'form', // style
+            false, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $tag_id,
+            'tag_id', // param base name
+            'string', // openApiType
             'form', // style
             false, // explode
             false // required
