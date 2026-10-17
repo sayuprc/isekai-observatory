@@ -23,7 +23,7 @@ readonly class RegistrationToken
     }
 
     /**
-     * @param list<string> $permissions
+     * @param array<int, string> $permissions
      */
     public static function reconstruct(
         string $registrationTokenId,

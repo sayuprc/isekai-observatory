@@ -42,7 +42,7 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
 
         return $this->findBy(
             'person_group_id',
-            array_values(array_map(fn (PersonGroupId $personGroupId): string => $this->converter->toBin($personGroupId->value), $personGroupIds)),
+            array_map(fn (PersonGroupId $personGroupId): string => $this->converter->toBin($personGroupId->value), $personGroupIds),
         );
     }
 
@@ -89,9 +89,9 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
     }
 
     /**
-     * @param list<string> $values
+     * @param array<string> $values
      *
-     * @return list<PersonGroup>
+     * @return array<int, PersonGroup>
      */
     private function findBy(string $column, array $values): array
     {

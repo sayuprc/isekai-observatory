@@ -13,7 +13,7 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
 readonly class TagReferences extends ImmutableCollection
 {
     /**
-     * @param list<array{tagId: string}> $items
+     * @param array<int, array{tagId: string}> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -37,7 +37,7 @@ readonly class TagReferences extends ImmutableCollection
     }
 
     /**
-     * @param list<array{tagId: string}> $items
+     * @param array<int, array{tagId: string}> $items
      */
     public static function reconstruct(array $items): self
     {

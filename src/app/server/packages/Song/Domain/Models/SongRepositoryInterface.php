@@ -11,7 +11,7 @@ interface SongRepositoryInterface
     public function find(SongId $songId): ?Song;
 
     /**
-     * @return list<Song>
+     * @return array<int, Song>
      */
     public function findByIds(SongId ...$songIds): array;
 

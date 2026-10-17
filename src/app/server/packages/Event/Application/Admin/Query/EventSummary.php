@@ -10,7 +10,7 @@ use Event\Domain\Models\EventType;
 readonly class EventSummary
 {
     /**
-     * @param list<string> $venueNames 開催先名。登録順
+     * @param array<int, string> $venueNames 開催先名。登録順
      */
     public function __construct(
         public string $eventId,

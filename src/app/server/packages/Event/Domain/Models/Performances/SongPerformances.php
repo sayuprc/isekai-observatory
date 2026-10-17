@@ -17,7 +17,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class SongPerformances extends ImmutableCollection
 {
     /**
-     * @param list<_songPerformanceInput> $items
+     * @param array<int, _songPerformanceInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -44,7 +44,7 @@ readonly class SongPerformances extends ImmutableCollection
     }
 
     /**
-     * @param list<_songPerformanceInput> $items
+     * @param array<int, _songPerformanceInput> $items
      */
     public static function reconstruct(array $items): self
     {

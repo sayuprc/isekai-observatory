@@ -76,9 +76,9 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
     }
 
     /**
-     * @param list<array<string, mixed>> $rows
+     * @param array<int, array<string, mixed>> $rows
      *
-     * @return list<PersonGroupSummary>
+     * @return array<int, PersonGroupSummary>
      */
     private function summarize(array $rows): array
     {

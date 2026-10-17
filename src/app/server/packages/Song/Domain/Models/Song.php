@@ -29,9 +29,9 @@ readonly class Song
     }
 
     /**
-     * @param list<array{tagId: string}>                             $tags
-     * @param list<array{personId: string, role: int, orderNo: int}> $persons
-     * @param list<array{mediaId: string, orderNo: int}>             $media
+     * @param array<int, array{tagId: string}>                             $tags
+     * @param array<int, array{personId: string, role: int, orderNo: int}> $persons
+     * @param array<int, array{mediaId: string, orderNo: int}>             $media
      */
     public static function reconstruct(
         string $songId,

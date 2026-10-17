@@ -15,7 +15,7 @@ use Support\Infrastructures\Database\Row;
 
 readonly class SongRepository implements SongRepositoryInterface
 {
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array SONG_COLUMNS = [
         'song_id',
         'title',
@@ -236,9 +236,9 @@ readonly class SongRepository implements SongRepositoryInterface
     }
 
     /**
-     * @param list<array<string, mixed>> $rows
+     * @param array<int, array<string, mixed>> $rows
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function groupBySongId(array $rows): array
     {
@@ -251,10 +251,10 @@ readonly class SongRepository implements SongRepositoryInterface
     }
 
     /**
-     * @param array<string, mixed>       $songRow
-     * @param list<array<string, mixed>> $personRows
-     * @param list<array<string, mixed>> $taggingRows
-     * @param list<array<string, mixed>> $mediaRows
+     * @param array<string, mixed>             $songRow
+     * @param array<int, array<string, mixed>> $personRows
+     * @param array<int, array<string, mixed>> $taggingRows
+     * @param array<int, array<string, mixed>> $mediaRows
      */
     private function hydrate(array $songRow, array $personRows, array $taggingRows, array $mediaRows): Song
     {

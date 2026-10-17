@@ -12,7 +12,7 @@ interface PersonGroupQueryServiceInterface
     /**
      * 名前の昇順で返す
      *
-     * @return list<PersonGroupSummary>
+     * @return array<int, PersonGroupSummary>
      */
     public function search(PersonGroupSearchCriteria $criteria): array;
 

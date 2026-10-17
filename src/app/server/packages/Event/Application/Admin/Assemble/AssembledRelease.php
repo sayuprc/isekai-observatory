@@ -7,7 +7,7 @@ namespace Event\Application\Admin\Assemble;
 readonly class AssembledRelease
 {
     /**
-     * @param list<int> $formatValues
+     * @param array<int, int> $formatValues
      */
     public function __construct(
         public string $releaseId,

@@ -77,9 +77,9 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
     /**
      * 一覧の 1 ページ分の開催先名を、行ごとに問い合わせず 1 回で引く
      *
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<string>>
+     * @return array<string, array<int, string>>
      */
     private function loadVenueNames(array $binEventIds): array
     {

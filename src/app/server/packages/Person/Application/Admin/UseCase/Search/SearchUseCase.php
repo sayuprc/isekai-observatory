@@ -43,7 +43,7 @@ readonly class SearchUseCase
         return new SearchOutputData(
             $persons,
             $this->repository->maxPage($criteria),
-            $this->usageCountQueryService->countUsages(array_values(array_map(static fn (Person $person): PersonId => $person->personId, $persons))),
+            $this->usageCountQueryService->countUsages(array_map(static fn (Person $person): PersonId => $person->personId, $persons)),
         );
     }
 }

@@ -27,7 +27,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
     private const string TRACK_SONG_TABLE = 'release_track_songs';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = [
         'release_id',
         'release_group_id',
@@ -216,7 +216,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     }
 
     /**
-     * @return list<int>
+     * @return array<int, int>
      */
     private function loadFormats(string $binReleaseId): array
     {
@@ -296,7 +296,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
     /**
      * @param array<string, mixed>                                                                                                $releaseRow
-     * @param list<int>                                                                                                           $formats
+     * @param array<int, int>                                                                                                     $formats
      * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function hydrate(array $releaseRow, array $formats, array $media): Release

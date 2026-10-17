@@ -43,7 +43,7 @@ readonly class SearchUseCase
         return new SearchOutputData(
             $tags,
             $this->repository->maxPage($criteria),
-            $this->usageCountQueryService->countUsages(array_values(array_map(static fn (Tag $tag): TagId => $tag->tagId, $tags))),
+            $this->usageCountQueryService->countUsages(array_map(static fn (Tag $tag): TagId => $tag->tagId, $tags)),
         );
     }
 }

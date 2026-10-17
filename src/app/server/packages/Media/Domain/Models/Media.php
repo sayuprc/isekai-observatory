@@ -22,7 +22,7 @@ readonly class Media
     }
 
     /**
-     * @param list<array{tagId: string}> $tags
+     * @param array<int, array{tagId: string}> $tags
      */
     public static function reconstruct(
         string $mediaId,

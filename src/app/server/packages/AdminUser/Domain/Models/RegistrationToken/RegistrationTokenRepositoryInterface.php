@@ -13,7 +13,7 @@ interface RegistrationTokenRepositoryInterface
     public function findByEmailForUpdate(Email $email): ?RegistrationToken;
 
     /**
-     * @return list<RegistrationToken>
+     * @return array<int, RegistrationToken>
      */
     public function findUnusedByEmailForUpdate(Email $email): array;
 }

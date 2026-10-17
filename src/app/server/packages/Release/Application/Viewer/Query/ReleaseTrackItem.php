@@ -7,7 +7,7 @@ namespace Release\Application\Viewer\Query;
 readonly class ReleaseTrackItem
 {
     /**
-     * @param list<ReleaseTrackSong> $songs
+     * @param array<int, ReleaseTrackSong> $songs
      */
     public function __construct(
         public int $trackNo,

@@ -27,7 +27,7 @@ class PersonGroupIntegrityService
     }
 
     /**
-     * @param list<_memberInput> $members
+     * @param array<int, _memberInput> $members
      *
      * @throws BusinessRuleViolationException
      */
@@ -37,7 +37,7 @@ class PersonGroupIntegrityService
     }
 
     /**
-     * @param list<_memberInput> $members
+     * @param array<int, _memberInput> $members
      *
      * @throws BusinessRuleViolationException
      */
@@ -47,7 +47,7 @@ class PersonGroupIntegrityService
     }
 
     /**
-     * @param list<_memberInput> $members
+     * @param array<int, _memberInput> $members
      *
      * @throws BusinessRuleViolationException
      */

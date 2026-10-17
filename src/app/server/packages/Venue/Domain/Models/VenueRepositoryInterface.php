@@ -18,7 +18,7 @@ interface VenueRepositoryInterface
     public function find(VenueId $venueId): ?Venue;
 
     /**
-     * @return list<Venue>
+     * @return array<int, Venue>
      */
     public function findByIds(VenueId ...$venueIds): array;
 

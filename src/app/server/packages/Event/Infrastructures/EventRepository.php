@@ -21,7 +21,7 @@ readonly class EventRepository implements EventRepositoryInterface
 {
     private const string TABLE = 'events';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = [
         'event_id',
         'title',
@@ -269,7 +269,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{venueId: string, orderNo: int}> */
+    /** @return array<int, array{venueId: string, orderNo: int}> */
     private function loadVenues(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -289,7 +289,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{tagId: string}> */
+    /** @return array<int, array{tagId: string}> */
     private function loadTags(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -307,7 +307,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{mediaId: string, orderNo: int}> */
+    /** @return array<int, array{mediaId: string, orderNo: int}> */
     private function loadMedia(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -327,7 +327,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{releaseId: string, orderNo: int}> */
+    /** @return array<int, array{releaseId: string, orderNo: int}> */
     private function loadReleases(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -347,7 +347,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<_eventSourceInput> */
+    /** @return array<int, _eventSourceInput> */
     private function loadSources(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -368,7 +368,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<_songPerformanceInput> */
+    /** @return array<int, _songPerformanceInput> */
     private function loadPerformances(string $binEventId): array
     {
         $performanceRows = $this->queryFactory->fetchAll(

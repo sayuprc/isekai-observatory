@@ -14,13 +14,13 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/packages/Support/Infrastructures/Valinor/ApplicationMapperConfigurator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\.\\.\\.\\$constructors of method CuyZ\\\\Valinor\\\\MapperBuilder\\:\\:registerConstructor\\(\\) expects \\(pure\\-callable\\(\\)\\: mixed\\)\\|class\\-string, Closure\\(string, string, string, DateTimeImmutable, int, list\\<string\\>\\)\\: AdminUser\\\\Domain\\\\Models\\\\AdminUser given\\.$#',
+	'message' => '#^Parameter \\#1 \\.\\.\\.\\$constructors of method CuyZ\\\\Valinor\\\\MapperBuilder\\:\\:registerConstructor\\(\\) expects \\(pure\\-callable\\(\\)\\: mixed\\)\\|class\\-string, Closure\\(string, string, string, DateTimeImmutable, int, array\\<int, string\\>\\)\\: AdminUser\\\\Domain\\\\Models\\\\AdminUser given\\.$#',
 	'identifier' => 'argument.type',
 	'count' => 1,
 	'path' => __DIR__ . '/packages/Support/Infrastructures/Valinor/ApplicationMapperConfigurator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\.\\.\\.\\$constructors of method CuyZ\\\\Valinor\\\\MapperBuilder\\:\\:registerConstructor\\(\\) expects \\(pure\\-callable\\(\\)\\: mixed\\)\\|class\\-string, Closure\\(string, string, string, string, string\\|null, int, bool, int, list\\<array\\{tagId\\: string\\}\\>, list\\<array\\{personId\\: string, role\\: int, orderNo\\: int\\}\\>, list\\<array\\{mediaId\\: string, orderNo\\: int\\}\\>\\)\\: Song\\\\Domain\\\\Models\\\\Song given\\.$#',
+	'message' => '#^Parameter \\#1 \\.\\.\\.\\$constructors of method CuyZ\\\\Valinor\\\\MapperBuilder\\:\\:registerConstructor\\(\\) expects \\(pure\\-callable\\(\\)\\: mixed\\)\\|class\\-string, Closure\\(string, string, string, string, string\\|null, int, bool, int, array\\<int, array\\{tagId\\: string\\}\\>, array\\<int, array\\{personId\\: string, role\\: int, orderNo\\: int\\}\\>, array\\<int, array\\{mediaId\\: string, orderNo\\: int\\}\\>\\)\\: Song\\\\Domain\\\\Models\\\\Song given\\.$#',
 	'identifier' => 'argument.type',
 	'count' => 1,
 	'path' => __DIR__ . '/packages/Support/Infrastructures/Valinor/ApplicationMapperConfigurator.php',

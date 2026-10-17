@@ -37,14 +37,14 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}      $schedule
-     * @param list<array{venueId: string, orderNo: int}>   $venues
-     * @param list<array{mediaId: string, orderNo: int}>   $media
-     * @param list<array{releaseId: string, orderNo: int}> $releases
-     * @param list<_eventSourceInput>                      $sources
-     * @param list<_songPerformanceInput>                  $performances
-     * @param list<_setlistItemInput>                      $setlist
-     * @param list<array{tagId: string}>                   $tags
+     * @param array{startOn: ?string, endOn: ?string}            $schedule
+     * @param array<int, array{venueId: string, orderNo: int}>   $venues
+     * @param array<int, array{mediaId: string, orderNo: int}>   $media
+     * @param array<int, array{releaseId: string, orderNo: int}> $releases
+     * @param array<int, _eventSourceInput>                      $sources
+     * @param array<int, _songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                            $setlist
+     * @param array<int, array{tagId: string}>                   $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -84,14 +84,14 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}      $schedule
-     * @param list<array{venueId: string, orderNo: int}>   $venues
-     * @param list<array{mediaId: string, orderNo: int}>   $media
-     * @param list<array{releaseId: string, orderNo: int}> $releases
-     * @param list<_eventSourceInput>                      $sources
-     * @param list<_songPerformanceInput>                  $performances
-     * @param list<_setlistItemInput>                      $setlist
-     * @param list<array{tagId: string}>                   $tags
+     * @param array{startOn: ?string, endOn: ?string}            $schedule
+     * @param array<int, array{venueId: string, orderNo: int}>   $venues
+     * @param array<int, array{mediaId: string, orderNo: int}>   $media
+     * @param array<int, array{releaseId: string, orderNo: int}> $releases
+     * @param array<int, _eventSourceInput>                      $sources
+     * @param array<int, _songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                            $setlist
+     * @param array<int, array{tagId: string}>                   $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -132,14 +132,14 @@ readonly class EventIntegrityService
     }
 
     /**
-     * @param array{startOn: ?string, endOn: ?string}      $schedule
-     * @param list<array{venueId: string, orderNo: int}>   $venues
-     * @param list<array{mediaId: string, orderNo: int}>   $media
-     * @param list<array{releaseId: string, orderNo: int}> $releases
-     * @param list<_eventSourceInput>                      $sources
-     * @param list<_songPerformanceInput>                  $performances
-     * @param list<_setlistItemInput>                      $setlist
-     * @param list<array{tagId: string}>                   $tags
+     * @param array{startOn: ?string, endOn: ?string}            $schedule
+     * @param array<int, array{venueId: string, orderNo: int}>   $venues
+     * @param array<int, array{mediaId: string, orderNo: int}>   $media
+     * @param array<int, array{releaseId: string, orderNo: int}> $releases
+     * @param array<int, _eventSourceInput>                      $sources
+     * @param array<int, _songPerformanceInput>                  $performances
+     * @param list<_setlistItemInput>                            $setlist
+     * @param array<int, array{tagId: string}>                   $tags
      *
      * @throws BusinessRuleViolationException
      */

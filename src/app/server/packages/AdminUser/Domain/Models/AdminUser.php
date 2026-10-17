@@ -19,7 +19,7 @@ readonly class AdminUser
     }
 
     /**
-     * @param list<string> $permissions
+     * @param array<int, string> $permissions
      */
     public static function reconstruct(
         string $adminUserId,

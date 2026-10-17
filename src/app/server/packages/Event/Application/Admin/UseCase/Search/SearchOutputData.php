@@ -8,7 +8,7 @@ use Event\Application\Admin\Query\EventSummary;
 
 readonly class SearchOutputData
 {
-    /** @param list<EventSummary> $events */
+    /** @param array<int, EventSummary> $events */
     public function __construct(
         public array $events,
         public int $maxPage,

@@ -104,9 +104,9 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
     }
 
     /**
-     * @param list<string> $binGroupIds
+     * @param array<int, string> $binGroupIds
      *
-     * @return array<string, list<ReleaseListItem>>
+     * @return array<string, array<int, ReleaseListItem>>
      */
     private function loadReleases(array $binGroupIds): array
     {
@@ -149,9 +149,9 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
     }
 
     /**
-     * @param list<string> $binReleaseIds
+     * @param array<int, string> $binReleaseIds
      *
-     * @return array<string, list<ReleaseFormat>>
+     * @return array<string, array<int, ReleaseFormat>>
      */
     private function loadFormats(array $binReleaseIds): array
     {
@@ -177,9 +177,9 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
     }
 
     /**
-     * @param list<string> $binReleaseIds
+     * @param array<int, string> $binReleaseIds
      *
-     * @return array<string, list<ReleaseMediumItem>>
+     * @return array<string, array<int, ReleaseMediumItem>>
      */
     private function loadMedia(array $binReleaseIds): array
     {

@@ -39,9 +39,9 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<_tag>       $tags
-     * @param list<_person>    $persons
-     * @param list<_songMedia> $media
+     * @param array<int, _tag>       $tags
+     * @param array<int, _person>    $persons
+     * @param array<int, _songMedia> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -77,9 +77,9 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<_tag>       $tags
-     * @param list<_person>    $persons
-     * @param list<_songMedia> $media
+     * @param array<int, _tag>       $tags
+     * @param array<int, _person>    $persons
+     * @param array<int, _songMedia> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -116,9 +116,9 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<_person>    $persons
-     * @param list<_tag>       $tags
-     * @param list<_songMedia> $media
+     * @param array<int, _person>    $persons
+     * @param array<int, _tag>       $tags
+     * @param array<int, _songMedia> $media
      *
      * @return array{0: SongPersons, 1: TagReferences, 2: SongMediaLinks}
      */

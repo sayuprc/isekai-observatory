@@ -15,14 +15,14 @@ interface MediaRepositoryInterface
     public function isUsed(MediaId $mediaId): bool;
 
     /**
-     * @return list<Media>
+     * @return array<int, Media>
      */
     public function search(MediaSearchCriteria $criteria): array;
 
     public function maxPage(MediaSearchCriteria $criteria): int;
 
     /**
-     * @return list<Media>
+     * @return array<int, Media>
      */
     public function findByIds(MediaId ...$mediaIds): array;
 

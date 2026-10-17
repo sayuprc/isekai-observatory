@@ -18,7 +18,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class CoVocalists extends ImmutableCollection
 {
     /**
-     * @param list<_coVocalistInput> $items
+     * @param array<int, _coVocalistInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -36,7 +36,7 @@ readonly class CoVocalists extends ImmutableCollection
     }
 
     /**
-     * @param list<_coVocalistInput> $items
+     * @param array<int, _coVocalistInput> $items
      */
     public static function reconstruct(array $items): self
     {
