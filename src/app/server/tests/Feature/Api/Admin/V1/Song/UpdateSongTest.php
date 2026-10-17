@@ -11,7 +11,6 @@ use Person\Infrastructures\PersonRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
 use Song\Infrastructures\SongRepository;
-use Song\Infrastructures\Tag\SongTagRepository;
 use Song\Route\SongRouteMap;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
@@ -33,9 +32,6 @@ class UpdateSongTest extends DatabaseTestCase
         $personRepo->save($person1);
         $personRepo->save($person2);
         $personRepo->save($person3);
-        $tagRepo = $this->app->make(SongTagRepository::class);
-        $tagRepo->save($oldTag = $this->createSongTag($this->generateUuid(), '旧タグ', 10));
-        $tagRepo->save($newTag = $this->createSongTag($this->generateUuid(), '新タグ', 20));
         $mediaRepo = $this->app->make(MediaRepository::class);
         $mediaRepo->save($oldMedia = $this->createMedia($this->generateUuid(), '旧 Media', 'https://example.com/old-media', MediaType::Mv, true));
         $mediaRepo->save($newMedia = $this->createMedia($this->generateUuid(), '新 Media', 'https://example.com/new-media', MediaType::Short, true));
@@ -51,7 +47,7 @@ class UpdateSongTest extends DatabaseTestCase
                 SongType::Original,
                 true,
                 1,
-                [['songTagId' => $oldTag->songTagId->value]],
+                [],
                 [
                     ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
                     ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 2],
@@ -77,7 +73,6 @@ class UpdateSongTest extends DatabaseTestCase
                     ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 1],
                     ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 2],
                 ],
-                'tags' => [['songTagId' => $newTag->songTagId->value]],
                 'media' => [['mediaId' => $newMedia->mediaId->value, 'orderNo' => 1]],
             ])->assertStatus(200)
             ->assertExactJson([
@@ -102,12 +97,6 @@ class UpdateSongTest extends DatabaseTestCase
                             'name' => $person3->name->value,
                             'role' => 3,
                             'orderNo' => 2,
-                        ],
-                    ],
-                    'tags' => [
-                        [
-                            'songTagId' => $newTag->songTagId->value,
-                            'name' => $newTag->name->value,
                         ],
                     ],
                     'media' => [
@@ -156,7 +145,6 @@ class UpdateSongTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'persons' => [],
-                'tags' => [],
                 'media' => [],
             ])->assertStatus(200)
             ->assertJsonPath('song.lyricsLink', null)
@@ -212,7 +200,6 @@ class UpdateSongTest extends DatabaseTestCase
                     ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 1],
                     ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 2],
                 ],
-                'tags' => [],
                 'media' => [],
             ])->assertStatus(200)
             ->assertExactJson([
@@ -239,7 +226,6 @@ class UpdateSongTest extends DatabaseTestCase
                             'orderNo' => 2,
                         ],
                     ],
-                    'tags' => [],
                     'media' => [],
                 ],
             ]);
@@ -260,68 +246,8 @@ class UpdateSongTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'persons' => [],
-                'tags' => [],
                 'media' => [],
             ])->assertStatus(404);
-    }
-
-    #[Test]
-    public function updateFailsWithNotExistsSongTag(): void
-    {
-        $songId = $this->generateUuid();
-
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
-        );
-
-        $this->withAuth()
-            ->putJson(route(SongRouteMap::Update, $songId), [
-                'title' => 'テスト楽曲',
-                'description' => 'テスト楽曲説明',
-                'note' => '',
-                'lyricsLink' => null,
-                'type' => SongType::Original->value,
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'persons' => [],
-                'tags' => [['songTagId' => $this->generateUuid()]],
-                'media' => [],
-            ])->assertStatus(400);
-    }
-
-    #[Test]
-    public function updateFailsWithDuplicateSongTag(): void
-    {
-        $songId = $this->generateUuid();
-
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
-        );
-
-        $tagRepo = $this->app->make(SongTagRepository::class);
-        $tagRepo->save($tag = $this->createSongTag($this->generateUuid(), 'タグA', 10));
-
-        $this->withAuth()
-            ->putJson(route(SongRouteMap::Update, $songId), [
-                'title' => 'テスト楽曲',
-                'description' => 'テスト楽曲説明',
-                'note' => '',
-                'lyricsLink' => null,
-                'type' => SongType::Original->value,
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'persons' => [],
-                'tags' => [
-                    ['songTagId' => $tag->songTagId->value],
-                    ['songTagId' => $tag->songTagId->value],
-                ],
-                'media' => [],
-            ])->assertStatus(400)
-            ->assertJson(
-                static fn (AssertableJson $json) => $json
-                    ->where('code', 'business_rule_violation')
-                    ->where('message', '同じ楽曲タグを複数指定することはできません。'),
-            );
     }
 
     #[Test]
@@ -343,7 +269,6 @@ class UpdateSongTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 0,
                 'persons' => [],
-                'tags' => [],
                 'media' => [],
             ])->assertStatus(422)
             ->assertJson(

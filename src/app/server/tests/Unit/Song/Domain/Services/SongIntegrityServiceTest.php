@@ -13,7 +13,6 @@ use Person\Domain\Models\PersonRepositoryInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Domain\Models\SongType;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
 use Song\Domain\Services\SongIntegrityService;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
@@ -30,8 +29,6 @@ class SongIntegrityServiceTest extends TestCase
 
     private MockInterface&SongRepositoryInterface $songRepository;
 
-    private MockInterface&SongTagRepositoryInterface $songTagRepository;
-
     private MediaRepositoryInterface&MockInterface $mediaRepository;
 
     #[Override]
@@ -42,7 +39,6 @@ class SongIntegrityServiceTest extends TestCase
         $this->generator = Mockery::mock(UuidGeneratorInterface::class);
         $this->personRepository = Mockery::mock(PersonRepositoryInterface::class);
         $this->songRepository = Mockery::mock(SongRepositoryInterface::class);
-        $this->songTagRepository = Mockery::mock(SongTagRepositoryInterface::class);
         $this->mediaRepository = Mockery::mock(MediaRepositoryInterface::class);
     }
 
@@ -109,7 +105,6 @@ class SongIntegrityServiceTest extends TestCase
             null,
             $type,
             $isDisplay,
-            [],
             $persons,
             [],
         );
@@ -156,7 +151,6 @@ class SongIntegrityServiceTest extends TestCase
             null,
             $type,
             $isDisplay,
-            [],
             $persons,
             [],
         );
@@ -216,7 +210,6 @@ class SongIntegrityServiceTest extends TestCase
             $type,
             $isDisplay,
             $orderNo,
-            [],
             $persons,
             [],
         );
@@ -267,7 +260,6 @@ class SongIntegrityServiceTest extends TestCase
             $type,
             $isDisplay,
             $orderNo,
-            [],
             $persons,
             [],
         );
@@ -279,7 +271,6 @@ class SongIntegrityServiceTest extends TestCase
             $this->generator,
             $this->songRepository,
             $this->personRepository,
-            $this->songTagRepository,
             $this->mediaRepository,
         );
     }

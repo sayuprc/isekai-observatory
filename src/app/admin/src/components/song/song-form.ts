@@ -12,10 +12,6 @@ import { toMediaEntry, type MediaEntry } from '../media/MediaSection';
 import { buildSongMediaRequest } from './media-request';
 import { toRequestSongPersons, type PersonSelections, type SelectedPerson } from './person-selection';
 
-export type SongTagEntry = {
-  songTagId: string;
-};
-
 const toSelectedPersons = (items: SongPerson[]): SelectedPerson[] =>
   items.map((item) => ({ personId: item.personId, name: item.name }));
 
@@ -58,7 +54,6 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
     2: toSelectedPersons(persons.filter((person) => person.role === 2)),
     3: toSelectedPersons(persons.filter((person) => person.role === 3)),
   });
-  const [tags, setTags] = createSignal<SongTagEntry[]>((song?.tags ?? []).map((tag) => ({ songTagId: tag.songTagId })));
   const [mediaEntries, setMediaEntries] = createSignal<MediaEntry[]>((song?.media ?? []).map(toMediaEntry));
   const [availableMedia, setAvailableMedia] = createSignal<Media[]>(mergeLinkedMedia(options.media, song));
 
@@ -78,7 +73,6 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
     type: typeValue() as SongTypeValue,
     isDisplay: isDisplay(),
     persons: buildPersons(),
-    tags: tags(),
     media: buildSongMediaRequest(mediaEntries()),
   });
 
@@ -101,8 +95,6 @@ export const createSongForm = (options: { song?: Song; media: Media[] }) => {
     setOrderNo,
     personSelections,
     setPersonSelections,
-    tags,
-    setTags,
     mediaEntries,
     setMediaEntries,
     availableMedia,

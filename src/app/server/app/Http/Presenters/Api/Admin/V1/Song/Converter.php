@@ -7,7 +7,6 @@ namespace App\Http\Presenters\Api\Admin\V1\Song;
 use DateTime;
 use OpenAPI\Admin\Client\Model\MediaTypeValue;
 use OpenAPI\Admin\Client\Model\Song as OpenApiSong;
-use OpenAPI\Admin\Client\Model\SongAttachedTag as OpenApiSongAttachedTag;
 use OpenAPI\Admin\Client\Model\SongLinkedMedia as OpenApiSongLinkedMedia;
 use OpenAPI\Admin\Client\Model\SongPerson as OpenApiSongPerson;
 use OpenAPI\Admin\Client\Model\SongPersonRole as OpenApiSongPersonRole;
@@ -15,7 +14,6 @@ use OpenAPI\Admin\Client\Model\SongTypeValue;
 use Song\Application\Admin\Assemble\AssembledMedia;
 use Song\Application\Admin\Assemble\AssembledPerson;
 use Song\Application\Admin\Assemble\AssembledSong;
-use Song\Application\Admin\Assemble\AssembledTag;
 
 readonly class Converter
 {
@@ -30,7 +28,6 @@ readonly class Converter
             ->setIsDisplay($song->isDisplay)
             ->setOrderNo($song->orderNo)
             ->setPersons(array_map($this->toOpenApiSongPerson(...), $song->persons))
-            ->setTags(array_map($this->toOpenApiSongTag(...), $song->tags))
             ->setMedia(array_map($this->toOpenApiSongLinkedMedia(...), $song->media));
     }
 
@@ -41,13 +38,6 @@ readonly class Converter
             ->setName($person->name)
             ->setRole(OpenApiSongPersonRole::from($person->role->value))
             ->setOrderNo($person->orderNo);
-    }
-
-    private function toOpenApiSongTag(AssembledTag $tag): OpenApiSongAttachedTag
-    {
-        return new OpenApiSongAttachedTag()
-            ->setSongTagId($tag->songTagId)
-            ->setName($tag->name);
     }
 
     private function toOpenApiSongLinkedMedia(AssembledMedia $media): OpenApiSongLinkedMedia

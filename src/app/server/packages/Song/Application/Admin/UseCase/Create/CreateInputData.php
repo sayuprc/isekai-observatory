@@ -7,7 +7,6 @@ namespace Song\Application\Admin\UseCase\Create;
 readonly class CreateInputData
 {
     /**
-     * @param list<array{songTagId: string}>                         $tags
      * @param list<array{personId: string, role: int, orderNo: int}> $persons
      * @param list<array{mediaId: string, orderNo: int}>             $media
      */
@@ -18,7 +17,6 @@ readonly class CreateInputData
         public ?string $lyricsLink,
         public int $type,
         public bool $isDisplay,
-        public array $tags,
         public array $persons,
         public array $media = [],
     ) {

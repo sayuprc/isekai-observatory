@@ -8,7 +8,6 @@ readonly class AssembledSong
 {
     /**
      * @param array<int, AssembledPerson> $persons
-     * @param array<int, AssembledTag>    $tags
      * @param array<int, AssembledMedia>  $media
      */
     public function __construct(
@@ -21,7 +20,6 @@ readonly class AssembledSong
         public bool $isDisplay,
         public int $orderNo,
         public array $persons,
-        public array $tags = [],
         public array $media = [],
     ) {
     }
