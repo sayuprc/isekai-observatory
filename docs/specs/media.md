@@ -1,6 +1,6 @@
 # Media Spec
 
-関連: ADR-0015 (画像)、ADR-0020 (6 フィールドと MediaType)、ADR-0036 (タグ)
+関連: ADR-0015 (画像)、ADR-0020 (6 フィールドと MediaType)、ADR-0036 / ADR-0037 (タグ)
 
 ## 用語
 
@@ -9,7 +9,7 @@
   入力経路の未知 type は Other に倒す
 - `url` は一意。platform / thumbnail / 旧 format は永続しない
 - Media には複数の Tag を付けられる。タグ付けの所有は Media 側で、6 フィールドや MediaType の軸には数えない
-  Admin API では Media モデルに含めず、取得・作成・更新のレスポンスに `tags` として並べて返す。Viewer には出さない
+  Admin API では Media モデルに含めず、取得・作成・更新のレスポンスに `tags` として並べて返す。Viewer には出さない (ADR-0037)
 
 ## できること
 

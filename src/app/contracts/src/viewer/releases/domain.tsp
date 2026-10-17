@@ -1,4 +1,5 @@
 import "../../shared";
+import "../tags";
 import "../../packages/song";
 
 using IsekaiObservatory.Shared;
@@ -101,4 +102,7 @@ model ReleaseGroupListItem {
   firstReleasedOn: releasedOn;
 
   releases: ReleaseListItem[];
+
+  @doc("付いているタグ(タグの表示順)")
+  tags: AttachedTag[];
 }

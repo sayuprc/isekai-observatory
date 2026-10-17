@@ -9,7 +9,8 @@ use Release\Domain\Models\ReleaseGroupType;
 readonly class ReleaseGroupListItem
 {
     /**
-     * @param array<ReleaseListItem> $releases
+     * @param array<ReleaseListItem>                                  $releases
+     * @param array<array{tagId: string, name: string, orderNo: int}> $tags     タグの表示順
      */
     public function __construct(
         public string $releaseGroupId,
@@ -18,6 +19,7 @@ readonly class ReleaseGroupListItem
         public string $description,
         public string $firstReleasedOn,
         public array $releases,
+        public array $tags,
     ) {
     }
 }

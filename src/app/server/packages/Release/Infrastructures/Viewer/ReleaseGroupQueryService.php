@@ -77,6 +77,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
 
         $binGroupIds = array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $pageRows);
         $releasesByGroup = $this->loadReleases($binGroupIds);
+        $tagsByGroup = $this->loadTags($binGroupIds);
 
         $releaseGroups = array_map(
             fn (array $row): ReleaseGroupListItem => new ReleaseGroupListItem(
@@ -86,6 +87,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
                 Row::string($row, 'description'),
                 Row::string($row, 'first_released_on'),
                 $releasesByGroup[Row::string($row, 'release_group_id')] ?? [],
+                $tagsByGroup[Row::string($row, 'release_group_id')] ?? [],
             ),
             $pageRows,
         );
@@ -101,6 +103,40 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             );
 
         return new ReleaseGroupListPage($releaseGroups, $nextCursor);
+    }
+
+    /**
+     * @param array<int, string> $binGroupIds
+     *
+     * @return array<string, array<int, array{tagId: string, name: string, orderNo: int}>>
+     */
+    private function loadTags(array $binGroupIds): array
+    {
+        if ($binGroupIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['release_group_taggings.release_group_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+                ->from('release_group_taggings')
+                ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
+                ->where('release_group_taggings.release_group_id', 'IN', $binGroupIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        );
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'release_group_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($row, 'tag_id')),
+                'name' => Row::string($row, 'name'),
+                'orderNo' => Row::int($row, 'order_no'),
+            ];
+        }
+
+        return $grouped;
     }
 
     /**
