@@ -16,6 +16,7 @@
 ## できること
 
 - Admin: ReleaseGroup / Release の CRUD。一覧・検索の主語は ReleaseGroup
+- ReleaseGroup には複数の Tag を付けられる。タグ付けの所有は ReleaseGroup 側で、重複は不可。並びは Tag の表示順で、Viewer には出さない。Release (版) には付けない
 - Admin: Event のセットリスト順に楽曲披露を Track として取り込める
   メドレーの項目は 1 つのメドレー Track にまとめ、項目の表示名をメドレーの表示名にする
   セットリスト外の楽曲披露は末尾に並べ、表示名だけの項目はタイトルのみの Track として選んだときだけ取り込む
@@ -38,6 +39,7 @@
 classDiagram
   direction TB
   ReleaseGroup "1" --> "N" Release : 別集約
+  ReleaseGroup "N" --> "M" Tag : タグ付け所有
   Release "1" --> "N" Medium
   Medium "1" --> "N" Track
   Track ..> Song : 0..N (順序付き)

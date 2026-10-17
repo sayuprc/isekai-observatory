@@ -21,7 +21,7 @@ readonly class AssembledSong
         public bool $isDisplay,
         public int $orderNo,
         public array $persons,
-        public array $tags = [],
+        public array $tags,
         public array $media = [],
     ) {
     }

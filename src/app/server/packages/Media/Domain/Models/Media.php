@@ -6,6 +6,7 @@ namespace Media\Domain\Models;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use Tag\Domain\Models\TagReferences;
 
 readonly class Media
 {
@@ -16,9 +17,13 @@ readonly class Media
         public MediaPublishedAt $publishedAt,
         public MediaType $type,
         public bool $isDisplay,
+        public TagReferences $tags,
     ) {
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     public static function reconstruct(
         string $mediaId,
         string $title,
@@ -26,6 +31,7 @@ readonly class Media
         DateTimeImmutable $publishedAt,
         int $type,
         bool $isDisplay,
+        array $tags,
     ): self {
         return new self(
             new MediaId($mediaId),
@@ -34,11 +40,12 @@ readonly class Media
             new MediaPublishedAt($publishedAt),
             MediaType::from($type),
             $isDisplay,
+            TagReferences::reconstruct($tags),
         );
     }
 
     /**
-     * @return array{media_id: string, title: string, url: string, published_at: string, type: value-of<MediaType>, is_display: bool}
+     * @return array{media_id: string, title: string, url: string, published_at: string, type: value-of<MediaType>, is_display: bool, tags: list<array{tag_id: string}>}
      */
     public function toArray(): array
     {
@@ -51,6 +58,7 @@ readonly class Media
                 ->format('Y-m-d H:i:s'),
             'type' => $this->type->value,
             'is_display' => $this->isDisplay,
+            'tags' => $this->tags->toArray(),
         ];
     }
 

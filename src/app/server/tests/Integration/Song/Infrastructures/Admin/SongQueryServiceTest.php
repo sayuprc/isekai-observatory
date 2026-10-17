@@ -212,6 +212,7 @@ class SongQueryServiceTest extends DatabaseTestCase
             $title ?? new None(),
             $type ?? new None(),
             $isDisplay ?? new None(),
+            new None(),
             Sort::OrderNo,
             Order::Asc,
             1,

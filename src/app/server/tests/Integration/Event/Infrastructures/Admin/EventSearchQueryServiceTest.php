@@ -38,7 +38,7 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), isDisplay: false),
         );
 
-        $criteria = new EventSearchCriteria(new None(), new Some(EventType::Live), new Some(EventStatus::Normal), new Some(true));
+        $criteria = new EventSearchCriteria(new None(), new Some(EventType::Live), new Some(EventStatus::Normal), new Some(true), new None());
 
         $this->assertEquals(
             [new EventSummary($eventId, 'テストライブ', EventType::Live, '2026-10-01', '2026-10-02', EventStatus::Normal, true, [], 0, 0, 0)],
@@ -58,7 +58,7 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: '配信'),
         );
 
-        $criteria = new EventSearchCriteria(new Some('ライブ'), new None(), new None(), new None(), Sort::Title, Order::Desc, 1, PerPage::TwentyFive);
+        $criteria = new EventSearchCriteria(new Some('ライブ'), new None(), new None(), new None(), new None(), Sort::Title, Order::Desc, 1, PerPage::TwentyFive);
 
         $this->assertSame(
             [$secondId, $firstId],
@@ -106,7 +106,7 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
                 new EventSummary($eventId, 'テストライブ', EventType::Live, '2026-10-01', null, EventStatus::Normal, true, ['配信', '会場'], 2, 3, 1),
                 new EventSummary($emptyEventId, 'テストライブ', EventType::Live, '2026-10-02', null, EventStatus::Normal, true, [], 0, 0, 0),
             ],
-            $this->getInstance()->search(new EventSearchCriteria(new None(), new None(), new None(), new None())),
+            $this->getInstance()->search(new EventSearchCriteria(new None(), new None(), new None(), new None(), new None())),
         );
     }
 

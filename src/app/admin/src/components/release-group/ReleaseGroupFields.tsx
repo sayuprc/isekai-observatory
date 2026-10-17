@@ -1,5 +1,5 @@
 import { createSignal, Show } from 'solid-js';
-import type { ReleaseGroup, ReleaseGroupTypeValue } from '../../generated';
+import type { ReleaseGroup, ReleaseGroupTypeValue, RequestTag } from '../../generated';
 import { RELEASE_GROUP_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
@@ -19,6 +19,7 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
   const [note, setNote] = createSignal(initial?.note ?? '');
   const [isDisplay, setIsDisplay] = createSignal(initial?.isDisplay ?? true);
   const [orderNo, setOrderNo] = createSignal(initial?.orderNo ?? 1);
+  const [tags, setTags] = createSignal<RequestTag[]>((initial?.tags ?? []).map((tag) => ({ tagId: tag.tagId })));
 
   const toRequestBody = () => ({
     title: title(),
@@ -27,6 +28,7 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
     note: note(),
     isDisplay: isDisplay(),
     orderNo: orderNo(),
+    tags: tags(),
   });
 
   return {
@@ -42,6 +44,8 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
     setIsDisplay,
     orderNo,
     setOrderNo,
+    tags,
+    setTags,
     toRequestBody,
   };
 };

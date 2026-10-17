@@ -20,6 +20,7 @@ use Event\Domain\Models\Venues\EventVenueLinks;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\ValueObjects\Note;
+use Tag\Domain\Models\TagReferences;
 
 /**
  * Event 集約内でしか判断できない不変条件を検証する。
@@ -43,6 +44,7 @@ readonly class EventIntegrityService
      * @param list<_eventSourceInput>                      $sources
      * @param list<_songPerformanceInput>                  $performances
      * @param list<_setlistItemInput>                      $setlist
+     * @param list<array{tagId: string}>                   $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -60,6 +62,7 @@ readonly class EventIntegrityService
         array $sources,
         array $performances,
         array $setlist,
+        array $tags,
     ): Event {
         return $this->build(
             $this->generator->generate(),
@@ -76,6 +79,7 @@ readonly class EventIntegrityService
             $sources,
             $performances,
             $setlist,
+            $tags,
         );
     }
 
@@ -87,6 +91,7 @@ readonly class EventIntegrityService
      * @param list<_eventSourceInput>                      $sources
      * @param list<_songPerformanceInput>                  $performances
      * @param list<_setlistItemInput>                      $setlist
+     * @param list<array{tagId: string}>                   $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -105,6 +110,7 @@ readonly class EventIntegrityService
         array $sources,
         array $performances,
         array $setlist,
+        array $tags,
     ): Event {
         return $this->build(
             $eventId,
@@ -121,6 +127,7 @@ readonly class EventIntegrityService
             $sources,
             $performances,
             $setlist,
+            $tags,
         );
     }
 
@@ -132,6 +139,7 @@ readonly class EventIntegrityService
      * @param list<_eventSourceInput>                      $sources
      * @param list<_songPerformanceInput>                  $performances
      * @param list<_setlistItemInput>                      $setlist
+     * @param list<array{tagId: string}>                   $tags
      *
      * @throws BusinessRuleViolationException
      */
@@ -150,6 +158,7 @@ readonly class EventIntegrityService
         array $sources,
         array $performances,
         array $setlist,
+        array $tags,
     ): Event {
         $event = new Event(
             new EventId($eventId),
@@ -166,6 +175,7 @@ readonly class EventIntegrityService
             EventSources::fromArray($sources),
             SongPerformances::fromArray($performances),
             Setlist::fromArray($setlist),
+            TagReferences::fromArray($tags),
         );
 
         $this->assertSetlistAllowed($event);

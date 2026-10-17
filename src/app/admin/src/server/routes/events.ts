@@ -64,6 +64,7 @@ const eventBodySchema = t.Object({
   sources: t.Array(eventSourceSchema),
   performances: t.Array(songPerformanceSchema),
   setlist: t.Array(setlistItemSchema),
+  tags: t.Array(t.Object({ tagId: t.String() })),
 });
 
 export const events = new Elysia({ prefix: '/events' })
@@ -79,6 +80,7 @@ export const events = new Elysia({ prefix: '/events' })
             type: query.type ? (Number(query.type) as EventTypeValue) : undefined,
             status: query.status ? (Number(query.status) as EventStatusValue) : undefined,
             is_display: query.is_display,
+            tag_id: query.tag_id || undefined,
             sort: (query.sort ?? 'schedule') as EventSearchSortBy,
             order: (query.order ?? 'asc') as SortOrder,
             page: query.page ?? 1,
@@ -95,6 +97,7 @@ export const events = new Elysia({ prefix: '/events' })
         ),
         status: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('')])),
         is_display: t.Optional(t.Boolean()),
+        tag_id: t.Optional(t.String()),
         sort: t.Optional(t.Union([t.Literal('schedule'), t.Literal('title')])),
         order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),
         page: t.Optional(t.Number()),

@@ -209,6 +209,8 @@ export const MediaSection = (props: Props) => {
       publishedAt,
       type: createTypeValue(),
       isDisplay: createIsDisplay(),
+      // その場で作るメディアにはタグを付けず、必要ならメディアの画面で付ける
+      tags: [],
     });
 
     setCreating(false);

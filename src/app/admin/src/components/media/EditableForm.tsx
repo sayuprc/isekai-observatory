@@ -1,5 +1,5 @@
 import { createResource, createSignal, Match, Show, Switch } from 'solid-js';
-import type { Media, MediaReferencedSong, MediaTypeValue } from '../../generated';
+import type { AttachedTag, Media, MediaReferencedSong, MediaTypeValue, RequestTag } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { normalizeDateTimeInputValue } from '../../utils/date';
@@ -13,6 +13,7 @@ import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormColumns } from '../FormColumns';
 import { FormError } from '../FormError';
+import { TagPicker } from '../tag/TagPicker';
 import { MediaFields } from './MediaFields';
 
 interface DetailViewProps {
@@ -20,12 +21,12 @@ interface DetailViewProps {
 }
 
 interface EditableFormProps {
-  data: { media: Media; songs: MediaReferencedSong[] };
+  data: { media: Media; songs: MediaReferencedSong[]; tags: AttachedTag[] };
 }
 
 interface FetchOkState {
   status: 'ok';
-  data: { media: Media; songs: MediaReferencedSong[] };
+  data: { media: Media; songs: MediaReferencedSong[]; tags: AttachedTag[] };
 }
 
 interface FetchErrorState {
@@ -97,7 +98,8 @@ const EditableForm = (props: EditableFormProps) => {
   const { isSubmitting, withSubmitting } = createSubmitting();
   const [typeValue, setTypeValue] = createSignal<MediaTypeValue>(props.data.media.type);
   const [isDisplay, setIsDisplay] = createSignal(props.data.media.isDisplay);
-  const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(() => [typeValue(), isDisplay()]);
+  const [tags, setTags] = createSignal<RequestTag[]>(props.data.tags.map((tag) => ({ tagId: tag.tagId })));
+  const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(() => [typeValue(), isDisplay(), tags()]);
 
   const handleUpdate = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
@@ -118,6 +120,7 @@ const EditableForm = (props: EditableFormProps) => {
       publishedAt: formData.get('publishedAt')?.toString() ?? '',
       type: Number(formData.get('type')) as MediaTypeValue,
       isDisplay: formData.get('isDisplay') === 'true',
+      tags: tags(),
     });
 
     if (data) {
@@ -187,7 +190,13 @@ const EditableForm = (props: EditableFormProps) => {
       <FormError message={formError()} onClose={clearErrors} />
       <FormColumns
         main={
-          <form ref={bindForm} id="media-form" onKeyDown={preventImplicitSubmit} onSubmit={handleUpdate}>
+          <form
+            ref={bindForm}
+            id="media-form"
+            onKeyDown={preventImplicitSubmit}
+            class="space-y-6"
+            onSubmit={handleUpdate}
+          >
             <MediaFields
               title={props.data.media.title}
               url={props.data.media.url}
@@ -198,6 +207,7 @@ const EditableForm = (props: EditableFormProps) => {
               onIsDisplayChange={setIsDisplay}
               getFieldError={getFieldError}
             />
+            <TagPicker tags={tags} setTags={setTags} />
           </form>
         }
         side={

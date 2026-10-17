@@ -12,6 +12,9 @@ use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
+use Tag\Domain\Models\TagId;
+use Tag\Domain\Models\TagReference;
+use Tag\Domain\Models\TagRepositoryInterface;
 
 readonly class CreateUseCase
 {
@@ -21,6 +24,7 @@ readonly class CreateUseCase
         private ReleaseGroupRepositoryInterface $repository,
         private ReleaseGroupIntegrityService $service,
         private AuditLogRecorderInterface $recorder,
+        private TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -36,6 +40,7 @@ readonly class CreateUseCase
                 $inputData->note,
                 $inputData->isDisplay,
                 $inputData->orderNo,
+                $inputData->tags,
             );
 
             $releaseGroup = $this->repository->save($releaseGroup);
@@ -47,7 +52,10 @@ readonly class CreateUseCase
                 $releaseGroup->toArray(),
             );
 
-            return new CreateOutputData($releaseGroup);
+            return new CreateOutputData(
+                $releaseGroup,
+                $this->tagRepository->findByIds(...$releaseGroup->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray()),
+            );
         });
     }
 }

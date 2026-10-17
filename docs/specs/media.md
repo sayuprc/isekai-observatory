@@ -1,6 +1,6 @@
 # Media Spec
 
-関連: ADR-0015 (画像)、ADR-0020 (6 フィールドと MediaType)
+関連: ADR-0015 (画像)、ADR-0020 (6 フィールドと MediaType)、ADR-0036 (タグ)
 
 ## 用語
 
@@ -8,6 +8,8 @@
 - **MediaType** (1 軸): Mv / AudioVideo / LiveStream / Short / Post / Other
   入力経路の未知 type は Other に倒す
 - `url` は一意。platform / thumbnail / 旧 format は永続しない
+- Media には複数の Tag を付けられる。タグ付けの所有は Media 側で、6 フィールドや MediaType の軸には数えない
+  Admin API では Media モデルに含めず、取得・作成・更新のレスポンスに `tags` として並べて返す。Viewer には出さない
 
 ## できること
 
@@ -33,4 +35,5 @@ classDiagram
   }
   Song "N" --> "M" Media : リンク所有
   Event "N" --> "M" Media : リンク所有
+  Media "N" --> "M" Tag : タグ付け所有
 ```

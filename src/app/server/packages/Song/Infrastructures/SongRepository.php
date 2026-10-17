@@ -9,9 +9,6 @@ use Person\Domain\Models\PersonId;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
-use Song\Domain\Models\Tag\SongTag;
-use Song\Domain\Models\Tag\SongTagId;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -33,7 +30,6 @@ readonly class SongRepository implements SongRepositoryInterface
     public function __construct(
         private QueryFactory $queryFactory,
         private UuidConverterInterface $converter,
-        private SongTagRepositoryInterface $songTagRepository,
     ) {
     }
 
@@ -73,9 +69,11 @@ readonly class SongRepository implements SongRepositoryInterface
 
         $taggingRows = $this->groupBySongId($this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_id', 'song_tag_id'])
+                ->withSelect(['song_taggings.song_id', 'song_taggings.tag_id'])
                 ->from('song_taggings')
-                ->where('song_id', 'IN', $binSongIds),
+                ->join('tags', 'song_taggings.tag_id = tags.tag_id')
+                ->where('song_taggings.song_id', 'IN', $binSongIds)
+                ->orderBy('tags.order_no'),
         ));
 
         $mediaRows = $this->groupBySongId($this->queryFactory->fetchAll(
@@ -199,9 +197,9 @@ readonly class SongRepository implements SongRepositoryInterface
 
         $this->queryFactory->insertRows(
             'song_taggings',
-            ['song_id', 'song_tag_id'],
+            ['song_id', 'tag_id'],
             array_map(
-                fn (array $tag): array => [$id, $this->converter->toBin($tag['song_tag_id'])],
+                fn (array $tag): array => [$id, $this->converter->toBin($tag['tag_id'])],
                 $data['tags'],
             ),
         );
@@ -269,11 +267,9 @@ readonly class SongRepository implements SongRepositoryInterface
             $personRows,
         );
 
-        $tags = $this->sortTagsByMasterOrder(
-            array_map(
-                fn (array $tag): array => ['songTagId' => $this->converter->toUuid(Row::string($tag, 'song_tag_id'))],
-                $taggingRows,
-            ),
+        $tags = array_map(
+            fn (array $tag): array => ['tagId' => $this->converter->toUuid(Row::string($tag, 'tag_id'))],
+            $taggingRows,
         );
 
         $media = array_map(
@@ -297,29 +293,5 @@ readonly class SongRepository implements SongRepositoryInterface
             $persons,
             $media,
         );
-    }
-
-    /**
-     * @param list<array{songTagId: string}> $tags
-     *
-     * @return list<array{songTagId: string}>
-     */
-    private function sortTagsByMasterOrder(array $tags): array
-    {
-        if ($tags === []) {
-            return [];
-        }
-
-        $foundTags = $this->songTagRepository->findByIds(
-            ...array_map(
-                static fn (array $tag): SongTagId => new SongTagId($tag['songTagId']),
-                $tags,
-            ),
-        );
-
-        return array_map(
-            static fn (SongTag $tag): array => ['songTagId' => $tag->songTagId->value],
-            $foundTags,
-        ) |> array_values(...);
     }
 }

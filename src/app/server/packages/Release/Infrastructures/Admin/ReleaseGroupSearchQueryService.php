@@ -129,6 +129,17 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
             $query = $query->where('release_groups.is_display', '=', $criteria->isDisplay->get());
         }
 
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'release_groups.release_group_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['release_group_id'])
+                    ->from('release_group_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
+        }
+
         return $query;
     }
 

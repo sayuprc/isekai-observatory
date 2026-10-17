@@ -36,6 +36,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'note' => '備考',
                 'isDisplay' => false,
                 'orderNo' => 3,
+                'tags' => [],
             ])->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
@@ -48,7 +49,8 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                             ->where('description', '更新後の説明')
                             ->where('note', '備考')
                             ->where('isDisplay', false)
-                            ->where('orderNo', 3),
+                            ->where('orderNo', 3)
+                            ->where('tags', []),
                     ),
             );
 
@@ -71,6 +73,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
+                'tags' => [],
             ])->assertStatus(404);
     }
 
@@ -91,6 +94,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
+                'tags' => [],
             ])->assertStatus(403);
     }
 }

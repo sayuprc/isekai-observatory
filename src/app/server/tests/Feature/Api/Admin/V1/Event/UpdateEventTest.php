@@ -46,6 +46,7 @@ class UpdateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performanceIds' => [$performanceId]]],
+                'tags' => [],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.eventId', $eventId)
@@ -80,6 +81,7 @@ class UpdateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
                 'setlist' => [],
+                'tags' => [],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');

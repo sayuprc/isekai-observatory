@@ -58,6 +58,7 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
                 'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'personGroupId' => null, 'orderNo' => 1]]]],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
+                'tags' => [],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.title', 'テストライブ')
@@ -115,6 +116,7 @@ class CreateEventTest extends DatabaseTestCase
                     ['personId' => $person2, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 2],
                 ]]],
                 'setlist' => [],
+                'tags' => [],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.performances.0.coVocalists.0.name', 'メンバー1')
@@ -141,6 +143,7 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '展示作品', 'performanceIds' => []]],
+                'tags' => [],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
@@ -167,6 +170,7 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
                 'setlist' => [],
+                'tags' => [],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
@@ -190,6 +194,7 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'オープニング', 'performanceIds' => []]],
+                'tags' => [],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
@@ -213,6 +218,7 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [],
+                'tags' => [],
             ])
             ->assertStatus(422);
     }
@@ -235,6 +241,7 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [],
+                'tags' => [],
             ])
             ->assertStatus(200)
             ->assertJsonPath('event.schedule.startOn', null)
@@ -259,8 +266,66 @@ class CreateEventTest extends DatabaseTestCase
                 'sources' => [],
                 'performances' => [],
                 'setlist' => [],
+                'tags' => [],
             ])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
+    }
+
+    #[Test]
+    public function canCreateEventWithTagsSortedByTagOrder(): void
+    {
+        $firstTagId = $this->generateUuid();
+        $secondTagId = $this->generateUuid();
+        $this->storeTags($this->createTag($secondTagId, 'タグB', 20), $this->createTag($firstTagId, 'タグA', 10));
+
+        $this->withAuth()
+            ->postJson(route(EventRouteMap::Create), [
+                ...$this->minimalRequest(),
+                'tags' => [['tagId' => $secondTagId], ['tagId' => $firstTagId]],
+            ])
+            ->assertStatus(200)
+            ->assertJsonPath('event.tags', [
+                ['tagId' => $firstTagId, 'name' => 'タグA'],
+                ['tagId' => $secondTagId, 'name' => 'タグB'],
+            ]);
+    }
+
+    #[Test]
+    public function rejectsDuplicatedTag(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグA', 10));
+
+        $this->withAuth()
+            ->postJson(route(EventRouteMap::Create), [
+                ...$this->minimalRequest(),
+                'tags' => [['tagId' => $tagId], ['tagId' => $tagId]],
+            ])
+            ->assertStatus(400)
+            ->assertJsonPath('code', 'business_rule_violation');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function minimalRequest(): array
+    {
+        return [
+            'title' => 'タグ付きのイベント',
+            'description' => '',
+            'note' => '',
+            'type' => 1,
+            'schedule' => ['startOn' => '2026-10-01', 'endOn' => null],
+            'status' => 1,
+            'isDisplay' => true,
+            'venues' => [],
+            'media' => [],
+            'releases' => [],
+            'sources' => [],
+            'performances' => [],
+            'setlist' => [],
+            'tags' => [],
+        ];
     }
 }
