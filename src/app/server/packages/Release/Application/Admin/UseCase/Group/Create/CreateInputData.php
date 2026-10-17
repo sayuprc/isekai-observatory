@@ -16,7 +16,7 @@ readonly class CreateInputData
         public string $note,
         public bool $isDisplay,
         public int $orderNo,
-        public array $tags = [],
+        public array $tags,
     ) {
     }
 }

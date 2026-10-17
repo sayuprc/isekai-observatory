@@ -83,6 +83,7 @@ class GetUseCaseTest extends TestCase
                         new AssembledPerson($composerId, 'テスト作曲者A', SongPersonRole::Composer, 2),
                         new AssembledPerson($arrangerId, 'テスト編曲者A', SongPersonRole::Arranger, 3),
                     ],
+                    [],
                 ),
             )
             ->once();

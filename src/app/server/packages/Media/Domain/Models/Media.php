@@ -17,7 +17,7 @@ readonly class Media
         public MediaPublishedAt $publishedAt,
         public MediaType $type,
         public bool $isDisplay,
-        public TagReferences $tags = new TagReferences([]),
+        public TagReferences $tags,
     ) {
     }
 
@@ -31,7 +31,7 @@ readonly class Media
         DateTimeImmutable $publishedAt,
         int $type,
         bool $isDisplay,
-        array $tags = [],
+        array $tags,
     ): self {
         return new self(
             new MediaId($mediaId),

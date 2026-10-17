@@ -28,6 +28,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             note: '',
             isDisplay: true,
             orderNo: 1,
+            tags: [],
         ));
 
         $this->assertSame('観測された春', $result->releaseGroup->title->value);
@@ -56,6 +57,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             note: '',
             isDisplay: true,
             orderNo: 7,
+            tags: [],
         ));
 
         $this->assertSame(7, $result->releaseGroup->orderNo->value);
@@ -73,6 +75,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             note: '',
             isDisplay: true,
             orderNo: 1,
+            tags: [],
         ));
     }
 
