@@ -38,7 +38,6 @@ const TARGET_TYPE_OPTIONS = [
   'Release',
   'ReleaseGroup',
   'Song',
-  'SongTag',
   'Venue',
   'Event',
 ] as const satisfies readonly TargetType[];
@@ -51,7 +50,6 @@ const TARGET_TYPE_LABEL: Record<TargetType, string> = {
   Release: 'リリース',
   ReleaseGroup: 'リリースグループ',
   Song: '楽曲',
-  SongTag: '楽曲タグ',
   Venue: '開催先',
   Event: 'イベント',
 };

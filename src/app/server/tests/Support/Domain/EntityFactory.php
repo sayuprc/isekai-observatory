@@ -54,10 +54,6 @@ use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongType;
-use Song\Domain\Models\Tag\SongTag;
-use Song\Domain\Models\Tag\SongTagId;
-use Song\Domain\Models\Tag\SongTagName;
-use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
@@ -173,7 +169,6 @@ trait EntityFactory
             $type = $lyricsLinkOrType;
             $isDisplay = is_bool($typeOrIsDisplay) ? $typeOrIsDisplay : true;
             $orderNo = is_int($isDisplayOrOrderNo) ? $isDisplayOrOrderNo : 1;
-            $tags = is_array($orderNoOrTags) ? $orderNoOrTags : [];
             $persons = $this->normalizeSongPersons(
                 is_array($tagsOrPersons) ? $tagsOrPersons : [],
                 is_array($personsOrLyricists) ? $personsOrLyricists : [],
@@ -191,7 +186,6 @@ trait EntityFactory
             $type = $typeOrIsDisplay;
             $isDisplay = is_bool($isDisplayOrOrderNo) ? $isDisplayOrOrderNo : true;
             $orderNo = is_int($orderNoOrTags) ? $orderNoOrTags : 1;
-            $tags = is_array($tagsOrPersons) ? $tagsOrPersons : [];
             $persons = $this->normalizeSongPersons(
                 is_array($personsOrLyricists) ? $personsOrLyricists : [],
                 is_array($lyricistsOrComposers) ? $lyricistsOrComposers : [],
@@ -217,7 +211,6 @@ trait EntityFactory
             $type,
             $isDisplay,
             new OrderNo($orderNo),
-            SongTagReferences::fromArray($tags),
             SongPersons::fromArray($persons),
             SongMediaLinks::fromArray(is_array($media) ? $media : []),
         );
@@ -271,15 +264,6 @@ trait EntityFactory
         }
 
         return [];
-    }
-
-    protected function createSongTag(string $songTagId, string $name, int $orderNo): SongTag
-    {
-        return new SongTag(
-            new SongTagId($songTagId),
-            new SongTagName($name),
-            new OrderNo($orderNo),
-        );
     }
 
     protected function createMedia(

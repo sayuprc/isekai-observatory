@@ -3,7 +3,6 @@ import "../../packages/media";
 import "../../packages/song";
 import "../media";
 import "../persons";
-import "../song-tags";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Media;
@@ -33,7 +32,6 @@ scalar lyricsLink extends string;
     },
     #{ personId: "a4d01e9d-e593-4bd9-ba83-e9a7dd3887cd", name: "テスト人物", role: SongPersonRole.Composer, orderNo: 2 }
   ],
-  tags: #[#{ songTagId: "3cd42c09-ff3c-4cd2-913f-a279c4ea89b4", name: "テストタグA" }],
   media: #[
     #{
       mediaId: "11111111-1111-1111-1111-111111111111",
@@ -56,7 +54,6 @@ model Song {
   isDisplay: boolean;
   orderNo: orderNo;
   persons: SongPerson[];
-  tags: SongAttachedTag[];
   media: SongLinkedMedia[];
 }
 
@@ -108,11 +105,6 @@ model SongPerson {
   name: personName;
   role: SongPersonRole;
   orderNo: orderNo;
-}
-
-model SongAttachedTag {
-  songTagId: songTagId;
-  name: songTagName;
 }
 
 @example(#{

@@ -10,7 +10,6 @@ use Person\Infrastructures\PersonRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
 use Song\Infrastructures\SongRepository;
-use Song\Infrastructures\Tag\SongTagRepository;
 use Song\Route\SongRouteMap;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
@@ -32,9 +31,6 @@ class GetSongTest extends DatabaseTestCase
         $personRepo->save($lyricist);
         $personRepo->save($composer);
         $personRepo->save($arranger);
-        $tagRepo = $this->app->make(SongTagRepository::class);
-        $tagRepo->save($tagA = $this->createSongTag($this->generateUuid(), 'タグA', 20));
-        $tagRepo->save($tagB = $this->createSongTag($this->generateUuid(), 'タグB', 10));
         $mediaRepo = $this->app->make(MediaRepository::class);
         $mediaRepo->save($media = $this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true));
 
@@ -49,10 +45,7 @@ class GetSongTest extends DatabaseTestCase
                 SongType::Original,
                 true,
                 1,
-                [
-                    ['songTagId' => $tagA->songTagId->value],
-                    ['songTagId' => $tagB->songTagId->value],
-                ],
+                [],
                 [
                     ['personId' => $lyricistId, 'role' => 1, 'orderNo' => 1],
                     ['personId' => $composerId, 'role' => 2, 'orderNo' => 2],
@@ -82,10 +75,6 @@ class GetSongTest extends DatabaseTestCase
                         ['personId' => $lyricistId, 'name' => 'テスト作詞者A', 'role' => 1, 'orderNo' => 1],
                         ['personId' => $composerId, 'name' => 'テスト作曲者A', 'role' => 2, 'orderNo' => 2],
                         ['personId' => $arrangerId, 'name' => 'テスト編曲者A', 'role' => 3, 'orderNo' => 3],
-                    ],
-                    'tags' => [
-                        ['songTagId' => $tagB->songTagId->value, 'name' => 'タグB'],
-                        ['songTagId' => $tagA->songTagId->value, 'name' => 'タグA'],
                     ],
                     'media' => [
                         [

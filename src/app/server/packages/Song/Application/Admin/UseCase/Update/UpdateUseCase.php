@@ -48,7 +48,6 @@ readonly class UpdateUseCase
                 $inputData->type,
                 $inputData->isDisplay,
                 $inputData->orderNo,
-                $inputData->tags,
                 $inputData->persons,
                 $inputData->media,
             );

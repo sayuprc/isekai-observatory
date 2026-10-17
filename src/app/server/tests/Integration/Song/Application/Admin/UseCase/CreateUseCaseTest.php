@@ -39,7 +39,6 @@ class CreateUseCaseTest extends DatabaseTestCase
                 'https://example.com/lyrics',
                 SongType::Original->value,
                 true,
-                [],
                 [
                     ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
                     ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 2],

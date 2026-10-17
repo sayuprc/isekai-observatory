@@ -66,7 +66,7 @@ export type AuditLogSummary = {
 /**
  * 監査ログの対象種別
  */
-export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'PersonGroup' | 'Release' | 'ReleaseGroup' | 'Song' | 'SongTag' | 'Venue' | 'Event';
+export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'PersonGroup' | 'Release' | 'ReleaseGroup' | 'Song' | 'Venue' | 'Event';
 
 /**
  * エラー分類を表す機械可読なコード
@@ -786,13 +786,6 @@ export type RequestSongPerson = {
 };
 
 /**
- * The template for picking properties.
- */
-export type RequestSongTag = {
-    songTagId: SongTagId;
-};
-
-/**
  * 役割の値
  */
 export type RoleValue = 1 | 2 | 3;
@@ -817,13 +810,7 @@ export type Song = {
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<SongPerson>;
-    tags: Array<SongAttachedTag>;
     media: Array<SongLinkedMedia>;
-};
-
-export type SongAttachedTag = {
-    songTagId: SongTagId;
-    name: SongTagName;
 };
 
 export type SongCreateRequest = {
@@ -834,7 +821,6 @@ export type SongCreateRequest = {
     type: SongTypeValue;
     isDisplay: boolean;
     persons: Array<RequestSongPerson>;
-    tags: Array<RequestSongTag>;
     media: Array<RequestSongMediaLink>;
 };
 
@@ -915,60 +901,6 @@ export type SongSummary = {
     releaseCount: number;
 };
 
-export type SongTag = {
-    songTagId: SongTagId;
-    name: SongTagName;
-    orderNo: OrderNo;
-};
-
-export type SongTagCreateRequest = {
-    name: SongTagName;
-};
-
-export type SongTagCreateResponse = {
-    tag: SongTag;
-};
-
-export type SongTagGetResponse = {
-    tag: SongTag;
-};
-
-export type SongTagListResponse = {
-    tags: Array<SongTag>;
-};
-
-export type SongTagSearchResponse = {
-    tags: Array<SongTagSummary>;
-    maxPage: number;
-};
-
-/**
- * 楽曲タグ検索のソート条件
- */
-export type SongTagSearchSortBy = 'name' | 'order_no';
-
-/**
- * 楽曲タグ一覧の 1 行分
- */
-export type SongTagSummary = {
-    songTagId: SongTagId;
-    name: SongTagName;
-    orderNo: OrderNo;
-    /**
-     * このタグが付いている楽曲の件数
-     */
-    songCount: number;
-};
-
-export type SongTagUpdateRequest = {
-    name: SongTagName;
-    orderNo: OrderNo;
-};
-
-export type SongTagUpdateResponse = {
-    tag: SongTag;
-};
-
 /**
  * 楽曲種別の値
  */
@@ -983,7 +915,6 @@ export type SongUpdateRequest = {
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<RequestSongPerson>;
-    tags: Array<RequestSongTag>;
     media: Array<RequestSongMediaLink>;
 };
 
@@ -1287,16 +1218,6 @@ export type SetlistLabel = string;
  * 楽曲ID
  */
 export type SongId = string;
-
-/**
- * 楽曲タグID
- */
-export type SongTagId = string;
-
-/**
- * 楽曲タグ名
- */
-export type SongTagName = string;
 
 /**
  * 楽曲名
@@ -3328,300 +3249,6 @@ export type ReleaseServiceUpdateReleaseResponses = {
 };
 
 export type ReleaseServiceUpdateReleaseResponse = ReleaseServiceUpdateReleaseResponses[keyof ReleaseServiceUpdateReleaseResponses];
-
-export type SongTagServiceListSongTagsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/song-tags';
-};
-
-export type SongTagServiceListSongTagsErrors = {
-    /**
-     * Access is unauthorized.
-     */
-    401: ErrorResponse;
-    /**
-     * Access is forbidden.
-     */
-    403: ErrorResponse;
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-    /**
-     * Service unavailable.
-     */
-    503: unknown;
-    /**
-     * Server error
-     */
-    504: unknown;
-};
-
-export type SongTagServiceListSongTagsError = SongTagServiceListSongTagsErrors[keyof SongTagServiceListSongTagsErrors];
-
-export type SongTagServiceListSongTagsResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SongTagListResponse;
-};
-
-export type SongTagServiceListSongTagsResponse = SongTagServiceListSongTagsResponses[keyof SongTagServiceListSongTagsResponses];
-
-export type SongTagServiceCreateSongTagData = {
-    body: SongTagCreateRequest;
-    path?: never;
-    query?: never;
-    url: '/song-tags';
-};
-
-export type SongTagServiceCreateSongTagErrors = {
-    /**
-     * The server could not understand the request due to invalid syntax.
-     */
-    400: ErrorResponse;
-    /**
-     * Access is unauthorized.
-     */
-    401: ErrorResponse;
-    /**
-     * Access is forbidden.
-     */
-    403: ErrorResponse;
-    /**
-     * Client error
-     */
-    422: ErrorResponse;
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-    /**
-     * Service unavailable.
-     */
-    503: unknown;
-    /**
-     * Server error
-     */
-    504: unknown;
-};
-
-export type SongTagServiceCreateSongTagError = SongTagServiceCreateSongTagErrors[keyof SongTagServiceCreateSongTagErrors];
-
-export type SongTagServiceCreateSongTagResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SongTagCreateResponse;
-};
-
-export type SongTagServiceCreateSongTagResponse = SongTagServiceCreateSongTagResponses[keyof SongTagServiceCreateSongTagResponses];
-
-export type SongTagServiceSearchSongTagsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        name?: string;
-        sort?: SongTagSearchSortBy;
-        order?: SortOrder;
-        page?: Page;
-        per_page?: PerPage;
-    };
-    url: '/song-tags/search';
-};
-
-export type SongTagServiceSearchSongTagsErrors = {
-    /**
-     * Access is unauthorized.
-     */
-    401: ErrorResponse;
-    /**
-     * Access is forbidden.
-     */
-    403: ErrorResponse;
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-    /**
-     * Service unavailable.
-     */
-    503: unknown;
-    /**
-     * Server error
-     */
-    504: unknown;
-};
-
-export type SongTagServiceSearchSongTagsError = SongTagServiceSearchSongTagsErrors[keyof SongTagServiceSearchSongTagsErrors];
-
-export type SongTagServiceSearchSongTagsResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SongTagSearchResponse;
-};
-
-export type SongTagServiceSearchSongTagsResponse = SongTagServiceSearchSongTagsResponses[keyof SongTagServiceSearchSongTagsResponses];
-
-export type SongTagServiceDeleteSongTagData = {
-    body?: never;
-    path: {
-        songTagId: SongTagId;
-    };
-    query?: never;
-    url: '/song-tags/{songTagId}';
-};
-
-export type SongTagServiceDeleteSongTagErrors = {
-    /**
-     * The server could not understand the request due to invalid syntax.
-     */
-    400: ErrorResponse;
-    /**
-     * Access is unauthorized.
-     */
-    401: ErrorResponse;
-    /**
-     * Access is forbidden.
-     */
-    403: ErrorResponse;
-    /**
-     * Client error
-     */
-    422: ErrorResponse;
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-    /**
-     * Service unavailable.
-     */
-    503: unknown;
-    /**
-     * Server error
-     */
-    504: unknown;
-};
-
-export type SongTagServiceDeleteSongTagError = SongTagServiceDeleteSongTagErrors[keyof SongTagServiceDeleteSongTagErrors];
-
-export type SongTagServiceDeleteSongTagResponses = {
-    /**
-     * There is no content to send for this request, but the headers may be useful.
-     */
-    204: void;
-};
-
-export type SongTagServiceDeleteSongTagResponse = SongTagServiceDeleteSongTagResponses[keyof SongTagServiceDeleteSongTagResponses];
-
-export type SongTagServiceGetSongTagData = {
-    body?: never;
-    path: {
-        songTagId: SongTagId;
-    };
-    query?: never;
-    url: '/song-tags/{songTagId}';
-};
-
-export type SongTagServiceGetSongTagErrors = {
-    /**
-     * Access is unauthorized.
-     */
-    401: ErrorResponse;
-    /**
-     * Access is forbidden.
-     */
-    403: ErrorResponse;
-    /**
-     * The server cannot find the requested resource.
-     */
-    404: ErrorResponse;
-    /**
-     * Client error
-     */
-    422: ErrorResponse;
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-    /**
-     * Service unavailable.
-     */
-    503: unknown;
-    /**
-     * Server error
-     */
-    504: unknown;
-};
-
-export type SongTagServiceGetSongTagError = SongTagServiceGetSongTagErrors[keyof SongTagServiceGetSongTagErrors];
-
-export type SongTagServiceGetSongTagResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SongTagGetResponse;
-};
-
-export type SongTagServiceGetSongTagResponse = SongTagServiceGetSongTagResponses[keyof SongTagServiceGetSongTagResponses];
-
-export type SongTagServiceUpdateSongTagData = {
-    body: SongTagUpdateRequest;
-    path: {
-        songTagId: SongTagId;
-    };
-    query?: never;
-    url: '/song-tags/{songTagId}';
-};
-
-export type SongTagServiceUpdateSongTagErrors = {
-    /**
-     * The server could not understand the request due to invalid syntax.
-     */
-    400: ErrorResponse;
-    /**
-     * Access is unauthorized.
-     */
-    401: ErrorResponse;
-    /**
-     * Access is forbidden.
-     */
-    403: ErrorResponse;
-    /**
-     * The server cannot find the requested resource.
-     */
-    404: ErrorResponse;
-    /**
-     * Client error
-     */
-    422: ErrorResponse;
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-    /**
-     * Service unavailable.
-     */
-    503: unknown;
-    /**
-     * Server error
-     */
-    504: unknown;
-};
-
-export type SongTagServiceUpdateSongTagError = SongTagServiceUpdateSongTagErrors[keyof SongTagServiceUpdateSongTagErrors];
-
-export type SongTagServiceUpdateSongTagResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SongTagUpdateResponse;
-};
-
-export type SongTagServiceUpdateSongTagResponse = SongTagServiceUpdateSongTagResponses[keyof SongTagServiceUpdateSongTagResponses];
 
 export type SongServiceCreateSongData = {
     body: SongCreateRequest;

@@ -82,7 +82,7 @@ class UpdateUseCaseTest extends TestCase
             ->once();
 
         $this->service->shouldReceive('prepareForUpdate')
-            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
+            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons, [])
             ->andReturn(
                 $song = $this->createSong(
                     $songId,
@@ -135,7 +135,6 @@ class UpdateUseCaseTest extends TestCase
                 $typeValue,
                 $isDisplay,
                 $orderNo,
-                [],
                 $persons,
             ),
         );
@@ -169,7 +168,7 @@ class UpdateUseCaseTest extends TestCase
             ->once();
 
         $this->service->shouldReceive('prepareForUpdate')
-            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
+            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons, [])
             ->andThrow(new BusinessRuleViolationException('検証エラー'))
             ->once();
 
@@ -185,7 +184,6 @@ class UpdateUseCaseTest extends TestCase
                 $typeValue,
                 $isDisplay,
                 $orderNo,
-                [],
                 $persons,
             ),
         );
@@ -221,7 +219,6 @@ class UpdateUseCaseTest extends TestCase
                 SongType::Original->value,
                 true,
                 1,
-                [],
                 [],
             ),
         );

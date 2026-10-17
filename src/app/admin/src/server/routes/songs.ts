@@ -6,7 +6,6 @@ import {
   songServiceGetSong,
   songServiceSearchSongs,
   songServiceUpdateSong,
-  songTagServiceListSongTags,
 } from '../../generated';
 import type { PerPage, SongSearchSortBy, SongSearchTypeValue, SortOrder } from '../../generated';
 import { requestWithAuth, withAuthRetry } from '../client';
@@ -19,20 +18,15 @@ const NullableStringSchema = t.Union([t.String(), t.Null()]);
 const SongPersonRefSchema = t.Array(
   t.Object({ personId: t.String(), role: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]), orderNo: t.Number() }),
 );
-const SongTagRefSchema = t.Array(t.Object({ songTagId: t.String() }));
 const SongMediaRefSchema = t.Array(t.Object({ mediaId: t.String(), orderNo: t.Number() }));
 
 export const songs = new Elysia({ prefix: '/songs' })
   .use(authGuard)
   .get('/create-form', async ({ authSession }) => {
     return withAuthRetry(authSession, async (client) => {
-      const [tags, media] = await Promise.all([
-        songTagServiceListSongTags({ client }),
-        mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
-      ]);
+      const media = await mediaServiceSearchMedia({ client, query: { per_page: 50 } });
 
       return {
-        tags: resolveApiResponse(tags).tags,
         media: resolveApiResponse(media).media,
       };
     });
@@ -71,15 +65,13 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId/edit-form',
     async ({ params: { songId }, authSession }) => {
       return withAuthRetry(authSession, async (client) => {
-        const [song, tags, media] = await Promise.all([
+        const [song, media] = await Promise.all([
           songServiceGetSong({ client, path: { songId } }),
-          songTagServiceListSongTags({ client }),
           mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
         ]);
 
         return {
           ...resolveApiResponse(song),
-          tags: resolveApiResponse(tags).tags,
           media: resolveApiResponse(media).media,
         };
       });
@@ -103,7 +95,7 @@ export const songs = new Elysia({ prefix: '/songs' })
   )
   .post(
     '/',
-    async ({ body: { title, description, note, lyricsLink, type, isDisplay, persons, tags, media }, authSession }) => {
+    async ({ body: { title, description, note, lyricsLink, type, isDisplay, persons, media }, authSession }) => {
       return requestWithAuth(authSession, (client) =>
         songServiceCreateSong({
           client,
@@ -115,7 +107,6 @@ export const songs = new Elysia({ prefix: '/songs' })
             type,
             isDisplay,
             persons,
-            tags,
             media,
           },
         }),
@@ -130,7 +121,6 @@ export const songs = new Elysia({ prefix: '/songs' })
         type: SongTypeValueSchema,
         isDisplay: t.Boolean(),
         persons: SongPersonRefSchema,
-        tags: SongTagRefSchema,
         media: SongMediaRefSchema,
       }),
     },
@@ -139,7 +129,7 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId',
     async ({
       params: { songId },
-      body: { title, description, note, lyricsLink, type, isDisplay, orderNo, persons, tags, media },
+      body: { title, description, note, lyricsLink, type, isDisplay, orderNo, persons, media },
       authSession,
     }) => {
       return requestWithAuth(authSession, (client) =>
@@ -155,7 +145,6 @@ export const songs = new Elysia({ prefix: '/songs' })
             isDisplay,
             orderNo,
             persons,
-            tags,
             media,
           },
         }),
@@ -174,7 +163,6 @@ export const songs = new Elysia({ prefix: '/songs' })
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
         persons: SongPersonRefSchema,
-        tags: SongTagRefSchema,
         media: SongMediaRefSchema,
       }),
     },
