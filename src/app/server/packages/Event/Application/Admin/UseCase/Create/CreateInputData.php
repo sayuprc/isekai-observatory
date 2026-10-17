@@ -35,7 +35,7 @@ readonly class CreateInputData
         public array $sources,
         public array $performances,
         public array $setlist,
-        public array $tags = [],
+        public array $tags,
     ) {
     }
 }

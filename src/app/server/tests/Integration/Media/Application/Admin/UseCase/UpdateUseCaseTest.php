@@ -46,6 +46,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                 '2024-04-02T10:20:30+09:00',
                 MediaType::LiveStream->value,
                 false,
+                [],
             ),
         );
 
@@ -78,6 +79,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     '2024-04-02T10:20:30+09:00',
                     MediaType::Mv->value,
                     true,
+                    [],
                 ),
             );
             $this->fail('ResourceNotFoundException が発生しませんでした');

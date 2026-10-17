@@ -35,6 +35,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             note: '',
             isDisplay: false,
             orderNo: 3,
+            tags: [],
         ));
 
         $this->assertSame('新タイトル', $result->releaseGroup->title->value);
@@ -62,6 +63,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             note: '',
             isDisplay: true,
             orderNo: 1,
+            tags: [],
         ));
     }
 

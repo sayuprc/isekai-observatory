@@ -15,7 +15,7 @@ readonly class CreateInputData
         public string $publishedAt,
         public int $type,
         public bool $isDisplay,
-        public array $tags = [],
+        public array $tags,
     ) {
     }
 }
