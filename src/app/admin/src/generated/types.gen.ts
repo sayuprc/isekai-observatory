@@ -66,7 +66,7 @@ export type AuditLogSummary = {
 /**
  * 監査ログの対象種別
  */
-export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'PersonGroup' | 'Release' | 'ReleaseGroup' | 'Song' | 'Venue' | 'Event';
+export type AuditTargetType = 'AdminUser' | 'Media' | 'Person' | 'PersonGroup' | 'Release' | 'ReleaseGroup' | 'Song' | 'Tag' | 'Venue' | 'Event';
 
 /**
  * エラー分類を表す機械可読なコード
@@ -378,7 +378,7 @@ export type PerformancePersonGroup = {
 /**
  * 権限の値
  */
-export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_audit_log' | 'read_media' | 'write_media' | 'read_release' | 'write_release' | 'read_venue' | 'write_venue' | 'read_event' | 'write_event';
+export type PermissionValue = 'read_admin_user' | 'write_admin_user' | 'read_person' | 'write_person' | 'read_song' | 'write_song' | 'read_audit_log' | 'read_media' | 'write_media' | 'read_release' | 'write_release' | 'read_venue' | 'write_venue' | 'read_event' | 'write_event' | 'read_tag' | 'write_tag';
 
 export type Person = {
     personId: PersonId;
@@ -786,6 +786,13 @@ export type RequestSongPerson = {
 };
 
 /**
+ * The template for picking properties.
+ */
+export type RequestSongTag = {
+    tagId: TagId;
+};
+
+/**
  * 役割の値
  */
 export type RoleValue = 1 | 2 | 3;
@@ -810,7 +817,13 @@ export type Song = {
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<SongPerson>;
+    tags: Array<SongAttachedTag>;
     media: Array<SongLinkedMedia>;
+};
+
+export type SongAttachedTag = {
+    tagId: TagId;
+    name: TagName;
 };
 
 export type SongCreateRequest = {
@@ -821,6 +834,7 @@ export type SongCreateRequest = {
     type: SongTypeValue;
     isDisplay: boolean;
     persons: Array<RequestSongPerson>;
+    tags: Array<RequestSongTag>;
     media: Array<RequestSongMediaLink>;
 };
 
@@ -915,6 +929,7 @@ export type SongUpdateRequest = {
     isDisplay: boolean;
     orderNo: OrderNo;
     persons: Array<RequestSongPerson>;
+    tags: Array<RequestSongTag>;
     media: Array<RequestSongMediaLink>;
 };
 
@@ -926,6 +941,60 @@ export type SongUpdateResponse = {
  * ソート順
  */
 export type SortOrder = 'asc' | 'desc';
+
+export type Tag = {
+    tagId: TagId;
+    name: TagName;
+    orderNo: OrderNo;
+};
+
+export type TagCreateRequest = {
+    name: TagName;
+};
+
+export type TagCreateResponse = {
+    tag: Tag;
+};
+
+export type TagGetResponse = {
+    tag: Tag;
+};
+
+export type TagListResponse = {
+    tags: Array<Tag>;
+};
+
+export type TagSearchResponse = {
+    tags: Array<TagSummary>;
+    maxPage: number;
+};
+
+/**
+ * タグ検索のソート条件
+ */
+export type TagSearchSortBy = 'name' | 'order_no';
+
+/**
+ * タグ一覧の 1 行分
+ */
+export type TagSummary = {
+    tagId: TagId;
+    name: TagName;
+    orderNo: OrderNo;
+    /**
+     * このタグが付いている楽曲の件数
+     */
+    songCount: number;
+};
+
+export type TagUpdateRequest = {
+    name: TagName;
+    orderNo: OrderNo;
+};
+
+export type TagUpdateResponse = {
+    tag: Tag;
+};
 
 /**
  * 収録曲。songIds / title の少なくとも一方を指定する(検証はサーバー側の責務)。songIds は Song 集約を収録順に参照し、2 件以上でメドレーになる。楽曲 1 件では title で表示名を上書きし、メドレーでは title をメドレーの表示名にする。songIds が空なら表示専用のタイトルのみトラック
@@ -1218,6 +1287,16 @@ export type SetlistLabel = string;
  * 楽曲ID
  */
 export type SongId = string;
+
+/**
+ * タグID
+ */
+export type TagId = string;
+
+/**
+ * タグ名
+ */
+export type TagName = string;
 
 /**
  * 楽曲名
@@ -3306,6 +3385,10 @@ export type SongServiceSearchSongsData = {
         title?: string;
         type?: SongSearchTypeValue;
         is_display?: boolean;
+        /**
+         * このタグが付いた楽曲だけに絞り込む
+         */
+        tag_id?: TagId;
         sort?: SongSearchSortBy;
         order?: SortOrder;
         page?: Page;
@@ -3504,6 +3587,300 @@ export type SongServiceUpdateSongResponses = {
 };
 
 export type SongServiceUpdateSongResponse = SongServiceUpdateSongResponses[keyof SongServiceUpdateSongResponses];
+
+export type TagServiceListTagsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/tags';
+};
+
+export type TagServiceListTagsErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type TagServiceListTagsError = TagServiceListTagsErrors[keyof TagServiceListTagsErrors];
+
+export type TagServiceListTagsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: TagListResponse;
+};
+
+export type TagServiceListTagsResponse = TagServiceListTagsResponses[keyof TagServiceListTagsResponses];
+
+export type TagServiceCreateTagData = {
+    body: TagCreateRequest;
+    path?: never;
+    query?: never;
+    url: '/tags';
+};
+
+export type TagServiceCreateTagErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type TagServiceCreateTagError = TagServiceCreateTagErrors[keyof TagServiceCreateTagErrors];
+
+export type TagServiceCreateTagResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: TagCreateResponse;
+};
+
+export type TagServiceCreateTagResponse = TagServiceCreateTagResponses[keyof TagServiceCreateTagResponses];
+
+export type TagServiceSearchTagsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        name?: string;
+        sort?: TagSearchSortBy;
+        order?: SortOrder;
+        page?: Page;
+        per_page?: PerPage;
+    };
+    url: '/tags/search';
+};
+
+export type TagServiceSearchTagsErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type TagServiceSearchTagsError = TagServiceSearchTagsErrors[keyof TagServiceSearchTagsErrors];
+
+export type TagServiceSearchTagsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: TagSearchResponse;
+};
+
+export type TagServiceSearchTagsResponse = TagServiceSearchTagsResponses[keyof TagServiceSearchTagsResponses];
+
+export type TagServiceDeleteTagData = {
+    body?: never;
+    path: {
+        tagId: TagId;
+    };
+    query?: never;
+    url: '/tags/{tagId}';
+};
+
+export type TagServiceDeleteTagErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type TagServiceDeleteTagError = TagServiceDeleteTagErrors[keyof TagServiceDeleteTagErrors];
+
+export type TagServiceDeleteTagResponses = {
+    /**
+     * There is no content to send for this request, but the headers may be useful.
+     */
+    204: void;
+};
+
+export type TagServiceDeleteTagResponse = TagServiceDeleteTagResponses[keyof TagServiceDeleteTagResponses];
+
+export type TagServiceGetTagData = {
+    body?: never;
+    path: {
+        tagId: TagId;
+    };
+    query?: never;
+    url: '/tags/{tagId}';
+};
+
+export type TagServiceGetTagErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type TagServiceGetTagError = TagServiceGetTagErrors[keyof TagServiceGetTagErrors];
+
+export type TagServiceGetTagResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: TagGetResponse;
+};
+
+export type TagServiceGetTagResponse = TagServiceGetTagResponses[keyof TagServiceGetTagResponses];
+
+export type TagServiceUpdateTagData = {
+    body: TagUpdateRequest;
+    path: {
+        tagId: TagId;
+    };
+    query?: never;
+    url: '/tags/{tagId}';
+};
+
+export type TagServiceUpdateTagErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type TagServiceUpdateTagError = TagServiceUpdateTagErrors[keyof TagServiceUpdateTagErrors];
+
+export type TagServiceUpdateTagResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: TagUpdateResponse;
+};
+
+export type TagServiceUpdateTagResponse = TagServiceUpdateTagResponses[keyof TagServiceUpdateTagResponses];
 
 export type VenueServiceCreateVenueData = {
     body: VenueCreateRequest;

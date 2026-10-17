@@ -21,6 +21,8 @@ variable "table_schemas" {
     "file://schemas/event-setlist-item-performances.my.hcl",
     "file://schemas/songs.my.hcl",
     "file://schemas/media.my.hcl",
+    "file://schemas/tags.my.hcl",
+    "file://schemas/song-taggings.my.hcl",
     "file://schemas/song-persons.my.hcl",
     "file://schemas/song-media-links.my.hcl",
     "file://schemas/release-groups.my.hcl",

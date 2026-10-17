@@ -61,6 +61,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                 SongType::Cover->value,
                 false,
                 2,
+                [],
                 [
                     ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 1],
                     ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 2],
@@ -112,6 +113,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     SongType::Original->value,
                     true,
                     1,
+                    [],
                     [],
                 ),
             );

@@ -11,6 +11,7 @@ use Person\Infrastructures\PersonRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
 use Song\Route\SongRouteMap;
+use Tag\Infrastructures\TagRepository;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -27,6 +28,9 @@ class CreateSongTest extends DatabaseTestCase
         $personRepo->save($person1 = $this->createPerson($this->generateUuid(), 'テスト作詞者', 1));
         $personRepo->save($person2 = $this->createPerson($this->generateUuid(), 'テスト作曲者', 1));
         $personRepo->save($person3 = $this->createPerson($this->generateUuid(), 'テスト編曲者', 1));
+        $tagRepo = $this->app->make(TagRepository::class);
+        $tagRepo->save($tag1 = $this->createTag($this->generateUuid(), 'タグA', 10));
+        $tagRepo->save($tag2 = $this->createTag($this->generateUuid(), 'タグB', 20));
         $mediaRepo = $this->app->make(MediaRepository::class);
         $mediaRepo->save($media = $this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true));
 
@@ -42,6 +46,10 @@ class CreateSongTest extends DatabaseTestCase
                     ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
                     ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 2],
                     ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 3],
+                ],
+                'tags' => [
+                    ['tagId' => $tag2->tagId->value],
+                    ['tagId' => $tag1->tagId->value],
                 ],
                 'media' => [
                     ['mediaId' => $media->mediaId->value, 'orderNo' => 1],
@@ -76,6 +84,13 @@ class CreateSongTest extends DatabaseTestCase
                                 'role' => 3,
                                 'orderNo' => 3,
                             ]])
+                            ->where('tags', [[
+                                'tagId' => $tag1->tagId->value,
+                                'name' => $tag1->name->value,
+                            ], [
+                                'tagId' => $tag2->tagId->value,
+                                'name' => $tag2->name->value,
+                            ]])
                             ->where('media', [[
                                 'mediaId' => $media->mediaId->value,
                                 'title' => $media->title->value,
@@ -101,6 +116,7 @@ class CreateSongTest extends DatabaseTestCase
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'persons' => [],
+                'tags' => [],
                 'media' => [],
             ])->assertStatus(200)
             ->assertJsonPath('song.lyricsLink', null)
@@ -119,9 +135,55 @@ class CreateSongTest extends DatabaseTestCase
                 'type' => SongType::Guest->value,
                 'isDisplay' => true,
                 'persons' => [],
+                'tags' => [],
                 'media' => [],
             ])->assertStatus(200)
             ->assertJsonPath('song.type', SongType::Guest->value);
+    }
+
+    #[Test]
+    public function createFailsWithNotExistsTag(): void
+    {
+        $this->withAuth()
+            ->postJson(route(SongRouteMap::Create), [
+                'title' => 'テスト楽曲',
+                'description' => 'テスト楽曲説明',
+                'note' => '',
+                'lyricsLink' => null,
+                'type' => SongType::Original->value,
+                'isDisplay' => true,
+                'persons' => [],
+                'tags' => [['tagId' => $this->generateUuid()]],
+                'media' => [],
+            ])->assertStatus(400);
+    }
+
+    #[Test]
+    public function createFailsWithDuplicateTag(): void
+    {
+        $tagRepo = $this->app->make(TagRepository::class);
+        $tagRepo->save($tag = $this->createTag($this->generateUuid(), 'タグA', 10));
+
+        $this->withAuth()
+            ->postJson(route(SongRouteMap::Create), [
+                'title' => 'テスト楽曲',
+                'description' => 'テスト楽曲説明',
+                'note' => '',
+                'lyricsLink' => null,
+                'type' => SongType::Original->value,
+                'isDisplay' => true,
+                'persons' => [],
+                'tags' => [
+                    ['tagId' => $tag->tagId->value],
+                    ['tagId' => $tag->tagId->value],
+                ],
+                'media' => [],
+            ])->assertStatus(400)
+            ->assertJson(
+                static fn (AssertableJson $json) => $json
+                    ->where('code', 'business_rule_violation')
+                    ->where('message', '同じタグを複数指定することはできません。'),
+            );
     }
 
     #[Test]
@@ -136,6 +198,7 @@ class CreateSongTest extends DatabaseTestCase
                 'type' => 0,
                 'isDisplay' => true,
                 'persons' => [],
+                'tags' => [],
                 'media' => [],
             ])->assertStatus(422)
             ->assertJson(

@@ -9,6 +9,7 @@ use Tools\Arkitect\ComponentMaps\MediaComponent;
 use Tools\Arkitect\ComponentMaps\PersonComponent;
 use Tools\Arkitect\ComponentMaps\SongComponent;
 use Tools\Arkitect\ComponentMaps\SupportComponent;
+use Tools\Arkitect\ComponentMaps\TagComponent;
 use Tools\Arkitect\ComponentMaps\VenueComponent;
 use Tools\Arkitect\Define;
 
@@ -114,6 +115,28 @@ return [
         LibraryComponent::ResultType,
     ]),
 
+    new Define(TagComponent::Domain, [
+        TagComponent::Domain,
+        SupportComponent::Domain,
+        SupportComponent::Contracts,
+        SupportComponent::Optional,
+        LibraryComponent::ResultType,
+    ]),
+    new Define(TagComponent::Query, [
+        TagComponent::Domain,
+    ]),
+    new Define(TagComponent::UseCase, [
+        TagComponent::Domain,
+        TagComponent::Query,
+        AdminUserComponent::Domain,
+        AuthComponent::Domain,
+        SupportComponent::Contracts,
+        SupportComponent::Domain,
+        SupportComponent::Optional,
+        SupportComponent::UseCase,
+        LibraryComponent::ResultType,
+    ]),
+
     new Define(MediaComponent::Domain, [
         MediaComponent::Domain,
         LibraryComponent::DateType,
@@ -127,6 +150,7 @@ return [
         SongComponent::Domain,
         MediaComponent::Domain,
         PersonComponent::Domain,
+        TagComponent::Domain,
         SupportComponent::Domain,
         SupportComponent::Contracts,
         SupportComponent::Collection,
@@ -142,11 +166,13 @@ return [
         SongComponent::Domain,
         MediaComponent::Domain,
         PersonComponent::Domain,
+        TagComponent::Domain,
     ]),
     new Define(SongComponent::UseCase, [
         SongComponent::Domain,
         SongComponent::Query,
         SongComponent::Assemble,
+        TagComponent::Domain,
         AdminUserComponent::Domain,
         AuthComponent::Domain,
         SupportComponent::Contracts,

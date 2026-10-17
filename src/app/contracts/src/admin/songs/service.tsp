@@ -2,6 +2,7 @@ import "@typespec/http";
 import "../../shared";
 import "../../packages/song";
 import "../auth";
+import "../tags";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Song;
@@ -42,6 +43,11 @@ interface SongService {
     @query title?: string,
     @query type?: SongSearchTypeValue,
     @query("is_display") isDisplay?: boolean,
+
+    @doc("このタグが付いた楽曲だけに絞り込む")
+    @query("tag_id")
+    tagId?: tagId,
+
     @query sort?: SongSearchSortBy = SongSearchSortBy.orderNo,
     @query order?: SortOrder = SortOrder.asc,
     @query page?: page = 1,

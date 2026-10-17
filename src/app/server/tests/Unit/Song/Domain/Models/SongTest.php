@@ -62,6 +62,7 @@ class SongTest extends TestCase
             $type->value,
             $isDisplay,
             $orderNo,
+            [],
             [
                 ['personId' => 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'role' => 1, 'orderNo' => 1],
                 ['personId' => 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'role' => 2, 'orderNo' => 2],
