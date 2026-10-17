@@ -1,6 +1,6 @@
 # Event Spec
 
-関連: ADR-0015 (画像)、ADR-0020 (Media)、ADR-0021 (公開 read model)、ADR-0022 (監査)、ADR-0023 (Person)、ADR-0025 (Venue)、ADR-0026 (Event / Activity 境界)、ADR-0027 (Event の日付精度)
+関連: ADR-0015 (画像)、ADR-0020 (Media)、ADR-0021 (公開 read model)、ADR-0022 (監査)、ADR-0023 (Person)、ADR-0025 (Venue)、ADR-0026 (Event / Activity 境界)、ADR-0027 (Event の日付精度)、ADR-0036 / ADR-0037 (タグ)
 
 ## 用語
 
@@ -28,7 +28,8 @@
 - Event は複数の Release (版) を関連リリースとして関連づけられる。リンクの所有は Event 側
   同じ作品の通常盤と限定盤のように、Event を収録した版ごとに関連づける
   Admin はリリースグループのタイトルで検索し、傘下の版から選ぶ
-- Event には複数の Tag を付けられる。タグ付けの所有は Event 側で、重複は不可。並びは Tag の表示順で、Viewer には出さない
+- Event には複数の Tag を付けられる。タグ付けの所有は Event 側で、重複は不可。並びは Tag の表示順
+  Viewer では item に Tag が載り、イベント一覧を Tag で絞り込める。詳細は `tag.md`
 - Postponed の Event は延期先 Event を参照しない。延期後の開催は別 Event として登録する
 - SongPerformance はすべての EventType に 0 件以上登録でき、必ず 1 件の Song を参照する
   同じ Event で同じ Song を複数回披露した場合も別 SongPerformance とする

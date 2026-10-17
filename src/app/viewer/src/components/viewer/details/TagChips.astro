@@ -1,0 +1,23 @@
+---
+import { tagFilterHref, type Tag } from '../../../features/tags/tags';
+
+interface Props {
+  tags: Tag[];
+  // タグを選んだ状態で開く、同じ種類の一覧のパス
+  listPath: string;
+}
+
+const { tags, listPath } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <ul class="tag-chips" aria-label="タグ">
+    {tags.map((tag) => (
+      <li>
+        <a class="pill tag-chip" href={tagFilterHref(listPath, tag.tagId)}>
+          {tag.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

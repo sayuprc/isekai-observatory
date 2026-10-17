@@ -31,13 +31,27 @@ class ListReleaseGroupTest extends DatabaseTestCase
         $hiddenReleaseId = $this->generateUuid();
         $hiddenGroupId = $this->generateUuid();
         $emptyGroupId = $this->generateUuid();
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
 
+        // タグは作成順ではなく表示順で並ぶ
+        $this->storeTags(
+            $this->createTag($tagIdSecond, 'シリーズB', 20),
+            $this->createTag($tagIdFirst, 'シリーズA', 10),
+        );
         $this->storeSongs(
             $this->createSong($visibleSongId, '公開楽曲', '説明', SongType::Original, true, 10),
             $this->createSong($hiddenSongId, '非公開楽曲', '説明', SongType::Original, false, 20),
         );
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true, '1st アルバム'),
+            $this->createReleaseGroup(
+                $releaseGroupId,
+                '観測された春',
+                ReleaseGroupType::Album,
+                true,
+                '1st アルバム',
+                tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
+            ),
             $this->createReleaseGroup($hiddenGroupId, '非公開グループ', ReleaseGroupType::Single, false),
             $this->createReleaseGroup($emptyGroupId, '公開リリース無しグループ', ReleaseGroupType::Ep, true),
         );
@@ -178,6 +192,10 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                     ],
                                 ],
                             ],
+                        ],
+                        'tags' => [
+                            ['tagId' => $tagIdFirst, 'name' => 'シリーズA', 'orderNo' => 10],
+                            ['tagId' => $tagIdSecond, 'name' => 'シリーズB', 'orderNo' => 20],
                         ],
                     ],
                 ],

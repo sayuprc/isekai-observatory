@@ -10,12 +10,13 @@ use Event\Domain\Models\EventType;
 readonly class EventListItem
 {
     /**
-     * @param array<EventVenueSummary>       $venues
-     * @param array<EventMediaSummary>       $media        公開 Media のみ
-     * @param array<EventReleaseSummary>     $releases     リリースとリリースグループがともに公開のもののみ
-     * @param array<EventSourceSummary>      $sources
-     * @param array<EventPerformanceSummary> $performances
-     * @param array<EventSetlistItemSummary> $setlist
+     * @param array<EventVenueSummary>                                $venues
+     * @param array<EventMediaSummary>                                $media        公開 Media のみ
+     * @param array<EventReleaseSummary>                              $releases     リリースとリリースグループがともに公開のもののみ
+     * @param array<EventSourceSummary>                               $sources
+     * @param array<EventPerformanceSummary>                          $performances
+     * @param array<EventSetlistItemSummary>                          $setlist
+     * @param array<array{tagId: string, name: string, orderNo: int}> $tags         タグの表示順
      */
     public function __construct(
         public string $eventId,
@@ -31,6 +32,7 @@ readonly class EventListItem
         public array $sources,
         public array $performances,
         public array $setlist,
+        public array $tags,
     ) {
     }
 }

@@ -14,10 +14,11 @@
 - Viewer: 公開楽曲の cursor 一覧 (個別 get は持たない)
   item には説明・種別・作詞/作曲/編曲の名前・紐づく公開 Media・収録先の公開 ReleaseGroup 要約・公開 Event での披露履歴が載る
   非公開 Event の SongPerformance は披露履歴に件数も含めて出さない
+- Viewer: item に Tag が載り、楽曲一覧を Tag で絞り込める。詳細は `tag.md`
 
 ## できないこと
 
-- Viewer に Tag・`lyricsLink`・`note`・`isDisplay`・管理用 shape を出さない
+- Viewer に `lyricsLink`・`note`・`isDisplay`・管理用 shape を出さない
 - 人物役割は song 文脈の Lyricist / Composer / Arranger のみ。Creator / Performer 互換は持たない
 - 収録トラックまたは SongPerformance から参照されている楽曲は削除できない
 - 非公開 Song が公開 Event から参照されても、Viewer の Song 一覧・ページは公開しない

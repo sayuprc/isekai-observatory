@@ -27,7 +27,7 @@ applies_to: [api, admin]
 - タグは独立した `Tag` パッケージに置き、ほかのコンテキストからは `TagId` で参照する
 - タグ付けは付けられる側の集約が持ち、テーブルも対象ごとに分ける (`song_taggings`、`event_taggings`、`release_group_taggings`、`media_taggings`)
 - 対象を削除するとタグ付けも消え (CASCADE)、使われているタグは削除できない (RESTRICT)
-- タグは管理用とし、読者には見せない
+- タグは管理用とし、読者には見せない (ADR-0037 で置き換え、すべてのタグを閲覧サイトにも出す)
 - メディアのタグ付けは ADR-0020 の 6 フィールドと MediaType の 1 軸に数えない。契約上の Media モデルには含めず、メディアの取得・作成・更新のレスポンスに並べて返す
 
 ## Consequences

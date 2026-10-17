@@ -264,6 +264,25 @@ span.detail-song-list-song-title {
   display: none;
 }
 
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+.tag-chip {
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.tag-chip:hover {
+  color: var(--accent-strong);
+  border-color: var(--accent);
+}
+
 .rel-main {
   overflow: hidden;
   text-overflow: ellipsis;

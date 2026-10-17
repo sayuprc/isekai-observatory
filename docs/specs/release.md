@@ -1,6 +1,6 @@
 # Release Spec
 
-関連: ADR-0015 (画像)、ADR-0019 (階層と formats)、ADR-0034 (代表色を持たない)
+関連: ADR-0015 (画像)、ADR-0019 (階層と formats)、ADR-0034 (代表色を持たない)、ADR-0036 / ADR-0037 (タグ)
 
 ## 用語
 
@@ -16,7 +16,8 @@
 ## できること
 
 - Admin: ReleaseGroup / Release の CRUD。一覧・検索の主語は ReleaseGroup
-- ReleaseGroup には複数の Tag を付けられる。タグ付けの所有は ReleaseGroup 側で、重複は不可。並びは Tag の表示順で、Viewer には出さない。Release (版) には付けない
+- ReleaseGroup には複数の Tag を付けられる。タグ付けの所有は ReleaseGroup 側で、重複は不可。並びは Tag の表示順。Release (版) には付けない
+  Viewer では Group の item に Tag が載り、リリース一覧を Tag で絞り込める。詳細は `tag.md`
 - Admin: Event のセットリスト順に楽曲披露を Track として取り込める
   メドレーの項目は 1 つのメドレー Track にまとめ、項目の表示名をメドレーの表示名にする
   セットリスト外の楽曲披露は末尾に並べ、表示名だけの項目はタイトルのみの Track として選んだときだけ取り込む
