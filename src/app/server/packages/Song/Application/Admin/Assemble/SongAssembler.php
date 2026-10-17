@@ -10,11 +10,14 @@ use Person\Domain\Models\PersonRepositoryInterface;
 use Song\Domain\Models\Media\SongMediaLink;
 use Song\Domain\Models\Persons\SongPerson;
 use Song\Domain\Models\Song;
+use Song\Domain\Models\Tags\TagReference;
+use Tag\Domain\Models\TagRepositoryInterface;
 
 class SongAssembler
 {
     public function __construct(
         private readonly PersonRepositoryInterface $personRepository,
+        private readonly TagRepositoryInterface $tagRepository,
         private readonly MediaRepositoryInterface $mediaRepository,
     ) {
     }
@@ -31,6 +34,19 @@ class SongAssembler
             $persons = $this->personRepository->findByIds(...array_values($allPersonIds));
             foreach ($persons as $person) {
                 $personMap[$person->personId->value] = $person;
+            }
+        }
+
+        $allTagIds = [];
+        foreach ($song->tags as $tag) {
+            $allTagIds[$tag->tagId->value] = $tag->tagId;
+        }
+
+        $tagMap = [];
+        if (! empty($allTagIds)) {
+            $tags = $this->tagRepository->findByIds(...array_values($allTagIds));
+            foreach ($tags as $tag) {
+                $tagMap[$tag->tagId->value] = $tag;
             }
         }
 
@@ -59,6 +75,16 @@ class SongAssembler
                 $person->orderNo->value,
             );
         };
+        $toAssembledTag = static function (TagReference $tag) use ($tagMap): AssembledTag {
+            $found = $tagMap[$tag->tagId->value] ?? null;
+            // Song Entity が成立している時点で $found が null になることはない
+            assert($found !== null);
+
+            return new AssembledTag(
+                $tag->tagId->value,
+                $found->name->value,
+            );
+        };
         $toAssembledMedia = static function (SongMediaLink $link) use ($mediaMap): AssembledMedia {
             $found = $mediaMap[$link->mediaId->value] ?? null;
             assert($found instanceof Media);
@@ -84,6 +110,7 @@ class SongAssembler
             $song->isDisplay,
             $song->orderNo->value,
             $song->persons->toGeneric()->map($toAssembled)->toArray(),
+            $song->tags->toGeneric()->map($toAssembledTag)->toArray(),
             $song->media->toGeneric()->map($toAssembledMedia)->toArray(),
         );
     }

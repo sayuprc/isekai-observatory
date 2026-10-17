@@ -76,6 +76,11 @@ enum AuditTargetType: string
     case SONG = 'Song';
 
     /**
+     * タグ
+     */
+    case TAG = 'Tag';
+
+    /**
      * 開催先
      */
     case VENUE = 'Venue';

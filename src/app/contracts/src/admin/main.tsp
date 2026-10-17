@@ -12,6 +12,7 @@ import "./persons";
 import "./person-groups";
 import "./releases";
 import "./songs";
+import "./tags";
 import "./venues";
 
 using Http;

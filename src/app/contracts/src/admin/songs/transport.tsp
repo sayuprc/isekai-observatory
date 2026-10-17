@@ -23,6 +23,7 @@ model SongCreateRequest {
   type: SongTypeValue;
   isDisplay: boolean;
   persons: RequestSongPerson[];
+  tags: RequestSongTag[];
   media: RequestSongMediaLink[];
 }
 
@@ -39,6 +40,7 @@ model SongUpdateRequest {
   isDisplay: boolean;
   orderNo: orderNo;
   persons: RequestSongPerson[];
+  tags: RequestSongTag[];
   media: RequestSongMediaLink[];
 }
 
@@ -47,3 +49,5 @@ model SongUpdateResponse {
 }
 
 model RequestSongPerson is PickProperties<SongPerson, "personId" | "role" | "orderNo">;
+
+model RequestSongTag is PickProperties<Tag, "tagId">;

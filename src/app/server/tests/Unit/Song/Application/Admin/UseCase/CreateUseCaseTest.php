@@ -75,7 +75,7 @@ class CreateUseCaseTest extends TestCase
             ->once();
 
         $this->service->shouldReceive('prepareForCreate')
-            ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $persons, [])
+            ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
             ->andReturn(
                 $song = $this->createSong(
                     $songId,
@@ -126,6 +126,7 @@ class CreateUseCaseTest extends TestCase
                 $lyricsLink,
                 $typeValue,
                 $isDisplay,
+                [],
                 $persons,
             ),
         );
@@ -152,7 +153,7 @@ class CreateUseCaseTest extends TestCase
             ->once();
 
         $this->service->shouldReceive('prepareForCreate')
-            ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $persons, [])
+            ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
             ->andThrow(new BusinessRuleViolationException('検証エラー'))
             ->once();
 
@@ -166,6 +167,7 @@ class CreateUseCaseTest extends TestCase
                 $lyricsLink,
                 $typeValue,
                 $isDisplay,
+                [],
                 $persons,
             ),
         );

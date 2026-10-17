@@ -44,9 +44,10 @@ mock.module('../../generated', () => ({
   },
   songServiceCreateSong: async () => ok({}),
   songServiceDeleteSong: async () => ok({}),
-  songServiceGetSong: async () => ok({ song: { songId: 'song-id', persons: [], media: [] } }),
+  songServiceGetSong: async () => ok({ song: { songId: 'song-id', persons: [], tags: [], media: [] } }),
   songServiceSearchSongs: async () => ok({ songs: [], maxPage: 1 }),
   songServiceUpdateSong: async () => ok({}),
+  tagServiceListTags: async () => ok({ tags: [] }),
 }));
 
 const { songs } = await import('./songs');

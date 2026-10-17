@@ -63,6 +63,9 @@ enum AuditTargetType {
   @doc("楽曲")
   song: "Song",
 
+  @doc("タグ")
+  tag: "Tag",
+
   @doc("開催先")
   venue: "Venue",
 

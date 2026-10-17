@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongType;
 use Song\Infrastructures\SongRepository;
+use Tag\Infrastructures\TagRepository;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
@@ -150,6 +151,37 @@ class SongRepositoryTest extends DatabaseTestCase
 
         $this->assertNotNull($found);
         $this->assertEquals($song, $found);
+    }
+
+    #[Test]
+    public function findSortsTagsByTagMasterOrder(): void
+    {
+        $tagRepository = $this->app->make(TagRepository::class);
+        $tagA = $this->createTag($this->generateUuid(), 'タグA', 20);
+        $tagB = $this->createTag($this->generateUuid(), 'タグB', 10);
+        $tagRepository->save($tagA);
+        $tagRepository->save($tagB);
+
+        $song = $this->createSong(
+            $this->generateUuid(),
+            '曲名',
+            '説明',
+            SongType::Original,
+            true,
+            1,
+            [
+                ['tagId' => $tagA->tagId->value],
+                ['tagId' => $tagB->tagId->value],
+            ],
+            [],
+        );
+
+        $this->getInstance()->save($song);
+        $found = $this->getInstance()->find($song->songId);
+
+        $this->assertNotNull($found);
+        $this->assertSame($tagB->tagId->value, $found->tags[0]->tagId->value);
+        $this->assertSame($tagA->tagId->value, $found->tags[1]->tagId->value);
     }
 
     #[Test]

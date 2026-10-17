@@ -38,6 +38,7 @@ readonly class CreateUseCase
                 $inputData->lyricsLink,
                 $inputData->type,
                 $inputData->isDisplay,
+                $inputData->tags,
                 $inputData->persons,
                 $inputData->media,
             );

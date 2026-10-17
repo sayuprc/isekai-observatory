@@ -16,6 +16,7 @@ use Song\Domain\Models\SongType;
 use Song\Domain\Services\SongIntegrityService;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Tag\Domain\Models\TagRepositoryInterface;
 use Tests\Support\Domain\EntityFactory;
 use Tests\TestCase;
 
@@ -29,6 +30,8 @@ class SongIntegrityServiceTest extends TestCase
 
     private MockInterface&SongRepositoryInterface $songRepository;
 
+    private MockInterface&TagRepositoryInterface $tagRepository;
+
     private MediaRepositoryInterface&MockInterface $mediaRepository;
 
     #[Override]
@@ -39,6 +42,7 @@ class SongIntegrityServiceTest extends TestCase
         $this->generator = Mockery::mock(UuidGeneratorInterface::class);
         $this->personRepository = Mockery::mock(PersonRepositoryInterface::class);
         $this->songRepository = Mockery::mock(SongRepositoryInterface::class);
+        $this->tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $this->mediaRepository = Mockery::mock(MediaRepositoryInterface::class);
     }
 
@@ -105,6 +109,7 @@ class SongIntegrityServiceTest extends TestCase
             null,
             $type,
             $isDisplay,
+            [],
             $persons,
             [],
         );
@@ -151,6 +156,7 @@ class SongIntegrityServiceTest extends TestCase
             null,
             $type,
             $isDisplay,
+            [],
             $persons,
             [],
         );
@@ -210,6 +216,7 @@ class SongIntegrityServiceTest extends TestCase
             $type,
             $isDisplay,
             $orderNo,
+            [],
             $persons,
             [],
         );
@@ -260,6 +267,7 @@ class SongIntegrityServiceTest extends TestCase
             $type,
             $isDisplay,
             $orderNo,
+            [],
             $persons,
             [],
         );
@@ -271,6 +279,7 @@ class SongIntegrityServiceTest extends TestCase
             $this->generator,
             $this->songRepository,
             $this->personRepository,
+            $this->tagRepository,
             $this->mediaRepository,
         );
     }

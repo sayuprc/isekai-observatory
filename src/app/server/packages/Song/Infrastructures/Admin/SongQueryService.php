@@ -84,6 +84,17 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $query = $query->where('is_display', '=', $criteria->isDisplay->get());
         }
 
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'song_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['song_id'])
+                    ->from('song_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
+        }
+
         return $query;
     }
 

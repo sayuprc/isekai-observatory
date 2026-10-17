@@ -12,6 +12,7 @@ import { recoveryCodes } from './routes/recovery-codes';
 import { releaseGroups } from './routes/release-groups';
 import { releases } from './routes/releases';
 import { songs } from './routes/songs';
+import { tags } from './routes/tags';
 import { venues } from './routes/venues';
 
 export const app = new Elysia({ prefix: '/api', normalize: 'typebox' })
@@ -37,6 +38,7 @@ export const app = new Elysia({ prefix: '/api', normalize: 'typebox' })
   .use(recoveryCodes)
   .use(releaseGroups)
   .use(releases)
+  .use(tags)
   .use(songs)
   .use(venues)
   .use(events);

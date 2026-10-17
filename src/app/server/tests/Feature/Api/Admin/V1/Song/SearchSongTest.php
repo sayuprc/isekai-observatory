@@ -157,6 +157,30 @@ class SearchSongTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function searchByTagId(): void
+    {
+        $tagId = $this->generateUuid();
+        $taggedSongId = $this->generateUuid();
+
+        $this->storeTags(
+            $this->createTag($tagId, 'タグA', 10),
+            $this->createTag($otherTagId = $this->generateUuid(), 'タグB', 20),
+        );
+        $this->storeSongs(
+            $this->createSong($taggedSongId, 'タグ付き楽曲', '説明', SongType::Original, true, 1, [['tagId' => $tagId]]),
+            $this->createSong($this->generateUuid(), '別タグの楽曲', '説明', SongType::Original, true, 2, [['tagId' => $otherTagId]]),
+            $this->createSong($this->generateUuid(), 'タグなし楽曲', '説明', SongType::Original, true, 3),
+        );
+
+        $this->withAuth()
+            ->get(route(SongRouteMap::Search, ['tag_id' => $tagId]))
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'songs')
+            ->assertJsonPath('songs.0.songId', $taggedSongId)
+            ->assertJsonPath('maxPage', 1);
+    }
+
+    #[Test]
     public function searchByTitleNotFound(): void
     {
         $uuid = $this->generateUuid();

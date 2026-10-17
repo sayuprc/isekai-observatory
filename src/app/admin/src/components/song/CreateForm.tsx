@@ -1,5 +1,5 @@
 import { createResource, Match, Switch } from 'solid-js';
-import type { Media } from '../../generated';
+import type { Media, Tag } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
@@ -13,7 +13,7 @@ import { FormError } from '../FormError';
 import { createSongForm } from './song-form';
 import { SONG_TABS, SongFormFields, SongTabList } from './SongFormFields';
 
-type CreateFormData = { media: Media[] };
+type CreateFormData = { tags: Tag[]; media: Media[] };
 
 interface CreateFormProps {
   data: CreateFormData;
@@ -109,7 +109,13 @@ export const CreateForm = (props: CreateFormProps) => {
       />
       <FormError message={formError()} onClose={clearErrors} />
       <form ref={bindForm} id="song-form" onKeyDown={preventImplicitSubmit} onSubmit={handleSubmit}>
-        <SongFormFields form={form} tab={tab()} getFieldError={getFieldError} withOrderNo={false} />
+        <SongFormFields
+          form={form}
+          tab={tab()}
+          availableTags={props.data.tags}
+          getFieldError={getFieldError}
+          withOrderNo={false}
+        />
       </form>
     </>
   );

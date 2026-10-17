@@ -54,9 +54,13 @@ use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongType;
+use Song\Domain\Models\Tags\TagReferences;
 use Song\Domain\Models\Title;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\Tag;
+use Tag\Domain\Models\TagId;
+use Tag\Domain\Models\TagName;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueId;
 use Venue\Domain\Models\VenueKind;
@@ -169,6 +173,7 @@ trait EntityFactory
             $type = $lyricsLinkOrType;
             $isDisplay = is_bool($typeOrIsDisplay) ? $typeOrIsDisplay : true;
             $orderNo = is_int($isDisplayOrOrderNo) ? $isDisplayOrOrderNo : 1;
+            $tags = is_array($orderNoOrTags) ? $orderNoOrTags : [];
             $persons = $this->normalizeSongPersons(
                 is_array($tagsOrPersons) ? $tagsOrPersons : [],
                 is_array($personsOrLyricists) ? $personsOrLyricists : [],
@@ -186,6 +191,7 @@ trait EntityFactory
             $type = $typeOrIsDisplay;
             $isDisplay = is_bool($isDisplayOrOrderNo) ? $isDisplayOrOrderNo : true;
             $orderNo = is_int($orderNoOrTags) ? $orderNoOrTags : 1;
+            $tags = is_array($tagsOrPersons) ? $tagsOrPersons : [];
             $persons = $this->normalizeSongPersons(
                 is_array($personsOrLyricists) ? $personsOrLyricists : [],
                 is_array($lyricistsOrComposers) ? $lyricistsOrComposers : [],
@@ -211,6 +217,7 @@ trait EntityFactory
             $type,
             $isDisplay,
             new OrderNo($orderNo),
+            TagReferences::fromArray($tags),
             SongPersons::fromArray($persons),
             SongMediaLinks::fromArray(is_array($media) ? $media : []),
         );
@@ -264,6 +271,15 @@ trait EntityFactory
         }
 
         return [];
+    }
+
+    protected function createTag(string $tagId, string $name, int $orderNo): Tag
+    {
+        return new Tag(
+            new TagId($tagId),
+            new TagName($name),
+            new OrderNo($orderNo),
+        );
     }
 
     protected function createMedia(

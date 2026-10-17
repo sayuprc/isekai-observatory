@@ -15,6 +15,7 @@ const TARGET_TYPE_LABEL: Record<string, string> = {
   Release: 'リリース',
   ReleaseGroup: 'リリースグループ',
   Song: '楽曲',
+  Tag: 'タグ',
   Venue: '開催先',
   Event: 'イベント',
 } satisfies Record<AuditTargetType, string>;

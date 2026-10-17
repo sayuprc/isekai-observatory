@@ -49,6 +49,12 @@ use App\Http\Controllers\Api\Admin\V1\Song\DeleteSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\GetSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\SearchSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\UpdateSongController;
+use App\Http\Controllers\Api\Admin\V1\Tag\CreateTagController;
+use App\Http\Controllers\Api\Admin\V1\Tag\DeleteTagController;
+use App\Http\Controllers\Api\Admin\V1\Tag\GetTagController;
+use App\Http\Controllers\Api\Admin\V1\Tag\ListTagController;
+use App\Http\Controllers\Api\Admin\V1\Tag\SearchTagController;
+use App\Http\Controllers\Api\Admin\V1\Tag\UpdateTagController;
 use App\Http\Controllers\Api\Admin\V1\Venue\CreateVenueController;
 use App\Http\Controllers\Api\Admin\V1\Venue\DeleteVenueController;
 use App\Http\Controllers\Api\Admin\V1\Venue\GetVenueController;
@@ -66,6 +72,7 @@ use Release\Route\ReleaseGroupRouteMap;
 use Release\Route\ReleaseRouteMap;
 use Song\Route\SongRouteMap;
 use Support\Route\AuditLogRouteMap;
+use Tag\Route\TagRouteMap;
 use Venue\Route\VenueRouteMap;
 
 Route::middleware(AdminOpenApiValidator::class)->group(static function () {
@@ -165,6 +172,15 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                 Route::prefix('audit-logs')->group(static function () {
                     Route::get('/search', [SearchAuditLogController::class, 'handle'])->name(AuditLogRouteMap::Search);
                     Route::get('/{auditLogId}', [GetAuditLogController::class, 'handle'])->name(AuditLogRouteMap::Get);
+                });
+
+                Route::prefix('tags')->group(static function () {
+                    Route::post('/', [CreateTagController::class, 'handle'])->name(TagRouteMap::Create);
+                    Route::get('/', [ListTagController::class, 'handle'])->name(TagRouteMap::List);
+                    Route::put('/{tagId}', [UpdateTagController::class, 'handle'])->name(TagRouteMap::Update);
+                    Route::delete('/{tagId}', [DeleteTagController::class, 'handle'])->name(TagRouteMap::Delete);
+                    Route::get('/search', [SearchTagController::class, 'handle'])->name(TagRouteMap::Search);
+                    Route::get('/{tagId}', [GetTagController::class, 'handle'])->name(TagRouteMap::Get);
                 });
             });
         });

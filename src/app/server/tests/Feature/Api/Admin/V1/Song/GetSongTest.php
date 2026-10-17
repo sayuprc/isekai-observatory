@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
 use Song\Infrastructures\SongRepository;
 use Song\Route\SongRouteMap;
+use Tag\Infrastructures\TagRepository;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -31,6 +32,9 @@ class GetSongTest extends DatabaseTestCase
         $personRepo->save($lyricist);
         $personRepo->save($composer);
         $personRepo->save($arranger);
+        $tagRepo = $this->app->make(TagRepository::class);
+        $tagRepo->save($tagA = $this->createTag($this->generateUuid(), 'タグA', 20));
+        $tagRepo->save($tagB = $this->createTag($this->generateUuid(), 'タグB', 10));
         $mediaRepo = $this->app->make(MediaRepository::class);
         $mediaRepo->save($media = $this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true));
 
@@ -45,7 +49,10 @@ class GetSongTest extends DatabaseTestCase
                 SongType::Original,
                 true,
                 1,
-                [],
+                [
+                    ['tagId' => $tagA->tagId->value],
+                    ['tagId' => $tagB->tagId->value],
+                ],
                 [
                     ['personId' => $lyricistId, 'role' => 1, 'orderNo' => 1],
                     ['personId' => $composerId, 'role' => 2, 'orderNo' => 2],
@@ -75,6 +82,10 @@ class GetSongTest extends DatabaseTestCase
                         ['personId' => $lyricistId, 'name' => 'テスト作詞者A', 'role' => 1, 'orderNo' => 1],
                         ['personId' => $composerId, 'name' => 'テスト作曲者A', 'role' => 2, 'orderNo' => 2],
                         ['personId' => $arrangerId, 'name' => 'テスト編曲者A', 'role' => 3, 'orderNo' => 3],
+                    ],
+                    'tags' => [
+                        ['tagId' => $tagB->tagId->value, 'name' => 'タグB'],
+                        ['tagId' => $tagA->tagId->value, 'name' => 'タグA'],
                     ],
                     'media' => [
                         [

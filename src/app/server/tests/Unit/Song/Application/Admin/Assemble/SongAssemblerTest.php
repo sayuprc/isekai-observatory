@@ -17,6 +17,7 @@ use Song\Application\Admin\Assemble\SongAssembler;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\SongType;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\TagRepositoryInterface;
 use Tests\Support\Domain\EntityFactory;
 use Tests\TestCase;
 
@@ -26,6 +27,8 @@ class SongAssemblerTest extends TestCase
 
     private MockInterface&PersonRepositoryInterface $personRepository;
 
+    private MockInterface&TagRepositoryInterface $tagRepository;
+
     private MediaRepositoryInterface&MockInterface $mediaRepository;
 
     #[Override]
@@ -34,6 +37,7 @@ class SongAssemblerTest extends TestCase
         parent::setUp();
 
         $this->personRepository = Mockery::mock(PersonRepositoryInterface::class);
+        $this->tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $this->mediaRepository = Mockery::mock(MediaRepositoryInterface::class);
     }
 
@@ -131,6 +135,6 @@ class SongAssemblerTest extends TestCase
 
     private function getInstance(): SongAssembler
     {
-        return new SongAssembler($this->personRepository, $this->mediaRepository);
+        return new SongAssembler($this->personRepository, $this->tagRepository, $this->mediaRepository);
     }
 }

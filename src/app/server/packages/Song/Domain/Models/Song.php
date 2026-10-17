@@ -7,6 +7,7 @@ namespace Song\Domain\Models;
 use Song\Domain\Models\Media\SongMediaLinks;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\Persons\SongPersons;
+use Song\Domain\Models\Tags\TagReferences;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
@@ -21,12 +22,14 @@ readonly class Song
         public SongType $type,
         public bool $isDisplay,
         public OrderNo $orderNo,
+        public TagReferences $tags,
         public SongPersons $persons,
         public SongMediaLinks $media,
     ) {
     }
 
     /**
+     * @param list<array{tagId: string}>                             $tags
      * @param list<array{personId: string, role: int, orderNo: int}> $persons
      * @param list<array{mediaId: string, orderNo: int}>             $media
      */
@@ -39,6 +42,7 @@ readonly class Song
         int $type,
         bool $isDisplay,
         int $orderNo,
+        array $tags,
         array $persons,
         array $media,
     ): self {
@@ -51,13 +55,14 @@ readonly class Song
             SongType::from($type),
             $isDisplay,
             new OrderNo($orderNo),
+            TagReferences::reconstruct($tags),
             SongPersons::reconstruct($persons),
             SongMediaLinks::reconstruct($media),
         );
     }
 
     /**
-     * @return array{song_id: string, title: string, description: string, note: string, lyrics_link: string|null, type: value-of<SongType>, is_display: bool, order_no: int, persons: array<int, array{person_id: string, role: value-of<SongPersonRole>, order_no: int}>, media: array<int, array{media_id: string, order_no: int}>}
+     * @return array{song_id: string, title: string, description: string, note: string, lyrics_link: string|null, type: value-of<SongType>, is_display: bool, order_no: int, persons: array<int, array{person_id: string, role: value-of<SongPersonRole>, order_no: int}>, tags: array<int, array{tag_id: string}>, media: array<int, array{media_id: string, order_no: int}>}
      */
     public function toArray(): array
     {
@@ -71,6 +76,7 @@ readonly class Song
             'is_display' => $this->isDisplay,
             'order_no' => $this->orderNo->value,
             'persons' => $this->persons->toArray(),
+            'tags' => $this->tags->toArray(),
             'media' => $this->media->toArray(),
         ];
     }
