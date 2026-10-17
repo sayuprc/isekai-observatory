@@ -27,6 +27,9 @@ model TagSummary {
 
   @doc("このタグが付いているイベントの件数")
   eventCount: int32;
+
+  @doc("このタグが付いているリリースグループの件数")
+  releaseGroupCount: int32;
 }
 
 @doc("記録に付いたタグ")

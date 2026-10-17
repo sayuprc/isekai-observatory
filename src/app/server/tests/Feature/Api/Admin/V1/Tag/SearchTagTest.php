@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Admin\V1\Tag;
 
 use PHPUnit\Framework\Attributes\Test;
+use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
 use Tag\Route\TagRouteMap;
 use Tests\Feature\Api\Admin\WithAuth;
@@ -45,6 +46,7 @@ class SearchTagTest extends DatabaseTestCase
                         'orderNo' => 1,
                         'songCount' => 0,
                         'eventCount' => 0,
+                        'releaseGroupCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -73,6 +75,7 @@ class SearchTagTest extends DatabaseTestCase
                         'orderNo' => 1,
                         'songCount' => 0,
                         'eventCount' => 0,
+                        'releaseGroupCount' => 0,
                     ],
                 ],
                 'maxPage' => 1,
@@ -128,6 +131,7 @@ class SearchTagTest extends DatabaseTestCase
                         'orderNo' => 1,
                         'songCount' => 0,
                         'eventCount' => 0,
+                        'releaseGroupCount' => 0,
                     ],
                 ],
                 'maxPage' => 2,
@@ -165,5 +169,20 @@ class SearchTagTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonPath('tags.0.songCount', 0)
             ->assertJsonPath('tags.0.eventCount', 2);
+    }
+
+    #[Test]
+    public function returnsReleaseGroupCountTaggedWithEachTag(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグ', 1));
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($this->generateUuid(), '作品1', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]),
+        );
+
+        $this->withAuth()
+            ->get(route(TagRouteMap::Search))
+            ->assertStatus(200)
+            ->assertJsonPath('tags.0.releaseGroupCount', 1);
     }
 }

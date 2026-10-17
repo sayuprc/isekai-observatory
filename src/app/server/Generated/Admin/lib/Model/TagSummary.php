@@ -62,7 +62,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'string',
         'order_no' => 'int',
         'song_count' => 'int',
-        'event_count' => 'int'
+        'event_count' => 'int',
+        'release_group_count' => 'int'
     ];
 
     /**
@@ -77,7 +78,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => null,
         'order_no' => 'int32',
         'song_count' => 'int32',
-        'event_count' => 'int32'
+        'event_count' => 'int32',
+        'release_group_count' => 'int32'
     ];
 
     /**
@@ -90,7 +92,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => false,
         'order_no' => false,
         'song_count' => false,
-        'event_count' => false
+        'event_count' => false,
+        'release_group_count' => false
     ];
 
     /**
@@ -183,7 +186,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'name',
         'order_no' => 'orderNo',
         'song_count' => 'songCount',
-        'event_count' => 'eventCount'
+        'event_count' => 'eventCount',
+        'release_group_count' => 'releaseGroupCount'
     ];
 
     /**
@@ -196,7 +200,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'setName',
         'order_no' => 'setOrderNo',
         'song_count' => 'setSongCount',
-        'event_count' => 'setEventCount'
+        'event_count' => 'setEventCount',
+        'release_group_count' => 'setReleaseGroupCount'
     ];
 
     /**
@@ -209,7 +214,8 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'getName',
         'order_no' => 'getOrderNo',
         'song_count' => 'getSongCount',
-        'event_count' => 'getEventCount'
+        'event_count' => 'getEventCount',
+        'release_group_count' => 'getReleaseGroupCount'
     ];
 
     /**
@@ -274,6 +280,7 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('order_no', $data ?? [], null);
         $this->setIfExists('song_count', $data ?? [], null);
         $this->setIfExists('event_count', $data ?? [], null);
+        $this->setIfExists('release_group_count', $data ?? [], null);
     }
 
     /**
@@ -325,6 +332,9 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['event_count'] === null) {
             $invalidProperties[] = "'event_count' can't be null";
+        }
+        if ($this->container['release_group_count'] === null) {
+            $invalidProperties[] = "'release_group_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -482,6 +492,33 @@ class TagSummary implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable event_count cannot be null');
         }
         $this->container['event_count'] = $event_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets release_group_count
+     *
+     * @return int
+     */
+    public function getReleaseGroupCount()
+    {
+        return $this->container['release_group_count'];
+    }
+
+    /**
+     * Sets release_group_count
+     *
+     * @param int $release_group_count このタグが付いているリリースグループの件数
+     *
+     * @return self
+     */
+    public function setReleaseGroupCount($release_group_count)
+    {
+        if (is_null($release_group_count)) {
+            throw new \InvalidArgumentException('non-nullable release_group_count cannot be null');
+        }
+        $this->container['release_group_count'] = $release_group_count;
 
         return $this;
     }
