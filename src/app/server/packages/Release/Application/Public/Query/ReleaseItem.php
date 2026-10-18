@@ -17,7 +17,6 @@ readonly class ReleaseItem
         public string $name,
         public string $releasedOn,
         public string $description,
-        public string $color,
         public array $formats,
         public array $media,
     ) {

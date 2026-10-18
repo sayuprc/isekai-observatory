@@ -353,7 +353,7 @@ class PersonGroup implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets name
      *
-     * @param string $name name
+     * @param string $name 表示用の名称
      *
      * @return self
      */
