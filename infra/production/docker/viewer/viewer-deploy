@@ -12,12 +12,14 @@ set -euo pipefail
 
 pnpm --filter viewer build
 
-DEPLOY_MESSAGE="production viewer deploy $(date --iso-8601=seconds)"
-
 pnpm --filter viewer run deploy \
   --name "${CLOUDFLARE_WORKER_NAME}" \
   --compatibility-date "$(date -u '+%Y-%m-%d')" \
-  --message "${DEPLOY_MESSAGE}"
+  --message "production viewer deploy $(date --iso-8601=seconds)"
+
+notify-publish <<EOF
+{"action":"viewer.deploy","status":"succeeded","embeds":[{"title":"Viewer のデプロイが成功しました","fields":[{"name":"site_url","value":"${SITE_URL}","inline":true},{"name":"env","value":"production","inline":true}]}]}
+EOF
 
 # Public API は API サーバーへ問い合わせずに配信するため、ここで書き出した静的スナップショットだけを載せる
 pnpm --filter public-api run snapshot
@@ -28,5 +30,5 @@ pnpm --filter public-api run deploy \
   --message "production public-api deploy $(date --iso-8601=seconds)"
 
 notify-publish <<EOF
-{"action":"viewer.deploy","status":"succeeded","embeds":[{"title":"Viewer のデプロイが成功しました","fields":[{"name":"site_url","value":"${SITE_URL}","inline":true},{"name":"env","value":"production","inline":true}]}]}
+{"action":"public-api.deploy","status":"succeeded","embeds":[{"title":"Public API のデプロイが成功しました","fields":[{"name":"worker","value":"${CLOUDFLARE_PUBLIC_API_WORKER_NAME}","inline":true},{"name":"env","value":"production","inline":true}]}]}
 EOF

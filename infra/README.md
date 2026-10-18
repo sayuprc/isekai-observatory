@@ -84,7 +84,7 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 ## 振る舞い (共通)
 
 - Viewer deploy job は runtime env / secret を受け取り、Cloudflare Workers へ deploy する
-- Viewer deploy 成功時は `notify-publish` で通知 JSON を publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
+- Viewer と Public API の deploy 成功時は、それぞれ `notify-publish` で通知 JSON (`viewer.deploy` / `public-api.deploy`) を publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
 - admin-proxy deploy job は Cloud Build が `gcloud run jobs deploy --wait` で image 差し替えと実行完了まで行い、Cloudflare Workers へ deploy する
 - Admin の `PUBLIC_APP_URL` は Cloud Build substitution の `_PUBLIC_APP_URL` を build arg として渡す
 
