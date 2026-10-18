@@ -21,11 +21,12 @@ readonly class EventRepository implements EventRepositoryInterface
 {
     private const string TABLE = 'events';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = [
         'event_id',
         'title',
         'description',
+        'note',
         'type',
         'start_on',
         'end_on',
@@ -62,7 +63,15 @@ readonly class EventRepository implements EventRepositoryInterface
 
         // 共演者とセットリスト項目の披露参照は親の削除で CASCADE されるため、削除対象に含めない
         $this->queryFactory->deleteFromTables(
-            ['event_setlist_items', 'song_performances', 'event_sources', 'event_releases', 'event_media', 'event_venues'],
+            [
+                'event_setlist_items',
+                'song_performances',
+                'event_sources',
+                'event_releases',
+                'event_taggings',
+                'event_media',
+                'event_venues',
+            ],
             'event_id',
             $binEventId,
         );
@@ -73,6 +82,7 @@ readonly class EventRepository implements EventRepositoryInterface
                 $binEventId,
                 $data['title'],
                 $data['description'],
+                $data['note'],
                 $data['type'],
                 $data['start_on'],
                 $data['end_on'],
@@ -86,6 +96,7 @@ readonly class EventRepository implements EventRepositoryInterface
                 'ON DUPLICATE KEY UPDATE '
                 . '`title` = VALUES(`title`), '
                 . '`description` = VALUES(`description`), '
+                . '`note` = VALUES(`note`), '
                 . '`type` = VALUES(`type`), '
                 . '`start_on` = VALUES(`start_on`), '
                 . '`end_on` = VALUES(`end_on`), '
@@ -105,6 +116,15 @@ readonly class EventRepository implements EventRepositoryInterface
                     $venue['order_no'],
                 ],
                 $data['venues'],
+            ),
+        );
+
+        $this->queryFactory->insertRows(
+            'event_taggings',
+            ['event_id', 'tag_id'],
+            array_map(
+                fn (array $tag): array => [$binEventId, $this->converter->toBin($tag['tag_id'])],
+                $data['tags'],
             ),
         );
 
@@ -233,6 +253,7 @@ readonly class EventRepository implements EventRepositoryInterface
             $this->converter->toUuid($binEventId),
             Row::string($row, 'title'),
             Row::string($row, 'description'),
+            Row::string($row, 'note'),
             Row::int($row, 'type'),
             Row::nullableString($row, 'start_on'),
             Row::nullableString($row, 'end_on'),
@@ -244,10 +265,11 @@ readonly class EventRepository implements EventRepositoryInterface
             $this->loadSources($binEventId),
             $this->loadPerformances($binEventId),
             $this->loadSetlist($binEventId),
+            $this->loadTags($binEventId),
         );
     }
 
-    /** @return list<array{venueId: string, orderNo: int}> */
+    /** @return array<int, array{venueId: string, orderNo: int}> */
     private function loadVenues(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -267,7 +289,25 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{mediaId: string, orderNo: int}> */
+    /** @return array<int, array{tagId: string}> */
+    private function loadTags(string $binEventId): array
+    {
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['event_taggings.tag_id'])
+                ->from('event_taggings')
+                ->join('tags', 'event_taggings.tag_id = tags.tag_id')
+                ->where('event_taggings.event_id', '=', $binEventId)
+                ->orderBy('tags.order_no'),
+        );
+
+        return array_map(
+            fn (array $row): array => ['tagId' => $this->converter->toUuid(Row::string($row, 'tag_id'))],
+            $rows,
+        );
+    }
+
+    /** @return array<int, array{mediaId: string, orderNo: int}> */
     private function loadMedia(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -287,7 +327,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<array{releaseId: string, orderNo: int}> */
+    /** @return array<int, array{releaseId: string, orderNo: int}> */
     private function loadReleases(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -307,7 +347,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<_eventSourceInput> */
+    /** @return array<int, _eventSourceInput> */
     private function loadSources(string $binEventId): array
     {
         $rows = $this->queryFactory->fetchAll(
@@ -328,7 +368,7 @@ readonly class EventRepository implements EventRepositoryInterface
         );
     }
 
-    /** @return list<_songPerformanceInput> */
+    /** @return array<int, _songPerformanceInput> */
     private function loadPerformances(string $binEventId): array
     {
         $performanceRows = $this->queryFactory->fetchAll(

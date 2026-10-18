@@ -7,11 +7,12 @@ namespace Person\Application\Admin\Query;
 readonly class PersonGroupSummary
 {
     /**
-     * @param list<PersonGroupMemberSummary> $members
+     * @param array<int, PersonGroupMemberSummary> $members
      */
     public function __construct(
         public string $personGroupId,
         public string $name,
+        public string $displayName,
         public array $members,
     ) {
     }

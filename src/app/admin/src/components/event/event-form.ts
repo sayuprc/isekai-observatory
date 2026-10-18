@@ -1,5 +1,13 @@
 import { createSignal } from 'solid-js';
-import type { Event, EventCreateRequest, EventRelease, EventStatusValue, EventTypeValue, Media } from '../../generated';
+import type {
+  Event,
+  EventCreateRequest,
+  EventRelease,
+  EventStatusValue,
+  EventTypeValue,
+  Media,
+  RequestTag,
+} from '../../generated';
 import { normalizeDateValue } from '../../utils/date';
 import { toMediaEntry, type MediaEntry } from '../media/MediaSection';
 import type { SongCandidate } from '../song-import';
@@ -28,6 +36,7 @@ export type EventRequestBody = EventCreateRequest;
 export const createEventForm = (event?: Event) => {
   const [title, setTitle] = createSignal(event?.title ?? '');
   const [description, setDescription] = createSignal(event?.description ?? '');
+  const [note, setNote] = createSignal(event?.note ?? '');
   const [startOn, setStartOn] = createSignal(normalizeDateValue(event?.schedule.startOn));
   const [endOn, setEndOn] = createSignal(normalizeDateValue(event?.schedule.endOn));
   const [typeValue, setTypeValue] = createSignal<EventTypeValue>(event?.type ?? 1);
@@ -43,6 +52,7 @@ export const createEventForm = (event?: Event) => {
   const [availableMedia, setAvailableMedia] = createSignal<Media[]>(event?.media ?? []);
   const [releases, setReleases] = createSignal<EventRelease[]>(event?.releases ?? []);
   const [sources, setSources] = createSignal<SourceForm[]>(toSourceForms(event?.sources ?? []));
+  const [tags, setTags] = createSignal<RequestTag[]>((event?.tags ?? []).map((tag) => ({ tagId: tag.tagId })));
 
   const canEditPerformances = () => allowsPerformances(statusValue());
   const canEditSetlist = () => allowsSetlist(typeValue());
@@ -87,6 +97,7 @@ export const createEventForm = (event?: Event) => {
   const toRequestBody = (): EventRequestBody => ({
     title: title(),
     description: description(),
+    note: note(),
     type: typeValue(),
     schedule: {
       startOn: startOn() || null,
@@ -100,6 +111,7 @@ export const createEventForm = (event?: Event) => {
     sources: toSourcesPayload(sources()),
     performances: toPerformancesPayload(performances()),
     setlist: toSetlistPayload(setlist(), performances()),
+    tags: tags(),
   });
 
   return {
@@ -107,6 +119,8 @@ export const createEventForm = (event?: Event) => {
     setTitle,
     description,
     setDescription,
+    note,
+    setNote,
     startOn,
     setStartOn,
     endOn,
@@ -132,6 +146,8 @@ export const createEventForm = (event?: Event) => {
     setReleases,
     sources,
     setSources,
+    tags,
+    setTags,
     canEditPerformances,
     canEditSetlist,
     validate,

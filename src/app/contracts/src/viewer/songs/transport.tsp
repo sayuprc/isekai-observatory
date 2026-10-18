@@ -35,10 +35,10 @@ namespace IsekaiObservatory.Viewer;
           title: "テストアルバム",
           type: ReleaseGroupTypeValue.Album,
           firstReleasedOn: "2026-05-01",
-          color: "#4a5a78",
         }
       ],
       performances: #[],
+      tags: #[#{ tagId: "5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90", name: "テストタグ", orderNo: 10 }],
     }
   ],
   nextCursor: "eyJvcmRlck5vIjoxLCJzb25nSWQiOiIzY2Q0MmMwOS1mZjNjLTRjZDItOTEzZi1hMjc5YzRlYTg5YjQifQ==",

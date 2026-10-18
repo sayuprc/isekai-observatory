@@ -48,7 +48,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
             ),
@@ -58,14 +58,13 @@ class GetReleaseGroupTest extends DatabaseTestCase
                 '初回限定盤',
                 true,
                 new ImmutableDate('2026-06-01'),
-                color: '#4a5a78',
                 formats: [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
                 orderNo: 10,
                 media: [
                     [
                         'position' => 1,
                         'name' => 'CD',
-                        'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                     [
                         'position' => 2,
@@ -85,15 +84,16 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     'title' => '観測された春',
                     'type' => ReleaseGroupType::Album->value,
                     'description' => '1st アルバム',
+                    'note' => '',
                     'isDisplay' => true,
                     'orderNo' => 5,
+                    'tags' => [],
                 ],
                 'releases' => [
                     [
                         'releaseId' => $releaseId1,
                         'name' => '配信',
                         'releasedOn' => '2026-05-01',
-                        'color' => '#989899',
                         'isDisplay' => true,
                         'orderNo' => 20,
                         'formats' => [ReleaseFormat::Digital->value],
@@ -102,7 +102,6 @@ class GetReleaseGroupTest extends DatabaseTestCase
                         'releaseId' => $releaseId2,
                         'name' => '初回限定盤',
                         'releasedOn' => '2026-06-01',
-                        'color' => '#4a5a78',
                         'isDisplay' => true,
                         'orderNo' => 10,
                         'formats' => [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],

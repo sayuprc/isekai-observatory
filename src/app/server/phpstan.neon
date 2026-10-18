@@ -1,5 +1,4 @@
 includes:
-  - baseline.php
   - vendor/larastan/larastan/extension.neon
 
 parameters:

@@ -75,9 +75,9 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
 
     /**
      * グループごとに、傘下のリリースへ収録された管理対象の楽曲を重複なく数える
-     * タイトルだけのトラック (song_id が NULL) は COUNT(DISTINCT) で除かれる
+     * タイトルだけのトラックは楽曲を持たないため数えない
      *
-     * @param list<string> $binGroupIds
+     * @param array<int, string> $binGroupIds
      *
      * @return array<string, int>
      */
@@ -91,9 +91,9 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
         foreach ($this->queryFactory->fetchAll(
             $this->queryFactory->select()
                 ->select('releases.release_group_id')
-                ->select(new Sql('COUNT(DISTINCT release_tracks.song_id)'), 'song_count')
-                ->from('release_tracks')
-                ->join('releases', 'releases.release_id = release_tracks.release_id')
+                ->select(new Sql('COUNT(DISTINCT release_track_songs.song_id)'), 'song_count')
+                ->from('release_track_songs')
+                ->join('releases', 'releases.release_id = release_track_songs.release_id')
                 ->where('releases.release_group_id', 'IN', $binGroupIds)
                 ->groupBy('releases.release_group_id'),
         ) as $row) {
@@ -127,6 +127,17 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
 
         if ($criteria->isDisplay->isPresent()) {
             $query = $query->where('release_groups.is_display', '=', $criteria->isDisplay->get());
+        }
+
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'release_groups.release_group_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['release_group_id'])
+                    ->from('release_group_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
         }
 
         return $query;

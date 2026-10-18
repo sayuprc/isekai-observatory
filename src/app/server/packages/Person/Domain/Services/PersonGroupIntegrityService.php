@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Person\Domain\Services;
 
 use Person\Domain\Models\PersonGroup;
+use Person\Domain\Models\PersonGroupDisplayName;
 use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonGroupMembers;
 use Person\Domain\Models\PersonGroupName;
@@ -26,35 +27,36 @@ class PersonGroupIntegrityService
     }
 
     /**
-     * @param list<_memberInput> $members
+     * @param array<int, _memberInput> $members
      *
      * @throws BusinessRuleViolationException
      */
-    public function prepareForCreate(string $name, array $members): PersonGroup
+    public function prepareForCreate(string $name, string $displayName, array $members): PersonGroup
     {
-        return $this->build($this->generator->generate(), $name, $members);
+        return $this->build($this->generator->generate(), $name, $displayName, $members);
     }
 
     /**
-     * @param list<_memberInput> $members
+     * @param array<int, _memberInput> $members
      *
      * @throws BusinessRuleViolationException
      */
-    public function prepareForUpdate(string $personGroupId, string $name, array $members): PersonGroup
+    public function prepareForUpdate(string $personGroupId, string $name, string $displayName, array $members): PersonGroup
     {
-        return $this->build($personGroupId, $name, $members);
+        return $this->build($personGroupId, $name, $displayName, $members);
     }
 
     /**
-     * @param list<_memberInput> $members
+     * @param array<int, _memberInput> $members
      *
      * @throws BusinessRuleViolationException
      */
-    private function build(string $personGroupId, string $name, array $members): PersonGroup
+    private function build(string $personGroupId, string $name, string $displayName, array $members): PersonGroup
     {
         $personGroup = new PersonGroup(
             new PersonGroupId($personGroupId),
             new PersonGroupName($name),
+            new PersonGroupDisplayName($displayName),
             PersonGroupMembers::fromArray($members),
         );
 

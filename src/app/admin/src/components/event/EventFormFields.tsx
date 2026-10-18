@@ -4,6 +4,7 @@ import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
 import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
+import { TagPicker } from '../tag/TagPicker';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
 import { PerformanceWorkspace } from './PerformanceWorkspace';
@@ -70,6 +71,7 @@ export const EventFormFields = (props: EventFormFieldsProps) => {
             <>
               <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
               <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
+              <TagPicker tags={props.form.tags} setTags={props.form.setTags} />
             </>
           }
         />
@@ -153,6 +155,15 @@ const EventBasicInfo = (props: { form: EventFormState }) => {
           rows={3}
           value={props.form.description()}
           onInput={(e) => props.form.setDescription(e.currentTarget.value)}
+        />
+      </FormRow>
+      <FormRow label="備考" for="note" hint="管理用のメモです。閲覧サイトには表示しません">
+        <textarea
+          id="note"
+          class="textarea w-full"
+          rows={3}
+          value={props.form.note()}
+          onInput={(e) => props.form.setNote(e.currentTarget.value)}
         />
       </FormRow>
       <FormRow

@@ -18,11 +18,12 @@ model SongGetResponse {
 model SongCreateRequest {
   title: title;
   description: description;
+  note: note;
   lyricsLink: lyricsLink | null;
   type: SongTypeValue;
   isDisplay: boolean;
   persons: RequestSongPerson[];
-  tags: RequestSongTag[];
+  tags: RequestTag[];
   media: RequestSongMediaLink[];
 }
 
@@ -33,12 +34,13 @@ model SongCreateResponse {
 model SongUpdateRequest {
   title: title;
   description: description;
+  note: note;
   lyricsLink: lyricsLink | null;
   type: SongTypeValue;
   isDisplay: boolean;
   orderNo: orderNo;
   persons: RequestSongPerson[];
-  tags: RequestSongTag[];
+  tags: RequestTag[];
   media: RequestSongMediaLink[];
 }
 
@@ -47,5 +49,3 @@ model SongUpdateResponse {
 }
 
 model RequestSongPerson is PickProperties<SongPerson, "personId" | "role" | "orderNo">;
-
-model RequestSongTag is PickProperties<SongTag, "songTagId">;

@@ -8,9 +8,9 @@ tags:
   - name: RecoveryCode
   - name: AuditLog
   - name: Media
+  - name: Tag
   - name: Person
   - name: PersonGroup
-  - name: SongTag
   - name: Song
   - name: ReleaseGroup
   - name: Release
@@ -90,7 +90,7 @@ paths:
           in: query
           required: false
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/auditTargetId'
           explode: false
         - name: admin_user_name
           in: query
@@ -154,7 +154,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/auditLogId'
       responses:
         '200':
           description: The request has succeeded.
@@ -609,6 +609,13 @@ paths:
           schema:
             type: boolean
           explode: false
+        - name: tag_id
+          in: query
+          required: false
+          description: このタグが付いたイベントだけに絞り込む
+          schema:
+            $ref: '#/components/schemas/tagId'
+          explode: false
         - name: sort
           in: query
           required: false
@@ -679,7 +686,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '200':
           description: The request has succeeded.
@@ -733,7 +740,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '200':
           description: The request has succeeded.
@@ -799,7 +806,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/eventId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -926,6 +933,13 @@ paths:
           schema:
             type: boolean
           explode: false
+        - name: tag_id
+          in: query
+          required: false
+          description: このタグが付いたメディアだけに絞り込む
+          schema:
+            $ref: '#/components/schemas/tagId'
+          explode: false
         - name: sort
           in: query
           required: false
@@ -996,7 +1010,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1050,7 +1064,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1116,7 +1130,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/mediaId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1281,7 +1295,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1335,7 +1349,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1401,7 +1415,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personGroupId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1617,7 +1631,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1671,7 +1685,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '200':
           description: The request has succeeded.
@@ -1737,7 +1751,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/personId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -1890,6 +1904,13 @@ paths:
           schema:
             type: boolean
           explode: false
+        - name: tag_id
+          in: query
+          required: false
+          description: このタグが付いたリリースグループだけに絞り込む
+          schema:
+            $ref: '#/components/schemas/tagId'
+          explode: false
         - name: sort
           in: query
           required: false
@@ -1960,7 +1981,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2014,7 +2035,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2074,7 +2095,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseGroupId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2187,7 +2208,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2241,7 +2262,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2307,7 +2328,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/releaseId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -2353,342 +2374,6 @@ paths:
           description: Server error
       tags:
         - Release
-      security:
-        - BearerAuth: []
-  /song-tags:
-    get:
-      operationId: SongTagService_listSongTags
-      description: 楽曲タグ一覧取得API
-      parameters: []
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SongTagListResponse'
-        '401':
-          description: Access is unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Access is forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '503':
-          description: Service unavailable.
-        '504':
-          description: Server error
-      tags:
-        - SongTag
-      security:
-        - BearerAuth: []
-    post:
-      operationId: SongTagService_createSongTag
-      description: 楽曲タグ作成API
-      parameters: []
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SongTagCreateResponse'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Access is unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Access is forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '422':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '503':
-          description: Service unavailable.
-        '504':
-          description: Server error
-      tags:
-        - SongTag
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SongTagCreateRequest'
-      security:
-        - BearerAuth: []
-  /song-tags/search:
-    get:
-      operationId: SongTagService_searchSongTags
-      description: 楽曲タグ検索API
-      parameters:
-        - name: name
-          in: query
-          required: false
-          schema:
-            type: string
-          explode: false
-        - name: sort
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/SongTagSearchSortBy'
-            default: order_no
-          explode: false
-        - name: order
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/SortOrder'
-            default: asc
-          explode: false
-        - name: page
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/page'
-            default: 1
-          explode: false
-        - name: per_page
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/PerPage'
-            default: 50
-          explode: false
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SongTagSearchResponse'
-        '401':
-          description: Access is unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Access is forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '503':
-          description: Service unavailable.
-        '504':
-          description: Server error
-      tags:
-        - SongTag
-      security:
-        - BearerAuth: []
-  /song-tags/{songTagId}:
-    get:
-      operationId: SongTagService_getSongTag
-      description: 楽曲タグ取得API
-      parameters:
-        - name: songTagId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/uuid'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SongTagGetResponse'
-        '401':
-          description: Access is unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Access is forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '422':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '503':
-          description: Service unavailable.
-        '504':
-          description: Server error
-      tags:
-        - SongTag
-      security:
-        - BearerAuth: []
-    put:
-      operationId: SongTagService_updateSongTag
-      description: 楽曲タグ更新API
-      parameters:
-        - name: songTagId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/uuid'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SongTagUpdateResponse'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Access is unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Access is forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '422':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '503':
-          description: Service unavailable.
-        '504':
-          description: Server error
-      tags:
-        - SongTag
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SongTagUpdateRequest'
-      security:
-        - BearerAuth: []
-    delete:
-      operationId: SongTagService_deleteSongTag
-      description: 楽曲タグ削除API
-      parameters:
-        - name: songTagId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/uuid'
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Access is unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Access is forbidden.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '422':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '503':
-          description: Service unavailable.
-        '504':
-          description: Server error
-      tags:
-        - SongTag
       security:
         - BearerAuth: []
   /songs:
@@ -2770,6 +2455,13 @@ paths:
           schema:
             type: boolean
           explode: false
+        - name: tag_id
+          in: query
+          required: false
+          description: このタグが付いた楽曲だけに絞り込む
+          schema:
+            $ref: '#/components/schemas/tagId'
+          explode: false
         - name: sort
           in: query
           required: false
@@ -2840,7 +2532,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2894,7 +2586,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '200':
           description: The request has succeeded.
@@ -2960,7 +2652,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/songId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -3000,6 +2692,342 @@ paths:
           description: Server error
       tags:
         - Song
+      security:
+        - BearerAuth: []
+  /tags:
+    get:
+      operationId: TagService_listTags
+      description: タグ一覧取得API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Tag
+      security:
+        - BearerAuth: []
+    post:
+      operationId: TagService_createTag
+      description: タグ作成API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagCreateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagCreateRequest'
+      security:
+        - BearerAuth: []
+  /tags/search:
+    get:
+      operationId: TagService_searchTags
+      description: タグ検索API
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/TagSearchSortBy'
+            default: order_no
+          explode: false
+        - name: order
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortOrder'
+            default: asc
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/page'
+            default: 1
+          explode: false
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PerPage'
+            default: 50
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagSearchResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Tag
+      security:
+        - BearerAuth: []
+  /tags/{tagId}:
+    get:
+      operationId: TagService_getTag
+      description: タグ取得API
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/tagId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagGetResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Tag
+      security:
+        - BearerAuth: []
+    put:
+      operationId: TagService_updateTag
+      description: タグ更新API
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/tagId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagUpdateRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: TagService_deleteTag
+      description: タグ削除API
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/tagId'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Tag
       security:
         - BearerAuth: []
   /venues:
@@ -3145,7 +3173,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '200':
           description: The request has succeeded.
@@ -3199,7 +3227,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '200':
           description: The request has succeeded.
@@ -3265,7 +3293,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/uuid'
+            $ref: '#/components/schemas/venueId'
       responses:
         '204':
           description: 'There is no content to send for this request, but the headers may be useful. '
@@ -3356,6 +3384,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AdminUser'
+    AttachedTag:
+      type: object
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          $ref: '#/components/schemas/tagId'
+        name:
+          $ref: '#/components/schemas/tagName'
+      description: 記録に付いたタグ
     AuditAction:
       type: string
       enum:
@@ -3401,7 +3440,7 @@ components:
         auditLogId:
           $ref: '#/components/schemas/auditLogId'
         adminUserId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/adminUserId'
         adminUserName:
           type: string
         action:
@@ -3409,7 +3448,7 @@ components:
         targetType:
           $ref: '#/components/schemas/AuditTargetType'
         targetId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/auditTargetId'
         createdAt:
           type: string
           format: date-time
@@ -3452,7 +3491,7 @@ components:
         auditLogId:
           $ref: '#/components/schemas/auditLogId'
         adminUserId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/adminUserId'
         adminUserName:
           type: string
         action:
@@ -3460,7 +3499,7 @@ components:
         targetType:
           $ref: '#/components/schemas/AuditTargetType'
         targetId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/auditTargetId'
         createdAt:
           type: string
           format: date-time
@@ -3475,7 +3514,7 @@ components:
         - Release
         - ReleaseGroup
         - Song
-        - SongTag
+        - Tag
         - Venue
         - Event
       description: 監査ログの対象種別
@@ -3487,7 +3526,7 @@ components:
         - release
         - releaseGroup
         - song
-        - songTag
+        - tag
         - venue
         - event
       x-enum-descriptions:
@@ -3498,7 +3537,7 @@ components:
         - リリース
         - リリースグループ
         - 楽曲
-        - 楽曲タグ
+        - タグ
         - 開催先
         - イベント
     ErrorCode:
@@ -3557,6 +3596,7 @@ components:
         - eventId
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3567,6 +3607,7 @@ components:
         - sources
         - performances
         - setlist
+        - tags
       properties:
         eventId:
           $ref: '#/components/schemas/eventId'
@@ -3574,6 +3615,8 @@ components:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -3606,12 +3649,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SetlistItem'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
       description: イベント
     EventCreateRequest:
       type: object
       required:
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3622,11 +3670,14 @@ components:
         - sources
         - performances
         - setlist
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -3659,6 +3710,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RequestSetlistItem'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     EventCreateResponse:
       type: object
       required:
@@ -3827,6 +3882,7 @@ components:
       required:
         - title
         - description
+        - note
         - type
         - schedule
         - status
@@ -3837,11 +3893,14 @@ components:
         - sources
         - performances
         - setlist
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/eventTitle'
         description:
           $ref: '#/components/schemas/eventDescription'
+        note:
+          $ref: '#/components/schemas/note'
         type:
           $ref: '#/components/schemas/EventTypeValue'
         schedule:
@@ -3874,6 +3933,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RequestSetlistItem'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     EventUpdateResponse:
       type: object
       required:
@@ -3985,6 +4048,7 @@ components:
         - publishedAt
         - type
         - isDisplay
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/mediaTitle'
@@ -3996,21 +4060,35 @@ components:
           $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     MediaCreateResponse:
       type: object
       required:
         - media
+        - tags
       properties:
         media:
           $ref: '#/components/schemas/Media'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
     MediaGetResponse:
       type: object
       required:
         - media
+        - tags
         - songs
       properties:
         media:
           $ref: '#/components/schemas/Media'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
         songs:
           type: array
           items:
@@ -4122,6 +4200,7 @@ components:
         - publishedAt
         - type
         - isDisplay
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/mediaTitle'
@@ -4133,13 +4212,22 @@ components:
           $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     MediaUpdateResponse:
       type: object
       required:
         - media
+        - tags
       properties:
         media:
           $ref: '#/components/schemas/Media'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
     Medium:
       type: object
       required:
@@ -4227,6 +4315,8 @@ components:
         - write_venue
         - read_event
         - write_event
+        - read_tag
+        - write_tag
       description: 権限の値
       x-enum-varnames:
         - ReadAdminUser
@@ -4244,6 +4334,8 @@ components:
         - WriteVenue
         - ReadEvent
         - WriteEvent
+        - ReadTag
+        - WriteTag
       x-enum-descriptions:
         - 管理ユーザー閲覧
         - 管理ユーザー編集
@@ -4260,6 +4352,8 @@ components:
         - 開催先編集
         - イベント閲覧
         - イベント編集
+        - タグ閲覧
+        - タグ編集
     Person:
       type: object
       required:
@@ -4303,12 +4397,15 @@ components:
       required:
         - personGroupId
         - name
+        - displayName
         - members
       properties:
         personGroupId:
           $ref: '#/components/schemas/personGroupId'
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4316,7 +4413,8 @@ components:
       description: 共演者をまとめて入力・表示するための人物グループ
       examples:
         - personGroupId: 6f0f4c1e-5d6a-4c55-9a43-0d7c2b1a8e10
-          name: テストグループ
+          name: テストグループ (B不在)
+          displayName: テストグループ
           members:
             - personId: 0cc5f492-22fe-4f38-b702-8b2375bc0254
               name: テスト人物
@@ -4325,10 +4423,13 @@ components:
       type: object
       required:
         - name
+        - displayName
         - members
       properties:
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4379,6 +4480,7 @@ components:
       required:
         - personGroupId
         - name
+        - displayName
         - members
         - performanceCount
       properties:
@@ -4386,6 +4488,8 @@ components:
           $ref: '#/components/schemas/personGroupId'
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4399,10 +4503,13 @@ components:
       type: object
       required:
         - name
+        - displayName
         - members
       properties:
         name:
           $ref: '#/components/schemas/personGroupName'
+        displayName:
+          $ref: '#/components/schemas/personGroupDisplayName'
         members:
           type: array
           items:
@@ -4619,7 +4726,7 @@ components:
         - name
         - releasedOn
         - description
-        - color
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4635,8 +4742,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4658,7 +4765,7 @@ components:
         - name
         - releasedOn
         - description
-        - color
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4672,8 +4779,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -4739,8 +4846,10 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
+        - tags
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -4750,10 +4859,16 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
       description: リリースグループ(作品)
     ReleaseGroupCreateRequest:
       type: object
@@ -4761,8 +4876,10 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
@@ -4770,10 +4887,16 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     ReleaseGroupCreateResponse:
       type: object
       required:
@@ -4799,7 +4922,6 @@ components:
         - releaseId
         - name
         - releasedOn
-        - color
         - isDisplay
         - orderNo
         - formats
@@ -4810,8 +4932,6 @@ components:
           $ref: '#/components/schemas/releaseName'
         releasedOn:
           $ref: '#/components/schemas/releasedOn'
-        color:
-          $ref: '#/components/schemas/color'
         isDisplay:
           type: boolean
         orderNo:
@@ -4909,8 +5029,10 @@ components:
         - title
         - type
         - description
+        - note
         - isDisplay
         - orderNo
+        - tags
       properties:
         title:
           $ref: '#/components/schemas/releaseGroupTitle'
@@ -4918,10 +5040,16 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         description:
           type: string
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
           $ref: '#/components/schemas/orderNo'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestTag'
     ReleaseGroupUpdateResponse:
       type: object
       required:
@@ -4943,18 +5071,18 @@ components:
           $ref: '#/components/schemas/orderNo'
         songId:
           anyOf:
-            - $ref: '#/components/schemas/uuid'
+            - $ref: '#/components/schemas/songId'
             - type: 'null'
         title:
           $ref: '#/components/schemas/title'
-      description: 'リリース収録曲の read model。参照トラックの title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る'
+      description: 'リリース収録曲の read model。楽曲を参照するトラックは楽曲ごとに 1 行で title は楽曲の正式名(上書き名は反映しない)、タイトルのみトラックは songId: null でトラックタイトルが載る'
     ReleaseUpdateRequest:
       type: object
       required:
         - name
         - releasedOn
         - description
-        - color
+        - note
         - isDisplay
         - orderNo
         - formats
@@ -4966,8 +5094,8 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
+        note:
+          $ref: '#/components/schemas/note'
         isDisplay:
           type: boolean
         orderNo:
@@ -5111,14 +5239,14 @@ components:
         orderNo:
           $ref: '#/components/schemas/orderNo'
       description: The template for picking properties.
-    RequestSongTag:
+    RequestTag:
       type: object
       required:
-        - songTagId
+        - tagId
       properties:
-        songTagId:
-          $ref: '#/components/schemas/songTagId'
-      description: The template for picking properties.
+        tagId:
+          $ref: '#/components/schemas/tagId'
+      description: 記録に付けるタグの指定
     RoleValue:
       type: integer
       format: int32
@@ -5162,6 +5290,7 @@ components:
         - songId
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5176,6 +5305,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5193,7 +5324,7 @@ components:
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/SongAttachedTag'
+            $ref: '#/components/schemas/AttachedTag'
         media:
           type: array
           items:
@@ -5202,6 +5333,7 @@ components:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
           description: テスト楽曲説明
+          note: テスト楽曲備考
           lyricsLink: https://example.com/lyrics
           type: 1
           isDisplay: true
@@ -5216,7 +5348,7 @@ components:
               role: 2
               orderNo: 2
           tags:
-            - songTagId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+            - tagId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
               name: テストタグA
           media:
             - mediaId: 11111111-1111-1111-1111-111111111111
@@ -5226,21 +5358,12 @@ components:
               type: 1
               isDisplay: true
               orderNo: 1
-    SongAttachedTag:
-      type: object
-      required:
-        - songTagId
-        - name
-      properties:
-        songTagId:
-          $ref: '#/components/schemas/songTagId'
-        name:
-          $ref: '#/components/schemas/songTagName'
     SongCreateRequest:
       type: object
       required:
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5252,6 +5375,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5267,7 +5392,7 @@ components:
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/RequestSongTag'
+            $ref: '#/components/schemas/RequestTag'
         media:
           type: array
           items:
@@ -5402,13 +5527,16 @@ components:
       enum:
         - '1'
         - '2'
+        - '3'
       description: 楽曲検索API用の楽曲種別
       x-enum-varnames:
         - Original
         - Cover
+        - Guest
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
+        - 参加曲
     SongSummary:
       type: object
       required:
@@ -5458,132 +5586,28 @@ components:
           mediaCount: 1
           personCount: 2
           releaseCount: 1
-    SongTag:
-      type: object
-      required:
-        - songTagId
-        - name
-        - orderNo
-      properties:
-        songTagId:
-          $ref: '#/components/schemas/songTagId'
-        name:
-          $ref: '#/components/schemas/songTagName'
-        orderNo:
-          $ref: '#/components/schemas/orderNo'
-      examples:
-        - songTagId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
-          name: テストタグA
-          orderNo: 10
-    SongTagCreateRequest:
-      type: object
-      required:
-        - name
-      properties:
-        name:
-          $ref: '#/components/schemas/songTagName'
-    SongTagCreateResponse:
-      type: object
-      required:
-        - tag
-      properties:
-        tag:
-          $ref: '#/components/schemas/SongTag'
-    SongTagGetResponse:
-      type: object
-      required:
-        - tag
-      properties:
-        tag:
-          $ref: '#/components/schemas/SongTag'
-    SongTagListResponse:
-      type: object
-      required:
-        - tags
-      properties:
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/SongTag'
-    SongTagSearchResponse:
-      type: object
-      required:
-        - tags
-        - maxPage
-      properties:
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/SongTagSummary'
-        maxPage:
-          type: integer
-          format: int32
-    SongTagSearchSortBy:
-      type: string
-      enum:
-        - name
-        - order_no
-      description: 楽曲タグ検索のソート条件
-      x-enum-varnames:
-        - name
-        - orderNo
-      x-enum-descriptions:
-        - 楽曲タグ名
-        - 表示順
-    SongTagSummary:
-      type: object
-      required:
-        - songTagId
-        - name
-        - orderNo
-        - songCount
-      properties:
-        songTagId:
-          $ref: '#/components/schemas/songTagId'
-        name:
-          $ref: '#/components/schemas/songTagName'
-        orderNo:
-          $ref: '#/components/schemas/orderNo'
-        songCount:
-          type: integer
-          format: int32
-          description: このタグが付いている楽曲の件数
-      description: 楽曲タグ一覧の 1 行分
-    SongTagUpdateRequest:
-      type: object
-      required:
-        - name
-        - orderNo
-      properties:
-        name:
-          $ref: '#/components/schemas/songTagName'
-        orderNo:
-          $ref: '#/components/schemas/orderNo'
-    SongTagUpdateResponse:
-      type: object
-      required:
-        - tag
-      properties:
-        tag:
-          $ref: '#/components/schemas/SongTag'
     SongTypeValue:
       type: integer
       format: int32
       enum:
         - 1
         - 2
+        - 3
       description: 楽曲種別の値
       x-enum-varnames:
         - Original
         - Cover
+        - Guest
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
+        - 参加曲
     SongUpdateRequest:
       type: object
       required:
         - title
         - description
+        - note
         - lyricsLink
         - type
         - isDisplay
@@ -5596,6 +5620,8 @@ components:
           $ref: '#/components/schemas/title'
         description:
           $ref: '#/components/schemas/description'
+        note:
+          $ref: '#/components/schemas/note'
         lyricsLink:
           anyOf:
             - $ref: '#/components/schemas/lyricsLink'
@@ -5613,7 +5639,7 @@ components:
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/RequestSongTag'
+            $ref: '#/components/schemas/RequestTag'
         media:
           type: array
           items:
@@ -5637,24 +5663,147 @@ components:
       x-enum-descriptions:
         - 昇順
         - 降順
+    Tag:
+      type: object
+      required:
+        - tagId
+        - name
+        - orderNo
+      properties:
+        tagId:
+          $ref: '#/components/schemas/tagId'
+        name:
+          $ref: '#/components/schemas/tagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+      examples:
+        - tagId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+          name: テストタグA
+          orderNo: 10
+    TagCreateRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          $ref: '#/components/schemas/tagName'
+    TagCreateResponse:
+      type: object
+      required:
+        - tag
+      properties:
+        tag:
+          $ref: '#/components/schemas/Tag'
+    TagGetResponse:
+      type: object
+      required:
+        - tag
+      properties:
+        tag:
+          $ref: '#/components/schemas/Tag'
+    TagListResponse:
+      type: object
+      required:
+        - tags
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    TagSearchResponse:
+      type: object
+      required:
+        - tags
+        - maxPage
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagSummary'
+        maxPage:
+          type: integer
+          format: int32
+    TagSearchSortBy:
+      type: string
+      enum:
+        - name
+        - order_no
+      description: タグ検索のソート条件
+      x-enum-varnames:
+        - name
+        - orderNo
+      x-enum-descriptions:
+        - タグ名
+        - 表示順
+    TagSummary:
+      type: object
+      required:
+        - tagId
+        - name
+        - orderNo
+        - songCount
+        - eventCount
+        - releaseGroupCount
+        - mediaCount
+      properties:
+        tagId:
+          $ref: '#/components/schemas/tagId'
+        name:
+          $ref: '#/components/schemas/tagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+        songCount:
+          type: integer
+          format: int32
+          description: このタグが付いている楽曲の件数
+        eventCount:
+          type: integer
+          format: int32
+          description: このタグが付いているイベントの件数
+        releaseGroupCount:
+          type: integer
+          format: int32
+          description: このタグが付いているリリースグループの件数
+        mediaCount:
+          type: integer
+          format: int32
+          description: このタグが付いているメディアの件数
+      description: タグ一覧の 1 行分
+    TagUpdateRequest:
+      type: object
+      required:
+        - name
+        - orderNo
+      properties:
+        name:
+          $ref: '#/components/schemas/tagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+    TagUpdateResponse:
+      type: object
+      required:
+        - tag
+      properties:
+        tag:
+          $ref: '#/components/schemas/Tag'
     Track:
       type: object
       required:
-        - songId
+        - songIds
         - title
         - trackNo
       properties:
-        songId:
-          anyOf:
-            - $ref: '#/components/schemas/uuid'
-            - type: 'null'
+        songIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/songId'
         title:
           anyOf:
             - $ref: '#/components/schemas/trackTitle'
             - type: 'null'
         trackNo:
           $ref: '#/components/schemas/orderNo'
-      description: 収録曲。songId / title の少なくとも一方を指定する(検証はサーバー側の責務)。songId ありは Song 集約を参照する参照トラックで、title を併記すると表示名を上書きする。songId なしは表示専用のタイトルのみトラック
+      description: 収録曲。songIds / title の少なくとも一方を指定する(検証はサーバー側の責務)。songIds は Song 集約を収録順に参照し、2 件以上でメドレーになる。楽曲 1 件では title で表示名を上書きし、メドレーでは title をメドレーの表示名にする。songIds が空なら表示専用のタイトルのみトラック
     Venue:
       type: object
       required:
@@ -5790,14 +5939,14 @@ components:
       type: string
       format: uuid
       description: 監査ログID
+    auditTargetId:
+      type: string
+      format: uuid
+      description: 監査対象ID。targetType によって指す集約が変わる
     authCeremonyId:
       type: string
       format: uuid
       description: 認証セッションID
-    color:
-      type: string
-      pattern: ^#[0-9a-f]{6}$
-      description: 代表色
     createdAt:
       type: string
       format: date-time
@@ -5864,6 +6013,9 @@ components:
       type: string
       minLength: 1
       description: 媒体の表示ラベル(CD1 / Blu-ray など)
+    note:
+      type: string
+      description: 管理用の備考。閲覧サイトには公開しない
     orderNo:
       type: integer
       format: int32
@@ -5882,6 +6034,10 @@ components:
       type: string
       format: uuid
       description: 楽曲披露ID
+    personGroupDisplayName:
+      type: string
+      minLength: 1
+      description: 人物グループの表示用名称。閲覧サイトに出す名前で、重複してよい
     personGroupId:
       type: string
       format: uuid
@@ -5889,7 +6045,7 @@ components:
     personGroupName:
       type: string
       minLength: 1
-      description: 人物グループ名
+      description: 人物グループの管理用名称。一意で、管理画面でグループを見分けるために使う
     personId:
       type: string
       format: uuid
@@ -5945,14 +6101,14 @@ components:
       type: string
       format: uuid
       description: 楽曲ID
-    songTagId:
+    tagId:
       type: string
       format: uuid
-      description: 楽曲タグID
-    songTagName:
+      description: タグID
+    tagName:
       type: string
       minLength: 1
-      description: 楽曲タグ名
+      description: タグ名
     title:
       type: string
       minLength: 1
@@ -5960,11 +6116,7 @@ components:
     trackTitle:
       type: string
       minLength: 1
-      description: トラックの表示名。参照トラックでは楽曲名の上書き、タイトルのみトラックでは必須のタイトル
-    uuid:
-      type: string
-      format: uuid
-      description: UUID v4
+      description: トラックの表示名。楽曲 1 件では楽曲名の上書き、メドレーでは任意の表示名、タイトルのみトラックでは必須のタイトル
     venueId:
       type: string
       format: uuid

@@ -11,6 +11,7 @@ use Support\Domain\SearchCriteria\PerPage;
 use Support\Domain\ValueObjects\String\TextNormalizer;
 use Support\Optional\Optional;
 use Support\Optional\Some;
+use Tag\Domain\Models\TagId;
 
 readonly class EventSearchCriteria
 {
@@ -22,12 +23,14 @@ readonly class EventSearchCriteria
      * @param Optional<EventType>   $type
      * @param Optional<EventStatus> $status
      * @param Optional<bool>        $isDisplay
+     * @param Optional<TagId>       $tagId
      */
     public function __construct(
         Optional $title,
         public Optional $type,
         public Optional $status,
         public Optional $isDisplay,
+        public Optional $tagId,
         public Sort $sort = Sort::Schedule,
         public Order $order = Order::Asc,
         public int $page = 1,

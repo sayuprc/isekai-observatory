@@ -31,6 +31,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                 '2024-03-01T12:34:56+09:00',
                 MediaType::Mv->value,
                 true,
+                [],
             ),
         );
 
@@ -64,6 +65,7 @@ class CreateUseCaseTest extends DatabaseTestCase
                     '2024-03-01T12:34:56+09:00',
                     MediaType::Mv->value,
                     true,
+                    [],
                 ),
             );
             $this->fail('RuntimeException が送出されるはず');

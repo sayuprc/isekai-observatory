@@ -59,7 +59,7 @@ export const SearchList = () => {
       <form onSubmit={handleSearch} class="mb-4 flex flex-wrap items-end gap-4">
         <fieldset class="fieldset">
           <label class="fieldset-label" for="name">
-            グループ名
+            管理用名称
           </label>
           <input
             type="text"
@@ -68,7 +68,7 @@ export const SearchList = () => {
             value={input().name}
             onInput={(e) => updateInput({ name: e.currentTarget.value })}
             class="input input-bordered input-sm"
-            placeholder="グループ名で検索"
+            placeholder="管理用名称で検索"
           />
         </fieldset>
         <fieldset class="fieldset">
@@ -106,7 +106,8 @@ export const SearchList = () => {
         <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
-              <th>グループ名</th>
+              <th>管理用名称</th>
+              <th>表示用名称</th>
               <th>メンバー</th>
               <th class="text-right">共演</th>
             </tr>
@@ -114,13 +115,13 @@ export const SearchList = () => {
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={3} />
+                <ListState state="loading" colSpan={4} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={3} message={message()} onRetry={() => refetch()} />}
+                {(message) => <ListState state="error" colSpan={4} message={message()} onRetry={() => refetch()} />}
               </Match>
               <Match when={data() && data()!.personGroups.length === 0}>
-                <ListState state="empty" colSpan={3} />
+                <ListState state="empty" colSpan={4} />
               </Match>
               <Match when={data()}>
                 {(result) => (
@@ -132,6 +133,7 @@ export const SearchList = () => {
                             {personGroup.name}
                           </a>
                         </td>
+                        <td>{personGroup.displayName}</td>
                         <td class="max-w-md truncate text-base-content/70">
                           {personGroup.members.map((member) => member.name).join(' / ')}
                         </td>

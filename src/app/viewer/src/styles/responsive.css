@@ -92,11 +92,6 @@
     gap: 20px;
   }
 
-  .release-year-head {
-    flex-direction: row;
-    align-items: baseline;
-  }
-
   .event-group-label {
     position: static;
   }
@@ -125,7 +120,7 @@
   }
 
   .hero-ledger {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: 36px;
   }
@@ -209,31 +204,41 @@
     padding: 24px 20px 48px;
   }
 
-  .release-year-list {
-    grid-template-columns: 1fr;
-    gap: 14px;
+  /* 縦の線を左端に寄せ、日付と種別を 1 段目、題名と会場を 2 段目に積む */
+
+  .event-line,
+  .event-line-with-year {
+    grid-template-columns: 16px minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 0 4px;
   }
 
-  .event-line {
-    grid-template-columns: 72px minmax(0, 1fr);
-    gap: 8px 14px;
-    padding: 16px 4px;
+  .event-line-axis {
+    grid-row: 1 / span 2;
+    grid-column: 1;
+  }
+
+  .event-line-dot {
+    top: 22px;
   }
 
   .event-line-date {
-    grid-row: span 2;
+    flex-direction: row;
+    grid-row: 1;
+    grid-column: 2;
+    gap: 8px;
+    align-items: baseline;
+    padding-top: 14px;
   }
 
-  .event-line-with-year {
-    grid-template-columns: 96px minmax(0, 1fr);
-  }
-
-  .event-line-with-year .event-line-date-main {
+  .event-line-date-main {
     font-size: 15px;
   }
 
-  .event-line-type {
+  .event-line-body {
+    grid-row: 2;
     grid-column: 2;
+    padding: 4px 0 16px;
   }
 
   .event-line-arrow {
@@ -241,17 +246,29 @@
   }
 
   .release-row {
-    min-height: 150px;
-    padding: 20px 24px;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
+    padding: 0 4px;
+  }
+
+  .release-row-date {
+    grid-column: 1;
+    padding-top: 14px;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .release-row-body {
+    grid-column: 1;
+    padding: 4px 0 16px;
   }
 
   .release-row-title {
-    font-size: 20px;
+    font-size: 16px;
   }
 
-  .release-row-type,
-  .release-row-date {
-    display: block;
+  .release-row::after {
+    display: none;
   }
 
   /* リンクはボトムナビへ移動するためヘッダーからは消す */
@@ -376,8 +393,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .song-grid-card,
-  .release-row,
-  .release-row::before,
   .release-row::after,
   .event-line-arrow {
     transform: none;

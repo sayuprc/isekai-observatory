@@ -22,7 +22,7 @@ applies_to: [api, admin, viewer]
 - 提供形態は `Release.formats` (順序なし集合、子テーブル `release_formats`) が持つ
   Medium に format を載せない
 - Medium は区切りであり、自由テキストの `name` (nullable) を持てる
-- 代表色は `releases.color` に置く。Group の代表色は傘下版から導出する
+- 代表色は `releases.color` に置く。Group の代表色は傘下版から導出する (ADR-0034 で代表色は持たないことにした)
 - 管理画面の一覧・検索の主語は release-groups に置く
 
 ## Consequences

@@ -17,6 +17,7 @@ model PersonGroupGetResponse {
 
 model PersonGroupCreateRequest {
   name: personGroupName;
+  displayName: personGroupDisplayName;
   members: RequestPersonGroupMember[];
 }
 
@@ -26,6 +27,7 @@ model PersonGroupCreateResponse {
 
 model PersonGroupUpdateRequest {
   name: personGroupName;
+  displayName: personGroupDisplayName;
   members: RequestPersonGroupMember[];
 }
 

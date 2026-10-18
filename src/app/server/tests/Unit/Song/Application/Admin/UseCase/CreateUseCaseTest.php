@@ -58,6 +58,7 @@ class CreateUseCaseTest extends TestCase
         $songId = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $title = 'テスト楽曲';
         $description = 'テスト楽曲説明';
+        $note = '備考';
         $lyricsLink = 'https://example.com/lyrics';
         $typeValue = SongType::Original->value;
         $isDisplay = true;
@@ -74,7 +75,7 @@ class CreateUseCaseTest extends TestCase
             ->once();
 
         $this->service->shouldReceive('prepareForCreate')
-            ->with($title, $description, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
+            ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
             ->andReturn(
                 $song = $this->createSong(
                     $songId,
@@ -86,22 +87,24 @@ class CreateUseCaseTest extends TestCase
                     $orderNo,
                     [],
                     $persons,
+                    note: $note,
                 ),
             )
             ->once();
 
         $this->repository->shouldReceive('save')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
             ->andReturn($song)
             ->once();
 
         $this->assembler->shouldReceive('assemble')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
             ->andReturn(
                 new AssembledSong(
                     $song->songId->value,
                     $song->title->value,
                     $song->description->value,
+                    $song->note->value,
                     $song->lyricsLink?->value,
                     $song->type->value,
                     $song->isDisplay,
@@ -111,6 +114,7 @@ class CreateUseCaseTest extends TestCase
                         new AssembledPerson($composerId, 'テスト作曲者', SongPersonRole::Composer, 2),
                         new AssembledPerson($arrangerId, 'テスト編曲者', SongPersonRole::Arranger, 3),
                     ],
+                    [],
                 ),
             )
             ->once();
@@ -119,6 +123,7 @@ class CreateUseCaseTest extends TestCase
             new CreateInputData(
                 $title,
                 $description,
+                $note,
                 $lyricsLink,
                 $typeValue,
                 $isDisplay,
@@ -133,6 +138,7 @@ class CreateUseCaseTest extends TestCase
     {
         $title = '曲名';
         $description = '説明';
+        $note = '備考';
         $lyricsLink = null;
         $typeValue = 1;
         $isDisplay = true;
@@ -148,7 +154,7 @@ class CreateUseCaseTest extends TestCase
             ->once();
 
         $this->service->shouldReceive('prepareForCreate')
-            ->with($title, $description, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
+            ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
             ->andThrow(new BusinessRuleViolationException('検証エラー'))
             ->once();
 
@@ -158,6 +164,7 @@ class CreateUseCaseTest extends TestCase
             new CreateInputData(
                 $title,
                 $description,
+                $note,
                 $lyricsLink,
                 $typeValue,
                 $isDisplay,
@@ -175,6 +182,7 @@ class CreateUseCaseTest extends TestCase
         string $songId,
         string $title,
         string $description,
+        string $note,
         ?string $lyricsLink,
         int $typeValue,
         bool $isDisplay,
@@ -185,6 +193,7 @@ class CreateUseCaseTest extends TestCase
             $song->songId->value !== $songId
             || $song->title->value !== $title
             || $song->description->value !== $description
+            || $song->note->value !== $note
             || $song->lyricsLink?->value !== $lyricsLink
             || $song->type->value !== $typeValue
             || $song->isDisplay !== $isDisplay

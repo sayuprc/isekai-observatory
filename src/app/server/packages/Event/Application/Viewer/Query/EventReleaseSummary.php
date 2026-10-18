@@ -9,7 +9,7 @@ use Release\Domain\Models\ReleaseFormat;
 readonly class EventReleaseSummary
 {
     /**
-     * @param list<ReleaseFormat> $formats
+     * @param array<int, ReleaseFormat> $formats
      */
     public function __construct(
         public string $releaseId,

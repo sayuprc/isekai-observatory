@@ -18,12 +18,17 @@ interface AuditLogService {
     @query to?: utcDateTime,
     @query action?: AuditAction,
     @query("target_type") targetType?: AuditTargetType,
-    @query("target_id") targetId?: uuid,
+    @query("target_id") targetId?: auditTargetId,
     @query("admin_user_name") adminUserName?: string,
     @query page?: page = 1,
     @query("per_page") perPage?: PerPage = PerPage.fifty,
   ): Ok<AuditLogSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("監査ログ取得API")
-  getAuditLog(@path auditLogId: uuid): Ok<AuditLogGetResponse> | Unauthorized | Forbidden | NotFound | ServerError;
+  getAuditLog(@path auditLogId: auditLogId):
+    | Ok<AuditLogGetResponse>
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | ServerError;
 }

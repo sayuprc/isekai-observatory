@@ -1,13 +1,15 @@
 import { createSignal } from 'solid-js';
-import type { MediaTypeValue } from '../../generated';
+import type { MediaTypeValue, RequestTag } from '../../generated';
 import { client } from '../../utils/client';
 import { createFormDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
+import { TagPicker } from '../tag/TagPicker';
 import { MediaFields } from './MediaFields';
 
 export const CreateForm = () => {
@@ -16,7 +18,8 @@ export const CreateForm = () => {
   const { isSubmitting, withSubmitting } = createSubmitting();
   const [typeValue, setTypeValue] = createSignal<MediaTypeValue>(1);
   const [isDisplay, setIsDisplay] = createSignal(true);
-  const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(() => [typeValue(), isDisplay()]);
+  const [tags, setTags] = createSignal<RequestTag[]>([]);
+  const { isDirty, allowLeave, bindForm } = createFormDirtyTracker(() => [typeValue(), isDisplay(), tags()]);
 
   const handleSubmit = withSubmitting(async (e: SubmitEvent) => {
     e.preventDefault();
@@ -31,6 +34,7 @@ export const CreateForm = () => {
       publishedAt: formData.get('publishedAt')?.toString() ?? '',
       type: Number(formData.get('type')) as MediaTypeValue,
       isDisplay: formData.get('isDisplay') === 'true',
+      tags: tags(),
     });
 
     if (data) {
@@ -55,7 +59,13 @@ export const CreateForm = () => {
         submittingLabel="作成中..."
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="media-form" class="max-w-4xl" onSubmit={handleSubmit}>
+      <form
+        ref={bindForm}
+        id="media-form"
+        onKeyDown={preventImplicitSubmit}
+        class="max-w-4xl space-y-6"
+        onSubmit={handleSubmit}
+      >
         <MediaFields
           typeValue={typeValue()}
           onTypeValueChange={setTypeValue}
@@ -63,6 +73,7 @@ export const CreateForm = () => {
           onIsDisplayChange={setIsDisplay}
           getFieldError={getFieldError}
         />
+        <TagPicker tags={tags} setTags={setTags} />
       </form>
     </>
   );

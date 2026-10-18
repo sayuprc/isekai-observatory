@@ -18,7 +18,7 @@ const item = (setlistItemId: string, label: string | null, performances: SongPer
 });
 
 describe('イベントのセットリストからの取り込み', () => {
-  it('セットリスト順に並べ、メドレーは項目内の順で展開する', () => {
+  it('セットリスト順に並べ、メドレーは項目内の順で 1 つの候補にする', () => {
     const p1 = performance('p1', 1);
     const p2 = performance('p2', 2);
     const p3 = performance('p3', 3);
@@ -28,15 +28,23 @@ describe('イベントのセットリストからの取り込み', () => {
       setlist: [item('s1', null, [p3]), item('s2', 'メドレー', [p1, p2])],
     });
 
-    expect(result.map((candidate) => candidate.songId)).toEqual(['song-p3', 'song-p1', 'song-p2']);
-    expect(result[1]).toMatchObject({ note: 'セットリスト 2 (メドレー)', selectable: true, defaultSelected: true });
+    expect(result.map((candidate) => candidate.songs.map((song) => song.songId))).toEqual([
+      ['song-p3'],
+      ['song-p1', 'song-p2'],
+    ]);
+    expect(result[1]).toMatchObject({
+      label: 'メドレー',
+      note: 'セットリスト 2 (メドレー)',
+      selectable: true,
+      defaultSelected: true,
+    });
   });
 
   it('表示名だけの項目は楽曲なしの候補にし、初期状態では選ばない', () => {
     const result = toEventTrackCandidates({ performances: [], setlist: [item('s1', 'MC', [])] });
 
     expect(result).toEqual([
-      { key: 's1', songId: null, title: 'MC', note: 'セットリスト 1', selectable: true, defaultSelected: false },
+      { key: 's1', songs: [], label: 'MC', note: 'セットリスト 1', selectable: true, defaultSelected: false },
     ]);
   });
 
@@ -46,7 +54,7 @@ describe('イベントのセットリストからの取り込み', () => {
 
     const result = toEventTrackCandidates({ performances: [p1, p2], setlist: [item('s1', null, [p2])] });
 
-    expect(result.map((candidate) => candidate.key)).toEqual(['p2', 'p1']);
+    expect(result.map((candidate) => candidate.key)).toEqual(['s1', 'p1']);
     expect(result[1]?.note).toBe('セットリスト外の楽曲披露');
   });
 
@@ -56,15 +64,20 @@ describe('イベントのセットリストからの取り込み', () => {
     expect(result.map((candidate) => candidate.note)).toEqual(['楽曲披露 1', '楽曲披露 2']);
   });
 
-  it('楽曲の候補は参照トラック、楽曲なしの候補はタイトルのみトラックにする', () => {
+  it('1 曲の候補は表示名を引き継がない参照トラック、メドレーはメドレー名付きのトラック、楽曲なしはタイトルのみトラックにする', () => {
+    const song1 = { songId: 'song-1', title: '曲1' };
+    const song2 = { songId: 'song-2', title: '曲2' };
+
     const result = toTrackForms([
-      { key: 'a', songId: 'song-1', title: '曲1', note: '', selectable: true, defaultSelected: true },
-      { key: 'b', songId: null, title: 'MC', note: '', selectable: true, defaultSelected: false },
+      { key: 'a', songs: [song1], label: 'アンコール', note: '', selectable: true, defaultSelected: true },
+      { key: 'b', songs: [song1, song2], label: 'メドレー', note: '', selectable: true, defaultSelected: true },
+      { key: 'c', songs: [], label: 'MC', note: '', selectable: true, defaultSelected: false },
     ]);
 
     expect(result).toEqual([
-      { songId: 'song-1', songTitle: '曲1', title: '' },
-      { songId: null, songTitle: null, title: 'MC' },
+      { songs: [song1], title: '' },
+      { songs: [song1, song2], title: 'メドレー' },
+      { songs: [], title: 'MC' },
     ]);
   });
 

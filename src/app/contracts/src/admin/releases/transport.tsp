@@ -1,4 +1,5 @@
 import "../../shared";
+import "../tags";
 
 using IsekaiObservatory.Shared;
 
@@ -8,8 +9,10 @@ model ReleaseGroupCreateRequest {
   title: releaseGroupTitle;
   type: ReleaseGroupTypeValue;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
+  tags: RequestTag[];
 }
 
 model ReleaseGroupCreateResponse {
@@ -20,8 +23,10 @@ model ReleaseGroupUpdateRequest {
   title: releaseGroupTitle;
   type: ReleaseGroupTypeValue;
   description: string;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
+  tags: RequestTag[];
 }
 
 model ReleaseGroupUpdateResponse {
@@ -43,7 +48,7 @@ model ReleaseCreateRequest {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
-  color: color;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 
@@ -61,7 +66,7 @@ model ReleaseUpdateRequest {
   name: releaseName;
   releasedOn: releasedOn;
   description: string;
-  color: color;
+  note: note;
   isDisplay: boolean;
   orderNo: orderNo;
 

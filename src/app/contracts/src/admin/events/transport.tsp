@@ -3,6 +3,7 @@ import "../../packages/event";
 import "../../packages/media";
 import "../../packages/song";
 import "../releases";
+import "../tags";
 import "../venues";
 
 using IsekaiObservatory.Shared;
@@ -24,6 +25,7 @@ model EventGetResponse {
 model EventCreateRequest {
   title: eventTitle;
   description: eventDescription;
+  note: note;
   type: EventTypeValue;
   schedule: EventSchedule;
   status: EventStatusValue;
@@ -34,6 +36,7 @@ model EventCreateRequest {
   sources: EventSource[];
   performances: RequestSongPerformance[];
   setlist: RequestSetlistItem[];
+  tags: RequestTag[];
 }
 
 model EventCreateResponse {
@@ -43,6 +46,7 @@ model EventCreateResponse {
 model EventUpdateRequest {
   title: eventTitle;
   description: eventDescription;
+  note: note;
   type: EventTypeValue;
   schedule: EventSchedule;
   status: EventStatusValue;
@@ -53,6 +57,7 @@ model EventUpdateRequest {
   sources: EventSource[];
   performances: RequestSongPerformance[];
   setlist: RequestSetlistItem[];
+  tags: RequestTag[];
 }
 
 model EventUpdateResponse {

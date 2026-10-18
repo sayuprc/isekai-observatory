@@ -6,7 +6,6 @@ namespace Release\Domain\Services;
 
 use DateMalformedStringException;
 use DateType\ImmutableDate;
-use Release\Domain\Models\Color;
 use Release\Domain\Models\Description;
 use Release\Domain\Models\Media;
 use Release\Domain\Models\Release;
@@ -20,6 +19,7 @@ use Song\Domain\Models\SongRepositoryInterface;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Exceptions\InvalidDomainException;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
 
 class ReleaseIntegrityService
@@ -32,8 +32,8 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param array<int, int>                                                                                                     $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -42,18 +42,29 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
-        string $color,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        return $this->prepare($this->generator->generate(), $releaseGroupId, $name, $releasedOn, $description, $color, $isDisplay, $orderNo, $formatValues, $media);
+        return $this->prepare(
+            $this->generator->generate(),
+            $releaseGroupId,
+            $name,
+            $releasedOn,
+            $description,
+            $note,
+            $isDisplay,
+            $orderNo,
+            $formatValues,
+            $media,
+        );
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param array<int, int>                                                                                                     $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -63,18 +74,29 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
-        string $color,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        return $this->prepare($releaseId, $releaseGroupId, $name, $releasedOn, $description, $color, $isDisplay, $orderNo, $formatValues, $media);
+        return $this->prepare(
+            $releaseId,
+            $releaseGroupId,
+            $name,
+            $releasedOn,
+            $description,
+            $note,
+            $isDisplay,
+            $orderNo,
+            $formatValues,
+            $media,
+        );
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param array<int, int>                                                                                                     $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function prepare(
         string $releaseId,
@@ -82,13 +104,24 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
-        string $color,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
         array $media,
     ): Release {
-        $release = $this->build($releaseId, $releaseGroupId, $name, $releasedOn, $description, $color, $isDisplay, $orderNo, $formatValues, $media);
+        $release = $this->build(
+            $releaseId,
+            $releaseGroupId,
+            $name,
+            $releasedOn,
+            $description,
+            $note,
+            $isDisplay,
+            $orderNo,
+            $formatValues,
+            $media,
+        );
 
         if ($this->releaseGroupRepository->find($release->releaseGroupId) === null) {
             throw new BusinessRuleViolationException('指定されたリリースグループが存在しません。');
@@ -102,8 +135,8 @@ class ReleaseIntegrityService
     }
 
     /**
-     * @param list<int>                                                                                                     $formatValues
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param array<int, int>                                                                                                     $formatValues
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function build(
         string $releaseId,
@@ -111,7 +144,7 @@ class ReleaseIntegrityService
         string $name,
         string $releasedOn,
         string $description,
-        string $color,
+        string $note,
         bool $isDisplay,
         int $orderNo,
         array $formatValues,
@@ -123,7 +156,7 @@ class ReleaseIntegrityService
             new ReleaseName($name),
             $this->toReleasedOn($releasedOn),
             new Description($description),
-            new Color($color),
+            new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
             ReleaseFormats::fromArray($formatValues),
@@ -135,13 +168,10 @@ class ReleaseIntegrityService
     {
         foreach ($media as $medium) {
             foreach ($medium->tracks as $track) {
-                // タイトルのみトラックは Song 集約を参照しない
-                if ($track->songId === null) {
-                    continue;
-                }
-
-                if ($this->songRepository->find($track->songId) === null) {
-                    return false;
+                foreach ($track->songIds as $songId) {
+                    if ($this->songRepository->find($songId) === null) {
+                        return false;
+                    }
                 }
             }
         }

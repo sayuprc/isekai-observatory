@@ -11,8 +11,8 @@ import "./media";
 import "./persons";
 import "./person-groups";
 import "./releases";
-import "./song-tags";
 import "./songs";
+import "./tags";
 import "./venues";
 
 using Http;

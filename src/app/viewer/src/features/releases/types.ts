@@ -5,6 +5,7 @@ import type {
   ReleaseListItem,
   ReleaseMediumItem,
   ReleaseTrackItem,
+  ReleaseTrackSong,
 } from '../../generated/types.gen.js';
 
 export type ReleaseGroup = ReleaseGroupListItem;
@@ -38,12 +39,35 @@ export function releaseFormatText(formats: ReleaseFormatValue[]): string {
   return formats.map((format) => RELEASE_FORMAT_NAMES[format]).join('・');
 }
 
-/** トラック詳細へのリンク可否。楽曲未紐づけまたは非表示のトラックはリンクしない */
-export function isLinkableTrack(track: ReleaseTrack): track is ReleaseTrack & { songId: string } {
-  return track.songId !== null && track.isDisplay;
+/** 楽曲詳細へのリンク先。非表示の楽曲はリンクしない */
+function songHref(song: ReleaseTrackSong): string | null {
+  return song.isDisplay ? `/songs/${song.songId}` : null;
 }
 
-/** 代表色: 公開リリースを発売日順に見て最初のもの */
-export function representativeColor(releaseGroup: ReleaseGroup): string {
-  return releaseGroup.releases[0].color;
+/**
+ * 曲の一覧に出す 1 項目。イベントのセットリストと同じ見た目にする
+ * 1 曲のトラックはトラック名を楽曲名の上書きとして出し、メドレーはトラック名を見出しにして楽曲を並べる
+ */
+export function trackSongListItem(track: ReleaseTrack) {
+  const index = String(track.trackNo).padStart(2, '0');
+  const [first, ...rest] = track.songs;
+
+  if (first === undefined) {
+    return { index, label: null, songs: [{ title: track.title ?? '', href: null, note: null }] };
+  }
+
+  if (rest.length === 0) {
+    return { index, label: null, songs: [{ title: track.title ?? first.title, href: songHref(first), note: null }] };
+  }
+
+  return {
+    index,
+    label: track.title,
+    songs: track.songs.map((song) => ({ title: song.title, href: songHref(song), note: null })),
+  };
+}
+
+/** 検索に使うトラックの名前。トラック名と楽曲名の両方で引けるようにする */
+export function trackSearchTitles(track: ReleaseTrack): string[] {
+  return [...(track.title === null ? [] : [track.title]), ...track.songs.map((song) => song.title)];
 }

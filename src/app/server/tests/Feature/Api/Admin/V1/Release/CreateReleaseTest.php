@@ -40,7 +40,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#4a5a78',
+                'note' => '備考',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
@@ -49,7 +49,7 @@ class CreateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
                         ],
                     ],
                     [
@@ -69,13 +69,13 @@ class CreateReleaseTest extends DatabaseTestCase
                             ->where('name', '初回限定盤')
                             ->where('releasedOn', '2026-05-09')
                             ->where('description', '')
-                            ->where('color', '#4a5a78')
+                            ->where('note', '備考')
                             ->where('isDisplay', true)
                             ->where('orderNo', 10)
                             ->where('formats', [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value])
                             ->where('media.0.position', 1)
                             ->where('media.0.name', null)
-                            ->where('media.0.tracks.0.songId', $songId)
+                            ->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.trackNo', 1)
                             ->where('media.1.position', 2)
                             ->where('media.1.name', 'DVD')
@@ -107,7 +107,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -116,8 +116,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                            ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
                         ],
                     ],
                 ],
@@ -127,9 +127,9 @@ class CreateReleaseTest extends DatabaseTestCase
                     ->has(
                         'release',
                         static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songId', $songId)
+                            ->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.title', null)
-                            ->where('media.0.tracks.1.songId', null)
+                            ->where('media.0.tracks.1.songIds', [])
                             ->where('media.0.tracks.1.title', '管理対象外の楽曲')
                             ->where('media.0.tracks.1.trackNo', 2)
                             ->etc(),
@@ -138,7 +138,6 @@ class CreateReleaseTest extends DatabaseTestCase
 
         $this->assertDatabaseHas('release_tracks', [
             'track_no' => 2,
-            'song_id' => null,
             'title' => '管理対象外の楽曲',
         ]);
     }
@@ -163,7 +162,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => 'ライブ盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -172,8 +171,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 2],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 2],
                         ],
                     ],
                 ],
@@ -183,15 +182,107 @@ class CreateReleaseTest extends DatabaseTestCase
                     ->has(
                         'release',
                         static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songId', $songId)
+                            ->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.trackNo', 1)
-                            ->where('media.0.tracks.1.songId', $songId)
+                            ->where('media.0.tracks.1.songIds', [$songId])
                             ->where('media.0.tracks.1.trackNo', 2)
                             ->etc(),
                     ),
             );
 
         $this->assertDatabaseCount('release_tracks', 2);
+    }
+
+    #[Test]
+    public function canCreateWithMedleyTrack(): void
+    {
+        $songId1 = $this->generateUuid();
+        $songId2 = $this->generateUuid();
+        $releaseGroupId = $this->generateUuid();
+
+        $this->storeSongs(
+            $this->createSong($songId1, 'テスト楽曲1', '説明', SongType::Original, true, 1),
+            $this->createSong($songId2, 'テスト楽曲2', '説明', SongType::Original, true, 2),
+        );
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
+        );
+
+        $this->withAuth()
+            ->postJson(route(ReleaseRouteMap::Create), [
+                'releaseGroupId' => $releaseGroupId,
+                'name' => 'ライブ盤',
+                'releasedOn' => '2026-05-09',
+                'description' => '',
+                'note' => '',
+                'isDisplay' => true,
+                'orderNo' => 10,
+                'formats' => [ReleaseFormat::Cd->value],
+                'media' => [
+                    [
+                        'position' => 1,
+                        'name' => null,
+                        'tracks' => [
+                            ['songIds' => [$songId2, $songId1], 'title' => 'メドレー', 'trackNo' => 1],
+                        ],
+                    ],
+                ],
+            ])->assertStatus(200)
+            ->assertJson(
+                static fn (AssertableJson $json) => $json
+                    ->has(
+                        'release',
+                        static fn (AssertableJson $json) => $json
+                            ->where('media.0.tracks.0.songIds', [$songId2, $songId1])
+                            ->where('media.0.tracks.0.title', 'メドレー')
+                            ->etc(),
+                    ),
+            );
+
+        $this->assertDatabaseCount('release_tracks', 1);
+        $this->assertDatabaseCount('release_track_songs', 2);
+    }
+
+    #[Test]
+    public function createFailsWhenMedleyHasDuplicatedSongs(): void
+    {
+        $songId = $this->generateUuid();
+        $releaseGroupId = $this->generateUuid();
+
+        $this->storeSongs(
+            $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1),
+        );
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
+        );
+
+        $this->withAuth()
+            ->postJson(route(ReleaseRouteMap::Create), [
+                'releaseGroupId' => $releaseGroupId,
+                'name' => 'ライブ盤',
+                'releasedOn' => '2026-05-09',
+                'description' => '',
+                'note' => '',
+                'isDisplay' => true,
+                'orderNo' => 10,
+                'formats' => [ReleaseFormat::Cd->value],
+                'media' => [
+                    [
+                        'position' => 1,
+                        'name' => null,
+                        'tracks' => [
+                            ['songIds' => [$songId, $songId], 'title' => 'メドレー', 'trackNo' => 1],
+                        ],
+                    ],
+                ],
+            ])->assertStatus(400)
+            ->assertJson(
+                static fn (AssertableJson $json) => $json
+                    ->where('code', 'business_rule_violation')
+                    ->where('message', '1 つの収録曲に同じ楽曲を複数指定することはできません。'),
+            );
+
+        $this->assertDatabaseCount('releases', 0);
     }
 
     #[Test]
@@ -214,7 +305,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -223,7 +314,7 @@ class CreateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => $songId, 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1],
+                            ['songIds' => [$songId], 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1],
                         ],
                     ],
                 ],
@@ -233,7 +324,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ->has(
                         'release',
                         static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songId', $songId)
+                            ->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.title', 'テスト楽曲1 -instrumental-')
                             ->where('media.0.tracks.0.trackNo', 1)
                             ->etc(),
@@ -247,7 +338,7 @@ class CreateReleaseTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function createFailsWhenTrackHasNeitherSongIdNorTitle(): void
+    public function createFailsWhenTrackHasNeitherSongsNorTitle(): void
     {
         $releaseGroupId = $this->generateUuid();
 
@@ -261,7 +352,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '初回限定盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 10,
                 'formats' => [ReleaseFormat::Cd->value],
@@ -270,7 +361,7 @@ class CreateReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => null,
                         'tracks' => [
-                            ['songId' => null, 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [], 'title' => null, 'trackNo' => 1],
                         ],
                     ],
                 ],
@@ -297,7 +388,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
@@ -313,7 +404,7 @@ class CreateReleaseTest extends DatabaseTestCase
                             ->where('name', '')
                             ->where('releasedOn', '2026-05-09')
                             ->where('description', '')
-                            ->where('color', '#989899')
+                            ->where('note', '')
                             ->where('isDisplay', true)
                             ->where('orderNo', 1)
                             ->where('formats', [ReleaseFormat::Digital->value])
@@ -343,7 +434,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '通常盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [],
@@ -360,7 +451,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '通常盤',
                 'releasedOn' => '2026-05-09',
                 'description' => '',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
@@ -378,7 +469,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'name' => '通常盤',
                 'releasedOn' => 'invalid-date',
                 'description' => '説明',
-                'color' => '#989899',
+                'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],

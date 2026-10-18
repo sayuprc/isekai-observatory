@@ -34,7 +34,7 @@ readonly class CreateUseCase
                 $inputData->name,
                 $inputData->releasedOn,
                 $inputData->description,
-                $inputData->color,
+                $inputData->note,
                 $inputData->isDisplay,
                 $inputData->orderNo,
                 $inputData->formats,

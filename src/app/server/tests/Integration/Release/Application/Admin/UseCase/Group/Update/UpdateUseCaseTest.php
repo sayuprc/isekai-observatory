@@ -32,8 +32,10 @@ class UpdateUseCaseTest extends DatabaseTestCase
             title: '新タイトル',
             type: ReleaseGroupType::Single->value,
             description: '更新後の説明',
+            note: '',
             isDisplay: false,
             orderNo: 3,
+            tags: [],
         ));
 
         $this->assertSame('新タイトル', $result->releaseGroup->title->value);
@@ -42,6 +44,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
             'title' => '新タイトル',
             'type' => ReleaseGroupType::Single->value,
             'description' => '更新後の説明',
+            'note' => '',
             'is_display' => false,
             'order_no' => 3,
         ]);
@@ -57,8 +60,10 @@ class UpdateUseCaseTest extends DatabaseTestCase
             title: '新タイトル',
             type: ReleaseGroupType::Album->value,
             description: '説明',
+            note: '',
             isDisplay: true,
             orderNo: 1,
+            tags: [],
         ));
     }
 

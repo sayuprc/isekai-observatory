@@ -1,9 +1,10 @@
 import { createResource, Match, Switch } from 'solid-js';
-import type { Media, SongTag } from '../../generated';
+import type { Media } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createTabState } from '../../utils/tab';
 import { createSubmitting } from '../../utils/use-submitting';
 import { EntityHeader } from '../EntityHeader';
@@ -12,7 +13,7 @@ import { FormError } from '../FormError';
 import { createSongForm } from './song-form';
 import { SONG_TABS, SongFormFields, SongTabList } from './SongFormFields';
 
-type CreateFormData = { tags: SongTag[]; media: Media[] };
+type CreateFormData = { media: Media[] };
 
 interface CreateFormProps {
   data: CreateFormData;
@@ -107,14 +108,8 @@ export const CreateForm = (props: CreateFormProps) => {
         tabs={<SongTabList form={form} current={tab()} onChange={setTab} withHistory={false} />}
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="song-form" onSubmit={handleSubmit}>
-        <SongFormFields
-          form={form}
-          tab={tab()}
-          availableTags={props.data.tags}
-          getFieldError={getFieldError}
-          withOrderNo={false}
-        />
+      <form ref={bindForm} id="song-form" onKeyDown={preventImplicitSubmit} onSubmit={handleSubmit}>
+        <SongFormFields form={form} tab={tab()} getFieldError={getFieldError} withOrderNo={false} />
       </form>
     </>
   );

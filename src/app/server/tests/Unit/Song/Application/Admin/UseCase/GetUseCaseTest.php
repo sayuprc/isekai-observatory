@@ -73,6 +73,7 @@ class GetUseCaseTest extends TestCase
                     $song->songId->value,
                     $song->title->value,
                     $song->description->value,
+                    $song->note->value,
                     $song->lyricsLink?->value,
                     $song->type->value,
                     $song->isDisplay,
@@ -82,6 +83,7 @@ class GetUseCaseTest extends TestCase
                         new AssembledPerson($composerId, 'テスト作曲者A', SongPersonRole::Composer, 2),
                         new AssembledPerson($arrangerId, 'テスト編曲者A', SongPersonRole::Arranger, 3),
                     ],
+                    [],
                 ),
             )
             ->once();

@@ -9,7 +9,7 @@ interface PersonGroupRepositoryInterface
     public function find(PersonGroupId $personGroupId): ?PersonGroup;
 
     /**
-     * @return list<PersonGroup>
+     * @return array<int, PersonGroup>
      */
     public function findByIds(PersonGroupId ...$personGroupIds): array;
 

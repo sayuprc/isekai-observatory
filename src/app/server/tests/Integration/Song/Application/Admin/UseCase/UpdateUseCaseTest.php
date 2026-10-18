@@ -56,6 +56,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                 $songId,
                 'テスト楽曲',
                 'テスト楽曲説明',
+                'テスト楽曲備考',
                 'https://example.com/lyrics',
                 SongType::Cover->value,
                 false,
@@ -73,6 +74,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $song = array_first($songs);
         $this->assertSame('テスト楽曲', $song->title);
         $this->assertSame('テスト楽曲説明', $song->description);
+        $this->assertSame('テスト楽曲備考', $song->note);
         $this->assertSame('https://example.com/lyrics', $song->lyrics_link);
         $this->assertSame(SongType::Cover->value, (int)$song->type);
         $this->assertSame(0, (int)$song->is_display);
@@ -106,6 +108,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     $songId,
                     'テスト楽曲',
                     'テスト楽曲説明',
+                    '',
                     null,
                     SongType::Original->value,
                     true,

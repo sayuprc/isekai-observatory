@@ -44,25 +44,34 @@
   padding: 0;
   margin: 0;
   list-style: none;
-  border-top: 1px solid var(--line);
 }
 
+/* 日付と題名のあいだに縦の線と点を通し、時間の流れとして見せる
+   行の区切り線は本文側にだけ引き、縦の線を途切れさせない */
+
 .event-line {
+  --event-line-ground: var(--bg);
+
   display: grid;
-  grid-template-columns: 104px 64px minmax(0, 1fr) 24px;
-  gap: 20px;
-  align-items: center;
-  padding: 20px 16px;
+  grid-template-columns: 104px 20px minmax(0, 1fr) 24px;
+  column-gap: 16px;
+  align-items: start;
+  padding: 0 16px;
   color: inherit;
   text-decoration: none;
-  border-bottom: 1px solid var(--line);
   transition: background 0.2s ease;
+}
+
+.event-home-list .event-line {
+  --event-line-ground: var(--bg-elev);
 }
 
 .event-line-date {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  align-items: flex-end;
+  padding-top: 20px;
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -76,14 +85,50 @@
   color: var(--fg-muted);
 }
 
-.event-line-type {
-  justify-self: start;
-  padding: 3px 8px;
-  font-size: 11px;
-  color: var(--fg-muted);
-  white-space: nowrap;
-  border: 1px solid var(--line);
-  border-radius: 20px;
+.event-line-axis {
+  position: relative;
+  align-self: stretch;
+}
+
+.event-line-axis::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  content: '';
+  border-left: 1px solid var(--line);
+}
+
+.event-line-dot {
+  position: absolute;
+  top: 29px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  background: var(--accent-strong);
+  border-radius: 999px;
+  box-shadow: 0 0 0 4px var(--event-line-ground);
+  transform: translateX(-50%);
+}
+
+/* 状態は色だけに頼らず点の形で表す。期間は縦長、延期・中止は白抜き、日付未定は破線 */
+
+.event-line[data-span] .event-line-dot {
+  height: 30px;
+}
+
+.event-line[data-inactive] .event-line-dot {
+  background: var(--event-line-ground);
+  border: 1.5px solid var(--fg-muted);
+}
+
+.event-line[data-undated] .event-line-axis::before {
+  border-left-style: dashed;
+}
+
+.event-line[data-undated] .event-line-dot {
+  background: var(--event-line-ground);
+  border: 1.5px dashed var(--fg-muted);
 }
 
 .event-line-body {
@@ -91,6 +136,17 @@
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* 種別と会場はリリース一覧と同じく題名の下の段にまとめる */
+
+.event-line-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
 }
 
 .event-line-title {
@@ -120,6 +176,7 @@
 }
 
 .event-line-arrow {
+  padding-top: 22px;
   color: var(--fg-muted);
   transition:
     transform 0.2s ease,
@@ -128,6 +185,8 @@
 
 @media (hover: hover) {
   .event-line:hover {
+    --event-line-ground: var(--bg-elev);
+
     background: var(--bg-elev);
   }
 
@@ -151,7 +210,7 @@
 /* 年見出しがないので開始日に年を付ける分、日付列を広げる */
 
 .event-line-with-year {
-  grid-template-columns: 140px 64px minmax(0, 1fr) 24px;
+  grid-template-columns: 140px 20px minmax(0, 1fr) 24px;
 }
 
 .event-line-status,
@@ -225,100 +284,6 @@
 
 .event-detail-fact-part {
   display: inline-block;
-}
-
-/* セットリストは楽曲披露を入れ込んだ番号付きの 1 列リスト。メドレーは 1 項目に複数の曲を並べる */
-
-.event-setlist {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-}
-
-.event-setlist-item {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
-  gap: 14px;
-  align-items: baseline;
-  padding: 18px 20px;
-  border-bottom: 1px solid var(--line-soft);
-}
-
-.event-setlist-item:last-child {
-  border-bottom: 0;
-}
-
-.event-setlist-item-loose {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.event-setlist-body {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 0;
-}
-
-.event-setlist-label {
-  font-size: 16px;
-  line-height: 1.6;
-}
-
-/* 本人が歌唱しない演目は曲と区別して控えめに出す */
-
-.event-setlist-item[data-label-only] .event-setlist-label {
-  color: var(--fg-muted);
-}
-
-.event-setlist-songs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.event-setlist-label + .event-setlist-songs {
-  padding-left: 14px;
-  border-left: 1px solid var(--line);
-}
-
-.event-setlist-song {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  align-items: baseline;
-}
-
-.event-setlist-song-title {
-  font-size: 16px;
-  line-height: 1.6;
-  color: inherit;
-  overflow-wrap: anywhere;
-}
-
-a.event-setlist-song-title {
-  text-decoration: none;
-  transition: color 0.18s ease;
-}
-
-a.event-setlist-song-title::after {
-  margin-left: 8px;
-  font-size: 12px;
-  color: var(--fg-muted);
-  content: '→';
-}
-
-a.event-setlist-song-title:hover {
-  color: var(--accent-strong);
-}
-
-.event-setlist-song-note {
-  font-size: 11px;
 }
 
 /* 説明は改行可能なプレーンテキストなので、改行をそのまま表示する */

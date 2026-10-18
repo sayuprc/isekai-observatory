@@ -9,50 +9,65 @@ use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\ValueObjects\OrderNo;
 
 /**
- * 収録曲。songId と title の少なくとも一方を持つ
+ * 収録曲。楽曲とタイトルの少なくとも一方を持つ
  *
- * - 参照トラック: songId あり(Song 集約を参照する)。title があれば表示名を上書きする
- * - タイトルのみトラック: songId なし / title あり(管理対象外楽曲。表示専用)
+ * - 楽曲 1 件: Song 集約を参照する。title があれば表示名を上書きする
+ * - メドレー: 楽曲を 2 件以上、収録順に参照する。title はメドレーの表示名
+ * - タイトルのみトラック: 楽曲なし / title あり(管理対象外楽曲。表示専用)
  */
 readonly class Track
 {
+    /**
+     * @param list<SongId> $songIds
+     */
     private function __construct(
-        public ?SongId $songId,
+        public array $songIds,
         public ?TrackTitle $title,
         public OrderNo $trackNo,
     ) {
     }
 
     /**
-     * 楽曲かタイトルの一方必須は契約 (JSON Schema) で表現しない配列内ルールのため業務エラーとする
+     * 楽曲かタイトルの一方必須と楽曲の重複禁止は契約 (JSON Schema) で表現しない配列内ルールのため業務エラーとする
+     *
+     * @param list<SongId> $songIds
      *
      * @throws BusinessRuleViolationException
      */
-    public static function create(?SongId $songId, ?TrackTitle $title, OrderNo $trackNo): self
+    public static function create(array $songIds, ?TrackTitle $title, OrderNo $trackNo): self
     {
-        if ($songId === null && $title === null) {
+        if ($songIds === [] && $title === null) {
             throw new BusinessRuleViolationException('収録曲には楽曲かタイトルの少なくとも一方を指定してください。');
         }
 
-        return new self($songId, $title, $trackNo);
+        $values = array_map(static fn (SongId $songId): string => $songId->value, $songIds);
+
+        if (count($values) !== count(array_unique($values))) {
+            throw new BusinessRuleViolationException('1 つの収録曲に同じ楽曲を複数指定することはできません。');
+        }
+
+        return new self($songIds, $title, $trackNo);
     }
 
-    public static function reconstruct(?string $songId, ?string $title, int $trackNo): self
+    /**
+     * @param list<string> $songIds
+     */
+    public static function reconstruct(array $songIds, ?string $title, int $trackNo): self
     {
         return new self(
-            $songId === null ? null : new SongId($songId),
+            array_map(static fn (string $songId): SongId => new SongId($songId), $songIds),
             $title === null ? null : new TrackTitle($title),
             new OrderNo($trackNo),
         );
     }
 
     /**
-     * @return array{song_id: ?string, title: ?string, track_no: int}
+     * @return array{song_ids: list<string>, title: ?string, track_no: int}
      */
     public function toArray(): array
     {
         return [
-            'song_id' => $this->songId?->value,
+            'song_ids' => array_map(static fn (SongId $songId): string => $songId->value, $this->songIds),
             'title' => $this->title?->value,
             'track_no' => $this->trackNo->value,
         ];

@@ -1,11 +1,11 @@
 # Event Spec
 
-関連: ADR-0015 (画像)、ADR-0020 (Media)、ADR-0021 (公開 read model)、ADR-0022 (監査)、ADR-0023 (Person)、ADR-0025 (Venue)、ADR-0026 (Event / Activity 境界)、ADR-0027 (Event の日付精度)
+関連: ADR-0015 (画像)、ADR-0020 (Media)、ADR-0021 (公開 read model)、ADR-0022 (監査)、ADR-0023 (Person)、ADR-0025 (Venue)、ADR-0026 (Event / Activity 境界)、ADR-0027 (Event の日付精度)、ADR-0036 / ADR-0037 (タグ)
 
 ## 用語
 
 - **Event (イベント)**: ヰ世界情緒による、または本人が公式に参加する、一回の開催または連続した開催期間
-- **Event** の主要フィールド: `eventId` / `title` / `description` / `type` / `schedule` / `status` / `isDisplay`
+- **Event** の主要フィールド: `eventId` / `title` / `description` / `note` / `type` / `schedule` / `status` / `isDisplay`
 - **EventType**: Live / Stream / Exhibition / Radio / Other。開催方法ではなく Event 全体の主目的を表す
   冠番組は番組を 1 件の Event として扱い、放送開始日を開催時期に入れる。放送回ごとの Event や番組の概念は持たない
 - **EventSchedule**: `startOn` / `endOn` で開催時期を表す。両方 null は日付未定、`startOn` のみは単日、両方指定は期間。`endOn` のみは許容しない。時刻とタイムゾーンは持たず、詳細な時刻は Event の説明に記載する
@@ -20,6 +20,7 @@
 - Admin: Event の検索・取得・作成・更新・削除
   タイトル、活動種別、延期・中止、公開状態で検索できる
 - Event はタイトル必須、改行可能なプレーンテキストの説明は空文字を許容する必須値。同じタイトル・日付を許容する
+- 説明は Viewer に公開し、備考 (`note`) は管理用のメモとして Viewer に出さない
 - 一回の開始を一つの Event とする。同日昼夜公演は別 Event、同時刻の現地会場と配信先は一つの Event とする
 - 開催先は 0 件以上。Venue / Media / Release / EventSource は Event 内で重複不可かつ `orderNo` を持つ
 - EventSource は 0 件でも Event を公開できる。Viewer には表示名と URL を公開する
@@ -27,12 +28,14 @@
 - Event は複数の Release (版) を関連リリースとして関連づけられる。リンクの所有は Event 側
   同じ作品の通常盤と限定盤のように、Event を収録した版ごとに関連づける
   Admin はリリースグループのタイトルで検索し、傘下の版から選ぶ
+- Event には複数の Tag を付けられる。タグ付けの所有は Event 側で、重複は不可。並びは Tag の表示順
+  Viewer では item に Tag が載り、イベント一覧を Tag で絞り込める。詳細は `tag.md`
 - Postponed の Event は延期先 Event を参照しない。延期後の開催は別 Event として登録する
 - SongPerformance はすべての EventType に 0 件以上登録でき、必ず 1 件の Song を参照する
   同じ Event で同じ Song を複数回披露した場合も別 SongPerformance とする
 - SongPerformance は一緒に歌唱した Person を共演者として順序付きで参照できる
   演奏だけを担当した Person は含めず、当日のユニット名などを任意のクレジット名として持てる
-  グループとして全員で出演した共演者は、任意の出演グループ (PersonGroup) を共演者ごとに持てる。一部メンバーだけの披露は個人として記録する
+  グループとして全員で出演した共演者は、任意の出演グループ (PersonGroup) を共演者ごとに持てる。一部メンバーだけの披露は個人として記録するか、その顔ぶれの別グループとして記録する
   出演グループ付きの共演者とグループの現在のメンバー構成の一致は検証しない
 - Live / Stream は Setlist を持てる。項目は `orderNo` を持ち、次のどちらかまたは両方を満たす
   - 1 件以上の SongPerformance を参照する。メドレーでは複数件を参照できる
@@ -42,8 +45,10 @@
 - EventType を Live / Stream から Exhibition / Radio / Other へ変える場合、Setlist が残っていれば拒否する
 - Admin は Release の収録楽曲を曲順どおりに SongPerformance として取り込める
   取り込み元は関連リリースから選ぶか、リリースグループのタイトルで検索する。タイトルのみのトラックは取り込まない
-- Admin は Release の収録楽曲を曲順どおりに 1 曲 1 項目の Setlist 項目として取り込める
+  メドレーのトラックは収録順に楽曲ごとの SongPerformance にする
+- Admin は Release の収録楽曲を曲順どおりに 1 トラック 1 項目の Setlist 項目として取り込める
   楽曲を参照するトラックは SongPerformance も作って項目から参照し、タイトルのみのトラックは表示名だけの項目にする
+  メドレーのトラックは楽曲ごとの SongPerformance を 1 項目から参照し、トラック名を項目の表示名にする
 - Postponed / Cancelled の Event は SongPerformance と Setlist を持たない
   状態を Postponed / Cancelled にする保存で SongPerformance または Setlist が残っていれば拒否する
 - SongPerformance の公開可否は所属する Event の `isDisplay` に従い、SongPerformance ごとには持たない
@@ -54,6 +59,7 @@
 - Viewer のイベント一覧は、日付未定を先頭の別枠に置き、残りは未来・過去を区別せず年ごとに開催日の降順で表示する
   イベント種別で絞り込み、タイトル・年・開催先でクライアント側検索できる。延期・中止も元の開催日の位置に状態バッジ付きで残す
 - ホームの今後の予定は、延期・中止を除外したうえでブラウザ上の現在日付と比較して導出する
+- ホームの台帳のイベント数は、延期・中止を除いた公開 Event の件数とする
 - 公開 Event が非公開 Song を参照する場合、イベント詳細には曲名だけを出し、Song ID とリンクは出さない
   非公開 Media はイベント詳細から除外する
   関連リリースは Release とその ReleaseGroup がともに公開のものだけを出し、リリース詳細へリンクする
@@ -81,6 +87,7 @@ classDiagram
   Event "N" --> "M" Media : order / リンク所有
   Event "N" --> "M" Release : 関連リリース / order / リンク所有
   Event "1" --> "N" EventSource : 所有
+  Event "N" --> "M" Tag : タグ付け所有
   Event "1" --> "N" SongPerformance : 所有
   SongPerformance "N" --> "1" Song
   SongPerformance "N" --> "M" Person : 共演者 / order

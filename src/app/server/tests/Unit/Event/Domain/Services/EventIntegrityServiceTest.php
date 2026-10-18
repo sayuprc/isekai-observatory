@@ -246,7 +246,7 @@ class EventIntegrityServiceTest extends TestCase
      * @param list<_setlistItemInput>                      $setlist
      * @param list<array{releaseId: string, orderNo: int}> $releases
      *
-     * @return array{title: string, description: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venues: list<array{venueId: string, orderNo: int}>, media: list<array{mediaId: string, orderNo: int}>, releases: list<array{releaseId: string, orderNo: int}>, sources: list<_eventSourceInput>, performances: list<_songPerformanceInput>, setlist: list<_setlistItemInput>}
+     * @return array{title: string, description: string, note: string, type: int, schedule: array{startOn: ?string, endOn: ?string}, status: int, isDisplay: bool, venues: list<array{venueId: string, orderNo: int}>, media: list<array{mediaId: string, orderNo: int}>, releases: list<array{releaseId: string, orderNo: int}>, sources: list<_eventSourceInput>, performances: list<_songPerformanceInput>, setlist: list<_setlistItemInput>, tags: list<array{tagId: string}>}
      */
     private function input(
         int $type = EventType::Live->value,
@@ -260,6 +260,7 @@ class EventIntegrityServiceTest extends TestCase
         return [
             'title' => 'テストライブ',
             'description' => '',
+            'note' => '',
             'type' => $type,
             'schedule' => $schedule,
             'status' => $status,
@@ -270,6 +271,7 @@ class EventIntegrityServiceTest extends TestCase
             'sources' => [],
             'performances' => $performances,
             'setlist' => $setlist,
+            'tags' => [],
         ];
     }
 

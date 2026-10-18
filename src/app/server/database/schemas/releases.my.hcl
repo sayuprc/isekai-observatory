@@ -27,10 +27,10 @@ table "releases" {
     type    = text
     comment = "説明"
   }
-  column "color" {
+  column "note" {
     null    = false
-    type    = varchar(7)
-    comment = "代表色"
+    type    = text
+    comment = "備考"
   }
   column "is_display" {
     null    = false

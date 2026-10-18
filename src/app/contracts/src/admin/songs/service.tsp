@@ -1,8 +1,11 @@
 import "@typespec/http";
 import "../../shared";
+import "../../packages/song";
 import "../auth";
+import "../tags";
 
 using IsekaiObservatory.Shared;
+using IsekaiObservatory.Packages.Song;
 using Http;
 
 namespace IsekaiObservatory.Admin;
@@ -25,6 +28,9 @@ enum SongSearchTypeValue {
 
   @doc("カバー曲")
   Cover: "2",
+
+  @doc("参加曲")
+  Guest: "3",
 }
 
 @tag("Song")
@@ -37,6 +43,11 @@ interface SongService {
     @query title?: string,
     @query type?: SongSearchTypeValue,
     @query("is_display") isDisplay?: boolean,
+
+    @doc("このタグが付いた楽曲だけに絞り込む")
+    @query("tag_id")
+    tagId?: tagId,
+
     @query sort?: SongSearchSortBy = SongSearchSortBy.orderNo,
     @query order?: SortOrder = SortOrder.asc,
     @query page?: page = 1,
@@ -44,7 +55,13 @@ interface SongService {
   ): Ok<SongSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("楽曲取得API")
-  getSong(@path songId: uuid): Ok<SongGetResponse> | Unauthorized | Forbidden | NotFound | Unprocessable | ServerError;
+  getSong(@path songId: songId):
+    | Ok<SongGetResponse>
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | Unprocessable
+    | ServerError;
 
   @doc("楽曲作成API")
   createSong(@body request: SongCreateRequest):
@@ -57,7 +74,7 @@ interface SongService {
 
   @doc("楽曲更新API")
   @put
-  updateSong(@path songId: uuid, @body request: SongUpdateRequest):
+  updateSong(@path songId: songId, @body request: SongUpdateRequest):
     | Ok<SongUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -68,5 +85,5 @@ interface SongService {
 
   @doc("楽曲削除API")
   @delete
-  deleteSong(@path songId: uuid): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
+  deleteSong(@path songId: songId): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
 }

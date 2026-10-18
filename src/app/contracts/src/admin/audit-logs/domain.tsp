@@ -1,4 +1,5 @@
 import "../../shared";
+import "../admin-users";
 
 using IsekaiObservatory.Shared;
 
@@ -6,6 +7,9 @@ namespace IsekaiObservatory.Admin;
 
 @doc("監査ログID")
 scalar auditLogId extends uuid;
+
+@doc("監査対象ID。targetType によって指す集約が変わる")
+scalar auditTargetId extends uuid;
 
 @doc("監査ログの操作種別")
 @IsekaiObservatory.Shared.enumExtensions
@@ -59,8 +63,8 @@ enum AuditTargetType {
   @doc("楽曲")
   song: "Song",
 
-  @doc("楽曲タグ")
-  songTag: "SongTag",
+  @doc("タグ")
+  tag: "Tag",
 
   @doc("開催先")
   venue: "Venue",
@@ -72,11 +76,11 @@ enum AuditTargetType {
 @doc("監査ログ一覧の 1 行分")
 model AuditLogSummary {
   auditLogId: auditLogId;
-  adminUserId: uuid;
+  adminUserId: adminUserId;
   adminUserName: string;
   action: AuditAction;
   targetType: AuditTargetType;
-  targetId: uuid;
+  targetId: auditTargetId;
   createdAt: utcDateTime;
 }
 

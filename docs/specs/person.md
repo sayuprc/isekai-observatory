@@ -7,7 +7,8 @@
 - **Person**: `personId` / `name` (一意) / `orderNo`。役割マスタではない
 - 楽曲上の役割は **SongPersonRole**: Lyricist / Composer / Arranger (song 文脈のみ)
 - Creator / Performer 互換は持たない。管理導線は `/persons` のみ
-- **PersonGroup**: `personGroupId` / `name` (一意) / 順序付きのメンバー (Person)。共演者をまとめて入力・表示するためのグループで、所属期間は持たない
+- **PersonGroup**: `personGroupId` / `name` (管理用名称、一意) / `displayName` (表示用名称、重複可) / 順序付きのメンバー (Person)。共演者をまとめて入力・表示するためのグループで、所属期間は持たない
+  メンバーの一時離脱は、離脱パターンごとに別のグループを作り、表示用名称を揃えて表す
 
 ## できること
 
@@ -20,7 +21,7 @@
 - Admin: 楽曲披露でグループを選ぶと、メンバーをグループ付きの共演者としてまとめて添付できる
 - Viewer: 人物 API・人物ページは持たない
   楽曲 item 上の名前配列 (lyricists / composers / arrangers) または楽曲披露の共演者名としてのみ見える
-  グループとして出演した共演者は、グループ名 1 つにまとめて見える
+  グループとして出演した共演者は、グループの表示用名称 1 つにまとめて見える
 
 ## できないこと
 

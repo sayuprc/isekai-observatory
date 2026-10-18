@@ -55,7 +55,7 @@ UI 実装方針の詳細は `FRONTEND.md` を参照します
 - Worker は API サーバーと DB へ問い合わせない。データは `viewer-deploy` で書き出したスナップショットだけを使う
 - item の中身は解釈しない。形状は Public 契約と server が保証する
 
-配信方針の判断は ADR-0034 を参照します
+配信方針の判断は ADR-0038 を参照します
 
 ## Notify Contract
 

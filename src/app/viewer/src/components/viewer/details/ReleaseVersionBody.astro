@@ -1,6 +1,6 @@
 ---
-import type { Release } from '../../../features/releases/types';
-import TrackChip from '../TrackChip.astro';
+import { trackSongListItem, type Release } from '../../../features/releases/types';
+import DetailSongList from './DetailSongList.astro';
 
 interface Props {
   release: Release;
@@ -9,7 +9,7 @@ interface Props {
 const { release } = Astro.props;
 ---
 
-<div class="release-version-content" style={`--c:${release.color};`}>
+<div class="release-version-content">
   <div class="release-version-track-list">
     {release.description && <p class="detail-description release-version-description">{release.description}</p>}
     {release.media.map((medium) => (
@@ -21,11 +21,7 @@ const { release } = Astro.props;
           </div>
         )}
         {medium.tracks.length > 0 ? (
-          <div class="rel-list">
-            {medium.tracks.map((track) => (
-              <TrackChip track={track} />
-            ))}
-          </div>
+          <DetailSongList items={medium.tracks.map(trackSongListItem)} />
         ) : (
           <p class="detail-description">収録曲情報はありません。</p>
         )}

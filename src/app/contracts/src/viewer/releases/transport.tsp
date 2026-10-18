@@ -20,7 +20,6 @@ namespace IsekaiObservatory.Viewer;
           name: "初回限定盤",
           releasedOn: "2026-05-01",
           description: "",
-          color: "#4a5a78",
           orderNo: 1,
           formats: #[ReleaseFormatValue.Cd],
           media: #[
@@ -28,12 +27,17 @@ namespace IsekaiObservatory.Viewer;
               position: 1,
               name: null,
               tracks: #[
-                #{ trackNo: 1, songId: "3cd42c09-ff3c-4cd2-913f-a279c4ea89b4", title: "テスト楽曲", isDisplay: true }
+                #{
+                  trackNo: 1,
+                  title: null,
+                  songs: #[#{ songId: "3cd42c09-ff3c-4cd2-913f-a279c4ea89b4", title: "テスト楽曲", isDisplay: true }],
+                }
               ],
             }
           ],
         }
       ],
+      tags: #[#{ tagId: "5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90", name: "テストタグ", orderNo: 10 }],
     }
   ],
   nextCursor: "eyJmaXJzdFJlbGVhc2VkT24iOiIyMDI2LTA1LTAxIiwicmVsZWFzZUdyb3VwSWQiOiIwZjIxODVjZC1iNGFiLTRmMjItYjBhMy1mZDkzY2JiZDJkZjIifQ==",

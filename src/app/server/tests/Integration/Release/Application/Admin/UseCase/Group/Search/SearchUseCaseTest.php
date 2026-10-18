@@ -155,13 +155,13 @@ class SearchUseCaseTest extends DatabaseTestCase
         $this->storeReleases(
             $this->createRelease($this->generateUuid(), $releaseGroupId, 'CD', true, media: [
                 ['position' => 1, 'name' => null, 'tracks' => [
-                    ['songId' => $songId1, 'title' => null, 'trackNo' => 1],
-                    ['songId' => $songId2, 'title' => null, 'trackNo' => 2],
-                    ['songId' => null, 'title' => 'インスト', 'trackNo' => 3],
+                    ['songIds' => [$songId1], 'title' => null, 'trackNo' => 1],
+                    ['songIds' => [$songId2], 'title' => null, 'trackNo' => 2],
+                    ['songIds' => [], 'title' => 'インスト', 'trackNo' => 3],
                 ]],
             ]),
             $this->createRelease($this->generateUuid(), $releaseGroupId, '配信', true, orderNo: 2, media: [
-                ['position' => 1, 'name' => null, 'tracks' => [['songId' => $songId1, 'title' => null, 'trackNo' => 1]]],
+                ['position' => 1, 'name' => null, 'tracks' => [['songIds' => [$songId1], 'title' => null, 'trackNo' => 1]]],
             ]),
         );
 

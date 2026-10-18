@@ -1,4 +1,5 @@
 import "../../shared";
+import "../tags";
 import "../../packages/media";
 import "../../packages/event";
 import "../../packages/song";
@@ -54,10 +55,10 @@ model SongPerformanceHistory {
       title: "テストアルバム",
       type: ReleaseGroupTypeValue.Album,
       firstReleasedOn: "2026-05-01",
-      color: "#4a5a78",
     }
   ],
   performances: #[],
+  tags: #[#{ tagId: "5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90", name: "テストタグ", orderNo: 10 }],
 })
 model SongListItem {
   songId: songId;
@@ -75,6 +76,9 @@ model SongListItem {
 
   @doc("公開イベントでの披露履歴(開催時期の新しい順)")
   performances: SongPerformanceHistory[];
+
+  @doc("付いているタグ(タグの表示順)")
+  tags: AttachedTag[];
 }
 
 @doc("楽曲が収録されている公開リリースグループの概要")
@@ -83,9 +87,6 @@ model SongReleaseGroupSummary {
   title: releaseGroupTitle;
   type: ReleaseGroupTypeValue;
   firstReleasedOn: releasedOn;
-
-  @doc("代表色(公開リリースを発売日順に見て最初のもの)")
-  color: color;
 }
 
 @example(#{

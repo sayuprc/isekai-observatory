@@ -30,7 +30,7 @@ readonly class ImportYouTubeNotifier
     }
 
     /**
-     * @param list<ChannelImportResult> $results
+     * @param array<int, ChannelImportResult> $results
      */
     public function succeeded(array $results): void
     {
@@ -58,9 +58,9 @@ readonly class ImportYouTubeNotifier
     }
 
     /**
-     * @param list<ChannelImportResult> $results
+     * @param array<int, ChannelImportResult> $results
      *
-     * @return list<NotificationEmbed>
+     * @return array<int, NotificationEmbed>
      */
     private function buildSucceededEmbeds(array $results): array
     {

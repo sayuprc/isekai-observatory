@@ -1,5 +1,6 @@
 import "@typespec/http";
 import "../auth";
+import "../tags";
 import "../../packages/event";
 import "../../shared";
 
@@ -30,6 +31,11 @@ interface EventService {
     @query type?: EventTypeValue,
     @query status?: EventStatusValue,
     @query("is_display") isDisplay?: boolean,
+
+    @doc("このタグが付いたイベントだけに絞り込む")
+    @query("tag_id")
+    tagId?: tagId,
+
     @query sort?: EventSearchSortBy = EventSearchSortBy.schedule,
     @query order?: SortOrder = SortOrder.asc,
     @query page?: page = 1,
@@ -37,7 +43,7 @@ interface EventService {
   ): Ok<EventSearchResponse> | Unauthorized | Forbidden | ServerError;
 
   @doc("イベント取得API")
-  getEvent(@path eventId: uuid):
+  getEvent(@path eventId: eventId):
     | Ok<EventGetResponse>
     | Unauthorized
     | Forbidden
@@ -56,7 +62,7 @@ interface EventService {
 
   @doc("イベント更新API")
   @put
-  updateEvent(@path eventId: uuid, @body request: EventUpdateRequest):
+  updateEvent(@path eventId: eventId, @body request: EventUpdateRequest):
     | Ok<EventUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -67,7 +73,7 @@ interface EventService {
 
   @doc("イベント削除API")
   @delete
-  deleteEvent(@path eventId: uuid):
+  deleteEvent(@path eventId: eventId):
     | NoContent
     | BadRequest
     | Unauthorized

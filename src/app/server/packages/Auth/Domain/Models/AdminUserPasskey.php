@@ -9,7 +9,7 @@ use DateTimeImmutable;
 readonly class AdminUserPasskey
 {
     /**
-     * @param list<string> $transports
+     * @param array<int, string> $transports
      */
     public function __construct(
         public string $adminUserPasskeyId,

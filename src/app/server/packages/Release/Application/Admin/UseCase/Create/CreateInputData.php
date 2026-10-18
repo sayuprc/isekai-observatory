@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Release\Application\Admin\UseCase\Create;
 
 /**
- * @phpstan-type _mediumInput array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}
+ * @phpstan-type _mediumInput array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}
  */
 readonly class CreateInputData
 {
@@ -18,7 +18,7 @@ readonly class CreateInputData
         public string $name,
         public string $releasedOn,
         public string $description,
-        public string $color,
+        public string $note,
         public bool $isDisplay,
         public int $orderNo,
         public array $formats,

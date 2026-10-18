@@ -16,7 +16,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class SongPersons extends ImmutableCollection
 {
     /**
-     * @param list<array{personId: string, role: int, orderNo: int}> $items
+     * @param array<int, array{personId: string, role: int, orderNo: int}> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -41,7 +41,7 @@ readonly class SongPersons extends ImmutableCollection
     }
 
     /**
-     * @param list<array{personId: string, role: int, orderNo: int}> $items
+     * @param array<int, array{personId: string, role: int, orderNo: int}> $items
      */
     public static function reconstruct(array $items): self
     {

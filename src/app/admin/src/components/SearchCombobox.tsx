@@ -109,6 +109,9 @@ export const SearchCombobox = <T extends object>(props: SearchComboboxProps<T>) 
       }
       case 'Enter': {
         e.preventDefault();
+        if (e.isComposing) {
+          break;
+        }
         const item = results()[activeIndex()];
         if (open() && item) {
           pick(item);

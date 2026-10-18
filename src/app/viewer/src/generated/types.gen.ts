@@ -5,6 +5,18 @@ export type ClientOptions = {
 };
 
 /**
+ * 記録に付いたタグ
+ */
+export type AttachedTag = {
+    tagId: TagId;
+    name: TagName;
+    /**
+     * タグの表示順。一覧のタグの選択肢を並べるのに使う
+     */
+    orderNo: OrderNo;
+};
+
+/**
  * エラー分類を表す機械可読なコード
  */
 export type ErrorCode = 'unauthenticated' | 'permission_denied' | 'not_found' | 'validation_failed' | 'business_rule_violation' | 'internal_error';
@@ -39,6 +51,10 @@ export type Event = {
     sources: Array<EventSource>;
     performances: Array<SongPerformance>;
     setlist: Array<SetlistItem>;
+    /**
+     * 付いているタグ(タグの表示順)
+     */
+    tags: Array<AttachedTag>;
 };
 
 export type EventListResponse = {
@@ -83,7 +99,7 @@ export type EventStatusValue = 1 | 2 | 3;
 export type EventTypeValue = 1 | 2 | 3 | 4 | 99;
 
 export type EventVenueSummary = {
-    venueId: Uuid;
+    venueId: VenueId;
     name: string;
     kind: VenueKindValue;
 };
@@ -138,7 +154,7 @@ export type MediaTypeValue = 1 | 2 | 3 | 4 | 5 | 99;
  * 楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ
  */
 export type PerformancePerson = {
-    personId: Uuid;
+    personId: PersonId;
     name: string;
     creditName: PerformanceCreditName | null;
     personGroup: PerformancePersonGroup | null;
@@ -149,7 +165,10 @@ export type PerformancePerson = {
  * 共演者が出演したグループ
  */
 export type PerformancePersonGroup = {
-    personGroupId: Uuid;
+    personGroupId: PersonGroupId;
+    /**
+     * グループの表示用名称。別のグループと重複することがある
+     */
     name: string;
 };
 
@@ -171,6 +190,10 @@ export type ReleaseGroupListItem = {
      */
     firstReleasedOn: ReleasedOn;
     releases: Array<ReleaseListItem>;
+    /**
+     * 付いているタグ(タグの表示順)
+     */
+    tags: Array<AttachedTag>;
 };
 
 export type ReleaseGroupListResponse = {
@@ -194,7 +217,6 @@ export type ReleaseListItem = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
     description: string;
-    color: Color;
     orderNo: OrderNo;
     formats: Array<ReleaseFormatValue>;
     media: Array<ReleaseMediumItem>;
@@ -210,11 +232,19 @@ export type ReleaseMediumItem = {
 };
 
 /**
- * 収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する
+ * 収録曲。songs は収録順で、2 件以上ならメドレー。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null
  */
 export type ReleaseTrackItem = {
     trackNo: OrderNo;
-    songId: Uuid | null;
+    title: string | null;
+    songs: Array<ReleaseTrackSong>;
+};
+
+/**
+ * 収録曲が参照する楽曲。リンク可否は isDisplay で判定する
+ */
+export type ReleaseTrackSong = {
+    songId: SongId;
     title: string;
     isDisplay: boolean;
 };
@@ -223,17 +253,6 @@ export type SetlistItem = {
     orderNo: OrderNo;
     label: string | null;
     performances: Array<SongPerformance>;
-};
-
-export type SiteStatsResponse = {
-    /**
-     * 公開対象楽曲数
-     */
-    songCount: number;
-    /**
-     * 公開対象リリースグループ数
-     */
-    releaseCount: number;
 };
 
 export type SongListItem = {
@@ -254,6 +273,10 @@ export type SongListItem = {
      * 公開イベントでの披露履歴(開催時期の新しい順)
      */
     performances: Array<SongPerformanceHistory>;
+    /**
+     * 付いているタグ(タグの表示順)
+     */
+    tags: Array<AttachedTag>;
 };
 
 export type SongListResponse = {
@@ -273,7 +296,7 @@ export type SongMediaSummary = {
 };
 
 export type SongPerformance = {
-    performanceId: Uuid;
+    performanceId: PerformanceId;
     songId: SongId | null;
     songTitle: Title;
     coVocalists: Array<PerformancePerson>;
@@ -312,16 +335,12 @@ export type SongReleaseGroupSummary = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
     firstReleasedOn: ReleasedOn;
-    /**
-     * 代表色(公開リリースを発売日順に見て最初のもの)
-     */
-    color: Color;
 };
 
 /**
  * 楽曲種別の値
  */
-export type SongTypeValue = 1 | 2;
+export type SongTypeValue = 1 | 2 | 3;
 
 /**
  * 開催先種別の値
@@ -329,11 +348,6 @@ export type SongTypeValue = 1 | 2;
 export type VenueKindValue = 1 | 2;
 
 export type Version = 'v1';
-
-/**
- * 代表色
- */
-export type Color = string;
 
 /**
  * 次ページを記すキー
@@ -411,6 +425,21 @@ export type OrderNo = number;
 export type PerformanceCreditName = string;
 
 /**
+ * 楽曲披露ID
+ */
+export type PerformanceId = string;
+
+/**
+ * 人物グループID
+ */
+export type PersonGroupId = string;
+
+/**
+ * 人物ID
+ */
+export type PersonId = string;
+
+/**
  * リリースグループID
  */
 export type ReleaseGroupId = string;
@@ -441,14 +470,24 @@ export type ReleasedOn = string;
 export type SongId = string;
 
 /**
+ * タグID
+ */
+export type TagId = string;
+
+/**
+ * タグ名
+ */
+export type TagName = string;
+
+/**
  * 楽曲名
  */
 export type Title = string;
 
 /**
- * UUID v4
+ * 開催先ID
  */
-export type Uuid = string;
+export type VenueId = string;
 
 export type EventServiceListEventsData = {
     body?: never;
@@ -545,31 +584,6 @@ export type ReleaseGroupServiceListReleaseGroupsResponses = {
 };
 
 export type ReleaseGroupServiceListReleaseGroupsResponse = ReleaseGroupServiceListReleaseGroupsResponses[keyof ReleaseGroupServiceListReleaseGroupsResponses];
-
-export type SiteStatsServiceGetSiteStatsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/site-stats';
-};
-
-export type SiteStatsServiceGetSiteStatsErrors = {
-    /**
-     * Server error
-     */
-    500: ErrorResponse;
-};
-
-export type SiteStatsServiceGetSiteStatsError = SiteStatsServiceGetSiteStatsErrors[keyof SiteStatsServiceGetSiteStatsErrors];
-
-export type SiteStatsServiceGetSiteStatsResponses = {
-    /**
-     * The request has succeeded.
-     */
-    200: SiteStatsResponse;
-};
-
-export type SiteStatsServiceGetSiteStatsResponse = SiteStatsServiceGetSiteStatsResponses[keyof SiteStatsServiceGetSiteStatsResponses];
 
 export type SongServiceListSongsData = {
     body?: never;

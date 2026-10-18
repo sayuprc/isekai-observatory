@@ -7,8 +7,9 @@ namespace Song\Domain\Models;
 use Song\Domain\Models\Media\SongMediaLinks;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\Persons\SongPersons;
-use Song\Domain\Models\Tags\SongTagReferences;
+use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\TagReferences;
 
 readonly class Song
 {
@@ -16,25 +17,27 @@ readonly class Song
         public SongId $songId,
         public Title $title,
         public Description $description,
+        public Note $note,
         public ?LyricsLink $lyricsLink,
         public SongType $type,
         public bool $isDisplay,
         public OrderNo $orderNo,
-        public SongTagReferences $tags,
+        public TagReferences $tags,
         public SongPersons $persons,
         public SongMediaLinks $media,
     ) {
     }
 
     /**
-     * @param list<array{songTagId: string}>                         $tags
-     * @param list<array{personId: string, role: int, orderNo: int}> $persons
-     * @param list<array{mediaId: string, orderNo: int}>             $media
+     * @param array<int, array{tagId: string}>                             $tags
+     * @param array<int, array{personId: string, role: int, orderNo: int}> $persons
+     * @param array<int, array{mediaId: string, orderNo: int}>             $media
      */
     public static function reconstruct(
         string $songId,
         string $title,
         string $description,
+        string $note,
         ?string $lyricsLink,
         int $type,
         bool $isDisplay,
@@ -47,18 +50,19 @@ readonly class Song
             new SongId($songId),
             new Title($title),
             new Description($description),
+            new Note($note),
             $lyricsLink === null ? null : new LyricsLink($lyricsLink),
             SongType::from($type),
             $isDisplay,
             new OrderNo($orderNo),
-            SongTagReferences::reconstruct($tags),
+            TagReferences::reconstruct($tags),
             SongPersons::reconstruct($persons),
             SongMediaLinks::reconstruct($media),
         );
     }
 
     /**
-     * @return array{song_id: string, title: string, description: string, lyrics_link: string|null, type: value-of<SongType>, is_display: bool, order_no: int, persons: array<int, array{person_id: string, role: value-of<SongPersonRole>, order_no: int}>, tags: array<int, array{song_tag_id: string}>, media: array<int, array{media_id: string, order_no: int}>}
+     * @return array{song_id: string, title: string, description: string, note: string, lyrics_link: string|null, type: value-of<SongType>, is_display: bool, order_no: int, persons: array<int, array{person_id: string, role: value-of<SongPersonRole>, order_no: int}>, tags: array<int, array{tag_id: string}>, media: array<int, array{media_id: string, order_no: int}>}
      */
     public function toArray(): array
     {
@@ -66,6 +70,7 @@ readonly class Song
             'song_id' => $this->songId->value,
             'title' => $this->title->value,
             'description' => $this->description->value,
+            'note' => $this->note->value,
             'lyrics_link' => $this->lyricsLink?->value,
             'type' => $this->type->value,
             'is_display' => $this->isDisplay,

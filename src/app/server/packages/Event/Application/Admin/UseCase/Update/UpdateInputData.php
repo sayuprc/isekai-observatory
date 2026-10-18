@@ -19,11 +19,13 @@ readonly class UpdateInputData
      * @param list<_eventSourceInput>                      $sources
      * @param list<_songPerformanceInput>                  $performances
      * @param list<_setlistItemInput>                      $setlist
+     * @param list<array{tagId: string}>                   $tags
      */
     public function __construct(
         public string $eventId,
         public string $title,
         public string $description,
+        public string $note,
         public int $type,
         public array $schedule,
         public int $status,
@@ -34,6 +36,7 @@ readonly class UpdateInputData
         public array $sources,
         public array $performances,
         public array $setlist,
+        public array $tags,
     ) {
     }
 }

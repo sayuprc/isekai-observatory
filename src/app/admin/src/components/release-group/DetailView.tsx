@@ -5,6 +5,7 @@ import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { RELEASE_FORMAT_NAMES } from '../../utils/enum-names';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -12,6 +13,7 @@ import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormColumns } from '../FormColumns';
 import { FormError } from '../FormError';
+import { TagPicker } from '../tag/TagPicker';
 import { createReleaseGroupForm, ReleaseGroupFields } from './ReleaseGroupFields';
 
 /** 版名は空になりうるため、リンクのラベルとして意味を持つ代替文言を出す */
@@ -222,8 +224,9 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
       <FormError message={formError()} onClose={clearErrors} />
       <FormColumns
         main={
-          <form id="release-group-form" onSubmit={handleSubmit}>
+          <form id="release-group-form" onKeyDown={preventImplicitSubmit} class="space-y-6" onSubmit={handleSubmit}>
             <ReleaseGroupFields form={form} getFieldError={getFieldError} />
+            <TagPicker tags={form.tags} setTags={form.setTags} />
           </form>
         }
         side={
@@ -242,10 +245,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
               <ul class="flex flex-col gap-2 md:hidden">
                 <For each={props.data.releases}>
                   {(release) => (
-                    <li
-                      class="rounded-box border-y border-r border-l-4 border-base-300 bg-base-100 p-3"
-                      style={{ 'border-left-color': release.color }}
-                    >
+                    <li class="rounded-box border border-base-300 bg-base-100 p-3">
                       <ReleaseNameLink release={release} />
                       <div class="mt-1 flex flex-wrap gap-x-3 text-sm text-base-content/60">
                         <span>{normalizeDateValue(release.releasedOn)}</span>
@@ -278,11 +278,7 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
                     <For each={props.data.releases}>
                       {(release) => (
                         <tr>
-                          <td
-                            class="min-w-40 border-l-4 font-medium"
-                            style={{ 'border-left-color': release.color }}
-                            title={`代表色 ${release.color}`}
-                          >
+                          <td class="min-w-40 font-medium">
                             <ReleaseNameLink release={release} />
                           </td>
                           <td class="whitespace-nowrap text-sm">{normalizeDateValue(release.releasedOn)}</td>

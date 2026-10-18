@@ -1,5 +1,6 @@
 import "@typespec/http";
 import "../auth";
+import "../tags";
 import "../../shared";
 
 using IsekaiObservatory.Shared;
@@ -31,7 +32,7 @@ interface ReleaseGroupService {
     | ServerError;
 
   @doc("リリースグループ取得API")
-  getReleaseGroup(@path releaseGroupId: uuid):
+  getReleaseGroup(@path releaseGroupId: releaseGroupId):
     | Ok<ReleaseGroupGetResponse>
     | Unauthorized
     | Forbidden
@@ -41,7 +42,7 @@ interface ReleaseGroupService {
 
   @doc("リリースグループ更新API")
   @put
-  updateReleaseGroup(@path releaseGroupId: uuid, @body request: ReleaseGroupUpdateRequest):
+  updateReleaseGroup(@path releaseGroupId: releaseGroupId, @body request: ReleaseGroupUpdateRequest):
     | Ok<ReleaseGroupUpdateResponse>
     | Unauthorized
     | Forbidden
@@ -51,7 +52,7 @@ interface ReleaseGroupService {
 
   @doc("リリースグループ削除API")
   @delete
-  deleteReleaseGroup(@path releaseGroupId: uuid):
+  deleteReleaseGroup(@path releaseGroupId: releaseGroupId):
     | NoContent
     | BadRequest
     | Unauthorized
@@ -66,6 +67,11 @@ interface ReleaseGroupService {
     @query title?: string,
     @query type?: ReleaseGroupTypeValue,
     @query("is_display") isDisplay?: boolean,
+
+    @doc("このタグが付いたリリースグループだけに絞り込む")
+    @query("tag_id")
+    tagId?: tagId,
+
     @query sort?: ReleaseGroupSearchSortBy = ReleaseGroupSearchSortBy.firstReleasedOn,
     @query order?: SortOrder = SortOrder.desc,
     @query page?: page = 1,
@@ -87,7 +93,7 @@ interface ReleaseService {
     | ServerError;
 
   @doc("リリース取得API")
-  getRelease(@path releaseId: uuid):
+  getRelease(@path releaseId: releaseId):
     | Ok<ReleaseGetResponse>
     | Unauthorized
     | Forbidden
@@ -97,7 +103,7 @@ interface ReleaseService {
 
   @doc("リリース更新API")
   @put
-  updateRelease(@path releaseId: uuid, @body request: ReleaseUpdateRequest):
+  updateRelease(@path releaseId: releaseId, @body request: ReleaseUpdateRequest):
     | Ok<ReleaseUpdateResponse>
     | BadRequest
     | Unauthorized
@@ -108,7 +114,7 @@ interface ReleaseService {
 
   @doc("リリース削除API")
   @delete
-  deleteRelease(@path releaseId: uuid):
+  deleteRelease(@path releaseId: releaseId):
     | NoContent
     | BadRequest
     | Unauthorized

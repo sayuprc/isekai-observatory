@@ -15,12 +15,13 @@ readonly class AssembledSong
         public string $songId,
         public string $title,
         public string $description,
+        public string $note,
         public ?string $lyricsLink,
         public int $typeValue,
         public bool $isDisplay,
         public int $orderNo,
         public array $persons,
-        public array $tags = [],
+        public array $tags,
         public array $media = [],
     ) {
     }

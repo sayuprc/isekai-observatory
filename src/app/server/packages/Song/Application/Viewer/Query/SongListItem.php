@@ -9,12 +9,13 @@ use Song\Domain\Models\SongType;
 readonly class SongListItem
 {
     /**
-     * @param array<string>                  $lyricists
-     * @param array<string>                  $composers
-     * @param array<string>                  $arrangers
-     * @param array<SongMediaSummary>        $media
-     * @param array<SongReleaseGroupSummary> $releaseGroups
-     * @param array<SongPerformanceHistory>  $performances
+     * @param array<string>                                           $lyricists
+     * @param array<string>                                           $composers
+     * @param array<string>                                           $arrangers
+     * @param array<SongMediaSummary>                                 $media
+     * @param array<SongReleaseGroupSummary>                          $releaseGroups
+     * @param array<SongPerformanceHistory>                           $performances
+     * @param array<array{tagId: string, name: string, orderNo: int}> $tags          タグの表示順
      */
     public function __construct(
         public string $songId,
@@ -27,6 +28,7 @@ readonly class SongListItem
         public array $media,
         public array $releaseGroups,
         public array $performances,
+        public array $tags,
         public int $orderNo,
     ) {
     }

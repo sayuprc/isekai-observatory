@@ -21,7 +21,7 @@ readonly class VenueRepository implements VenueRepositoryInterface
 {
     private const string TABLE = 'venues';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['venue_id', 'name', 'kind'];
 
     public function __construct(

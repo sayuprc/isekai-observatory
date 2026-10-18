@@ -4,6 +4,7 @@ import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { createTabState } from '../../utils/tab';
 import { createSubmitting } from '../../utils/use-submitting';
 import { ActionMenu } from '../ActionMenu';
@@ -11,7 +12,7 @@ import { TargetHistory } from '../audit-log/TargetHistory';
 import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormError } from '../FormError';
-import { toMediumForms } from './MediaEditor';
+import { toMediumForms } from './media-form';
 import { createReleaseForm } from './release-form';
 import { RELEASE_TABS, ReleaseFormFields, ReleaseTabList } from './ReleaseFormFields';
 
@@ -114,7 +115,7 @@ const ReleaseForm = (props: ReleaseFormProps) => {
     name: props.data.release.name,
     releasedOn: normalizeDateValue(props.data.release.releasedOn),
     description: props.data.release.description,
-    color: props.data.release.color,
+    note: props.data.release.note,
     isDisplay: props.data.release.isDisplay,
     orderNo: props.data.release.orderNo,
     formats: props.data.release.formats,
@@ -206,7 +207,7 @@ const ReleaseForm = (props: ReleaseFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="release-form" onSubmit={handleSubmit}>
+      <form ref={bindForm} id="release-form" onKeyDown={preventImplicitSubmit} onSubmit={handleSubmit}>
         <ReleaseFormFields
           form={form}
           tab={tab()}

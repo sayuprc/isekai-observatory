@@ -1,5 +1,5 @@
 import { createSignal, Show } from 'solid-js';
-import type { ReleaseGroup, ReleaseGroupTypeValue } from '../../generated';
+import type { ReleaseGroup, ReleaseGroupTypeValue, RequestTag } from '../../generated';
 import { RELEASE_GROUP_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { FormRow } from '../FormRow';
 import { SegmentedControl } from '../SegmentedControl';
@@ -16,15 +16,19 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
   const [title, setTitle] = createSignal(initial?.title ?? '');
   const [typeValue, setTypeValue] = createSignal<ReleaseGroupTypeValue>(initial?.type ?? 1);
   const [description, setDescription] = createSignal(initial?.description ?? '');
+  const [note, setNote] = createSignal(initial?.note ?? '');
   const [isDisplay, setIsDisplay] = createSignal(initial?.isDisplay ?? true);
   const [orderNo, setOrderNo] = createSignal(initial?.orderNo ?? 1);
+  const [tags, setTags] = createSignal<RequestTag[]>((initial?.tags ?? []).map((tag) => ({ tagId: tag.tagId })));
 
   const toRequestBody = () => ({
     title: title(),
     type: typeValue(),
     description: description(),
+    note: note(),
     isDisplay: isDisplay(),
     orderNo: orderNo(),
+    tags: tags(),
   });
 
   return {
@@ -34,10 +38,14 @@ export const createReleaseGroupForm = (initial?: ReleaseGroup) => {
     setTypeValue,
     description,
     setDescription,
+    note,
+    setNote,
     isDisplay,
     setIsDisplay,
     orderNo,
     setOrderNo,
+    tags,
+    setTags,
     toRequestBody,
   };
 };
@@ -84,6 +92,15 @@ export const ReleaseGroupFields = (props: ReleaseGroupFieldsProps) => (
       <Show when={props.getFieldError('description')}>
         {(message) => <p class="text-xs text-error">{message()}</p>}
       </Show>
+    </FormRow>
+    <FormRow label="備考" for="note" hint="管理用のメモです。閲覧サイトには表示しません">
+      <textarea
+        id="note"
+        class="textarea w-full"
+        rows={3}
+        value={props.form.note()}
+        onInput={(e) => props.form.setNote(e.currentTarget.value)}
+      />
     </FormRow>
     <FormRow label="表示順" for="orderNo">
       <input

@@ -4,8 +4,9 @@ import { EVENT_TYPE_NAMES, coVocalistNames, eventDetailDate, eventStatusName } f
 import { releaseFormatText } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
-import EventSetlistSongs from './EventSetlistSongs.astro';
+import DetailSongList from './DetailSongList.astro';
 import MediaChip from './MediaChip.astro';
+import TagChips from './TagChips.astro';
 
 interface Props {
   event: Event;
@@ -62,6 +63,7 @@ const hostname = (url: string): string => {
   </div>
   <h1 class="detail-title">{event.title}</h1>
   {event.description && <p class="detail-description event-detail-description">{event.description}</p>}
+  <TagChips tags={event.tags} />
 
   <dl class="event-detail-facts">
     {facts.map((fact) => (
@@ -82,28 +84,14 @@ const hostname = (url: string): string => {
   {setlistItems.length > 0 && (
     <>
       <DetailSectionHead title="セットリスト" count={setlistItems.length} />
-      <ol class="event-setlist">
-        {setlistItems.map((item) => (
-          <li class="event-setlist-item" data-label-only={item.songs.length === 0 ? '' : undefined}>
-            <span class="detail-index">{item.index}</span>
-            <div class="event-setlist-body">
-              {item.label && <div class="event-setlist-label">{item.label}</div>}
-              {item.songs.length > 0 && <EventSetlistSongs songs={item.songs} />}
-            </div>
-          </li>
-        ))}
-      </ol>
+      <DetailSongList items={setlistItems} />
     </>
   )}
 
   {looseSongs.length > 0 && (
     <>
       <DetailSectionHead title={looseTitle} count={looseSongs.length} />
-      <div class="event-setlist">
-        <div class="event-setlist-item event-setlist-item-loose">
-          <EventSetlistSongs songs={looseSongs} />
-        </div>
-      </div>
+      <DetailSongList items={[{ index: null, label: null, songs: looseSongs }]} />
     </>
   )}
 

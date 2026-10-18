@@ -78,14 +78,14 @@ class ListEventTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function listsPersonGroupOfCoVocalists(): void
+    public function listsPersonGroupOfCoVocalistsByDisplayName(): void
     {
         $songId = $this->generateUuid();
         $personId = $this->generateUuid();
         $personGroupId = $this->generateUuid();
         $this->storeSongs($this->createSong($songId, '楽曲', '説明', SongType::Original, true, 1));
         $this->storePersons($this->createPerson($personId, 'メンバー', 1));
-        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
+        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ (B不在)', [$personId], 'グループ'));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
             performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
@@ -151,6 +151,27 @@ class ListEventTest extends DatabaseTestCase
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.schedule.startOn', '2026-10-01')
             ->assertJsonPath('events.0.schedule.endOn', '2026-10-03');
+    }
+
+    #[Test]
+    public function showsTagsInDisplayOrder(): void
+    {
+        $eventId = $this->generateUuid();
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
+        $this->storeTags(
+            $this->createTag($tagIdSecond, 'タイアップB', 20),
+            $this->createTag($tagIdFirst, 'タイアップA', 10),
+        );
+        $this->storeEvents($this->createEvent($eventId, tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]]));
+
+        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertStatus(200)
+            ->assertJsonPath('events.0.eventId', $eventId)
+            ->assertJsonPath('events.0.tags', [
+                ['tagId' => $tagIdFirst, 'name' => 'タイアップA', 'orderNo' => 10],
+                ['tagId' => $tagIdSecond, 'name' => 'タイアップB', 'orderNo' => 20],
+            ]);
     }
 
     #[Test]

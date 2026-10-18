@@ -16,11 +16,13 @@ readonly class AssembledEvent
      * @param array<int, AssembledSource>      $sources
      * @param array<int, AssembledPerformance> $performances
      * @param array<int, AssembledSetlistItem> $setlist
+     * @param array<int, AssembledTag>         $tags
      */
     public function __construct(
         public string $eventId,
         public string $title,
         public string $description,
+        public string $note,
         public EventType $type,
         public ?string $startOn,
         public ?string $endOn,
@@ -32,6 +34,7 @@ readonly class AssembledEvent
         public array $sources,
         public array $performances,
         public array $setlist,
+        public array $tags,
     ) {
     }
 }

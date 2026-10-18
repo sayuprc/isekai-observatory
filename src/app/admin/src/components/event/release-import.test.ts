@@ -14,7 +14,7 @@ const data: Pick<ReleaseGetResponse, 'release' | 'songs'> = {
     name: '',
     releasedOn: '2026-01-01',
     description: '',
-    color: '#000000',
+    note: '',
     isDisplay: true,
     orderNo: 1,
     formats: [2],
@@ -23,16 +23,19 @@ const data: Pick<ReleaseGetResponse, 'release' | 'songs'> = {
         position: 1,
         name: null,
         tracks: [
-          { songId: 'song-1', title: null, trackNo: 1 },
-          { songId: null, title: 'インスト', trackNo: 2 },
+          { songIds: ['song-1'], title: null, trackNo: 1 },
+          { songIds: [], title: 'インスト', trackNo: 2 },
+          { songIds: ['song-3', 'song-1'], title: 'メドレー', trackNo: 3 },
         ],
       },
-      { position: 2, name: 'Blu-ray', tracks: [{ songId: 'song-2', title: '曲2 (Live)', trackNo: 1 }] },
+      { position: 2, name: 'Blu-ray', tracks: [{ songIds: ['song-2'], title: '曲2 (Live)', trackNo: 1 }] },
     ],
   },
   songs: [
     { mediumPosition: 1, trackNo: 1, songId: 'song-1', title: '曲1' },
     { mediumPosition: 1, trackNo: 2, songId: null, title: 'インスト' },
+    { mediumPosition: 1, trackNo: 3, songId: 'song-3', title: '曲3' },
+    { mediumPosition: 1, trackNo: 3, songId: 'song-1', title: '曲1' },
     { mediumPosition: 2, trackNo: 1, songId: 'song-2', title: '曲2' },
   ],
 };
@@ -41,10 +44,11 @@ describe('リリースの収録楽曲からの取り込み', () => {
   it('媒体と曲順どおりに並べ、楽曲名は収録曲 read model から引く', () => {
     const result = toReleasePerformanceCandidates(data);
 
-    expect(result.map((candidate) => [candidate.songId, candidate.title, candidate.note])).toEqual([
-      ['song-1', '曲1', '媒体 1 - 1'],
-      [null, 'インスト', '媒体 1 - 2 (管理対象外楽曲)'],
-      ['song-2', '曲2', 'Blu-ray - 1 (表記: 曲2 (Live))'],
+    expect(result.map((candidate) => [candidate.songs.map((song) => song.title), candidate.note])).toEqual([
+      [['曲1'], '媒体 1 - 1'],
+      [[], '媒体 1 - 2 (管理対象外楽曲)'],
+      [['曲3', '曲1'], '媒体 1 - 3 (メドレー)'],
+      [['曲2'], 'Blu-ray - 1 (表記: 曲2 (Live))'],
     ]);
   });
 
@@ -54,14 +58,14 @@ describe('リリースの収録楽曲からの取り込み', () => {
     expect(result[1]).toMatchObject({ selectable: false, defaultSelected: false });
   });
 
-  it('楽曲を参照する候補だけを楽曲披露として末尾に追加する', () => {
+  it('楽曲を参照する候補だけを楽曲披露として末尾に追加し、メドレーは楽曲ごとに披露にする', () => {
     const candidates = toReleasePerformanceCandidates(data);
     const existing = [{ performanceId: 'p1', songId: 'song-1', songTitle: '曲1', coVocalists: [] }];
 
     const result = addPerformancesFromCandidates(existing, candidates);
 
-    expect(result.map((performance) => performance.songId)).toEqual(['song-1', 'song-1', 'song-2']);
-    expect(result[2]).toMatchObject({ songTitle: '曲2', coVocalists: [] });
+    expect(result.map((performance) => performance.songId)).toEqual(['song-1', 'song-1', 'song-3', 'song-1', 'song-2']);
+    expect(result[4]).toMatchObject({ songTitle: '曲2', coVocalists: [] });
   });
 });
 
@@ -69,10 +73,11 @@ describe('リリースの収録楽曲からのセットリスト取り込み', (
   it('タイトルのみトラックも初期状態で選んだ候補にする', () => {
     const result = toReleaseSetlistCandidates(data);
 
-    expect(result.map((candidate) => [candidate.songId, candidate.selectable, candidate.defaultSelected])).toEqual([
-      ['song-1', true, true],
-      [null, true, true],
-      ['song-2', true, true],
+    expect(result.map((candidate) => [candidate.label, candidate.selectable, candidate.defaultSelected])).toEqual([
+      ['', true, true],
+      ['インスト', true, true],
+      ['メドレー', true, true],
+      ['曲2 (Live)', true, true],
     ]);
   });
 
@@ -81,7 +86,7 @@ describe('リリースの収録楽曲からのセットリスト取り込み', (
       ...data,
       release: {
         ...data.release,
-        media: [{ position: 1, name: null, tracks: [{ songId: null, title: null, trackNo: 1 }] }],
+        media: [{ position: 1, name: null, tracks: [{ songIds: [], title: null, trackNo: 1 }] }],
       },
     };
 
@@ -99,15 +104,23 @@ describe('リリースの収録楽曲からのセットリスト取り込み', (
 
     const result = addSetlistFromCandidates(current, candidates);
 
-    expect(result.performances.map((performance) => performance.songId)).toEqual(['song-1', 'song-1', 'song-2']);
+    expect(result.performances.map((performance) => performance.songId)).toEqual([
+      'song-1',
+      'song-1',
+      'song-3',
+      'song-1',
+      'song-2',
+    ]);
     const songIdOf = new Map(result.performances.map((performance) => [performance.performanceId, performance.songId]));
     expect(result.setlist.map((item) => [item.label, item.performanceIds.map((id) => songIdOf.get(id))])).toEqual([
       ['', ['song-1']],
       ['', ['song-1']],
       ['インスト', []],
+      ['メドレー', ['song-3', 'song-1']],
+      // 1 曲のトラック名は楽曲名の表記違いなので表示名にしない
       ['', ['song-2']],
     ]);
     // 既存の披露を使い回さず、取り込んだ楽曲ごとに新しい披露へ紐づける
-    expect(new Set(result.setlist.flatMap((item) => item.performanceIds)).size).toBe(3);
+    expect(new Set(result.setlist.flatMap((item) => item.performanceIds)).size).toBe(5);
   });
 });

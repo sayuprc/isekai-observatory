@@ -25,8 +25,19 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
     private const string TRACK_TABLE = 'release_tracks';
 
-    /** @var list<string> */
-    private const array COLUMNS = ['release_id', 'release_group_id', 'name', 'released_on', 'description', 'color', 'is_display', 'order_no'];
+    private const string TRACK_SONG_TABLE = 'release_track_songs';
+
+    /** @var array<int, string> */
+    private const array COLUMNS = [
+        'release_id',
+        'release_group_id',
+        'name',
+        'released_on',
+        'description',
+        'note',
+        'is_display',
+        'order_no',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -101,18 +112,29 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
         $data = $release->toArray();
         $now = now()->toDateTimeString();
 
-        // 収録曲は FK CASCADE で媒体と一緒に消えるため、削除対象に含めない
+        // 収録曲とその楽曲は FK CASCADE で媒体と一緒に消えるため、削除対象に含めない
         $this->queryFactory->deleteFromTables([self::FORMAT_TABLE, self::MEDIA_TABLE], 'release_id', $binReleaseId);
 
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['release_id', 'release_group_id', 'name', 'released_on', 'description', 'color', 'is_display', 'order_no', 'created_at', 'updated_at'])
+            ->into(self::TABLE, [
+                'release_id',
+                'release_group_id',
+                'name',
+                'released_on',
+                'description',
+                'note',
+                'is_display',
+                'order_no',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $binReleaseId,
                 $this->converter->toBin($data['release_group_id']),
                 $data['name'],
                 $data['released_on'],
                 $data['description'],
-                $data['color'],
+                $data['note'],
                 $data['is_display'],
                 $data['order_no'],
                 $now,
@@ -125,7 +147,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
                 . '`name` = VALUES(`name`), '
                 . '`released_on` = VALUES(`released_on`), '
                 . '`description` = VALUES(`description`), '
-                . '`color` = VALUES(`color`), '
+                . '`note` = VALUES(`note`), '
                 . '`is_display` = VALUES(`is_display`), '
                 . '`order_no` = VALUES(`order_no`), '
                 . '`updated_at` = VALUES(`updated_at`)',
@@ -140,26 +162,32 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
         $mediumRows = [];
         $trackRows = [];
+        $trackSongRows = [];
 
         foreach ($data['media'] as $medium) {
             $mediumRows[] = [$binReleaseId, $medium['position'], $medium['name']];
 
             foreach ($medium['tracks'] as $track) {
-                $trackRows[] = [
-                    $binReleaseId,
-                    $medium['position'],
-                    $track['track_no'],
-                    $track['song_id'] === null ? null : $this->converter->toBin($track['song_id']),
-                    $track['title'],
-                ];
+                $trackRows[] = [$binReleaseId, $medium['position'], $track['track_no'], $track['title']];
+
+                foreach ($track['song_ids'] as $index => $songId) {
+                    $trackSongRows[] = [
+                        $binReleaseId,
+                        $medium['position'],
+                        $track['track_no'],
+                        $this->converter->toBin($songId),
+                        $index + 1,
+                    ];
+                }
             }
         }
 
         $this->queryFactory->insertRows(self::MEDIA_TABLE, ['release_id', 'position', 'name'], $mediumRows);
+        $this->queryFactory->insertRows(self::TRACK_TABLE, ['release_id', 'position', 'track_no', 'title'], $trackRows);
         $this->queryFactory->insertRows(
-            self::TRACK_TABLE,
-            ['release_id', 'position', 'track_no', 'song_id', 'title'],
-            $trackRows,
+            self::TRACK_SONG_TABLE,
+            ['release_id', 'position', 'track_no', 'song_id', 'order_no'],
+            $trackSongRows,
         );
 
         return $release;
@@ -188,7 +216,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     }
 
     /**
-     * @return list<int>
+     * @return array<int, int>
      */
     private function loadFormats(string $binReleaseId): array
     {
@@ -207,7 +235,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     }
 
     /**
-     * @return list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}>
+     * @return list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}>
      */
     private function loadMedia(string $binReleaseId): array
     {
@@ -221,22 +249,38 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
 
         $trackRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['position', 'track_no', 'song_id', 'title'])
+                ->withSelect(['position', 'track_no', 'title'])
                 ->from(self::TRACK_TABLE)
                 ->where('release_id', '=', $binReleaseId)
                 ->orderBy('position')
                 ->orderBy('track_no'),
         );
 
+        $trackSongRows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['position', 'track_no', 'song_id'])
+                ->from(self::TRACK_SONG_TABLE)
+                ->where('release_id', '=', $binReleaseId)
+                ->orderBy('order_no'),
+        );
+
+        $songIdsByTrack = [];
+
+        foreach ($trackSongRows as $trackSongRow) {
+            $songIdsByTrack[Row::int($trackSongRow, 'position')][Row::int($trackSongRow, 'track_no')][]
+                = $this->converter->toUuid(Row::string($trackSongRow, 'song_id'));
+        }
+
         $tracksByPosition = [];
 
         foreach ($trackRows as $trackRow) {
-            $binSongId = Row::nullableString($trackRow, 'song_id');
+            $position = Row::int($trackRow, 'position');
+            $trackNo = Row::int($trackRow, 'track_no');
 
-            $tracksByPosition[Row::int($trackRow, 'position')][] = [
-                'songId' => $binSongId === null ? null : $this->converter->toUuid($binSongId),
+            $tracksByPosition[$position][] = [
+                'songIds' => $songIdsByTrack[$position][$trackNo] ?? [],
                 'title' => Row::nullableString($trackRow, 'title'),
-                'trackNo' => Row::int($trackRow, 'track_no'),
+                'trackNo' => $trackNo,
             ];
         }
 
@@ -251,9 +295,9 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     }
 
     /**
-     * @param array<string, mixed>                                                                                          $releaseRow
-     * @param list<int>                                                                                                     $formats
-     * @param list<array{position: int, name: ?string, tracks: list<array{songId: ?string, title: ?string, trackNo: int}>}> $media
+     * @param array<string, mixed>                                                                                                $releaseRow
+     * @param array<int, int>                                                                                                     $formats
+     * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     private function hydrate(array $releaseRow, array $formats, array $media): Release
     {
@@ -263,7 +307,7 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             Row::string($releaseRow, 'name'),
             ImmutableDate::createFromInterface(new DateTimeImmutable(Row::string($releaseRow, 'released_on'))),
             Row::string($releaseRow, 'description'),
-            Row::string($releaseRow, 'color'),
+            Row::string($releaseRow, 'note'),
             Row::bool($releaseRow, 'is_display'),
             Row::int($releaseRow, 'order_no'),
             $formats,

@@ -1,9 +1,10 @@
 import { createResource, Match, Switch } from 'solid-js';
-import type { Media, Song, SongTag } from '../../generated';
+import type { Media, Song } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
 import { createFormErrors } from '../../utils/form-error';
+import { preventImplicitSubmit } from '../../utils/keyboard';
 import { getListUrl } from '../../utils/list-url';
 import { createTabState } from '../../utils/tab';
 import { createSubmitting } from '../../utils/use-submitting';
@@ -19,7 +20,7 @@ interface DetailViewProps {
   songId: string;
 }
 
-type EditableFormData = { song: Song; tags: SongTag[]; media: Media[] };
+type EditableFormData = { song: Song; media: Media[] };
 
 interface EditableFormProps {
   data: EditableFormData;
@@ -173,11 +174,10 @@ export const EditableForm = (props: EditableFormProps) => {
         }
       />
       <FormError message={formError()} onClose={clearErrors} />
-      <form ref={bindForm} id="song-form" onSubmit={handleUpdate}>
+      <form ref={bindForm} id="song-form" onKeyDown={preventImplicitSubmit} onSubmit={handleUpdate}>
         <SongFormFields
           form={form}
           tab={tab()}
-          availableTags={props.data.tags}
           getFieldError={getFieldError}
           withOrderNo
           history={<TargetHistory targetType="Song" targetId={songId} active={tab() === 'history'} />}

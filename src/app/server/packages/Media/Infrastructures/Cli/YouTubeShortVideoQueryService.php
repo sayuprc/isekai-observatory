@@ -43,7 +43,7 @@ readonly class YouTubeShortVideoQueryService implements YouTubeShortVideoQuerySe
     }
 
     /**
-     * @param list<YouTubeUploadedVideo> $videos
+     * @param array<int, YouTubeUploadedVideo> $videos
      *
      * @return Generator<string, callable(): mixed>
      */

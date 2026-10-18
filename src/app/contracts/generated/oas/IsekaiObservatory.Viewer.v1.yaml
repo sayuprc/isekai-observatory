@@ -6,7 +6,6 @@ tags:
   - name: ReleaseGroup
   - name: Event
   - name: Media
-  - name: SiteStats
   - name: Song
 paths:
   /events:
@@ -123,26 +122,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - ReleaseGroup
-  /site-stats:
-    get:
-      operationId: SiteStatsService_getSiteStats
-      description: サイト集計取得API
-      parameters: []
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SiteStatsResponse'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - SiteStats
   /songs:
     get:
       operationId: SongService_listSongs
@@ -183,6 +162,21 @@ paths:
         - Song
 components:
   schemas:
+    AttachedTag:
+      type: object
+      required:
+        - tagId
+        - name
+        - orderNo
+      properties:
+        tagId:
+          $ref: '#/components/schemas/tagId'
+        name:
+          $ref: '#/components/schemas/tagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+          description: タグの表示順。一覧のタグの選択肢を並べるのに使う
+      description: 記録に付いたタグ
     ErrorCode:
       type: string
       enum:
@@ -248,6 +242,7 @@ components:
         - sources
         - performances
         - setlist
+        - tags
       properties:
         eventId:
           $ref: '#/components/schemas/eventId'
@@ -285,6 +280,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SetlistItem'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
+          description: 付いているタグ(タグの表示順)
     EventListResponse:
       type: object
       required:
@@ -399,7 +399,7 @@ components:
         - kind
       properties:
         venueId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/venueId'
         name:
           type: string
         kind:
@@ -553,7 +553,7 @@ components:
         - orderNo
       properties:
         personId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/personId'
         name:
           type: string
         creditName:
@@ -574,9 +574,10 @@ components:
         - name
       properties:
         personGroupId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/personGroupId'
         name:
           type: string
+          description: グループの表示用名称。別のグループと重複することがある
       description: 共演者が出演したグループ
     ReleaseFormatValue:
       type: integer
@@ -609,6 +610,7 @@ components:
         - description
         - firstReleasedOn
         - releases
+        - tags
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -625,6 +627,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseListItem'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
+          description: 付いているタグ(タグの表示順)
       description: リリースグループ。公開リリースを 1 件以上持つものだけが一覧に載る
     ReleaseGroupListResponse:
       type: object
@@ -650,7 +657,6 @@ components:
                   name: 初回限定盤
                   releasedOn: '2026-05-01'
                   description: ''
-                  color: '#4a5a78'
                   orderNo: 1
                   formats:
                     - 2
@@ -659,9 +665,15 @@ components:
                       name: null
                       tracks:
                         - trackNo: 1
-                          songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
-                          title: テスト楽曲
-                          isDisplay: true
+                          title: null
+                          songs:
+                            - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
+                              title: テスト楽曲
+                              isDisplay: true
+              tags:
+                - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+                  name: テストタグ
+                  orderNo: 10
           nextCursor: eyJmaXJzdFJlbGVhc2VkT24iOiIyMDI2LTA1LTAxIiwicmVsZWFzZUdyb3VwSWQiOiIwZjIxODVjZC1iNGFiLTRmMjItYjBhMy1mZDkzY2JiZDJkZjIifQ==
     ReleaseGroupTypeValue:
       type: integer
@@ -689,7 +701,6 @@ components:
         - name
         - releasedOn
         - description
-        - color
         - orderNo
         - formats
         - media
@@ -702,8 +713,6 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
         orderNo:
           $ref: '#/components/schemas/orderNo'
         formats:
@@ -737,21 +746,34 @@ components:
       type: object
       required:
         - trackNo
+        - title
+        - songs
+      properties:
+        trackNo:
+          $ref: '#/components/schemas/orderNo'
+        title:
+          anyOf:
+            - type: string
+            - type: 'null'
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseTrackSong'
+      description: 収録曲。songs は収録順で、2 件以上ならメドレー。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null
+    ReleaseTrackSong:
+      type: object
+      required:
         - songId
         - title
         - isDisplay
       properties:
-        trackNo:
-          $ref: '#/components/schemas/orderNo'
         songId:
-          anyOf:
-            - $ref: '#/components/schemas/uuid'
-            - type: 'null'
+          $ref: '#/components/schemas/songId'
         title:
           type: string
         isDisplay:
           type: boolean
-      description: '収録曲。title は上書き名があればそれ、なければ楽曲名。タイトルのみトラックは songId: null / isDisplay: false で返る。リンク可否は songId != null && isDisplay で判定する'
+      description: 収録曲が参照する楽曲。リンク可否は isDisplay で判定する
     SetlistItem:
       type: object
       required:
@@ -769,23 +791,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SongPerformance'
-    SiteStatsResponse:
-      type: object
-      required:
-        - songCount
-        - releaseCount
-      properties:
-        songCount:
-          type: integer
-          format: int32
-          description: 公開対象楽曲数
-        releaseCount:
-          type: integer
-          format: int32
-          description: 公開対象リリースグループ数
-      examples:
-        - songCount: 42
-          releaseCount: 12
     SongListItem:
       type: object
       required:
@@ -800,6 +805,7 @@ components:
         - media
         - releaseGroups
         - performances
+        - tags
       properties:
         songId:
           $ref: '#/components/schemas/songId'
@@ -837,6 +843,11 @@ components:
           items:
             $ref: '#/components/schemas/SongPerformanceHistory'
           description: 公開イベントでの披露履歴(開催時期の新しい順)
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
+          description: 付いているタグ(タグの表示順)
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
@@ -862,8 +873,11 @@ components:
               title: テストアルバム
               type: 2
               firstReleasedOn: '2026-05-01'
-              color: '#4a5a78'
           performances: []
+          tags:
+            - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+              name: テストタグ
+              orderNo: 10
     SongListResponse:
       type: object
       required:
@@ -902,8 +916,11 @@ components:
                   title: テストアルバム
                   type: 2
                   firstReleasedOn: '2026-05-01'
-                  color: '#4a5a78'
               performances: []
+              tags:
+                - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+                  name: テストタグ
+                  orderNo: 10
           nextCursor: eyJvcmRlck5vIjoxLCJzb25nSWQiOiIzY2Q0MmMwOS1mZjNjLTRjZDItOTEzZi1hMjc5YzRlYTg5YjQifQ==
     SongMediaSummary:
       type: object
@@ -939,7 +956,7 @@ components:
         - coVocalists
       properties:
         performanceId:
-          $ref: '#/components/schemas/uuid'
+          $ref: '#/components/schemas/performanceId'
         songId:
           anyOf:
             - $ref: '#/components/schemas/songId'
@@ -994,7 +1011,6 @@ components:
         - title
         - type
         - firstReleasedOn
-        - color
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -1004,9 +1020,6 @@ components:
           $ref: '#/components/schemas/ReleaseGroupTypeValue'
         firstReleasedOn:
           $ref: '#/components/schemas/releasedOn'
-        color:
-          $ref: '#/components/schemas/color'
-          description: 代表色(公開リリースを発売日順に見て最初のもの)
       description: 楽曲が収録されている公開リリースグループの概要
     SongTypeValue:
       type: integer
@@ -1014,13 +1027,16 @@ components:
       enum:
         - 1
         - 2
+        - 3
       description: 楽曲種別の値
       x-enum-varnames:
         - Original
         - Cover
+        - Guest
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
+        - 参加曲
     VenueKindValue:
       type: integer
       format: int32
@@ -1042,10 +1058,6 @@ components:
         - v1
       x-enum-descriptions:
         - バージョン 1
-    color:
-      type: string
-      pattern: ^#[0-9a-f]{6}$
-      description: 代表色
     cursor:
       type: string
       description: 次ページを記すキー
@@ -1106,6 +1118,18 @@ components:
       type: string
       minLength: 1
       description: 共演者としてのクレジット名
+    performanceId:
+      type: string
+      format: uuid
+      description: 楽曲披露ID
+    personGroupId:
+      type: string
+      format: uuid
+      description: 人物グループID
+    personId:
+      type: string
+      format: uuid
+      description: 人物ID
     releaseGroupId:
       type: string
       format: uuid
@@ -1129,14 +1153,22 @@ components:
       type: string
       format: uuid
       description: 楽曲ID
+    tagId:
+      type: string
+      format: uuid
+      description: タグID
+    tagName:
+      type: string
+      minLength: 1
+      description: タグ名
     title:
       type: string
       minLength: 1
       description: 楽曲名
-    uuid:
+    venueId:
       type: string
       format: uuid
-      description: UUID v4
+      description: 開催先ID
 servers:
   - url: https://local.api.isekaijoucho.fan/{version}
     description: ローカル環境

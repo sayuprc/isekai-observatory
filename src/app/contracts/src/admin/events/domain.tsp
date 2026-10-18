@@ -6,6 +6,7 @@ import "../media";
 import "../persons";
 import "../person-groups";
 import "../releases";
+import "../tags";
 import "../venues";
 
 using IsekaiObservatory.Shared;
@@ -70,6 +71,7 @@ model Event {
   eventId: eventId;
   title: eventTitle;
   description: eventDescription;
+  note: note;
   type: EventTypeValue;
   schedule: EventSchedule;
   status: EventStatusValue;
@@ -80,6 +82,7 @@ model Event {
   sources: EventSource[];
   performances: SongPerformance[];
   setlist: SetlistItem[];
+  tags: AttachedTag[];
 }
 
 @doc("イベント一覧の 1 行分")

@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongType;
 use Song\Infrastructures\SongRepository;
-use Song\Infrastructures\Tag\SongTagRepository;
+use Tag\Infrastructures\TagRepository;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
@@ -154,11 +154,11 @@ class SongRepositoryTest extends DatabaseTestCase
     }
 
     #[Test]
-    public function findSortsTagsBySongTagMasterOrder(): void
+    public function findSortsTagsByTagMasterOrder(): void
     {
-        $tagRepository = $this->app->make(SongTagRepository::class);
-        $tagA = $this->createSongTag($this->generateUuid(), 'タグA', 20);
-        $tagB = $this->createSongTag($this->generateUuid(), 'タグB', 10);
+        $tagRepository = $this->app->make(TagRepository::class);
+        $tagA = $this->createTag($this->generateUuid(), 'タグA', 20);
+        $tagB = $this->createTag($this->generateUuid(), 'タグB', 10);
         $tagRepository->save($tagA);
         $tagRepository->save($tagB);
 
@@ -170,8 +170,8 @@ class SongRepositoryTest extends DatabaseTestCase
             true,
             1,
             [
-                ['songTagId' => $tagA->songTagId->value],
-                ['songTagId' => $tagB->songTagId->value],
+                ['tagId' => $tagA->tagId->value],
+                ['tagId' => $tagB->tagId->value],
             ],
             [],
         );
@@ -180,8 +180,8 @@ class SongRepositoryTest extends DatabaseTestCase
         $found = $this->getInstance()->find($song->songId);
 
         $this->assertNotNull($found);
-        $this->assertSame($tagB->songTagId->value, $found->tags[0]->songTagId->value);
-        $this->assertSame($tagA->songTagId->value, $found->tags[1]->songTagId->value);
+        $this->assertSame($tagB->tagId->value, $found->tags[0]->tagId->value);
+        $this->assertSame($tagA->tagId->value, $found->tags[1]->tagId->value);
     }
 
     #[Test]

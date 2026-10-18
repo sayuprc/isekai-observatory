@@ -24,11 +24,13 @@ class GetReleaseTest extends DatabaseTestCase
     public function found(): void
     {
         $songId = $this->generateUuid();
+        $songId2 = $this->generateUuid();
         $releaseGroupId = $this->generateUuid();
         $releaseId = $this->generateUuid();
 
         $this->storeSongs(
             $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 10),
+            $this->createSong($songId2, 'テスト楽曲2', '説明', SongType::Original, true, 20),
         );
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
@@ -39,7 +41,6 @@ class GetReleaseTest extends DatabaseTestCase
                 $releaseGroupId,
                 '初回限定盤',
                 true,
-                color: '#4a5a78',
                 orderNo: 10,
                 formats: [ReleaseFormat::Cd->value, ReleaseFormat::Digital->value],
                 media: [
@@ -47,9 +48,10 @@ class GetReleaseTest extends DatabaseTestCase
                         'position' => 1,
                         'name' => 'CD1',
                         'tracks' => [
-                            ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                            ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 2],
-                            ['songId' => $songId, 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 3],
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
+                            ['songIds' => [$songId], 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 3],
+                            ['songIds' => [$songId2, $songId], 'title' => 'メドレー', 'trackNo' => 4],
                         ],
                     ],
                 ],
@@ -66,7 +68,7 @@ class GetReleaseTest extends DatabaseTestCase
                     'name' => '初回限定盤',
                     'releasedOn' => '2024-01-01',
                     'description' => 'テスト用リリース',
-                    'color' => '#4a5a78',
+                    'note' => '',
                     'isDisplay' => true,
                     'orderNo' => 10,
                     // 提供形態は値順で返る (配信=1, CD=2)
@@ -77,20 +79,26 @@ class GetReleaseTest extends DatabaseTestCase
                             'name' => 'CD1',
                             'tracks' => [
                                 [
-                                    'songId' => $songId,
+                                    'songIds' => [$songId],
                                     'title' => null,
                                     'trackNo' => 1,
                                 ],
                                 [
-                                    'songId' => null,
+                                    'songIds' => [],
                                     'title' => '管理対象外の楽曲',
                                     'trackNo' => 2,
                                 ],
                                 // 上書き名を持つ参照トラックは title に上書き名の生値が載る
                                 [
-                                    'songId' => $songId,
+                                    'songIds' => [$songId],
                                     'title' => 'テスト楽曲1 -instrumental-',
                                     'trackNo' => 3,
+                                ],
+                                // メドレーは楽曲を収録順に並べる
+                                [
+                                    'songIds' => [$songId2, $songId],
+                                    'title' => 'メドレー',
+                                    'trackNo' => 4,
                                 ],
                             ],
                         ],
@@ -115,6 +123,19 @@ class GetReleaseTest extends DatabaseTestCase
                     [
                         'mediumPosition' => 1,
                         'trackNo' => 3,
+                        'songId' => $songId,
+                        'title' => 'テスト楽曲1',
+                    ],
+                    // メドレーは楽曲ごとに収録順で載る
+                    [
+                        'mediumPosition' => 1,
+                        'trackNo' => 4,
+                        'songId' => $songId2,
+                        'title' => 'テスト楽曲2',
+                    ],
+                    [
+                        'mediumPosition' => 1,
+                        'trackNo' => 4,
                         'songId' => $songId,
                         'title' => 'テスト楽曲1',
                     ],

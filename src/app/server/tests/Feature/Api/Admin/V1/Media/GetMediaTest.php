@@ -66,6 +66,7 @@ class GetMediaTest extends DatabaseTestCase
                     'type' => MediaType::Mv->value,
                     'isDisplay' => true,
                 ],
+                'tags' => [],
                 'songs' => [[
                     'songId' => $songId,
                     'title' => 'テスト楽曲',

@@ -2,6 +2,7 @@ import { createSignal, For, Show, type Accessor, type Setter } from 'solid-js';
 import type { Media, MediaTypeValue } from '../../generated';
 import { client } from '../../utils/client';
 import { MEDIA_TYPE_NAMES, toOptions } from '../../utils/enum-names';
+import { isEnterKey } from '../../utils/keyboard';
 import { createSortable, reorderItems } from '../sortable';
 
 export type MediaEntry = {
@@ -208,6 +209,8 @@ export const MediaSection = (props: Props) => {
       publishedAt,
       type: createTypeValue(),
       isDisplay: createIsDisplay(),
+      // その場で作るメディアにはタグを付けず、必要ならメディアの画面で付ける
+      tags: [],
     });
 
     setCreating(false);
@@ -242,6 +245,7 @@ export const MediaSection = (props: Props) => {
                 class="input input-bordered w-full"
                 value={searchTitle()}
                 onInput={(e) => setSearchTitle(e.currentTarget.value)}
+                onKeyDown={(e) => isEnterKey(e) && void handleSearch()}
                 placeholder="タイトルで検索"
               />
 

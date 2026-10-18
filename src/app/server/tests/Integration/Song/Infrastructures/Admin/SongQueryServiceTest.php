@@ -177,12 +177,12 @@ class SongQueryServiceTest extends DatabaseTestCase
         $this->storeReleases(
             $this->createRelease($this->generateUuid(), $releaseGroupId, 'CD', true, media: [
                 ['position' => 1, 'name' => null, 'tracks' => [
-                    ['songId' => $songId, 'title' => null, 'trackNo' => 1],
-                    ['songId' => $songId, 'title' => null, 'trackNo' => 2],
+                    ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                    ['songIds' => [$songId], 'title' => null, 'trackNo' => 2],
                 ]],
             ]),
             $this->createRelease($this->generateUuid(), $releaseGroupId, '配信', true, orderNo: 2, media: [
-                ['position' => 1, 'name' => null, 'tracks' => [['songId' => $songId, 'title' => null, 'trackNo' => 1]]],
+                ['position' => 1, 'name' => null, 'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]]],
             ]),
         );
 
@@ -212,6 +212,7 @@ class SongQueryServiceTest extends DatabaseTestCase
             $title ?? new None(),
             $type ?? new None(),
             $isDisplay ?? new None(),
+            new None(),
             Sort::OrderNo,
             Order::Asc,
             1,

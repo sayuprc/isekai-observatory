@@ -1,4 +1,5 @@
 import "../../shared";
+import "../tags";
 import "../../packages/event";
 import "../../packages/media";
 import "../../packages/song";
@@ -11,6 +12,15 @@ using IsekaiObservatory.Packages.Song;
 
 namespace IsekaiObservatory.Viewer;
 
+@doc("開催先ID")
+scalar venueId extends uuid;
+
+@doc("人物ID")
+scalar personId extends uuid;
+
+@doc("人物グループID")
+scalar personGroupId extends uuid;
+
 @doc("開催先種別の値")
 @enumExtensions
 enum VenueKindValue {
@@ -22,7 +32,7 @@ enum VenueKindValue {
 }
 
 model EventVenueSummary {
-  venueId: uuid;
+  venueId: venueId;
   name: string;
   kind: VenueKindValue;
 }
@@ -53,13 +63,15 @@ model EventSource {
 
 @doc("共演者が出演したグループ")
 model PerformancePersonGroup {
-  personGroupId: uuid;
+  personGroupId: personGroupId;
+
+  @doc("グループの表示用名称。別のグループと重複することがある")
   name: string;
 }
 
 @doc("楽曲披露の共演者。personGroup はグループとして全員で出演したときだけ持つ")
 model PerformancePerson {
-  personId: uuid;
+  personId: personId;
   name: string;
   creditName: performanceCreditName | null;
   personGroup: PerformancePersonGroup | null;
@@ -67,7 +79,7 @@ model PerformancePerson {
 }
 
 model SongPerformance {
-  performanceId: uuid;
+  performanceId: performanceId;
   songId: songId | null;
   songTitle: title;
   coVocalists: PerformancePerson[];
@@ -92,4 +104,7 @@ model Event {
   sources: EventSource[];
   performances: SongPerformance[];
   setlist: SetlistItem[];
+
+  @doc("付いているタグ(タグの表示順)")
+  tags: AttachedTag[];
 }

@@ -28,6 +28,10 @@ use Release\Domain\Models\ReleaseId;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongRepositoryInterface;
+use Tag\Domain\Models\Tag;
+use Tag\Domain\Models\TagId;
+use Tag\Domain\Models\TagReference;
+use Tag\Domain\Models\TagRepositoryInterface;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueId;
 use Venue\Domain\Models\VenueRepositoryInterface;
@@ -45,6 +49,7 @@ class EventAssembler
         private readonly SongRepositoryInterface $songRepository,
         private readonly PersonRepositoryInterface $personRepository,
         private readonly PersonGroupRepositoryInterface $personGroupRepository,
+        private readonly TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -67,6 +72,7 @@ class EventAssembler
             $event->eventId->value,
             $event->title->value,
             $event->description->value,
+            $event->note->value,
             $event->type,
             $event->schedule->startOn?->format('Y-m-d'),
             $event->schedule->endOn?->format('Y-m-d'),
@@ -93,6 +99,13 @@ class EventAssembler
                     array_map(static fn (PerformanceId $id): AssembledPerformance => $performances[$id->value], $item->performanceIds),
                 ),
             )->toArray(),
+            // タグの表示順で返る
+            array_values(array_map(
+                static fn (Tag $tag): AssembledTag => new AssembledTag($tag->tagId->value, $tag->name->value),
+                $this->tagRepository->findByIds(
+                    ...$event->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray(),
+                ),
+            )),
         );
     }
 

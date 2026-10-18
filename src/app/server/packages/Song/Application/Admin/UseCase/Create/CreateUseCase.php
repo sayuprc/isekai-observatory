@@ -34,6 +34,7 @@ readonly class CreateUseCase
             $song = $this->service->prepareForCreate(
                 $inputData->title,
                 $inputData->description,
+                $inputData->note,
                 $inputData->lyricsLink,
                 $inputData->type,
                 $inputData->isDisplay,

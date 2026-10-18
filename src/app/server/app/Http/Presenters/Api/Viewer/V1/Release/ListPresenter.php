@@ -6,6 +6,7 @@ namespace App\Http\Presenters\Api\Viewer\V1\Release;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
+use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\ReleaseFormatValue;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupListItem as OpenApiReleaseGroupListItem;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupListResponse;
@@ -13,10 +14,12 @@ use OpenAPI\Viewer\Client\Model\ReleaseGroupTypeValue;
 use OpenAPI\Viewer\Client\Model\ReleaseListItem as OpenApiReleaseListItem;
 use OpenAPI\Viewer\Client\Model\ReleaseMediumItem as OpenApiReleaseMediumItem;
 use OpenAPI\Viewer\Client\Model\ReleaseTrackItem as OpenApiReleaseTrackItem;
+use OpenAPI\Viewer\Client\Model\ReleaseTrackSong as OpenApiReleaseTrackSong;
 use Release\Application\Viewer\Query\ReleaseGroupListItem;
 use Release\Application\Viewer\Query\ReleaseListItem;
 use Release\Application\Viewer\Query\ReleaseMediumItem;
 use Release\Application\Viewer\Query\ReleaseTrackItem;
+use Release\Application\Viewer\Query\ReleaseTrackSong;
 use Release\Application\Viewer\UseCase\List\ListOutputData;
 use Release\Domain\Models\ReleaseFormat;
 
@@ -39,7 +42,19 @@ class ListPresenter
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description)
             ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn))
-            ->setReleases(array_map($this->toOpenApiReleaseListItem(...), $releaseGroup->releases));
+            ->setReleases(array_map($this->toOpenApiReleaseListItem(...), $releaseGroup->releases))
+            ->setTags(array_map($this->toOpenApiTag(...), $releaseGroup->tags));
+    }
+
+    /**
+     * @param array{tagId: string, name: string, orderNo: int} $tag
+     */
+    private function toOpenApiTag(array $tag): AttachedTag
+    {
+        return new AttachedTag()
+            ->setTagId($tag['tagId'])
+            ->setName($tag['name'])
+            ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiReleaseListItem(ReleaseListItem $release): OpenApiReleaseListItem
@@ -49,7 +64,6 @@ class ListPresenter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setDescription($release->description)
-            ->setColor($release->color)
             ->setOrderNo($release->orderNo)
             ->setFormats(array_map($this->toOpenApiReleaseFormatValue(...), $release->formats))
             ->setMedia(array_map($this->toOpenApiReleaseMediumItem(...), $release->media));
@@ -72,10 +86,17 @@ class ListPresenter
     private function toOpenApiReleaseTrackItem(ReleaseTrackItem $track): OpenApiReleaseTrackItem
     {
         return new OpenApiReleaseTrackItem([
-            'song_id' => $track->songId,
+            'title' => $track->title,
         ])
             ->setTrackNo($track->trackNo)
-            ->setTitle($track->title)
-            ->setIsDisplay($track->isDisplay);
+            ->setSongs(array_map($this->toOpenApiReleaseTrackSong(...), $track->songs));
+    }
+
+    private function toOpenApiReleaseTrackSong(ReleaseTrackSong $song): OpenApiReleaseTrackSong
+    {
+        return new OpenApiReleaseTrackSong()
+            ->setSongId($song->songId)
+            ->setTitle($song->title)
+            ->setIsDisplay($song->isDisplay);
     }
 }

@@ -24,8 +24,8 @@ use Release\Domain\Models\ReleaseGroupRepositoryInterface;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongRepositoryInterface;
-use Song\Domain\Models\Tag\SongTag;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
+use Tag\Domain\Models\Tag;
+use Tag\Domain\Models\TagRepositoryInterface;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueRepositoryInterface;
 
@@ -73,10 +73,10 @@ trait EntityStore
         array_map(static fn (YouTubeChannel $item) => $repository->save($item), $items);
     }
 
-    protected function storeSongTags(SongTag ...$items): void
+    protected function storeTags(Tag ...$items): void
     {
-        $repository = $this->makeRepository(SongTagRepositoryInterface::class);
-        array_map(static fn (SongTag $item) => $repository->save($item), $items);
+        $repository = $this->makeRepository(TagRepositoryInterface::class);
+        array_map(static fn (Tag $item) => $repository->save($item), $items);
     }
 
     protected function storeReleaseGroups(ReleaseGroup ...$items): void

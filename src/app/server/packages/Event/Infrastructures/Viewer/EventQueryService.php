@@ -66,9 +66,10 @@ readonly class EventQueryService implements EventQueryServiceInterface
         $sourcesByEvent = $this->loadSources($binEventIds);
         $performancesByEvent = $this->loadPerformances($binEventIds);
         $setlistByEvent = $this->loadSetlist($binEventIds, $performancesByEvent);
+        $tagsByEvent = $this->loadTags($binEventIds);
 
         $events = array_map(
-            function (array $row) use ($venuesByEvent, $mediaByEvent, $releasesByEvent, $sourcesByEvent, $performancesByEvent, $setlistByEvent): EventListItem {
+            function (array $row) use ($venuesByEvent, $mediaByEvent, $releasesByEvent, $sourcesByEvent, $performancesByEvent, $setlistByEvent, $tagsByEvent): EventListItem {
                 $binEventId = Row::string($row, 'event_id');
 
                 return new EventListItem(
@@ -85,6 +86,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
                     $sourcesByEvent[$binEventId] ?? [],
                     array_values($performancesByEvent[$binEventId] ?? []),
                     $setlistByEvent[$binEventId] ?? [],
+                    $tagsByEvent[$binEventId] ?? [],
                 );
             },
             $pageRows,
@@ -119,9 +121,43 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventVenueSummary>>
+     * @return array<string, array<int, array{tagId: string, name: string, orderNo: int}>>
+     */
+    private function loadTags(array $binEventIds): array
+    {
+        if ($binEventIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['event_taggings.event_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+                ->from('event_taggings')
+                ->join('tags', 'event_taggings.tag_id = tags.tag_id')
+                ->where('event_taggings.event_id', 'IN', $binEventIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        );
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'event_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($row, 'tag_id')),
+                'name' => Row::string($row, 'name'),
+                'orderNo' => Row::int($row, 'order_no'),
+            ];
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param array<int, string> $binEventIds
+     *
+     * @return array<string, array<int, EventVenueSummary>>
      */
     private function loadVenues(array $binEventIds): array
     {
@@ -149,9 +185,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventMediaSummary>>
+     * @return array<string, array<int, EventMediaSummary>>
      */
     private function loadMedia(array $binEventIds): array
     {
@@ -184,9 +220,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     /**
      * リリースとリリースグループがともに公開のものだけを返す
      *
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventReleaseSummary>>
+     * @return array<string, array<int, EventReleaseSummary>>
      */
     private function loadReleases(array $binEventIds): array
     {
@@ -235,9 +271,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<EventSourceSummary>>
+     * @return array<string, array<int, EventSourceSummary>>
      */
     private function loadSources(array $binEventIds): array
     {
@@ -266,7 +302,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
     /**
      * 非公開の楽曲は曲名だけを出し、楽曲 ID を伏せる
      *
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
      * @return array<string, array<string, EventPerformanceSummary>> イベント ID ごとの、楽曲披露 ID をキーにした一覧
      */
@@ -301,9 +337,9 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binPerformanceIds
+     * @param array<int, string> $binPerformanceIds
      *
-     * @return array<string, list<EventCoVocalistSummary>>
+     * @return array<string, array<int, EventCoVocalistSummary>>
      */
     private function loadCoVocalists(array $binPerformanceIds): array
     {
@@ -322,7 +358,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
                     'persons.name',
                     'person_groups.person_group_id',
                 ])
-                ->select('person_groups.name', 'person_group_name')
+                ->select('person_groups.display_name', 'person_group_name')
                 ->from('song_performance_persons')
                 ->join('persons', 'song_performance_persons.person_id = persons.person_id')
                 ->outerJoin('person_groups', 'song_performance_persons.person_group_id = person_groups.person_group_id')
@@ -344,10 +380,10 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     /**
-     * @param list<string>                                          $binEventIds
+     * @param array<int, string>                                    $binEventIds
      * @param array<string, array<string, EventPerformanceSummary>> $performancesByEvent
      *
-     * @return array<string, list<EventSetlistItemSummary>>
+     * @return array<string, array<int, EventSetlistItemSummary>>
      */
     private function loadSetlist(array $binEventIds, array $performancesByEvent): array
     {

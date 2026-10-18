@@ -19,6 +19,7 @@ class GetPresenter
         return response()->json(
             new MediaGetResponse()
                 ->setMedia($this->converter->toOpenApiMedia($outputData->media))
+                ->setTags($this->converter->toOpenApiTags($outputData->tags))
                 ->setSongs(array_map($this->converter->toOpenApiReferencedSong(...), $outputData->songs)),
             200,
         );

@@ -6,8 +6,8 @@ import "../shared";
 import "./events";
 import "./media";
 import "./releases";
-import "./site-stats";
 import "./songs";
+import "./tags";
 
 using Http;
 using IsekaiObservatory.Shared;

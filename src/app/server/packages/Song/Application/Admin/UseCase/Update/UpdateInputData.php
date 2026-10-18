@@ -7,7 +7,7 @@ namespace Song\Application\Admin\UseCase\Update;
 readonly class UpdateInputData
 {
     /**
-     * @param list<array{songTagId: string}>                         $tags
+     * @param list<array{tagId: string}>                             $tags
      * @param list<array{personId: string, role: int, orderNo: int}> $persons
      * @param list<array{mediaId: string, orderNo: int}>             $media
      */
@@ -15,6 +15,7 @@ readonly class UpdateInputData
         public string $songId,
         public string $title,
         public string $description,
+        public string $note,
         public ?string $lyricsLink,
         public int $type,
         public bool $isDisplay,

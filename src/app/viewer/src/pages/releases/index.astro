@@ -7,14 +7,17 @@ import { releaseGroupContentRepository } from '../../features/releases/content';
 import {
   RELEASE_GROUP_TYPE_FILTER_ORDER,
   RELEASE_GROUP_TYPE_NAMES,
-  representativeColor,
+  trackSearchTitles,
+  releaseFormatText,
 } from '../../features/releases/types';
+import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
 import { dottedDate } from '../../shared/date';
 
 // API は最古発売日の降順で返すので、年の区切りを入れるだけで並べ替えは不要
 const releaseGroups = await releaseGroupContentRepository.all();
 
+const tags = collectTags(releaseGroups);
 const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.firstReleasedOn.slice(0, 4)))];
 ---
 
@@ -35,6 +38,8 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
       categoryAttrs={['releaseType']}
       searchAttr="releaseSearch"
       searchPlaceholder="タイトル・種別・収録曲を検索..."
+      tags={tags}
+      tagAttr="releaseTags"
     />
 
     <EntryStatus
@@ -54,7 +59,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
 
     <div class="entry-empty entry-empty-panel" data-release-empty hidden>
       <div class="entry-empty-title">該当するリリースがありません</div>
-      <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
+      <div class="entry-empty-description">検索語句や種別・タグのフィルタを変えて確認してください。</div>
     </div>
 
     {years.map((year) => {
@@ -71,8 +76,9 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
           <ol class="release-year-list">
             {items.map((releaseGroup) => {
               const trackTitles = releaseGroup.releases.flatMap((release) =>
-                release.media.flatMap((medium) => medium.tracks.map((track) => track.title)),
+                release.media.flatMap((medium) => medium.tracks.flatMap(trackSearchTitles)),
               );
+              const formats = [...new Set(releaseGroup.releases.flatMap((release) => release.formats))];
 
               return (
                 <li
@@ -81,15 +87,19 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
                   data-release-search={[releaseGroup.title, RELEASE_GROUP_TYPE_NAMES[releaseGroup.type], ...trackTitles]
                     .join(' ')
                     .toLowerCase()}
+                  data-release-tags={tagIdsText(releaseGroup)}
                 >
-                  <a
-                    href={`/releases/${releaseGroup.releaseGroupId}`}
-                    class="release-row"
-                    style={`--release-color:${representativeColor(releaseGroup)};`}
-                  >
-                    <span class="release-row-title">{releaseGroup.title}</span>
-                    <span class="release-row-type">{RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}</span>
+                  <a href={`/releases/${releaseGroup.releaseGroupId}`} class="release-row">
                     <span class="label-mono release-row-date">{dottedDate(releaseGroup.firstReleasedOn.slice(5))}</span>
+                    <span class="release-row-body">
+                      <span class="release-row-title">{releaseGroup.title}</span>
+                      <span class="release-row-meta">
+                        <span class="pill" data-release-type={String(releaseGroup.type)}>
+                          {RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}
+                        </span>
+                        {formats.length > 0 && <span>{releaseFormatText(formats)}</span>}
+                      </span>
+                    </span>
                   </a>
                 </li>
               );

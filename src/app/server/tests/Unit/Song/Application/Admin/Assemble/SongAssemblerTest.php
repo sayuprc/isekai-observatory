@@ -16,8 +16,8 @@ use PHPUnit\Framework\Attributes\Test;
 use Song\Application\Admin\Assemble\SongAssembler;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\SongType;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\TagRepositoryInterface;
 use Tests\Support\Domain\EntityFactory;
 use Tests\TestCase;
 
@@ -27,7 +27,7 @@ class SongAssemblerTest extends TestCase
 
     private MockInterface&PersonRepositoryInterface $personRepository;
 
-    private MockInterface&SongTagRepositoryInterface $songTagRepository;
+    private MockInterface&TagRepositoryInterface $tagRepository;
 
     private MediaRepositoryInterface&MockInterface $mediaRepository;
 
@@ -37,7 +37,7 @@ class SongAssemblerTest extends TestCase
         parent::setUp();
 
         $this->personRepository = Mockery::mock(PersonRepositoryInterface::class);
-        $this->songTagRepository = Mockery::mock(SongTagRepositoryInterface::class);
+        $this->tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $this->mediaRepository = Mockery::mock(MediaRepositoryInterface::class);
     }
 
@@ -47,6 +47,7 @@ class SongAssemblerTest extends TestCase
         $uuid = $this->generateUuid();
         $title = 'テスト楽曲';
         $description = 'テスト楽曲説明';
+        $note = 'テスト楽曲備考';
         $type = SongType::Original;
         $orderNo = 1;
 
@@ -63,6 +64,7 @@ class SongAssemblerTest extends TestCase
                 ['personId' => $composerId = $this->generateUuid(), 'role' => 2, 'orderNo' => 2],
                 ['personId' => $arrangerId = $this->generateUuid(), 'role' => 3, 'orderNo' => 3],
             ],
+            note: $note,
         );
 
         $this->personRepository->shouldReceive('findByIds')
@@ -86,6 +88,7 @@ class SongAssemblerTest extends TestCase
         $this->assertSame($uuid, $assembled->songId);
         $this->assertSame($title, $assembled->title);
         $this->assertSame($description, $assembled->description);
+        $this->assertSame($note, $assembled->note);
         $this->assertSame($type->value, $assembled->typeValue);
         $this->assertSame($orderNo, $assembled->orderNo);
         $this->assertCount(3, $assembled->persons);
@@ -132,6 +135,6 @@ class SongAssemblerTest extends TestCase
 
     private function getInstance(): SongAssembler
     {
-        return new SongAssembler($this->personRepository, $this->songTagRepository, $this->mediaRepository);
+        return new SongAssembler($this->personRepository, $this->tagRepository, $this->mediaRepository);
     }
 }

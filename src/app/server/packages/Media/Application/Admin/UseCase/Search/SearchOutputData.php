@@ -10,7 +10,7 @@ use Media\Domain\Models\Media;
 readonly class SearchOutputData
 {
     /**
-     * @param list<Media>                    $media
+     * @param array<int, Media>              $media
      * @param array<string, MediaUsageCount> $usageCounts メディア ID (UUID) ごとの参照件数
      */
     public function __construct(
