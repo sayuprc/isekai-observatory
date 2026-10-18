@@ -69,7 +69,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'release_ids' => 'string[]',
         'sources' => '\OpenAPI\Public\Client\Model\EventSource[]',
         'performances' => '\OpenAPI\Public\Client\Model\SongPerformance[]',
-        'setlist' => '\OpenAPI\Public\Client\Model\SetlistItem[]'
+        'setlist' => '\OpenAPI\Public\Client\Model\SetlistItem[]',
+        'tag_ids' => 'string[]'
     ];
 
     /**
@@ -91,7 +92,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'release_ids' => 'uuid',
         'sources' => null,
         'performances' => null,
-        'setlist' => null
+        'setlist' => null,
+        'tag_ids' => 'uuid'
     ];
 
     /**
@@ -111,7 +113,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'release_ids' => false,
         'sources' => false,
         'performances' => false,
-        'setlist' => false
+        'setlist' => false,
+        'tag_ids' => false
     ];
 
     /**
@@ -211,7 +214,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'release_ids' => 'releaseIds',
         'sources' => 'sources',
         'performances' => 'performances',
-        'setlist' => 'setlist'
+        'setlist' => 'setlist',
+        'tag_ids' => 'tagIds'
     ];
 
     /**
@@ -231,7 +235,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'release_ids' => 'setReleaseIds',
         'sources' => 'setSources',
         'performances' => 'setPerformances',
-        'setlist' => 'setSetlist'
+        'setlist' => 'setSetlist',
+        'tag_ids' => 'setTagIds'
     ];
 
     /**
@@ -251,7 +256,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'release_ids' => 'getReleaseIds',
         'sources' => 'getSources',
         'performances' => 'getPerformances',
-        'setlist' => 'getSetlist'
+        'setlist' => 'getSetlist',
+        'tag_ids' => 'getTagIds'
     ];
 
     /**
@@ -323,6 +329,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('sources', $data ?? [], null);
         $this->setIfExists('performances', $data ?? [], null);
         $this->setIfExists('setlist', $data ?? [], null);
+        $this->setIfExists('tag_ids', $data ?? [], null);
     }
 
     /**
@@ -391,6 +398,9 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['setlist'] === null) {
             $invalidProperties[] = "'setlist' can't be null";
+        }
+        if ($this->container['tag_ids'] === null) {
+            $invalidProperties[] = "'tag_ids' can't be null";
         }
         return $invalidProperties;
     }
@@ -732,6 +742,33 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable setlist cannot be null');
         }
         $this->container['setlist'] = $setlist;
+
+        return $this;
+    }
+
+    /**
+     * Gets tag_ids
+     *
+     * @return string[]
+     */
+    public function getTagIds()
+    {
+        return $this->container['tag_ids'];
+    }
+
+    /**
+     * Sets tag_ids
+     *
+     * @param string[] $tag_ids タグの ID (タグの表示順)
+     *
+     * @return self
+     */
+    public function setTagIds($tag_ids)
+    {
+        if (is_null($tag_ids)) {
+            throw new \InvalidArgumentException('non-nullable tag_ids cannot be null');
+        }
+        $this->container['tag_ids'] = $tag_ids;
 
         return $this;
     }

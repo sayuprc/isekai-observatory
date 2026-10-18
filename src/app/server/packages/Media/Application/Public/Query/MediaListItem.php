@@ -9,12 +9,16 @@ use Media\Domain\Models\MediaType;
 
 readonly class MediaListItem
 {
+    /**
+     * @param list<string> $tagIds
+     */
     public function __construct(
         public string $mediaId,
         public string $title,
         public string $url,
         public DateTimeImmutable $publishedAt,
         public MediaType $type,
+        public array $tagIds,
     ) {
     }
 }

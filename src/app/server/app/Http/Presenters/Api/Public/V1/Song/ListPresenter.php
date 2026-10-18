@@ -33,7 +33,8 @@ class ListPresenter
             ->setDescription($song->description)
             ->setType(SongTypeValue::from($song->type->value))
             ->setCredits(array_map($this->toOpenApiSongCredit(...), $song->credits))
-            ->setMediaIds($song->mediaIds);
+            ->setMediaIds($song->mediaIds)
+            ->setTagIds($song->tagIds);
     }
 
     private function toOpenApiSongCredit(SongCredit $credit): OpenApiSongCredit

@@ -5,6 +5,7 @@ import "../../packages/song";
 import "../people/domain.tsp";
 import "../person-groups/domain.tsp";
 import "../release-groups/domain.tsp";
+import "../tags/domain.tsp";
 import "../venues/domain.tsp";
 
 using IsekaiObservatory.Shared;
@@ -71,4 +72,7 @@ model Event {
 
   @doc("セットリスト (表示順)")
   setlist: SetlistItem[];
+
+  @doc("タグの ID (タグの表示順)")
+  tagIds: tagId[];
 }

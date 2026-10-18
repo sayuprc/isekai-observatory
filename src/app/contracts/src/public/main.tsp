@@ -8,6 +8,7 @@ import "./people";
 import "./person-groups";
 import "./release-groups";
 import "./songs";
+import "./tags";
 import "./venues";
 
 using Http;

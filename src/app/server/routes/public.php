@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Public\V1\Person\ListPersonController;
 use App\Http\Controllers\Api\Public\V1\PersonGroup\ListPersonGroupController;
 use App\Http\Controllers\Api\Public\V1\ReleaseGroup\ListReleaseGroupController;
 use App\Http\Controllers\Api\Public\V1\Song\ListSongController;
+use App\Http\Controllers\Api\Public\V1\Tag\ListTagController;
 use App\Http\Controllers\Api\Public\V1\Venue\ListVenueController;
 use App\Http\Middleware\Public\PublicOpenApiValidator;
 use Event\Route\PublicEventRouteMap;
@@ -17,6 +18,7 @@ use Person\Route\PublicPersonGroupRouteMap;
 use Person\Route\PublicPersonRouteMap;
 use Release\Route\PublicReleaseGroupRouteMap;
 use Song\Route\PublicSongRouteMap;
+use Tag\Route\PublicTagRouteMap;
 use Venue\Route\PublicVenueRouteMap;
 
 Route::middleware(PublicOpenApiValidator::class)->group(static function () {
@@ -39,6 +41,9 @@ Route::middleware(PublicOpenApiValidator::class)->group(static function () {
             });
             Route::prefix('person-groups')->group(static function () {
                 Route::get('/', [ListPersonGroupController::class, 'handle'])->name(PublicPersonGroupRouteMap::List);
+            });
+            Route::prefix('tags')->group(static function () {
+                Route::get('/', [ListTagController::class, 'handle'])->name(PublicTagRouteMap::List);
             });
             Route::prefix('venues')->group(static function () {
                 Route::get('/', [ListVenueController::class, 'handle'])->name(PublicVenueRouteMap::List);

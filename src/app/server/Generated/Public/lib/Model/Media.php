@@ -62,7 +62,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'string',
         'url' => 'string',
         'published_at' => '\DateTime',
-        'type' => '\OpenAPI\Public\Client\Model\MediaTypeValue'
+        'type' => '\OpenAPI\Public\Client\Model\MediaTypeValue',
+        'tag_ids' => 'string[]'
     ];
 
     /**
@@ -77,7 +78,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => null,
         'url' => 'uri',
         'published_at' => 'date-time',
-        'type' => null
+        'type' => null,
+        'tag_ids' => 'uuid'
     ];
 
     /**
@@ -90,7 +92,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => false,
         'url' => false,
         'published_at' => false,
-        'type' => false
+        'type' => false,
+        'tag_ids' => false
     ];
 
     /**
@@ -183,7 +186,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'title',
         'url' => 'url',
         'published_at' => 'publishedAt',
-        'type' => 'type'
+        'type' => 'type',
+        'tag_ids' => 'tagIds'
     ];
 
     /**
@@ -196,7 +200,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'setTitle',
         'url' => 'setUrl',
         'published_at' => 'setPublishedAt',
-        'type' => 'setType'
+        'type' => 'setType',
+        'tag_ids' => 'setTagIds'
     ];
 
     /**
@@ -209,7 +214,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'getTitle',
         'url' => 'getUrl',
         'published_at' => 'getPublishedAt',
-        'type' => 'getType'
+        'type' => 'getType',
+        'tag_ids' => 'getTagIds'
     ];
 
     /**
@@ -274,6 +280,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('url', $data ?? [], null);
         $this->setIfExists('published_at', $data ?? [], null);
         $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('tag_ids', $data ?? [], null);
     }
 
     /**
@@ -321,6 +328,9 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";
+        }
+        if ($this->container['tag_ids'] === null) {
+            $invalidProperties[] = "'tag_ids' can't be null";
         }
         return $invalidProperties;
     }
@@ -473,6 +483,33 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
         $this->container['type'] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Gets tag_ids
+     *
+     * @return string[]
+     */
+    public function getTagIds()
+    {
+        return $this->container['tag_ids'];
+    }
+
+    /**
+     * Sets tag_ids
+     *
+     * @param string[] $tag_ids タグの ID (タグの表示順)
+     *
+     * @return self
+     */
+    public function setTagIds($tag_ids)
+    {
+        if (is_null($tag_ids)) {
+            throw new \InvalidArgumentException('non-nullable tag_ids cannot be null');
+        }
+        $this->container['tag_ids'] = $tag_ids;
 
         return $this;
     }

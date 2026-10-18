@@ -16,6 +16,7 @@ readonly class EventListItem
      * @param list<EventSourceItem> $sources
      * @param list<PerformanceItem> $performances
      * @param list<SetlistItem>     $setlist
+     * @param list<string>          $tagIds
      */
     public function __construct(
         public string $eventId,
@@ -31,6 +32,7 @@ readonly class EventListItem
         public array $sources,
         public array $performances,
         public array $setlist,
+        public array $tagIds,
     ) {
     }
 }

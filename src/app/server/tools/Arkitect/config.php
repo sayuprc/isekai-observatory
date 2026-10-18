@@ -127,6 +127,7 @@ return [
     ]),
     new Define(TagComponent::Query, [
         TagComponent::Domain,
+        SupportComponent::Pagination,
     ]),
     new Define(TagComponent::UseCase, [
         TagComponent::Domain,

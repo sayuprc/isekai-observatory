@@ -2,6 +2,7 @@ import "../../shared";
 import "../../packages/media";
 import "../../packages/song";
 import "../people/domain.tsp";
+import "../tags/domain.tsp";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Media;
@@ -40,4 +41,7 @@ model Song {
 
   @doc("関連する公開メディアの ID (表示順)")
   mediaIds: mediaId[];
+
+  @doc("タグの ID (タグの表示順)")
+  tagIds: tagId[];
 }

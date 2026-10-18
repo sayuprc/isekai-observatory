@@ -37,6 +37,12 @@ class ListEventTest extends DatabaseTestCase
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
         $this->storeMedia($this->createMedia($mediaId, '公開メディア', 'https://example.com/public', MediaType::Mv, true));
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
+        $this->storeTags(
+            $this->createTag($tagIdFirst, 'タグ A', 1),
+            $this->createTag($tagIdSecond, 'タグ B', 2),
+        );
         $this->storeEvents($this->createEvent(
             $eventId,
             title: '公開ライブ',
@@ -51,6 +57,7 @@ class ListEventTest extends DatabaseTestCase
                 ]],
             ],
             setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
+            tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
         ));
 
         $this->get(route(PublicEventRouteMap::List))
@@ -74,6 +81,7 @@ class ListEventTest extends DatabaseTestCase
                         'coVocalists' => [['personId' => $personId, 'creditName' => '当日のユニット', 'personGroupId' => $personGroupId]],
                     ]],
                     'setlist' => [['label' => '本編', 'performanceIds' => [$performanceId]]],
+                    'tagIds' => [$tagIdFirst, $tagIdSecond],
                 ]],
             ]);
     }

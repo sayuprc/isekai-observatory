@@ -10,6 +10,7 @@ readonly class ReleaseGroupListItem
 {
     /**
      * @param list<ReleaseItem> $releases
+     * @param list<string>      $tagIds
      */
     public function __construct(
         public string $releaseGroupId,
@@ -17,6 +18,7 @@ readonly class ReleaseGroupListItem
         public ReleaseGroupType $type,
         public string $description,
         public array $releases,
+        public array $tagIds,
     ) {
     }
 }
