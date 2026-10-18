@@ -32,7 +32,7 @@ class ListPersonGroupTest extends DatabaseTestCase
             $this->createPerson($secondMemberId, 'メンバー B', 2),
         );
         $this->storePersonGroups(
-            $this->createPersonGroup($publicGroupId, '公開イベントのグループ', [$secondMemberId, $firstMemberId]),
+            $this->createPersonGroup($publicGroupId, '管理用の名称', [$secondMemberId, $firstMemberId], '公開イベントのグループ'),
             $this->createPersonGroup($privateGroupId, '非公開イベントのグループ', [$firstMemberId]),
             $this->createPersonGroup($unusedGroupId, '未使用のグループ', [$firstMemberId]),
         );

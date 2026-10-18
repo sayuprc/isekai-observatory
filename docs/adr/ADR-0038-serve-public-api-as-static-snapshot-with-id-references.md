@@ -36,7 +36,7 @@ Viewer API (ADR-0021) は一覧 item に表示用の内容を埋め込むが、�
 - 公開する要素は Event / Song / ReleaseGroup / Media / Person / PersonGroup / Venue とする
   - Release (版) は ReleaseGroup の中に入れ子で返す
   - 要素同士の参照は ID で返す
-  - 楽曲披露は `songTitle` を常に返し、参照先の Song が非公開なら `songId` を null にする。収録トラックも同様に非公開 Song の `songId` を null にする
+  - 楽曲披露は `songTitle` を常に返し、参照先の Song が非公開なら `songId` を null にする。収録トラックの楽曲 (メドレーでは複数) も同様に非公開 Song の `songId` を null にする
   - Person / PersonGroup / Venue は公開記録から参照されているものだけを返す。公開した PersonGroup のメンバーも参照されているものとみなす
   - 公開境界は Viewer と同じとし、Viewer に出さないものは出さない
 - 一覧の契約は次のとおり

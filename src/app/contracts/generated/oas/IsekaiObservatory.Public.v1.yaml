@@ -569,6 +569,7 @@ components:
           $ref: '#/components/schemas/personGroupId'
         name:
           type: string
+          description: 表示用の名称
         memberIds:
           type: array
           items:

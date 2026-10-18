@@ -11,6 +11,8 @@ scalar personGroupId extends uuid;
 @doc("人物グループ。公開イベントの共演者の出演グループとして参照されているものだけが載る")
 model PersonGroup {
   personGroupId: personGroupId;
+
+  @doc("表示用の名称")
   name: string;
 
   @doc("メンバーの人物 ID (表示順)")

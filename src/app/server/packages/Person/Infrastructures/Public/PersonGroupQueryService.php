@@ -26,7 +26,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
     public function list(?string $pageToken, int $pageSize): PersonGroupListPage
     {
         $query = $this->queryFactory->select()
-            ->withSelect(['person_group_id', 'name'])
+            ->withSelect(['person_group_id', 'display_name'])
             ->from('person_groups')
             ->where(new Sql('person_group_id IN (' . PublicReferenceSql::PERSON_GROUP_IDS . ')'));
 
@@ -34,7 +34,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
             $decoded = PersonGroupListPageToken::decode($pageToken);
 
             $query = $query->where(Sql::format(
-                '(name > %s OR (name = %s AND person_group_id > %s))',
+                '(display_name > %s OR (display_name = %s AND person_group_id > %s))',
                 Sql::value($decoded->name),
                 Sql::value($decoded->name),
                 Sql::value($this->converter->toBin($decoded->personGroupId)),
@@ -42,7 +42,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
         }
 
         $rows = $this->queryFactory->fetchAll(
-            $query->orderBy('name')
+            $query->orderBy('display_name')
                 ->orderBy('person_group_id')
                 ->limit($pageSize + 1),
         );
@@ -54,7 +54,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
         $personGroups = array_map(
             fn (array $row): PersonGroupListItem => new PersonGroupListItem(
                 $this->converter->toUuid(Row::string($row, 'person_group_id')),
-                Row::string($row, 'name'),
+                Row::string($row, 'display_name'),
                 $memberIdsByGroup[Row::string($row, 'person_group_id')] ?? [],
             ),
             $pageRows,
@@ -66,7 +66,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
             $personGroups,
             $lastRow === null
                 ? null
-                : PersonGroupListPageToken::encode(Row::string($lastRow, 'name'), $this->converter->toUuid(Row::string($lastRow, 'person_group_id'))),
+                : PersonGroupListPageToken::encode(Row::string($lastRow, 'display_name'), $this->converter->toUuid(Row::string($lastRow, 'person_group_id'))),
         );
     }
 
