@@ -6,6 +6,7 @@ namespace App\Http\Presenters\Api\Viewer\V1\Song;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
+use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\EventTypeValue;
 use OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule;
 use OpenAPI\Viewer\Client\Model\MediaTypeValue;
@@ -54,7 +55,19 @@ class ListPresenter
             )
             ->setMedia($media)
             ->setReleaseGroups($releaseGroups)
-            ->setPerformances(array_map($this->toOpenApiPerformanceHistory(...), $song->performances));
+            ->setPerformances(array_map($this->toOpenApiPerformanceHistory(...), $song->performances))
+            ->setTags(array_map($this->toOpenApiTag(...), $song->tags));
+    }
+
+    /**
+     * @param array{tagId: string, name: string, orderNo: int} $tag
+     */
+    private function toOpenApiTag(array $tag): AttachedTag
+    {
+        return new AttachedTag()
+            ->setTagId($tag['tagId'])
+            ->setName($tag['name'])
+            ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiSongReleaseGroupSummary(SongReleaseGroupSummary $releaseGroup): OpenApiSongReleaseGroupSummary

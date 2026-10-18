@@ -35,7 +35,14 @@ class ListSongTest extends DatabaseTestCase
         $lyricistId = $this->generateUuid();
         $composerId = $this->generateUuid();
         $arrangerId = $this->generateUuid();
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
 
+        // タグは作成順ではなく表示順で並ぶ
+        $this->storeTags(
+            $this->createTag($tagIdSecond, 'コラボB', 20),
+            $this->createTag($tagIdFirst, 'コラボA', 10),
+        );
         $this->storePersons(
             $this->createPerson($lyricistId, 'テスト作詞者A', 1),
             $this->createPerson($composerId, 'テスト作曲者A', 2),
@@ -77,7 +84,7 @@ class ListSongTest extends DatabaseTestCase
                 SongType::Original,
                 true,
                 1,
-                [],
+                [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
                 [
                     ['personId' => $lyricistId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
                     ['personId' => $composerId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 2],
@@ -188,6 +195,7 @@ class ListSongTest extends DatabaseTestCase
                         ],
                         'performances' => [],
                         'releaseGroups' => [],
+                        'tags' => [],
                     ],
                 ],
                 'nextCursor' => base64_encode((string)json_encode([
@@ -240,6 +248,10 @@ class ListSongTest extends DatabaseTestCase
                                 'type' => 1,
                                 'firstReleasedOn' => '2024-01-01',
                             ],
+                        ],
+                        'tags' => [
+                            ['tagId' => $tagIdFirst, 'name' => 'コラボA', 'orderNo' => 10],
+                            ['tagId' => $tagIdSecond, 'name' => 'コラボB', 'orderNo' => 20],
                         ],
                     ],
                 ],

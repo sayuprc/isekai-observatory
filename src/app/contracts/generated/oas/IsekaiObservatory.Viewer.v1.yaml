@@ -162,6 +162,21 @@ paths:
         - Song
 components:
   schemas:
+    AttachedTag:
+      type: object
+      required:
+        - tagId
+        - name
+        - orderNo
+      properties:
+        tagId:
+          $ref: '#/components/schemas/tagId'
+        name:
+          $ref: '#/components/schemas/tagName'
+        orderNo:
+          $ref: '#/components/schemas/orderNo'
+          description: タグの表示順。一覧のタグの選択肢を並べるのに使う
+      description: 記録に付いたタグ
     ErrorCode:
       type: string
       enum:
@@ -227,6 +242,7 @@ components:
         - sources
         - performances
         - setlist
+        - tags
       properties:
         eventId:
           $ref: '#/components/schemas/eventId'
@@ -264,6 +280,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SetlistItem'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
+          description: 付いているタグ(タグの表示順)
     EventListResponse:
       type: object
       required:
@@ -589,6 +610,7 @@ components:
         - description
         - firstReleasedOn
         - releases
+        - tags
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -605,6 +627,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseListItem'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
+          description: 付いているタグ(タグの表示順)
       description: リリースグループ。公開リリースを 1 件以上持つものだけが一覧に載る
     ReleaseGroupListResponse:
       type: object
@@ -643,6 +670,10 @@ components:
                             - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
                               title: テスト楽曲
                               isDisplay: true
+              tags:
+                - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+                  name: テストタグ
+                  orderNo: 10
           nextCursor: eyJmaXJzdFJlbGVhc2VkT24iOiIyMDI2LTA1LTAxIiwicmVsZWFzZUdyb3VwSWQiOiIwZjIxODVjZC1iNGFiLTRmMjItYjBhMy1mZDkzY2JiZDJkZjIifQ==
     ReleaseGroupTypeValue:
       type: integer
@@ -774,6 +805,7 @@ components:
         - media
         - releaseGroups
         - performances
+        - tags
       properties:
         songId:
           $ref: '#/components/schemas/songId'
@@ -811,6 +843,11 @@ components:
           items:
             $ref: '#/components/schemas/SongPerformanceHistory'
           description: 公開イベントでの披露履歴(開催時期の新しい順)
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
+          description: 付いているタグ(タグの表示順)
       examples:
         - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
           title: テスト楽曲
@@ -837,6 +874,10 @@ components:
               type: 2
               firstReleasedOn: '2026-05-01'
           performances: []
+          tags:
+            - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+              name: テストタグ
+              orderNo: 10
     SongListResponse:
       type: object
       required:
@@ -876,6 +917,10 @@ components:
                   type: 2
                   firstReleasedOn: '2026-05-01'
               performances: []
+              tags:
+                - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+                  name: テストタグ
+                  orderNo: 10
           nextCursor: eyJvcmRlck5vIjoxLCJzb25nSWQiOiIzY2Q0MmMwOS1mZjNjLTRjZDItOTEzZi1hMjc5YzRlYTg5YjQifQ==
     SongMediaSummary:
       type: object
@@ -1108,6 +1153,14 @@ components:
       type: string
       format: uuid
       description: 楽曲ID
+    tagId:
+      type: string
+      format: uuid
+      description: タグID
+    tagName:
+      type: string
+      minLength: 1
+      description: タグ名
     title:
       type: string
       minLength: 1

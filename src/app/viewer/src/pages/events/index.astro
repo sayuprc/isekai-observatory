@@ -7,6 +7,7 @@ import SectionHead from '../../components/viewer/SectionHead.astro';
 import { eventContentRepository } from '../../features/events/content';
 import type { Event } from '../../features/events/types';
 import { EVENT_TYPE_NAMES, eventDate } from '../../features/events/types';
+import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
 
 const { undated, byYear } = await eventContentRepository.grouped();
@@ -15,6 +16,7 @@ const groups = [
   ...byYear.map(({ year, events }) => ({ label: year, isYear: true, events })),
 ];
 const total = groups.reduce((sum, group) => sum + group.events.length, 0);
+const tags = collectTags(groups.flatMap((group) => group.events));
 
 const searchText = (event: Event) =>
   [event.title, EVENT_TYPE_NAMES[event.type], eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
@@ -36,6 +38,8 @@ const searchText = (event: Event) =>
       categoryAttrs={['eventType']}
       searchAttr="eventSearch"
       searchPlaceholder="タイトル・年・開催先を検索..."
+      tags={tags}
+      tagAttr="eventTags"
     />
 
     <EntryStatus
@@ -55,7 +59,7 @@ const searchText = (event: Event) =>
 
     <div class="entry-empty entry-empty-panel" data-event-empty hidden>
       <div class="entry-empty-title">該当するイベントがありません</div>
-      <div class="entry-empty-description">検索語句や種別フィルタを変えて確認してください。</div>
+      <div class="entry-empty-description">検索語句や種別・タグのフィルタを変えて確認してください。</div>
     </div>
 
     {groups.map((group) => (
@@ -68,7 +72,12 @@ const searchText = (event: Event) =>
         </h2>
         <ol class="event-group-list">
           {group.events.map((event) => (
-            <li data-event-entry data-event-type={String(event.type)} data-event-search={searchText(event)}>
+            <li
+              data-event-entry
+              data-event-type={String(event.type)}
+              data-event-search={searchText(event)}
+              data-event-tags={tagIdsText(event)}
+            >
               <EventRow event={event} />
             </li>
           ))}

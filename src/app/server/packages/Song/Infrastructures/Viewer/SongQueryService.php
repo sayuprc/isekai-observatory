@@ -64,9 +64,10 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $mediaBySong = $this->loadMedia($binSongIds);
         $releaseGroupsBySong = $this->loadReleaseGroups($binSongIds);
         $performancesBySong = $this->loadPerformances($binSongIds);
+        $tagsBySong = $this->loadTags($binSongIds);
 
         $songs = array_map(
-            function (array $songRow) use ($personsBySong, $mediaBySong, $releaseGroupsBySong, $performancesBySong): SongListItem {
+            function (array $songRow) use ($personsBySong, $mediaBySong, $releaseGroupsBySong, $performancesBySong, $tagsBySong): SongListItem {
                 $binSongId = Row::string($songRow, 'song_id');
                 $personRows = $personsBySong[$binSongId] ?? [];
                 $mediaRows = $mediaBySong[$binSongId] ?? [];
@@ -82,6 +83,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
                     array_map($this->toMediaSummary(...), $mediaRows),
                     $releaseGroupsBySong[$binSongId] ?? [],
                     $performancesBySong[$binSongId] ?? [],
+                    $tagsBySong[$binSongId] ?? [],
                     Row::int($songRow, 'order_no'),
                 );
             },
@@ -241,6 +243,40 @@ readonly class SongQueryService implements SongQueryServiceInterface
                 $summaries,
                 static fn (SongReleaseGroupSummary $a, SongReleaseGroupSummary $b): int => [$b->firstReleasedOn, $a->title] <=> [$a->firstReleasedOn, $b->title],
             );
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param array<int, string> $binSongIds
+     *
+     * @return array<string, array<int, array{tagId: string, name: string, orderNo: int}>>
+     */
+    private function loadTags(array $binSongIds): array
+    {
+        if ($binSongIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['song_taggings.song_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+                ->from('song_taggings')
+                ->join('tags', 'song_taggings.tag_id = tags.tag_id')
+                ->where('song_taggings.song_id', 'IN', $binSongIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        );
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'song_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($row, 'tag_id')),
+                'name' => Row::string($row, 'name'),
+                'orderNo' => Row::int($row, 'order_no'),
+            ];
         }
 
         return $grouped;

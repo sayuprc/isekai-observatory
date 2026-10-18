@@ -1,4 +1,5 @@
 import "../../shared";
+import "../tags";
 import "../../packages/media";
 import "../../packages/event";
 import "../../packages/song";
@@ -57,6 +58,7 @@ model SongPerformanceHistory {
     }
   ],
   performances: #[],
+  tags: #[#{ tagId: "5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90", name: "テストタグ", orderNo: 10 }],
 })
 model SongListItem {
   songId: songId;
@@ -74,6 +76,9 @@ model SongListItem {
 
   @doc("公開イベントでの披露履歴(開催時期の新しい順)")
   performances: SongPerformanceHistory[];
+
+  @doc("付いているタグ(タグの表示順)")
+  tags: AttachedTag[];
 }
 
 @doc("楽曲が収録されている公開リリースグループの概要")

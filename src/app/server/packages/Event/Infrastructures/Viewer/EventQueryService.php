@@ -66,9 +66,10 @@ readonly class EventQueryService implements EventQueryServiceInterface
         $sourcesByEvent = $this->loadSources($binEventIds);
         $performancesByEvent = $this->loadPerformances($binEventIds);
         $setlistByEvent = $this->loadSetlist($binEventIds, $performancesByEvent);
+        $tagsByEvent = $this->loadTags($binEventIds);
 
         $events = array_map(
-            function (array $row) use ($venuesByEvent, $mediaByEvent, $releasesByEvent, $sourcesByEvent, $performancesByEvent, $setlistByEvent): EventListItem {
+            function (array $row) use ($venuesByEvent, $mediaByEvent, $releasesByEvent, $sourcesByEvent, $performancesByEvent, $setlistByEvent, $tagsByEvent): EventListItem {
                 $binEventId = Row::string($row, 'event_id');
 
                 return new EventListItem(
@@ -85,6 +86,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
                     $sourcesByEvent[$binEventId] ?? [],
                     array_values($performancesByEvent[$binEventId] ?? []),
                     $setlistByEvent[$binEventId] ?? [],
+                    $tagsByEvent[$binEventId] ?? [],
                 );
             },
             $pageRows,
@@ -116,6 +118,40 @@ readonly class EventQueryService implements EventQueryServiceInterface
             Sql::value($decoded->startOn),
             $binEventId,
         ));
+    }
+
+    /**
+     * @param array<int, string> $binEventIds
+     *
+     * @return array<string, array<int, array{tagId: string, name: string, orderNo: int}>>
+     */
+    private function loadTags(array $binEventIds): array
+    {
+        if ($binEventIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['event_taggings.event_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+                ->from('event_taggings')
+                ->join('tags', 'event_taggings.tag_id = tags.tag_id')
+                ->where('event_taggings.event_id', 'IN', $binEventIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        );
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'event_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($row, 'tag_id')),
+                'name' => Row::string($row, 'name'),
+                'orderNo' => Row::int($row, 'order_no'),
+            ];
+        }
+
+        return $grouped;
     }
 
     /**

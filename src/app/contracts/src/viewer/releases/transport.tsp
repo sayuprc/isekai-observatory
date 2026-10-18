@@ -37,6 +37,7 @@ namespace IsekaiObservatory.Viewer;
           ],
         }
       ],
+      tags: #[#{ tagId: "5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90", name: "テストタグ", orderNo: 10 }],
     }
   ],
   nextCursor: "eyJmaXJzdFJlbGVhc2VkT24iOiIyMDI2LTA1LTAxIiwicmVsZWFzZUdyb3VwSWQiOiIwZjIxODVjZC1iNGFiLTRmMjItYjBhMy1mZDkzY2JiZDJkZjIifQ==",

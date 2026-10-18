@@ -2,6 +2,7 @@
 import { RELEASE_GROUP_TYPE_NAMES, releaseFormatText, type ReleaseGroup } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
 import ReleaseVersionBody from './ReleaseVersionBody.astro';
+import TagChips from './TagChips.astro';
 
 interface Props {
   releaseGroup: ReleaseGroup;
@@ -21,6 +22,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
       {releaseGroup.description}
     </p>
   )}
+  <TagChips tags={releaseGroup.tags} />
 
   {releaseGroup.releases.map((release, index) =>
     isSingleReleaseGroup ? (

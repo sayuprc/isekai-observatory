@@ -4,6 +4,7 @@ import { SONG_TYPE_NAMES, type Song } from '../../../features/songs/types';
 import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import MediaChip from './MediaChip.astro';
+import TagChips from './TagChips.astro';
 
 interface Props {
   song: Song;
@@ -36,6 +37,7 @@ const formatPerformanceSub = (value: Song['performances'][number]): string =>
   <p class="detail-description" style="margin-top: 24px;">
     {song.description}
   </p>
+  <TagChips tags={song.tags} />
 
   <DetailSectionHead title="クレジット" />
   <dl class="song-credit-grid">
