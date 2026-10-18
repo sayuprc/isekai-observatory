@@ -22,7 +22,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
       {releaseGroup.description}
     </p>
   )}
-  <TagChips tags={releaseGroup.tags} listPath="/releases" />
+  <TagChips tags={releaseGroup.tags} />
 
   {releaseGroup.releases.map((release, index) =>
     isSingleReleaseGroup ? (

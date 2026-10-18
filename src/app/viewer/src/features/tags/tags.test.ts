@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { collectTags, tagFilterHref, tagIdsText } from './tags';
+import { collectTags, tagIdsText } from './tags';
 
 const tag = (tagId: string, orderNo: number) => ({ tagId, name: `タグ${tagId}`, orderNo });
 
@@ -18,11 +18,5 @@ describe('collectTags', () => {
 describe('tagIdsText', () => {
   it('タグ ID を空白区切りにする', () => {
     expect(tagIdsText({ tags: [tag('a', 1), tag('b', 2)] })).toBe('a b');
-  });
-});
-
-describe('tagFilterHref', () => {
-  it('一覧のパスに tag クエリを付ける', () => {
-    expect(tagFilterHref('/songs', 'a')).toBe('/songs?tag=a');
   });
 });

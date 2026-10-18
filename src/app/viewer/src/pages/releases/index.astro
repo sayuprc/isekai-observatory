@@ -10,7 +10,7 @@ import {
   trackSearchTitles,
   releaseFormatText,
 } from '../../features/releases/types';
-import { collectTags, tagIdsText, tagNames } from '../../features/tags/tags';
+import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
 import { dottedDate } from '../../shared/date';
 
@@ -37,7 +37,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
       entrySelector="[data-release-entry]"
       categoryAttrs={['releaseType']}
       searchAttr="releaseSearch"
-      searchPlaceholder="タイトル・種別・収録曲・タグを検索..."
+      searchPlaceholder="タイトル・種別・収録曲を検索..."
       tags={tags}
       tagAttr="releaseTags"
     />
@@ -84,12 +84,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
                 <li
                   data-release-entry
                   data-release-type={String(releaseGroup.type)}
-                  data-release-search={[
-                    releaseGroup.title,
-                    RELEASE_GROUP_TYPE_NAMES[releaseGroup.type],
-                    ...trackTitles,
-                    ...tagNames(releaseGroup),
-                  ]
+                  data-release-search={[releaseGroup.title, RELEASE_GROUP_TYPE_NAMES[releaseGroup.type], ...trackTitles]
                     .join(' ')
                     .toLowerCase()}
                   data-release-tags={tagIdsText(releaseGroup)}

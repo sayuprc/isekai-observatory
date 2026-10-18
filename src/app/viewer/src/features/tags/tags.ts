@@ -19,7 +19,3 @@ export function collectTags(items: Tagged[]): Tag[] {
 
 // FilterBar が dataset から読む、空白区切りのタグ ID
 export const tagIdsText = (item: Tagged): string => item.tags.map((tag) => tag.tagId).join(' ');
-
-export const tagNames = (item: Tagged): string[] => item.tags.map((tag) => tag.name);
-
-export const tagFilterHref = (listPath: string, tagId: string): string => `${listPath}?tag=${tagId}`;

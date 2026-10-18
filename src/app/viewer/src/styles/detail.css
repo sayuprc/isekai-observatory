@@ -275,12 +275,6 @@ span.detail-song-list-song-title {
 
 .tag-chip {
   letter-spacing: 0.04em;
-  text-decoration: none;
-}
-
-.tag-chip:hover {
-  color: var(--accent-strong);
-  border-color: var(--accent);
 }
 
 .rel-main {

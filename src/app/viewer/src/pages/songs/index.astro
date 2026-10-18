@@ -6,7 +6,7 @@ import SongTile from '../../components/viewer/SongTile.astro';
 import { YOUTUBE_THUMBNAIL_ORIGIN } from '../../features/media/labels';
 import { songContentRepository } from '../../features/songs/content';
 import { SONG_TYPE_NAMES } from '../../features/songs/types';
-import { collectTags, tagIdsText, tagNames } from '../../features/tags/tags';
+import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
 
 const songs = await songContentRepository.all();
@@ -30,7 +30,7 @@ const tags = collectTags(songs);
       entrySelector="[data-song-entry]"
       categoryAttrs={['songCategory']}
       searchAttr="songSearch"
-      searchPlaceholder="タイトル・作者・タグを検索..."
+      searchPlaceholder="タイトル・作者を検索..."
       tags={tags}
       tagAttr="songTags"
     />
@@ -54,7 +54,7 @@ const tags = collectTags(songs);
             class="song-grid-card"
             data-song-entry
             data-song-category={song.type}
-            data-song-search={[song.title, ...song.lyricists, ...song.composers, ...song.arrangers, ...tagNames(song)]
+            data-song-search={[song.title, ...song.lyricists, ...song.composers, ...song.arrangers]
               .join(' ')
               .toLowerCase()}
             data-song-tags={tagIdsText(song)}

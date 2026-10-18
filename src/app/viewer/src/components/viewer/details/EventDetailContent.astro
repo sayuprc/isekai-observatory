@@ -63,7 +63,7 @@ const hostname = (url: string): string => {
   </div>
   <h1 class="detail-title">{event.title}</h1>
   {event.description && <p class="detail-description event-detail-description">{event.description}</p>}
-  <TagChips tags={event.tags} listPath="/events" />
+  <TagChips tags={event.tags} />
 
   <dl class="event-detail-facts">
     {facts.map((fact) => (

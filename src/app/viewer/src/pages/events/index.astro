@@ -7,7 +7,7 @@ import SectionHead from '../../components/viewer/SectionHead.astro';
 import { eventContentRepository } from '../../features/events/content';
 import type { Event } from '../../features/events/types';
 import { EVENT_TYPE_NAMES, eventDate } from '../../features/events/types';
-import { collectTags, tagIdsText, tagNames } from '../../features/tags/tags';
+import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
 
 const { undated, byYear } = await eventContentRepository.grouped();
@@ -19,13 +19,7 @@ const total = groups.reduce((sum, group) => sum + group.events.length, 0);
 const tags = collectTags(groups.flatMap((group) => group.events));
 
 const searchText = (event: Event) =>
-  [
-    event.title,
-    EVENT_TYPE_NAMES[event.type],
-    eventDate(event) ?? '',
-    ...event.venues.map((venue) => venue.name),
-    ...tagNames(event),
-  ]
+  [event.title, EVENT_TYPE_NAMES[event.type], eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
     .join(' ')
     .toLowerCase();
 ---
@@ -43,7 +37,7 @@ const searchText = (event: Event) =>
       entrySelector="[data-event-entry]"
       categoryAttrs={['eventType']}
       searchAttr="eventSearch"
-      searchPlaceholder="タイトル・年・開催先・タグを検索..."
+      searchPlaceholder="タイトル・年・開催先を検索..."
       tags={tags}
       tagAttr="eventTags"
     />

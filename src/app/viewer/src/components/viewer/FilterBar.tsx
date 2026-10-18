@@ -1,10 +1,9 @@
-import { For, Show, createEffect, createSignal, onMount } from 'solid-js';
+import { For, Show, createEffect, createSignal } from 'solid-js';
 
 type FilterOption = { value: string; label: string };
 
 type TagOption = { tagId: string; name: string };
 
-const TAG_QUERY_KEY = 'tag';
 const ALL_TAGS = 'all';
 
 type Props = {
@@ -29,29 +28,6 @@ export default function FilterBar(props: Props) {
   const [tag, setTag] = createSignal(ALL_TAGS);
   // 絞り込みのない初回は SSR の DOM と結果が同じなので、全 entry の走査ごと省く
   let firstRun = true;
-
-  // 静的ページなので、共有された ?tag= はクライアントで読む。存在しないタグ ID は「すべてのタグ」として扱う
-  onMount(() => {
-    const fromUrl = new URLSearchParams(window.location.search).get(TAG_QUERY_KEY);
-
-    if (fromUrl !== null && props.tags?.some((option) => option.tagId === fromUrl)) {
-      setTag(fromUrl);
-    }
-  });
-
-  const changeTag = (value: string) => {
-    setTag(value);
-
-    const url = new URL(window.location.href);
-
-    if (value === ALL_TAGS) {
-      url.searchParams.delete(TAG_QUERY_KEY);
-    } else {
-      url.searchParams.set(TAG_QUERY_KEY, value);
-    }
-
-    window.history.replaceState(window.history.state, '', url);
-  };
 
   createEffect(() => {
     const f = filter();
@@ -95,7 +71,7 @@ export default function FilterBar(props: Props) {
       </div>
       <Show when={props.tagAttr && props.tags && props.tags.length > 0}>
         <div class="viewer-select">
-          <select aria-label="タグで絞り込む" value={tag()} onChange={(event) => changeTag(event.currentTarget.value)}>
+          <select aria-label="タグで絞り込む" value={tag()} onChange={(event) => setTag(event.currentTarget.value)}>
             <option value={ALL_TAGS}>すべてのタグ</option>
             <For each={props.tags}>{(option) => <option value={option.tagId}>{option.name}</option>}</For>
           </select>
