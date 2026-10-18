@@ -4,7 +4,16 @@
  */
 
 /** 公開する一覧の path。Public 契約の route と一致させる */
-export const RESOURCES = ['events', 'songs', 'release-groups', 'media', 'people', 'person-groups', 'venues'] as const;
+export const RESOURCES = [
+  'events',
+  'songs',
+  'release-groups',
+  'media',
+  'people',
+  'person-groups',
+  'tags',
+  'venues',
+] as const;
 
 export type Resource = (typeof RESOURCES)[number];
 

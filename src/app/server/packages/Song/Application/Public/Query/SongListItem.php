@@ -11,6 +11,7 @@ readonly class SongListItem
     /**
      * @param list<SongCredit> $credits
      * @param list<string>     $mediaIds
+     * @param list<string>     $tagIds
      */
     public function __construct(
         public string $songId,
@@ -19,6 +20,7 @@ readonly class SongListItem
         public SongType $type,
         public array $credits,
         public array $mediaIds,
+        public array $tagIds,
     ) {
     }
 }

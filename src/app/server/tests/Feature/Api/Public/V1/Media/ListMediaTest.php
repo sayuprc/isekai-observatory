@@ -21,8 +21,22 @@ class ListMediaTest extends DatabaseTestCase
     public function returnsPublicMediaOnly(): void
     {
         $mediaId = $this->generateUuid();
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
+        $this->storeTags(
+            $this->createTag($tagIdFirst, 'タグ A', 1),
+            $this->createTag($tagIdSecond, 'タグ B', 2),
+        );
         $this->storeMedia(
-            $this->createMedia($mediaId, '公開 MV', 'https://example.com/public', MediaType::Mv, true, new DateTimeImmutable('2024-03-01 12:00:00')),
+            $this->createMedia(
+                $mediaId,
+                '公開 MV',
+                'https://example.com/public',
+                MediaType::Mv,
+                true,
+                new DateTimeImmutable('2024-03-01 12:00:00'),
+                [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
+            ),
             $this->createMedia($this->generateUuid(), '非公開 MV', 'https://example.com/private', MediaType::Mv, false),
         );
 
@@ -33,6 +47,7 @@ class ListMediaTest extends DatabaseTestCase
             ->assertJsonPath('items.0.title', '公開 MV')
             ->assertJsonPath('items.0.url', 'https://example.com/public')
             ->assertJsonPath('items.0.type', MediaType::Mv->value)
+            ->assertJsonPath('items.0.tagIds', [$tagIdFirst, $tagIdSecond])
             ->assertJsonMissingPath('nextPageToken');
     }
 

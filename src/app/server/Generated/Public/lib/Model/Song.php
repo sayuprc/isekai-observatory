@@ -63,7 +63,8 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'string',
         'type' => '\OpenAPI\Public\Client\Model\SongTypeValue',
         'credits' => '\OpenAPI\Public\Client\Model\SongCredit[]',
-        'media_ids' => 'string[]'
+        'media_ids' => 'string[]',
+        'tag_ids' => 'string[]'
     ];
 
     /**
@@ -79,7 +80,8 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => null,
         'type' => null,
         'credits' => null,
-        'media_ids' => 'uuid'
+        'media_ids' => 'uuid',
+        'tag_ids' => 'uuid'
     ];
 
     /**
@@ -93,7 +95,8 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => false,
         'type' => false,
         'credits' => false,
-        'media_ids' => false
+        'media_ids' => false,
+        'tag_ids' => false
     ];
 
     /**
@@ -187,7 +190,8 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'description',
         'type' => 'type',
         'credits' => 'credits',
-        'media_ids' => 'mediaIds'
+        'media_ids' => 'mediaIds',
+        'tag_ids' => 'tagIds'
     ];
 
     /**
@@ -201,7 +205,8 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'setDescription',
         'type' => 'setType',
         'credits' => 'setCredits',
-        'media_ids' => 'setMediaIds'
+        'media_ids' => 'setMediaIds',
+        'tag_ids' => 'setTagIds'
     ];
 
     /**
@@ -215,7 +220,8 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         'description' => 'getDescription',
         'type' => 'getType',
         'credits' => 'getCredits',
-        'media_ids' => 'getMediaIds'
+        'media_ids' => 'getMediaIds',
+        'tag_ids' => 'getTagIds'
     ];
 
     /**
@@ -281,6 +287,7 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('credits', $data ?? [], null);
         $this->setIfExists('media_ids', $data ?? [], null);
+        $this->setIfExists('tag_ids', $data ?? [], null);
     }
 
     /**
@@ -331,6 +338,9 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['media_ids'] === null) {
             $invalidProperties[] = "'media_ids' can't be null";
+        }
+        if ($this->container['tag_ids'] === null) {
+            $invalidProperties[] = "'tag_ids' can't be null";
         }
         return $invalidProperties;
     }
@@ -510,6 +520,33 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable media_ids cannot be null');
         }
         $this->container['media_ids'] = $media_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets tag_ids
+     *
+     * @return string[]
+     */
+    public function getTagIds()
+    {
+        return $this->container['tag_ids'];
+    }
+
+    /**
+     * Sets tag_ids
+     *
+     * @param string[] $tag_ids タグの ID (タグの表示順)
+     *
+     * @return self
+     */
+    public function setTagIds($tag_ids)
+    {
+        if (is_null($tag_ids)) {
+            throw new \InvalidArgumentException('non-nullable tag_ids cannot be null');
+        }
+        $this->container['tag_ids'] = $tag_ids;
 
         return $this;
     }

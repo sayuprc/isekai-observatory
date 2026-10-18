@@ -19,7 +19,7 @@ class ListSongTest extends DatabaseTestCase
     use EntityStore;
 
     #[Test]
-    public function returnsCreditsAndPublicMediaAsIds(): void
+    public function returnsCreditsPublicMediaAndTagsAsIds(): void
     {
         $songId = $this->generateUuid();
         $personId = $this->generateUuid();
@@ -27,6 +27,12 @@ class ListSongTest extends DatabaseTestCase
         $hiddenMediaId = $this->generateUuid();
 
         $this->storePersons($this->createPerson($personId, '作家', 1));
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
+        $this->storeTags(
+            $this->createTag($tagIdFirst, 'タグ A', 1),
+            $this->createTag($tagIdSecond, 'タグ B', 2),
+        );
         $this->storeMedia(
             $this->createMedia($visibleMediaId, '公開 MV', 'https://example.com/public', MediaType::Mv, true),
             $this->createMedia($hiddenMediaId, '非公開 MV', 'https://example.com/private', MediaType::Mv, false),
@@ -38,7 +44,7 @@ class ListSongTest extends DatabaseTestCase
             SongType::Cover,
             true,
             1,
-            [],
+            [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
             [
                 ['personId' => $personId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
                 ['personId' => $personId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 2],
@@ -59,6 +65,7 @@ class ListSongTest extends DatabaseTestCase
                         ['personId' => $personId, 'role' => SongPersonRole::Composer->value],
                     ],
                     'mediaIds' => [$visibleMediaId],
+                    'tagIds' => [$tagIdFirst, $tagIdSecond],
                 ]],
             ]);
     }

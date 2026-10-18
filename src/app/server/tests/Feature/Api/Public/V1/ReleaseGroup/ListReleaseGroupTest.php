@@ -26,12 +26,24 @@ class ListReleaseGroupTest extends DatabaseTestCase
         $releaseId = $this->generateUuid();
         $visibleSongId = $this->generateUuid();
         $hiddenSongId = $this->generateUuid();
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
 
         $this->storeSongs(
             $this->createSong($visibleSongId, '公開楽曲', '説明', SongType::Original, true, 1),
             $this->createSong($hiddenSongId, '非公開楽曲', '説明', SongType::Original, false, 2),
         );
-        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'アルバム', ReleaseGroupType::Album, description: '説明'));
+        $this->storeTags(
+            $this->createTag($tagIdFirst, 'タグ A', 1),
+            $this->createTag($tagIdSecond, 'タグ B', 2),
+        );
+        $this->storeReleaseGroups($this->createReleaseGroup(
+            $releaseGroupId,
+            'アルバム',
+            ReleaseGroupType::Album,
+            description: '説明',
+            tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
+        ));
         $this->storeReleases(
             $this->createRelease(
                 $releaseId,
@@ -83,6 +95,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
                             ],
                         ]],
                     ]],
+                    'tagIds' => [$tagIdFirst, $tagIdSecond],
                 ]],
             ]);
     }

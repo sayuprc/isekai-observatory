@@ -30,6 +30,7 @@ class ListPresenter
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
-            ->setType(MediaTypeValue::from($media->type->value));
+            ->setType(MediaTypeValue::from($media->type->value))
+            ->setTagIds($media->tagIds);
     }
 }

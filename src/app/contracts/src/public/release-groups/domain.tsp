@@ -1,5 +1,6 @@
 import "../../shared";
 import "../../packages/song";
+import "../tags/domain.tsp";
 
 using IsekaiObservatory.Shared;
 using IsekaiObservatory.Packages.Song;
@@ -95,4 +96,7 @@ model ReleaseGroup {
 
   @doc("公開リリース (表示順)")
   releases: Release[];
+
+  @doc("タグの ID (タグの表示順)")
+  tagIds: tagId[];
 }

@@ -40,7 +40,8 @@ class ListPresenter
             ->setTitle($releaseGroup->title)
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description)
-            ->setReleases(array_map($this->toOpenApiRelease(...), $releaseGroup->releases));
+            ->setReleases(array_map($this->toOpenApiRelease(...), $releaseGroup->releases))
+            ->setTagIds($releaseGroup->tagIds);
     }
 
     private function toOpenApiRelease(ReleaseItem $release): Release

@@ -51,6 +51,7 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
+        $tagIdsByMedia = $this->loadTagIds(array_map(static fn (array $row): string => Row::string($row, 'media_id'), $pageRows));
 
         $media = array_map(
             fn (array $row): MediaListItem => new MediaListItem(
@@ -59,6 +60,7 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
                 Row::string($row, 'url'),
                 new DateTimeImmutable(Row::string($row, 'published_at')),
                 MediaType::from(Row::int($row, 'type')),
+                $tagIdsByMedia[Row::string($row, 'media_id')] ?? [],
             ),
             $pageRows,
         );
@@ -71,5 +73,32 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
                 ? null
                 : MediaListPageToken::encode(Row::string($lastRow, 'title'), $this->converter->toUuid(Row::string($lastRow, 'media_id'))),
         );
+    }
+
+    /**
+     * @param list<string> $binMediaIds
+     *
+     * @return array<string, list<string>>
+     */
+    private function loadTagIds(array $binMediaIds): array
+    {
+        if ($binMediaIds === []) {
+            return [];
+        }
+
+        $grouped = [];
+        foreach ($this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['media_taggings.media_id', 'tags.tag_id'])
+                ->from('media_taggings')
+                ->join('tags', 'media_taggings.tag_id = tags.tag_id')
+                ->where('media_taggings.media_id', 'IN', $binMediaIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        ) as $row) {
+            $grouped[Row::string($row, 'media_id')][] = $this->converter->toUuid(Row::string($row, 'tag_id'));
+        }
+
+        return $grouped;
     }
 }

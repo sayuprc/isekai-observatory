@@ -62,7 +62,8 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'string',
         'type' => '\OpenAPI\Public\Client\Model\ReleaseGroupTypeValue',
         'description' => 'string',
-        'releases' => '\OpenAPI\Public\Client\Model\Release[]'
+        'releases' => '\OpenAPI\Public\Client\Model\Release[]',
+        'tag_ids' => 'string[]'
     ];
 
     /**
@@ -77,7 +78,8 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => null,
         'type' => null,
         'description' => null,
-        'releases' => null
+        'releases' => null,
+        'tag_ids' => 'uuid'
     ];
 
     /**
@@ -90,7 +92,8 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => false,
         'type' => false,
         'description' => false,
-        'releases' => false
+        'releases' => false,
+        'tag_ids' => false
     ];
 
     /**
@@ -183,7 +186,8 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'title',
         'type' => 'type',
         'description' => 'description',
-        'releases' => 'releases'
+        'releases' => 'releases',
+        'tag_ids' => 'tagIds'
     ];
 
     /**
@@ -196,7 +200,8 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'setTitle',
         'type' => 'setType',
         'description' => 'setDescription',
-        'releases' => 'setReleases'
+        'releases' => 'setReleases',
+        'tag_ids' => 'setTagIds'
     ];
 
     /**
@@ -209,7 +214,8 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         'title' => 'getTitle',
         'type' => 'getType',
         'description' => 'getDescription',
-        'releases' => 'getReleases'
+        'releases' => 'getReleases',
+        'tag_ids' => 'getTagIds'
     ];
 
     /**
@@ -274,6 +280,7 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('releases', $data ?? [], null);
+        $this->setIfExists('tag_ids', $data ?? [], null);
     }
 
     /**
@@ -317,6 +324,9 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['releases'] === null) {
             $invalidProperties[] = "'releases' can't be null";
+        }
+        if ($this->container['tag_ids'] === null) {
+            $invalidProperties[] = "'tag_ids' can't be null";
         }
         return $invalidProperties;
     }
@@ -464,6 +474,33 @@ class ReleaseGroup implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable releases cannot be null');
         }
         $this->container['releases'] = $releases;
+
+        return $this;
+    }
+
+    /**
+     * Gets tag_ids
+     *
+     * @return string[]
+     */
+    public function getTagIds()
+    {
+        return $this->container['tag_ids'];
+    }
+
+    /**
+     * Sets tag_ids
+     *
+     * @param string[] $tag_ids タグの ID (タグの表示順)
+     *
+     * @return self
+     */
+    public function setTagIds($tag_ids)
+    {
+        if (is_null($tag_ids)) {
+            throw new \InvalidArgumentException('non-nullable tag_ids cannot be null');
+        }
+        $this->container['tag_ids'] = $tag_ids;
 
         return $this;
     }

@@ -9,6 +9,7 @@ tags:
   - name: PersonGroup
   - name: ReleaseGroup
   - name: Song
+  - name: Tag
   - name: Venue
 paths:
   /events:
@@ -239,6 +240,44 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - Song
+  /tags:
+    get:
+      operationId: TagService_listTags
+      description: タグ一覧取得API
+      parameters:
+        - name: pageToken
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/pageToken'
+          explode: false
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/pageSize'
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Tag
   /venues:
     get:
       operationId: VenueService_listVenues
@@ -362,6 +401,7 @@ components:
         - sources
         - performances
         - setlist
+        - tagIds
       properties:
         eventId:
           $ref: '#/components/schemas/eventId'
@@ -405,6 +445,11 @@ components:
           items:
             $ref: '#/components/schemas/SetlistItem'
           description: セットリスト (表示順)
+        tagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: タグの ID (タグの表示順)
       description: 公開イベント
     EventListResponse:
       type: object
@@ -498,6 +543,7 @@ components:
         - url
         - publishedAt
         - type
+        - tagIds
       properties:
         mediaId:
           $ref: '#/components/schemas/mediaId'
@@ -509,6 +555,11 @@ components:
           $ref: '#/components/schemas/mediaPublishedAt'
         type:
           $ref: '#/components/schemas/MediaTypeValue'
+        tagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: タグの ID (タグの表示順)
       description: 公開メディア
     MediaListResponse:
       type: object
@@ -658,6 +709,7 @@ components:
         - type
         - description
         - releases
+        - tagIds
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -672,6 +724,11 @@ components:
           items:
             $ref: '#/components/schemas/Release'
           description: 公開リリース (表示順)
+        tagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: タグの ID (タグの表示順)
       description: リリースグループ。公開リリースを 1 件以上持つものだけが載る
     ReleaseGroupListResponse:
       type: object
@@ -779,6 +836,7 @@ components:
         - type
         - credits
         - mediaIds
+        - tagIds
       properties:
         songId:
           $ref: '#/components/schemas/songId'
@@ -798,6 +856,11 @@ components:
           items:
             $ref: '#/components/schemas/mediaId'
           description: 関連する公開メディアの ID (表示順)
+        tagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: タグの ID (タグの表示順)
       description: 公開楽曲
     SongCredit:
       type: object
@@ -876,6 +939,29 @@ components:
         - オリジナル曲
         - カバー曲
         - 参加曲
+    Tag:
+      type: object
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          $ref: '#/components/schemas/tagId'
+        name:
+          type: string
+      description: タグ。公開楽曲・公開イベント・公開リリースグループ・公開メディアに付いているものだけが載る
+    TagListResponse:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        nextPageToken:
+          $ref: '#/components/schemas/pageToken'
+          description: 続きがある場合のみ返す
     Venue:
       type: object
       required:
@@ -1015,6 +1101,10 @@ components:
       type: string
       format: uuid
       description: 楽曲ID
+    tagId:
+      type: string
+      format: uuid
+      description: タグID
     title:
       type: string
       minLength: 1

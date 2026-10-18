@@ -1,4 +1,5 @@
 import "../../packages/media";
+import "../tags/domain.tsp";
 
 using IsekaiObservatory.Packages.Media;
 
@@ -11,4 +12,7 @@ model Media {
   url: mediaUrl;
   publishedAt: mediaPublishedAt;
   type: MediaTypeValue;
+
+  @doc("タグの ID (タグの表示順)")
+  tagIds: tagId[];
 }

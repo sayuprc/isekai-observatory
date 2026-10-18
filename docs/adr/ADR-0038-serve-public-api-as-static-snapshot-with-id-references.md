@@ -33,11 +33,13 @@ Viewer API (ADR-0021) は一覧 item に表示用の内容を埋め込むが、�
   - Worker は `pageToken` を静的ファイルへ変換して切り出すだけにし、API サーバーや DB へ問い合わせない
   - 静的ファイルは 100 件単位に分割し、Worker が最大 2 ファイルを読んで `pageSize` 分を返す
 - 最初は一覧だけを提供し、検索は需要が見えてから D1 などを使う別の口として追加する
-- 公開する要素は Event / Song / ReleaseGroup / Media / Person / PersonGroup / Venue とする
+- 公開する要素は Event / Song / ReleaseGroup / Media / Person / PersonGroup / Tag / Venue とする
   - Release (版) は ReleaseGroup の中に入れ子で返す
   - 要素同士の参照は ID で返す
   - 楽曲披露は `songTitle` を常に返し、参照先の Song が非公開なら `songId` を null にする。収録トラックの楽曲 (メドレーでは複数) も同様に非公開 Song の `songId` を null にする
   - Person / PersonGroup / Venue は公開記録から参照されているものだけを返す。公開した PersonGroup のメンバーも参照されているものとみなす
+  - Tag は公開した Song / Event / ReleaseGroup / Media に付いているものだけを返す。各要素は付いた Tag を `tagIds` として Tag の表示順で返す
+  - Viewer に一覧が無いため Tag を出していない Media にも、Public API では `tagIds` を載せる。Tag 自体は ADR-0037 で公開としている
   - 公開境界は Viewer と同じとし、Viewer に出さないものは出さない
 - 一覧の契約は次のとおり
   - パスは `/v1/...` とし、破壊的変更は `/v2` として並行提供する

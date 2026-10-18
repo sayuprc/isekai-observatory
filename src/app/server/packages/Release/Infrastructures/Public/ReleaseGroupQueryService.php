@@ -60,7 +60,9 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
-        $releasesByGroup = $this->loadReleases(array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $pageRows));
+        $binGroupIds = array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $pageRows);
+        $releasesByGroup = $this->loadReleases($binGroupIds);
+        $tagIdsByGroup = $this->loadTagIds($binGroupIds);
 
         $releaseGroups = array_map(
             fn (array $row): ReleaseGroupListItem => new ReleaseGroupListItem(
@@ -69,6 +71,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
                 ReleaseGroupType::from(Row::int($row, 'type')),
                 Row::string($row, 'description'),
                 $releasesByGroup[Row::string($row, 'release_group_id')] ?? [],
+                $tagIdsByGroup[Row::string($row, 'release_group_id')] ?? [],
             ),
             $pageRows,
         );
@@ -224,6 +227,33 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
                 Row::nullableString($row, 'name'),
                 $tracksByMedium[$binReleaseId][$position] ?? [],
             );
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param list<string> $binGroupIds
+     *
+     * @return array<string, list<string>>
+     */
+    private function loadTagIds(array $binGroupIds): array
+    {
+        if ($binGroupIds === []) {
+            return [];
+        }
+
+        $grouped = [];
+        foreach ($this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['release_group_taggings.release_group_id', 'tags.tag_id'])
+                ->from('release_group_taggings')
+                ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
+                ->where('release_group_taggings.release_group_id', 'IN', $binGroupIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        ) as $row) {
+            $grouped[Row::string($row, 'release_group_id')][] = $this->converter->toUuid(Row::string($row, 'tag_id'));
         }
 
         return $grouped;

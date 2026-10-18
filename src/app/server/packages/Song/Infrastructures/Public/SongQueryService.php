@@ -57,9 +57,10 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $creditsBySong = $this->loadCredits($binSongIds);
         $mediaIdsBySong = $this->loadMediaIds($binSongIds);
+        $tagIdsBySong = $this->loadTagIds($binSongIds);
 
         $songs = array_map(
-            function (array $row) use ($creditsBySong, $mediaIdsBySong): SongListItem {
+            function (array $row) use ($creditsBySong, $mediaIdsBySong, $tagIdsBySong): SongListItem {
                 $binSongId = Row::string($row, 'song_id');
 
                 return new SongListItem(
@@ -69,6 +70,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
                     SongType::from(Row::int($row, 'type')),
                     $creditsBySong[$binSongId] ?? [],
                     $mediaIdsBySong[$binSongId] ?? [],
+                    $tagIdsBySong[$binSongId] ?? [],
                 );
             },
             $pageRows,
@@ -134,6 +136,33 @@ readonly class SongQueryService implements SongQueryServiceInterface
                 ->orderBy('song_media_links.order_no'),
         ) as $row) {
             $grouped[Row::string($row, 'song_id')][] = $this->converter->toUuid(Row::string($row, 'media_id'));
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param list<string> $binSongIds
+     *
+     * @return array<string, list<string>>
+     */
+    private function loadTagIds(array $binSongIds): array
+    {
+        if ($binSongIds === []) {
+            return [];
+        }
+
+        $grouped = [];
+        foreach ($this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['song_taggings.song_id', 'tags.tag_id'])
+                ->from('song_taggings')
+                ->join('tags', 'song_taggings.tag_id = tags.tag_id')
+                ->where('song_taggings.song_id', 'IN', $binSongIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        ) as $row) {
+            $grouped[Row::string($row, 'song_id')][] = $this->converter->toUuid(Row::string($row, 'tag_id'));
         }
 
         return $grouped;

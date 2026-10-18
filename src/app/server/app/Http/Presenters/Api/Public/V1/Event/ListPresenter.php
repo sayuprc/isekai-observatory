@@ -50,7 +50,8 @@ class ListPresenter
             ->setReleaseIds($event->releaseIds)
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
-            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
+            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist))
+            ->setTagIds($event->tagIds);
     }
 
     private function toOpenApiSource(EventSourceItem $source): EventSource
