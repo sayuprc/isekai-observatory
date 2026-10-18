@@ -13,6 +13,7 @@ use Release\Application\Public\Query\ReleaseGroupQueryServiceInterface;
 use Release\Application\Public\Query\ReleaseItem;
 use Release\Application\Public\Query\ReleaseMediumItem;
 use Release\Application\Public\Query\ReleaseTrackItem;
+use Release\Application\Public\Query\ReleaseTrackSongItem;
 use Release\Domain\Models\ReleaseFormat;
 use Release\Domain\Models\ReleaseGroupType;
 use Support\Contracts\Uuid\UuidConverterInterface;
@@ -95,7 +96,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
 
         $releaseRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['release_id', 'release_group_id', 'name', 'released_on', 'description', 'color'])
+                ->withSelect(['release_id', 'release_group_id', 'name', 'released_on', 'description'])
                 ->from('releases')
                 ->where('release_group_id', 'IN', $binGroupIds)
                 ->where('is_display', '=', true)
@@ -115,7 +116,6 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
                 Row::string($row, 'name'),
                 Row::string($row, 'released_on'),
                 Row::string($row, 'description'),
-                Row::string($row, 'color'),
                 $formatsByRelease[$binReleaseId] ?? [],
                 $mediaByRelease[$binReleaseId] ?? [],
             );
@@ -150,7 +150,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
     }
 
     /**
-     * 楽曲を参照しないトラックと、参照先の楽曲が非公開のトラックは楽曲 ID を伏せる
+     * 参照先の楽曲が非公開なら楽曲 ID を伏せる
      *
      * @param list<string> $binReleaseIds
      *
@@ -172,22 +172,46 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
 
         $trackRows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['release_tracks.release_id', 'release_tracks.position', 'release_tracks.track_no', 'release_tracks.song_id', 'songs.is_display'])
-                ->select(new Sql('COALESCE(release_tracks.title, songs.title)'), 'title')
+                ->withSelect(['release_id', 'position', 'track_no', 'title'])
                 ->from('release_tracks')
-                ->outerJoin('songs', 'songs.song_id = release_tracks.song_id')
-                ->where('release_tracks.release_id', 'IN', $binReleaseIds)
-                ->orderBy('release_tracks.position')
-                ->orderBy('release_tracks.track_no'),
+                ->where('release_id', 'IN', $binReleaseIds)
+                ->orderBy('position')
+                ->orderBy('track_no'),
         );
+
+        $trackSongRows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect([
+                    'release_track_songs.release_id',
+                    'release_track_songs.position',
+                    'release_track_songs.track_no',
+                    'release_track_songs.song_id',
+                    'songs.title',
+                    'songs.is_display',
+                ])
+                ->from('release_track_songs')
+                ->join('songs', 'songs.song_id = release_track_songs.song_id')
+                ->where('release_track_songs.release_id', 'IN', $binReleaseIds)
+                ->orderBy('release_track_songs.order_no'),
+        );
+
+        $songsByTrack = [];
+        foreach ($trackSongRows as $row) {
+            $songsByTrack[Row::string($row, 'release_id')][Row::int($row, 'position')][Row::int($row, 'track_no')][] = new ReleaseTrackSongItem(
+                Row::bool($row, 'is_display') ? $this->converter->toUuid(Row::string($row, 'song_id')) : null,
+                Row::string($row, 'title'),
+            );
+        }
 
         $tracksByMedium = [];
         foreach ($trackRows as $row) {
-            $binSongId = Row::nullableString($row, 'song_id');
-            $tracksByMedium[Row::string($row, 'release_id')][Row::int($row, 'position')][] = new ReleaseTrackItem(
-                Row::int($row, 'track_no'),
-                $binSongId !== null && Row::bool($row, 'is_display') ? $this->converter->toUuid($binSongId) : null,
-                Row::string($row, 'title'),
+            $binReleaseId = Row::string($row, 'release_id');
+            $position = Row::int($row, 'position');
+            $trackNo = Row::int($row, 'track_no');
+            $tracksByMedium[$binReleaseId][$position][] = new ReleaseTrackItem(
+                $trackNo,
+                Row::nullableString($row, 'title'),
+                $songsByTrack[$binReleaseId][$position][$trackNo] ?? [],
             );
         }
 

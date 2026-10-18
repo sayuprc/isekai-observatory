@@ -16,10 +16,6 @@ scalar releaseId extends uuid;
 @format("date")
 scalar releasedOn extends string;
 
-@doc("代表色")
-@pattern("^#[0-9a-f]{6}$")
-scalar color extends string;
-
 @doc("リリースグループ種別の値")
 @enumExtensions
 enum ReleaseGroupTypeValue {
@@ -55,11 +51,19 @@ enum ReleaseFormatValue {
   Other: 99,
 }
 
-@doc("収録トラック。title は上書き名があればそれ、なければ楽曲名。楽曲を参照しないトラックと非公開楽曲のトラックは songId が null になる")
+@doc("収録トラックが参照する楽曲。参照先の楽曲が非公開なら songId は null になり、title だけが載る")
+model ReleaseTrackSong {
+  songId: songId | null;
+  title: title;
+}
+
+@doc("収録トラック。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null")
 model ReleaseTrack {
   trackNo: orderNo;
-  songId: songId | null;
-  title: string;
+  title: string | null;
+
+  @doc("参照する楽曲 (収録順)。2 件以上ならメドレー")
+  songs: ReleaseTrackSong[];
 }
 
 @doc("リリース内の区切り (Disc など)")
@@ -78,7 +82,6 @@ model Release {
 
   releasedOn: releasedOn;
   description: string;
-  color: color;
   formats: ReleaseFormatValue[];
   media: ReleaseMedium[];
 }

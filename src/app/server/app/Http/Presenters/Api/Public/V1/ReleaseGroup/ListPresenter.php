@@ -13,10 +13,12 @@ use OpenAPI\Public\Client\Model\ReleaseGroupListResponse;
 use OpenAPI\Public\Client\Model\ReleaseGroupTypeValue;
 use OpenAPI\Public\Client\Model\ReleaseMedium;
 use OpenAPI\Public\Client\Model\ReleaseTrack;
+use OpenAPI\Public\Client\Model\ReleaseTrackSong;
 use Release\Application\Public\Query\ReleaseGroupListItem;
 use Release\Application\Public\Query\ReleaseItem;
 use Release\Application\Public\Query\ReleaseMediumItem;
 use Release\Application\Public\Query\ReleaseTrackItem;
+use Release\Application\Public\Query\ReleaseTrackSongItem;
 use Release\Application\Public\UseCase\List\ListOutputData;
 use Release\Domain\Models\ReleaseFormat;
 
@@ -48,7 +50,6 @@ class ListPresenter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setDescription($release->description)
-            ->setColor($release->color)
             ->setFormats(array_map(static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value), $release->formats))
             ->setMedia(array_map($this->toOpenApiMedium(...), $release->media));
     }
@@ -66,8 +67,16 @@ class ListPresenter
     {
         return new ReleaseTrack([
             'track_no' => $track->trackNo,
-            'song_id' => $track->songId,
             'title' => $track->title,
+            'songs' => array_map($this->toOpenApiTrackSong(...), $track->songs),
+        ]);
+    }
+
+    private function toOpenApiTrackSong(ReleaseTrackSongItem $song): ReleaseTrackSong
+    {
+        return new ReleaseTrackSong([
+            'song_id' => $song->songId,
+            'title' => $song->title,
         ]);
     }
 }

@@ -20,7 +20,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
     use EntityStore;
 
     #[Test]
-    public function returnsPublicReleasesWithTracksReferencingPublicSongsOnly(): void
+    public function returnsPublicReleasesWithTracksHidingPrivateSongIds(): void
     {
         $releaseGroupId = $this->generateUuid();
         $releaseId = $this->generateUuid();
@@ -40,15 +40,15 @@ class ListReleaseGroupTest extends DatabaseTestCase
                 true,
                 new ImmutableDate('2026-05-01'),
                 description: 'CD',
-                color: '#4a5a78',
                 formats: [ReleaseFormat::Cd->value],
                 media: [[
                     'position' => 1,
                     'name' => 'Disc 1',
                     'tracks' => [
-                        ['songId' => $visibleSongId, 'title' => null, 'trackNo' => 1],
-                        ['songId' => $hiddenSongId, 'title' => null, 'trackNo' => 2],
-                        ['songId' => null, 'title' => '管理対象外の楽曲', 'trackNo' => 3],
+                        ['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [$hiddenSongId], 'title' => null, 'trackNo' => 2],
+                        ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 3],
+                        ['songIds' => [$hiddenSongId, $visibleSongId], 'title' => 'メドレー', 'trackNo' => 4],
                     ],
                 ]],
             ),
@@ -68,15 +68,18 @@ class ListReleaseGroupTest extends DatabaseTestCase
                         'name' => '通常盤',
                         'releasedOn' => '2026-05-01',
                         'description' => 'CD',
-                        'color' => '#4a5a78',
                         'formats' => [ReleaseFormat::Cd->value],
                         'media' => [[
                             'position' => 1,
                             'name' => 'Disc 1',
                             'tracks' => [
-                                ['trackNo' => 1, 'songId' => $visibleSongId, 'title' => '公開楽曲'],
-                                ['trackNo' => 2, 'songId' => null, 'title' => '非公開楽曲'],
-                                ['trackNo' => 3, 'songId' => null, 'title' => '管理対象外の楽曲'],
+                                ['trackNo' => 1, 'title' => null, 'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲']]],
+                                ['trackNo' => 2, 'title' => null, 'songs' => [['songId' => null, 'title' => '非公開楽曲']]],
+                                ['trackNo' => 3, 'title' => '管理対象外の楽曲', 'songs' => []],
+                                ['trackNo' => 4, 'title' => 'メドレー', 'songs' => [
+                                    ['songId' => null, 'title' => '非公開楽曲'],
+                                    ['songId' => $visibleSongId, 'title' => '公開楽曲'],
+                                ]],
                             ],
                         ]],
                     ]],
