@@ -606,7 +606,6 @@ components:
         - name
         - releasedOn
         - description
-        - color
         - formats
         - media
       properties:
@@ -619,8 +618,6 @@ components:
           $ref: '#/components/schemas/releasedOn'
         description:
           type: string
-        color:
-          $ref: '#/components/schemas/color'
         formats:
           type: array
           items:
@@ -728,18 +725,34 @@ components:
       type: object
       required:
         - trackNo
-        - songId
         - title
+        - songs
       properties:
         trackNo:
           $ref: '#/components/schemas/orderNo'
+        title:
+          anyOf:
+            - type: string
+            - type: 'null'
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseTrackSong'
+          description: 参照する楽曲 (収録順)。2 件以上ならメドレー
+      description: 収録トラック。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null
+    ReleaseTrackSong:
+      type: object
+      required:
+        - songId
+        - title
+      properties:
         songId:
           anyOf:
             - $ref: '#/components/schemas/songId'
             - type: 'null'
         title:
-          type: string
-      description: 収録トラック。title は上書き名があればそれ、なければ楽曲名。楽曲を参照しないトラックと非公開楽曲のトラックは songId が null になる
+          $ref: '#/components/schemas/title'
+      description: 収録トラックが参照する楽曲。参照先の楽曲が非公開なら songId は null になり、title だけが載る
     SetlistItem:
       type: object
       required:
@@ -852,13 +865,16 @@ components:
       enum:
         - 1
         - 2
+        - 3
       description: 楽曲種別の値
       x-enum-varnames:
         - Original
         - Cover
+        - Guest
       x-enum-descriptions:
         - オリジナル曲
         - カバー曲
+        - 参加曲
     Venue:
       type: object
       required:
@@ -906,10 +922,6 @@ components:
         - v1
       x-enum-descriptions:
         - バージョン 1
-    color:
-      type: string
-      pattern: ^#[0-9a-f]{6}$
-      description: 代表色
     description:
       type: string
       description: 楽曲の説明

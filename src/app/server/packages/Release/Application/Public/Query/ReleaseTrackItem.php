@@ -7,12 +7,12 @@ namespace Release\Application\Public\Query;
 readonly class ReleaseTrackItem
 {
     /**
-     * @param ?string $songId 楽曲を参照しないトラックと、参照先の楽曲が非公開のトラックは null
+     * @param list<ReleaseTrackSongItem> $songs 収録順。2 件以上ならメドレー
      */
     public function __construct(
         public int $trackNo,
-        public ?string $songId,
-        public string $title,
+        public ?string $title,
+        public array $songs,
     ) {
     }
 }
