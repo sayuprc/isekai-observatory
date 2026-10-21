@@ -65,7 +65,7 @@ class AuditLog implements ModelInterface, ArrayAccess, \JsonSerializable
         'target_type' => '\OpenAPI\Admin\Client\Model\AuditTargetType',
         'target_id' => 'string',
         'created_at' => '\DateTime',
-        'snapshot' => 'object'
+        'snapshot' => 'array<string,mixed>'
     ];
 
     /**
@@ -555,7 +555,7 @@ class AuditLog implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets snapshot
      *
-     * @return object
+     * @return array<string,mixed>
      */
     public function getSnapshot()
     {
@@ -565,7 +565,7 @@ class AuditLog implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets snapshot
      *
-     * @param object $snapshot 対象の変更後スナップショット。target_type ごとに構造が異なるため任意の JSON とする
+     * @param array<string,mixed> $snapshot 対象の変更後スナップショット。target_type ごとに構造が異なるため任意の JSON とする
      *
      * @return self
      */
