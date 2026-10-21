@@ -4,18 +4,14 @@ ENV TZ=Asia/Tokyo
 
 WORKDIR /var/www/html
 
-RUN apk add --no-cache \
+RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.2-bin,source=/pie,target=/usr/local/bin/pie \
+    apk add --no-cache \
     icu-libs \
     unzip \
   && apk add --no-cache --virtual .build-deps ${PHPIZE_DEPS} icu-dev \
-  && pecl channel-update pecl.php.net \
-  && pecl install \
-    redis \
-  && docker-php-ext-enable \
-    redis \
+  && pie install phpredis/phpredis \
   && docker-php-ext-install intl pdo_mysql \
-  && apk del .build-deps \
-  && rm -rf /tmp/pear
+  && apk del .build-deps
 
 COPY --from=composer:2.10.3 /usr/bin/composer /usr/bin/composer
 COPY src/app/server/composer.json src/app/server/composer.lock ./
