@@ -37,7 +37,7 @@ readonly class Converter
             ->setTargetType(OpenApiAuditTargetType::from($detail->targetType->value))
             ->setTargetId($detail->targetId)
             ->setCreatedAt($this->toDateTime($detail->createdAt))
-            ->setSnapshot((object)$detail->snapshot);
+            ->setSnapshot($detail->snapshot);
     }
 
     private function toDateTime(DateTimeInterface $value): DateTime
