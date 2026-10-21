@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:php8.5.7-alpine
+FROM dunglas/frankenphp:php8.5.12-alpine
 
 ENV TZ=Asia/Tokyo
 
