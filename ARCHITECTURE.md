@@ -18,7 +18,7 @@
 - `src/app/contracts/`: TypeSpec による API 契約
 - `src/app/admin/`: Astro / SolidJS / Elysia による管理画面
 - `src/app/viewer/`: Astro / SolidJS による閲覧サイト
-- `src/app/public-api/`: 外部向け Public API の静的スナップショット書き出しと配信用 Cloudflare Worker
+- `src/app/public-api/`: 外部向け Public API の静的スナップショット書き出しと配信用 Cloudflare Worker、API リファレンス (Scalar) の書き出し
 - `src/notification/discord-notifier/`: MoonBit 製 Discord 通知配達サービス (Cloud Run)
 - `src/notification/publish/`: MoonBit 製の通知 JSON → Pub/Sub publish CLI
 - `src/notification/contract/`: MoonBit 製のアプリ通知 JSON 共有契約 (`notify-publish` / `discord-notifier` が依存)
