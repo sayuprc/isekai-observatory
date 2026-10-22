@@ -59,7 +59,7 @@ class RegisterFinishRequest implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static $openAPITypes = [
         'auth_ceremony_id' => 'string',
         'token' => 'string',
-        'credential' => 'object'
+        'credential' => 'array<string,mixed>'
     ];
 
     /**
@@ -369,7 +369,7 @@ class RegisterFinishRequest implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Gets credential
      *
-     * @return object
+     * @return array<string,mixed>
      */
     public function getCredential()
     {
@@ -379,7 +379,7 @@ class RegisterFinishRequest implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets credential
      *
-     * @param object $credential credential
+     * @param array<string,mixed> $credential credential
      *
      * @return self
      */

@@ -3454,7 +3454,7 @@ components:
           format: date-time
         snapshot:
           type: object
-          unevaluatedProperties: {}
+          additionalProperties: {}
           description: 対象の変更後スナップショット。target_type ごとに構造が異なるため任意の JSON とする
       description: 監査ログ詳細
     AuditLogGetResponse:
@@ -3986,7 +3986,7 @@ components:
           $ref: '#/components/schemas/authCeremonyId'
         credential:
           type: object
-          unevaluatedProperties: {}
+          additionalProperties: {}
     LoginFinishResponse:
       type: object
       required:
@@ -4017,7 +4017,7 @@ components:
           $ref: '#/components/schemas/authCeremonyId'
         publicKey:
           type: object
-          unevaluatedProperties: {}
+          additionalProperties: {}
     Media:
       type: object
       required:
@@ -4606,7 +4606,7 @@ components:
           $ref: '#/components/schemas/authCeremonyId'
         credential:
           type: object
-          unevaluatedProperties: {}
+          additionalProperties: {}
     RecoveryFinishResponse:
       type: object
       required:
@@ -4643,7 +4643,7 @@ components:
           $ref: '#/components/schemas/authCeremonyId'
         publicKey:
           type: object
-          unevaluatedProperties: {}
+          additionalProperties: {}
     RefreshTokenRequest:
       type: object
       required:
@@ -4680,7 +4680,7 @@ components:
           $ref: '#/components/schemas/registrationToken'
         credential:
           type: object
-          unevaluatedProperties: {}
+          additionalProperties: {}
     RegisterFinishResponse:
       type: object
       required:
@@ -4717,7 +4717,7 @@ components:
           $ref: '#/components/schemas/authCeremonyId'
         publicKey:
           type: object
-          unevaluatedProperties: {}
+          additionalProperties: {}
     Release:
       type: object
       required:

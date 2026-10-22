@@ -15,7 +15,7 @@ class LoginStartPresenter
         return response()->json(
             new LoginStartResponse()
                 ->setAuthCeremonyId($output->authCeremonyId)
-                ->setPublicKey((object)$output->publicKey),
+                ->setPublicKey($output->publicKey),
             200,
         );
     }
