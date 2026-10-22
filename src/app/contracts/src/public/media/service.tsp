@@ -10,7 +10,9 @@ namespace IsekaiObservatory.Public;
 @tag("Media")
 @route("/media")
 interface MediaService {
-  @doc("メディア一覧取得API")
+  @summary("メディア一覧")
+  @doc("公開メディアを返す。並び順はタイトル順")
+  @returnsDoc("メディアの一覧")
   listMedia(@query pageToken?: pageToken, @query pageSize?: pageSize):
     | Ok<MediaListResponse>
     | BadRequest

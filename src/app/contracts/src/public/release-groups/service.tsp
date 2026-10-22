@@ -10,7 +10,9 @@ namespace IsekaiObservatory.Public;
 @tag("ReleaseGroup")
 @route("/release-groups")
 interface ReleaseGroupService {
-  @doc("リリースグループ一覧取得API")
+  @summary("リリースグループ一覧")
+  @doc("公開リリースを 1 件以上持つリリースグループを返す。リリース (版) は `releases` に入れ子で返す。並び順は表示順の降順")
+  @returnsDoc("リリースグループの一覧")
   listReleaseGroups(@query pageToken?: pageToken, @query pageSize?: pageSize):
     | Ok<ReleaseGroupListResponse>
     | BadRequest

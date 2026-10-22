@@ -1,6 +1,34 @@
 openapi: 3.1.0
 info:
   title: ヰ世界観測所 Public API
+  description: |-
+    ヰ世界観測所の公開記録を読み取るための API
+
+    ## データの更新
+
+    - サイトのデプロイ時に書き出したスナップショットを返す。管理画面での更新は次のデプロイまで反映されない
+    - デプロイをまたいでページを送ると、新旧のデータが混ざって重複や取りこぼしが起きることがある
+
+    ## 参照
+
+    - 要素どうしの参照は ID で返す。名前などは対応する一覧から引き当てる
+    - 参照先の楽曲が非公開のときは `songId` が null になり、曲名だけが載る
+
+    ## ページ送り
+
+    - `pageSize` は 1〜100 で、省略すると 100
+    - 続きがあるときはレスポンスに `nextPageToken` が載るので、次のリクエストの `pageToken` に渡す
+    - `pageToken` の中身の形式は保証しない
+    - 並び順は一覧ごとに決まっていて、同順のものは ID 順
+
+    ## 利用条件
+
+    - 認証は不要で、すべてのオリジンからのリクエストを許可する (CORS)
+    - アクセスが多すぎると 429 を返すことがある
+
+    ## バージョン
+
+    - パスは `/v1/...` とし、互換性のない変更は `/v2` として並行して提供する
   version: v1
 tags:
   - name: Event
@@ -15,7 +43,8 @@ paths:
   /events:
     get:
       operationId: EventService_listEvents
-      description: イベント一覧取得API
+      summary: イベント一覧
+      description: 公開イベントを返す。並び順はタイトル順
       parameters:
         - name: pageToken
           in: query
@@ -31,19 +60,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: イベントの一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
@@ -53,7 +82,8 @@ paths:
   /media:
     get:
       operationId: MediaService_listMedia
-      description: メディア一覧取得API
+      summary: メディア一覧
+      description: 公開メディアを返す。並び順はタイトル順
       parameters:
         - name: pageToken
           in: query
@@ -69,19 +99,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: メディアの一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MediaListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
@@ -91,7 +121,8 @@ paths:
   /people:
     get:
       operationId: PersonService_listPeople
-      description: 人物一覧取得API
+      summary: 人物一覧
+      description: 公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されている人物を返す。並び順は表示順
       parameters:
         - name: pageToken
           in: query
@@ -107,19 +138,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: 人物の一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
@@ -129,7 +160,8 @@ paths:
   /person-groups:
     get:
       operationId: PersonGroupService_listPersonGroups
-      description: 人物グループ一覧取得API
+      summary: 人物グループ一覧
+      description: 公開イベントの共演者の出演グループとして参照されている人物グループを返す。並び順は表示用名称順
       parameters:
         - name: pageToken
           in: query
@@ -145,19 +177,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: 人物グループの一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonGroupListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
@@ -167,7 +199,8 @@ paths:
   /release-groups:
     get:
       operationId: ReleaseGroupService_listReleaseGroups
-      description: リリースグループ一覧取得API
+      summary: リリースグループ一覧
+      description: 公開リリースを 1 件以上持つリリースグループを返す。リリース (版) は `releases` に入れ子で返す。並び順は表示順の降順
       parameters:
         - name: pageToken
           in: query
@@ -183,19 +216,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: リリースグループの一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReleaseGroupListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
@@ -205,7 +238,8 @@ paths:
   /songs:
     get:
       operationId: SongService_listSongs
-      description: 楽曲一覧取得API
+      summary: 楽曲一覧
+      description: 公開楽曲を返す。並び順は表示順の降順
       parameters:
         - name: pageToken
           in: query
@@ -221,19 +255,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: 楽曲の一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SongListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
@@ -243,7 +277,8 @@ paths:
   /tags:
     get:
       operationId: TagService_listTags
-      description: タグ一覧取得API
+      summary: タグ一覧
+      description: 公開した楽曲・イベント・リリースグループ・メディアに付いているタグを返す。並び順は表示順
       parameters:
         - name: pageToken
           in: query
@@ -259,19 +294,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: タグの一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TagListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
@@ -281,7 +316,8 @@ paths:
   /venues:
     get:
       operationId: VenueService_listVenues
-      description: 開催先一覧取得API
+      summary: 開催先一覧
+      description: 公開イベントから参照されている開催先を返す。並び順は名前順
       parameters:
         - name: pageToken
           in: query
@@ -297,19 +333,19 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: 開催先の一覧
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/VenueListResponse'
         '400':
-          description: The server could not understand the request due to invalid syntax.
+          description: '`pageSize` が範囲外、または `pageToken` が不正'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Server error
+          description: サーバー側でエラーが発生した
           content:
             application/json:
               schema:
