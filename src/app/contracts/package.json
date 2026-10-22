@@ -9,6 +9,8 @@
     "compile:viewer:watch": "tsp compile ./src/viewer/main.tsp --watch",
     "compile:admin": "tsp compile ./src/admin/main.tsp && bun run scripts/fix-enum-types.ts",
     "compile:admin:watch": "tsp compile ./src/admin/main.tsp --watch",
+    "compile:public": "tsp compile ./src/public/main.tsp && bun run scripts/fix-enum-types.ts",
+    "compile:public:watch": "tsp compile ./src/public/main.tsp --watch",
     "format": "tsp format \"**/*.tsp\"",
     "format:check": "tsp format --check \"**/*.tsp\"",
     "typecheck": "tsc --noEmit"

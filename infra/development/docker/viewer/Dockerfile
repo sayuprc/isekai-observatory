@@ -58,10 +58,12 @@ WORKDIR /app/src
 
 COPY src/app/package.json src/app/pnpm-lock.yaml src/app/pnpm-workspace.yaml ./
 COPY src/app/viewer/package.json viewer/package.json
+COPY src/app/public-api/package.json public-api/package.json
 
-RUN pnpm install --frozen-lockfile --filter viewer --prod \
+RUN pnpm install --frozen-lockfile --filter viewer --filter public-api --prod \
   && rm -rf /pnpm/store
 
 COPY src/app/viewer viewer
+COPY src/app/public-api public-api
 
 ENTRYPOINT ["viewer-deploy"]

@@ -6,5 +6,6 @@ return [
     'path' => [
         'admin' => __DIR__ . '/../../contracts/generated/oas/IsekaiObservatory.Admin.v1.yaml',
         'viewer' => __DIR__ . '/../../contracts/generated/oas/IsekaiObservatory.Viewer.v1.yaml',
+        'public' => __DIR__ . '/../../contracts/generated/oas/IsekaiObservatory.Public.v1.yaml',
     ],
 ];

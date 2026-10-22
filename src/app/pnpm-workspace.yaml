@@ -5,6 +5,7 @@ packages:
   - admin
   - admin-proxy
   - contracts
+  - public-api
   - viewer
 
 catalog:

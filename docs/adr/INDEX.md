@@ -41,3 +41,4 @@
 | ADR-0035 | accepted | 楽曲種別に参加曲を加える | [api, admin, viewer] |
 | ADR-0036 | accepted | タグは対象をまたいで共有し、タグ付けは対象ごとに付けられる側が持つ | [api, admin] |
 | ADR-0037 | accepted | タグを閲覧サイトにも出し、各一覧の絞り込みに使う | [api, viewer] |
+| ADR-0038 | accepted | Public API は deploy 時の静的スナップショットとして配信し、参照を ID で返す | [api, public-api] |

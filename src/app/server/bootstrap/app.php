@@ -12,7 +12,7 @@ use Support\UseCase\Exceptions\UseCaseException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        api: [__DIR__ . '/../routes/admin.php', __DIR__ . '/../routes/viewer.php'],
+        api: [__DIR__ . '/../routes/admin.php', __DIR__ . '/../routes/viewer.php', __DIR__ . '/../routes/public.php'],
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
         apiPrefix: '',

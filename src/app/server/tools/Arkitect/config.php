@@ -80,6 +80,7 @@ return [
     ]),
     new Define(PersonComponent::Query, [
         PersonComponent::Domain,
+        SupportComponent::Pagination,
     ]),
     new Define(PersonComponent::UseCase, [
         PersonComponent::Domain,
@@ -102,6 +103,7 @@ return [
     ]),
     new Define(VenueComponent::Query, [
         VenueComponent::Domain,
+        SupportComponent::Pagination,
     ]),
     new Define(VenueComponent::UseCase, [
         VenueComponent::Domain,
@@ -125,6 +127,7 @@ return [
     ]),
     new Define(TagComponent::Query, [
         TagComponent::Domain,
+        SupportComponent::Pagination,
     ]),
     new Define(TagComponent::UseCase, [
         TagComponent::Domain,
