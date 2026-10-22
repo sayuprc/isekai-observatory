@@ -23,6 +23,9 @@ const defaultRules = {
 
 export default [
   {
+    ignores: ['docs/**'],
+  },
+  {
     plugins: {
       'import-x': importX,
     },
