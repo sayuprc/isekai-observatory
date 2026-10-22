@@ -4,7 +4,7 @@ ENV TZ=Asia/Tokyo
 
 WORKDIR /var/www/html
 
-RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.2-bin,source=/pie,target=/usr/local/bin/pie \
+RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.3-bin,source=/pie,target=/usr/local/bin/pie \
     apk add --no-cache \
     icu-libs \
     unzip \
