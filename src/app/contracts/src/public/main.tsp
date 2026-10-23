@@ -15,7 +15,7 @@ using Http;
 using IsekaiObservatory.Shared;
 using Versioning;
 
-@service(#{ title: "ヰ世界観測所 Public API" })
+@service(#{ title: "ヰ世界観測所 API" })
 @doc("""
   ヰ世界観測所の公開記録を読み取るための API
   
