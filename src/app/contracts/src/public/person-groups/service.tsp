@@ -11,7 +11,7 @@ namespace IsekaiObservatory.Public;
 @route("/person-groups")
 interface PersonGroupService {
   @summary("人物グループ一覧")
-  @doc("公開イベントの共演者の出演グループとして参照されている人物グループを返す。並び順は表示用名称順")
+  @doc("公開イベントの共演者の出演グループとして参照されている人物グループを返します。並び順は表示用名称順です")
   @returnsDoc("人物グループの一覧")
   listPersonGroups(@query pageToken?: pageToken, @query pageSize?: pageSize):
     | Ok<PersonGroupListResponse>

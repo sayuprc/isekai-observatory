@@ -21,14 +21,14 @@ model EventSource {
   url: eventSourceUrl;
 }
 
-@doc("楽曲披露の共演者。personGroupId はグループとして全員で出演したときだけ持つ")
+@doc("楽曲披露の共演者。personGroupId はグループとして全員で出演したときだけ持ちます")
 model CoVocalist {
   personId: personId;
   creditName: performanceCreditName | null;
   personGroupId: personGroupId | null;
 }
 
-@doc("楽曲披露。参照先の楽曲が非公開なら songId は null になり、songTitle だけが載る")
+@doc("楽曲披露。参照先の楽曲が非公開なら songId は null になり、songTitle だけが載ります")
 model SongPerformance {
   performanceId: performanceId;
   songId: songId | null;
@@ -38,11 +38,11 @@ model SongPerformance {
   coVocalists: CoVocalist[];
 }
 
-@doc("セットリスト項目。本人が歌唱しない演目は label だけを持つ")
+@doc("セットリスト項目。本人が歌唱しない演目は label だけを持ちます")
 model SetlistItem {
   label: setlistLabel | null;
 
-  @doc("この項目で披露した楽曲披露の ID。メドレーでは複数になる")
+  @doc("この項目で披露した楽曲披露の ID。メドレーでは複数になります")
   performanceIds: performanceId[];
 }
 
@@ -61,13 +61,13 @@ model Event {
   @doc("関連する公開メディアの ID (表示順)")
   mediaIds: mediaId[];
 
-  @doc("関連リリースの ID (表示順)。リリースとリリースグループがともに公開のものだけが載る")
+  @doc("関連リリースの ID (表示順)。リリースとリリースグループがともに公開のものだけが載ります")
   releaseIds: releaseId[];
 
   @doc("出典 (表示順)")
   sources: EventSource[];
 
-  @doc("楽曲披露。セットリスト項目に属さないものも含む")
+  @doc("楽曲披露。セットリスト項目に属さないものも含みます")
   performances: SongPerformance[];
 
   @doc("セットリスト (表示順)")

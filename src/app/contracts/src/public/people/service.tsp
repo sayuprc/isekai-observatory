@@ -11,7 +11,7 @@ namespace IsekaiObservatory.Public;
 @route("/people")
 interface PersonService {
   @summary("人物一覧")
-  @doc("公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されている人物を返す。並び順は表示順")
+  @doc("公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されている人物を返します。並び順は表示順です")
   @returnsDoc("人物の一覧")
   listPeople(@query pageToken?: pageToken, @query pageSize?: pageSize):
     | Ok<PersonListResponse>

@@ -1,6 +1,6 @@
 namespace IsekaiObservatory.Public;
 
-@doc("次ページを取得するためのトークン。中身の形式は保証しない")
+@doc("次ページを取得するためのトークン。中身の形式は保証しません")
 @friendlyName("pageToken")
 scalar pageToken extends string;
 

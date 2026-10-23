@@ -17,7 +17,7 @@ enum VenueKindValue {
   Online: 2,
 }
 
-@doc("開催先。公開イベントから参照されているものだけが載る")
+@doc("開催先。公開イベントから参照されているものだけが載ります")
 model Venue {
   venueId: venueId;
   name: string;

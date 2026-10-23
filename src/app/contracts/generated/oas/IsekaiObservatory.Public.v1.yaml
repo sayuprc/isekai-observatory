@@ -2,33 +2,33 @@ openapi: 3.1.0
 info:
   title: ヰ世界観測所 API
   description: |-
-    ヰ世界観測所の公開記録を読み取るための API
+    ヰ世界観測所の公開記録を読み取るための API です
 
     ## データの更新
 
-    - サイトのデプロイ時に書き出したスナップショットを返す。管理画面での更新は次のデプロイまで反映されない
-    - デプロイをまたいでページを送ると、新旧のデータが混ざって重複や取りこぼしが起きることがある
+    - サイトのデプロイ時に書き出したスナップショットを返します。管理画面での更新は次のデプロイまで反映されません
+    - デプロイをまたいでページを送ると、新旧のデータが混ざって重複や取りこぼしが起きることがあります
 
     ## 参照
 
-    - 要素どうしの参照は ID で返す。名前などは対応する一覧から引き当てる
-    - 参照先の楽曲が非公開のときは `songId` が null になり、曲名だけが載る
+    - 要素どうしの参照は ID で返します。名前などは対応する一覧から引き当ててください
+    - 参照先の楽曲が非公開のときは `songId` が null になり、曲名だけが載ります
 
     ## ページ送り
 
-    - `pageSize` は 1〜100 で、省略すると 100
-    - 続きがあるときはレスポンスに `nextPageToken` が載るので、次のリクエストの `pageToken` に渡す
-    - `pageToken` の中身の形式は保証しない
-    - 並び順は一覧ごとに決まっていて、同順のものは ID 順
+    - `pageSize` は 1〜100 で、省略すると 100 です
+    - 続きがあるときはレスポンスに `nextPageToken` が載るので、次のリクエストの `pageToken` に渡してください
+    - `pageToken` の中身の形式は保証しません
+    - 並び順は一覧ごとに決まっていて、同順のものは ID 順です
 
     ## 利用条件
 
-    - 認証は不要で、すべてのオリジンからのリクエストを許可する (CORS)
-    - アクセスが多すぎると 429 を返すことがある
+    - 認証は不要で、すべてのオリジンからのリクエストを許可しています (CORS)
+    - アクセスが多すぎると 429 を返すことがあります
 
     ## バージョン
 
-    - パスは `/v1/...` とし、互換性のない変更は `/v2` として並行して提供する
+    - パスは `/v1/...` とし、互換性のない変更は `/v2` として並行して提供します
   version: v1
 tags:
   - name: Event
@@ -44,7 +44,7 @@ paths:
     get:
       operationId: EventService_listEvents
       summary: イベント一覧
-      description: 公開イベントを返す。並び順はタイトル順
+      description: 公開イベントを返します。並び順はタイトル順です
       parameters:
         - name: pageToken
           in: query
@@ -66,13 +66,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/EventListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -83,7 +83,7 @@ paths:
     get:
       operationId: MediaService_listMedia
       summary: メディア一覧
-      description: 公開メディアを返す。並び順はタイトル順
+      description: 公開メディアを返します。並び順はタイトル順です
       parameters:
         - name: pageToken
           in: query
@@ -105,13 +105,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/MediaListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -122,7 +122,7 @@ paths:
     get:
       operationId: PersonService_listPeople
       summary: 人物一覧
-      description: 公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されている人物を返す。並び順は表示順
+      description: 公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されている人物を返します。並び順は表示順です
       parameters:
         - name: pageToken
           in: query
@@ -144,13 +144,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/PersonListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -161,7 +161,7 @@ paths:
     get:
       operationId: PersonGroupService_listPersonGroups
       summary: 人物グループ一覧
-      description: 公開イベントの共演者の出演グループとして参照されている人物グループを返す。並び順は表示用名称順
+      description: 公開イベントの共演者の出演グループとして参照されている人物グループを返します。並び順は表示用名称順です
       parameters:
         - name: pageToken
           in: query
@@ -183,13 +183,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/PersonGroupListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -200,7 +200,7 @@ paths:
     get:
       operationId: ReleaseGroupService_listReleaseGroups
       summary: リリースグループ一覧
-      description: 公開リリースを 1 件以上持つリリースグループを返す。リリース (版) は `releases` に入れ子で返す。並び順は表示順の降順
+      description: 公開リリースを 1 件以上持つリリースグループを返します。リリース (版) は `releases` に入れ子で返します。並び順は表示順の降順です
       parameters:
         - name: pageToken
           in: query
@@ -222,13 +222,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReleaseGroupListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -239,7 +239,7 @@ paths:
     get:
       operationId: SongService_listSongs
       summary: 楽曲一覧
-      description: 公開楽曲を返す。並び順は表示順の降順
+      description: 公開楽曲を返します。並び順は表示順の降順です
       parameters:
         - name: pageToken
           in: query
@@ -261,13 +261,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/SongListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -278,7 +278,7 @@ paths:
     get:
       operationId: TagService_listTags
       summary: タグ一覧
-      description: 公開した楽曲・イベント・リリースグループ・メディアに付いているタグを返す。並び順は表示順
+      description: 公開した楽曲・イベント・リリースグループ・メディアに付いているタグを返します。並び順は表示順です
       parameters:
         - name: pageToken
           in: query
@@ -300,13 +300,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/TagListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -317,7 +317,7 @@ paths:
     get:
       operationId: VenueService_listVenues
       summary: 開催先一覧
-      description: 公開イベントから参照されている開催先を返す。並び順は名前順
+      description: 公開イベントから参照されている開催先を返します。並び順は名前順です
       parameters:
         - name: pageToken
           in: query
@@ -339,13 +339,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/VenueListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正'
+          description: '`pageSize` が範囲外、または `pageToken` が不正です'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: サーバー側でエラーが発生した
+          description: サーバー側でエラーが発生しました
           content:
             application/json:
               schema:
@@ -371,7 +371,7 @@ components:
           anyOf:
             - $ref: '#/components/schemas/personGroupId'
             - type: 'null'
-      description: 楽曲披露の共演者。personGroupId はグループとして全員で出演したときだけ持つ
+      description: 楽曲披露の共演者。personGroupId はグループとして全員で出演したときだけ持ちます
     ErrorCode:
       type: string
       enum:
@@ -465,7 +465,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/releaseId'
-          description: 関連リリースの ID (表示順)。リリースとリリースグループがともに公開のものだけが載る
+          description: 関連リリースの ID (表示順)。リリースとリリースグループがともに公開のものだけが載ります
         sources:
           type: array
           items:
@@ -475,7 +475,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SongPerformance'
-          description: 楽曲披露。セットリスト項目に属さないものも含む
+          description: 楽曲披露。セットリスト項目に属さないものも含みます
         setlist:
           type: array
           items:
@@ -498,7 +498,7 @@ components:
             $ref: '#/components/schemas/Event'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     EventSource:
       type: object
       required:
@@ -608,7 +608,7 @@ components:
             $ref: '#/components/schemas/Media'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     MediaTypeValue:
       type: integer
       format: int32
@@ -644,7 +644,7 @@ components:
           $ref: '#/components/schemas/personId'
         name:
           type: string
-      description: 人物。公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されているものだけが載る
+      description: 人物。公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されているものだけが載ります
     PersonGroup:
       type: object
       required:
@@ -662,7 +662,7 @@ components:
           items:
             $ref: '#/components/schemas/personId'
           description: メンバーの人物 ID (表示順)
-      description: 人物グループ。公開イベントの共演者の出演グループとして参照されているものだけが載る
+      description: 人物グループ。公開イベントの共演者の出演グループとして参照されているものだけが載ります
     PersonGroupListResponse:
       type: object
       required:
@@ -674,7 +674,7 @@ components:
             $ref: '#/components/schemas/PersonGroup'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     PersonListResponse:
       type: object
       required:
@@ -686,7 +686,7 @@ components:
             $ref: '#/components/schemas/Person'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     Release:
       type: object
       required:
@@ -701,7 +701,7 @@ components:
           $ref: '#/components/schemas/releaseId'
         name:
           type: string
-          description: 版名。無しは空文字
+          description: 版名。無しは空文字です
         releasedOn:
           $ref: '#/components/schemas/releasedOn'
         description:
@@ -765,7 +765,7 @@ components:
           items:
             $ref: '#/components/schemas/tagId'
           description: タグの ID (タグの表示順)
-      description: リリースグループ。公開リリースを 1 件以上持つものだけが載る
+      description: リリースグループ。公開リリースを 1 件以上持つものだけが載ります
     ReleaseGroupListResponse:
       type: object
       required:
@@ -777,7 +777,7 @@ components:
             $ref: '#/components/schemas/ReleaseGroup'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     ReleaseGroupTypeValue:
       type: integer
       format: int32
@@ -832,8 +832,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReleaseTrackSong'
-          description: 参照する楽曲 (収録順)。2 件以上ならメドレー
-      description: 収録トラック。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null
+          description: 参照する楽曲 (収録順)。2 件以上ならメドレーです
+      description: 収録トラック。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null です
     ReleaseTrackSong:
       type: object
       required:
@@ -846,7 +846,7 @@ components:
             - type: 'null'
         title:
           $ref: '#/components/schemas/title'
-      description: 収録トラックが参照する楽曲。参照先の楽曲が非公開なら songId は null になり、title だけが載る
+      description: 収録トラックが参照する楽曲。参照先の楽曲が非公開なら songId は null になり、title だけが載ります
     SetlistItem:
       type: object
       required:
@@ -861,8 +861,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/performanceId'
-          description: この項目で披露した楽曲披露の ID。メドレーでは複数になる
-      description: セットリスト項目。本人が歌唱しない演目は label だけを持つ
+          description: この項目で披露した楽曲披露の ID。メドレーでは複数になります
+      description: セットリスト項目。本人が歌唱しない演目は label だけを持ちます
     Song:
       type: object
       required:
@@ -908,7 +908,7 @@ components:
           $ref: '#/components/schemas/personId'
         role:
           $ref: '#/components/schemas/SongCreditRoleValue'
-      description: 人物が楽曲に関わった役割。同じ人物が複数の役割で載ることがある
+      description: 人物が楽曲に関わった役割。同じ人物が複数の役割で載ることがあります
     SongCreditRoleValue:
       type: integer
       format: int32
@@ -936,7 +936,7 @@ components:
             $ref: '#/components/schemas/Song'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     SongPerformance:
       type: object
       required:
@@ -958,7 +958,7 @@ components:
           items:
             $ref: '#/components/schemas/CoVocalist'
           description: 共演者 (表示順)
-      description: 楽曲披露。参照先の楽曲が非公開なら songId は null になり、songTitle だけが載る
+      description: 楽曲披露。参照先の楽曲が非公開なら songId は null になり、songTitle だけが載ります
     SongTypeValue:
       type: integer
       format: int32
@@ -985,7 +985,7 @@ components:
           $ref: '#/components/schemas/tagId'
         name:
           type: string
-      description: タグ。公開楽曲・公開イベント・公開リリースグループ・公開メディアに付いているものだけが載る
+      description: タグ。公開楽曲・公開イベント・公開リリースグループ・公開メディアに付いているものだけが載ります
     TagListResponse:
       type: object
       required:
@@ -997,7 +997,7 @@ components:
             $ref: '#/components/schemas/Tag'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     Venue:
       type: object
       required:
@@ -1011,7 +1011,7 @@ components:
           type: string
         kind:
           $ref: '#/components/schemas/VenueKindValue'
-      description: 開催先。公開イベントから参照されているものだけが載る
+      description: 開催先。公開イベントから参照されているものだけが載ります
     VenueKindValue:
       type: integer
       format: int32
@@ -1036,7 +1036,7 @@ components:
             $ref: '#/components/schemas/Venue'
         nextPageToken:
           $ref: '#/components/schemas/pageToken'
-          description: 続きがある場合のみ返す
+          description: 続きがある場合のみ返します
     Version:
       type: string
       enum:
@@ -1100,7 +1100,7 @@ components:
       description: 1 ページあたりの件数
     pageToken:
       type: string
-      description: 次ページを取得するためのトークン。中身の形式は保証しない
+      description: 次ページを取得するためのトークン。中身の形式は保証しません
     performanceCreditName:
       type: string
       minLength: 1

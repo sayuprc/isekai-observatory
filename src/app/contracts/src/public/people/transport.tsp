@@ -6,6 +6,6 @@ namespace IsekaiObservatory.Public;
 model PersonListResponse {
   items: Person[];
 
-  @doc("続きがある場合のみ返す")
+  @doc("続きがある場合のみ返します")
   nextPageToken?: pageToken;
 }
