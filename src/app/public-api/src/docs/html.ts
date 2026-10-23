@@ -19,7 +19,7 @@ export const renderIndexHtml = (publicApiUrl: string): string => {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ヰ世界観測所 Public API</title>
+    <title>ヰ世界観測所 API</title>
   </head>
   <body>
     <div id="app"></div>

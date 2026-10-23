@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: ヰ世界観測所 Public API
+  title: ヰ世界観測所 API
   description: |-
     ヰ世界観測所の公開記録を読み取るための API
 
