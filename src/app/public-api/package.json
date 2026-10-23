@@ -20,7 +20,7 @@
     "lint:check": "bun run eslint:check"
   },
   "dependencies": {
-    "@scalar/api-reference": "1.74.0",
+    "@scalar/api-reference": "1.75.0",
     "wrangler": "catalog:"
   },
   "devDependencies": {
