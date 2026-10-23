@@ -29,6 +29,7 @@ pnpm --filter public-api run snapshot
 pnpm --filter public-api run deploy \
   --name "${CLOUDFLARE_PUBLIC_API_WORKER_NAME}" \
   --compatibility-date "$(date -u '+%Y-%m-%d')" \
+  --var NOINDEX:true \
   --message "production public-api deploy $(date --iso-8601=seconds)"
 
 notify-publish <<EOF
