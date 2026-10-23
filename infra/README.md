@@ -77,7 +77,7 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 | API / Admin service と各 job の runtime env / secret | `ci.yaml` では定義しない。初回デプロイ前に別経路で設定する |
 | DB migrate job | `DB_USERNAME` / `DB_PASSWORD` / `DB_HOST` / `DB_PORT` / `DB_DATABASE` |
 | media youtube import job | DB 接続 env と `YOUTUBE_API_KEY` |
-| Viewer deploy job | `API_URL` / `SITE_URL` / `PUBLIC_API_URL` / `PUBLIC_API_DOCS_URL` (任意。Viewer の footer に出すリファレンスの URL。未設定ならリンクを出さない) / Cloudflare Worker 名 (`CLOUDFLARE_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME`) / account ID / `GOOGLE_CLOUD_PROJECT` / `NOTIFICATION_TOPIC` と `CLOUDFLARE_API_TOKEN` secret |
+| Viewer deploy job | `API_URL` / `SITE_URL` / `PUBLIC_API_URL` / `PUBLIC_API_DOCS_URL` (リファレンスの URL。Viewer の footer と Docs の deploy 通知に出す) / Cloudflare Worker 名 (`CLOUDFLARE_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME`) / account ID / `GOOGLE_CLOUD_PROJECT` / `NOTIFICATION_TOPIC` と `CLOUDFLARE_API_TOKEN` secret |
 | admin-proxy deploy job | `ADMIN_PROXY_WORKER_NAME` / `ADMIN_PROXY_ORIGIN_URL` / `CLOUDFLARE_ACCOUNT_ID` と `CLOUDFLARE_API_TOKEN` / `PROXY_SHARED_SECRET` secret |
 | Admin service | `PROXY_SHARED_SECRET` (admin-proxy と同じ secret) |
 
