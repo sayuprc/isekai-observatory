@@ -85,7 +85,7 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 
 - Viewer deploy job は runtime env / secret を受け取り、Cloudflare Workers へ deploy する
 - Viewer deploy job は Viewer、Public API、Public API のリファレンス (ADR-0039) の 3 つの Worker を順に deploy する。`PUBLIC_API_URL` はリファレンスから叩く Public API の URL
-- Viewer と Public API の deploy 成功時は、それぞれ `notify-publish` で通知 JSON (`viewer.deploy` / `public-api.deploy`) を publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
+- Viewer、Public API、Public API Docs の deploy 成功時は、それぞれ `notify-publish` で通知 JSON (`viewer.deploy` / `public-api.deploy` / `public-api-docs.deploy`) を publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
 - admin-proxy deploy job は Cloud Build が `gcloud run jobs deploy --wait` で image 差し替えと実行完了まで行い、Cloudflare Workers へ deploy する
 - Admin の `PUBLIC_APP_URL` は Cloud Build substitution の `_PUBLIC_APP_URL` を build arg として渡す
 
