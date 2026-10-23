@@ -33,7 +33,6 @@ using Versioning;
   
   - `pageSize` は 1〜100 で、省略すると 100 です
   - 続きがあるときはレスポンスに `nextPageToken` が載るので、次のリクエストの `pageToken` に渡してください
-  - `pageToken` の中身の形式は保証しません
   - 並び順は一覧ごとに決まっていて、同順のものは ID 順です
   
   ## 利用条件
