@@ -3,6 +3,9 @@
 // 閲覧者に見える変更があったときだけ上げる。採番と手順は docs/operations/release.md
 import { version } from '../../../package.json';
 import { navLinks } from '../../shared/nav';
+
+// 未設定の環境(ローカルなど)ではリンクごと出さない
+const publicApiDocsUrl = import.meta.env.PUBLIC_API_DOCS_URL;
 ---
 
 <footer class="site-footer">
@@ -110,6 +113,13 @@ import { navLinks } from '../../shared/nav';
           <li>
             <a href="/changelog">更新履歴</a>
           </li>
+          {publicApiDocsUrl && (
+            <li>
+              <a href={publicApiDocsUrl} target="_blank" rel="noopener noreferrer">
+                Public API
+              </a>
+            </li>
+          )}
         </ul>
       </nav>
     </div>
