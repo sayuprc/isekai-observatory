@@ -13,7 +13,7 @@ use Support\Domain\Exceptions\InvalidDomainException;
 readonly class Permissions extends ImmutableCollection
 {
     /**
-     * @param list<string> $items
+     * @param array<int, string> $items
      *
      * @throws InvalidDomainException
      */
@@ -29,7 +29,7 @@ readonly class Permissions extends ImmutableCollection
     }
 
     /**
-     * @param list<string> $items
+     * @param array<int, string> $items
      */
     public static function reconstruct(array $items): self
     {

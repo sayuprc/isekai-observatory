@@ -1,12 +1,11 @@
-import { children, createSignal, For, type JSX, Show } from 'solid-js';
-import type { SongTag } from '../../generated';
+import { children, type JSX, Show } from 'solid-js';
 import { SONG_TYPE_NAMES, toOptions } from '../../utils/enum-names';
 import { FormColumns } from '../FormColumns';
 import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
-import { SearchableSelect } from '../SearchableSelect';
 import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
+import { TagPicker } from '../tag/TagPicker';
 import { PersonSearchSection } from './PersonSearchSection';
 import type { SongFormState } from './song-form';
 
@@ -52,7 +51,6 @@ export const SongTabList = (props: SongTabListProps) => {
 interface SongFormFieldsProps {
   form: SongFormState;
   tab: SongTab;
-  availableTags: SongTag[];
   getFieldError: (field: string) => string | undefined;
   // 編集画面だけ表示順を出す
   withOrderNo: boolean;
@@ -69,7 +67,7 @@ export const SongFormFields = (props: SongFormFieldsProps) => {
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="overview" current={props.tab}>
         <FormColumns
           main={<SongBasicInfo {...props} />}
-          side={<SongTagSection form={props.form} availableTags={props.availableTags} />}
+          side={<TagPicker tags={props.form.tags} setTags={props.form.setTags} />}
         />
       </TabPanel>
       <TabPanel idPrefix={TAB_ID_PREFIX} tabKey="persons" current={props.tab} class="max-w-4xl">
@@ -181,66 +179,3 @@ const SongBasicInfo = (props: SongFormFieldsProps) => (
     </FormRow>
   </fieldset>
 );
-
-const SongTagSection = (props: { form: SongFormState; availableTags: SongTag[] }) => {
-  const [pickerValue, setPickerValue] = createSignal('');
-
-  const addTag = (songTagId: string) => {
-    if (songTagId === '') return;
-    props.form.setTags((prev) =>
-      prev.some((entry) => entry.songTagId === songTagId) ? prev : [...prev, { songTagId }],
-    );
-    setPickerValue('');
-  };
-
-  const removeTag = (index: number) => {
-    props.form.setTags((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const tagOptions = () => {
-    const selectedIds = new Set(props.form.tags().map((entry) => entry.songTagId));
-    return props.availableTags
-      .filter((tag) => !selectedIds.has(tag.songTagId))
-      .map((tag) => ({ value: tag.songTagId, label: tag.name }));
-  };
-
-  const selectedTags = () =>
-    props.form
-      .tags()
-      .map((entry) => props.availableTags.find((tag) => tag.songTagId === entry.songTagId))
-      .filter((tag): tag is SongTag => tag !== undefined);
-
-  return (
-    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-      <legend class="px-2 text-sm font-semibold text-base-content/70">タグ</legend>
-      <SearchableSelect
-        options={tagOptions()}
-        value={pickerValue()}
-        onChange={addTag}
-        placeholder="楽曲タグを検索して追加..."
-      />
-      <Show
-        when={selectedTags().length > 0}
-        fallback={<p class="mt-3 text-sm text-base-content/60">タグはまだ追加されていません。</p>}
-      >
-        <div class="mt-3 flex flex-wrap gap-2">
-          <For each={selectedTags()}>
-            {(tag, index) => (
-              <button
-                type="button"
-                class="badge badge-lg cursor-pointer gap-2 border border-base-300 bg-base-100 px-3 py-4"
-                aria-label={`${tag.name}を外す`}
-                onClick={() => removeTag(index())}
-              >
-                <span>{tag.name}</span>
-                <span class="text-error" aria-hidden="true">
-                  ×
-                </span>
-              </button>
-            )}
-          </For>
-        </div>
-      </Show>
-    </fieldset>
-  );
-};

@@ -13,10 +13,10 @@ use Person\Domain\Models\PersonRepositoryInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Domain\Models\SongType;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
 use Song\Domain\Services\SongIntegrityService;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Tag\Domain\Models\TagRepositoryInterface;
 use Tests\Support\Domain\EntityFactory;
 use Tests\TestCase;
 
@@ -30,7 +30,7 @@ class SongIntegrityServiceTest extends TestCase
 
     private MockInterface&SongRepositoryInterface $songRepository;
 
-    private MockInterface&SongTagRepositoryInterface $songTagRepository;
+    private MockInterface&TagRepositoryInterface $tagRepository;
 
     private MediaRepositoryInterface&MockInterface $mediaRepository;
 
@@ -42,7 +42,7 @@ class SongIntegrityServiceTest extends TestCase
         $this->generator = Mockery::mock(UuidGeneratorInterface::class);
         $this->personRepository = Mockery::mock(PersonRepositoryInterface::class);
         $this->songRepository = Mockery::mock(SongRepositoryInterface::class);
-        $this->songTagRepository = Mockery::mock(SongTagRepositoryInterface::class);
+        $this->tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $this->mediaRepository = Mockery::mock(MediaRepositoryInterface::class);
     }
 
@@ -279,7 +279,7 @@ class SongIntegrityServiceTest extends TestCase
             $this->generator,
             $this->songRepository,
             $this->personRepository,
-            $this->songTagRepository,
+            $this->tagRepository,
             $this->mediaRepository,
         );
     }

@@ -16,7 +16,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
 {
     private const string TABLE = 'release_groups';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['release_group_id', 'title', 'type', 'description', 'note', 'is_display', 'order_no'];
 
     public function __construct(
@@ -36,13 +36,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
                 ->limit(1),
         );
 
-        $row = $rows[0] ?? null;
-
-        if ($row === null) {
-            return null;
-        }
-
-        return $this->hydrate($row);
+        return $this->hydrateAll($rows)[0] ?? null;
     }
 
     #[Override]
@@ -59,7 +53,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
                 ->where('release_group_id', 'IN', array_map(fn (ReleaseGroupId $releaseGroupId): string => $this->converter->toBin($releaseGroupId->value), $releaseGroupIds)),
         );
 
-        return array_map($this->hydrate(...), $rows);
+        return $this->hydrateAll($rows);
     }
 
     #[Override]
@@ -67,6 +61,9 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     {
         $data = $releaseGroup->toArray();
         $now = now()->toDateTimeString();
+        $binReleaseGroupId = $this->converter->toBin($releaseGroup->releaseGroupId->value);
+
+        $this->queryFactory->deleteFromTables(['release_group_taggings'], 'release_group_id', $binReleaseGroupId);
 
         $this->queryFactory->insert()
             ->into(self::TABLE, [
@@ -81,7 +78,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
                 'updated_at',
             ])
             ->values([
-                $this->converter->toBin($releaseGroup->releaseGroupId->value),
+                $binReleaseGroupId,
                 $data['title'],
                 $data['type'],
                 $data['description'],
@@ -104,6 +101,15 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
             )
             ->execute($this->queryFactory->pdo());
 
+        $this->queryFactory->insertRows(
+            'release_group_taggings',
+            ['release_group_id', 'tag_id'],
+            array_map(
+                fn (array $tag): array => [$binReleaseGroupId, $this->converter->toBin($tag['tag_id'])],
+                $data['tags'],
+            ),
+        );
+
         return $releaseGroup;
     }
 
@@ -117,9 +123,42 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     }
 
     /**
-     * @param array<string, mixed> $row
+     * @param array<int, array<string, mixed>> $rows
+     *
+     * @return array<int, ReleaseGroup>
      */
-    private function hydrate(array $row): ReleaseGroup
+    private function hydrateAll(array $rows): array
+    {
+        if ($rows === []) {
+            return [];
+        }
+
+        // タグ付けはまとめて引き、リリースグループごとの問い合わせを避ける
+        $taggingRows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['release_group_taggings.release_group_id', 'release_group_taggings.tag_id'])
+                ->from('release_group_taggings')
+                ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
+                ->where('release_group_taggings.release_group_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $rows))
+                ->orderBy('tags.order_no'),
+        );
+
+        $tags = [];
+        foreach ($taggingRows as $taggingRow) {
+            $tags[Row::string($taggingRow, 'release_group_id')][] = ['tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id'))];
+        }
+
+        return array_map(
+            fn (array $row): ReleaseGroup => $this->hydrate($row, $tags[Row::string($row, 'release_group_id')] ?? []),
+            $rows,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>             $row
+     * @param array<int, array{tagId: string}> $tags
+     */
+    private function hydrate(array $row, array $tags): ReleaseGroup
     {
         return ReleaseGroup::reconstruct(
             $this->converter->toUuid(Row::string($row, 'release_group_id')),
@@ -129,6 +168,7 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
             Row::string($row, 'note'),
             Row::bool($row, 'is_display'),
             Row::int($row, 'order_no'),
+            $tags,
         );
     }
 }

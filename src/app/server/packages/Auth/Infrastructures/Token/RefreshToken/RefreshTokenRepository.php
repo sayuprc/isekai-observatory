@@ -18,7 +18,7 @@ readonly class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 {
     private const string TABLE = 'refresh_tokens';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['refresh_token_id', 'admin_user_id', 'token', 'expired_at', 'status'];
 
     public function __construct(

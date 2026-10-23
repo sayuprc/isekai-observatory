@@ -64,9 +64,10 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $mediaBySong = $this->loadMedia($binSongIds);
         $releaseGroupsBySong = $this->loadReleaseGroups($binSongIds);
         $performancesBySong = $this->loadPerformances($binSongIds);
+        $tagsBySong = $this->loadTags($binSongIds);
 
         $songs = array_map(
-            function (array $songRow) use ($personsBySong, $mediaBySong, $releaseGroupsBySong, $performancesBySong): SongListItem {
+            function (array $songRow) use ($personsBySong, $mediaBySong, $releaseGroupsBySong, $performancesBySong, $tagsBySong): SongListItem {
                 $binSongId = Row::string($songRow, 'song_id');
                 $personRows = $personsBySong[$binSongId] ?? [];
                 $mediaRows = $mediaBySong[$binSongId] ?? [];
@@ -82,6 +83,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
                     array_map($this->toMediaSummary(...), $mediaRows),
                     $releaseGroupsBySong[$binSongId] ?? [],
                     $performancesBySong[$binSongId] ?? [],
+                    $tagsBySong[$binSongId] ?? [],
                     Row::int($songRow, 'order_no'),
                 );
             },
@@ -101,9 +103,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function loadPersons(array $binSongIds): array
     {
@@ -124,9 +126,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function loadMedia(array $binSongIds): array
     {
@@ -158,9 +160,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     /**
      * 楽曲 → 公開リリースグループの逆引き。公開リリース経由のもののみ
      *
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<SongReleaseGroupSummary>>
+     * @return array<string, array<int, SongReleaseGroupSummary>>
      */
     private function loadReleaseGroups(array $binSongIds): array
     {
@@ -247,9 +249,43 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<array<string, mixed>> $rows
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array{tagId: string, name: string, orderNo: int}>>
+     */
+    private function loadTags(array $binSongIds): array
+    {
+        if ($binSongIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['song_taggings.song_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+                ->from('song_taggings')
+                ->join('tags', 'song_taggings.tag_id = tags.tag_id')
+                ->where('song_taggings.song_id', 'IN', $binSongIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        );
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'song_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($row, 'tag_id')),
+                'name' => Row::string($row, 'name'),
+                'orderNo' => Row::int($row, 'order_no'),
+            ];
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $rows
+     *
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function groupBySongId(array $rows): array
     {
@@ -263,9 +299,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<array<string, mixed>> $personRows
+     * @param array<int, array<string, mixed>> $personRows
      *
-     * @return list<string>
+     * @return array<int, string>
      */
     private function personNamesByRole(array $personRows, SongPersonRole $role): array
     {
@@ -295,9 +331,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binSongIds
+     * @param array<int, string> $binSongIds
      *
-     * @return array<string, list<SongPerformanceHistory>>
+     * @return array<string, array<int, SongPerformanceHistory>>
      */
     private function loadPerformances(array $binSongIds): array
     {
@@ -337,9 +373,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     /**
-     * @param list<string> $performanceIds
+     * @param array<int, string> $performanceIds
      *
-     * @return array<string, list<string>>
+     * @return array<string, array<int, string>>
      */
     private function loadCoVocalists(array $performanceIds): array
     {

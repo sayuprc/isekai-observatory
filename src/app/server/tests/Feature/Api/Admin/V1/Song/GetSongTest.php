@@ -10,8 +10,8 @@ use Person\Infrastructures\PersonRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
 use Song\Infrastructures\SongRepository;
-use Song\Infrastructures\Tag\SongTagRepository;
 use Song\Route\SongRouteMap;
+use Tag\Infrastructures\TagRepository;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -32,9 +32,9 @@ class GetSongTest extends DatabaseTestCase
         $personRepo->save($lyricist);
         $personRepo->save($composer);
         $personRepo->save($arranger);
-        $tagRepo = $this->app->make(SongTagRepository::class);
-        $tagRepo->save($tagA = $this->createSongTag($this->generateUuid(), 'タグA', 20));
-        $tagRepo->save($tagB = $this->createSongTag($this->generateUuid(), 'タグB', 10));
+        $tagRepo = $this->app->make(TagRepository::class);
+        $tagRepo->save($tagA = $this->createTag($this->generateUuid(), 'タグA', 20));
+        $tagRepo->save($tagB = $this->createTag($this->generateUuid(), 'タグB', 10));
         $mediaRepo = $this->app->make(MediaRepository::class);
         $mediaRepo->save($media = $this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true));
 
@@ -50,8 +50,8 @@ class GetSongTest extends DatabaseTestCase
                 true,
                 1,
                 [
-                    ['songTagId' => $tagA->songTagId->value],
-                    ['songTagId' => $tagB->songTagId->value],
+                    ['tagId' => $tagA->tagId->value],
+                    ['tagId' => $tagB->tagId->value],
                 ],
                 [
                     ['personId' => $lyricistId, 'role' => 1, 'orderNo' => 1],
@@ -84,8 +84,8 @@ class GetSongTest extends DatabaseTestCase
                         ['personId' => $arrangerId, 'name' => 'テスト編曲者A', 'role' => 3, 'orderNo' => 3],
                     ],
                     'tags' => [
-                        ['songTagId' => $tagB->songTagId->value, 'name' => 'タグB'],
-                        ['songTagId' => $tagA->songTagId->value, 'name' => 'タグA'],
+                        ['tagId' => $tagB->tagId->value, 'name' => 'タグB'],
+                        ['tagId' => $tagA->tagId->value, 'name' => 'タグA'],
                     ],
                     'media' => [
                         [

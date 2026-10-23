@@ -6,6 +6,7 @@ namespace App\Http\Presenters\Api\Viewer\V1\Release;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
+use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\ReleaseFormatValue;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupListItem as OpenApiReleaseGroupListItem;
 use OpenAPI\Viewer\Client\Model\ReleaseGroupListResponse;
@@ -41,7 +42,19 @@ class ListPresenter
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description)
             ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn))
-            ->setReleases(array_map($this->toOpenApiReleaseListItem(...), $releaseGroup->releases));
+            ->setReleases(array_map($this->toOpenApiReleaseListItem(...), $releaseGroup->releases))
+            ->setTags(array_map($this->toOpenApiTag(...), $releaseGroup->tags));
+    }
+
+    /**
+     * @param array{tagId: string, name: string, orderNo: int} $tag
+     */
+    private function toOpenApiTag(array $tag): AttachedTag
+    {
+        return new AttachedTag()
+            ->setTagId($tag['tagId'])
+            ->setName($tag['name'])
+            ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiReleaseListItem(ReleaseListItem $release): OpenApiReleaseListItem

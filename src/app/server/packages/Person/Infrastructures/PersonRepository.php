@@ -20,7 +20,7 @@ readonly class PersonRepository implements PersonRepositoryInterface
 {
     private const string TABLE = 'persons';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['person_id', 'name', 'order_no'];
 
     public function __construct(

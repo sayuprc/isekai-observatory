@@ -154,6 +154,27 @@ class ListEventTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function showsTagsInDisplayOrder(): void
+    {
+        $eventId = $this->generateUuid();
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
+        $this->storeTags(
+            $this->createTag($tagIdSecond, 'タイアップB', 20),
+            $this->createTag($tagIdFirst, 'タイアップA', 10),
+        );
+        $this->storeEvents($this->createEvent($eventId, tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]]));
+
+        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertStatus(200)
+            ->assertJsonPath('events.0.eventId', $eventId)
+            ->assertJsonPath('events.0.tags', [
+                ['tagId' => $tagIdFirst, 'name' => 'タイアップA', 'orderNo' => 10],
+                ['tagId' => $tagIdSecond, 'name' => 'タイアップB', 'orderNo' => 20],
+            ]);
+    }
+
+    #[Test]
     public function excludesPrivateEvent(): void
     {
         $this->storeEvents($this->createEvent($this->generateUuid(), isDisplay: false));

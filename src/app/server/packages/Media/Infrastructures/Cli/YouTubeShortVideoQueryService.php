@@ -7,11 +7,11 @@ namespace Media\Infrastructures\Cli;
 use Generator;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Pool;
+use GuzzleHttp\Promise\PromiseInterface;
 use Media\Application\Cli\Query\YouTubeShortVideoQueryServiceInterface;
 use Media\Application\Cli\Query\YouTubeUploadedVideo;
 use Override;
 use Psr\Http\Message\ResponseInterface;
-use Throwable;
 
 readonly class YouTubeShortVideoQueryService implements YouTubeShortVideoQueryServiceInterface
 {
@@ -28,12 +28,12 @@ readonly class YouTubeShortVideoQueryService implements YouTubeShortVideoQuerySe
 
         $pool = new Pool($this->httpClient, $this->requests($videos), [
             'concurrency' => self::CONCURRENCY,
-            'fulfilled' => static function (ResponseInterface $response, string $videoId) use (&$results): void {
+            'fulfilled' => static function (ResponseInterface $response, int|string $videoId) use (&$results): void {
                 $statusCode = $response->getStatusCode();
-                $results[$videoId] = $statusCode >= 200 && $statusCode < 300;
+                $results[(string)$videoId] = $statusCode >= 200 && $statusCode < 300;
             },
-            'rejected' => static function (Throwable $reason, string $videoId) use (&$results): void {
-                $results[$videoId] = false;
+            'rejected' => static function (mixed $reason, int|string $videoId) use (&$results): void {
+                $results[(string)$videoId] = false;
             },
         ]);
 
@@ -43,9 +43,9 @@ readonly class YouTubeShortVideoQueryService implements YouTubeShortVideoQuerySe
     }
 
     /**
-     * @param list<YouTubeUploadedVideo> $videos
+     * @param array<int, YouTubeUploadedVideo> $videos
      *
-     * @return Generator<string, callable(): mixed>
+     * @return Generator<string, callable(): PromiseInterface>
      */
     private function requests(array $videos): Generator
     {

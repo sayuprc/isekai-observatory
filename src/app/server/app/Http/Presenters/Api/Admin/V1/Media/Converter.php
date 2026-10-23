@@ -8,13 +8,28 @@ use DateTime;
 use Media\Application\Admin\Query\MediaReferencedSong;
 use Media\Application\Admin\Query\MediaUsageCount;
 use Media\Domain\Models\Media;
+use OpenAPI\Admin\Client\Model\AttachedTag as OpenApiAttachedTag;
 use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;
 use OpenAPI\Admin\Client\Model\MediaReferencedSong as OpenApiMediaReferencedSong;
 use OpenAPI\Admin\Client\Model\MediaSummary as OpenApiMediaSummary;
 use OpenAPI\Admin\Client\Model\MediaTypeValue;
+use Tag\Domain\Models\Tag;
 
 class Converter
 {
+    /**
+     * @param array<Tag> $tags
+     *
+     * @return array<int, OpenApiAttachedTag>
+     */
+    public function toOpenApiTags(array $tags): array
+    {
+        return array_values(array_map(
+            static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()->setTagId($tag->tagId->value)->setName($tag->name->value),
+            $tags,
+        ));
+    }
+
     public function toOpenApiMedia(Media $media): OpenApiMedia
     {
         return new OpenApiMedia()

@@ -1,5 +1,5 @@
 import { createResource, Match, Switch } from 'solid-js';
-import type { Media, Song, SongTag } from '../../generated';
+import type { Media, Song } from '../../generated';
 import { redirectToLogin } from '../../utils/auth-redirect';
 import { client } from '../../utils/client';
 import { createDirtyTracker, discardChanges } from '../../utils/dirty';
@@ -20,7 +20,7 @@ interface DetailViewProps {
   songId: string;
 }
 
-type EditableFormData = { song: Song; tags: SongTag[]; media: Media[] };
+type EditableFormData = { song: Song; media: Media[] };
 
 interface EditableFormProps {
   data: EditableFormData;
@@ -178,7 +178,6 @@ export const EditableForm = (props: EditableFormProps) => {
         <SongFormFields
           form={form}
           tab={tab()}
-          availableTags={props.data.tags}
           getFieldError={getFieldError}
           withOrderNo
           history={<TargetHistory targetType="Song" targetId={songId} active={tab() === 'history'} />}

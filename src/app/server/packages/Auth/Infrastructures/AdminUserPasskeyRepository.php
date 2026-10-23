@@ -16,7 +16,7 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
 {
     private const string TABLE = 'admin_user_passkeys';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = [
         'admin_user_passkey_id',
         'admin_user_id',
@@ -40,7 +40,7 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     }
 
     /**
-     * @return list<AdminUserPasskey>
+     * @return array<int, AdminUserPasskey>
      */
     #[Override]
     public function findByAdminUserId(string $adminUserId): array
@@ -212,7 +212,7 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     }
 
     /**
-     * @return list<string>
+     * @return array<int, string>
      */
     private function transports(mixed $transports): array
     {

@@ -7,7 +7,7 @@ namespace Media\Application\Cli\Query;
 interface YouTubeShortVideoQueryServiceInterface
 {
     /**
-     * @param list<YouTubeUploadedVideo> $videos
+     * @param array<int, YouTubeUploadedVideo> $videos
      *
      * @return array<string, bool> videoId ごとの short 判定
      */

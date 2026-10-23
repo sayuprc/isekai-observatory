@@ -15,7 +15,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class EventMediaLinks extends ImmutableCollection
 {
     /**
-     * @param list<array{mediaId: string, orderNo: int}> $items
+     * @param array<int, array{mediaId: string, orderNo: int}> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -33,7 +33,7 @@ readonly class EventMediaLinks extends ImmutableCollection
     }
 
     /**
-     * @param list<array{mediaId: string, orderNo: int}> $items
+     * @param array<int, array{mediaId: string, orderNo: int}> $items
      */
     public static function reconstruct(array $items): self
     {

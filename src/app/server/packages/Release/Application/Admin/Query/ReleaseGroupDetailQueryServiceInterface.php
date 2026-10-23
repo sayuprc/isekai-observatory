@@ -9,7 +9,7 @@ use Release\Domain\Models\ReleaseGroupId;
 interface ReleaseGroupDetailQueryServiceInterface
 {
     /**
-     * @return list<ReleaseGroupReferencedRelease>
+     * @return array<int, ReleaseGroupReferencedRelease>
      */
     public function findReferencedReleases(ReleaseGroupId $releaseGroupId): array;
 }

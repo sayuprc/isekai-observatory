@@ -6,7 +6,6 @@ import {
   songServiceGetSong,
   songServiceSearchSongs,
   songServiceUpdateSong,
-  songTagServiceListSongTags,
 } from '../../generated';
 import type { PerPage, SongSearchSortBy, SongSearchTypeValue, SortOrder } from '../../generated';
 import { requestWithAuth, withAuthRetry } from '../client';
@@ -19,20 +18,16 @@ const NullableStringSchema = t.Union([t.String(), t.Null()]);
 const SongPersonRefSchema = t.Array(
   t.Object({ personId: t.String(), role: t.Union([t.Literal(1), t.Literal(2), t.Literal(3)]), orderNo: t.Number() }),
 );
-const SongTagRefSchema = t.Array(t.Object({ songTagId: t.String() }));
+const TagRefSchema = t.Array(t.Object({ tagId: t.String() }));
 const SongMediaRefSchema = t.Array(t.Object({ mediaId: t.String(), orderNo: t.Number() }));
 
 export const songs = new Elysia({ prefix: '/songs' })
   .use(authGuard)
   .get('/create-form', async ({ authSession }) => {
     return withAuthRetry(authSession, async (client) => {
-      const [tags, media] = await Promise.all([
-        songTagServiceListSongTags({ client }),
-        mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
-      ]);
+      const media = await mediaServiceSearchMedia({ client, query: { per_page: 50 } });
 
       return {
-        tags: resolveApiResponse(tags).tags,
         media: resolveApiResponse(media).media,
       };
     });
@@ -47,6 +42,7 @@ export const songs = new Elysia({ prefix: '/songs' })
             title: query.title || undefined,
             type: query.type as SongSearchTypeValue | undefined,
             is_display: query.is_display,
+            tag_id: query.tag_id || undefined,
             sort: (query.sort ?? 'order_no') as SongSearchSortBy,
             order: (query.order ?? 'asc') as SortOrder,
             page: query.page ?? 1,
@@ -60,6 +56,7 @@ export const songs = new Elysia({ prefix: '/songs' })
         title: t.String(),
         type: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3')])),
         is_display: t.Optional(t.Boolean()),
+        tag_id: t.Optional(t.String()),
         sort: t.Optional(t.Union([t.Literal('title'), t.Literal('order_no')])),
         order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),
         page: t.Optional(t.Number()),
@@ -71,15 +68,13 @@ export const songs = new Elysia({ prefix: '/songs' })
     '/:songId/edit-form',
     async ({ params: { songId }, authSession }) => {
       return withAuthRetry(authSession, async (client) => {
-        const [song, tags, media] = await Promise.all([
+        const [song, media] = await Promise.all([
           songServiceGetSong({ client, path: { songId } }),
-          songTagServiceListSongTags({ client }),
           mediaServiceSearchMedia({ client, query: { per_page: 50 } }),
         ]);
 
         return {
           ...resolveApiResponse(song),
-          tags: resolveApiResponse(tags).tags,
           media: resolveApiResponse(media).media,
         };
       });
@@ -130,7 +125,7 @@ export const songs = new Elysia({ prefix: '/songs' })
         type: SongTypeValueSchema,
         isDisplay: t.Boolean(),
         persons: SongPersonRefSchema,
-        tags: SongTagRefSchema,
+        tags: TagRefSchema,
         media: SongMediaRefSchema,
       }),
     },
@@ -174,7 +169,7 @@ export const songs = new Elysia({ prefix: '/songs' })
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
         persons: SongPersonRefSchema,
-        tags: SongTagRefSchema,
+        tags: TagRefSchema,
         media: SongMediaRefSchema,
       }),
     },

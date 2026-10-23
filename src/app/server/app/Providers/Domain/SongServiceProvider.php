@@ -10,15 +10,13 @@ use Media\Infrastructures\MediaRepository;
 use Override;
 use Person\Domain\Services\PersonUsageCheckerInterface;
 use Song\Application\Admin\Query\SongQueryServiceInterface;
-use Song\Application\Admin\Query\Tag\SongTagUsageCountQueryServiceInterface;
+use Song\Application\Public\Query\SongQueryServiceInterface as PublicSongQueryServiceInterface;
 use Song\Application\Viewer\Query\SongQueryServiceInterface as ViewerSongQueryServiceInterface;
 use Song\Domain\Models\SongRepositoryInterface;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
 use Song\Infrastructures\Admin\SongQueryService;
-use Song\Infrastructures\Admin\SongTagUsageCountQueryService;
 use Song\Infrastructures\PersonUsageChecker;
+use Song\Infrastructures\Public\SongQueryService as PublicSongQueryService;
 use Song\Infrastructures\SongRepository;
-use Song\Infrastructures\Tag\SongTagRepository;
 use Song\Infrastructures\Viewer\SongQueryService as ViewerSongQueryService;
 
 class SongServiceProvider extends ServiceProvider
@@ -26,13 +24,12 @@ class SongServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->bind(SongTagUsageCountQueryServiceInterface::class, SongTagUsageCountQueryService::class);
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
-        $this->app->bind(SongTagRepositoryInterface::class, SongTagRepository::class);
         $this->app->bind(PersonUsageCheckerInterface::class, PersonUsageChecker::class);
         $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
 
         $this->app->bind(SongQueryServiceInterface::class, SongQueryService::class);
         $this->app->bind(ViewerSongQueryServiceInterface::class, ViewerSongQueryService::class);
+        $this->app->bind(PublicSongQueryServiceInterface::class, PublicSongQueryService::class);
     }
 }

@@ -7,7 +7,7 @@ namespace Media\Application\Cli\UseCase\ImportYouTube;
 readonly class ImportYouTubeOutputData
 {
     /**
-     * @param list<ChannelImportResult> $results
+     * @param array<int, ChannelImportResult> $results
      */
     public function __construct(public array $results)
     {

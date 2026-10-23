@@ -91,4 +91,10 @@ enum PermissionValue {
 
   @doc("イベント編集")
   WriteEvent: "write_event",
+
+  @doc("タグ閲覧")
+  ReadTag: "read_tag",
+
+  @doc("タグ編集")
+  WriteTag: "write_tag",
 }

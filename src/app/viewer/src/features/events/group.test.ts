@@ -15,6 +15,7 @@ const event = (title: string, startOn: string | null, endOn: string | null = nul
   sources: [],
   performances: [],
   setlist: [],
+  tags: [],
 });
 
 const titles = (events: Event[]) => events.map((item) => item.title);

@@ -10,10 +10,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Media\Application\Admin\UseCase\Update\UpdateInputData;
 use Media\Application\Admin\UseCase\Update\UpdateUseCase;
+use Support\Contracts\MapperInterface;
 
 class UpdateMediaController extends Controller
 {
     public function __construct(
+        private readonly MapperInterface $mapper,
         private readonly UpdateUseCase $useCase,
         private readonly UpdatePresenter $presenter,
     ) {
@@ -21,15 +23,14 @@ class UpdateMediaController extends Controller
 
     public function handle(Request $request, string $mediaId): JsonResponse
     {
-        $inputData = new UpdateInputData(
-            $mediaId,
-            $request->string('title')->toString(),
-            $request->string('url')->toString(),
-            $request->string('publishedAt')->toString(),
-            $request->integer('type'),
-            $request->boolean('isDisplay'),
-        );
-
-        return $this->presenter->present($this->useCase->handle($inputData));
+        return $this->mapper->map(
+            UpdateInputData::class,
+            [
+                ...$request->all(),
+                'mediaId' => $mediaId,
+            ],
+        )
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

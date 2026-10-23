@@ -15,7 +15,7 @@ readonly class YouTubeChannelRepository implements YouTubeChannelRepositoryInter
 {
     private const string TABLE = 'youtube_channels';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = [
         'channel_id',
         'name',

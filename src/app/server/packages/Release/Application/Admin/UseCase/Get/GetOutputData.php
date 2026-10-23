@@ -11,7 +11,7 @@ use Release\Domain\Models\ReleaseGroup;
 readonly class GetOutputData
 {
     /**
-     * @param list<ReleaseReferencedSong> $songs
+     * @param array<int, ReleaseReferencedSong> $songs
      */
     public function __construct(
         public Release $release,

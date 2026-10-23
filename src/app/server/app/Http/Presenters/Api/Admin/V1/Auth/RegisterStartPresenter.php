@@ -15,7 +15,7 @@ class RegisterStartPresenter
         return response()->json(
             new RegisterStartResponse()
                 ->setAuthCeremonyId($output->authCeremonyId)
-                ->setPublicKey((object)$output->publicKey),
+                ->setPublicKey($output->publicKey),
             200,
         );
     }

@@ -48,6 +48,10 @@ jobs:
     name: Admin Proxy QA
     uses: ./.github/workflows/admin-proxy-qa.yaml
 
+  public-api:
+    name: Public API QA
+    uses: ./.github/workflows/public-api-qa.yaml
+
   infra-docker:
     name: Infra Docker QA
     uses: ./.github/workflows/infra-docker-qa.yaml

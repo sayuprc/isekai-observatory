@@ -10,14 +10,14 @@ use Person\Domain\Models\PersonRepositoryInterface;
 use Song\Domain\Models\Media\SongMediaLink;
 use Song\Domain\Models\Persons\SongPerson;
 use Song\Domain\Models\Song;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
-use Song\Domain\Models\Tags\SongTagReference;
+use Tag\Domain\Models\TagReference;
+use Tag\Domain\Models\TagRepositoryInterface;
 
 class SongAssembler
 {
     public function __construct(
         private readonly PersonRepositoryInterface $personRepository,
-        private readonly SongTagRepositoryInterface $songTagRepository,
+        private readonly TagRepositoryInterface $tagRepository,
         private readonly MediaRepositoryInterface $mediaRepository,
     ) {
     }
@@ -37,16 +37,16 @@ class SongAssembler
             }
         }
 
-        $allSongTagIds = [];
+        $allTagIds = [];
         foreach ($song->tags as $tag) {
-            $allSongTagIds[$tag->songTagId->value] = $tag->songTagId;
+            $allTagIds[$tag->tagId->value] = $tag->tagId;
         }
 
-        $songTagMap = [];
-        if (! empty($allSongTagIds)) {
-            $tags = $this->songTagRepository->findByIds(...array_values($allSongTagIds));
+        $tagMap = [];
+        if (! empty($allTagIds)) {
+            $tags = $this->tagRepository->findByIds(...array_values($allTagIds));
             foreach ($tags as $tag) {
-                $songTagMap[$tag->songTagId->value] = $tag;
+                $tagMap[$tag->tagId->value] = $tag;
             }
         }
 
@@ -75,13 +75,13 @@ class SongAssembler
                 $person->orderNo->value,
             );
         };
-        $toAssembledTag = static function (SongTagReference $tag) use ($songTagMap): AssembledTag {
-            $found = $songTagMap[$tag->songTagId->value] ?? null;
+        $toAssembledTag = static function (TagReference $tag) use ($tagMap): AssembledTag {
+            $found = $tagMap[$tag->tagId->value] ?? null;
             // Song Entity が成立している時点で $found が null になることはない
             assert($found !== null);
 
             return new AssembledTag(
-                $tag->songTagId->value,
+                $tag->tagId->value,
                 $found->name->value,
             );
         };

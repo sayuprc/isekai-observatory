@@ -31,7 +31,7 @@ WORKDIR /workspace/publish
 RUN moon update \
   && moon build --target native --release
 
-FROM node:24.21.0-slim
+FROM node:24.22.1-slim
 
 ENV TZ=Asia/Tokyo
 ENV PNPM_HOME=/pnpm
@@ -58,10 +58,14 @@ WORKDIR /app/src
 
 COPY src/app/package.json src/app/pnpm-lock.yaml src/app/pnpm-workspace.yaml ./
 COPY src/app/viewer/package.json viewer/package.json
+COPY src/app/public-api/package.json public-api/package.json
 
-RUN pnpm install --frozen-lockfile --filter viewer --prod \
+RUN pnpm install --frozen-lockfile --filter viewer --filter public-api --prod \
   && rm -rf /pnpm/store
 
 COPY src/app/viewer viewer
+COPY src/app/public-api public-api
+# API リファレンスは Public の契約から作るため、生成済みの OAS だけを入れる
+COPY src/app/contracts/generated/oas/IsekaiObservatory.Public.v1.yaml contracts/generated/oas/IsekaiObservatory.Public.v1.yaml
 
 ENTRYPOINT ["viewer-deploy"]

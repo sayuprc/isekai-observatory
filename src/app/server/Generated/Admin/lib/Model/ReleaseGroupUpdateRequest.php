@@ -62,7 +62,8 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'description' => 'string',
         'note' => 'string',
         'is_display' => 'bool',
-        'order_no' => 'int'
+        'order_no' => 'int',
+        'tags' => '\OpenAPI\Admin\Client\Model\RequestTag[]'
     ];
 
     /**
@@ -78,7 +79,8 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'description' => null,
         'note' => null,
         'is_display' => null,
-        'order_no' => 'int32'
+        'order_no' => 'int32',
+        'tags' => null
     ];
 
     /**
@@ -92,7 +94,8 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'description' => false,
         'note' => false,
         'is_display' => false,
-        'order_no' => false
+        'order_no' => false,
+        'tags' => false
     ];
 
     /**
@@ -186,7 +189,8 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'description' => 'description',
         'note' => 'note',
         'is_display' => 'isDisplay',
-        'order_no' => 'orderNo'
+        'order_no' => 'orderNo',
+        'tags' => 'tags'
     ];
 
     /**
@@ -200,7 +204,8 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'description' => 'setDescription',
         'note' => 'setNote',
         'is_display' => 'setIsDisplay',
-        'order_no' => 'setOrderNo'
+        'order_no' => 'setOrderNo',
+        'tags' => 'setTags'
     ];
 
     /**
@@ -214,7 +219,8 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         'description' => 'getDescription',
         'note' => 'getNote',
         'is_display' => 'getIsDisplay',
-        'order_no' => 'getOrderNo'
+        'order_no' => 'getOrderNo',
+        'tags' => 'getTags'
     ];
 
     /**
@@ -280,6 +286,7 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         $this->setIfExists('note', $data ?? [], null);
         $this->setIfExists('is_display', $data ?? [], null);
         $this->setIfExists('order_no', $data ?? [], null);
+        $this->setIfExists('tags', $data ?? [], null);
     }
 
     /**
@@ -335,6 +342,9 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
+        if ($this->container['tags'] === null) {
+            $invalidProperties[] = "'tags' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -518,6 +528,33 @@ class ReleaseGroupUpdateRequest implements ModelInterface, ArrayAccess, \JsonSer
         }
 
         $this->container['order_no'] = $order_no;
+
+        return $this;
+    }
+
+    /**
+     * Gets tags
+     *
+     * @return \OpenAPI\Admin\Client\Model\RequestTag[]
+     */
+    public function getTags()
+    {
+        return $this->container['tags'];
+    }
+
+    /**
+     * Sets tags
+     *
+     * @param \OpenAPI\Admin\Client\Model\RequestTag[] $tags tags
+     *
+     * @return self
+     */
+    public function setTags($tags)
+    {
+        if (is_null($tags)) {
+            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        }
+        $this->container['tags'] = $tags;
 
         return $this;
     }

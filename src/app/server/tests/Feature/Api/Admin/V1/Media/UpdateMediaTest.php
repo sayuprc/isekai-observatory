@@ -12,10 +12,12 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Admin\WithAuth;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
+use Tests\Support\Domain\EntityStore;
 
 class UpdateMediaTest extends DatabaseTestCase
 {
     use EntityFactory;
+    use EntityStore;
     use WithAuth;
 
     #[Test]
@@ -41,6 +43,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::LiveStream->value,
                 'isDisplay' => false,
+                'tags' => [],
             ])->assertStatus(200)
             ->assertExactJson([
                 'media' => [
@@ -51,6 +54,7 @@ class UpdateMediaTest extends DatabaseTestCase
                     'type' => MediaType::LiveStream->value,
                     'isDisplay' => false,
                 ],
+                'tags' => [],
             ]);
     }
 
@@ -79,6 +83,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(200)
             ->assertJsonPath('media.mediaId', $routeMediaId);
     }
@@ -95,6 +100,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(404);
     }
 
@@ -121,6 +127,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => 0,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(422)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
@@ -169,11 +176,42 @@ class UpdateMediaTest extends DatabaseTestCase
                 'publishedAt' => '2024-04-02T10:20:30+09:00',
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
+                'tags' => [],
             ])->assertStatus(400)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
                     ->where('message', '同じURLのメディアが既に存在します'),
             );
+    }
+
+    #[Test]
+    public function canReplaceTags(): void
+    {
+        $oldTagId = $this->generateUuid();
+        $newTagId = $this->generateUuid();
+        $mediaId = $this->generateUuid();
+        $this->storeTags($this->createTag($oldTagId, '旧タグ', 10), $this->createTag($newTagId, '新タグ', 20));
+        $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $oldTagId]]));
+
+        $client = $this->withAuth();
+
+        $client
+            ->putJson(route(MediaRouteMap::Update, $mediaId), [
+                'title' => 'MV',
+                'url' => 'https://example.com/mv',
+                'publishedAt' => '2024-04-02T10:20:30+09:00',
+                'type' => MediaType::Mv->value,
+                'isDisplay' => true,
+                'tags' => [['tagId' => $newTagId]],
+            ])
+            ->assertStatus(200)
+            ->assertJsonPath('tags', [['tagId' => $newTagId, 'name' => '新タグ']]);
+
+        // 更新のレスポンスだけでなく、保存されたタグ付けも入れ替わっている
+        $client
+            ->getJson(route(MediaRouteMap::Get, $mediaId))
+            ->assertStatus(200)
+            ->assertJsonPath('tags', [['tagId' => $newTagId, 'name' => '新タグ']]);
     }
 }

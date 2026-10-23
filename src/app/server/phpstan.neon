@@ -1,5 +1,4 @@
 includes:
-  - baseline.php
   - vendor/larastan/larastan/extension.neon
 
 parameters:
@@ -7,8 +6,20 @@ parameters:
     - app
     - bootstrap
     - packages
+    - config/valinor.php
 
   level: 10
 
 rules:
   - Tools\PHPStan\Rules\TypeAliasNamingRule
+  - Tools\PHPStan\Rules\ValinorWarmupRule
+
+services:
+  -
+    class: Tools\PHPStan\Collectors\MapperSignatureCollector
+    tags:
+      - phpstan.collector
+  -
+    class: Tools\PHPStan\Collectors\ValinorWarmupCollector
+    tags:
+      - phpstan.collector

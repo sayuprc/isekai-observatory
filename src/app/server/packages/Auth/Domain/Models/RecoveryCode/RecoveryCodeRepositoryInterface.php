@@ -9,12 +9,12 @@ use AdminUser\Domain\Models\AdminUserId;
 interface RecoveryCodeRepositoryInterface
 {
     /**
-     * @param list<RecoveryCode> $codes
+     * @param array<int, RecoveryCode> $codes
      */
     public function saveMany(array $codes): void;
 
     /**
-     * @return list<RecoveryCode>
+     * @return array<int, RecoveryCode>
      */
     public function findUnusedByAdminUserIdForUpdate(AdminUserId $adminUserId): array;
 

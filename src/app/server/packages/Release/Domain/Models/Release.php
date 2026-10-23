@@ -25,7 +25,7 @@ readonly class Release
     }
 
     /**
-     * @param list<int>                                                                                                           $formats
+     * @param array<int, int>                                                                                                     $formats
      * @param list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}> $media
      */
     public static function reconstruct(

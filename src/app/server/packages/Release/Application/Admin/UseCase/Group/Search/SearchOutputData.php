@@ -9,7 +9,7 @@ use Release\Application\Admin\Query\ReleaseGroupSummary;
 readonly class SearchOutputData
 {
     /**
-     * @param list<ReleaseGroupSummary> $releaseGroups
+     * @param array<int, ReleaseGroupSummary> $releaseGroups
      */
     public function __construct(
         public array $releaseGroups,

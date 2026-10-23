@@ -4,6 +4,7 @@ import { FormRow } from '../FormRow';
 import { MediaSection } from '../media/MediaSection';
 import { SegmentedControl } from '../SegmentedControl';
 import { TabList, TabPanel, type TabItem } from '../Tabs';
+import { TagPicker } from '../tag/TagPicker';
 import type { EventFormState } from './event-form';
 import { EVENT_STATUS_OPTIONS, EVENT_TYPE_OPTIONS } from './event-options';
 import { PerformanceWorkspace } from './PerformanceWorkspace';
@@ -70,6 +71,7 @@ export const EventFormFields = (props: EventFormFieldsProps) => {
             <>
               <VenueEditor venues={props.form.venues()} onChange={props.form.setVenues} />
               <SourceEditor sources={props.form.sources()} onChange={props.form.setSources} />
+              <TagPicker tags={props.form.tags} setTags={props.form.setTags} />
             </>
           }
         />

@@ -211,4 +211,25 @@ class SearchReleaseGroupTest extends DatabaseTestCase
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
             ->assertJsonPath('releaseGroups.1.releaseGroupId', $releaseGroupId1);
     }
+
+    #[Test]
+    public function canFilterByTagId(): void
+    {
+        $tagId = $this->generateUuid();
+        $otherTagId = $this->generateUuid();
+        $taggedId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($otherTagId, 'タグB', 20));
+        $this->storeReleaseGroups(
+            $this->createReleaseGroup($taggedId, 'タグ付きの作品', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]),
+            $this->createReleaseGroup($this->generateUuid(), '別タグの作品', ReleaseGroupType::Album, tags: [['tagId' => $otherTagId]]),
+            $this->createReleaseGroup($this->generateUuid(), 'タグなしの作品', ReleaseGroupType::Album),
+        );
+
+        $this->withAuth()
+            ->getJson(route(ReleaseGroupRouteMap::Search, ['tag_id' => $tagId]))
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'releaseGroups')
+            ->assertJsonPath('releaseGroups.0.releaseGroupId', $taggedId)
+            ->assertJsonPath('maxPage', 1);
+    }
 }

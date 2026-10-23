@@ -77,9 +77,9 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
     /**
      * 一覧の 1 ページ分の開催先名を、行ごとに問い合わせず 1 回で引く
      *
-     * @param list<string> $binEventIds
+     * @param array<int, string> $binEventIds
      *
-     * @return array<string, list<string>>
+     * @return array<string, array<int, string>>
      */
     private function loadVenueNames(array $binEventIds): array
     {
@@ -124,6 +124,17 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
 
         if ($criteria->isDisplay->isPresent()) {
             $query = $query->where('is_display', '=', $criteria->isDisplay->get());
+        }
+
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'event_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['event_id'])
+                    ->from('event_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
         }
 
         return $query;

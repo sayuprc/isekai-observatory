@@ -6,6 +6,7 @@ import { dottedDate } from '../../../shared/date';
 import DetailSectionHead from './DetailSectionHead.astro';
 import DetailSongList from './DetailSongList.astro';
 import MediaChip from './MediaChip.astro';
+import TagChips from './TagChips.astro';
 
 interface Props {
   event: Event;
@@ -62,6 +63,7 @@ const hostname = (url: string): string => {
   </div>
   <h1 class="detail-title">{event.title}</h1>
   {event.description && <p class="detail-description event-detail-description">{event.description}</p>}
+  <TagChips tags={event.tags} />
 
   <dl class="event-detail-facts">
     {facts.map((fact) => (

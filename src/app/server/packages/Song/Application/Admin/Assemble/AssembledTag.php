@@ -7,7 +7,7 @@ namespace Song\Application\Admin\Assemble;
 readonly class AssembledTag
 {
     public function __construct(
-        public string $songTagId,
+        public string $tagId,
         public string $name,
     ) {
     }

@@ -1,5 +1,6 @@
 import "@typespec/http";
 import "../auth";
+import "../tags";
 import "../../packages/media";
 import "../../shared";
 
@@ -38,6 +39,11 @@ interface MediaService {
     @query title?: string,
     @query type?: MediaTypeValue,
     @query("is_display") isDisplay?: boolean,
+
+    @doc("このタグが付いたメディアだけに絞り込む")
+    @query("tag_id")
+    tagId?: tagId,
+
     @query sort?: MediaSearchSortBy = MediaSearchSortBy.publishedAt,
     @query order?: SortOrder = SortOrder.asc,
     @query page?: page = 1,

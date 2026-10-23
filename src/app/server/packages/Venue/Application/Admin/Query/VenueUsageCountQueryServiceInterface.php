@@ -11,7 +11,7 @@ interface VenueUsageCountQueryServiceInterface
     /**
      * この開催先を使っているイベントの件数を、開催先 ID (UUID)をキーにして返す。管理画面の一覧に出す
      *
-     * @param list<VenueId> $venueIds
+     * @param array<VenueId> $venueIds
      *
      * @return array<string, int>
      */

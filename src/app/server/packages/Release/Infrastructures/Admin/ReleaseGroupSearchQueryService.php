@@ -77,7 +77,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
      * グループごとに、傘下のリリースへ収録された管理対象の楽曲を重複なく数える
      * タイトルだけのトラックは楽曲を持たないため数えない
      *
-     * @param list<string> $binGroupIds
+     * @param array<int, string> $binGroupIds
      *
      * @return array<string, int>
      */
@@ -127,6 +127,17 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
 
         if ($criteria->isDisplay->isPresent()) {
             $query = $query->where('release_groups.is_display', '=', $criteria->isDisplay->get());
+        }
+
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'release_groups.release_group_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['release_group_id'])
+                    ->from('release_group_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
         }
 
         return $query;

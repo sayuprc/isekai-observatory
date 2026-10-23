@@ -115,6 +115,16 @@ enum PermissionValue: string
      */
     case WRITE_EVENT = 'write_event';
 
+    /**
+     * タグ閲覧
+     */
+    case READ_TAG = 'read_tag';
+
+    /**
+     * タグ編集
+     */
+    case WRITE_TAG = 'write_tag';
+
 }
 
 

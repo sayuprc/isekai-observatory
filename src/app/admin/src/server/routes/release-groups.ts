@@ -32,6 +32,7 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
         note: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
+        tags: t.Array(t.Object({ tagId: t.String() })),
       }),
     },
   )
@@ -45,6 +46,7 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
             title: query.title || undefined,
             type: query.type as ReleaseGroupTypeValue | undefined,
             is_display: query.is_display,
+            tag_id: query.tag_id || undefined,
             sort: (query.sort ?? 'first_released_on') as ReleaseGroupSearchSortBy,
             order: (query.order ?? 'desc') as SortOrder,
             page: query.page ?? 1,
@@ -58,6 +60,7 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
         title: t.Optional(t.String()),
         type: t.Optional(t.Union([t.Literal('1'), t.Literal('2'), t.Literal('3'), t.Literal('99')])),
         is_display: t.Optional(t.Boolean()),
+        tag_id: t.Optional(t.String()),
         sort: t.Optional(t.Union([t.Literal('first_released_on'), t.Literal('title')])),
         order: t.Optional(t.Union([t.Literal('asc'), t.Literal('desc')])),
         page: t.Optional(t.Number()),
@@ -100,6 +103,7 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
         note: t.String(),
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
+        tags: t.Array(t.Object({ tagId: t.String() })),
       }),
     },
   )

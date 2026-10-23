@@ -58,7 +58,7 @@ class LoginStartResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       */
     protected static $openAPITypes = [
         'auth_ceremony_id' => 'string',
-        'public_key' => 'object'
+        'public_key' => 'array<string,mixed>'
     ];
 
     /**
@@ -332,7 +332,7 @@ class LoginStartResponse implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets public_key
      *
-     * @return object
+     * @return array<string,mixed>
      */
     public function getPublicKey()
     {
@@ -342,7 +342,7 @@ class LoginStartResponse implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets public_key
      *
-     * @param object $public_key public_key
+     * @param array<string,mixed> $public_key public_key
      *
      * @return self
      */

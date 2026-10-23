@@ -11,7 +11,7 @@ interface MediaUsageCountQueryServiceInterface
     /**
      * 渡したメディアそれぞれの参照件数を、メディア ID (UUID) をキーにして返す
      *
-     * @param list<MediaId> $mediaIds
+     * @param array<MediaId> $mediaIds
      *
      * @return array<string, MediaUsageCount>
      */
