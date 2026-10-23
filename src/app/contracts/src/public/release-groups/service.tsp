@@ -11,7 +11,7 @@ namespace IsekaiObservatory.Public;
 @route("/release-groups")
 interface ReleaseGroupService {
   @summary("リリースグループ一覧")
-  @doc("公開リリースを 1 件以上持つリリースグループを返す。リリース (版) は `releases` に入れ子で返す。並び順は表示順の降順")
+  @doc("公開リリースを 1 件以上持つリリースグループを返します。リリース (版) は `releases` に入れ子で返します。並び順は表示順の降順です")
   @returnsDoc("リリースグループの一覧")
   listReleaseGroups(@query pageToken?: pageToken, @query pageSize?: pageSize):
     | Ok<ReleaseGroupListResponse>

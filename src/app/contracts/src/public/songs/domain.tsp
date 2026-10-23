@@ -23,7 +23,7 @@ enum SongCreditRoleValue {
   Arranger: 3,
 }
 
-@doc("人物が楽曲に関わった役割。同じ人物が複数の役割で載ることがある")
+@doc("人物が楽曲に関わった役割。同じ人物が複数の役割で載ることがあります")
 model SongCredit {
   personId: personId;
   role: SongCreditRoleValue;

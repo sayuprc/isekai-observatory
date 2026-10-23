@@ -11,7 +11,7 @@ namespace IsekaiObservatory.Public;
 @route("/events")
 interface EventService {
   @summary("イベント一覧")
-  @doc("公開イベントを返す。並び順はタイトル順")
+  @doc("公開イベントを返します。並び順はタイトル順です")
   @returnsDoc("イベントの一覧")
   listEvents(@query pageToken?: pageToken, @query pageSize?: pageSize):
     | Ok<EventListResponse>

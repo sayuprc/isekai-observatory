@@ -52,18 +52,18 @@ enum ReleaseFormatValue {
   Other: 99,
 }
 
-@doc("収録トラックが参照する楽曲。参照先の楽曲が非公開なら songId は null になり、title だけが載る")
+@doc("収録トラックが参照する楽曲。参照先の楽曲が非公開なら songId は null になり、title だけが載ります")
 model ReleaseTrackSong {
   songId: songId | null;
   title: title;
 }
 
-@doc("収録トラック。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null")
+@doc("収録トラック。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null です")
 model ReleaseTrack {
   trackNo: orderNo;
   title: string | null;
 
-  @doc("参照する楽曲 (収録順)。2 件以上ならメドレー")
+  @doc("参照する楽曲 (収録順)。2 件以上ならメドレーです")
   songs: ReleaseTrackSong[];
 }
 
@@ -78,7 +78,7 @@ model ReleaseMedium {
 model Release {
   releaseId: releaseId;
 
-  @doc("版名。無しは空文字")
+  @doc("版名。無しは空文字です")
   name: string;
 
   releasedOn: releasedOn;
@@ -87,7 +87,7 @@ model Release {
   media: ReleaseMedium[];
 }
 
-@doc("リリースグループ。公開リリースを 1 件以上持つものだけが載る")
+@doc("リリースグループ。公開リリースを 1 件以上持つものだけが載ります")
 model ReleaseGroup {
   releaseGroupId: releaseGroupId;
   title: string;

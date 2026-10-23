@@ -8,7 +8,7 @@ namespace IsekaiObservatory.Public;
 @doc("人物グループID")
 scalar personGroupId extends uuid;
 
-@doc("人物グループ。公開イベントの共演者の出演グループとして参照されているものだけが載る")
+@doc("人物グループ。公開イベントの共演者の出演グループとして参照されているものだけが載ります")
 model PersonGroup {
   personGroupId: personGroupId;
 
