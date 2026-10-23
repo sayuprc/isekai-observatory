@@ -43,6 +43,12 @@ pnpm --filter public-api run deploy:docs \
   --compatibility-date "$(date -u '+%Y-%m-%d')" \
   --message "production public-api docs deploy $(date --iso-8601=seconds)"
 
+# PUBLIC_API_DOCS_URL は任意なので、設定されているときだけ通知に載せる
+docs_url_field=""
+if [[ -n "${PUBLIC_API_DOCS_URL:-}" ]]; then
+  docs_url_field=',{"name":"docs_url","value":"'"${PUBLIC_API_DOCS_URL}"'","inline":true}'
+fi
+
 notify-publish <<EOF
-{"action":"public-api-docs.deploy","status":"succeeded","embeds":[{"title":"Public API Docs のデプロイが成功しました","fields":[{"name":"worker","value":"${CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME}","inline":true},{"name":"env","value":"production","inline":true}]}]}
+{"action":"public-api-docs.deploy","status":"succeeded","embeds":[{"title":"Public API Docs のデプロイが成功しました","fields":[{"name":"worker","value":"${CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME}","inline":true},{"name":"env","value":"production","inline":true}${docs_url_field}]}]}
 EOF
