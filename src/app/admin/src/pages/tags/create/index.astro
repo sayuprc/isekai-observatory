@@ -1,0 +1,10 @@
+---
+import { FlashMessage } from '../../../components/Flash';
+import { CreateForm } from '../../../components/tag/CreateForm';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout pageTitle="タグ作成">
+  <FlashMessage client:only="solid-js" />
+  <CreateForm client:only="solid-js" />
+</Layout>

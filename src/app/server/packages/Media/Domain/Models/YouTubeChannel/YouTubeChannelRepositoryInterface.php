@@ -9,7 +9,7 @@ interface YouTubeChannelRepositoryInterface
     public function find(YouTubeChannelId $channelId): ?YouTubeChannel;
 
     /**
-     * @return list<YouTubeChannel>
+     * @return array<int, YouTubeChannel>
      */
     public function findAll(): array;
 

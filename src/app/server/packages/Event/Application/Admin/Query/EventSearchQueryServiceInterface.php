@@ -9,7 +9,7 @@ use Event\Domain\Criteria\EventSearchCriteria;
 interface EventSearchQueryServiceInterface
 {
     /**
-     * @return list<EventSummary>
+     * @return array<int, EventSummary>
      */
     public function search(EventSearchCriteria $criteria): array;
 

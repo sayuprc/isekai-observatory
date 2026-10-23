@@ -1,4 +1,5 @@
 import "../../shared";
+import "../tags";
 import "../../packages/event";
 import "../../packages/media";
 import "../../packages/song";
@@ -103,4 +104,7 @@ model Event {
   sources: EventSource[];
   performances: SongPerformance[];
   setlist: SetlistItem[];
+
+  @doc("付いているタグ(タグの表示順)")
+  tags: AttachedTag[];
 }

@@ -15,6 +15,7 @@ use Event\Application\Viewer\Query\EventSourceSummary;
 use Event\Application\Viewer\Query\EventVenueSummary;
 use Event\Application\Viewer\UseCase\List\ListOutputData;
 use Illuminate\Http\JsonResponse;
+use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Viewer\Client\Model\EventListResponse;
 use OpenAPI\Viewer\Client\Model\EventMediaSummary as OpenApiEventMediaSummary;
@@ -61,7 +62,19 @@ class ListPresenter
             ->setReleases(array_map($this->toOpenApiRelease(...), $event->releases))
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
-            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
+            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist))
+            ->setTags(array_map($this->toOpenApiTag(...), $event->tags));
+    }
+
+    /**
+     * @param array{tagId: string, name: string, orderNo: int} $tag
+     */
+    private function toOpenApiTag(array $tag): AttachedTag
+    {
+        return new AttachedTag()
+            ->setTagId($tag['tagId'])
+            ->setName($tag['name'])
+            ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiVenue(EventVenueSummary $venue): OpenApiEventVenueSummary

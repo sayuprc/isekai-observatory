@@ -18,7 +18,7 @@ class CreatePresenter
     {
         return response()->json(
             new ReleaseGroupCreateResponse()->setReleaseGroup(
-                $this->converter->toOpenApiReleaseGroup($outputData->releaseGroup),
+                $this->converter->toOpenApiReleaseGroup($outputData->releaseGroup, $outputData->tags),
             ),
             200,
         );

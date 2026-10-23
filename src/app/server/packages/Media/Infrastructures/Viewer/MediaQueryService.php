@@ -87,9 +87,9 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
     }
 
     /**
-     * @param list<string> $binMediaIds
+     * @param array<int, string> $binMediaIds
      *
-     * @return array<string, list<array<string, mixed>>>
+     * @return array<string, array<int, array<string, mixed>>>
      */
     private function loadSongs(array $binMediaIds): array
     {

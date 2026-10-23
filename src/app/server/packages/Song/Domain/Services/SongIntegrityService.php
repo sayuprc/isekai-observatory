@@ -14,17 +14,17 @@ use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Domain\Models\SongType;
-use Song\Domain\Models\Tag\SongTagRepositoryInterface;
-use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\TagReferences;
+use Tag\Domain\Models\TagRepositoryInterface;
 
 /**
  * @phpstan-type _person array{personId: string, role: int, orderNo: int}
- * @phpstan-type _songTag array{songTagId: string}
+ * @phpstan-type _tag array{tagId: string}
  * @phpstan-type _songMedia array{mediaId: string, orderNo: int}
  */
 class SongIntegrityService
@@ -33,15 +33,15 @@ class SongIntegrityService
         private readonly UuidGeneratorInterface $generator,
         private readonly SongRepositoryInterface $songRepository,
         private readonly PersonRepositoryInterface $personRepository,
-        private readonly SongTagRepositoryInterface $songTagRepository,
+        private readonly TagRepositoryInterface $tagRepository,
         private readonly MediaRepositoryInterface $mediaRepository,
     ) {
     }
 
     /**
-     * @param list<_songTag>   $tags
-     * @param list<_person>    $persons
-     * @param list<_songMedia> $media
+     * @param array<int, _tag>       $tags
+     * @param array<int, _person>    $persons
+     * @param array<int, _songMedia> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -77,9 +77,9 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<_songTag>   $tags
-     * @param list<_person>    $persons
-     * @param list<_songMedia> $media
+     * @param array<int, _tag>       $tags
+     * @param array<int, _person>    $persons
+     * @param array<int, _songMedia> $media
      *
      * @throws BusinessRuleViolationException
      */
@@ -116,25 +116,25 @@ class SongIntegrityService
     }
 
     /**
-     * @param list<_person>    $persons
-     * @param list<_songTag>   $tags
-     * @param list<_songMedia> $media
+     * @param array<int, _person>    $persons
+     * @param array<int, _tag>       $tags
+     * @param array<int, _songMedia> $media
      *
-     * @return array{0: SongPersons, 1: SongTagReferences, 2: SongMediaLinks}
+     * @return array{0: SongPersons, 1: TagReferences, 2: SongMediaLinks}
      */
     private function buildRelations(array $persons, array $tags, array $media): array
     {
-        return [SongPersons::fromArray($persons), SongTagReferences::fromArray($tags), SongMediaLinks::fromArray($media)];
+        return [SongPersons::fromArray($persons), TagReferences::fromArray($tags), SongMediaLinks::fromArray($media)];
     }
 
-    private function assertRelationsExist(SongPersons $persons, SongTagReferences $tags, SongMediaLinks $media): void
+    private function assertRelationsExist(SongPersons $persons, TagReferences $tags, SongMediaLinks $media): void
     {
         if (! $this->existsPersons($persons)) {
             throw new BusinessRuleViolationException('指定された人物の一部が存在しません。');
         }
 
-        if (! $this->existsSongTags($tags)) {
-            throw new BusinessRuleViolationException('指定された楽曲タグの一部が存在しません。');
+        if (! $this->existsTags($tags)) {
+            throw new BusinessRuleViolationException('指定されたタグの一部が存在しません。');
         }
 
         if (! $this->existsMedia($media)) {
@@ -152,7 +152,7 @@ class SongIntegrityService
         bool $isDisplay,
         int $orderNo,
         SongPersons $persons,
-        SongTagReferences $tags,
+        TagReferences $tags,
         SongMediaLinks $media,
     ): Song {
         return new Song(
@@ -192,23 +192,23 @@ class SongIntegrityService
         return count($personIds) === count($founds);
     }
 
-    private function existsSongTags(SongTagReferences $tags): bool
+    private function existsTags(TagReferences $tags): bool
     {
-        $songTagIds = [];
+        $tagIds = [];
 
         foreach ($tags as $tag) {
-            if (! isset($songTagIds[$tag->songTagId->value])) {
-                $songTagIds[$tag->songTagId->value] = $tag->songTagId;
+            if (! isset($tagIds[$tag->tagId->value])) {
+                $tagIds[$tag->tagId->value] = $tag->tagId;
             }
         }
 
-        if ($songTagIds === []) {
+        if ($tagIds === []) {
             return true;
         }
 
-        $founds = $this->songTagRepository->findByIds(...array_values($songTagIds));
+        $founds = $this->tagRepository->findByIds(...array_values($tagIds));
 
-        return count($songTagIds) === count($founds);
+        return count($tagIds) === count($founds);
     }
 
     private function existsMedia(SongMediaLinks $media): bool

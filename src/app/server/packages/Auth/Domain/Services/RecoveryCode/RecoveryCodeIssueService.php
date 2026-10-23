@@ -23,7 +23,7 @@ class RecoveryCodeIssueService
     }
 
     /**
-     * @return array{codes: list<RecoveryCode>, plainCodes: list<string>}
+     * @return array{codes: array<int, RecoveryCode>, plainCodes: array<int, string>}
      */
     public function issue(AdminUserId $adminUserId): array
     {

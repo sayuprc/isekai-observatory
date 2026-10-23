@@ -20,7 +20,7 @@ use Support\UseCase\AuditLog\Query\AuditLogSummary;
 
 readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
 {
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array SUMMARY_COLUMNS = [
         'audit_logs.audit_log_id',
         'audit_logs.admin_user_id',

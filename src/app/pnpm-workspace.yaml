@@ -5,45 +5,46 @@ packages:
   - admin
   - admin-proxy
   - contracts
+  - public-api
   - viewer
 
 catalog:
   typescript: 6.0.3
-  "@types/bun": 1.4.2
-  wrangler: 4.147.0
+  "@types/bun": 1.4.3
+  wrangler: 4.151.1
 
 catalogs:
   fonts:
     "@fontsource/eb-garamond": 5.3.0
     "@fontsource/jetbrains-mono": 5.3.0
-    "@fontsource/noto-serif-jp": 5.3.0
+    "@fontsource/noto-serif-jp": 5.3.1
     "@fontsource/shippori-mincho": 5.3.0
     "@fontsource/spectral": 5.3.0
   astro:
-    astro: 7.3.5
+    astro: 7.4.0
     "@astrojs/check": 0.9.10
     "@astrojs/sitemap": 3.7.4
-    "@astrojs/solid-js": 7.0.2
-    solid-js: 1.9.15
+    "@astrojs/solid-js": 7.1.0
+    solid-js: 1.9.17
   ui:
     "@tailwindcss/vite": 4.3.3
-    daisyui: 5.7.47
+    daisyui: 5.7.50
     tailwindcss: 4.3.3
   lint:
     "@eslint/js": 10.0.1
-    "@typescript-eslint/parser": 8.71.1
-    eslint: 10.12.0
+    "@typescript-eslint/parser": 8.71.2
+    eslint: 10.13.0
     eslint-plugin-astro: 3.2.1
     eslint-config-prettier: 10.1.8
     eslint-plugin-import-x: 4.17.1
-    prettier: 3.9.9
-    prettier-plugin-astro: 1.1.0
+    prettier: 3.9.10
+    prettier-plugin-astro: 1.1.1
     stylelint: 17.16.0
     stylelint-config-html: 2.0.0
     stylelint-config-recess-order: 7.8.0
     stylelint-config-standard: 40.0.0
-    stylelint-order: 8.1.1
-    typescript-eslint: 8.71.1
+    stylelint-order: 8.1.2
+    typescript-eslint: 8.71.2
     postcss-html: 2.0.0
   gen:
     "@hey-api/openapi-ts": 0.99.0
@@ -54,9 +55,8 @@ allowBuilds:
   redis-commander: false
   sharp: false
   unrs-resolver: false
+  vue-demi: false
   workerd: false
 overrides:
   js-yaml@>=4.0.0 <4.3.2: 4.3.2
-  seroval@<=1.6.2: 1.6.8
-  sharp@<0.35.5: 0.35.5
-  undici@>=7.0.0 <7.29.1: 7.30.0
+  undici@>=7.0.0 <7.29.1: 7.29.1

@@ -17,7 +17,7 @@ use Support\Infrastructures\Database\SqlHelper;
 
 readonly class SongQueryService implements SongQueryServiceInterface
 {
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['song_id', 'title', 'type', 'is_display', 'order_no'];
 
     public function __construct(
@@ -82,6 +82,17 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         if ($criteria->isDisplay->isPresent()) {
             $query = $query->where('is_display', '=', $criteria->isDisplay->get());
+        }
+
+        if ($criteria->tagId->isPresent()) {
+            $query = $query->where(
+                'song_id',
+                'IN',
+                $this->queryFactory->select()
+                    ->withSelect(['song_id'])
+                    ->from('song_taggings')
+                    ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
+            );
         }
 
         return $query;

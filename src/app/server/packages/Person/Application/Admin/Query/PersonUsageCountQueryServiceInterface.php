@@ -11,7 +11,7 @@ interface PersonUsageCountQueryServiceInterface
     /**
      * 渡した人物それぞれの参照件数を、人物 ID (UUID) をキーにして返す
      *
-     * @param list<PersonId> $personIds
+     * @param array<PersonId> $personIds
      *
      * @return array<string, PersonUsageCount>
      */

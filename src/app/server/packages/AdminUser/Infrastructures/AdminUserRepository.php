@@ -23,7 +23,7 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
 
     private const string PERMISSION_TABLE = 'admin_user_permissions';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['admin_user_id', 'name', 'email', 'role', 'created_at'];
 
     public function __construct(
@@ -151,9 +151,9 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
     }
 
     /**
-     * @param list<string> $binAdminUserIds
+     * @param array<int, string> $binAdminUserIds
      *
-     * @return array<string, list<string>>
+     * @return array<string, array<int, string>>
      */
     private function loadPermissions(array $binAdminUserIds): array
     {
@@ -185,7 +185,7 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
 
     /**
      * @param array<string, mixed> $row
-     * @param list<string>         $permissions
+     * @param array<int, string>   $permissions
      */
     private function hydrate(array $row, array $permissions): AdminUser
     {

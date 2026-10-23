@@ -13,6 +13,7 @@ import { EntityHeader } from '../EntityHeader';
 import { setFlash } from '../Flash';
 import { FormColumns } from '../FormColumns';
 import { FormError } from '../FormError';
+import { TagPicker } from '../tag/TagPicker';
 import { createReleaseGroupForm, ReleaseGroupFields } from './ReleaseGroupFields';
 
 /** 版名は空になりうるため、リンクのラベルとして意味を持つ代替文言を出す */
@@ -223,8 +224,9 @@ const ReleaseGroupForm = (props: ReleaseGroupFormProps) => {
       <FormError message={formError()} onClose={clearErrors} />
       <FormColumns
         main={
-          <form id="release-group-form" onKeyDown={preventImplicitSubmit} onSubmit={handleSubmit}>
+          <form id="release-group-form" onKeyDown={preventImplicitSubmit} class="space-y-6" onSubmit={handleSubmit}>
             <ReleaseGroupFields form={form} getFieldError={getFieldError} />
+            <TagPicker tags={form.tags} setTags={form.setTags} />
           </form>
         }
         side={

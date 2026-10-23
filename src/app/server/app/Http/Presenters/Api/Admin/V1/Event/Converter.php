@@ -12,8 +12,10 @@ use Event\Application\Admin\Assemble\AssembledPerformance;
 use Event\Application\Admin\Assemble\AssembledRelease;
 use Event\Application\Admin\Assemble\AssembledSetlistItem;
 use Event\Application\Admin\Assemble\AssembledSource;
+use Event\Application\Admin\Assemble\AssembledTag;
 use Event\Application\Admin\Assemble\AssembledVenue;
 use Event\Application\Admin\Query\EventSummary;
+use OpenAPI\Admin\Client\Model\AttachedTag as OpenApiAttachedTag;
 use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Admin\Client\Model\EventRelease as OpenApiEventRelease;
 use OpenAPI\Admin\Client\Model\EventSource as OpenApiEventSource;
@@ -64,7 +66,15 @@ class Converter
             ->setReleases(array_map($this->toOpenApiRelease(...), $event->releases))
             ->setSources(array_map($this->toOpenApiSource(...), $event->sources))
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $event->performances))
-            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist));
+            ->setSetlist(array_map($this->toOpenApiSetlistItem(...), $event->setlist))
+            ->setTags(array_map($this->toOpenApiTag(...), $event->tags));
+    }
+
+    private function toOpenApiTag(AssembledTag $tag): OpenApiAttachedTag
+    {
+        return new OpenApiAttachedTag()
+            ->setTagId($tag->tagId)
+            ->setName($tag->name);
     }
 
     private function toOpenApiSchedule(?string $startOn, ?string $endOn): OpenApiEventSchedule

@@ -5,6 +5,18 @@ export type ClientOptions = {
 };
 
 /**
+ * 記録に付いたタグ
+ */
+export type AttachedTag = {
+    tagId: TagId;
+    name: TagName;
+    /**
+     * タグの表示順。一覧のタグの選択肢を並べるのに使う
+     */
+    orderNo: OrderNo;
+};
+
+/**
  * エラー分類を表す機械可読なコード
  */
 export type ErrorCode = 'unauthenticated' | 'permission_denied' | 'not_found' | 'validation_failed' | 'business_rule_violation' | 'internal_error';
@@ -39,6 +51,10 @@ export type Event = {
     sources: Array<EventSource>;
     performances: Array<SongPerformance>;
     setlist: Array<SetlistItem>;
+    /**
+     * 付いているタグ(タグの表示順)
+     */
+    tags: Array<AttachedTag>;
 };
 
 export type EventListResponse = {
@@ -174,6 +190,10 @@ export type ReleaseGroupListItem = {
      */
     firstReleasedOn: ReleasedOn;
     releases: Array<ReleaseListItem>;
+    /**
+     * 付いているタグ(タグの表示順)
+     */
+    tags: Array<AttachedTag>;
 };
 
 export type ReleaseGroupListResponse = {
@@ -253,6 +273,10 @@ export type SongListItem = {
      * 公開イベントでの披露履歴(開催時期の新しい順)
      */
     performances: Array<SongPerformanceHistory>;
+    /**
+     * 付いているタグ(タグの表示順)
+     */
+    tags: Array<AttachedTag>;
 };
 
 export type SongListResponse = {
@@ -444,6 +468,16 @@ export type ReleasedOn = string;
  * 楽曲ID
  */
 export type SongId = string;
+
+/**
+ * タグID
+ */
+export type TagId = string;
+
+/**
+ * タグ名
+ */
+export type TagName = string;
 
 /**
  * 楽曲名

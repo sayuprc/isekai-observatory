@@ -114,6 +114,7 @@ class CreateUseCaseTest extends TestCase
                         new AssembledPerson($composerId, 'テスト作曲者', SongPersonRole::Composer, 2),
                         new AssembledPerson($arrangerId, 'テスト編曲者', SongPersonRole::Arranger, 3),
                     ],
+                    [],
                 ),
             )
             ->once();

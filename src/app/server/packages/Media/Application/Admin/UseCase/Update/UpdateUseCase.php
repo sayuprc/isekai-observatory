@@ -14,6 +14,9 @@ use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
+use Tag\Domain\Models\TagId;
+use Tag\Domain\Models\TagReference;
+use Tag\Domain\Models\TagRepositoryInterface;
 
 readonly class UpdateUseCase
 {
@@ -23,6 +26,7 @@ readonly class UpdateUseCase
         private MediaRepositoryInterface $repository,
         private MediaIntegrityService $service,
         private AuditLogRecorderInterface $recorder,
+        private TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -44,6 +48,7 @@ readonly class UpdateUseCase
                 $inputData->publishedAt,
                 $inputData->type,
                 $inputData->isDisplay,
+                $inputData->tags,
             );
 
             $media = $this->repository->save($media);
@@ -55,7 +60,10 @@ readonly class UpdateUseCase
                 $media->toArray(),
             );
 
-            return new UpdateOutputData($media);
+            return new UpdateOutputData(
+                $media,
+                $this->tagRepository->findByIds(...$media->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray()),
+            );
         });
     }
 }

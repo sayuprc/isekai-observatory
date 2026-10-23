@@ -66,7 +66,7 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
         'is_display' => 'bool',
         'order_no' => 'int',
         'persons' => '\OpenAPI\Admin\Client\Model\SongPerson[]',
-        'tags' => '\OpenAPI\Admin\Client\Model\SongAttachedTag[]',
+        'tags' => '\OpenAPI\Admin\Client\Model\AttachedTag[]',
         'media' => '\OpenAPI\Admin\Client\Model\SongLinkedMedia[]'
     ];
 
@@ -663,7 +663,7 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets tags
      *
-     * @return \OpenAPI\Admin\Client\Model\SongAttachedTag[]
+     * @return \OpenAPI\Admin\Client\Model\AttachedTag[]
      */
     public function getTags()
     {
@@ -673,7 +673,7 @@ class Song implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets tags
      *
-     * @param \OpenAPI\Admin\Client\Model\SongAttachedTag[] $tags tags
+     * @param \OpenAPI\Admin\Client\Model\AttachedTag[] $tags tags
      *
      * @return self
      */

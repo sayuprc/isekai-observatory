@@ -58,7 +58,7 @@ class RecoveryFinishRequest implements ModelInterface, ArrayAccess, \JsonSeriali
       */
     protected static $openAPITypes = [
         'auth_ceremony_id' => 'string',
-        'credential' => 'object'
+        'credential' => 'array<string,mixed>'
     ];
 
     /**
@@ -332,7 +332,7 @@ class RecoveryFinishRequest implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Gets credential
      *
-     * @return object
+     * @return array<string,mixed>
      */
     public function getCredential()
     {
@@ -342,7 +342,7 @@ class RecoveryFinishRequest implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets credential
      *
-     * @param object $credential credential
+     * @param array<string,mixed> $credential credential
      *
      * @return self
      */

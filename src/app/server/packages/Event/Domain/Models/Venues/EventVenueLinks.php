@@ -15,7 +15,7 @@ use Venue\Domain\Models\VenueId;
 readonly class EventVenueLinks extends ImmutableCollection
 {
     /**
-     * @param list<array{venueId: string, orderNo: int}> $items
+     * @param array<int, array{venueId: string, orderNo: int}> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -33,7 +33,7 @@ readonly class EventVenueLinks extends ImmutableCollection
     }
 
     /**
-     * @param list<array{venueId: string, orderNo: int}> $items
+     * @param array<int, array{venueId: string, orderNo: int}> $items
      */
     public static function reconstruct(array $items): self
     {

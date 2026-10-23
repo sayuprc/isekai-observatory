@@ -9,7 +9,7 @@ interface ReleaseRepositoryInterface
     public function find(ReleaseId $releaseId): ?Release;
 
     /**
-     * @return list<Release>
+     * @return array<int, Release>
      */
     public function findByIds(ReleaseId ...$releaseIds): array;
 

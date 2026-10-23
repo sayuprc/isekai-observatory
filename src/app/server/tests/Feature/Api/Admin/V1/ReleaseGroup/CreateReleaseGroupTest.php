@@ -30,6 +30,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'note' => '備考',
                 'isDisplay' => true,
                 'orderNo' => 1,
+                'tags' => [],
             ])->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
@@ -42,7 +43,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                             ->where('description', '1st アルバム')
                             ->where('note', '備考')
                             ->where('isDisplay', true)
-                            ->where('orderNo', 1),
+                            ->where('orderNo', 1)
+                            ->where('tags', []),
                     ),
             );
 
@@ -71,6 +73,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 7,
+                'tags' => [],
             ])->assertStatus(200)
             ->assertJsonPath('releaseGroup.orderNo', 7);
     }
@@ -86,6 +89,51 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
+                'tags' => [],
             ])->assertStatus(403);
+    }
+
+    #[Test]
+    public function canCreateWithTagsSortedByTagOrder(): void
+    {
+        $firstTagId = $this->generateUuid();
+        $secondTagId = $this->generateUuid();
+        $this->storeTags($this->createTag($secondTagId, 'タグB', 20), $this->createTag($firstTagId, 'タグA', 10));
+
+        $this->withAuth()
+            ->postJson(route(ReleaseGroupRouteMap::Create), [
+                'title' => 'タグ付きの作品',
+                'type' => ReleaseGroupType::Album->value,
+                'description' => '',
+                'note' => '',
+                'isDisplay' => true,
+                'orderNo' => 1,
+                'tags' => [['tagId' => $secondTagId], ['tagId' => $firstTagId]],
+            ])
+            ->assertStatus(200)
+            ->assertJsonPath('releaseGroup.tags', [
+                ['tagId' => $firstTagId, 'name' => 'タグA'],
+                ['tagId' => $secondTagId, 'name' => 'タグB'],
+            ]);
+    }
+
+    #[Test]
+    public function rejectsDuplicatedTag(): void
+    {
+        $tagId = $this->generateUuid();
+        $this->storeTags($this->createTag($tagId, 'タグA', 10));
+
+        $this->withAuth()
+            ->postJson(route(ReleaseGroupRouteMap::Create), [
+                'title' => 'タグが重複した作品',
+                'type' => ReleaseGroupType::Album->value,
+                'description' => '',
+                'note' => '',
+                'isDisplay' => true,
+                'orderNo' => 1,
+                'tags' => [['tagId' => $tagId], ['tagId' => $tagId]],
+            ])
+            ->assertStatus(400)
+            ->assertJsonPath('code', 'business_rule_violation');
     }
 }

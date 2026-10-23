@@ -9,7 +9,7 @@ use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
 readonly class ListYouTubeChannelOutputData
 {
     /**
-     * @param list<YouTubeChannel> $channels
+     * @param array<int, YouTubeChannel> $channels
      */
     public function __construct(public array $channels)
     {

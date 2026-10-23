@@ -9,6 +9,7 @@ use Tools\Arkitect\ComponentMaps\MediaComponent;
 use Tools\Arkitect\ComponentMaps\PersonComponent;
 use Tools\Arkitect\ComponentMaps\SongComponent;
 use Tools\Arkitect\ComponentMaps\SupportComponent;
+use Tools\Arkitect\ComponentMaps\TagComponent;
 use Tools\Arkitect\ComponentMaps\VenueComponent;
 use Tools\Arkitect\Define;
 
@@ -79,6 +80,7 @@ return [
     ]),
     new Define(PersonComponent::Query, [
         PersonComponent::Domain,
+        SupportComponent::Pagination,
     ]),
     new Define(PersonComponent::UseCase, [
         PersonComponent::Domain,
@@ -101,6 +103,7 @@ return [
     ]),
     new Define(VenueComponent::Query, [
         VenueComponent::Domain,
+        SupportComponent::Pagination,
     ]),
     new Define(VenueComponent::UseCase, [
         VenueComponent::Domain,
@@ -114,8 +117,33 @@ return [
         LibraryComponent::ResultType,
     ]),
 
+    new Define(TagComponent::Domain, [
+        TagComponent::Domain,
+        SupportComponent::Domain,
+        SupportComponent::Contracts,
+        SupportComponent::Collection,
+        SupportComponent::Optional,
+        LibraryComponent::ResultType,
+    ]),
+    new Define(TagComponent::Query, [
+        TagComponent::Domain,
+        SupportComponent::Pagination,
+    ]),
+    new Define(TagComponent::UseCase, [
+        TagComponent::Domain,
+        TagComponent::Query,
+        AdminUserComponent::Domain,
+        AuthComponent::Domain,
+        SupportComponent::Contracts,
+        SupportComponent::Domain,
+        SupportComponent::Optional,
+        SupportComponent::UseCase,
+        LibraryComponent::ResultType,
+    ]),
+
     new Define(MediaComponent::Domain, [
         MediaComponent::Domain,
+        TagComponent::Domain,
         LibraryComponent::DateType,
         SupportComponent::Domain,
         SupportComponent::Contracts,
@@ -127,6 +155,7 @@ return [
         SongComponent::Domain,
         MediaComponent::Domain,
         PersonComponent::Domain,
+        TagComponent::Domain,
         SupportComponent::Domain,
         SupportComponent::Contracts,
         SupportComponent::Collection,
@@ -142,11 +171,13 @@ return [
         SongComponent::Domain,
         MediaComponent::Domain,
         PersonComponent::Domain,
+        TagComponent::Domain,
     ]),
     new Define(SongComponent::UseCase, [
         SongComponent::Domain,
         SongComponent::Query,
         SongComponent::Assemble,
+        TagComponent::Domain,
         AdminUserComponent::Domain,
         AuthComponent::Domain,
         SupportComponent::Contracts,

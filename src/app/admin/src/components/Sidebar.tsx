@@ -221,7 +221,7 @@ const navSections: NavSection[] = [
     title: 'マスタ',
     items: [
       { href: '/venues', label: '開催先', icon: MapPinIcon },
-      { href: '/song-tags', label: '楽曲タグ', icon: TagIcon },
+      { href: '/tags', label: 'タグ', icon: TagIcon },
     ],
   },
   {

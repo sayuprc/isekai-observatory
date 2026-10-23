@@ -16,7 +16,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class EventSources extends ImmutableCollection
 {
     /**
-     * @param list<_eventSourceInput> $items
+     * @param array<int, _eventSourceInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -34,7 +34,7 @@ readonly class EventSources extends ImmutableCollection
     }
 
     /**
-     * @param list<_eventSourceInput> $items
+     * @param array<int, _eventSourceInput> $items
      */
     public static function reconstruct(array $items): self
     {

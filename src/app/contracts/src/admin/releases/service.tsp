@@ -1,5 +1,6 @@
 import "@typespec/http";
 import "../auth";
+import "../tags";
 import "../../shared";
 
 using IsekaiObservatory.Shared;
@@ -66,6 +67,11 @@ interface ReleaseGroupService {
     @query title?: string,
     @query type?: ReleaseGroupTypeValue,
     @query("is_display") isDisplay?: boolean,
+
+    @doc("このタグが付いたリリースグループだけに絞り込む")
+    @query("tag_id")
+    tagId?: tagId,
+
     @query sort?: ReleaseGroupSearchSortBy = ReleaseGroupSearchSortBy.firstReleasedOn,
     @query order?: SortOrder = SortOrder.desc,
     @query page?: page = 1,

@@ -16,7 +16,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class PersonGroupMembers extends ImmutableCollection
 {
     /**
-     * @param list<_memberInput> $items
+     * @param array<int, _memberInput> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -34,7 +34,7 @@ readonly class PersonGroupMembers extends ImmutableCollection
     }
 
     /**
-     * @param list<_memberInput> $items
+     * @param array<int, _memberInput> $items
      */
     public static function reconstruct(array $items): self
     {
@@ -48,7 +48,7 @@ readonly class PersonGroupMembers extends ImmutableCollection
     }
 
     /**
-     * @return list<PersonId>
+     * @return array<int, PersonId>
      */
     public function personIds(): array
     {

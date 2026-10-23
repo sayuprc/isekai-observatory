@@ -54,13 +54,13 @@ use Song\Domain\Models\Persons\SongPersons;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongType;
-use Song\Domain\Models\Tag\SongTag;
-use Song\Domain\Models\Tag\SongTagId;
-use Song\Domain\Models\Tag\SongTagName;
-use Song\Domain\Models\Tags\SongTagReferences;
 use Song\Domain\Models\Title;
 use Support\Domain\ValueObjects\Note;
 use Support\Domain\ValueObjects\OrderNo;
+use Tag\Domain\Models\Tag;
+use Tag\Domain\Models\TagId;
+use Tag\Domain\Models\TagName;
+use Tag\Domain\Models\TagReferences;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueId;
 use Venue\Domain\Models\VenueKind;
@@ -80,6 +80,7 @@ trait EntityFactory
      * @param list<_eventSourceInput>                      $sources
      * @param list<_songPerformanceInput>                  $performances
      * @param list<_setlistItemInput>                      $setlist
+     * @param list<array{tagId: string}>                   $tags
      */
     protected function createEvent(
         string $eventId,
@@ -96,6 +97,7 @@ trait EntityFactory
         array $performances = [],
         array $setlist = [],
         string $note = '',
+        array $tags = [],
     ): Event {
         return Event::reconstruct(
             $eventId,
@@ -113,6 +115,7 @@ trait EntityFactory
             $sources,
             $performances,
             $setlist,
+            $tags,
         );
     }
 
@@ -217,7 +220,7 @@ trait EntityFactory
             $type,
             $isDisplay,
             new OrderNo($orderNo),
-            SongTagReferences::fromArray($tags),
+            TagReferences::fromArray($tags),
             SongPersons::fromArray($persons),
             SongMediaLinks::fromArray(is_array($media) ? $media : []),
         );
@@ -273,15 +276,18 @@ trait EntityFactory
         return [];
     }
 
-    protected function createSongTag(string $songTagId, string $name, int $orderNo): SongTag
+    protected function createTag(string $tagId, string $name, int $orderNo): Tag
     {
-        return new SongTag(
-            new SongTagId($songTagId),
-            new SongTagName($name),
+        return new Tag(
+            new TagId($tagId),
+            new TagName($name),
             new OrderNo($orderNo),
         );
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     protected function createMedia(
         string $mediaId,
         string $title,
@@ -289,6 +295,7 @@ trait EntityFactory
         MediaType $type,
         bool $isDisplay,
         ?DateTimeImmutable $publishedAt = null,
+        array $tags = [],
     ): Media {
         return new Media(
             new MediaId($mediaId),
@@ -297,6 +304,7 @@ trait EntityFactory
             new MediaPublishedAt($publishedAt ?? new DateTimeImmutable('2024-01-01 00:00:00')),
             $type,
             $isDisplay,
+            TagReferences::fromArray($tags),
         );
     }
 
@@ -305,6 +313,9 @@ trait EntityFactory
         return YouTubeChannel::reconstruct($channelId, $name);
     }
 
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
     protected function createReleaseGroup(
         string $releaseGroupId,
         string $title,
@@ -313,6 +324,7 @@ trait EntityFactory
         string $description = 'テスト用リリースグループ',
         int $orderNo = 1,
         string $note = '',
+        array $tags = [],
     ): ReleaseGroup {
         return new ReleaseGroup(
             new ReleaseGroupId($releaseGroupId),
@@ -322,6 +334,7 @@ trait EntityFactory
             new Note($note),
             $isDisplay,
             new OrderNo($orderNo),
+            TagReferences::fromArray($tags),
         );
     }
 

@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "workers_dev": false,
+  "preview_urls": false,
+  // API リファレンスは静的ファイルだけなので Worker のコードを持たない
+  "assets": {
+    "directory": "./docs",
+  },
+}

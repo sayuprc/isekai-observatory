@@ -35,4 +35,8 @@ enum Permission: string
     case ReadEvent = 'read_event';
 
     case WriteEvent = 'write_event';
+
+    case ReadTag = 'read_tag';
+
+    case WriteTag = 'write_tag';
 }

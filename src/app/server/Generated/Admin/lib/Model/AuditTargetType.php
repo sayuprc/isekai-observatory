@@ -76,9 +76,9 @@ enum AuditTargetType: string
     case SONG = 'Song';
 
     /**
-     * 楽曲タグ
+     * タグ
      */
-    case SONG_TAG = 'SongTag';
+    case TAG = 'Tag';
 
     /**
      * 開催先

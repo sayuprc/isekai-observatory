@@ -12,6 +12,9 @@ use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
+use Tag\Domain\Models\TagId;
+use Tag\Domain\Models\TagReference;
+use Tag\Domain\Models\TagRepositoryInterface;
 
 readonly class CreateUseCase
 {
@@ -21,6 +24,7 @@ readonly class CreateUseCase
         private MediaRepositoryInterface $repository,
         private MediaIntegrityService $service,
         private AuditLogRecorderInterface $recorder,
+        private TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -35,6 +39,7 @@ readonly class CreateUseCase
                 $inputData->publishedAt,
                 $inputData->type,
                 $inputData->isDisplay,
+                $inputData->tags,
             );
 
             $media = $this->repository->save($media);
@@ -46,7 +51,10 @@ readonly class CreateUseCase
                 $media->toArray(),
             );
 
-            return new CreateOutputData($media);
+            return new CreateOutputData(
+                $media,
+                $this->tagRepository->findByIds(...$media->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray()),
+            );
         });
     }
 }

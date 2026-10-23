@@ -93,8 +93,8 @@ final readonly class QueryFactory
      * 管理画面の一覧で、1 ページ分の親 ID に対する子の件数を 1 回の問い合わせで引くときに使う
      * テーブル名と列名は SQL に埋め込むため、コード上の定数だけを渡す
      *
-     * @param list<string> $keys
-     * @param ?string      $distinctColumn 指定すると、その列の重複を除いて数える
+     * @param array<string> $keys
+     * @param ?string       $distinctColumn 指定すると、その列の重複を除いて数える
      *
      * @return array<string, int>
      */

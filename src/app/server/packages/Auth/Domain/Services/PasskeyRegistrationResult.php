@@ -7,7 +7,7 @@ namespace Auth\Domain\Services;
 readonly class PasskeyRegistrationResult
 {
     /**
-     * @param list<string> $transports
+     * @param array<int, string> $transports
      */
     public function __construct(
         public string $credentialId,

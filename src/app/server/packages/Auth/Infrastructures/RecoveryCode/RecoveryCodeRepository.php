@@ -19,7 +19,7 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
 {
     private const string TABLE = 'admin_user_recovery_codes';
 
-    /** @var list<string> */
+    /** @var array<int, string> */
     private const array COLUMNS = ['admin_user_recovery_code_id', 'admin_user_id', 'code', 'status', 'used_at'];
 
     public function __construct(
@@ -29,7 +29,7 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
     }
 
     /**
-     * @param list<RecoveryCode> $codes
+     * @param array<int, RecoveryCode> $codes
      */
     #[Override]
     public function saveMany(array $codes): void
@@ -61,7 +61,7 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
     }
 
     /**
-     * @return list<RecoveryCode>
+     * @return array<int, RecoveryCode>
      */
     #[Override]
     public function findUnusedByAdminUserIdForUpdate(AdminUserId $adminUserId): array

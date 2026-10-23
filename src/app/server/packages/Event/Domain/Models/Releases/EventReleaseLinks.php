@@ -15,7 +15,7 @@ use Support\Domain\ValueObjects\OrderNo;
 readonly class EventReleaseLinks extends ImmutableCollection
 {
     /**
-     * @param list<array{releaseId: string, orderNo: int}> $items
+     * @param array<int, array{releaseId: string, orderNo: int}> $items
      *
      * @throws BusinessRuleViolationException
      */
@@ -33,7 +33,7 @@ readonly class EventReleaseLinks extends ImmutableCollection
     }
 
     /**
-     * @param list<array{releaseId: string, orderNo: int}> $items
+     * @param array<int, array{releaseId: string, orderNo: int}> $items
      */
     public static function reconstruct(array $items): self
     {

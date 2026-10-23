@@ -9,7 +9,7 @@ use Auth\Domain\Models\AdminUserPasskey;
 interface PasskeyAuthenticatorInterface
 {
     /**
-     * @param list<AdminUserPasskey> $excludePasskeys
+     * @param array<int, AdminUserPasskey> $excludePasskeys
      */
     public function startRegistration(
         string $userHandle,

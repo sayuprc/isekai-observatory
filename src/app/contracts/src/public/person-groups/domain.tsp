@@ -1,0 +1,20 @@
+import "../../shared";
+import "../people/domain.tsp";
+
+using IsekaiObservatory.Shared;
+
+namespace IsekaiObservatory.Public;
+
+@doc("人物グループID")
+scalar personGroupId extends uuid;
+
+@doc("人物グループ。公開イベントの共演者の出演グループとして参照されているものだけが載ります")
+model PersonGroup {
+  personGroupId: personGroupId;
+
+  @doc("表示用の名称")
+  name: string;
+
+  @doc("メンバーの人物 ID (表示順)")
+  memberIds: personId[];
+}
