@@ -1099,7 +1099,7 @@ components:
       description: 1 ページあたりの件数
     pageToken:
       type: string
-      description: 次ページを取得するためのトークン。中身の形式は保証しません
+      description: 次ページを取得するためのトークン
     performanceCreditName:
       type: string
       minLength: 1
