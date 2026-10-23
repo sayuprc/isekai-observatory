@@ -3,6 +3,8 @@ import { listPage } from './list.ts';
 
 interface Env {
   ASSETS: { fetch: (request: Request | string) => Promise<Response> };
+  /** 'true' のとき検索エンジンに載せない。dev / staging の deploy だけが渡す */
+  NOINDEX?: string;
 }
 
 const CORS_HEADERS = {
@@ -16,7 +18,7 @@ const json = (body: unknown, status: number): Response =>
     headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
   });
 
-export const handle = async (request: Request, env: Env): Promise<Response> => {
+const respond = async (request: Request, env: Env): Promise<Response> => {
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
@@ -43,6 +45,16 @@ export const handle = async (request: Request, env: Env): Promise<Response> => {
   });
 
   return result.ok ? json(result.body, 200) : json({ code: 'business_rule_violation', message: result.message }, 400);
+};
+
+export const handle = async (request: Request, env: Env): Promise<Response> => {
+  const response = await respond(request, env);
+
+  if (env.NOINDEX === 'true') {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
+
+  return response;
 };
 
 export default { fetch: handle };

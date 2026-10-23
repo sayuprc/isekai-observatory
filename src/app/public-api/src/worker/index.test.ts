@@ -89,3 +89,17 @@ describe('不正なリクエスト', () => {
     expect(preflight.headers.get('Access-Control-Allow-Origin')).toBe('*');
   });
 });
+
+describe('検索エンジンへの非公開', () => {
+  const getWith = (noindex: string | undefined, path: string) =>
+    handle(new Request(`https://api.example.com${path}`), { ...env, NOINDEX: noindex });
+
+  it('NOINDEX が true なら成功・失敗を問わず X-Robots-Tag を付ける', async () => {
+    expect((await getWith('true', '/v1/songs')).headers.get('X-Robots-Tag')).toBe('noindex, nofollow');
+    expect((await getWith('true', '/unknown')).headers.get('X-Robots-Tag')).toBe('noindex, nofollow');
+  });
+
+  it('NOINDEX が無ければ付けない', async () => {
+    expect((await getWith(undefined, '/v1/songs')).headers.has('X-Robots-Tag')).toBe(false);
+  });
+});

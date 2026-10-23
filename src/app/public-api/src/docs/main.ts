@@ -24,4 +24,9 @@ await writeFile(join(outDir, 'index.html'), renderIndexHtml(publicApiUrl));
 await copyFile(openapiFile, join(outDir, OPENAPI_PATH));
 await copyFile(scalarFile, join(outDir, SCALAR_SCRIPT_PATH));
 
+// Cloudflare の静的 assets は _headers で応答ヘッダーを付けられる
+if (process.env.SITE_NOINDEX === 'true') {
+  await writeFile(join(outDir, '_headers'), '/*\n  X-Robots-Tag: noindex, nofollow\n');
+}
+
 console.log(`docs: ${outDir}`);
