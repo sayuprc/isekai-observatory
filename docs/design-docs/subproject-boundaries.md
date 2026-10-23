@@ -52,6 +52,7 @@ UI 実装方針の詳細は `FRONTEND.md` を参照します
 - `src/app/public-api/src/snapshot/`: build 時に server の Public 一覧を全件たどり、100 件ずつの静的ファイルへ書き出す
 - `src/app/public-api/src/worker/`: `pageToken` / `pageSize` を解釈し、静的ファイルから 1 ページを切り出して返す Cloudflare Worker
 - `src/app/public-api/src/shared/`: 書き出しと配信が共有するファイル配置
+- `src/app/public-api/src/docs/`: Public 契約の OAS と Scalar を、リファレンス用の静的ファイルとして書き出す。配信は `wrangler.docs.jsonc` の静的ファイルだけの Worker が担う
 - Worker は API サーバーと DB へ問い合わせない。データは `viewer-deploy` で書き出したスナップショットだけを使う
 - item の中身は解釈しない。形状は Public 契約と server が保証する
 

@@ -65,5 +65,7 @@ RUN pnpm install --frozen-lockfile --filter viewer --filter public-api --prod \
 
 COPY src/app/viewer viewer
 COPY src/app/public-api public-api
+# API リファレンスは Public の契約から作るため、生成済みの OAS だけを入れる
+COPY src/app/contracts/generated/oas/IsekaiObservatory.Public.v1.yaml contracts/generated/oas/IsekaiObservatory.Public.v1.yaml
 
 ENTRYPOINT ["viewer-deploy"]

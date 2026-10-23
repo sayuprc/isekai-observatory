@@ -10,7 +10,9 @@ namespace IsekaiObservatory.Public;
 @tag("Event")
 @route("/events")
 interface EventService {
-  @doc("イベント一覧取得API")
+  @summary("イベント一覧")
+  @doc("公開イベントを返す。並び順はタイトル順")
+  @returnsDoc("イベントの一覧")
   listEvents(@query pageToken?: pageToken, @query pageSize?: pageSize):
     | Ok<EventListResponse>
     | BadRequest

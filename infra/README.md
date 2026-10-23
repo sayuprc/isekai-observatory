@@ -77,13 +77,14 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 | API / Admin service と各 job の runtime env / secret | `ci.yaml` では定義しない。初回デプロイ前に別経路で設定する |
 | DB migrate job | `DB_USERNAME` / `DB_PASSWORD` / `DB_HOST` / `DB_PORT` / `DB_DATABASE` |
 | media youtube import job | DB 接続 env と `YOUTUBE_API_KEY` |
-| Viewer deploy job | `API_URL` / `SITE_URL` / Cloudflare Worker 名 / account ID / `GOOGLE_CLOUD_PROJECT` / `NOTIFICATION_TOPIC` と `CLOUDFLARE_API_TOKEN` secret |
+| Viewer deploy job | `API_URL` / `SITE_URL` / `PUBLIC_API_URL` / Cloudflare Worker 名 (`CLOUDFLARE_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME`) / account ID / `GOOGLE_CLOUD_PROJECT` / `NOTIFICATION_TOPIC` と `CLOUDFLARE_API_TOKEN` secret |
 | admin-proxy deploy job | `ADMIN_PROXY_WORKER_NAME` / `ADMIN_PROXY_ORIGIN_URL` / `CLOUDFLARE_ACCOUNT_ID` と `CLOUDFLARE_API_TOKEN` / `PROXY_SHARED_SECRET` secret |
 | Admin service | `PROXY_SHARED_SECRET` (admin-proxy と同じ secret) |
 
 ## 振る舞い (共通)
 
 - Viewer deploy job は runtime env / secret を受け取り、Cloudflare Workers へ deploy する
+- Viewer deploy job は Viewer、Public API、Public API のリファレンス (ADR-0039) の 3 つの Worker を順に deploy する。`PUBLIC_API_URL` はリファレンスから叩く Public API の URL
 - Viewer と Public API の deploy 成功時は、それぞれ `notify-publish` で通知 JSON (`viewer.deploy` / `public-api.deploy`) を publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
 - admin-proxy deploy job は Cloud Build が `gcloud run jobs deploy --wait` で image 差し替えと実行完了まで行い、Cloudflare Workers へ deploy する
 - Admin の `PUBLIC_APP_URL` は Cloud Build substitution の `_PUBLIC_APP_URL` を build arg として渡す

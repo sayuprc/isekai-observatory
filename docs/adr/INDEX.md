@@ -42,3 +42,4 @@
 | ADR-0036 | accepted | タグは対象をまたいで共有し、タグ付けは対象ごとに付けられる側が持つ | [api, admin] |
 | ADR-0037 | accepted | タグを閲覧サイトにも出し、各一覧の絞り込みに使う | [api, viewer] |
 | ADR-0038 | accepted | Public API は deploy 時の静的スナップショットとして配信し、参照を ID で返す | [api, public-api] |
+| ADR-0039 | accepted | Public API のリファレンスは Scalar で作り、専用の Worker とサブドメインで配信する | [public-api] |
