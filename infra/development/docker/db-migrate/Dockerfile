@@ -1,4 +1,4 @@
-FROM jdxcode/mise:2026.10.17-debian AS atlas
+FROM jdxcode/mise:2026.10.18-debian AS atlas
 
 ENV MISE_AUTO_INSTALL=false
 
