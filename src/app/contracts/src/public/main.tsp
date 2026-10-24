@@ -1,6 +1,7 @@
 import "@typespec/http";
 import "@typespec/versioning";
 import "../shared";
+import "./error.tsp";
 import "./pagination.tsp";
 import "./events";
 import "./media";
@@ -63,10 +64,6 @@ using Versioning;
 )
 @versioned(Version)
 namespace IsekaiObservatory.Public;
-
-// 共通のレスポンス型は Admin / Viewer と共有しているため、説明は Public の契約の中でだけ上書きする
-@@doc(BadRequest, "`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません");
-@@doc(InternalServerError, "サーバー側でエラーが発生しました");
 
 @enumExtensions
 enum Version {
