@@ -15,6 +15,12 @@ describe('tokenize', () => {
   it('日本語は 2-gram、英数字は単語のまま分ける', () => {
     expect(tokenize('風の名前 LIVE')).toEqual(['風の', 'の名', '名前', 'live']);
   });
+
+  it('長音や半角カナも日本語として分け、ハングルは単語のままにする', () => {
+    expect(tokenize('ループ')).toEqual(['ルー', 'ープ']);
+    expect(tokenize('ﾊﾟｰﾄ')).toEqual(['パー', 'ート']);
+    expect(tokenize('한국어')).toEqual(['한국어']);
+  });
 });
 
 describe('検索条件', () => {

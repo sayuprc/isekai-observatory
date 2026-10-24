@@ -79,10 +79,10 @@ export const SEARCH_SPECS: Partial<Record<Resource, SearchSpec>> = {
 
 export const searchIndexPath = (resource: Resource): string => `/search/${resource}.json`;
 
-const CJK = /[぀-ヿ㐀-鿿ｦ-ﾟ]/;
+const KANA_OR_HAN = /[\p{scx=Hiragana}\p{scx=Katakana}\p{scx=Han}]/u;
 
 /**
- * 空白では区切れない日本語を引けるよう、CJK を含む連なりは 2-gram にする
+ * 空白では区切れない日本語を引けるよう、かな・漢字を含む連なりは 2-gram にする
  */
 export const tokenize = (text: string): string[] =>
   text
@@ -91,7 +91,7 @@ export const tokenize = (text: string): string[] =>
     .split(/[^\p{L}\p{N}]+/u)
     .filter((run) => run !== '')
     .flatMap((run) => {
-      if (!CJK.test(run)) {
+      if (!KANA_OR_HAN.test(run)) {
         return [run];
       }
 
