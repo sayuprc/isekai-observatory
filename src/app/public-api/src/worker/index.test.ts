@@ -72,7 +72,7 @@ describe('不正なリクエスト', () => {
     const response = await get(`/v1/songs?pageSize=${pageSize}`);
 
     expect(response.status).toBe(400);
-    expect((await response.json()).code).toBe('business_rule_violation');
+    expect(await response.json()).toEqual({ message: expect.any(String) });
   });
 
   it.each([

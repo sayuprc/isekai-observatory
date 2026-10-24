@@ -28,7 +28,7 @@ const respond = async (request: Request, env: Env): Promise<Response> => {
   const resource = /^\/v1\/([a-z-]+)\/?$/.exec(url.pathname)?.[1];
 
   if (resource === undefined || !isResource(resource)) {
-    return json({ code: 'not_found', message: '対象が見つかりません。' }, 404);
+    return json({ message: '対象が見つかりません。' }, 404);
   }
 
   if (request.method !== 'GET') {
@@ -51,7 +51,7 @@ const respond = async (request: Request, env: Env): Promise<Response> => {
     async () => findPositions(resource, url.searchParams, async (path) => (await readAsset(path)).text()),
   );
 
-  return result.ok ? json(result.body, 200) : json({ code: 'business_rule_violation', message: result.message }, 400);
+  return result.ok ? json(result.body, 200) : json({ message: result.message }, 400);
 };
 
 export const handle = async (request: Request, env: Env): Promise<Response> => {

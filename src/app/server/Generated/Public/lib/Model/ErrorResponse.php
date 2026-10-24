@@ -35,7 +35,7 @@ use \OpenAPI\Public\Client\ObjectSerializer;
  * ErrorResponse Class Doc Comment
  *
  * @category Class
- * @description 全エラーステータス共通のレスポンス
+ * @description エラーのレスポンス
  * @package  OpenAPI\Public\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -58,9 +58,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'code' => '\OpenAPI\Public\Client\Model\ErrorCode',
-        'message' => 'string',
-        'details' => '\OpenAPI\Public\Client\Model\ErrorDetail[]'
+        'message' => 'string'
     ];
 
     /**
@@ -71,9 +69,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'code' => null,
-        'message' => null,
-        'details' => null
+        'message' => null
     ];
 
     /**
@@ -82,9 +78,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'code' => false,
-        'message' => false,
-        'details' => false
+        'message' => false
     ];
 
     /**
@@ -173,9 +167,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'code' => 'code',
-        'message' => 'message',
-        'details' => 'details'
+        'message' => 'message'
     ];
 
     /**
@@ -184,9 +176,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'code' => 'setCode',
-        'message' => 'setMessage',
-        'details' => 'setDetails'
+        'message' => 'setMessage'
     ];
 
     /**
@@ -195,9 +185,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'code' => 'getCode',
-        'message' => 'getMessage',
-        'details' => 'getDetails'
+        'message' => 'getMessage'
     ];
 
     /**
@@ -257,9 +245,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('code', $data ?? [], null);
         $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('details', $data ?? [], null);
     }
 
     /**
@@ -289,9 +275,6 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['code'] === null) {
-            $invalidProperties[] = "'code' can't be null";
-        }
         if ($this->container['message'] === null) {
             $invalidProperties[] = "'message' can't be null";
         }
@@ -311,33 +294,6 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets code
-     *
-     * @return \OpenAPI\Public\Client\Model\ErrorCode
-     */
-    public function getCode()
-    {
-        return $this->container['code'];
-    }
-
-    /**
-     * Sets code
-     *
-     * @param \OpenAPI\Public\Client\Model\ErrorCode $code code
-     *
-     * @return self
-     */
-    public function setCode($code)
-    {
-        if (is_null($code)) {
-            throw new \InvalidArgumentException('non-nullable code cannot be null');
-        }
-        $this->container['code'] = $code;
-
-        return $this;
-    }
-
-    /**
      * Gets message
      *
      * @return string
@@ -350,7 +306,7 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets message
      *
-     * @param string $message message
+     * @param string $message エラーの内容
      *
      * @return self
      */
@@ -360,33 +316,6 @@ class ErrorResponse implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable message cannot be null');
         }
         $this->container['message'] = $message;
-
-        return $this;
-    }
-
-    /**
-     * Gets details
-     *
-     * @return \OpenAPI\Public\Client\Model\ErrorDetail[]|null
-     */
-    public function getDetails()
-    {
-        return $this->container['details'];
-    }
-
-    /**
-     * Sets details
-     *
-     * @param \OpenAPI\Public\Client\Model\ErrorDetail[]|null $details details
-     *
-     * @return self
-     */
-    public function setDetails($details)
-    {
-        if (is_null($details)) {
-            throw new \InvalidArgumentException('non-nullable details cannot be null');
-        }
-        $this->container['details'] = $details;
 
         return $this;
     }
