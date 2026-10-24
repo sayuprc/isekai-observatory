@@ -13,9 +13,12 @@ import type { Media } from '../../features/media/types';
 import { MEDIA_TYPE_NAMES } from '../../features/media/types';
 import Layout from '../../layouts/Layout.astro';
 import { dottedDateOfDateTime } from '../../shared/date';
+import { byTitle, orderRanks, sortRanks } from '../../shared/sort';
 
 // API は公開日時の降順で返すので並べ替えは不要
 const media = await mediaContentRepository.all();
+const oldestRanks = orderRanks([...media].reverse());
+const titleRanks = sortRanks(media, byTitle);
 
 const searchText = (entry: Media) =>
   [entry.title, MEDIA_TYPE_NAMES[entry.type], mediaPlatformLabel(entry.url), ...entry.songs.map((song) => song.title)]
@@ -41,6 +44,11 @@ const searchText = (entry: Media) =>
       categoryAttrs={['mediaType']}
       searchAttr="mediaSearch"
       searchPlaceholder="タイトル・楽曲を検索..."
+      sorts={[
+        { value: 'newest', label: '新しい順' },
+        { value: 'oldest', label: '古い順', rankAttr: 'mediaRankOldest' },
+        { value: 'title', label: 'タイトル順', rankAttr: 'mediaRankTitle' },
+      ]}
     />
 
     <EntryStatus
@@ -68,6 +76,8 @@ const searchText = (entry: Media) =>
             data-media-entry
             data-media-type={String(entry.type)}
             data-media-search={searchText(entry)}
+            data-media-rank-oldest={oldestRanks.get(entry)}
+            data-media-rank-title={titleRanks.get(entry)}
           >
             <div class="media-card-thumb" aria-hidden="true">
               {thumbnailUrl ? (
