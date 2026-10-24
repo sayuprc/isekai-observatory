@@ -9,6 +9,9 @@ const MAX_PAGE_SIZE = 100;
 /** 静的ファイルを path で読む。Worker では ASSETS binding が担う */
 export type ReadJson = (path: string) => Promise<unknown>;
 
+/** 検索条件に合う要素の一覧での位置を返す。検索条件が無いときは null */
+export type FindPositions = () => Promise<number[] | null>;
+
 export type ListResult =
   { ok: true; body: { items: unknown[]; nextPageToken?: string } } | { ok: false; message: string };
 
@@ -26,6 +29,37 @@ const parsePageSize = (value: string | null): number | null => {
   return pageSize >= 1 && pageSize <= MAX_PAGE_SIZE ? pageSize : null;
 };
 
+/** 一覧の offset から end までを、100 件ずつの静的ファイルから切り出す */
+const readRange = async (resource: Resource, offset: number, end: number, readJson: ReadJson): Promise<unknown[]> => {
+  if (end <= offset) {
+    return [];
+  }
+
+  const firstChunk = Math.floor(offset / CHUNK_SIZE);
+  const lastChunk = Math.floor((end - 1) / CHUNK_SIZE);
+  const chunks = await Promise.all(
+    Array.from(
+      { length: lastChunk - firstChunk + 1 },
+      (_, i) => readJson(chunkPath(resource, firstChunk + i)) as Promise<unknown[]>,
+    ),
+  );
+  const start = offset - firstChunk * CHUNK_SIZE;
+
+  return chunks.flat().slice(start, start + (end - offset));
+};
+
+/** 一覧での位置を指定して、該当する要素だけを返す。位置の順を保つ */
+const readPositions = async (resource: Resource, positions: number[], readJson: ReadJson): Promise<unknown[]> => {
+  const chunkIndexes = [...new Set(positions.map((position) => Math.floor(position / CHUNK_SIZE)))];
+  const chunks = new Map(
+    await Promise.all(
+      chunkIndexes.map(async (index) => [index, (await readJson(chunkPath(resource, index))) as unknown[]] as const),
+    ),
+  );
+
+  return positions.map((position) => chunks.get(Math.floor(position / CHUNK_SIZE))?.[position % CHUNK_SIZE]);
+};
+
 /**
  * 一覧の 1 ページを、100 件ずつの静的ファイルから切り出す
  * 1 ページは最大 100 件なので、読むファイルは最大 2 つになる
@@ -34,6 +68,7 @@ export const listPage = async (
   resource: Resource,
   params: URLSearchParams,
   readJson: ReadJson,
+  findPositions: FindPositions = async () => null,
 ): Promise<ListResult> => {
   const pageSize = parsePageSize(params.get('pageSize'));
 
@@ -41,7 +76,8 @@ export const listPage = async (
     return { ok: false, message: 'pageSize は 1 から 100 の整数で指定してください。' };
   }
 
-  const { count } = (await readJson(metaPath(resource))) as Meta;
+  const positions = await findPositions();
+  const count = positions === null ? ((await readJson(metaPath(resource))) as Meta).count : positions.length;
   const pageToken = params.get('pageToken');
   const offset = pageToken === null ? 0 : decodePageToken(pageToken);
 
@@ -51,19 +87,9 @@ export const listPage = async (
   }
 
   const end = Math.min(offset + pageSize, count);
-  const firstChunk = Math.floor(offset / CHUNK_SIZE);
-  const lastChunk = Math.floor((end - 1) / CHUNK_SIZE);
-  const chunks =
-    end > offset
-      ? await Promise.all(
-          Array.from(
-            { length: lastChunk - firstChunk + 1 },
-            (_, i) => readJson(chunkPath(resource, firstChunk + i)) as Promise<unknown[]>,
-          ),
-        )
-      : [];
-  const start = offset - firstChunk * CHUNK_SIZE;
-  const items = chunks.flat().slice(start, start + (end - offset));
+  const items = await (positions === null
+    ? readRange(resource, offset, end, readJson)
+    : readPositions(resource, positions.slice(offset, end), readJson));
 
   return {
     ok: true,
