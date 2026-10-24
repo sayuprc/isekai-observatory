@@ -63,7 +63,8 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'published_at' => '\DateTime',
         'type' => '\OpenAPI\Viewer\Client\Model\MediaTypeValue',
         'counts' => '\OpenAPI\Viewer\Client\Model\MediaRelationCounts',
-        'songs' => '\OpenAPI\Viewer\Client\Model\MediaSongSummary[]'
+        'songs' => '\OpenAPI\Viewer\Client\Model\MediaSongSummary[]',
+        'tags' => '\OpenAPI\Viewer\Client\Model\AttachedTag[]'
     ];
 
     /**
@@ -80,7 +81,8 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'published_at' => 'date-time',
         'type' => null,
         'counts' => null,
-        'songs' => null
+        'songs' => null,
+        'tags' => null
     ];
 
     /**
@@ -95,7 +97,8 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'published_at' => false,
         'type' => false,
         'counts' => false,
-        'songs' => false
+        'songs' => false,
+        'tags' => false
     ];
 
     /**
@@ -190,7 +193,8 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'published_at' => 'publishedAt',
         'type' => 'type',
         'counts' => 'counts',
-        'songs' => 'songs'
+        'songs' => 'songs',
+        'tags' => 'tags'
     ];
 
     /**
@@ -205,7 +209,8 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'published_at' => 'setPublishedAt',
         'type' => 'setType',
         'counts' => 'setCounts',
-        'songs' => 'setSongs'
+        'songs' => 'setSongs',
+        'tags' => 'setTags'
     ];
 
     /**
@@ -220,7 +225,8 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         'published_at' => 'getPublishedAt',
         'type' => 'getType',
         'counts' => 'getCounts',
-        'songs' => 'getSongs'
+        'songs' => 'getSongs',
+        'tags' => 'getTags'
     ];
 
     /**
@@ -287,6 +293,7 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('counts', $data ?? [], null);
         $this->setIfExists('songs', $data ?? [], null);
+        $this->setIfExists('tags', $data ?? [], null);
     }
 
     /**
@@ -340,6 +347,9 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['songs'] === null) {
             $invalidProperties[] = "'songs' can't be null";
+        }
+        if ($this->container['tags'] === null) {
+            $invalidProperties[] = "'tags' can't be null";
         }
         return $invalidProperties;
     }
@@ -546,6 +556,33 @@ class MediaListItem implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable songs cannot be null');
         }
         $this->container['songs'] = $songs;
+
+        return $this;
+    }
+
+    /**
+     * Gets tags
+     *
+     * @return \OpenAPI\Viewer\Client\Model\AttachedTag[]
+     */
+    public function getTags()
+    {
+        return $this->container['tags'];
+    }
+
+    /**
+     * Sets tags
+     *
+     * @param \OpenAPI\Viewer\Client\Model\AttachedTag[] $tags 付いているタグ(タグの表示順)
+     *
+     * @return self
+     */
+    public function setTags($tags)
+    {
+        if (is_null($tags)) {
+            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        }
+        $this->container['tags'] = $tags;
 
         return $this;
     }

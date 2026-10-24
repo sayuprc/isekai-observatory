@@ -122,6 +122,10 @@ export type MediaListItem = {
     type: MediaTypeValue;
     counts: MediaRelationCounts;
     songs: Array<MediaSongSummary>;
+    /**
+     * 付いているタグ(タグの表示順)
+     */
+    tags: Array<AttachedTag>;
 };
 
 export type MediaListResponse = {
