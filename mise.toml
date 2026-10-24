@@ -94,7 +94,9 @@ mkcert \
   localhost \
   127.0.0.1 \
   local.admin.isekaijoucho.fan \
+  local.internal.api.isekaijoucho.fan \
   local.api.isekaijoucho.fan \
+  local.docs.api.isekaijoucho.fan \
   local.isekaijoucho.fan
 '''
 
@@ -588,6 +590,27 @@ description = "admin-proxy の format / lint / typecheck を実行する"
 depends = ["admin-proxy:format:check", "admin-proxy:lint", "admin-proxy:typecheck"]
 
 # -- public-api --
+
+[tasks."public-api:snapshot"]
+description = "ローカルの Laravel から Public API のスナップショットを書き出す"
+dir = "src/app/public-api"
+run = "bun run snapshot"
+
+[tasks."public-api:dev"]
+description = "Public API の Worker を worktree 専用ポートで起動する"
+dir = "src/app/public-api"
+run = 'bun x wrangler dev --ip 0.0.0.0 --port "${WORKTREE_PUBLIC_API_PORT:-8787}"'
+
+[tasks."public-api:docs"]
+description = "ローカルの Public API を叩く API リファレンスを書き出す"
+dir = "src/app/public-api"
+run = "bun run docs"
+
+[tasks."public-api:docs:dev"]
+description = "API リファレンスを書き出し、その Worker を worktree 専用ポートで起動する"
+dir = "src/app/public-api"
+depends = ["public-api:docs"]
+run = 'bun x wrangler dev --config wrangler.docs.jsonc --ip 0.0.0.0 --port "${WORKTREE_PUBLIC_API_DOCS_PORT:-8788}"'
 
 [tasks."public-api:format"]
 description = "public-api の formatter を実行し、フォーマットを自動修正する"

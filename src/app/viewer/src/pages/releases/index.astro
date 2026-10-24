@@ -13,11 +13,13 @@ import {
 import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
 import { dottedDate } from '../../shared/date';
+import { orderRanks } from '../../shared/sort';
 
 // API は最古発売日の降順で返すので、年の区切りを入れるだけで並べ替えは不要
 const releaseGroups = await releaseGroupContentRepository.all();
 
 const tags = collectTags(releaseGroups);
+const oldestRanks = orderRanks([...releaseGroups].reverse());
 const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.firstReleasedOn.slice(0, 4)))];
 ---
 
@@ -40,6 +42,11 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
       searchPlaceholder="タイトル・種別・収録曲を検索..."
       tags={tags}
       tagAttr="releaseTags"
+      sorts={[
+        { value: 'newest', label: '新しい順' },
+        { value: 'oldest', label: '古い順', rankAttr: 'releaseRankOldest' },
+      ]}
+      groupSelector="[data-release-year]"
     />
 
     <EntryStatus
@@ -88,6 +95,7 @@ const years = [...new Set(releaseGroups.map((releaseGroup) => releaseGroup.first
                     .join(' ')
                     .toLowerCase()}
                   data-release-tags={tagIdsText(releaseGroup)}
+                  data-release-rank-oldest={oldestRanks.get(releaseGroup)}
                 >
                   <a href={`/releases/${releaseGroup.releaseGroupId}`} class="release-row">
                     <span class="label-mono release-row-date">{dottedDate(releaseGroup.firstReleasedOn.slice(5))}</span>

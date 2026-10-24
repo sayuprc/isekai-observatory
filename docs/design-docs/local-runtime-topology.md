@@ -11,17 +11,26 @@
 
 ## Local URLs
 
-- `https://local.api.isekaijoucho.fan:<worktree ごとの HTTPS ポート>`
-- `https://local.admin.isekaijoucho.fan:<worktree ごとの HTTPS ポート>`
-- `https://local.isekaijoucho.fan:<worktree ごとの HTTPS ポート>`
+| URL | 行き先 |
+| --- | --- |
+| `https://local.isekaijoucho.fan:<worktree ごとの HTTPS ポート>` | Viewer の dev server |
+| `https://local.admin.isekaijoucho.fan:<worktree ごとの HTTPS ポート>` | Admin の dev server |
+| `https://local.internal.api.isekaijoucho.fan:<worktree ごとの HTTPS ポート>` | Laravel API (`php`) |
+| `https://local.api.isekaijoucho.fan:<worktree ごとの HTTPS ポート>` | Public API の Worker (`mise run public-api:dev`) |
+| `https://local.docs.api.isekaijoucho.fan:<worktree ごとの HTTPS ポート>` | Public API リファレンスの Worker (`mise run public-api:docs:dev`) |
+
+本番で `api` / `docs.api` を名乗るのは Public API とそのリファレンスなので、ローカルも同じ名前にそろえ、Laravel は `internal.api` に置く
+
+hosts には上の 5 つを `127.0.0.1` で登録する
 
 ## Worktree Isolation
 
 - `git worktree add <path>` の後、その worktree で `mise run worktree:init` を実行してから `mise run up` や各 dev task を起動する
 - `mise run worktree:init` が worktree ごとの Docker Compose project 名を生成する
-- MySQL / Redis / redis-http / proxy / Astro dev server のポートは worktree ごとに自動採番する
+- MySQL / Redis / redis-http / proxy / Astro dev server / Public API とリファレンスの Worker のポートは worktree ごとに自動採番する
+- 採番済みの worktree に後からポートが増えた場合は、`mise run worktree:init` を再実行すると足りないポートだけを採番する
 - 採番した開発用変数は `mise.local.toml` の自動生成ブロックに保存する
-- アプリ設定は `src/app/server/.env`, `src/app/server/.env.testing`, `src/app/admin/.env`, `src/app/viewer/.env` に書き戻す
+- アプリ設定は `src/app/server/.env`, `src/app/server/.env.testing`, `src/app/admin/.env`, `src/app/viewer/.env`, `src/app/public-api/.env` に書き戻す
 - `src/app/server/.env` と `.env.testing` の `DB_PORT` は Docker network 向けの `3306` を維持し、host 側 task 用の `ATLAS_DB_PORT` を worktree ごとの MySQL 公開ポートへ更新する
 - TLS 証明書 (`infra/local/docker/nginx/certs`, `infra/local/docker/php/certs/rootCA.pem`) は共有キャッシュ経由で worktree 間に複製する
 - proxy は同一 worktree の `php` サービスと、その worktree に割り当てられた Admin / Viewer dev server へ接続し、Astro dev server の WebSocket も forward する
@@ -42,6 +51,9 @@
 2. タスクごとに `git worktree add <path> <branch>` で worktree を作る
 3. 各 worktree で `mise run worktree:init` を実行する
 4. 必要に応じて `mise run up`、`mise run admin:dev`、`mise run viewer:dev` を起動する
+   - Public API を確かめるときは `mise run public-api:snapshot` でスナップショットを書き出してから `mise run public-api:dev` を起動する
+   - リファレンスは `mise run public-api:docs:dev` で書き出しと起動をまとめて行い、契約を直したら `mise run public-api:docs` で書き出し直す
+   - wrangler のインスペクタは起動時に空きポートを選ぶため、2 つの Worker は同時ではなく 1 つずつ起動する
 5. `mise run worktree:status` で URL とポートの衝突がないことを確認する
 6. タスクごとの局所検証を回しながら実装を進める
 7. 依存元の変更が進んだら、他 worktree はベースブランチまたは owner worktree の結果を再取り込みする

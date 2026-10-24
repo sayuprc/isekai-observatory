@@ -43,3 +43,4 @@
 | ADR-0037 | accepted | タグを閲覧サイトにも出し、各一覧の絞り込みに使う | [api, viewer] |
 | ADR-0038 | accepted | Public API は deploy 時の静的スナップショットとして配信し、参照を ID で返す | [api, public-api] |
 | ADR-0039 | accepted | Public API のリファレンスは Scalar で作り、専用の Worker とサブドメインで配信する | [public-api] |
+| ADR-0040 | proposed | Public API の一覧に検索条件を足し、MiniSearch の索引を静的ファイルで配信する | [api, public-api] |

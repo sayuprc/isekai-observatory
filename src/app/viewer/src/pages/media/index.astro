@@ -1,0 +1,116 @@
+---
+import EntryStatus from '../../components/viewer/EntryStatus';
+import FilterBar from '../../components/viewer/FilterBar';
+import SectionHead from '../../components/viewer/SectionHead.astro';
+import { mediaContentRepository } from '../../features/media/content';
+import {
+  YOUTUBE_THUMBNAIL_ORIGIN,
+  mediaPlatformLabel,
+  youtubeThumbnailFromUrl,
+  youtubeThumbnailSrcset,
+} from '../../features/media/labels';
+import type { Media } from '../../features/media/types';
+import { MEDIA_TYPE_NAMES } from '../../features/media/types';
+import Layout from '../../layouts/Layout.astro';
+import { dottedDateOfDateTime } from '../../shared/date';
+import { byTitle, orderRanks, sortRanks } from '../../shared/sort';
+
+// API は公開日時の降順で返すので並べ替えは不要
+const media = await mediaContentRepository.all();
+const oldestRanks = orderRanks([...media].reverse());
+const titleRanks = sortRanks(media, byTitle);
+
+const searchText = (entry: Media) =>
+  [entry.title, MEDIA_TYPE_NAMES[entry.type], mediaPlatformLabel(entry.url), ...entry.songs.map((song) => song.title)]
+    .join(' ')
+    .toLowerCase();
+---
+
+<Layout
+  pageTitle="メディア"
+  pageDescription="ヰ世界情緒のメディア一覧。MV・配信・ショートなどを記録しています"
+  preconnect={[YOUTUBE_THUMBNAIL_ORIGIN]}
+>
+  <section class="shell page-section">
+    <SectionHead title="メディア" level={1} />
+
+    <FilterBar
+      client:idle
+      filters={[
+        { value: 'all', label: 'すべて' },
+        ...Object.entries(MEDIA_TYPE_NAMES).map(([value, label]) => ({ value, label })),
+      ]}
+      entrySelector="[data-media-entry]"
+      categoryAttrs={['mediaType']}
+      searchAttr="mediaSearch"
+      searchPlaceholder="タイトル・楽曲を検索..."
+      sorts={[
+        { value: 'newest', label: '新しい順' },
+        { value: 'oldest', label: '古い順', rankAttr: 'mediaRankOldest' },
+        { value: 'title', label: 'タイトル順', rankAttr: 'mediaRankTitle' },
+      ]}
+    />
+
+    <EntryStatus
+      client:idle
+      entrySelector="[data-media-entry]"
+      emptySelector="[data-media-empty]"
+      initialCount={media.length}
+    />
+
+    <div class="media-card-grid">
+      <div class="entry-empty entry-empty-panel" data-media-empty hidden>
+        <div class="entry-empty-title">該当するメディアがありません</div>
+        <div class="entry-empty-description">検索語句や種別のフィルタを変えて確認してください。</div>
+      </div>
+      {media.map((entry, index) => {
+        // プラットフォームとサムネイルは状態として保持せず url から導出する
+        const thumbnailUrl = youtubeThumbnailFromUrl(entry.url);
+        const platformName = mediaPlatformLabel(entry.url);
+        const loading = index === 0 ? 'eager' : 'lazy';
+
+        return (
+          <a
+            href={`/media/${entry.mediaId}`}
+            class="media-card"
+            data-media-entry
+            data-media-type={String(entry.type)}
+            data-media-search={searchText(entry)}
+            data-media-rank-oldest={oldestRanks.get(entry)}
+            data-media-rank-title={titleRanks.get(entry)}
+          >
+            <div class="media-card-thumb" aria-hidden="true">
+              {thumbnailUrl ? (
+                <img
+                  class="media-card-thumb-image"
+                  src={thumbnailUrl}
+                  srcset={youtubeThumbnailSrcset(thumbnailUrl)}
+                  sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 1280px) calc((100vw - 124px) / 2), calc((min(1480px, 100vw) - 180px) / 3)"
+                  loading={loading}
+                  fetchpriority={loading === 'eager' ? 'high' : undefined}
+                  decoding="async"
+                  alt=""
+                />
+              ) : (
+                <span class="media-detail-thumbnail-placeholder-label">{platformName}</span>
+              )}
+            </div>
+            <div class="media-card-body">
+              <div class="label-mono">
+                {dottedDateOfDateTime(entry.publishedAt)} · {platformName} · {MEDIA_TYPE_NAMES[entry.type]}
+              </div>
+              <div class="media-card-title">{entry.title}</div>
+              {entry.songs.length > 0 && (
+                <div class="media-card-tags">
+                  {entry.songs.map((song) => (
+                    <span class="pill">{song.title}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</Layout>

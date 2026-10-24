@@ -8,9 +8,12 @@ import { songContentRepository } from '../../features/songs/content';
 import { SONG_TYPE_NAMES } from '../../features/songs/types';
 import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
+import { byTitle, orderRanks, sortRanks } from '../../shared/sort';
 
 const songs = await songContentRepository.all();
 const tags = collectTags(songs);
+const oldestRanks = orderRanks([...songs].reverse());
+const titleRanks = sortRanks(songs, byTitle);
 ---
 
 <Layout
@@ -33,6 +36,11 @@ const tags = collectTags(songs);
       searchPlaceholder="タイトル・作者を検索..."
       tags={tags}
       tagAttr="songTags"
+      sorts={[
+        { value: 'newest', label: '登録順 (新しい順)' },
+        { value: 'oldest', label: '登録順 (古い順)', rankAttr: 'songRankOldest' },
+        { value: 'title', label: 'タイトル順', rankAttr: 'songRankTitle' },
+      ]}
     />
 
     <EntryStatus
@@ -58,6 +66,8 @@ const tags = collectTags(songs);
               .join(' ')
               .toLowerCase()}
             data-song-tags={tagIdsText(song)}
+            data-song-rank-oldest={oldestRanks.get(song)}
+            data-song-rank-title={titleRanks.get(song)}
           >
             <SongTile
               songId={song.songId}

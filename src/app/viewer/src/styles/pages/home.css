@@ -31,7 +31,7 @@
 
 .hero-ledger {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  grid-template-columns: 1.4fr repeat(4, 1fr);
   gap: 36px;
   max-width: 960px;
   margin: 56px auto 0;
@@ -101,18 +101,6 @@
   font-size: clamp(56px, 9vw, 128px);
   line-height: 1;
   letter-spacing: 0.18em;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 40px;
-}
-
-.hero-data .hero-actions {
-  justify-content: center;
-  margin-top: 64px;
 }
 
 .feature-grid-link {
