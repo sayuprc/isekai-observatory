@@ -59,4 +59,7 @@ allowBuilds:
   workerd: false
 overrides:
   js-yaml@>=4.0.0 <4.3.2: 4.3.2
-  undici@>=7.0.0 <7.29.1: 7.29.1
+  undici@>=7.0.0 <7.29.1: 7.30.1
+minimumReleaseAgeExclude:
+  # Renovate security update: undici@7.30.1
+  - undici@7.30.1
