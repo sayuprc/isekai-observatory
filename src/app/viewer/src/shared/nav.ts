@@ -29,7 +29,11 @@ export const navLinks: readonly NavLink[] = [
       'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z',
     ],
   },
+  {
+    href: '/media',
+    label: 'メディア',
+    iconPaths: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z', 'm10 8.5 5 3.5-5 3.5Z'],
+  },
   // 未提供ページの雛形。公開時にアイコンを決めてコメントを外す
-  // { href: '/media', label: 'メディア', iconPaths: [] },
   // { href: '/profile', label: '人物', iconPaths: [] },
 ];
