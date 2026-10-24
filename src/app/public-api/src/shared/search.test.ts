@@ -66,7 +66,7 @@ describe('契約との一致', () => {
         expect({ resource, name, values: [...values] }).toEqual({
           resource,
           name,
-          values: oas.components.schemas[schema]?.enum,
+          values: oas.components.schemas[schema]?.enum ?? [],
         });
       }
     }
