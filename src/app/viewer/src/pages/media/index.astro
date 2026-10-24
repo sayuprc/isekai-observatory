@@ -11,6 +11,7 @@ import {
 } from '../../features/media/labels';
 import type { Media } from '../../features/media/types';
 import { MEDIA_TYPE_NAMES } from '../../features/media/types';
+import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
 import { dottedDateOfDateTime } from '../../shared/date';
 import { byTitle, orderRanks, sortRanks } from '../../shared/sort';
@@ -19,6 +20,7 @@ import { byTitle, orderRanks, sortRanks } from '../../shared/sort';
 const media = await mediaContentRepository.all();
 const oldestRanks = orderRanks([...media].reverse());
 const titleRanks = sortRanks(media, byTitle);
+const tags = collectTags(media);
 
 const searchText = (entry: Media) =>
   [entry.title, MEDIA_TYPE_NAMES[entry.type], mediaPlatformLabel(entry.url), ...entry.songs.map((song) => song.title)]
@@ -44,6 +46,8 @@ const searchText = (entry: Media) =>
       categoryAttrs={['mediaType']}
       searchAttr="mediaSearch"
       searchPlaceholder="タイトル・楽曲を検索..."
+      tags={tags}
+      tagAttr="mediaTags"
       sorts={[
         { value: 'newest', label: '新しい順' },
         { value: 'oldest', label: '古い順', rankAttr: 'mediaRankOldest' },
@@ -61,7 +65,7 @@ const searchText = (entry: Media) =>
     <div class="media-card-grid">
       <div class="entry-empty entry-empty-panel" data-media-empty hidden>
         <div class="entry-empty-title">該当するメディアがありません</div>
-        <div class="entry-empty-description">検索語句や種別のフィルタを変えて確認してください。</div>
+        <div class="entry-empty-description">検索語句や種別・タグのフィルタを変えて確認してください。</div>
       </div>
       {media.map((entry, index) => {
         // プラットフォームとサムネイルは状態として保持せず url から導出する
@@ -76,6 +80,7 @@ const searchText = (entry: Media) =>
             data-media-entry
             data-media-type={String(entry.type)}
             data-media-search={searchText(entry)}
+            data-media-tags={tagIdsText(entry)}
             data-media-rank-oldest={oldestRanks.get(entry)}
             data-media-rank-title={titleRanks.get(entry)}
           >

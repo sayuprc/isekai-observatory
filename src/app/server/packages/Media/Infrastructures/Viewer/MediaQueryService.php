@@ -59,9 +59,10 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
         $binMediaIds = array_map(static fn (array $row): string => Row::string($row, 'media_id'), $pageRows);
 
         $songsByMedia = $this->loadSongs($binMediaIds);
+        $tagsByMedia = $this->loadTags($binMediaIds);
 
         $media = array_map(
-            function (array $mediaRow) use ($songsByMedia): MediaListItem {
+            function (array $mediaRow) use ($songsByMedia, $tagsByMedia): MediaListItem {
                 $binMediaId = Row::string($mediaRow, 'media_id');
                 $songRows = $songsByMedia[$binMediaId] ?? [];
 
@@ -72,6 +73,7 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
                     new DateTimeImmutable(Row::string($mediaRow, 'published_at')),
                     MediaType::from(Row::int($mediaRow, 'type')),
                     array_map($this->toSongSummary(...), $songRows),
+                    $tagsByMedia[$binMediaId] ?? [],
                 );
             },
             $pageRows,
@@ -111,6 +113,40 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
 
         foreach ($rows as $row) {
             $grouped[Row::string($row, 'media_id')][] = $row;
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param array<int, string> $binMediaIds
+     *
+     * @return array<string, array<int, array{tagId: string, name: string, orderNo: int}>>
+     */
+    private function loadTags(array $binMediaIds): array
+    {
+        if ($binMediaIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory->fetchAll(
+            $this->queryFactory->select()
+                ->withSelect(['media_taggings.media_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+                ->from('media_taggings')
+                ->join('tags', 'media_taggings.tag_id = tags.tag_id')
+                ->where('media_taggings.media_id', 'IN', $binMediaIds)
+                ->orderBy('tags.order_no')
+                ->orderBy('tags.tag_id'),
+        );
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'media_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($row, 'tag_id')),
+                'name' => Row::string($row, 'name'),
+                'orderNo' => Row::int($row, 'order_no'),
+            ];
         }
 
         return $grouped;
