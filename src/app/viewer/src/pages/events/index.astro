@@ -9,6 +9,7 @@ import type { Event } from '../../features/events/types';
 import { EVENT_TYPE_NAMES, eventDate } from '../../features/events/types';
 import { collectTags, tagIdsText } from '../../features/tags/tags';
 import Layout from '../../layouts/Layout.astro';
+import { orderRanks } from '../../shared/sort';
 
 const { undated, byYear } = await eventContentRepository.grouped();
 const groups = [
@@ -17,6 +18,8 @@ const groups = [
 ];
 const total = groups.reduce((sum, group) => sum + group.events.length, 0);
 const tags = collectTags(groups.flatMap((group) => group.events));
+// 古い順でも日付未定はタイトル順のまま末尾に回す
+const oldestRanks = orderRanks([...byYear.flatMap((group) => group.events).reverse(), ...undated]);
 
 const searchText = (event: Event) =>
   [event.title, EVENT_TYPE_NAMES[event.type], eventDate(event) ?? '', ...event.venues.map((venue) => venue.name)]
@@ -40,6 +43,11 @@ const searchText = (event: Event) =>
       searchPlaceholder="タイトル・年・開催先を検索..."
       tags={tags}
       tagAttr="eventTags"
+      sorts={[
+        { value: 'newest', label: '新しい順' },
+        { value: 'oldest', label: '古い順', rankAttr: 'eventRankOldest' },
+      ]}
+      groupSelector="[data-event-group]"
     />
 
     <EntryStatus
@@ -77,6 +85,7 @@ const searchText = (event: Event) =>
               data-event-type={String(event.type)}
               data-event-search={searchText(event)}
               data-event-tags={tagIdsText(event)}
+              data-event-rank-oldest={oldestRanks.get(event)}
             >
               <EventRow event={event} />
             </li>
