@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "snapshot": "node src/snapshot/main.ts",
+    "snapshot": "node src/snapshot/main.ts && node src/snapshot/search-index.ts",
+    "snapshot:search": "node src/snapshot/search-index.ts",
     "docs": "node src/docs/main.ts",
     "deploy": "wrangler deploy",
     "deploy:docs": "wrangler deploy --config wrangler.docs.jsonc",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@scalar/api-reference": "1.75.0",
+    "minisearch": "7.2.0",
     "wrangler": "catalog:"
   },
   "devDependencies": {

@@ -1,5 +1,6 @@
 import { isResource } from '../shared/layout.ts';
 import { listPage } from './list.ts';
+import { findPositions } from './search.ts';
 
 interface Env {
   ASSETS: { fetch: (request: Request | string) => Promise<Response> };
@@ -34,15 +35,21 @@ const respond = async (request: Request, env: Env): Promise<Response> => {
     return new Response(null, { status: 405, headers: { ...CORS_HEADERS, Allow: 'GET, OPTIONS' } });
   }
 
-  const result = await listPage(resource, url.searchParams, async (path) => {
+  const readAsset = async (path: string): Promise<Response> => {
     const response = await env.ASSETS.fetch(new URL(path, url.origin).toString());
 
     if (!response.ok) {
       throw new Error(`Snapshot file is missing: ${path}`);
     }
 
-    return response.json();
-  });
+    return response;
+  };
+  const result = await listPage(
+    resource,
+    url.searchParams,
+    async (path) => (await readAsset(path)).json(),
+    async () => findPositions(resource, url.searchParams, async (path) => (await readAsset(path)).text()),
+  );
 
   return result.ok ? json(result.body, 200) : json({ code: 'business_rule_violation', message: result.message }, 400);
 };
