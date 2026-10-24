@@ -6131,7 +6131,7 @@ components:
       type: http
       scheme: Bearer
 servers:
-  - url: https://local.api.isekaijoucho.fan/admin/{version}
+  - url: https://local.internal.api.isekaijoucho.fan/admin/{version}
     description: ローカル環境
     variables:
       version:

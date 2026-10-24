@@ -128,12 +128,6 @@ body.drawer-lock {
   grid-template-columns: 1fr;
 }
 
-.detail-panel .song-detail-content .detail-title-en,
-.detail-panel .release-detail-content .detail-title-en {
-  display: block;
-  margin-top: 6px;
-}
-
 .detail-panel .song-credit-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
@@ -142,8 +136,4 @@ body.drawer-lock {
 .detail-panel .song-credit-item {
   padding: 16px;
   background: var(--bg-elev);
-}
-
-.detail-panel .media-detail-content .mv-thumb {
-  max-width: 280px;
 }

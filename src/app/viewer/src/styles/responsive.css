@@ -3,19 +3,8 @@
 /* ブレークポイントは max-width を降順に並べ、狭い側の指定が後勝ちになるようにする */
 
 @media (width <= 1280px) {
-  .profile-grid,
-  .media-featured-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .media-card-grid,
-  .recent-posts-grid {
+  .media-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .media-mosaic {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 164px;
   }
 }
 
@@ -37,22 +26,8 @@
     justify-content: center;
   }
 
-  .media-card-grid,
-  .recent-posts-grid {
+  .media-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .media-mosaic {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 148px;
-  }
-
-  .media-list-row {
-    grid-template-columns: 1fr;
-  }
-
-  .chronology-grid {
-    grid-template-columns: 1fr;
   }
 
   .viewer-filters-spacer {
@@ -64,14 +39,6 @@
     order: 10;
     width: 100%;
     min-width: 100%;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-  }
-
-  .hero-data .hero-actions {
-    margin-top: 48px;
   }
 
   .section-head,
@@ -123,6 +90,11 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: 36px;
+  }
+
+  /* 2 列だと 5 項目目が余るので、観測開始だけ全幅にして件数を 2 列ずつ並べる */
+  .hero-ledger-row:first-child {
+    grid-column: 1 / -1;
   }
 
   .hero-ledger-label {
@@ -310,26 +282,8 @@
     width: auto;
   }
 
-  .media-card-grid,
-  .recent-posts-grid {
+  .media-card-grid {
     grid-template-columns: 1fr;
-  }
-
-  .media-mosaic {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 132px;
-  }
-
-  .media-list-row {
-    grid-template-columns: 96px minmax(0, 1fr);
-    gap: 14px;
-    align-items: start;
-  }
-
-  .media-list-row > :first-child,
-  .media-list-row > :last-child,
-  .media-list-row .label-mono {
-    display: none;
   }
 
   /* 横並びだと本文が狭くなりすぎるので縦積みにし、サムネ縦幅への本文固定を外す */
@@ -373,25 +327,10 @@
   .footer-grid {
     grid-template-columns: 1fr;
   }
-
-  .chronology-grid,
-  .chronology-grid-mock {
-    grid-template-columns: 72px 1fr;
-    gap: 18px 20px;
-  }
-
-  .chronology-grid > :nth-child(odd),
-  .chronology-grid-mock > :nth-child(odd) {
-    padding-right: 18px;
-    font-size: 28px;
-  }
-
-  .media-mosaic {
-    grid-auto-rows: 116px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .media-card,
   .song-grid-card,
   .release-row::after,
   .event-line-arrow {
@@ -399,6 +338,7 @@
     transition: none;
   }
 
+  .media-card::after,
   .song-grid-card::after {
     transition: none;
   }

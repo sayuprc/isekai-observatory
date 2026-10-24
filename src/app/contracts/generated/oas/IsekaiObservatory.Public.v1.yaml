@@ -20,6 +20,16 @@ info:
     - 続きがあるときはレスポンスに `nextPageToken` が載るので、次のリクエストの `pageToken` に渡してください
     - 並び順は一覧ごとに決まっていて、同順のものは ID 順です
 
+    ## 検索
+
+    - 一覧には、フィールドを指定した検索条件をクエリパラメータで渡せます。指定できるものは一覧ごとに異なります
+    - 全文検索のパラメータ (`title` など) は、空白区切りの語をすべて含むものに絞ります。日本語は 2 文字以上の連なりで一致を見ます
+    - 絞り込みのパラメータ (`type` など) は完全一致です。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+    - 絞り込みの値が定義にないとき、空のときは 400 を返します
+    - 複数のパラメータを指定すると、すべてを満たすものに絞ります
+    - 全文検索の条件があるときは関連度の高い順、絞り込みだけのときは通常の並び順で返ります
+    - 検索結果にも `pageSize` と `pageToken` が使えます
+
     ## 利用条件
 
     - 認証は不要です
@@ -43,8 +53,40 @@ paths:
     get:
       operationId: EventService_listEvents
       summary: イベント一覧
-      description: 公開イベントを返します。並び順はタイトル順です
+      description: 公開イベントを返します。並び順はタイトル順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: title
+          in: query
+          required: false
+          description: タイトルに含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
+        - name: songTitle
+          in: query
+          required: false
+          description: 披露した楽曲名に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          description: 種別での絞り込み。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventTypeValue'
+          explode: false
+        - name: status
+          in: query
+          required: false
+          description: 開催状況での絞り込み。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventStatusValue'
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -65,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/EventListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -82,8 +124,24 @@ paths:
     get:
       operationId: MediaService_listMedia
       summary: メディア一覧
-      description: 公開メディアを返します。並び順はタイトル順です
+      description: 公開メディアを返します。並び順はタイトル順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: title
+          in: query
+          required: false
+          description: タイトルに含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          description: 種別での絞り込み。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/MediaTypeValue'
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -104,7 +162,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MediaListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -121,8 +179,15 @@ paths:
     get:
       operationId: PersonService_listPeople
       summary: 人物一覧
-      description: 公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されている人物を返します。並び順は表示順です
+      description: 公開楽曲のクレジット、公開イベントの共演者、公開人物グループのメンバーとして参照されている人物を返します。並び順は表示順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: name
+          in: query
+          required: false
+          description: 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -143,7 +208,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PersonListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -160,8 +225,15 @@ paths:
     get:
       operationId: PersonGroupService_listPersonGroups
       summary: 人物グループ一覧
-      description: 公開イベントの共演者の出演グループとして参照されている人物グループを返します。並び順は表示用名称順です
+      description: 公開イベントの共演者の出演グループとして参照されている人物グループを返します。並び順は表示用名称順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: name
+          in: query
+          required: false
+          description: 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -182,7 +254,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PersonGroupListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -199,8 +271,31 @@ paths:
     get:
       operationId: ReleaseGroupService_listReleaseGroups
       summary: リリースグループ一覧
-      description: 公開リリースを 1 件以上持つリリースグループを返します。リリース (版) は `releases` に入れ子で返します。並び順は表示順の降順です
+      description: 公開リリースを 1 件以上持つリリースグループを返します。リリース (版) は `releases` に入れ子で返します。並び順は表示順の降順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: title
+          in: query
+          required: false
+          description: タイトルに含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
+        - name: songTitle
+          in: query
+          required: false
+          description: 収録楽曲名に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          description: 種別での絞り込み。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReleaseGroupTypeValue'
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -221,7 +316,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReleaseGroupListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -238,8 +333,24 @@ paths:
     get:
       operationId: SongService_listSongs
       summary: 楽曲一覧
-      description: 公開楽曲を返します。並び順は表示順の降順です
+      description: 公開楽曲を返します。並び順は表示順の降順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: title
+          in: query
+          required: false
+          description: タイトルに含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          description: 種別での絞り込み。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/SongTypeValue'
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -260,7 +371,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SongListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -277,8 +388,15 @@ paths:
     get:
       operationId: TagService_listTags
       summary: タグ一覧
-      description: 公開した楽曲・イベント・リリースグループ・メディアに付いているタグを返します。並び順は表示順です
+      description: 公開した楽曲・イベント・リリースグループ・メディアに付いているタグを返します。並び順は表示順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: name
+          in: query
+          required: false
+          description: 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -299,7 +417,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TagListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -316,8 +434,24 @@ paths:
     get:
       operationId: VenueService_listVenues
       summary: 開催先一覧
-      description: 公開イベントから参照されている開催先を返します。並び順は名前順です
+      description: 公開イベントから参照されている開催先を返します。並び順は名前順です。検索条件を指定した場合は、全文検索があれば関連度順、絞り込みだけなら通常の並び順です
       parameters:
+        - name: name
+          in: query
+          required: false
+          description: 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります
+          schema:
+            type: string
+          explode: false
+        - name: kind
+          in: query
+          required: false
+          description: 種類での絞り込み。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/VenueKindValue'
+          explode: false
         - name: pageToken
           in: query
           required: false
@@ -338,7 +472,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VenueListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -371,56 +505,15 @@ components:
             - $ref: '#/components/schemas/personGroupId'
             - type: 'null'
       description: 楽曲披露の共演者。personGroupId はグループとして全員で出演したときだけ持ちます
-    ErrorCode:
-      type: string
-      enum:
-        - unauthenticated
-        - permission_denied
-        - not_found
-        - validation_failed
-        - business_rule_violation
-        - internal_error
-      description: エラー分類を表す機械可読なコード
-      x-enum-varnames:
-        - Unauthenticated
-        - PermissionDenied
-        - NotFound
-        - ValidationFailed
-        - BusinessRuleViolation
-        - InternalError
-      x-enum-descriptions:
-        - 認証されていない (401)
-        - 権限がない (403)
-        - 対象が見つからない (404)
-        - 入力形式の検証に失敗した (422)
-        - 業務ルールに違反した (400)
-        - 予期しないエラーが発生した (500)
-    ErrorDetail:
-      type: object
-      required:
-        - field
-        - message
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-      description: フィールド単位のエラー詳細
     ErrorResponse:
       type: object
       required:
-        - code
         - message
       properties:
-        code:
-          $ref: '#/components/schemas/ErrorCode'
         message:
           type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-      description: 全エラーステータス共通のレスポンス
+          description: エラーの内容
+      description: エラーのレスポンス
     Event:
       type: object
       required:
@@ -1149,7 +1242,7 @@ components:
       format: uuid
       description: 開催先ID
 servers:
-  - url: https://local.api.isekaijoucho.fan/public/{version}
+  - url: https://local.internal.api.isekaijoucho.fan/public/{version}
     description: ローカル環境
     variables:
       version:

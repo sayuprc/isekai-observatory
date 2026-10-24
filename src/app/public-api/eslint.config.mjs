@@ -23,7 +23,7 @@ const defaultRules = {
 
 export default [
   {
-    ignores: ['docs/**'],
+    ignores: ['docs/**', '.wrangler/**'],
   },
   {
     plugins: {

@@ -21,7 +21,7 @@ using Versioning;
 
 @service(#{ title: "ヰ世界観測所 管理画面向け API" })
 @server(
-  "https://local.api.isekaijoucho.fan/admin/{version}",
+  "https://local.internal.api.isekaijoucho.fan/admin/{version}",
   "ローカル環境",
   {
     version: Version,
