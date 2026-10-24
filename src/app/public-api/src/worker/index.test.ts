@@ -55,6 +55,13 @@ describe('一覧の取得', () => {
     expect(collected).toEqual(items(0, 250));
   });
 
+  it('絞り込みの値が契約の enum に無いときは 400 を返す', async () => {
+    const response = await get('/v1/songs?type=99');
+
+    expect(response.status).toBe(400);
+    expect((await response.json()).message).toContain('type');
+  });
+
   it('0 件の一覧は空の items だけを返す', async () => {
     expect(await (await get('/v1/venues')).json()).toEqual({ items: [] });
   });

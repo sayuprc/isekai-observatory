@@ -9,8 +9,8 @@ const MAX_PAGE_SIZE = 100;
 /** 静的ファイルを path で読む。Worker では ASSETS binding が担う */
 export type ReadJson = (path: string) => Promise<unknown>;
 
-/** 検索条件に合う要素の一覧での位置を返す。検索条件が無いときは null */
-export type FindPositions = () => Promise<number[] | null>;
+/** 検索条件に合う要素の一覧での位置を返す。検索条件が無いときは null、条件が不正なときは message */
+export type FindPositions = () => Promise<{ ok: true; positions: number[] | null } | { ok: false; message: string }>;
 
 export type ListResult =
   { ok: true; body: { items: unknown[]; nextPageToken?: string } } | { ok: false; message: string };
@@ -68,7 +68,7 @@ export const listPage = async (
   resource: Resource,
   params: URLSearchParams,
   readJson: ReadJson,
-  findPositions: FindPositions = async () => null,
+  findPositions: FindPositions = async () => ({ ok: true, positions: null }),
 ): Promise<ListResult> => {
   const pageSize = parsePageSize(params.get('pageSize'));
 
@@ -76,7 +76,13 @@ export const listPage = async (
     return { ok: false, message: 'pageSize は 1 から 100 の整数で指定してください。' };
   }
 
-  const positions = await findPositions();
+  const found = await findPositions();
+
+  if (!found.ok) {
+    return { ok: false, message: found.message };
+  }
+
+  const { positions } = found;
   const count = positions === null ? ((await readJson(metaPath(resource))) as Meta).count : positions.length;
   const pageToken = params.get('pageToken');
   const offset = pageToken === null ? 0 : decodePageToken(pageToken);

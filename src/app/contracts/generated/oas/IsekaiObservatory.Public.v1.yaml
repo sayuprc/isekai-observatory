@@ -25,6 +25,7 @@ info:
     - 一覧には、フィールドを指定した検索条件をクエリパラメータで渡せます。指定できるものは一覧ごとに異なります
     - 全文検索のパラメータ (`title` など) は、空白区切りの語をすべて含むものに絞ります。日本語は 2 文字以上の連なりで一致を見ます
     - 絞り込みのパラメータ (`type` など) は完全一致です。カンマ区切りで複数指定すると、いずれかに一致するものに絞ります
+    - 絞り込みの値が定義にないとき、空のときは 400 を返します
     - 複数のパラメータを指定すると、すべてを満たすものに絞ります
     - 全文検索の条件があるときは関連度の高い順、絞り込みだけのときは通常の並び順で返ります
     - 検索結果にも `pageSize` と `pageToken` が使えます
@@ -106,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/EventListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -161,7 +162,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MediaListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -207,7 +208,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PersonListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -253,7 +254,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PersonGroupListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -315,7 +316,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReleaseGroupListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -370,7 +371,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SongListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -416,7 +417,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TagListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
@@ -471,7 +472,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VenueListResponse'
         '400':
-          description: '`pageSize` が範囲外、または `pageToken` が不正です'
+          description: '`pageSize` が範囲外、`pageToken` が不正、または絞り込みの値が定義にありません'
           content:
             application/json:
               schema:
