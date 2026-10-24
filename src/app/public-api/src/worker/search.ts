@@ -54,7 +54,7 @@ export const findPositions = async (
   const invalid = findInvalidFilter(spec, conditions);
 
   if (invalid !== null) {
-    return { ok: false, message: `${invalid} が不正です。契約で定義された値をカンマ区切りで指定してください。` };
+    return { ok: false, message: `${invalid} が不正です。` };
   }
 
   // 検索条件が無いときは索引を読まない
