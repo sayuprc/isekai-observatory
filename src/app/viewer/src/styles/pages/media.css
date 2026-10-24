@@ -11,6 +11,31 @@
   margin-top: 10px;
 }
 
+/* YouTube 以外はサムネイルを導出できないので、プラットフォーム名を地に置く */
+
+.media-card-thumb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent) 24%, var(--bg-elev-2)),
+    color-mix(in oklab, var(--accent) 8%, var(--bg-elev-2))
+  );
+  border-radius: 2px;
+}
+
+.media-card-thumb-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .recent-posts-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

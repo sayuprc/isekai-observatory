@@ -392,6 +392,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .media-card,
   .song-grid-card,
   .release-row::after,
   .event-line-arrow {
@@ -399,6 +400,7 @@
     transition: none;
   }
 
+  .media-card::after,
   .song-grid-card::after {
     transition: none;
   }

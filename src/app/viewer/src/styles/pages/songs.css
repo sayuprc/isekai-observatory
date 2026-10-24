@@ -47,16 +47,13 @@
   align-items: stretch;
 }
 
-.media-card,
-.song-grid-card {
-  display: block;
-}
-
 /* 一覧は 300 件超を一度に描くので、画面外のカードはレイアウトと描画を省く
    高さは auto で実測値を再利用させ、初回だけ概算値を使う */
 
+.media-card,
 .song-grid-card {
   position: relative;
+  display: block;
   min-width: 0;
 
   /* auto 付きを解釈しないブラウザ向けに固定値を先に置く。未指定だと画面外カードが高さ 0 に潰れる */
@@ -92,6 +89,7 @@
   overflow-wrap: anywhere;
 }
 
+.media-card::after,
 .song-grid-card::after {
   position: absolute;
   right: 0;
@@ -105,18 +103,21 @@
   transition: transform 0.25s ease;
 }
 
+.media-card:focus-visible,
 .song-grid-card:focus-visible {
   outline: 2px solid var(--accent-strong);
   outline-offset: 4px;
 }
 
 @media (hover: hover) {
+  .media-card:hover,
   .song-grid-card:hover {
     border-color: var(--accent-strong);
     box-shadow: 0 14px 28px color-mix(in oklab, var(--fg) 7%, transparent);
     transform: translateY(-6px);
   }
 
+  .media-card:hover::after,
   .song-grid-card:hover::after {
     transform: scaleX(1);
   }
