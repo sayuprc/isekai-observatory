@@ -92,6 +92,11 @@
     margin-top: 36px;
   }
 
+  /* 2 列だと 5 項目目が余るので、観測開始だけ全幅にして件数を 2 列ずつ並べる */
+  .hero-ledger-row:first-child {
+    grid-column: 1 / -1;
+  }
+
   .hero-ledger-label {
     font-size: 10px;
     letter-spacing: 0;
