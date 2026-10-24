@@ -38,6 +38,4 @@ export const navLinks: readonly NavLink[] = [
     label: 'メディア',
     iconPaths: ['M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z', 'm10 9 5 3-5 3Z'],
   },
-  // 未提供ページの雛形。公開時にアイコンを決めてコメントを外す
-  // { href: '/profile', label: '人物', iconPaths: [] },
 ];
