@@ -41,6 +41,7 @@ load_reserved_ports() {
     unset WORKTREE_ROOT
     unset WORKTREE_PROXY_HTTP_PORT WORKTREE_PROXY_HTTPS_PORT WORKTREE_ADMIN_PORT
     unset WORKTREE_VIEWER_PORT WORKTREE_MYSQL_PORT WORKTREE_REDIS_PORT WORKTREE_REDIS_HTTP_PORT
+    unset WORKTREE_PUBLIC_API_PORT WORKTREE_PUBLIC_API_DOCS_PORT
 
     # shellcheck disable=SC1090
     source "$env_path"
@@ -61,6 +62,13 @@ load_reserved_ports() {
     reserved_ports["${WORKTREE_MYSQL_PORT}"]=1
     reserved_ports["${WORKTREE_REDIS_PORT}"]=1
     reserved_ports["${WORKTREE_REDIS_HTTP_PORT}"]=1
+    # 追加前に採番した worktree はこの 2 つを持たない
+    if [[ -n "${WORKTREE_PUBLIC_API_PORT:-}" ]]; then
+      reserved_ports["${WORKTREE_PUBLIC_API_PORT}"]=1
+    fi
+    if [[ -n "${WORKTREE_PUBLIC_API_DOCS_PORT:-}" ]]; then
+      reserved_ports["${WORKTREE_PUBLIC_API_DOCS_PORT}"]=1
+    fi
   done
   shopt -u nullglob
 }
@@ -162,6 +170,8 @@ set_mise_local_env_block() {
     write_toml_string "WORKTREE_MYSQL_PORT" "$WORKTREE_MYSQL_PORT"
     write_toml_string "WORKTREE_REDIS_PORT" "$WORKTREE_REDIS_PORT"
     write_toml_string "WORKTREE_REDIS_HTTP_PORT" "$WORKTREE_REDIS_HTTP_PORT"
+    write_toml_string "WORKTREE_PUBLIC_API_PORT" "$WORKTREE_PUBLIC_API_PORT"
+    write_toml_string "WORKTREE_PUBLIC_API_DOCS_PORT" "$WORKTREE_PUBLIC_API_DOCS_PORT"
     write_toml_string "WORKTREE_NGINX_SITE_CONF" "$WORKTREE_NGINX_SITE_CONF"
     printf '# <<< worktree:init <<<\n'
   } >"$block_file"
@@ -322,10 +332,20 @@ if [[ "${WORKTREE_ROOT:-}" != "$repo_root" ]]; then
   WORKTREE_REDIS_HTTP_PORT="$(find_free_port 18079 18978 "$(worktree_prefers_port 18079 18978)")"
 fi
 
+# 既存の worktree は上の採番を通らないため、後から足したポートは空のときだけ採番する
+if [[ -z "${WORKTREE_PUBLIC_API_PORT:-}" ]]; then
+  WORKTREE_PUBLIC_API_PORT="$(find_free_port 28787 29686 "$(worktree_prefers_port 28787 29686)")"
+fi
+if [[ -z "${WORKTREE_PUBLIC_API_DOCS_PORT:-}" ]]; then
+  WORKTREE_PUBLIC_API_DOCS_PORT="$(find_free_port 29787 30686 "$(worktree_prefers_port 29787 30686)")"
+fi
+
 WORKTREE_NGINX_SITE_CONF="${repo_root}/.worktree/docker/nginx/site.conf"
 WORKTREE_ADMIN_URL="https://local.admin.isekaijoucho.fan:${WORKTREE_PROXY_HTTPS_PORT}"
 WORKTREE_VIEWER_URL="https://local.isekaijoucho.fan:${WORKTREE_PROXY_HTTPS_PORT}"
-WORKTREE_API_BASE_URL="https://local.api.isekaijoucho.fan:${WORKTREE_PROXY_HTTPS_PORT}"
+WORKTREE_INTERNAL_API_URL="https://local.internal.api.isekaijoucho.fan:${WORKTREE_PROXY_HTTPS_PORT}"
+WORKTREE_PUBLIC_API_URL="https://local.api.isekaijoucho.fan:${WORKTREE_PROXY_HTTPS_PORT}"
+WORKTREE_PUBLIC_API_DOCS_URL="https://local.docs.api.isekaijoucho.fan:${WORKTREE_PROXY_HTTPS_PORT}"
 
 {
   write_shell_value "WORKTREE_ROOT" "$WORKTREE_ROOT"
@@ -339,10 +359,14 @@ WORKTREE_API_BASE_URL="https://local.api.isekaijoucho.fan:${WORKTREE_PROXY_HTTPS
   write_shell_value "WORKTREE_MYSQL_PORT" "$WORKTREE_MYSQL_PORT"
   write_shell_value "WORKTREE_REDIS_PORT" "$WORKTREE_REDIS_PORT"
   write_shell_value "WORKTREE_REDIS_HTTP_PORT" "$WORKTREE_REDIS_HTTP_PORT"
+  write_shell_value "WORKTREE_PUBLIC_API_PORT" "$WORKTREE_PUBLIC_API_PORT"
+  write_shell_value "WORKTREE_PUBLIC_API_DOCS_PORT" "$WORKTREE_PUBLIC_API_DOCS_PORT"
   write_shell_value "WORKTREE_NGINX_SITE_CONF" "$WORKTREE_NGINX_SITE_CONF"
   write_shell_value "WORKTREE_ADMIN_URL" "$WORKTREE_ADMIN_URL"
   write_shell_value "WORKTREE_VIEWER_URL" "$WORKTREE_VIEWER_URL"
-  write_shell_value "WORKTREE_API_BASE_URL" "$WORKTREE_API_BASE_URL"
+  write_shell_value "WORKTREE_INTERNAL_API_URL" "$WORKTREE_INTERNAL_API_URL"
+  write_shell_value "WORKTREE_PUBLIC_API_URL" "$WORKTREE_PUBLIC_API_URL"
+  write_shell_value "WORKTREE_PUBLIC_API_DOCS_URL" "$WORKTREE_PUBLIC_API_DOCS_URL"
 } >"$shared_env_file"
 
 if [[ -d "$WORKTREE_NGINX_SITE_CONF" ]]; then
@@ -352,6 +376,8 @@ fi
 sed \
   -e "s/__ADMIN_PORT__/${WORKTREE_ADMIN_PORT}/g" \
   -e "s/__VIEWER_PORT__/${WORKTREE_VIEWER_PORT}/g" \
+  -e "s/__PUBLIC_API_PORT__/${WORKTREE_PUBLIC_API_PORT}/g" \
+  -e "s/__PUBLIC_API_DOCS_PORT__/${WORKTREE_PUBLIC_API_DOCS_PORT}/g" \
   "$template_file" >"$WORKTREE_NGINX_SITE_CONF"
 
 set_mise_local_env_block "$mise_local_toml_file"
@@ -359,21 +385,26 @@ rm -f "${state_dir}/env"
 ensure_worktree_certs
 
 ensure_env_file "${repo_root}/src/app/admin/.env" "${repo_root}/src/app/admin/.env.example"
-set_env_value "${repo_root}/src/app/admin/.env" "API_URL" "$WORKTREE_API_BASE_URL"
+set_env_value "${repo_root}/src/app/admin/.env" "API_URL" "$WORKTREE_INTERNAL_API_URL"
 set_env_value "${repo_root}/src/app/admin/.env" "CACHE_URL" "http://127.0.0.1:${WORKTREE_REDIS_HTTP_PORT}"
 set_env_value "${repo_root}/src/app/admin/.env" "CACHE_TOKEN" "${REDIS_HTTP_TOKEN:-example_token}"
 set_env_value "${repo_root}/src/app/admin/.env" "PUBLIC_APP_URL" "$WORKTREE_ADMIN_URL"
 
 ensure_env_file "${repo_root}/src/app/viewer/.env" "${repo_root}/src/app/viewer/.env.example"
-set_env_value "${repo_root}/src/app/viewer/.env" "API_URL" "$WORKTREE_API_BASE_URL"
+set_env_value "${repo_root}/src/app/viewer/.env" "API_URL" "$WORKTREE_INTERNAL_API_URL"
+set_env_value "${repo_root}/src/app/viewer/.env" "PUBLIC_API_DOCS_URL" "$WORKTREE_PUBLIC_API_DOCS_URL"
+
+ensure_env_file "${repo_root}/src/app/public-api/.env" "${repo_root}/src/app/public-api/.env.example"
+set_env_value "${repo_root}/src/app/public-api/.env" "API_URL" "$WORKTREE_INTERNAL_API_URL"
+set_env_value "${repo_root}/src/app/public-api/.env" "PUBLIC_API_URL" "$WORKTREE_PUBLIC_API_URL"
 
 ensure_env_file "${repo_root}/src/app/server/.env" "${repo_root}/src/app/server/.env.example"
-set_env_value "${repo_root}/src/app/server/.env" "APP_URL" "$WORKTREE_API_BASE_URL"
+set_env_value "${repo_root}/src/app/server/.env" "APP_URL" "$WORKTREE_INTERNAL_API_URL"
 set_env_value "${repo_root}/src/app/server/.env" "DB_PORT" "3306"
 set_env_value "${repo_root}/src/app/server/.env" "ATLAS_DB_PORT" "$WORKTREE_MYSQL_PORT"
 
 ensure_env_file "${repo_root}/src/app/server/.env.testing" "${repo_root}/src/app/server/.env.testing.example"
-set_env_value "${repo_root}/src/app/server/.env.testing" "APP_URL" "$WORKTREE_API_BASE_URL"
+set_env_value "${repo_root}/src/app/server/.env.testing" "APP_URL" "$WORKTREE_INTERNAL_API_URL"
 set_env_value "${repo_root}/src/app/server/.env.testing" "DB_PORT" "3306"
 set_env_value "${repo_root}/src/app/server/.env.testing" "ATLAS_DB_PORT" "$WORKTREE_MYSQL_PORT"
 
@@ -387,8 +418,12 @@ viewer dev: ${WORKTREE_VIEWER_PORT}
 mysql: ${WORKTREE_MYSQL_PORT}
 redis: ${WORKTREE_REDIS_PORT}
 redis-http: ${WORKTREE_REDIS_HTTP_PORT}
+public-api dev: ${WORKTREE_PUBLIC_API_PORT}
+public-api docs dev: ${WORKTREE_PUBLIC_API_DOCS_PORT}
 admin url: ${WORKTREE_ADMIN_URL}
 viewer url: ${WORKTREE_VIEWER_URL}
-api url: ${WORKTREE_API_BASE_URL}
+internal api url: ${WORKTREE_INTERNAL_API_URL}
+public api url: ${WORKTREE_PUBLIC_API_URL}
+public api docs url: ${WORKTREE_PUBLIC_API_DOCS_URL}
 EOF
 fi

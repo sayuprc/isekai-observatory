@@ -56,7 +56,7 @@ using Versioning;
   - パスは `/v1/...` とし、互換性のない変更は `/v2` として並行して提供します
   """)
 @server(
-  "https://local.api.isekaijoucho.fan/public/{version}",
+  "https://local.internal.api.isekaijoucho.fan/public/{version}",
   "ローカル環境",
   {
     version: Version,
