@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "snapshot": "node src/snapshot/main.ts && node src/snapshot/search-index.ts",
-    "snapshot:search": "node src/snapshot/search-index.ts",
-    "docs": "node src/docs/main.ts",
+    "snapshot": "node --env-file-if-exists=.env src/snapshot/main.ts && node --env-file-if-exists=.env src/snapshot/search-index.ts",
+    "snapshot:search": "node --env-file-if-exists=.env src/snapshot/search-index.ts",
+    "docs": "node --env-file-if-exists=.env src/docs/main.ts",
     "deploy": "wrangler deploy",
     "deploy:docs": "wrangler deploy --config wrangler.docs.jsonc",
     "test": "bun test",
