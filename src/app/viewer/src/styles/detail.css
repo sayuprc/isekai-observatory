@@ -8,13 +8,6 @@
   letter-spacing: 0.04em;
 }
 
-.detail-title-en {
-  font-family: 'EB Garamond', serif;
-  font-size: 18px;
-  font-style: italic;
-  color: var(--accent-2);
-}
-
 .rel-list {
   display: flex;
   flex-direction: column;

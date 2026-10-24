@@ -103,18 +103,6 @@
   letter-spacing: 0.18em;
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 40px;
-}
-
-.hero-data .hero-actions {
-  justify-content: center;
-  margin-top: 64px;
-}
-
 .feature-grid-link {
   --feature-art-size: 320px;
 
