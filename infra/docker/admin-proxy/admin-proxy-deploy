@@ -6,8 +6,9 @@ set -euo pipefail
 : "${ADMIN_PROXY_WORKER_NAME:?}"
 : "${ADMIN_PROXY_ORIGIN_URL:?}"
 : "${PROXY_SHARED_SECRET:?}"
+: "${DEPLOY_ENV:?}"
 
-DEPLOY_MESSAGE="dev admin-proxy deploy $(date --iso-8601=seconds)"
+DEPLOY_MESSAGE="${DEPLOY_ENV} admin-proxy deploy $(date --iso-8601=seconds)"
 SECRETS_FILE="$(mktemp --suffix=.json)"
 trap 'rm -f "${SECRETS_FILE}"' EXIT
 

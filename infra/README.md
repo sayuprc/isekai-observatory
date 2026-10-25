@@ -1,15 +1,16 @@
 # Infrastructure
 
-ローカル開発と環境別 Cloud Build / Dockerfile の入口です
+ローカル開発、共通 Dockerfile、環境別 Cloud Build の入口です
 
 ## ディレクトリ
 
 | パス | 役割 |
 |---|---|
 | `local/` | ローカル開発用コンテナ定義。詳細は `docs/design-docs/local-runtime-topology.md` |
-| `development/` | 開発環境向け Cloud Build と Dockerfile |
-| `staging/` | ステージング向け Cloud Build と Dockerfile |
-| `production/` | 本番向け Cloud Build と Dockerfile |
+| `docker/` | 全環境共通の Dockerfile と entrypoint スクリプト |
+| `development/` | 開発環境向け Cloud Build |
+| `staging/` | ステージング向け Cloud Build |
+| `production/` | 本番向け Cloud Build |
 
 環境固有の job 名・`APP_ENV`・初回設定の差分は下の比較表と、各ディレクトリの `README.md` を参照する
 
@@ -56,7 +57,10 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 
 ## Dockerfiles (共通)
 
-各環境の `docker/` に同名の Dockerfile がある。役割は環境横断で同じ
+`docker/` の Dockerfile を全環境で使う。環境名は各環境の `ci.yaml` から `--build-arg DEPLOY_ENV=<env>` で渡す
+
+- `DEPLOY_ENV` は admin / admin-proxy / db-migrate / viewer が受け取る。値は `development` / `staging` / `production`
+- admin は `APP_ENV`、db-migrate は atlas の `--env`、viewer は `SITE_NOINDEX` と deploy 通知の `env` にこの値を使う
 
 | Dockerfile | 役割 |
 |---|---|
@@ -77,7 +81,7 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 | API / Admin service と各 job の runtime env / secret | `ci.yaml` では定義しない。初回デプロイ前に別経路で設定する |
 | DB migrate job | `DB_USERNAME` / `DB_PASSWORD` / `DB_HOST` / `DB_PORT` / `DB_DATABASE` |
 | media youtube import job | DB 接続 env と `YOUTUBE_API_KEY` |
-| Viewer deploy job | `API_URL` / `SITE_URL` / `PUBLIC_API_URL` / `PUBLIC_API_DOCS_URL` (リファレンスの URL。Viewer の footer と Docs の deploy 通知に出す) / Cloudflare Worker 名 (`CLOUDFLARE_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME`) / account ID / `GOOGLE_CLOUD_PROJECT` / `NOTIFICATION_TOPIC` と `CLOUDFLARE_API_TOKEN` secret |
+| Viewer deploy job | `API_URL` / `SITE_URL` / `PUBLIC_API_URL` / `PUBLIC_API_DOCS_URL` (リファレンスの URL。Viewer の footer と deploy 通知に出す) / Cloudflare Worker 名 (`CLOUDFLARE_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_WORKER_NAME` / `CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME`) / account ID / `GOOGLE_CLOUD_PROJECT` / `NOTIFICATION_TOPIC` と `CLOUDFLARE_API_TOKEN` secret |
 | admin-proxy deploy job | `ADMIN_PROXY_WORKER_NAME` / `ADMIN_PROXY_ORIGIN_URL` / `CLOUDFLARE_ACCOUNT_ID` と `CLOUDFLARE_API_TOKEN` / `PROXY_SHARED_SECRET` secret |
 | Admin service | `PROXY_SHARED_SECRET` (admin-proxy と同じ secret) |
 
@@ -85,7 +89,7 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 
 - Viewer deploy job は runtime env / secret を受け取り、Cloudflare Workers へ deploy する
 - Viewer deploy job は Viewer、Public API、Public API のリファレンス (ADR-0039) の 3 つの Worker を順に deploy する。`PUBLIC_API_URL` はリファレンスから叩く Public API の URL
-- Viewer、Public API、Public API Docs の deploy 成功時は、それぞれ `notify-publish` で通知 JSON (`viewer.deploy` / `public-api.deploy` / `public-api-docs.deploy`) を publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
+- 3 つの Worker の deploy がすべて成功したら、`notify-publish` で通知 JSON (`viewer.deploy`) を 1 通だけ publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
 - admin-proxy deploy job は Cloud Build が `gcloud run jobs deploy --wait` で image 差し替えと実行完了まで行い、Cloudflare Workers へ deploy する
 - Admin の `PUBLIC_APP_URL` は Cloud Build substitution の `_PUBLIC_APP_URL` を build arg として渡す
 

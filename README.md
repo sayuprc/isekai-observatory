@@ -8,6 +8,7 @@
 - 通知基盤: `src/notification/`
 - ローカル開発環境: `compose.yaml`, `infra/local/`, `mise.toml`
 - 環境別インフラ定義: `infra/development/`, `infra/staging/`, `infra/production/`
+- 全環境共通の Dockerfile: `infra/docker/`
 - インフラ入口: `infra/README.md`
 - 詳細: `ARCHITECTURE.md`
 

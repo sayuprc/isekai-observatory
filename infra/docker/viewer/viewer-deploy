@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+: "${API_URL:?}"
+: "${SITE_URL:?}"
+: "${CLOUDFLARE_WORKER_NAME:?}"
+: "${CLOUDFLARE_PUBLIC_API_WORKER_NAME:?}"
+: "${CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME:?}"
+: "${PUBLIC_API_URL:?}"
+: "${PUBLIC_API_DOCS_URL:?}"
+: "${CLOUDFLARE_ACCOUNT_ID:?}"
+: "${CLOUDFLARE_API_TOKEN:?}"
+: "${GOOGLE_CLOUD_PROJECT:?}"
+: "${NOTIFICATION_TOPIC:?}"
+: "${DEPLOY_ENV:?}"
+
+pnpm --filter viewer build
+
+pnpm --filter viewer run deploy \
+  --name "${CLOUDFLARE_WORKER_NAME}" \
+  --compatibility-date "$(date -u '+%Y-%m-%d')" \
+  --message "${DEPLOY_ENV} viewer deploy $(date --iso-8601=seconds)"
+
+# Public API は API サーバーへ問い合わせずに配信するため、ここで書き出した静的スナップショットだけを載せる
+pnpm --filter public-api run snapshot
+
+pnpm --filter public-api run deploy \
+  --name "${CLOUDFLARE_PUBLIC_API_WORKER_NAME}" \
+  --compatibility-date "$(date -u '+%Y-%m-%d')" \
+  --var NOINDEX:true \
+  --message "${DEPLOY_ENV} public-api deploy $(date --iso-8601=seconds)"
+
+# 本番以外のリファレンスは検索エンジンに載せない
+site_noindex=true
+if [[ "${DEPLOY_ENV}" == "production" ]]; then
+  site_noindex=false
+fi
+
+SITE_NOINDEX="${site_noindex}" pnpm --filter public-api run docs
+
+pnpm --filter public-api run deploy:docs \
+  --name "${CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME}" \
+  --compatibility-date "$(date -u '+%Y-%m-%d')" \
+  --message "${DEPLOY_ENV} public-api docs deploy $(date --iso-8601=seconds)"
+
+# 3 つの Worker は 1 回の Job でまとめて出すので、通知も全部成功した後に 1 通だけ送る
+notify-publish <<EOF
+{
+  "action": "viewer.deploy",
+  "status": "succeeded",
+  "embeds": [
+    {
+      "title": "Viewer のデプロイが成功しました",
+      "fields": [
+        { "name": "site_url", "value": "${SITE_URL}", "inline": true },
+        { "name": "public_api_worker", "value": "${CLOUDFLARE_PUBLIC_API_WORKER_NAME}", "inline": true },
+        { "name": "public_api_docs_worker", "value": "${CLOUDFLARE_PUBLIC_API_DOCS_WORKER_NAME}", "inline": true },
+        { "name": "docs_url", "value": "${PUBLIC_API_DOCS_URL}", "inline": true },
+        { "name": "env", "value": "${DEPLOY_ENV}", "inline": true }
+      ]
+    }
+  ]
+}
+EOF

@@ -9,9 +9,7 @@ on:
       - main
       - stg
     paths:
-      - "infra/development/**"
-      - "infra/staging/**"
-      - "infra/production/**"
+      - "infra/docker/**"
       - "mise.toml"
       - "tools/read-mise-value.sh"
       - ".github/workflows/infra-docker-qa.yaml"
@@ -19,9 +17,7 @@ on:
     branches:
       - dev
     paths:
-      - "infra/development/**"
-      - "infra/staging/**"
-      - "infra/production/**"
+      - "infra/docker/**"
       - "mise.toml"
       - "tools/read-mise-value.sh"
       - ".github/workflows/infra-docker-qa.yaml"
@@ -32,15 +28,11 @@ permissions:
 
 jobs:
   docker-build:
-    name: ${{ matrix.env }} / ${{ matrix.image }}
+    name: ${{ matrix.image }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        env:
-          - development
-          - staging
-          - production
         image:
           - api
           - cli
@@ -57,17 +49,21 @@ jobs:
 
       - name: Build image
         env:
-          ENV_NAME: ${{ matrix.env }}
           IMAGE: ${{ matrix.image }}
         run: |
           set -euo pipefail
 
-          dockerfile="infra/${ENV_NAME}/docker/${IMAGE}/Dockerfile"
-          tag="infra-qa-${ENV_NAME}-${IMAGE}:local"
+          dockerfile="infra/docker/${IMAGE}/Dockerfile"
+          tag="infra-qa-${IMAGE}:local"
           extra_args=()
 
           if [[ "${IMAGE}" == "admin" ]]; then
             extra_args+=(--build-arg "PUBLIC_APP_URL=https://example.invalid")
+          fi
+
+          # 環境ごとの差は DEPLOY_ENV だけなので、QA ではどれか 1 つの値でビルドできれば十分
+          if [[ "${IMAGE}" == "admin" || "${IMAGE}" == "admin-proxy" || "${IMAGE}" == "db-migrate" || "${IMAGE}" == "viewer" ]]; then
+            extra_args+=(--build-arg "DEPLOY_ENV=development")
           fi
 
           if [[ "${IMAGE}" == "discord-notifier" || "${IMAGE}" == "viewer" ]]; then

@@ -24,7 +24,7 @@ RUN composer install \
   --optimize-autoloader \
   --no-scripts
 
-COPY infra/development/docker/cli/php.ini /usr/local/etc/php/php.ini
+COPY infra/docker/cli/php.ini /usr/local/etc/php/php.ini
 COPY src/app/server ./
 
 RUN composer dump-autoload --optimize --no-dev --no-interaction

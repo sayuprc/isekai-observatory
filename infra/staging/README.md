@@ -8,6 +8,7 @@
 | 項目 | 値 |
 |---|---|
 | Cloud Build trigger | staging 用の substitution value |
+| build arg `DEPLOY_ENV` | `staging` |
 | service / job 名 | `stg-*` |
 | media youtube import job | `stg-media-youtube-import` |
 | Viewer deploy job | `stg-viewer-deploy` |
