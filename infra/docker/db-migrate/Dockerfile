@@ -13,6 +13,9 @@ RUN mise trust \
 FROM alpine:3.24
 
 ENV TZ=Asia/Tokyo
+# 環境名は各環境の ci.yaml から --build-arg で渡す
+ARG DEPLOY_ENV
+ENV DEPLOY_ENV=${DEPLOY_ENV}
 
 WORKDIR /app/src/app/server/database
 
@@ -23,10 +26,11 @@ RUN apk add --no-cache \
   && adduser -S -G app app
 
 COPY --from=atlas /out/atlas /usr/local/bin/atlas
-COPY infra/staging/docker/db-migrate/db-migrate /usr/local/bin/db-migrate
+COPY infra/docker/db-migrate/db-migrate /usr/local/bin/db-migrate
 COPY src/app/server/database ./
 
-RUN chmod +x /usr/local/bin/db-migrate \
+RUN test -n "${DEPLOY_ENV}" \
+  && chmod +x /usr/local/bin/db-migrate \
   && chown -R app:app /app
 
 USER app

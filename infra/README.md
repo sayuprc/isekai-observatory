@@ -1,15 +1,16 @@
 # Infrastructure
 
-ローカル開発と環境別 Cloud Build / Dockerfile の入口です
+ローカル開発、共通 Dockerfile、環境別 Cloud Build の入口です
 
 ## ディレクトリ
 
 | パス | 役割 |
 |---|---|
 | `local/` | ローカル開発用コンテナ定義。詳細は `docs/design-docs/local-runtime-topology.md` |
-| `development/` | 開発環境向け Cloud Build と Dockerfile |
-| `staging/` | ステージング向け Cloud Build と Dockerfile |
-| `production/` | 本番向け Cloud Build と Dockerfile |
+| `docker/` | 全環境共通の Dockerfile と entrypoint スクリプト |
+| `development/` | 開発環境向け Cloud Build |
+| `staging/` | ステージング向け Cloud Build |
+| `production/` | 本番向け Cloud Build |
 
 環境固有の job 名・`APP_ENV`・初回設定の差分は下の比較表と、各ディレクトリの `README.md` を参照する
 
@@ -56,7 +57,10 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 
 ## Dockerfiles (共通)
 
-各環境の `docker/` に同名の Dockerfile がある。役割は環境横断で同じ
+`docker/` の Dockerfile を全環境で使う。環境名は各環境の `ci.yaml` から `--build-arg DEPLOY_ENV=<env>` で渡す
+
+- `DEPLOY_ENV` は admin / admin-proxy / db-migrate / viewer が受け取る。値は `development` / `staging` / `production`
+- admin は `APP_ENV`、db-migrate は atlas の `--env`、viewer は `SITE_NOINDEX` と deploy 通知の `env` にこの値を使う
 
 | Dockerfile | 役割 |
 |---|---|

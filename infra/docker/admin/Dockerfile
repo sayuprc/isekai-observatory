@@ -14,8 +14,10 @@ RUN apt-get update \
   && curl https://mise.run | sh
 
 ENV PATH=/root/.local/bin:${PATH}
-# 環境バッジの表示判定に使う
-ENV APP_ENV=staging
+# 環境名は各環境の ci.yaml から --build-arg で渡す
+ARG DEPLOY_ENV
+# 環境バッジの表示判定に使う。production ではバッジを表示しない
+ENV APP_ENV=${DEPLOY_ENV}
 
 COPY mise.toml ./
 
@@ -35,7 +37,8 @@ ARG PUBLIC_APP_URL
 ENV PUBLIC_APP_URL=${PUBLIC_APP_URL}
 ENV ADMIN_SSR_NO_EXTERNAL=true
 
-RUN bun --filter admin build
+RUN test -n "${APP_ENV}" \
+  && bun --filter admin build
 
 FROM oven/bun:1.4.4-slim AS runtime
 

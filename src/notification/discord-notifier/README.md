@@ -75,11 +75,7 @@ curl -sS -X POST "http://127.0.0.1:8080/" \
 
 ## コンテナ
 
-各環境の Dockerfile:
-
-- `infra/development/docker/discord-notifier/Dockerfile`
-- `infra/staging/docker/discord-notifier/Dockerfile`
-- `infra/production/docker/discord-notifier/Dockerfile`
+Dockerfile は全環境共通で `infra/docker/discord-notifier/Dockerfile` を使う
 
 `moonc` の version 文字列 (`0.10.6+80dc50f24` 形式) は `mise.toml` の `moonbit_version` に書く
 

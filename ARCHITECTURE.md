@@ -9,9 +9,10 @@
 ## Top-Level Map
 
 - `infra/local/docker/`: ローカル開発用コンテナ定義と TLS 証明書設定
-- `infra/development/`: 開発環境向け Cloud Build 定義とアプリケーション用 Dockerfile
-- `infra/staging/`: ステージング向け Cloud Build 定義とアプリケーション用 Dockerfile
-- `infra/production/`: 本番向け Cloud Build 定義とアプリケーション用 Dockerfile
+- `infra/docker/`: 全環境共通のアプリケーション用 Dockerfile と entrypoint スクリプト
+- `infra/development/`: 開発環境向け Cloud Build 定義
+- `infra/staging/`: ステージング向け Cloud Build 定義
+- `infra/production/`: 本番向け Cloud Build 定義
 - `docs/`: ADR、設計原則、仕様、参照メモ、実行計画、運用手順
 - `src/app/`: `admin` / `viewer` / `public-api` / `contracts` を束ねる pnpm workspace のルート
 - `src/app/server/`: PHP 8.5 / Laravel API サーバー
@@ -47,12 +48,12 @@
 | サーバーの業務ロジック | `src/app/server` | 必要なら `src/app/contracts` | `mise run ecs`, `phpstan`, `arkitect`, `test` |
 | 管理画面の UI / BFF | `src/app/admin` | 必要なら `src/app/contracts` | `mise run admin:check`, `cd src/app && bun --filter admin build` |
 | 閲覧サイトの UI | `src/app/viewer` | 必要なら `src/app/contracts` | `mise run viewer:check`, `cd src/app && bun --filter viewer build` |
-| Public API の書き出し / 配信 | `src/app/public-api` | 必要なら `src/app/contracts`、各 env の `docker/viewer` | `mise run public-api:check` |
-| Discord 通知配達 | `src/notification/discord-notifier` | 各 env の `docker/discord-notifier`、Cloud Build | `mise run discord-notifier:check` |
-| 通知 Pub/Sub publish | `src/notification/publish` | 各 env の `docker/viewer` (viewer-deploy から利用) | `mise run notify-publish:check` |
+| Public API の書き出し / 配信 | `src/app/public-api` | 必要なら `src/app/contracts`、`infra/docker/viewer` | `mise run public-api:check` |
+| Discord 通知配達 | `src/notification/discord-notifier` | `infra/docker/discord-notifier`、Cloud Build | `mise run discord-notifier:check` |
+| 通知 Pub/Sub publish | `src/notification/publish` | `infra/docker/viewer` (viewer-deploy から利用) | `mise run notify-publish:check` |
 | アプリ通知 JSON 契約 | `src/notification/contract` | `notify-publish` / `discord-notifier` | `mise run notify-contract:check` |
 | 開発環境 | `mise.toml`, `compose.yaml`, `infra/local/` | `docs/design-docs/local-runtime-topology.md` | 起動確認と影響範囲の明記 |
-| 環境別インフラ | `infra/development/`, `infra/staging/`, `infra/production/` | `infra/README.md` | Cloud Build 設定、Dockerfile、build context の確認 |
+| 環境別インフラ | `infra/docker/`, `infra/development/`, `infra/staging/`, `infra/production/` | `infra/README.md` | Cloud Build 設定、Dockerfile、build context の確認 |
 
 ## Detail Documents
 

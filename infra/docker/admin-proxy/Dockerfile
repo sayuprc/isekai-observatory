@@ -3,6 +3,9 @@ FROM node:24.22.1-slim
 ENV TZ=Asia/Tokyo
 ENV PNPM_HOME=/pnpm
 ENV PATH=${PNPM_HOME}:${PATH}
+# 環境名は各環境の ci.yaml から --build-arg で渡す
+ARG DEPLOY_ENV
+ENV DEPLOY_ENV=${DEPLOY_ENV}
 
 WORKDIR /app
 
@@ -12,10 +15,11 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-COPY infra/production/docker/admin-proxy/admin-proxy-deploy /usr/local/bin/admin-proxy-deploy
+COPY infra/docker/admin-proxy/admin-proxy-deploy /usr/local/bin/admin-proxy-deploy
 COPY mise.toml ./
 
-RUN corepack enable \
+RUN test -n "${DEPLOY_ENV}" \
+  && corepack enable \
   && corepack prepare "pnpm@$(sed -n 's/^pnpm = "\(.*\)"$/\1/p' mise.toml)" --activate \
   && chmod +x /usr/local/bin/admin-proxy-deploy
 
