@@ -40,7 +40,7 @@ run = [
   { task = "cert:make" },
   { task = "cert:copy-pem" },
   { task = "build" },
-  { tasks = ["api:composer:install", "pnpm:install"] },
+  { tasks = ["api:install", "app:install"] },
   { task = "up" },
   "lefthook install",
 ]
@@ -107,7 +107,7 @@ caroot_pem=$(mkcert -CAROOT)/rootCA.pem
 cp ${caroot_pem} infra/local/docker/php/certs/
 '''
 
-[tasks."pnpm:install"]
+[tasks."app:install"]
 description = "pnpm のパッケージをインストールする"
 dir = "src/app"
 run = "pnpm install --frozen-lockfile"
@@ -119,8 +119,8 @@ description = "worktree ごとのローカル実行設定を生成し、開発�
 run = '''
 ./tools/worktree/init.sh
 mise run up
-mise run api:composer:install
-mise run pnpm:install
+mise run api:install
+mise run app:install
 '''
 
 [tasks."worktree:status"]
@@ -205,11 +205,11 @@ depends = ["api:generate", "admin:generate", "viewer:generate"]
 description = "php コンテナの中に入る"
 run = "docker compose exec php bash"
 
-[tasks."api:composer:install"]
+[tasks."api:install"]
 description = "composer パッケージをインストールする"
 run = "docker compose run --rm php composer install"
 
-[tasks."api:composer:dump"]
+[tasks."api:autoload"]
 description = "autoloader を更新する"
 run = "docker compose exec -T php composer dump-autoload"
 
@@ -258,28 +258,28 @@ docker run --rm -u {{vars.uid}}:{{vars.gid}} -v ".:/local" ${OPENAPI_IMAGE} gene
 
 # 可変長引数は usage.path を 1 件ずつ quote して渡す
 # ${usage_path} は引用符付きで連結された文字列なので、そのまま展開すると引用符が残り、空白でも分割される
-[tasks."api:phpstan"]
+[tasks."api:analyze"]
 description = "PHPStan を実行する"
 usage = 'arg "[path]" var=#true help="静的解析対象パス"'
-run = "docker compose exec php composer phpstan {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = "docker compose exec php composer analyze {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
-[tasks."api:phpstan:clear-cache"]
+[tasks."api:analyze:clear-cache"]
 description = "PHPStan のキャッシュを削除する"
-run = "docker compose exec php composer phpstan-clear-cache"
+run = "docker compose exec php composer analyze-clear-cache"
 
-[tasks."api:arkitect"]
+[tasks."api:architecture"]
 description = "PHPArkitect を実行する"
-run = "docker compose exec php composer arkitect"
+run = "docker compose exec php composer architecture"
 
-[tasks."api:ecs"]
+[tasks."api:format:check"]
 description = "ECS を実行し、コードフォーマットをチェックする"
 usage = 'arg "[path]" var=#true help="フォーマットチェック対象パス"'
-run = "docker compose exec php composer ecs {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = "docker compose exec php composer format-check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
-[tasks."api:ecs:fix"]
+[tasks."api:format"]
 description = "ECS を実行し、フォーマットを自動修正する"
 usage = 'arg "[path]" var=#true help="フォーマット自動修正対象パス"'
-run = "docker compose exec php composer ecs-fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = "docker compose exec php composer format {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:test"]
 description = "テストを実行する"
@@ -308,15 +308,15 @@ run = "docker compose exec php composer test-feature"
 description = "テストカバレッジを出力する"
 run = "docker compose exec php composer coverage"
 
-[tasks."api:infection"]
+[tasks."api:mutation"]
 description = "ミューテーションテストを実行する"
-run = "docker compose exec php composer infection"
+run = "docker compose exec php composer mutation"
 
 [tasks."api:metrics"]
 description = "コードメトリクスを出力する"
 run = "docker compose exec php composer metrics"
 
-[tasks."api:tinker"]
+[tasks."api:repl"]
 description = "Laravel tinker を実行する"
 run = "docker compose exec php php artisan tinker"
 
@@ -371,9 +371,9 @@ bun run generate:api
 description = "Admin の formatter を実行し、フォーマットを自動修正する"
 dir = "src/app/admin"
 run = [
-  "bun run prettier:format",
-  "bun run eslint:fix",
-  "bun run stylelint:fix",
+  "bun run format",
+  "bun run lint",
+  "bun run style",
 ]
 
 [tasks."admin:format:check"]
@@ -386,26 +386,26 @@ run = "bun x prettier --check {% for p in usage.path %}{{ p | quote }} {% endfor
 description = "Admin の linter を実行する"
 dir = "src/app/admin"
 run = [
-  "bun run eslint:check",
-  "bun run stylelint:check",
+  "bun run lint:check",
+  "bun run style:check",
 ]
 
 [tasks."admin:lint:fix"]
 description = "Admin の ESLint を --fix オプション付きで実行する"
 dir = "src/app/admin"
-run = "bun run eslint:fix"
+run = "bun run lint"
 
 [tasks."admin:style"]
 description = "Stylelint を実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
 dir = "src/app/admin"
-run = "bun run stylelint:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = "bun run style:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."admin:style:fix"]
 description = "Stylelint を --fix オプション付きで実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/admin"
-run = "bun run stylelint:fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = "bun run style {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."admin:typecheck"]
 description = "Admin の TypeScript をチェックする"
@@ -420,16 +420,16 @@ depends = ["admin:format"]
 description = "Admin の formatter check / linter / typecheck を直列で実行する"
 dir = "src/app/admin"
 run = [
-  "bun run prettier:format:check",
-  "bun run eslint:check",
-  "bun run stylelint:check",
+  "bun run format:check",
+  "bun run lint:check",
+  "bun run style:check",
   "bun run typecheck",
 ]
 
-[tasks."admin:prism"]
+[tasks."admin:mock"]
 description = "Prism のモックサーバーを起動する"
 dir = "src/app"
-run = "bun --filter admin prism"
+run = "bun --filter admin mock"
 
 # -- viewer --
 
@@ -451,9 +451,9 @@ bun run generate:api
 description = "Viewer の formatter を実行し、フォーマットを自動修正する"
 dir = "src/app/viewer"
 run = [
-  "bun run prettier:format",
-  "bun run eslint:fix",
-  "bun run stylelint:fix",
+  "bun run format",
+  "bun run lint",
+  "bun run style",
 ]
 
 [tasks."viewer:format:check"]
@@ -466,26 +466,26 @@ run = "bun x prettier --check {% for p in usage.path %}{{ p | quote }} {% endfor
 description = "Viewer の linter を実行する"
 dir = "src/app/viewer"
 run = [
-  "bun run eslint:check",
-  "bun run stylelint:check",
+  "bun run lint:check",
+  "bun run style:check",
 ]
 
 [tasks."viewer:lint:fix"]
 description = "Viewer の ESLint を --fix オプション付きで実行する"
 dir = "src/app/viewer"
-run = "bun run eslint:fix"
+run = "bun run lint"
 
 [tasks."viewer:style"]
 description = "Stylelint を実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
 dir = "src/app/viewer"
-run = "bun run stylelint:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = "bun run style:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."viewer:style:fix"]
 description = "Stylelint を --fix オプション付きで実行する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/viewer"
-run = "bun run stylelint:fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = "bun run style {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."viewer:typecheck"]
 description = "Viewer の TypeScript をチェックする"
@@ -500,9 +500,9 @@ depends = ["viewer:format"]
 description = "Viewer の formatter check / linter / typecheck を直列で実行する"
 dir = "src/app/viewer"
 run = [
-  "bun run prettier:format:check",
-  "bun run eslint:check",
-  "bun run stylelint:check",
+  "bun run format:check",
+  "bun run lint:check",
+  "bun run style:check",
   "bun run typecheck",
 ]
 

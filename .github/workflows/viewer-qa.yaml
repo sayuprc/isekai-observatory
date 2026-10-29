@@ -61,7 +61,7 @@ jobs:
           key: viewer-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Check generate code has diff
         run: mise run viewer:generate
@@ -90,13 +90,13 @@ jobs:
           key: viewer-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Run Format Check
         run: mise run viewer:format:check
 
   lint:
-    name: ESLint
+    name: Lint
 
     runs-on: ubuntu-latest
 
@@ -119,9 +119,9 @@ jobs:
           key: viewer-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
-      - name: Run ESLint
+      - name: Run Lint
         run: mise run viewer:lint
 
   typecheck:
@@ -148,13 +148,13 @@ jobs:
           key: viewer-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Run Type Check
         run: mise run viewer:typecheck
 
   style:
-    name: Stylelint
+    name: Style
 
     runs-on: ubuntu-latest
 
@@ -177,9 +177,9 @@ jobs:
           key: viewer-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
-      - name: Run Stylelint
+      - name: Run Style Check
         run: mise run viewer:style
 
       # - name: Run Build

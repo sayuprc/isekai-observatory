@@ -6,15 +6,15 @@ glob_matcher: doublestar
 pre-commit:
   parallel: true
   commands:
-    api-ecs:
+    api-format:
       root: "src/app/server/"
       glob: "src/app/server/{app,bootstrap,config,database,packages,routes,tests,tools}/**/*.php"
-      run: mise run api:ecs -- {staged_files}
+      run: mise run api:format:check -- {staged_files}
 
-    api-phpstan:
+    api-analyze:
       root: "src/app/server/"
       glob: "src/app/server/{app,bootstrap,packages}/**/*.php"
-      run: mise run api:phpstan -- {staged_files}
+      run: mise run api:analyze -- {staged_files}
 
     admin-lint:
       root: "src/app/admin/"

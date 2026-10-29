@@ -59,7 +59,7 @@ jobs:
           key: admin-proxy-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Run check
         run: mise run admin-proxy:check

@@ -8,7 +8,7 @@ applyTo: 'src/app/admin/**'
 
 ## 実行環境
 
-- 依存管理には `pnpm` を使い、インストールは root から `mise run pnpm:install` を実行する
+- 依存管理には `pnpm` を使い、インストールは root から `mise run app:install` を実行する
 - スクリプト実行には `bun` を使う
 - `src/` は `admin` / `viewer` / `contracts` を束ねる pnpm workspace のルート
 - 共有タスクは `mise`、パッケージ固有タスクは `src/` で `bun --filter admin <script>` として実行する

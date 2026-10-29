@@ -54,7 +54,7 @@ jobs:
           key: contracts-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Check format
         run: mise run contract:format:check
@@ -83,7 +83,7 @@ jobs:
           key: contracts-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Typecheck
         run: mise run contract:typecheck
@@ -112,7 +112,7 @@ jobs:
           key: contracts-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Check generate code has diff
         run: |
