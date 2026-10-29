@@ -382,27 +382,27 @@ usage = 'arg "[path]" var=#true default="." help="Prettier のチェック対象
 dir = "src/app/admin"
 run = "bun x prettier --check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
-[tasks."admin:lint"]
-description = "Admin の linter を実行する"
+[tasks."admin:lint:check"]
+description = "Admin の linter をチェックする"
 dir = "src/app/admin"
 run = [
   "bun run lint:check",
   "bun run style:check",
 ]
 
-[tasks."admin:lint:fix"]
-description = "Admin の ESLint を --fix オプション付きで実行する"
+[tasks."admin:lint"]
+description = "Admin の ESLint を実行し、自動修正する"
 dir = "src/app/admin"
 run = "bun run lint"
 
-[tasks."admin:style"]
-description = "Stylelint を実行する"
+[tasks."admin:style:check"]
+description = "Admin の Stylelint をチェックする"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
 dir = "src/app/admin"
 run = "bun run style:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
-[tasks."admin:style:fix"]
-description = "Stylelint を --fix オプション付きで実行する"
+[tasks."admin:style"]
+description = "Admin の Stylelint を実行し、自動修正する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/admin"
 run = "bun run style {% for p in usage.path %}{{ p | quote }} {% endfor %}"
@@ -462,27 +462,27 @@ usage = 'arg "[path]" var=#true default="." help="Prettier のチェック対象
 dir = "src/app/viewer"
 run = "bun x prettier --check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
-[tasks."viewer:lint"]
-description = "Viewer の linter を実行する"
+[tasks."viewer:lint:check"]
+description = "Viewer の linter をチェックする"
 dir = "src/app/viewer"
 run = [
   "bun run lint:check",
   "bun run style:check",
 ]
 
-[tasks."viewer:lint:fix"]
-description = "Viewer の ESLint を --fix オプション付きで実行する"
+[tasks."viewer:lint"]
+description = "Viewer の ESLint を実行し、自動修正する"
 dir = "src/app/viewer"
 run = "bun run lint"
 
-[tasks."viewer:style"]
-description = "Stylelint を実行する"
+[tasks."viewer:style:check"]
+description = "Viewer の Stylelint をチェックする"
 usage = 'arg "[path]" var=#true help="Stylelint 対象パス"'
 dir = "src/app/viewer"
 run = "bun run style:check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
-[tasks."viewer:style:fix"]
-description = "Stylelint を --fix オプション付きで実行する"
+[tasks."viewer:style"]
+description = "Viewer の Stylelint を実行し、自動修正する"
 usage = 'arg "[path]" var=#true help="Stylelint 自動修正対象パス"'
 dir = "src/app/viewer"
 run = "bun run style {% for p in usage.path %}{{ p | quote }} {% endfor %}"
@@ -576,7 +576,12 @@ dir = "src/app/admin-proxy"
 run = "bun run format:check"
 
 [tasks."admin-proxy:lint"]
-description = "admin-proxy の linter を実行する"
+description = "admin-proxy の linter を実行し、自動修正する"
+dir = "src/app/admin-proxy"
+run = "bun run lint"
+
+[tasks."admin-proxy:lint:check"]
+description = "admin-proxy の linter をチェックする"
 dir = "src/app/admin-proxy"
 run = "bun run lint:check"
 
@@ -587,7 +592,7 @@ run = "bun run typecheck"
 
 [tasks."admin-proxy:check"]
 description = "admin-proxy の format / lint / typecheck を実行する"
-depends = ["admin-proxy:format:check", "admin-proxy:lint", "admin-proxy:typecheck"]
+depends = ["admin-proxy:format:check", "admin-proxy:lint:check", "admin-proxy:typecheck"]
 
 # -- public-api --
 
@@ -623,7 +628,12 @@ dir = "src/app/public-api"
 run = "bun run format:check"
 
 [tasks."public-api:lint"]
-description = "public-api の linter を実行する"
+description = "public-api の linter を実行し、自動修正する"
+dir = "src/app/public-api"
+run = "bun run lint"
+
+[tasks."public-api:lint:check"]
+description = "public-api の linter をチェックする"
 dir = "src/app/public-api"
 run = "bun run lint:check"
 
@@ -639,4 +649,4 @@ run = "bun run test"
 
 [tasks."public-api:check"]
 description = "public-api の format / lint / typecheck / test を実行する"
-depends = ["public-api:format:check", "public-api:lint", "public-api:typecheck", "public-api:test"]
+depends = ["public-api:format:check", "public-api:lint:check", "public-api:typecheck", "public-api:test"]

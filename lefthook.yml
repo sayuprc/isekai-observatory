@@ -19,12 +19,12 @@ pre-commit:
     admin-lint:
       root: "src/app/admin/"
       glob: "src/app/**/*.{ts,tsx,js,jsx,mjs,astro}"
-      run: mise run admin:lint
+      run: mise run admin:lint:check
 
     admin-style:
       root: "src/app/admin/"
       glob: "src/app/**/*.{css,astro}"
-      run: mise run admin:style -- {staged_files}
+      run: mise run admin:style:check -- {staged_files}
 
     admin-format:
       root: "src/app/admin/"
@@ -34,12 +34,12 @@ pre-commit:
     viewer-lint:
       root: "src/app/viewer/"
       glob: "src/app/viewer/**/*.{ts,tsx,js,jsx,mjs,astro}"
-      run: mise run viewer:lint
+      run: mise run viewer:lint:check
 
     viewer-style:
       root: "src/app/viewer/"
       glob: "src/app/viewer/**/*.{css,astro}"
-      run: mise run viewer:style -- {staged_files}
+      run: mise run viewer:style:check -- {staged_files}
 
     viewer-format:
       root: "src/app/viewer/"
