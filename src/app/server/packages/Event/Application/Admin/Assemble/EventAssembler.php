@@ -65,7 +65,12 @@ class EventAssembler
 
         $performances = [];
         foreach ($event->performances as $performance) {
-            $performances[$performance->performanceId->value] = $this->toAssembledPerformance($performance, $songMap, $personMap, $personGroupMap);
+            $performances[$performance->performanceId->value] = $this->toAssembledPerformance(
+                $performance,
+                $songMap,
+                $personMap,
+                $personGroupMap,
+            );
         }
 
         return new AssembledEvent(
@@ -78,32 +83,58 @@ class EventAssembler
             $event->schedule->endOn?->format('Y-m-d'),
             $event->status,
             $event->isDisplay,
-            $event->venues->toGeneric()->map(
-                fn (EventVenueLink $link): AssembledVenue => $this->toAssembledVenue($venueMap[$link->venueId->value] ?? null),
-            )->toArray(),
-            $event->media->toGeneric()->map(
-                fn (EventMediaLink $link): AssembledMedia => $this->toAssembledMedia($mediaMap[$link->mediaId->value] ?? null),
-            )->toArray(),
-            $event->releases->toGeneric()->map(
-                fn (EventReleaseLink $link): AssembledRelease => $this->toAssembledRelease($releaseMap[$link->releaseId->value] ?? null, $releaseGroupMap),
-            )->toArray(),
-            $event->sources->toGeneric()->map(
-                static fn (EventSource $source): AssembledSource => new AssembledSource($source->displayName->value, $source->url->value, $source->orderNo->value),
-            )->toArray(),
+            $event->venues->toGeneric()
+                ->map(
+                    fn (EventVenueLink $link): AssembledVenue => $this->toAssembledVenue(
+                        $venueMap[$link->venueId->value] ?? null,
+                    ),
+                )
+                ->toArray(),
+            $event->media->toGeneric()
+                ->map(
+                    fn (EventMediaLink $link): AssembledMedia => $this->toAssembledMedia(
+                        $mediaMap[$link->mediaId->value] ?? null,
+                    ),
+                )
+                ->toArray(),
+            $event->releases->toGeneric()
+                ->map(
+                    fn (EventReleaseLink $link): AssembledRelease => $this->toAssembledRelease(
+                        $releaseMap[$link->releaseId->value] ?? null,
+                        $releaseGroupMap,
+                    ),
+                )
+                ->toArray(),
+            $event->sources->toGeneric()
+                ->map(
+                    static fn (EventSource $source): AssembledSource => new AssembledSource(
+                        $source->displayName->value,
+                        $source->url->value,
+                        $source->orderNo->value,
+                    ),
+                )
+                ->toArray(),
             array_values($performances),
-            $event->setlist->toGeneric()->map(
-                static fn (SetlistItem $item): AssembledSetlistItem => new AssembledSetlistItem(
-                    $item->setlistItemId->value,
-                    $item->orderNo->value,
-                    $item->label?->value,
-                    array_map(static fn (PerformanceId $id): AssembledPerformance => $performances[$id->value], $item->performanceIds),
-                ),
-            )->toArray(),
+            $event->setlist->toGeneric()
+                ->map(
+                    static fn (SetlistItem $item): AssembledSetlistItem => new AssembledSetlistItem(
+                        $item->setlistItemId->value,
+                        $item->orderNo->value,
+                        $item->label?->value,
+                        array_map(
+                            static fn (PerformanceId $id): AssembledPerformance => $performances[$id->value],
+                            $item->performanceIds,
+                        ),
+                    ),
+                )
+                ->toArray(),
             // タグの表示順で返る
             array_values(array_map(
                 static fn (Tag $tag): AssembledTag => new AssembledTag($tag->tagId->value, $tag->name->value),
                 $this->tagRepository->findByIds(
-                    ...$event->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray(),
+                    ...$event->tags->toGeneric()
+                        ->map(static fn (TagReference $tag): TagId => $tag->tagId)
+                        ->toArray(),
                 ),
             )),
         );
@@ -112,7 +143,9 @@ class EventAssembler
     /** @return array<string, Venue> */
     private function venueMap(Event $event): array
     {
-        $venueIds = $event->venues->toGeneric()->map(static fn (EventVenueLink $link): VenueId => $link->venueId)->toArray();
+        $venueIds = $event->venues->toGeneric()
+            ->map(static fn (EventVenueLink $link): VenueId => $link->venueId)
+            ->toArray();
 
         $venueMap = [];
         foreach ($this->venueRepository->findByIds(...$venueIds) as $venue) {
@@ -125,7 +158,9 @@ class EventAssembler
     /** @return array<string, Media> */
     private function mediaMap(Event $event): array
     {
-        $mediaIds = $event->media->toGeneric()->map(static fn (EventMediaLink $link): MediaId => $link->mediaId)->toArray();
+        $mediaIds = $event->media->toGeneric()
+            ->map(static fn (EventMediaLink $link): MediaId => $link->mediaId)
+            ->toArray();
 
         $mediaMap = [];
         foreach ($this->mediaRepository->findByIds(...$mediaIds) as $media) {
@@ -138,7 +173,9 @@ class EventAssembler
     /** @return array<string, Release> */
     private function releaseMap(Event $event): array
     {
-        $releaseIds = $event->releases->toGeneric()->map(static fn (EventReleaseLink $link): ReleaseId => $link->releaseId)->toArray();
+        $releaseIds = $event->releases->toGeneric()
+            ->map(static fn (EventReleaseLink $link): ReleaseId => $link->releaseId)
+            ->toArray();
 
         $releaseMap = [];
         foreach ($this->releaseRepository->findByIds(...$releaseIds) as $release) {
@@ -271,8 +308,12 @@ class EventAssembler
      * @param array<string, Person>      $personMap
      * @param array<string, PersonGroup> $personGroupMap
      */
-    private function toAssembledPerformance(SongPerformance $performance, array $songMap, array $personMap, array $personGroupMap): AssembledPerformance
-    {
+    private function toAssembledPerformance(
+        SongPerformance $performance,
+        array $songMap,
+        array $personMap,
+        array $personGroupMap,
+    ): AssembledPerformance {
         $song = $songMap[$performance->songId->value] ?? null;
         // Event が成立している時点で参照先の楽曲は存在する
         assert($song instanceof Song);
@@ -282,26 +323,30 @@ class EventAssembler
             $song->songId->value,
             $song->title->value,
             $performance->orderNo->value,
-            $performance->coVocalists->toGeneric()->map(static function (CoVocalist $coVocalist) use ($personMap, $personGroupMap): AssembledCoVocalist {
-                $person = $personMap[$coVocalist->personId->value] ?? null;
-                assert($person instanceof Person);
+            $performance->coVocalists->toGeneric()
+                ->map(static function (CoVocalist $coVocalist) use ($personMap, $personGroupMap): AssembledCoVocalist {
+                    $person = $personMap[$coVocalist->personId->value] ?? null;
+                    assert($person instanceof Person);
 
-                return new AssembledCoVocalist(
-                    $person->personId->value,
-                    $person->name->value,
-                    $coVocalist->creditName?->value,
-                    self::toAssembledPersonGroup($coVocalist->personGroupId, $personGroupMap),
-                    $coVocalist->orderNo->value,
-                );
-            })->toArray(),
+                    return new AssembledCoVocalist(
+                        $person->personId->value,
+                        $person->name->value,
+                        $coVocalist->creditName?->value,
+                        self::toAssembledPersonGroup($coVocalist->personGroupId, $personGroupMap),
+                        $coVocalist->orderNo->value,
+                    );
+                })
+                ->toArray(),
         );
     }
 
     /**
      * @param array<string, PersonGroup> $personGroupMap
      */
-    private static function toAssembledPersonGroup(?PersonGroupId $personGroupId, array $personGroupMap): ?AssembledPersonGroup
-    {
+    private static function toAssembledPersonGroup(
+        ?PersonGroupId $personGroupId,
+        array $personGroupMap,
+    ): ?AssembledPersonGroup {
         if ($personGroupId === null) {
             return null;
         }

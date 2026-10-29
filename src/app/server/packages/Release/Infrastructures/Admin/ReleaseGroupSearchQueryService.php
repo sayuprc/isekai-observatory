@@ -146,15 +146,13 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
     private function applyOrder(SelectBuilder $query, ReleaseGroupSearchCriteria $criteria): SelectBuilder
     {
         if ($criteria->sort === Sort::Title) {
-            return $query
-                ->orderBy('release_groups.title', $criteria->order->value)
+            return $query->orderBy('release_groups.title', $criteria->order->value)
                 ->orderBy('first_released_on', 'desc')
                 ->orderBy('release_groups.order_no', 'desc');
         }
 
         // MySQL には NULLS LAST が無いため、IS NULL で並べてリリース未登録のグループを昇順・降順どちらでも末尾にする
-        return $query
-            ->orderBy(new Sql('first_released_on IS NULL'))
+        return $query->orderBy(new Sql('first_released_on IS NULL'))
             ->orderBy('first_released_on', $criteria->order->value)
             ->orderBy('release_groups.order_no', 'desc')
             ->orderBy('release_groups.title');

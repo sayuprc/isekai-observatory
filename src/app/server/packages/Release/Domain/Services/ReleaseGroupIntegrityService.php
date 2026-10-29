@@ -36,7 +36,16 @@ class ReleaseGroupIntegrityService
         int $orderNo,
         array $tags,
     ): ReleaseGroup {
-        return $this->build($this->generator->generate(), $title, $typeValue, $description, $note, $isDisplay, $orderNo, $tags);
+        return $this->build(
+            $this->generator->generate(),
+            $title,
+            $typeValue,
+            $description,
+            $note,
+            $isDisplay,
+            $orderNo,
+            $tags,
+        );
     }
 
     /**
@@ -87,6 +96,10 @@ class ReleaseGroupIntegrityService
      */
     private function toReleaseGroupType(int $typeValue): ReleaseGroupType
     {
-        return ReleaseGroupType::tryFrom($typeValue) ?? throw new InvalidDomainException("不正なリリースグループ種別です: {$typeValue}");
+        return (
+            ReleaseGroupType::tryFrom($typeValue) ?? throw new InvalidDomainException(
+                "不正なリリースグループ種別です: {$typeValue}",
+            )
+        );
     }
 }

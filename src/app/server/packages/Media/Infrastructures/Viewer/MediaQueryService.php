@@ -47,8 +47,7 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
         }
 
         $mediaRows = $this->queryFactory->fetchAll(
-            $query
-                ->orderBy('published_at', 'desc')
+            $query->orderBy('published_at', 'desc')
                 ->orderBy('media_id')
                 ->limit($limit + 1),
         );

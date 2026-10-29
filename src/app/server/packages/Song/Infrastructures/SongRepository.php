@@ -170,14 +170,14 @@ readonly class SongRepository implements SongRepositoryInterface
             ->build()
             ->append(
                 'ON DUPLICATE KEY UPDATE '
-                . '`title` = VALUES(`title`), '
-                . '`description` = VALUES(`description`), '
-                . '`note` = VALUES(`note`), '
-                . '`lyrics_link` = VALUES(`lyrics_link`), '
-                . '`type` = VALUES(`type`), '
-                . '`is_display` = VALUES(`is_display`), '
-                . '`order_no` = VALUES(`order_no`), '
-                . '`updated_at` = VALUES(`updated_at`)',
+                    . '`title` = VALUES(`title`), '
+                    . '`description` = VALUES(`description`), '
+                    . '`note` = VALUES(`note`), '
+                    . '`lyrics_link` = VALUES(`lyrics_link`), '
+                    . '`type` = VALUES(`type`), '
+                    . '`is_display` = VALUES(`is_display`), '
+                    . '`order_no` = VALUES(`order_no`), '
+                    . '`updated_at` = VALUES(`updated_at`)',
             )
             ->execute($this->queryFactory->pdo());
 

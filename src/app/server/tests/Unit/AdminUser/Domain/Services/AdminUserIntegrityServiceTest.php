@@ -89,7 +89,13 @@ class AdminUserIntegrityServiceTest extends TestCase
         $role = Role::General;
         $permissions = [];
 
-        $existingUser = $this->createAdminUser('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', $email, $role, $permissions, $now);
+        $existingUser = $this->createAdminUser(
+            'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB',
+            $email,
+            $role,
+            $permissions,
+            $now,
+        );
 
         $this->repository->shouldReceive('findByEmail')
             ->with(Mockery::on(static fn (Email $arg): bool => $arg->value === $email))
@@ -153,7 +159,13 @@ class AdminUserIntegrityServiceTest extends TestCase
         $role = Role::General;
         $permissions = [];
 
-        $existingUser = $this->createAdminUser('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', $email, $role, $permissions, $now);
+        $existingUser = $this->createAdminUser(
+            'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB',
+            $email,
+            $role,
+            $permissions,
+            $now,
+        );
 
         $this->repository->shouldReceive('findByEmailForUpdate')
             ->with(Mockery::on(static fn (Email $arg): bool => $arg->value === $email))

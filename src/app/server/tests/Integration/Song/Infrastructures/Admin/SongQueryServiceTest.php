@@ -35,7 +35,18 @@ class SongQueryServiceTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, true, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                true,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
         $results = $this->getInstance()->search($this->criteria());
@@ -57,7 +68,18 @@ class SongQueryServiceTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, true, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                true,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
         $results = $this->getInstance()->search($this->criteria(title: new Some('テスト楽曲')));
@@ -78,7 +100,18 @@ class SongQueryServiceTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, true, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                true,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
         $results = $this->getInstance()->search($this->criteria(type: new Some(SongType::Original)));
@@ -110,7 +143,18 @@ class SongQueryServiceTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, false, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                false,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
         $results = $this->getInstance()->search($this->criteria(isDisplay: new Some(false)));
@@ -126,7 +170,18 @@ class SongQueryServiceTest extends DatabaseTestCase
         $songs = [];
 
         for ($i = 1; $i <= 26; $i++) {
-            $songs[] = $this->createSong($this->generateUuid(), "楽曲{$i}", '説明', SongType::Original, true, $i, [], [], [], []);
+            $songs[] = $this->createSong(
+                $this->generateUuid(),
+                "楽曲{$i}",
+                '説明',
+                SongType::Original,
+                true,
+                $i,
+                [],
+                [],
+                [],
+                [],
+            );
         }
 
         $this->storeSongs(...$songs);
@@ -176,27 +231,41 @@ class SongQueryServiceTest extends DatabaseTestCase
         $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'テスト作品', ReleaseGroupType::Single));
         $this->storeReleases(
             $this->createRelease($this->generateUuid(), $releaseGroupId, 'CD', true, media: [
-                ['position' => 1, 'name' => null, 'tracks' => [
-                    ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
-                    ['songIds' => [$songId], 'title' => null, 'trackNo' => 2],
-                ]],
+                [
+                    'position' => 1,
+                    'name' => null,
+                    'tracks' => [
+                        ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [$songId], 'title' => null, 'trackNo' => 2],
+                    ],
+                ],
             ]),
             $this->createRelease($this->generateUuid(), $releaseGroupId, '配信', true, orderNo: 2, media: [
-                ['position' => 1, 'name' => null, 'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]]],
+                [
+                    'position' => 1,
+                    'name' => null,
+                    'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
+                ],
             ]),
         );
 
-        $this->app->make(EventRepository::class)->save($this->createEvent($this->generateUuid(), performances: [
-            ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []],
-            ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 2, 'coVocalists' => []],
-        ]));
+        $this->app->make(EventRepository::class)
+            ->save($this->createEvent($this->generateUuid(), performances: [
+                ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []],
+                ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 2, 'coVocalists' => []],
+            ]));
 
         $results = $this->getInstance()->search($this->criteria());
 
         $this->assertSame(
             [[2, 1, 2, 2], [0, 0, 0, 0]],
             array_map(
-                static fn (SongSummary $song): array => [$song->performanceCount, $song->mediaCount, $song->personCount, $song->releaseCount],
+                static fn (SongSummary $song): array => [
+                    $song->performanceCount,
+                    $song->mediaCount,
+                    $song->personCount,
+                    $song->releaseCount,
+                ],
                 $results,
             ),
         );

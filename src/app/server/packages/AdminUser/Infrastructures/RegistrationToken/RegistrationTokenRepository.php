@@ -21,7 +21,14 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
     private const string PERMISSION_TABLE = 'admin_user_registration_token_permissions';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['admin_user_registration_token_id', 'token', 'email', 'role', 'expired_at', 'status'];
+    private const array COLUMNS = [
+        'admin_user_registration_token_id',
+        'token',
+        'email',
+        'role',
+        'expired_at',
+        'status',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -37,7 +44,16 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
         $now = now()->toDateTimeString();
 
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['admin_user_registration_token_id', 'token', 'email', 'role', 'expired_at', 'status', 'created_at', 'updated_at'])
+            ->into(self::TABLE, [
+                'admin_user_registration_token_id',
+                'token',
+                'email',
+                'role',
+                'expired_at',
+                'status',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $id,
                 $data['token'],
@@ -51,12 +67,12 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
             ->build()
             ->append(
                 'ON DUPLICATE KEY UPDATE '
-                . '`token` = VALUES(`token`), '
-                . '`email` = VALUES(`email`), '
-                . '`role` = VALUES(`role`), '
-                . '`expired_at` = VALUES(`expired_at`), '
-                . '`status` = VALUES(`status`), '
-                . '`updated_at` = VALUES(`updated_at`)',
+                    . '`token` = VALUES(`token`), '
+                    . '`email` = VALUES(`email`), '
+                    . '`role` = VALUES(`role`), '
+                    . '`expired_at` = VALUES(`expired_at`), '
+                    . '`status` = VALUES(`status`), '
+                    . '`updated_at` = VALUES(`updated_at`)',
             )
             ->execute($this->queryFactory->pdo());
 

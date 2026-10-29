@@ -36,8 +36,7 @@ class ListPresenter
 
     private function toOpenApiReleaseGroupListItem(ReleaseGroupListItem $releaseGroup): OpenApiReleaseGroupListItem
     {
-        return new OpenApiReleaseGroupListItem()
-            ->setReleaseGroupId($releaseGroup->releaseGroupId)
+        return new OpenApiReleaseGroupListItem()->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description)
@@ -51,16 +50,14 @@ class ListPresenter
      */
     private function toOpenApiTag(array $tag): AttachedTag
     {
-        return new AttachedTag()
-            ->setTagId($tag['tagId'])
+        return new AttachedTag()->setTagId($tag['tagId'])
             ->setName($tag['name'])
             ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiReleaseListItem(ReleaseListItem $release): OpenApiReleaseListItem
     {
-        return new OpenApiReleaseListItem()
-            ->setReleaseId($release->releaseId)
+        return new OpenApiReleaseListItem()->setReleaseId($release->releaseId)
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setDescription($release->description)
@@ -78,8 +75,7 @@ class ListPresenter
     {
         return new OpenApiReleaseMediumItem([
             'name' => $medium->name,
-        ])
-            ->setPosition($medium->position)
+        ])->setPosition($medium->position)
             ->setTracks(array_map($this->toOpenApiReleaseTrackItem(...), $medium->tracks));
     }
 
@@ -87,15 +83,13 @@ class ListPresenter
     {
         return new OpenApiReleaseTrackItem([
             'title' => $track->title,
-        ])
-            ->setTrackNo($track->trackNo)
+        ])->setTrackNo($track->trackNo)
             ->setSongs(array_map($this->toOpenApiReleaseTrackSong(...), $track->songs));
     }
 
     private function toOpenApiReleaseTrackSong(ReleaseTrackSong $song): OpenApiReleaseTrackSong
     {
-        return new OpenApiReleaseTrackSong()
-            ->setSongId($song->songId)
+        return new OpenApiReleaseTrackSong()->setSongId($song->songId)
             ->setTitle($song->title)
             ->setIsDisplay($song->isDisplay);
     }

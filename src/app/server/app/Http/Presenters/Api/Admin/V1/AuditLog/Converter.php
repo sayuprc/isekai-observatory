@@ -17,8 +17,7 @@ readonly class Converter
 {
     public function toOpenApiSummary(AuditLogSummary $summary): OpenApiAuditLogSummary
     {
-        return new OpenApiAuditLogSummary()
-            ->setAuditLogId($summary->auditLogId)
+        return new OpenApiAuditLogSummary()->setAuditLogId($summary->auditLogId)
             ->setAdminUserId($summary->adminUserId)
             ->setAdminUserName($summary->adminUserName)
             ->setAction(OpenApiAuditAction::from($summary->action->value))
@@ -29,8 +28,7 @@ readonly class Converter
 
     public function toOpenApiAuditLog(AuditLogDetail $detail): OpenApiAuditLog
     {
-        return new OpenApiAuditLog()
-            ->setAuditLogId($detail->auditLogId)
+        return new OpenApiAuditLog()->setAuditLogId($detail->auditLogId)
             ->setAdminUserId($detail->adminUserId)
             ->setAdminUserName($detail->adminUserName)
             ->setAction(OpenApiAuditAction::from($detail->action->value))

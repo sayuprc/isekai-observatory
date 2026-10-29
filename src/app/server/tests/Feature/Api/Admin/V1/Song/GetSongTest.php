@@ -36,34 +36,43 @@ class GetSongTest extends DatabaseTestCase
         $tagRepo->save($tagA = $this->createTag($this->generateUuid(), 'タグA', 20));
         $tagRepo->save($tagB = $this->createTag($this->generateUuid(), 'タグB', 10));
         $mediaRepo = $this->app->make(MediaRepository::class);
-        $mediaRepo->save($media = $this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true));
+        $mediaRepo->save(
+            $media = $this->createMedia(
+                $this->generateUuid(),
+                'テストメディアMV',
+                'https://example.com/media',
+                MediaType::Mv,
+                true,
+            ),
+        );
 
         $songId = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong(
-                $songId,
-                'テスト楽曲',
-                'テスト楽曲説明',
-                'https://example.com/lyrics',
-                SongType::Original,
-                true,
-                1,
-                [
-                    ['tagId' => $tagA->tagId->value],
-                    ['tagId' => $tagB->tagId->value],
-                ],
-                [
-                    ['personId' => $lyricistId, 'role' => 1, 'orderNo' => 1],
-                    ['personId' => $composerId, 'role' => 2, 'orderNo' => 2],
-                    ['personId' => $arrangerId, 'role' => 3, 'orderNo' => 3],
-                ],
-                [],
-                [
-                    ['mediaId' => $media->mediaId->value, 'orderNo' => 1],
-                ],
-            ),
-        );
+        $this->app->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $songId,
+                    'テスト楽曲',
+                    'テスト楽曲説明',
+                    'https://example.com/lyrics',
+                    SongType::Original,
+                    true,
+                    1,
+                    [
+                        ['tagId' => $tagA->tagId->value],
+                        ['tagId' => $tagB->tagId->value],
+                    ],
+                    [
+                        ['personId' => $lyricistId, 'role' => 1, 'orderNo' => 1],
+                        ['personId' => $composerId, 'role' => 2, 'orderNo' => 2],
+                        ['personId' => $arrangerId, 'role' => 3, 'orderNo' => 3],
+                    ],
+                    [],
+                    [
+                        ['mediaId' => $media->mediaId->value, 'orderNo' => 1],
+                    ],
+                ),
+            );
 
         $this->withAuth()
             ->get(route(SongRouteMap::Get, $songId))
@@ -107,9 +116,22 @@ class GetSongTest extends DatabaseTestCase
     {
         $songId = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong($songId, 'テスト楽曲', 'テスト楽曲説明', null, SongType::Original, true, 1, [], [], [], []),
-        );
+        $this->app->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $songId,
+                    'テスト楽曲',
+                    'テスト楽曲説明',
+                    null,
+                    SongType::Original,
+                    true,
+                    1,
+                    [],
+                    [],
+                    [],
+                    [],
+                ),
+            );
 
         $this->withAuth()
             ->get(route(SongRouteMap::Get, $songId))

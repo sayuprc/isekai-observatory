@@ -71,7 +71,9 @@ readonly class RecoveryFinishUseCase
 
         $name = $state->name;
 
-        return $this->transaction->scope(fn (): RecoveryFinishOutputData => $this->persist($state, $verification, $name));
+        return $this->transaction->scope(
+            fn (): RecoveryFinishOutputData => $this->persist($state, $verification, $name),
+        );
     }
 
     private function persist(

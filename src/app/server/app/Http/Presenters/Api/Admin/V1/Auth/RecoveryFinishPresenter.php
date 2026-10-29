@@ -13,8 +13,7 @@ class RecoveryFinishPresenter
     public function present(RecoveryFinishOutputData $output): JsonResponse
     {
         return response()->json(
-            new RecoveryFinishResponse()
-                ->setAccessToken($output->accessToken->jwt->value)
+            new RecoveryFinishResponse()->setAccessToken($output->accessToken->jwt->value)
                 ->setRefreshTokenId($output->refreshTokenId)
                 ->setRefreshToken($output->plainRefreshToken),
             200,

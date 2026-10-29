@@ -31,13 +31,13 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'releaseGroup',
-                        static fn (AssertableJson $json) => $json
-                            ->whereType('releaseGroupId', 'string')
+                        static fn (AssertableJson $json) => $json->whereType('releaseGroupId', 'string')
                             ->where('title', '観測された春')
                             ->where('type', ReleaseGroupType::Album->value)
                             ->where('description', '1st アルバム')
@@ -74,23 +74,23 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 7,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJsonPath('releaseGroup.orderNo', 7);
     }
 
     #[Test]
     public function forbidden(): void
     {
-        $this->withGeneralAuth()
-            ->postJson(route(ReleaseGroupRouteMap::Create), [
-                'title' => '観測された春',
-                'type' => ReleaseGroupType::Album->value,
-                'description' => '',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'tags' => [],
-            ])->assertStatus(403);
+        $this->withGeneralAuth()->postJson(route(ReleaseGroupRouteMap::Create), [
+            'title' => '観測された春',
+            'type' => ReleaseGroupType::Album->value,
+            'description' => '',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'tags' => [],
+        ])->assertStatus(403);
     }
 
     #[Test]

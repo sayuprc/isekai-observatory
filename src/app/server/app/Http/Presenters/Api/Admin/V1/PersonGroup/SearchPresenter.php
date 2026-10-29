@@ -19,14 +19,13 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new PersonGroupSearchResponse()
-                ->setPersonGroups(array_map(
-                    fn (PersonGroupSummary $personGroup): OpenApiPersonGroupSummary => $this->converter->toOpenApiPersonGroupSummary(
-                        $personGroup,
-                        $outputData->usageCounts[$personGroup->personGroupId] ?? 0,
-                    ),
-                    $outputData->personGroups,
-                ))
+            new PersonGroupSearchResponse()->setPersonGroups(array_map(
+                fn (PersonGroupSummary $personGroup): OpenApiPersonGroupSummary => $this->converter->toOpenApiPersonGroupSummary(
+                    $personGroup,
+                    $outputData->usageCounts[$personGroup->personGroupId] ?? 0,
+                ),
+                $outputData->personGroups,
+            ))
                 ->setMaxPage($outputData->maxPage),
             200,
         );

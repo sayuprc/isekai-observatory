@@ -31,9 +31,9 @@ class CreateMediaTest extends DatabaseTestCase
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
                 'tags' => [],
-            ])->assertStatus(200)
-            ->assertJson(static fn (AssertableJson $json) => $json
-                ->whereType('media.mediaId', 'string')
+            ])
+            ->assertStatus(200)
+            ->assertJson(static fn (AssertableJson $json) => $json->whereType('media.mediaId', 'string')
                 ->where('media.title', 'テストメディアMV')
                 ->where('media.url', 'https://example.com/media')
                 ->where('media.publishedAt', '2024-03-01T12:34:56+09:00')
@@ -64,10 +64,10 @@ class CreateMediaTest extends DatabaseTestCase
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
                 'tags' => [],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(
-                static fn (AssertableJson $json) => $json
-                    ->where('code', 'business_rule_violation')
+                static fn (AssertableJson $json) => $json->where('code', 'business_rule_violation')
                     ->where('message', '同じURLのメディアが既に存在します'),
             );
     }

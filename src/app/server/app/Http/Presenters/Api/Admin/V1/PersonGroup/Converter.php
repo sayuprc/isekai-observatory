@@ -12,10 +12,11 @@ use Person\Application\Admin\Query\PersonGroupSummary;
 
 class Converter
 {
-    public function toOpenApiPersonGroupSummary(PersonGroupSummary $personGroup, int $performanceCount): OpenApiPersonGroupSummary
-    {
-        return new OpenApiPersonGroupSummary()
-            ->setPersonGroupId($personGroup->personGroupId)
+    public function toOpenApiPersonGroupSummary(
+        PersonGroupSummary $personGroup,
+        int $performanceCount,
+    ): OpenApiPersonGroupSummary {
+        return new OpenApiPersonGroupSummary()->setPersonGroupId($personGroup->personGroupId)
             ->setName($personGroup->name)
             ->setDisplayName($personGroup->displayName)
             ->setMembers(array_map($this->toOpenApiMember(...), $personGroup->members))
@@ -24,8 +25,7 @@ class Converter
 
     public function toOpenApiPersonGroup(PersonGroupSummary $personGroup): OpenApiPersonGroup
     {
-        return new OpenApiPersonGroup()
-            ->setPersonGroupId($personGroup->personGroupId)
+        return new OpenApiPersonGroup()->setPersonGroupId($personGroup->personGroupId)
             ->setName($personGroup->name)
             ->setDisplayName($personGroup->displayName)
             ->setMembers(array_map($this->toOpenApiMember(...), $personGroup->members));
@@ -33,8 +33,7 @@ class Converter
 
     private function toOpenApiMember(PersonGroupMemberSummary $member): OpenApiPersonGroupMember
     {
-        return new OpenApiPersonGroupMember()
-            ->setPersonId($member->personId)
+        return new OpenApiPersonGroupMember()->setPersonId($member->personId)
             ->setName($member->name)
             ->setOrderNo($member->orderNo);
     }

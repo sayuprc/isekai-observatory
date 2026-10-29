@@ -26,7 +26,12 @@ class GetAuditLogTest extends DatabaseTestCase
     public function found(): void
     {
         $actorId = $this->generateUuid();
-        $this->storeAdminUsers($this->createAdminUser($actorId, 'actor@example.com', Role::Privilege, name: '監査テストユーザーA'));
+        $this->storeAdminUsers($this->createAdminUser(
+            $actorId,
+            'actor@example.com',
+            Role::Privilege,
+            name: '監査テストユーザーA',
+        ));
 
         $auditLogId = $this->generateUuid();
         $targetId = $this->generateUuid();
@@ -70,7 +75,12 @@ class GetAuditLogTest extends DatabaseTestCase
     public function foundForRelease(): void
     {
         $actorId = $this->generateUuid();
-        $this->storeAdminUsers($this->createAdminUser($actorId, 'actor@example.com', Role::Privilege, name: '監査テストユーザーA'));
+        $this->storeAdminUsers($this->createAdminUser(
+            $actorId,
+            'actor@example.com',
+            Role::Privilege,
+            name: '監査テストユーザーA',
+        ));
 
         $auditLogId = $this->generateUuid();
         $targetId = $this->generateUuid();

@@ -42,7 +42,10 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
 
         return $this->findBy(
             'person_group_id',
-            array_map(fn (PersonGroupId $personGroupId): string => $this->converter->toBin($personGroupId->value), $personGroupIds),
+            array_map(
+                fn (PersonGroupId $personGroupId): string => $this->converter->toBin($personGroupId->value),
+                $personGroupIds,
+            ),
         );
     }
 
@@ -64,7 +67,9 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
             ->into(self::TABLE, ['person_group_id', 'name', 'display_name', 'created_at', 'updated_at'])
             ->values([$id, $personGroup->name->value, $personGroup->displayName->value, $now, $now])
             ->build()
-            ->append('ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `display_name` = VALUES(`display_name`), `updated_at` = VALUES(`updated_at`)')
+            ->append(
+                'ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `display_name` = VALUES(`display_name`), `updated_at` = VALUES(`updated_at`)',
+            )
             ->execute($this->queryFactory->pdo());
 
         $this->queryFactory->insertRows(
@@ -110,7 +115,10 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
             $this->queryFactory->select()
                 ->withSelect(['person_group_id', 'person_id', 'order_no'])
                 ->from(self::MEMBER_TABLE)
-                ->where('person_group_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $rows))
+                ->where('person_group_id', 'IN', array_map(static fn (array $row): string => Row::string(
+                    $row,
+                    'person_group_id',
+                ), $rows))
                 ->orderBy('order_no'),
         );
 

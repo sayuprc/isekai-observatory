@@ -17,8 +17,7 @@ class GetPresenter
     public function present(GetOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new MediaGetResponse()
-                ->setMedia($this->converter->toOpenApiMedia($outputData->media))
+            new MediaGetResponse()->setMedia($this->converter->toOpenApiMedia($outputData->media))
                 ->setTags($this->converter->toOpenApiTags($outputData->tags))
                 ->setSongs(array_map($this->converter->toOpenApiReferencedSong(...), $outputData->songs)),
             200,

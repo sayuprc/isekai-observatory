@@ -52,10 +52,30 @@ class ListEventTest extends DatabaseTestCase
             media: [['mediaId' => $visibleMediaId, 'orderNo' => 1], ['mediaId' => $hiddenMediaId, 'orderNo' => 2]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/event', 'orderNo' => 1]],
             performances: [
-                ['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1]]],
-                ['performanceId' => $hiddenPerformanceId, 'songId' => $hiddenSongId, 'orderNo' => 2, 'coVocalists' => []],
+                [
+                    'performanceId' => $visiblePerformanceId,
+                    'songId' => $visibleSongId,
+                    'orderNo' => 1,
+                    'coVocalists' => [[
+                        'personId' => $personId,
+                        'creditName' => null,
+                        'personGroupId' => null,
+                        'orderNo' => 1,
+                    ]],
+                ],
+                [
+                    'performanceId' => $hiddenPerformanceId,
+                    'songId' => $hiddenSongId,
+                    'orderNo' => 2,
+                    'coVocalists' => [],
+                ],
             ],
-            setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$visiblePerformanceId]]],
+            setlist: [[
+                'setlistItemId' => $this->generateUuid(),
+                'orderNo' => 1,
+                'label' => '本編',
+                'performanceIds' => [$visiblePerformanceId],
+            ]],
         ));
 
         $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
@@ -88,9 +108,14 @@ class ListEventTest extends DatabaseTestCase
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ (B不在)', [$personId], 'グループ'));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
-            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $personId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
-            ]]],
+            performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    ['personId' => $personId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
+                ],
+            ]],
         ));
 
         $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
@@ -115,7 +140,10 @@ class ListEventTest extends DatabaseTestCase
             $this->createReleaseGroup($privateGroupId, '非公開の作品', ReleaseGroupType::Other, isDisplay: false),
         );
         $this->storeReleases(
-            $this->createRelease($visibleReleaseId, $publicGroupId, 'Blu-ray', true, formats: [ReleaseFormat::BluRay->value, ReleaseFormat::Dvd->value]),
+            $this->createRelease($visibleReleaseId, $publicGroupId, 'Blu-ray', true, formats: [
+                ReleaseFormat::BluRay->value,
+                ReleaseFormat::Dvd->value,
+            ]),
             $this->createRelease($privateReleaseId, $publicGroupId, '非公開の版', false, orderNo: 2),
             $this->createRelease($privateGroupReleaseId, $privateGroupId, '非公開グループの版', true),
         );
@@ -144,7 +172,12 @@ class ListEventTest extends DatabaseTestCase
     public function formatsDateRangeScheduleForPublicContract(): void
     {
         $eventId = $this->generateUuid();
-        $this->storeEvents($this->createEvent($eventId, type: EventType::Stream, startOn: '2026-10-01', endOn: '2026-10-03'));
+        $this->storeEvents($this->createEvent(
+            $eventId,
+            type: EventType::Stream,
+            startOn: '2026-10-01',
+            endOn: '2026-10-03',
+        ));
 
         $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
             ->assertStatus(200)

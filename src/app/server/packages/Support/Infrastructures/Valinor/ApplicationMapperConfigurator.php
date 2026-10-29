@@ -13,8 +13,7 @@ final class ApplicationMapperConfigurator implements MapperBuilderConfigurator
     #[Override]
     public function configureMapperBuilder(MapperBuilder $builder): MapperBuilder
     {
-        return $builder
-            ->allowSuperfluousKeys()
+        return $builder->allowSuperfluousKeys()
             ->allowScalarValueCasting()
             ->supportDateFormats('Y-m-d', 'Y-m-d H:i:s');
     }

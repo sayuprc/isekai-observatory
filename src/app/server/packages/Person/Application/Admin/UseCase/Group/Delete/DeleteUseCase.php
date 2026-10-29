@@ -40,7 +40,9 @@ readonly class DeleteUseCase
             }
 
             if ($this->usageChecker->isUsed($personGroupId)) {
-                throw new BusinessRuleViolationException('この人物グループは楽曲披露に使用されているため削除できません');
+                throw new BusinessRuleViolationException(
+                    'この人物グループは楽曲披露に使用されているため削除できません',
+                );
             }
 
             $this->repository->delete($personGroupId);

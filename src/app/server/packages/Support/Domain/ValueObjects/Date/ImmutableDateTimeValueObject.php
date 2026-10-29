@@ -31,7 +31,9 @@ abstract readonly class ImmutableDateTimeValueObject
 
     public function equals(self $other): bool
     {
-        return $this::class === $other::class
-            && $this->value->format('Y-m-d H:i:s') === $other->value->format('Y-m-d H:i:s');
+        return (
+            $this::class === $other::class
+                && $this->value->format('Y-m-d H:i:s') === $other->value->format('Y-m-d H:i:s')
+        );
     }
 }

@@ -54,7 +54,10 @@ readonly class SearchUseCase
         return new SearchOutputData(
             $media,
             $this->repository->maxPage($criteria),
-            $this->usageCountQueryService->countUsages(array_map(static fn (Media $item): MediaId => $item->mediaId, $media)),
+            $this->usageCountQueryService->countUsages(array_map(
+                static fn (Media $item): MediaId => $item->mediaId,
+                $media,
+            )),
         );
     }
 }

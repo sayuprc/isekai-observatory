@@ -29,12 +29,20 @@ class ImportYouTubeCommand extends Command
 
         foreach ($output->results as $channelResult) {
             if (! $channelResult->channelFound) {
-                $this->warn(sprintf('%s: チャンネルが見つかりませんでした (%s)', $channelResult->channel->name->value, $channelResult->channel->channelId->value));
+                $this->warn(sprintf(
+                    '%s: チャンネルが見つかりませんでした (%s)',
+                    $channelResult->channel->name->value,
+                    $channelResult->channel->channelId->value,
+                ));
 
                 continue;
             }
 
-            $this->info(sprintf('%s: %d 件取り込みました', $channelResult->channel->name->value, $channelResult->importedCount));
+            $this->info(sprintf(
+                '%s: %d 件取り込みました',
+                $channelResult->channel->name->value,
+                $channelResult->importedCount,
+            ));
         }
 
         return Command::SUCCESS;

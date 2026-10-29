@@ -40,7 +40,10 @@ readonly class SearchUseCase
         return new SearchOutputData(
             $personGroups,
             $this->query->maxPage($criteria),
-            $this->usageCountQueryService->countPerformances(array_map(static fn (PersonGroupSummary $personGroup): string => $personGroup->personGroupId, $personGroups)),
+            $this->usageCountQueryService->countPerformances(array_map(
+                static fn (PersonGroupSummary $personGroup): string => $personGroup->personGroupId,
+                $personGroups,
+            )),
         );
     }
 }

@@ -94,15 +94,15 @@ readonly class EventRepository implements EventRepositoryInterface
             ->build()
             ->append(
                 'ON DUPLICATE KEY UPDATE '
-                . '`title` = VALUES(`title`), '
-                . '`description` = VALUES(`description`), '
-                . '`note` = VALUES(`note`), '
-                . '`type` = VALUES(`type`), '
-                . '`start_on` = VALUES(`start_on`), '
-                . '`end_on` = VALUES(`end_on`), '
-                . '`status` = VALUES(`status`), '
-                . '`is_display` = VALUES(`is_display`), '
-                . '`updated_at` = VALUES(`updated_at`)',
+                    . '`title` = VALUES(`title`), '
+                    . '`description` = VALUES(`description`), '
+                    . '`note` = VALUES(`note`), '
+                    . '`type` = VALUES(`type`), '
+                    . '`start_on` = VALUES(`start_on`), '
+                    . '`end_on` = VALUES(`end_on`), '
+                    . '`status` = VALUES(`status`), '
+                    . '`is_display` = VALUES(`is_display`), '
+                    . '`updated_at` = VALUES(`updated_at`)',
             )
             ->execute($this->queryFactory->pdo());
 
@@ -389,7 +389,10 @@ readonly class EventRepository implements EventRepositoryInterface
                     'song_performance_persons.person_group_id',
                 ])
                 ->from('song_performance_persons')
-                ->join('song_performances', 'song_performances.performance_id = song_performance_persons.performance_id')
+                ->join(
+                    'song_performances',
+                    'song_performances.performance_id = song_performance_persons.performance_id',
+                )
                 ->where('song_performances.event_id', '=', $binEventId)
                 ->orderBy('song_performance_persons.order_no'),
         );
@@ -399,7 +402,9 @@ readonly class EventRepository implements EventRepositoryInterface
             $coVocalistsByPerformance[Row::string($row, 'performance_id')][] = [
                 'personId' => $this->converter->toUuid(Row::string($row, 'person_id')),
                 'creditName' => Row::nullableString($row, 'credit_name'),
-                'personGroupId' => ($binGroupId = Row::nullableString($row, 'person_group_id')) === null ? null : $this->converter->toUuid($binGroupId),
+                'personGroupId' => ($binGroupId = Row::nullableString($row, 'person_group_id')) === null
+                    ? null
+                    : $this->converter->toUuid($binGroupId),
                 'orderNo' => Row::int($row, 'order_no'),
             ];
         }
@@ -443,7 +448,10 @@ readonly class EventRepository implements EventRepositoryInterface
 
         $performanceIdsByItem = [];
         foreach ($linkRows as $row) {
-            $performanceIdsByItem[Row::string($row, 'setlist_item_id')][] = $this->converter->toUuid(Row::string($row, 'performance_id'));
+            $performanceIdsByItem[Row::string($row, 'setlist_item_id')][] = $this->converter->toUuid(Row::string(
+                $row,
+                'performance_id',
+            ));
         }
 
         return array_map(

@@ -33,15 +33,36 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         );
         $this->storeReleases(
             // 古い作品: 配信が先行、CD が後発。最古 2026-01-01 がグループの代表日になる
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, 'CD', true, new ImmutableDate('2026-03-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                'CD',
+                true,
+                new ImmutableDate('2026-03-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
         $this->withAuth()
@@ -101,15 +122,35 @@ class SearchReleaseGroupTest extends DatabaseTestCase
 
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId1, '古いが先頭の作品', ReleaseGroupType::Single, true, orderNo: 1),
-            $this->createReleaseGroup($releaseGroupId2, '新しいが後続の作品', ReleaseGroupType::Album, true, orderNo: 2),
+            $this->createReleaseGroup(
+                $releaseGroupId2,
+                '新しいが後続の作品',
+                ReleaseGroupType::Album,
+                true,
+                orderNo: 2,
+            ),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
         $this->withAuth()
@@ -126,16 +167,42 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $releaseGroupId2 = $this->generateUuid();
 
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId1, '同日で order_no が小さい作品', ReleaseGroupType::Single, true, orderNo: 1),
-            $this->createReleaseGroup($releaseGroupId2, '同日で order_no が大きい作品', ReleaseGroupType::Album, true, orderNo: 2),
+            $this->createReleaseGroup(
+                $releaseGroupId1,
+                '同日で order_no が小さい作品',
+                ReleaseGroupType::Single,
+                true,
+                orderNo: 1,
+            ),
+            $this->createReleaseGroup(
+                $releaseGroupId2,
+                '同日で order_no が大きい作品',
+                ReleaseGroupType::Album,
+                true,
+                orderNo: 2,
+            ),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
         $this->withAuth()
@@ -178,12 +245,26 @@ class SearchReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId3, 'リリース未登録の作品', ReleaseGroupType::Ep, true),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
         $this->withAuth()
@@ -220,8 +301,12 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $taggedId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($otherTagId, 'タグB', 20));
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($taggedId, 'タグ付きの作品', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]),
-            $this->createReleaseGroup($this->generateUuid(), '別タグの作品', ReleaseGroupType::Album, tags: [['tagId' => $otherTagId]]),
+            $this->createReleaseGroup($taggedId, 'タグ付きの作品', ReleaseGroupType::Album, tags: [[
+                'tagId' => $tagId,
+            ]]),
+            $this->createReleaseGroup($this->generateUuid(), '別タグの作品', ReleaseGroupType::Album, tags: [[
+                'tagId' => $otherTagId,
+            ]]),
             $this->createReleaseGroup($this->generateUuid(), 'タグなしの作品', ReleaseGroupType::Album),
         );
 

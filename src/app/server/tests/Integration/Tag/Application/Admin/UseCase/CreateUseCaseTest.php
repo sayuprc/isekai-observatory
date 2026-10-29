@@ -39,9 +39,10 @@ class CreateUseCaseTest extends DatabaseTestCase
     #[Test]
     public function createAppendsOrderNoFromCurrentMax(): void
     {
-        $this->app->make(TagRepository::class)->save(
-            $this->createTag($this->generateUuid(), '既存タグ', 40),
-        );
+        $this->app->make(TagRepository::class)
+            ->save(
+                $this->createTag($this->generateUuid(), '既存タグ', 40),
+            );
 
         $result = $this->getInstance()->handle(new CreateInputData('テストタグA'));
 

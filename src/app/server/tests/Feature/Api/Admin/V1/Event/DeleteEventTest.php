@@ -33,7 +33,10 @@ class DeleteEventTest extends DatabaseTestCase
             ->assertStatus(204);
 
         $this->assertAuditLogCount(1);
-        $this->assertSame('削除できる活動', $this->findAuditLog(AuditAction::Delete, AuditTargetType::Event, $eventId)['snapshot']['title']);
+        $this->assertSame(
+            '削除できる活動',
+            $this->findAuditLog(AuditAction::Delete, AuditTargetType::Event, $eventId)['snapshot']['title'],
+        );
     }
 
     #[Test]

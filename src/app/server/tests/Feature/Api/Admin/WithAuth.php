@@ -44,8 +44,7 @@ trait WithAuth
 
         $authorization = 'Bearer ' . $accessToken->jwt->value;
 
-        return $this
-            ->withHeader('Authorization', $authorization)
+        return $this->withHeader('Authorization', $authorization)
             ->withServerVariables(['HTTP_AUTHORIZATION' => $authorization]);
     }
 }

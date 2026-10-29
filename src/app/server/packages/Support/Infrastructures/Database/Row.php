@@ -80,7 +80,10 @@ final class Row
         }
 
         if (! is_numeric($value)) {
-            throw new UnexpectedValueException(sprintf('列 %s は bool 相当の数値もしくは null である必要があります。', $key));
+            throw new UnexpectedValueException(sprintf(
+                '列 %s は bool 相当の数値もしくは null である必要があります。',
+                $key,
+            ));
         }
 
         return (bool)(int)$value;

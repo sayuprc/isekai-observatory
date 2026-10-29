@@ -21,8 +21,7 @@ readonly class Converter
 {
     public function toOpenApiSong(AssembledSong $song): OpenApiSong
     {
-        return new OpenApiSong(['lyrics_link' => $song->lyricsLink])
-            ->setSongId($song->songId)
+        return new OpenApiSong(['lyrics_link' => $song->lyricsLink])->setSongId($song->songId)
             ->setTitle($song->title)
             ->setDescription($song->description)
             ->setNote($song->note)
@@ -36,8 +35,7 @@ readonly class Converter
 
     private function toOpenApiSongPerson(AssembledPerson $person): OpenApiSongPerson
     {
-        return new OpenApiSongPerson()
-            ->setPersonId($person->personId)
+        return new OpenApiSongPerson()->setPersonId($person->personId)
             ->setName($person->name)
             ->setRole(OpenApiSongPersonRole::from($person->role->value))
             ->setOrderNo($person->orderNo);
@@ -45,15 +43,13 @@ readonly class Converter
 
     private function toOpenApiTag(AssembledTag $tag): OpenApiAttachedTag
     {
-        return new OpenApiAttachedTag()
-            ->setTagId($tag->tagId)
+        return new OpenApiAttachedTag()->setTagId($tag->tagId)
             ->setName($tag->name);
     }
 
     private function toOpenApiSongLinkedMedia(AssembledMedia $media): OpenApiSongLinkedMedia
     {
-        return new OpenApiSongLinkedMedia()
-            ->setMediaId($media->mediaId)
+        return new OpenApiSongLinkedMedia()->setMediaId($media->mediaId)
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(new DateTime($media->publishedAt))

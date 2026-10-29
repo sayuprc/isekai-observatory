@@ -25,8 +25,7 @@ class ListPresenter
 
     private function toOpenApiMedia(MediaListItem $media): Media
     {
-        return new Media()
-            ->setMediaId($media->mediaId)
+        return new Media()->setMediaId($media->mediaId)
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))

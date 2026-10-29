@@ -88,10 +88,13 @@ class ReleaseIntegrityServiceTest extends TestCase
             ],
         );
 
-        $this->assertSame([
-            ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
-            ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
-        ], $result->media->toArray()[0]['tracks']);
+        $this->assertSame(
+            [
+                ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
+                ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
+            ],
+            $result->media->toArray()[0]['tracks'],
+        );
     }
 
     #[Test]

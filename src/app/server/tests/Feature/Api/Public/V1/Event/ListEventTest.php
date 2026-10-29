@@ -36,7 +36,13 @@ class ListEventTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
-        $this->storeMedia($this->createMedia($mediaId, '公開メディア', 'https://example.com/public', MediaType::Mv, true));
+        $this->storeMedia($this->createMedia(
+            $mediaId,
+            '公開メディア',
+            'https://example.com/public',
+            MediaType::Mv,
+            true,
+        ));
         $tagIdFirst = $this->generateUuid();
         $tagIdSecond = $this->generateUuid();
         $this->storeTags(
@@ -52,11 +58,26 @@ class ListEventTest extends DatabaseTestCase
             media: [['mediaId' => $mediaId, 'orderNo' => 1]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/event', 'orderNo' => 1]],
             performances: [
-                ['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                    ['personId' => $personId, 'creditName' => '当日のユニット', 'personGroupId' => $personGroupId, 'orderNo' => 1],
-                ]],
+                [
+                    'performanceId' => $performanceId,
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [
+                        [
+                            'personId' => $personId,
+                            'creditName' => '当日のユニット',
+                            'personGroupId' => $personGroupId,
+                            'orderNo' => 1,
+                        ],
+                    ],
+                ],
             ],
-            setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
+            setlist: [[
+                'setlistItemId' => $this->generateUuid(),
+                'orderNo' => 1,
+                'label' => '本編',
+                'performanceIds' => [$performanceId],
+            ]],
             tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
         ));
 
@@ -78,7 +99,11 @@ class ListEventTest extends DatabaseTestCase
                         'performanceId' => $performanceId,
                         'songId' => $songId,
                         'songTitle' => '公開楽曲',
-                        'coVocalists' => [['personId' => $personId, 'creditName' => '当日のユニット', 'personGroupId' => $personGroupId]],
+                        'coVocalists' => [[
+                            'personId' => $personId,
+                            'creditName' => '当日のユニット',
+                            'personGroupId' => $personGroupId,
+                        ]],
                     ]],
                     'setlist' => [['label' => '本編', 'performanceIds' => [$performanceId]]],
                     'tagIds' => [$tagIdFirst, $tagIdSecond],
@@ -93,7 +118,12 @@ class ListEventTest extends DatabaseTestCase
         $this->storeSongs($this->createSong($songId, '非公開楽曲', '説明', SongType::Original, false, 1));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
-            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
+            performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [],
+            ]],
         ));
 
         $this->get(route(PublicEventRouteMap::List))

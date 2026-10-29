@@ -62,7 +62,11 @@ readonly class UpdateUseCase
 
             return new UpdateOutputData(
                 $media,
-                $this->tagRepository->findByIds(...$media->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray()),
+                $this->tagRepository->findByIds(
+                    ...$media->tags->toGeneric()
+                        ->map(static fn (TagReference $tag): TagId => $tag->tagId)
+                        ->toArray(),
+                ),
             );
         });
     }

@@ -36,9 +36,10 @@ readonly class LoginStartUseCase
         // ユーザー列挙を防ぐため、メールの実在やパスキー登録の有無に依らず常に同一形状の
         // ceremony を返す。実在ユーザーのみ本物の adminUserId を束縛し、それ以外はダミーの
         // adminUserId にすることで finish 時に必ず認証失敗となる (応答は区別できない)
-        $adminUserId = $adminUser === null || $passkeys === []
-            ? $this->uuidGenerator->generate()
-            : $adminUser->adminUserId->value;
+        $adminUserId =
+            $adminUser === null || $passkeys === []
+                ? $this->uuidGenerator->generate()
+                : $adminUser->adminUserId->value;
 
         $authCeremonyId = $this->uuidGenerator->generate();
         $startResult = $this->passkeyAuthenticator->startAuthentication();

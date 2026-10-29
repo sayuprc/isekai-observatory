@@ -75,6 +75,9 @@ readonly class SongPerformances extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (SongPerformance $performance): array => $performance->toArray(), $this->items));
+        return array_values(array_map(
+            static fn (SongPerformance $performance): array => $performance->toArray(),
+            $this->items,
+        ));
     }
 }

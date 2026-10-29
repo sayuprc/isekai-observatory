@@ -23,8 +23,7 @@ final readonly class NotificationPubSubDriver implements NotificationDriverInter
     public function notice(NotificationMessage $message): void
     {
         $this->publisher->publish(
-            new PublishRequest()
-                ->setTopic(PublisherClient::topicName($this->config->project, $this->config->topic))
+            new PublishRequest()->setTopic(PublisherClient::topicName($this->config->project, $this->config->topic))
                 ->setMessages([new PubsubMessage()->setData($message->toJson())]),
         );
     }

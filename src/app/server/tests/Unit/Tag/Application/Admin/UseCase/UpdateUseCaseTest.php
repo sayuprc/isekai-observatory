@@ -70,9 +70,11 @@ class UpdateUseCaseTest extends TestCase
 
         $this->repository->shouldReceive('save')
             ->withArgs(
-                static fn (Tag $arg): bool => $arg->tagId->value === $tagId
+                static fn (Tag $arg): bool => (
+                    $arg->tagId->value === $tagId
                     && $arg->name->value === $name
-                    && $arg->orderNo->value === $orderNo,
+                    && $arg->orderNo->value === $orderNo
+                ),
             )
             ->andReturn($tag)
             ->once();

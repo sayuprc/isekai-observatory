@@ -20,14 +20,13 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new MediaSearchResponse()
-                ->setMedia(array_map(
-                    fn (Media $media): MediaSummary => $this->converter->toOpenApiMediaSummary(
-                        $media,
-                        $outputData->usageCounts[$media->mediaId->value] ?? new MediaUsageCount(0, 0),
-                    ),
-                    $outputData->media,
-                ))
+            new MediaSearchResponse()->setMedia(array_map(
+                fn (Media $media): MediaSummary => $this->converter->toOpenApiMediaSummary(
+                    $media,
+                    $outputData->usageCounts[$media->mediaId->value] ?? new MediaUsageCount(0, 0),
+                ),
+                $outputData->media,
+            ))
                 ->setMaxPage($outputData->maxPage),
             200,
         );

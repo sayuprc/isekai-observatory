@@ -22,9 +22,10 @@ class DeleteSongTest extends DatabaseTestCase
     {
         $uuid = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong($uuid, '', '', SongType::Original, true, 1, [], [], [], []),
-        );
+        $this->app->make(SongRepository::class)
+            ->save(
+                $this->createSong($uuid, '', '', SongType::Original, true, 1, [], [], [], []),
+            );
 
         $this->withAuth()
             ->delete(route(SongRouteMap::Delete, $uuid))

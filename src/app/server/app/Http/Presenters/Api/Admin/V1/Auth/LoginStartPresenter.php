@@ -13,8 +13,7 @@ class LoginStartPresenter
     public function present(LoginStartOutputData $output): JsonResponse
     {
         return response()->json(
-            new LoginStartResponse()
-                ->setAuthCeremonyId($output->authCeremonyId)
+            new LoginStartResponse()->setAuthCeremonyId($output->authCeremonyId)
                 ->setPublicKey($output->publicKey),
             200,
         );

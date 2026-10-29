@@ -40,8 +40,7 @@ class ListPresenter
         $media = array_map($this->toOpenApiSongMediaSummary(...), $song->media);
         $releaseGroups = array_map($this->toOpenApiSongReleaseGroupSummary(...), $song->releaseGroups);
 
-        return new OpenApiSongListItem()
-            ->setSongId($song->songId)
+        return new OpenApiSongListItem()->setSongId($song->songId)
             ->setTitle($song->title)
             ->setDescription($song->description)
             ->setType(SongTypeValue::from($song->type->value))
@@ -49,8 +48,7 @@ class ListPresenter
             ->setComposers($song->composers)
             ->setArrangers($song->arrangers)
             ->setCounts(
-                new SongRelationCounts()
-                    ->setReleaseCount(count($releaseGroups))
+                new SongRelationCounts()->setReleaseCount(count($releaseGroups))
                     ->setMediaCount(count($media)),
             )
             ->setMedia($media)
@@ -64,16 +62,14 @@ class ListPresenter
      */
     private function toOpenApiTag(array $tag): AttachedTag
     {
-        return new AttachedTag()
-            ->setTagId($tag['tagId'])
+        return new AttachedTag()->setTagId($tag['tagId'])
             ->setName($tag['name'])
             ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiSongReleaseGroupSummary(SongReleaseGroupSummary $releaseGroup): OpenApiSongReleaseGroupSummary
     {
-        return new OpenApiSongReleaseGroupSummary()
-            ->setReleaseGroupId($releaseGroup->releaseGroupId)
+        return new OpenApiSongReleaseGroupSummary()->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->typeValue))
             ->setFirstReleasedOn(new DateTime($releaseGroup->firstReleasedOn));
@@ -81,8 +77,7 @@ class ListPresenter
 
     private function toOpenApiSongMediaSummary(SongMediaSummary $media): OpenApiSongMediaSummary
     {
-        return new OpenApiSongMediaSummary()
-            ->setMediaId($media->mediaId)
+        return new OpenApiSongMediaSummary()->setMediaId($media->mediaId)
             ->setTitle($media->title)
             ->setType(MediaTypeValue::from($media->type->value))
             ->setUrl($media->url)
@@ -98,8 +93,7 @@ class ListPresenter
             'end_on' => $schedule['endOn'] === null ? null : new DateTime($schedule['endOn']),
         ]);
 
-        return new OpenApiSongPerformanceHistory()
-            ->setEventId($performance->eventId)
+        return new OpenApiSongPerformanceHistory()->setEventId($performance->eventId)
             ->setEventTitle($performance->eventTitle)
             ->setType(EventTypeValue::from($performance->typeValue))
             ->setSchedule($scheduleModel)

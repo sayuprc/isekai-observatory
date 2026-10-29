@@ -66,7 +66,10 @@ readonly class Setlist extends ImmutableCollection
      */
     public function referencedPerformanceIds(): array
     {
-        return array_merge([], ...array_map(static fn (SetlistItem $item): array => $item->performanceIds, $this->items));
+        return array_merge(
+            [],
+            ...array_map(static fn (SetlistItem $item): array => $item->performanceIds, $this->items),
+        );
     }
 
     /**

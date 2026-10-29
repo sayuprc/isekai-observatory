@@ -140,7 +140,9 @@ readonly class PersonRepository implements PersonRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append('ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `order_no` = VALUES(`order_no`), `updated_at` = VALUES(`updated_at`)')
+            ->append(
+                'ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `order_no` = VALUES(`order_no`), `updated_at` = VALUES(`updated_at`)',
+            )
             ->execute($this->queryFactory->pdo());
 
         return $person;

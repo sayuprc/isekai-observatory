@@ -13,16 +13,14 @@ class Converter
 {
     public function toOpenApiVenue(Venue $venue): OpenApiVenue
     {
-        return new OpenApiVenue()
-            ->setVenueId($venue->venueId->value)
+        return new OpenApiVenue()->setVenueId($venue->venueId->value)
             ->setName($venue->name->value)
             ->setKind(VenueKindValue::from($venue->kind->value));
     }
 
     public function toOpenApiVenueSummary(Venue $venue, int $eventCount): OpenApiVenueSummary
     {
-        return new OpenApiVenueSummary()
-            ->setVenueId($venue->venueId->value)
+        return new OpenApiVenueSummary()->setVenueId($venue->venueId->value)
             ->setName($venue->name->value)
             ->setKind(VenueKindValue::from($venue->kind->value))
             ->setEventCount($eventCount);

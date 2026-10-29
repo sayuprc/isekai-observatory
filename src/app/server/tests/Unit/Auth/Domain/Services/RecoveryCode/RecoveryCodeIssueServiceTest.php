@@ -53,7 +53,9 @@ class RecoveryCodeIssueServiceTest extends TestCase
             ->andReturn('hashed-code')
             ->times(10);
 
-        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(new AdminUserId(self::ADMIN_USER_ID));
+        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(
+            new AdminUserId(self::ADMIN_USER_ID),
+        );
 
         $this->assertCount(10, $codes);
         $this->assertCount(10, $plainCodes);
@@ -75,7 +77,9 @@ class RecoveryCodeIssueServiceTest extends TestCase
             ->andReturn('hashed-code')
             ->times(10);
 
-        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(new AdminUserId(self::ADMIN_USER_ID));
+        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(
+            new AdminUserId(self::ADMIN_USER_ID),
+        );
 
         foreach ($codes as $code) {
             $this->assertInstanceOf(RecoveryCode::class, $code);

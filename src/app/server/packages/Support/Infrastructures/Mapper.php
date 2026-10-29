@@ -22,8 +22,7 @@ readonly class Mapper implements MapperInterface
             ? (string)json_encode($source)
             : $source;
 
-        return $this->builder
-            ->mapper()
+        return $this->builder->mapper()
             ->map($signature, Source::json($json)->camelCaseKeys());
     }
 }

@@ -21,8 +21,7 @@ final class ApiError
     public static function unauthenticated(): array
     {
         return [
-            new ErrorResponse()
-                ->setCode(ErrorCode::UNAUTHENTICATED)
+            new ErrorResponse()->setCode(ErrorCode::UNAUTHENTICATED)
                 ->setMessage('認証が必要です'),
             401,
         ];
@@ -34,8 +33,7 @@ final class ApiError
     public static function permissionDenied(): array
     {
         return [
-            new ErrorResponse()
-                ->setCode(ErrorCode::PERMISSION_DENIED)
+            new ErrorResponse()->setCode(ErrorCode::PERMISSION_DENIED)
                 ->setMessage('権限がありません'),
             403,
         ];
@@ -47,8 +45,7 @@ final class ApiError
     public static function notFound(string $message): array
     {
         return [
-            new ErrorResponse()
-                ->setCode(ErrorCode::NOT_FOUND)
+            new ErrorResponse()->setCode(ErrorCode::NOT_FOUND)
                 ->setMessage($message),
             404,
         ];
@@ -65,15 +62,13 @@ final class ApiError
 
         foreach ($errors as $field => $messages) {
             foreach ($messages as $message) {
-                $details[] = new ErrorDetail()
-                    ->setField($field)
+                $details[] = new ErrorDetail()->setField($field)
                     ->setMessage($message);
             }
         }
 
         return [
-            new ErrorResponse()
-                ->setCode(ErrorCode::VALIDATION_FAILED)
+            new ErrorResponse()->setCode(ErrorCode::VALIDATION_FAILED)
                 ->setMessage('入力内容に誤りがあります')
                 ->setDetails($details),
             422,
@@ -86,8 +81,7 @@ final class ApiError
     public static function businessRuleViolation(string $message): array
     {
         return [
-            new ErrorResponse()
-                ->setCode(ErrorCode::BUSINESS_RULE_VIOLATION)
+            new ErrorResponse()->setCode(ErrorCode::BUSINESS_RULE_VIOLATION)
                 ->setMessage($message),
             400,
         ];
@@ -99,8 +93,7 @@ final class ApiError
     public static function internalError(): array
     {
         return [
-            new ErrorResponse()
-                ->setCode(ErrorCode::INTERNAL_ERROR)
+            new ErrorResponse()->setCode(ErrorCode::INTERNAL_ERROR)
                 ->setMessage('予期しないエラーが発生しました'),
             500,
         ];

@@ -85,13 +85,25 @@ class ListReleaseGroupTest extends DatabaseTestCase
                             'position' => 1,
                             'name' => 'Disc 1',
                             'tracks' => [
-                                ['trackNo' => 1, 'title' => null, 'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲']]],
-                                ['trackNo' => 2, 'title' => null, 'songs' => [['songId' => null, 'title' => '非公開楽曲']]],
+                                [
+                                    'trackNo' => 1,
+                                    'title' => null,
+                                    'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲']],
+                                ],
+                                [
+                                    'trackNo' => 2,
+                                    'title' => null,
+                                    'songs' => [['songId' => null, 'title' => '非公開楽曲']],
+                                ],
                                 ['trackNo' => 3, 'title' => '管理対象外の楽曲', 'songs' => []],
-                                ['trackNo' => 4, 'title' => 'メドレー', 'songs' => [
-                                    ['songId' => null, 'title' => '非公開楽曲'],
-                                    ['songId' => $visibleSongId, 'title' => '公開楽曲'],
-                                ]],
+                                [
+                                    'trackNo' => 4,
+                                    'title' => 'メドレー',
+                                    'songs' => [
+                                        ['songId' => null, 'title' => '非公開楽曲'],
+                                        ['songId' => $visibleSongId, 'title' => '公開楽曲'],
+                                    ],
+                                ],
                             ],
                         ]],
                     ]],
@@ -137,7 +149,10 @@ class ListReleaseGroupTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJsonPath('items.0.releaseGroupId', $firstId);
 
-        $this->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+        $this->get(route(PublicReleaseGroupRouteMap::List, [
+            'pageSize' => 1,
+            'pageToken' => $first->json('nextPageToken'),
+        ]))
             ->assertStatus(200)
             ->assertJsonPath('items.0.releaseGroupId', $secondId)
             ->assertJsonMissingPath('nextPageToken');

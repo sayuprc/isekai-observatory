@@ -32,4 +32,5 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // 例外 → {code, status} の対応表は ApiExceptionRenderer に集約する
         $exceptions->render(ApiExceptionRenderer::render(...));
-    })->create();
+    })
+    ->create();

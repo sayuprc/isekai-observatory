@@ -20,14 +20,13 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new TagSearchResponse()
-                ->setTags(array_map(
-                    fn (Tag $tag): TagSummary => $this->converter->toOpenApiTagSummary(
-                        $tag,
-                        $outputData->usageCounts[$tag->tagId->value] ?? new TagUsageCount(0, 0, 0, 0),
-                    ),
-                    $outputData->tags,
-                ))
+            new TagSearchResponse()->setTags(array_map(
+                fn (Tag $tag): TagSummary => $this->converter->toOpenApiTagSummary(
+                    $tag,
+                    $outputData->usageCounts[$tag->tagId->value] ?? new TagUsageCount(0, 0, 0, 0),
+                ),
+                $outputData->tags,
+            ))
                 ->setMaxPage($outputData->maxPage),
             200,
         );

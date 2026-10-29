@@ -58,7 +58,9 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for(
             'passkey-refresh',
-            fn (Request $request): Limit => $this->limit('refresh')->by('refresh:' . $request->string('refreshTokenId')->toString()),
+            fn (Request $request): Limit => $this->limit('refresh')->by(
+                'refresh:' . $request->string('refreshTokenId')->toString(),
+            ),
         );
     }
 

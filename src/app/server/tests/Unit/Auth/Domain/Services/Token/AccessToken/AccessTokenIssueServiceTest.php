@@ -50,11 +50,13 @@ class AccessTokenIssueServiceTest extends TestCase
 
         $this->factory->shouldReceive('create')
             ->withArgs(
-                static fn (AccessTokenPayload $payload): bool => $payload->iss === $issuer
+                static fn (AccessTokenPayload $payload): bool => (
+                    $payload->iss === $issuer
                     && $payload->iat === $now->getTimestamp()
                     && $payload->exp === $now->modify('+1 hours')->getTimestamp()
                     && $payload->nbf === $now->getTimestamp()
-                    && $payload->jti === $id,
+                    && $payload->jti === $id
+                ),
             )
             ->andReturn($expectedAccessToken)
             ->once();

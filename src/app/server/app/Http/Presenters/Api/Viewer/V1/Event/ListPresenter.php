@@ -47,8 +47,7 @@ class ListPresenter
 
     private function toOpenApiEvent(EventListItem $event): OpenApiEvent
     {
-        return new OpenApiEvent()
-            ->setEventId($event->eventId)
+        return new OpenApiEvent()->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
             ->setType(EventTypeValue::from($event->type->value))
@@ -71,24 +70,21 @@ class ListPresenter
      */
     private function toOpenApiTag(array $tag): AttachedTag
     {
-        return new AttachedTag()
-            ->setTagId($tag['tagId'])
+        return new AttachedTag()->setTagId($tag['tagId'])
             ->setName($tag['name'])
             ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiVenue(EventVenueSummary $venue): OpenApiEventVenueSummary
     {
-        return new OpenApiEventVenueSummary()
-            ->setVenueId($venue->venueId)
+        return new OpenApiEventVenueSummary()->setVenueId($venue->venueId)
             ->setName($venue->name)
             ->setKind(VenueKindValue::from($venue->kind->value));
     }
 
     private function toOpenApiMedia(EventMediaSummary $media): OpenApiEventMediaSummary
     {
-        return new OpenApiEventMediaSummary()
-            ->setMediaId($media->mediaId)
+        return new OpenApiEventMediaSummary()->setMediaId($media->mediaId)
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
@@ -97,8 +93,7 @@ class ListPresenter
 
     private function toOpenApiRelease(EventReleaseSummary $release): OpenApiEventReleaseSummary
     {
-        return new OpenApiEventReleaseSummary()
-            ->setReleaseId($release->releaseId)
+        return new OpenApiEventReleaseSummary()->setReleaseId($release->releaseId)
             ->setReleaseGroupId($release->releaseGroupId)
             ->setReleaseGroupTitle($release->releaseGroupTitle)
             ->setName($release->name)
@@ -111,25 +106,25 @@ class ListPresenter
 
     private function toOpenApiSource(EventSourceSummary $source): OpenApiEventSource
     {
-        return new OpenApiEventSource()
-            ->setDisplayName($source->displayName)
+        return new OpenApiEventSource()->setDisplayName($source->displayName)
             ->setUrl($source->url)
             ->setOrderNo($source->orderNo);
     }
 
     private function toOpenApiPerformance(EventPerformanceSummary $performance): OpenApiSongPerformance
     {
-        return new OpenApiSongPerformance(['song_id' => $performance->songId])
-            ->setPerformanceId($performance->performanceId)
+        return new OpenApiSongPerformance([
+            'song_id' => $performance->songId,
+        ])->setPerformanceId($performance->performanceId)
             ->setSongTitle($performance->songTitle)
             ->setCoVocalists(array_map(
                 static fn (EventCoVocalistSummary $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson([
                     'credit_name' => $coVocalist->creditName,
-                    'person_group' => $coVocalist->personGroup === null ? null : new OpenApiPerformancePersonGroup()
-                        ->setPersonGroupId($coVocalist->personGroup->personGroupId)
-                        ->setName($coVocalist->personGroup->name),
-                ])
-                    ->setPersonId($coVocalist->personId)
+                    'person_group' => $coVocalist->personGroup === null
+                        ? null
+                        : new OpenApiPerformancePersonGroup()->setPersonGroupId($coVocalist->personGroup->personGroupId)
+                            ->setName($coVocalist->personGroup->name),
+                ])->setPersonId($coVocalist->personId)
                     ->setName($coVocalist->name)
                     ->setOrderNo($coVocalist->orderNo),
                 $performance->coVocalists,
@@ -138,8 +133,7 @@ class ListPresenter
 
     private function toOpenApiSetlistItem(EventSetlistItemSummary $item): OpenApiSetlistItem
     {
-        return new OpenApiSetlistItem(['label' => $item->label])
-            ->setOrderNo($item->orderNo)
+        return new OpenApiSetlistItem(['label' => $item->label])->setOrderNo($item->orderNo)
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $item->performances));
     }
 }

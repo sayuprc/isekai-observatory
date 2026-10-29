@@ -81,9 +81,11 @@ class SongIntegrityServiceTest extends TestCase
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === $lyricistId
+                ): bool => (
+                    $arg1->value === $lyricistId
                     && $arg2->value === $composerId
-                    && $arg3->value === $arrangerId,
+                    && $arg3->value === $arrangerId
+                ),
             )
             ->andReturn([
                 $this->createPerson($lyricistId, '', 1),
@@ -137,9 +139,11 @@ class SongIntegrityServiceTest extends TestCase
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
+                ): bool => (
+                    $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
                     && $arg2->value === 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC'
-                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD',
+                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD'
+                ),
             )
             ->andReturn([
                 $this->createPerson('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', '', 1),
@@ -196,9 +200,11 @@ class SongIntegrityServiceTest extends TestCase
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === $lyricistId
+                ): bool => (
+                    $arg1->value === $lyricistId
                     && $arg2->value === $composerId
-                    && $arg3->value === $arrangerId,
+                    && $arg3->value === $arrangerId
+                ),
             )
             ->andReturn([
                 $this->createPerson($lyricistId, '', 1),
@@ -246,9 +252,11 @@ class SongIntegrityServiceTest extends TestCase
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
+                ): bool => (
+                    $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
                     && $arg2->value === 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC'
-                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD',
+                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD'
+                ),
             )
             ->andReturn([
                 $this->createPerson('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', '', 1),

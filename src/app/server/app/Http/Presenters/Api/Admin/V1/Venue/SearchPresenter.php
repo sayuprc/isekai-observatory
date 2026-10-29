@@ -19,14 +19,13 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new VenueSearchResponse()
-                ->setVenues(array_map(
-                    fn (Venue $venue): VenueSummary => $this->converter->toOpenApiVenueSummary(
-                        $venue,
-                        $outputData->usageCounts[$venue->venueId->value] ?? 0,
-                    ),
-                    $outputData->venues,
-                ))
+            new VenueSearchResponse()->setVenues(array_map(
+                fn (Venue $venue): VenueSummary => $this->converter->toOpenApiVenueSummary(
+                    $venue,
+                    $outputData->usageCounts[$venue->venueId->value] ?? 0,
+                ),
+                $outputData->venues,
+            ))
                 ->setMaxPage($outputData->maxPage),
             200,
         );

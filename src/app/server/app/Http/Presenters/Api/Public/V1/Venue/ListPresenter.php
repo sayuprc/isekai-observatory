@@ -24,8 +24,7 @@ class ListPresenter
 
     private function toOpenApiVenue(VenueListItem $venue): Venue
     {
-        return new Venue()
-            ->setVenueId($venue->venueId)
+        return new Venue()->setVenueId($venue->venueId)
             ->setName($venue->name)
             ->setKind(VenueKindValue::from($venue->kind->value));
     }

@@ -13,8 +13,7 @@ class Converter
 {
     public function toOpenApiPersonSummary(Person $person, PersonUsageCount $usage): OpenApiPersonSummary
     {
-        return new OpenApiPersonSummary()
-            ->setPersonId($person->personId->value)
+        return new OpenApiPersonSummary()->setPersonId($person->personId->value)
             ->setName($person->name->value)
             ->setOrderNo($person->orderNo->value)
             ->setSongCount($usage->songCount)
@@ -23,8 +22,7 @@ class Converter
 
     public function toOpenApiPerson(Person $person): OpenApiPerson
     {
-        return new OpenApiPerson()
-            ->setPersonId($person->personId->value)
+        return new OpenApiPerson()->setPersonId($person->personId->value)
             ->setName($person->name->value)
             ->setOrderNo($person->orderNo->value);
     }

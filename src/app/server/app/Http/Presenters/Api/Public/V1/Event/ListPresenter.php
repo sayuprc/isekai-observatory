@@ -35,8 +35,7 @@ class ListPresenter
 
     private function toOpenApiEvent(EventListItem $event): Event
     {
-        return new Event()
-            ->setEventId($event->eventId)
+        return new Event()->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
             ->setType(EventTypeValue::from($event->type->value))
@@ -56,8 +55,7 @@ class ListPresenter
 
     private function toOpenApiSource(EventSourceItem $source): EventSource
     {
-        return new EventSource()
-            ->setDisplayName($source->displayName)
+        return new EventSource()->setDisplayName($source->displayName)
             ->setUrl($source->url);
     }
 

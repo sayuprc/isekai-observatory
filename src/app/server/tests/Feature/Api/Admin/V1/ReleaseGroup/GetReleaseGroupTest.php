@@ -33,7 +33,14 @@ class GetReleaseGroupTest extends DatabaseTestCase
             $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 10),
         );
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true, '1st アルバム', orderNo: 5),
+            $this->createReleaseGroup(
+                $releaseGroupId,
+                '観測された春',
+                ReleaseGroupType::Album,
+                true,
+                '1st アルバム',
+                orderNo: 5,
+            ),
         );
         $this->storeReleases(
             $this->createRelease(

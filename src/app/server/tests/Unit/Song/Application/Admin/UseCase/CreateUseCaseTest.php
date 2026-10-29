@@ -93,12 +93,38 @@ class CreateUseCaseTest extends TestCase
             ->once();
 
         $this->repository->shouldReceive('save')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+            ->withArgs(
+                fn (Song $arg): bool => $this->assertSong(
+                    $arg,
+                    $songId,
+                    $title,
+                    $description,
+                    $note,
+                    $lyricsLink,
+                    $typeValue,
+                    $isDisplay,
+                    $orderNo,
+                    $persons,
+                ),
+            )
             ->andReturn($song)
             ->once();
 
         $this->assembler->shouldReceive('assemble')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+            ->withArgs(
+                fn (Song $arg): bool => $this->assertSong(
+                    $arg,
+                    $songId,
+                    $title,
+                    $description,
+                    $note,
+                    $lyricsLink,
+                    $typeValue,
+                    $isDisplay,
+                    $orderNo,
+                    $persons,
+                ),
+            )
             ->andReturn(
                 new AssembledSong(
                     $song->songId->value,

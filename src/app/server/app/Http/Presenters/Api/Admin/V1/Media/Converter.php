@@ -25,15 +25,15 @@ class Converter
     public function toOpenApiTags(array $tags): array
     {
         return array_values(array_map(
-            static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()->setTagId($tag->tagId->value)->setName($tag->name->value),
+            static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()->setTagId($tag->tagId->value)
+                ->setName($tag->name->value),
             $tags,
         ));
     }
 
     public function toOpenApiMedia(Media $media): OpenApiMedia
     {
-        return new OpenApiMedia()
-            ->setMediaId($media->mediaId->value)
+        return new OpenApiMedia()->setMediaId($media->mediaId->value)
             ->setTitle($media->title->value)
             ->setUrl($media->url->value)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt->value))
@@ -43,8 +43,7 @@ class Converter
 
     public function toOpenApiMediaSummary(Media $media, MediaUsageCount $usage): OpenApiMediaSummary
     {
-        return new OpenApiMediaSummary()
-            ->setMediaId($media->mediaId->value)
+        return new OpenApiMediaSummary()->setMediaId($media->mediaId->value)
             ->setTitle($media->title->value)
             ->setUrl($media->url->value)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt->value))
@@ -56,8 +55,7 @@ class Converter
 
     public function toOpenApiReferencedSong(MediaReferencedSong $song): OpenApiMediaReferencedSong
     {
-        return new OpenApiMediaReferencedSong()
-            ->setSongId($song->songId)
+        return new OpenApiMediaReferencedSong()->setSongId($song->songId)
             ->setTitle($song->title)
             ->setSongOrderNo($song->songOrderNo)
             ->setMediaOrderNo($song->mediaOrderNo);

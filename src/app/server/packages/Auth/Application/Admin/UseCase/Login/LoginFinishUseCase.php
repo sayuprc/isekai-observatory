@@ -55,7 +55,11 @@ readonly class LoginFinishUseCase
         }
 
         return $this->transaction->scope(
-            fn (): LoginFinishOutputData => $this->authenticateAndPersist($state, $credentialId, $inputData->credential),
+            fn (): LoginFinishOutputData => $this->authenticateAndPersist(
+                $state,
+                $credentialId,
+                $inputData->credential,
+            ),
         );
     }
 
@@ -67,7 +71,10 @@ readonly class LoginFinishUseCase
         string $credentialId,
         array $credential,
     ): LoginFinishOutputData {
-        $passkey = $this->passkeyRepository->findByAdminUserIdAndCredentialIdForUpdate($state->adminUserId, $credentialId);
+        $passkey = $this->passkeyRepository->findByAdminUserIdAndCredentialIdForUpdate(
+            $state->adminUserId,
+            $credentialId,
+        );
 
         if ($passkey === null) {
             throw new UnauthenticatedException();
@@ -96,7 +103,8 @@ readonly class LoginFinishUseCase
         AdminUserPasskey $passkey,
         PasskeyAuthenticationResult $verification,
     ): LoginFinishOutputData {
-        ['token' => $refreshToken, 'plainToken' => $plainRefreshToken] = $this->refreshTokenIssueService->issue($state->adminUserId);
+        ['token' => $refreshToken, 'plainToken' => $plainRefreshToken] =
+            $this->refreshTokenIssueService->issue($state->adminUserId);
 
         $updatedPasskey = $passkey->withCounter($verification->signCount, $this->clock->now());
 

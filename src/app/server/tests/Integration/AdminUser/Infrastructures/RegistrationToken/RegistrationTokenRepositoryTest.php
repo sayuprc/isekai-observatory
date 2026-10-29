@@ -29,7 +29,12 @@ class RegistrationTokenRepositoryTest extends DatabaseTestCase
     {
         $repository = $this->getInstance();
 
-        $token = $this->buildToken('invitee@example.com', 'hashed-token-value', ConsumptionStatus::Unused, ['read_admin_user']);
+        $token = $this->buildToken(
+            'invitee@example.com',
+            'hashed-token-value',
+            ConsumptionStatus::Unused,
+            ['read_admin_user'],
+        );
 
         $repository->save($token);
 
@@ -112,8 +117,10 @@ class RegistrationTokenRepositoryTest extends DatabaseTestCase
 
         $selectQueries = array_values(array_filter(
             $this->capturedQueries(),
-            static fn (string $query): bool => str_starts_with(strtolower($query), 'select')
-                && str_contains($query, 'admin_user_registration_tokens'),
+            static fn (string $query): bool => (
+                str_starts_with(strtolower($query), 'select')
+                && str_contains($query, 'admin_user_registration_tokens')
+            ),
         ));
 
         $this->assertNotSame([], $selectQueries);
@@ -142,13 +149,21 @@ class RegistrationTokenRepositoryTest extends DatabaseTestCase
     {
         $repository = $this->getInstance();
 
-        $token = $this->buildToken('invitee@example.com', 'hashed-token-value', ConsumptionStatus::Unused, ['read_admin_user']);
+        $token = $this->buildToken(
+            'invitee@example.com',
+            'hashed-token-value',
+            ConsumptionStatus::Unused,
+            ['read_admin_user'],
+        );
         $repository->save($token);
 
         $repository->save($token->consume());
 
         $permissions = DB::table('admin_user_registration_token_permissions')
-            ->where('admin_user_registration_token_id', $this->app->make(UuidConverterInterface::class)->toBin($token->registrationTokenId->value))
+            ->where(
+                'admin_user_registration_token_id',
+                $this->app->make(UuidConverterInterface::class)->toBin($token->registrationTokenId->value),
+            )
             ->pluck('permission')
             ->all();
 
@@ -158,8 +173,12 @@ class RegistrationTokenRepositoryTest extends DatabaseTestCase
     /**
      * @param list<string> $permissions
      */
-    private function buildToken(string $email, string $hashedToken, ConsumptionStatus $status, array $permissions = []): RegistrationToken
-    {
+    private function buildToken(
+        string $email,
+        string $hashedToken,
+        ConsumptionStatus $status,
+        array $permissions = [],
+    ): RegistrationToken {
         return new RegistrationToken(
             new RegistrationTokenId($this->generateUuid()),
             new HashedTokenValue($hashedToken),

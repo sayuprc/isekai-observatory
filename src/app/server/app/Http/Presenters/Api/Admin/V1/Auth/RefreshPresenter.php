@@ -13,8 +13,7 @@ class RefreshPresenter
     public function present(RefreshOutputData $output): JsonResponse
     {
         return response()->json(
-            new RefreshTokenResponse()
-                ->setAccessToken($output->accessToken->jwt->value)
+            new RefreshTokenResponse()->setAccessToken($output->accessToken->jwt->value)
                 ->setRefreshTokenId($output->refreshTokenId)
                 ->setRefreshToken($output->plainRefreshToken),
             200,

@@ -62,9 +62,10 @@ class InviteCommandTest extends DatabaseTestCase
     #[Test]
     public function failureIfEmailAlreadyUsedByAdminUser(): void
     {
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($this->generateUuid(), 'taken@example.com', Role::General, []),
-        );
+        $this->app->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($this->generateUuid(), 'taken@example.com', Role::General, []),
+            );
 
         $this->artisan('admin:invite taken@example.com')
             ->expectsOutput('すでに使われているメールアドレスです "taken@example.com"')

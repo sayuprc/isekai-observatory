@@ -44,8 +44,18 @@ class UpdateEventTest extends DatabaseTestCase
                 'media' => [],
                 'releases' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performanceIds' => [$performanceId]]],
+                'performances' => [[
+                    'performanceId' => $performanceId,
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [],
+                ]],
+                'setlist' => [[
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 1,
+                    'label' => null,
+                    'performanceIds' => [$performanceId],
+                ]],
                 'tags' => [],
             ])
             ->assertStatus(200)
@@ -55,7 +65,10 @@ class UpdateEventTest extends DatabaseTestCase
             ->assertJsonPath('event.schedule.endOn', '2026-10-02')
             ->assertJsonPath('event.setlist.0.performances.0.performanceId', $performanceId);
 
-        $this->assertSame('更新後のライブ', $this->findAuditLog(AuditAction::Update, AuditTargetType::Event, $eventId)['snapshot']['title']);
+        $this->assertSame(
+            '更新後のライブ',
+            $this->findAuditLog(AuditAction::Update, AuditTargetType::Event, $eventId)['snapshot']['title'],
+        );
     }
 
     #[Test]
@@ -79,7 +92,12 @@ class UpdateEventTest extends DatabaseTestCase
                 'media' => [],
                 'releases' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
+                'performances' => [[
+                    'performanceId' => $this->generateUuid(),
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [],
+                ]],
                 'setlist' => [],
                 'tags' => [],
             ])

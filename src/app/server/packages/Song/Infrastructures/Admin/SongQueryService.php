@@ -101,8 +101,13 @@ readonly class SongQueryService implements SongQueryServiceInterface
     /**
      * @param array<string, mixed> $row
      */
-    private function hydrate(array $row, int $performanceCount, int $mediaCount, int $personCount, int $releaseCount): SongSummary
-    {
+    private function hydrate(
+        array $row,
+        int $performanceCount,
+        int $mediaCount,
+        int $personCount,
+        int $releaseCount,
+    ): SongSummary {
         return new SongSummary(
             $this->converter->toUuid(Row::string($row, 'song_id')),
             Row::string($row, 'title'),

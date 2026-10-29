@@ -57,7 +57,15 @@ readonly class RefreshTokenRepository implements RefreshTokenRepositoryInterface
         $now = now()->toDateTimeString();
 
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['refresh_token_id', 'admin_user_id', 'token', 'expired_at', 'status', 'created_at', 'updated_at'])
+            ->into(self::TABLE, [
+                'refresh_token_id',
+                'admin_user_id',
+                'token',
+                'expired_at',
+                'status',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $this->converter->toBin($data['refresh_token_id']),
                 $this->converter->toBin($data['admin_user_id']),

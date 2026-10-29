@@ -23,13 +23,13 @@ class CreatePersonTest extends DatabaseTestCase
         $this->withAuth()
             ->postJson(route(PersonRouteMap::Create), [
                 'name' => 'テスト人物',
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'person',
-                        static fn (AssertableJson $json) => $json
-                            ->whereType('personId', 'string')
+                        static fn (AssertableJson $json) => $json->whereType('personId', 'string')
                             ->where('name', 'テスト人物')
                             ->whereType('orderNo', 'integer'),
                     ),
@@ -39,14 +39,16 @@ class CreatePersonTest extends DatabaseTestCase
     #[Test]
     public function createFailsWhenNameAlreadyExists(): void
     {
-        $this->app->make(PersonRepository::class)->save(
-            $this->createPerson($this->generateUuid(), 'テスト人物', 10),
-        );
+        $this->app->make(PersonRepository::class)
+            ->save(
+                $this->createPerson($this->generateUuid(), 'テスト人物', 10),
+            );
 
         $this->withAuth()
             ->postJson(route(PersonRouteMap::Create), [
                 'name' => 'テスト人物',
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テスト人物"',
@@ -59,16 +61,15 @@ class CreatePersonTest extends DatabaseTestCase
         $this->withAuth()
             ->postJson(route(PersonRouteMap::Create), [
                 'name' => '',
-            ])->assertStatus(422)
+            ])
+            ->assertStatus(422)
             ->assertJson(
-                static fn (AssertableJson $json) => $json
-                    ->where('code', 'validation_failed')
+                static fn (AssertableJson $json) => $json->where('code', 'validation_failed')
                     ->whereType('message', 'string')
                     ->has(
                         'details',
                         1,
-                        static fn (AssertableJson $json) => $json
-                            ->where('field', 'name')
+                        static fn (AssertableJson $json) => $json->where('field', 'name')
                             ->whereType('message', 'string'),
                     ),
             );

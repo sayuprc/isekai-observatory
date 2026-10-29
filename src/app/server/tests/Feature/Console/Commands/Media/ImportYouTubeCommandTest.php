@@ -46,11 +46,31 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
         $this->assertCount(5, $rows);
 
         $expected = [
-            ['https://www.youtube.com/watch?v=video-mv', '【Official Music Video】テスト曲', MediaType::Mv, '2024-06-04 19:00:00'],
-            ['https://www.youtube.com/watch?v=video-short', 'テスト曲 #shorts', MediaType::Short, '2024-06-03 19:00:00'],
+            [
+                'https://www.youtube.com/watch?v=video-mv',
+                '【Official Music Video】テスト曲',
+                MediaType::Mv,
+                '2024-06-04 19:00:00',
+            ],
+            [
+                'https://www.youtube.com/watch?v=video-short',
+                'テスト曲 #shorts',
+                MediaType::Short,
+                '2024-06-03 19:00:00',
+            ],
             ['https://www.youtube.com/watch?v=video-short-no-tag', '縦型動画', MediaType::Short, '2024-06-03 18:00:00'],
-            ['https://www.youtube.com/watch?v=video-cover', '【歌ってみた】テストカバー', MediaType::AudioVideo, '2024-06-02 19:00:00'],
-            ['https://www.youtube.com/watch?v=video-other', '雑談配信アーカイブ', MediaType::Other, '2024-06-01 19:00:00'],
+            [
+                'https://www.youtube.com/watch?v=video-cover',
+                '【歌ってみた】テストカバー',
+                MediaType::AudioVideo,
+                '2024-06-02 19:00:00',
+            ],
+            [
+                'https://www.youtube.com/watch?v=video-other',
+                '雑談配信アーカイブ',
+                MediaType::Other,
+                '2024-06-01 19:00:00',
+            ],
         ];
 
         foreach ($expected as $i => [$url, $title, $type, $publishedAt]) {
@@ -87,10 +107,13 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
             ->assertSuccessful();
 
         $urls = DB::table('media')->pluck('url')->all();
-        $this->assertEqualsCanonicalizing([
-            'https://www.youtube.com/watch?v=video-saved',
-            'https://www.youtube.com/watch?v=video-new',
-        ], $urls);
+        $this->assertEqualsCanonicalizing(
+            [
+                'https://www.youtube.com/watch?v=video-saved',
+                'https://www.youtube.com/watch?v=video-new',
+            ],
+            $urls,
+        );
     }
 
     #[Test]
@@ -126,7 +149,7 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
     {
         $this->app->instance(
             YouTubeVideoQueryServiceInterface::class,
-            new readonly class ($videosByChannelId) implements YouTubeVideoQueryServiceInterface {
+            new readonly class($videosByChannelId) implements YouTubeVideoQueryServiceInterface {
                 /**
                  * @param array<string, list<YouTubeUploadedVideo>> $videosByChannelId
                  */
@@ -143,7 +166,7 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
         );
         $this->app->instance(
             YouTubeShortVideoQueryServiceInterface::class,
-            new readonly class ($shortVideoIds) implements YouTubeShortVideoQueryServiceInterface {
+            new readonly class($shortVideoIds) implements YouTubeShortVideoQueryServiceInterface {
                 /**
                  * @param list<string> $shortVideoIds
                  */

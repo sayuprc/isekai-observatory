@@ -23,8 +23,7 @@ class ListPresenter
 
     private function toOpenApiPerson(PersonListItem $person): Person
     {
-        return new Person()
-            ->setPersonId($person->personId)
+        return new Person()->setPersonId($person->personId)
             ->setName($person->name);
     }
 }

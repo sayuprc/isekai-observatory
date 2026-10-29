@@ -23,8 +23,7 @@ class ListPresenter
 
     private function toOpenApiTag(TagListItem $tag): Tag
     {
-        return new Tag()
-            ->setTagId($tag->tagId)
+        return new Tag()->setTagId($tag->tagId)
             ->setName($tag->name);
     }
 }

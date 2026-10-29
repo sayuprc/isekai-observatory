@@ -38,8 +38,11 @@ class PositiveIntegerValueObjectTest extends TestCase
 
     #[Test]
     #[DataProvider('equalsEvaluatesEquivalenceProvider')]
-    public function equalsEvaluatesEquivalence(PositiveIntegerObject $object, PositiveIntegerValueObject $other, bool $expected): void
-    {
+    public function equalsEvaluatesEquivalence(
+        PositiveIntegerObject $object,
+        PositiveIntegerValueObject $other,
+        bool $expected,
+    ): void {
         $this->assertSame($expected, $object->equals($other));
     }
 

@@ -58,16 +58,17 @@ class CreateUseCaseTest extends DatabaseTestCase
         $this->app->instance(AuditLogRecorderInterface::class, $recorder);
 
         try {
-            $this->app->make(CreateUseCase::class)->handle(
-                new CreateInputData(
-                    'ロールバック対象',
-                    'https://example.com/rollback',
-                    '2024-03-01T12:34:56+09:00',
-                    MediaType::Mv->value,
-                    true,
-                    [],
-                ),
-            );
+            $this->app->make(CreateUseCase::class)
+                ->handle(
+                    new CreateInputData(
+                        'ロールバック対象',
+                        'https://example.com/rollback',
+                        '2024-03-01T12:34:56+09:00',
+                        MediaType::Mv->value,
+                        true,
+                        [],
+                    ),
+                );
             $this->fail('RuntimeException が送出されるはず');
         } catch (RuntimeException $e) {
             $this->assertSame('audit log failure', $e->getMessage());

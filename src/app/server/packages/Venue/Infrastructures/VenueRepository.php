@@ -80,7 +80,10 @@ readonly class VenueRepository implements VenueRepositoryInterface
             $this->queryFactory->select()
                 ->withSelect(self::COLUMNS)
                 ->from(self::TABLE)
-                ->where('venue_id', 'IN', array_map(fn (VenueId $venueId): string => $this->converter->toBin($venueId->value), $venueIds)),
+                ->where('venue_id', 'IN', array_map(
+                    fn (VenueId $venueId): string => $this->converter->toBin($venueId->value),
+                    $venueIds,
+                )),
         );
 
         return array_map($this->hydrate(...), $rows);
@@ -167,10 +170,14 @@ readonly class VenueRepository implements VenueRepositoryInterface
 
     private function toVenueKindValue(string $kind): int
     {
-        return is_numeric($kind) ? (int)$kind : match ($kind) {
-            'physical' => VenueKind::Physical->value,
-            'online' => VenueKind::Online->value,
-            default => throw new UnexpectedValueException('開催先種別が不正です。'),
-        };
+        return (
+            is_numeric($kind)
+                ? (int)$kind
+                : match ($kind) {
+                    'physical' => VenueKind::Physical->value,
+                    'online' => VenueKind::Online->value,
+                    default => throw new UnexpectedValueException('開催先種別が不正です。'),
+                }
+        );
     }
 }

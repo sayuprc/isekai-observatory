@@ -38,7 +38,10 @@ readonly class EventVenueLinks extends ImmutableCollection
     public static function reconstruct(array $items): self
     {
         return new self(array_map(
-            static fn (array $item): EventVenueLink => new EventVenueLink(new VenueId($item['venueId']), new OrderNo($item['orderNo'])),
+            static fn (array $item): EventVenueLink => new EventVenueLink(
+                new VenueId($item['venueId']),
+                new OrderNo($item['orderNo']),
+            ),
             $items,
         ));
     }

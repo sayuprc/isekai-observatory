@@ -37,7 +37,8 @@ class RefreshTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::Refresh), [
             'refreshTokenId' => $refreshToken->refreshTokenId->value,
             'refreshToken' => $plainToken,
-        ])->assertStatus(200)
+        ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json->has('accessToken')
                     ->has('refreshTokenId')

@@ -59,7 +59,7 @@ class RefreshUseCaseTest extends TestCase
         $this->recorder = Mockery::mock(AuditLogRecorderInterface::class);
         $this->recorder->shouldReceive('record')->byDefault();
 
-        $this->refreshTokenRepository = new class ($this) implements RefreshTokenRepositoryInterface {
+        $this->refreshTokenRepository = new class($this) implements RefreshTokenRepositoryInterface {
             public function __construct(private readonly RefreshUseCaseTest $test)
             {
             }
@@ -77,8 +77,7 @@ class RefreshUseCaseTest extends TestCase
             }
         };
 
-        $this->transaction->shouldReceive('scope')
-            ->andReturnUsing(static fn (callable $callback) => $callback());
+        $this->transaction->shouldReceive('scope')->andReturnUsing(static fn (callable $callback) => $callback());
     }
 
     #[Test]

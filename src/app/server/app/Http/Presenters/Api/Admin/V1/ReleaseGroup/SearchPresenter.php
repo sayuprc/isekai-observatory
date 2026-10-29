@@ -17,8 +17,10 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new ReleaseGroupSearchResponse()
-                ->setReleaseGroups(array_map($this->converter->toOpenApiSummary(...), $outputData->releaseGroups))
+            new ReleaseGroupSearchResponse()->setReleaseGroups(array_map(
+                $this->converter->toOpenApiSummary(...),
+                $outputData->releaseGroups,
+            ))
                 ->setMaxPage($outputData->maxPage),
             200,
         );

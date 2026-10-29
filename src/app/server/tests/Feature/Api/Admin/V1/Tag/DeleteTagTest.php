@@ -86,7 +86,12 @@ class DeleteTagTest extends DatabaseTestCase
     {
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
-        $this->storeReleaseGroups($this->createReleaseGroup($this->generateUuid(), '作品', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]));
+        $this->storeReleaseGroups($this->createReleaseGroup(
+            $this->generateUuid(),
+            '作品',
+            ReleaseGroupType::Album,
+            tags: [['tagId' => $tagId]],
+        ));
 
         $this->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
@@ -99,7 +104,14 @@ class DeleteTagTest extends DatabaseTestCase
     {
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
-        $this->storeMedia($this->createMedia($this->generateUuid(), 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $tagId]]));
+        $this->storeMedia($this->createMedia(
+            $this->generateUuid(),
+            'MV',
+            'https://example.com/mv',
+            MediaType::Mv,
+            true,
+            tags: [['tagId' => $tagId]],
+        ));
 
         $this->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))

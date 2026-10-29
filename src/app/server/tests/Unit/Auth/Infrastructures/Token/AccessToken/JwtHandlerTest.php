@@ -45,13 +45,16 @@ class JwtHandlerTest extends TestCase
         $elements = explode('.', $jwt);
         $payload = json_decode(base64_decode($elements[1]), true);
 
-        $this->assertSame([
-            'iss' => 'iss',
-            'iat' => 0,
-            'exp' => 180,
-            'nbf' => 0,
-            'jti' => 'jti',
-        ], $payload);
+        $this->assertSame(
+            [
+                'iss' => 'iss',
+                'iat' => 0,
+                'exp' => 180,
+                'nbf' => 0,
+                'jti' => 'jti',
+            ],
+            $payload,
+        );
     }
 
     #[Test]

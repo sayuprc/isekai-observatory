@@ -37,22 +37,23 @@ class GetMediaTest extends DatabaseTestCase
                 new DateTimeImmutable('2024-03-01 12:00:00'),
             ),
         );
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong(
-                $songId,
-                'テスト楽曲',
-                '説明',
-                SongType::Original,
-                true,
-                10,
-                [],
-                [],
-                [],
-                [],
-                [],
-                [['mediaId' => $uuid, 'orderNo' => 2]],
-            ),
-        );
+        $this->app->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $songId,
+                    'テスト楽曲',
+                    '説明',
+                    SongType::Original,
+                    true,
+                    10,
+                    [],
+                    [],
+                    [],
+                    [],
+                    [],
+                    [['mediaId' => $uuid, 'orderNo' => 2]],
+                ),
+            );
 
         $this->withAuth()
             ->getJson(route(MediaRouteMap::Get, $uuid))

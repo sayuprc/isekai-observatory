@@ -87,7 +87,11 @@ class QueryFactoryTest extends DatabaseTestCase
     public function countByCountsRowsPerKeyAndOmitsKeysWithoutRows(): void
     {
         $factory = $this->createFactoryWithTables();
-        $factory->insertRows('tmp_children_a', ['parent_id', 'value'], [[1, 'a'], [1, 'a'], [1, 'b'], [2, 'c'], [9, 'z']]);
+        $factory->insertRows(
+            'tmp_children_a',
+            ['parent_id', 'value'],
+            [[1, 'a'], [1, 'a'], [1, 'b'], [2, 'c'], [9, 'z']],
+        );
 
         $this->assertSame(['1' => 3, '2' => 1], $factory->countBy('tmp_children_a', 'parent_id', ['1', '2', '3']));
         $this->assertSame(['1' => 2, '2' => 1], $factory->countBy('tmp_children_a', 'parent_id', ['1', '2'], 'value'));

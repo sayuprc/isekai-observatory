@@ -194,7 +194,9 @@ readonly class EventIntegrityService
         }
 
         if (! $event->status->allowsPerformances() && (count($event->performances) > 0 || count($event->setlist) > 0)) {
-            throw new BusinessRuleViolationException('延期または中止されたイベントには楽曲披露とセットリストを設定できません');
+            throw new BusinessRuleViolationException(
+                '延期または中止されたイベントには楽曲披露とセットリストを設定できません',
+            );
         }
     }
 

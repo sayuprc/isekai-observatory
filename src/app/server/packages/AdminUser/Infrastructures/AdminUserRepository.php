@@ -179,8 +179,10 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
 
     private function isDuplicateEmail(PDOException $exception): bool
     {
-        return ($exception->errorInfo[0] ?? null) === '23000'
-            && str_contains($exception->getMessage(), 'admin_users_email_unique');
+        return (
+            ($exception->errorInfo[0] ?? null) === '23000'
+                && str_contains($exception->getMessage(), 'admin_users_email_unique')
+        );
     }
 
     /**

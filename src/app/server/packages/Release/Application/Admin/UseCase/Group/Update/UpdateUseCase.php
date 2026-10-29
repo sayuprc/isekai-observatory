@@ -63,7 +63,11 @@ readonly class UpdateUseCase
 
             return new UpdateOutputData(
                 $releaseGroup,
-                $this->tagRepository->findByIds(...$releaseGroup->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray()),
+                $this->tagRepository->findByIds(
+                    ...$releaseGroup->tags->toGeneric()
+                        ->map(static fn (TagReference $tag): TagId => $tag->tagId)
+                        ->toArray(),
+                ),
             );
         });
     }

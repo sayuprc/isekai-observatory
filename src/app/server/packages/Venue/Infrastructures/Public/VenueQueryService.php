@@ -34,7 +34,7 @@ readonly class VenueQueryService implements VenueQueryServiceInterface
             ->from('venues')
             ->where(new Sql(
                 'venue_id IN (SELECT event_venues.venue_id FROM event_venues'
-                . ' INNER JOIN events ON events.event_id = event_venues.event_id WHERE events.is_display = TRUE)',
+                    . ' INNER JOIN events ON events.event_id = event_venues.event_id WHERE events.is_display = TRUE)',
             ));
 
         if (is_string($pageToken)) {
@@ -72,7 +72,10 @@ readonly class VenueQueryService implements VenueQueryServiceInterface
             $venues,
             $lastRow === null
                 ? null
-                : VenueListPageToken::encode(Row::string($lastRow, 'name'), $this->converter->toUuid(Row::string($lastRow, 'venue_id'))),
+                : VenueListPageToken::encode(
+                    Row::string($lastRow, 'name'),
+                    $this->converter->toUuid(Row::string($lastRow, 'venue_id')),
+                ),
         );
     }
 }

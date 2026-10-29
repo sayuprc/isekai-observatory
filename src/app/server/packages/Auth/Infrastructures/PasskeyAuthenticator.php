@@ -256,7 +256,10 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         $host = parse_url($this->config->origin, PHP_URL_HOST);
 
         if (! is_string($host) || $host === '') {
-            throw new RuntimeException(sprintf('auth.passkey.origin からホストを取得できません: [%s]', $this->config->origin));
+            throw new RuntimeException(sprintf(
+                'auth.passkey.origin からホストを取得できません: [%s]',
+                $this->config->origin,
+            ));
         }
 
         return $host;

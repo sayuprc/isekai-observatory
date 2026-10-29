@@ -134,12 +134,20 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                             [
                                                 'trackNo' => 1,
                                                 'title' => null,
-                                                'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true]],
+                                                'songs' => [[
+                                                    'songId' => $visibleSongId,
+                                                    'title' => '公開楽曲',
+                                                    'isDisplay' => true,
+                                                ]],
                                             ],
                                             [
                                                 'trackNo' => 2,
                                                 'title' => null,
-                                                'songs' => [['songId' => $hiddenSongId, 'title' => '非公開楽曲', 'isDisplay' => false]],
+                                                'songs' => [[
+                                                    'songId' => $hiddenSongId,
+                                                    'title' => '非公開楽曲',
+                                                    'isDisplay' => false,
+                                                ]],
                                             ],
                                             // タイトルのみトラックは楽曲を持たない
                                             [
@@ -151,15 +159,27 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                             [
                                                 'trackNo' => 4,
                                                 'title' => '公開楽曲 -acoustic-',
-                                                'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true]],
+                                                'songs' => [[
+                                                    'songId' => $visibleSongId,
+                                                    'title' => '公開楽曲',
+                                                    'isDisplay' => true,
+                                                ]],
                                             ],
                                             // メドレーは楽曲を収録順に返す
                                             [
                                                 'trackNo' => 5,
                                                 'title' => 'メドレー',
                                                 'songs' => [
-                                                    ['songId' => $hiddenSongId, 'title' => '非公開楽曲', 'isDisplay' => false],
-                                                    ['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true],
+                                                    [
+                                                        'songId' => $hiddenSongId,
+                                                        'title' => '非公開楽曲',
+                                                        'isDisplay' => false,
+                                                    ],
+                                                    [
+                                                        'songId' => $visibleSongId,
+                                                        'title' => '公開楽曲',
+                                                        'isDisplay' => true,
+                                                    ],
                                                 ],
                                             ],
                                         ],
@@ -181,7 +201,11 @@ class ListReleaseGroupTest extends DatabaseTestCase
                                             [
                                                 'trackNo' => 1,
                                                 'title' => null,
-                                                'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲', 'isDisplay' => true]],
+                                                'songs' => [[
+                                                    'songId' => $visibleSongId,
+                                                    'title' => '公開楽曲',
+                                                    'isDisplay' => true,
+                                                ]],
                                             ],
                                         ],
                                     ],
@@ -256,8 +280,22 @@ class ListReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '同日リリースの作品', ReleaseGroupType::Album, true),
         );
         $this->storeReleases(
-            $this->createRelease($releaseId2, $releaseGroupId, '同日で order_no が大きい版', true, new ImmutableDate('2026-01-01'), orderNo: 2),
-            $this->createRelease($releaseId1, $releaseGroupId, '同日で order_no が小さい版', true, new ImmutableDate('2026-01-01'), orderNo: 1),
+            $this->createRelease(
+                $releaseId2,
+                $releaseGroupId,
+                '同日で order_no が大きい版',
+                true,
+                new ImmutableDate('2026-01-01'),
+                orderNo: 2,
+            ),
+            $this->createRelease(
+                $releaseId1,
+                $releaseGroupId,
+                '同日で order_no が小さい版',
+                true,
+                new ImmutableDate('2026-01-01'),
+                orderNo: 1,
+            ),
         );
 
         $this->get(route(ViewerReleaseGroupRouteMap::List))
@@ -296,8 +334,20 @@ class ListReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId2, '新しい作品', ReleaseGroupType::Album, true),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01')),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01')),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+            ),
         );
 
         // 最古発売日の降順なので新しい作品が先
@@ -323,12 +373,36 @@ class ListReleaseGroupTest extends DatabaseTestCase
         $releaseGroupId2 = $this->generateUuid();
 
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId1, '同日で order_no が小さい作品', ReleaseGroupType::Single, true, orderNo: 1),
-            $this->createReleaseGroup($releaseGroupId2, '同日で order_no が大きい作品', ReleaseGroupType::Album, true, orderNo: 2),
+            $this->createReleaseGroup(
+                $releaseGroupId1,
+                '同日で order_no が小さい作品',
+                ReleaseGroupType::Single,
+                true,
+                orderNo: 1,
+            ),
+            $this->createReleaseGroup(
+                $releaseGroupId2,
+                '同日で order_no が大きい作品',
+                ReleaseGroupType::Album,
+                true,
+                orderNo: 2,
+            ),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01')),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-01-01')),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+            ),
         );
 
         // 同じ発売日なら order_no の降順で制御する

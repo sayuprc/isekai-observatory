@@ -29,8 +29,7 @@ class CreateVenueTest extends DatabaseTestCase
             ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
-                    ->has('venue', static fn (AssertableJson $json) => $json
-                        ->whereType('venueId', 'string')
+                    ->has('venue', static fn (AssertableJson $json) => $json->whereType('venueId', 'string')
                         ->where('name', '配信先サンプルB')
                         ->where('kind', 2)),
             );
@@ -58,8 +57,7 @@ class CreateVenueTest extends DatabaseTestCase
     {
         $client = $this->withAuth();
 
-        $client
-            ->postJson(route(VenueRouteMap::Create), ['name' => str_repeat('あ', 256), 'kind' => 1])
+        $client->postJson(route(VenueRouteMap::Create), ['name' => str_repeat('あ', 256), 'kind' => 1])
             ->assertStatus(422);
     }
 

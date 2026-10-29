@@ -37,8 +37,7 @@ class Converter
 {
     public function toOpenApiEventSummary(EventSummary $event): OpenApiEventSummary
     {
-        return new OpenApiEventSummary()
-            ->setEventId($event->eventId)
+        return new OpenApiEventSummary()->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setType(EventTypeValue::from($event->type->value))
             ->setSchedule($this->toOpenApiSchedule($event->startOn, $event->endOn))
@@ -52,8 +51,7 @@ class Converter
 
     public function toOpenApiEvent(AssembledEvent $event): OpenApiEvent
     {
-        return new OpenApiEvent()
-            ->setEventId($event->eventId)
+        return new OpenApiEvent()->setEventId($event->eventId)
             ->setTitle($event->title)
             ->setDescription($event->description)
             ->setNote($event->note)
@@ -72,8 +70,7 @@ class Converter
 
     private function toOpenApiTag(AssembledTag $tag): OpenApiAttachedTag
     {
-        return new OpenApiAttachedTag()
-            ->setTagId($tag->tagId)
+        return new OpenApiAttachedTag()->setTagId($tag->tagId)
             ->setName($tag->name);
     }
 
@@ -87,16 +84,14 @@ class Converter
 
     private function toOpenApiVenue(AssembledVenue $venue): OpenApiVenue
     {
-        return new OpenApiVenue()
-            ->setVenueId($venue->venueId)
+        return new OpenApiVenue()->setVenueId($venue->venueId)
             ->setName($venue->name)
             ->setKind(VenueKindValue::from($venue->kindValue));
     }
 
     private function toOpenApiMedia(AssembledMedia $media): OpenApiMedia
     {
-        return new OpenApiMedia()
-            ->setMediaId($media->mediaId)
+        return new OpenApiMedia()->setMediaId($media->mediaId)
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
@@ -106,8 +101,7 @@ class Converter
 
     private function toOpenApiRelease(AssembledRelease $release): OpenApiEventRelease
     {
-        return new OpenApiEventRelease()
-            ->setReleaseId($release->releaseId)
+        return new OpenApiEventRelease()->setReleaseId($release->releaseId)
             ->setReleaseGroupId($release->releaseGroupId)
             ->setReleaseGroupTitle($release->releaseGroupTitle)
             ->setName($release->name)
@@ -121,27 +115,25 @@ class Converter
 
     private function toOpenApiSource(AssembledSource $source): OpenApiEventSource
     {
-        return new OpenApiEventSource()
-            ->setDisplayName($source->displayName)
+        return new OpenApiEventSource()->setDisplayName($source->displayName)
             ->setUrl($source->url)
             ->setOrderNo($source->orderNo);
     }
 
     private function toOpenApiPerformance(AssembledPerformance $performance): OpenApiSongPerformance
     {
-        return new OpenApiSongPerformance()
-            ->setPerformanceId($performance->performanceId)
+        return new OpenApiSongPerformance()->setPerformanceId($performance->performanceId)
             ->setSongId($performance->songId)
             ->setSongTitle($performance->songTitle)
             ->setOrderNo($performance->orderNo)
             ->setCoVocalists(array_map(
                 static fn (AssembledCoVocalist $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson([
                     'credit_name' => $coVocalist->creditName,
-                    'person_group' => $coVocalist->personGroup === null ? null : new OpenApiPerformancePersonGroup()
-                        ->setPersonGroupId($coVocalist->personGroup->personGroupId)
-                        ->setName($coVocalist->personGroup->name),
-                ])
-                    ->setPersonId($coVocalist->personId)
+                    'person_group' => $coVocalist->personGroup === null
+                        ? null
+                        : new OpenApiPerformancePersonGroup()->setPersonGroupId($coVocalist->personGroup->personGroupId)
+                            ->setName($coVocalist->personGroup->name),
+                ])->setPersonId($coVocalist->personId)
                     ->setName($coVocalist->name)
                     ->setOrderNo($coVocalist->orderNo),
                 $performance->coVocalists,
@@ -150,8 +142,7 @@ class Converter
 
     private function toOpenApiSetlistItem(AssembledSetlistItem $item): OpenApiSetlistItem
     {
-        return new OpenApiSetlistItem(['label' => $item->label])
-            ->setSetlistItemId($item->setlistItemId)
+        return new OpenApiSetlistItem(['label' => $item->label])->setSetlistItemId($item->setlistItemId)
             ->setOrderNo($item->orderNo)
             ->setPerformances(array_map($this->toOpenApiPerformance(...), $item->performances));
     }

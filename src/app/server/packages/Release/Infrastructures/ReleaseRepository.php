@@ -78,7 +78,10 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             $this->queryFactory->select()
                 ->withSelect(self::COLUMNS)
                 ->from(self::TABLE)
-                ->where('release_id', 'IN', array_map(fn (ReleaseId $releaseId): string => $this->converter->toBin($releaseId->value), $releaseIds)),
+                ->where('release_id', 'IN', array_map(
+                    fn (ReleaseId $releaseId): string => $this->converter->toBin($releaseId->value),
+                    $releaseIds,
+                )),
         );
 
         return array_map(
@@ -143,14 +146,14 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             ->build()
             ->append(
                 'ON DUPLICATE KEY UPDATE '
-                . '`release_group_id` = VALUES(`release_group_id`), '
-                . '`name` = VALUES(`name`), '
-                . '`released_on` = VALUES(`released_on`), '
-                . '`description` = VALUES(`description`), '
-                . '`note` = VALUES(`note`), '
-                . '`is_display` = VALUES(`is_display`), '
-                . '`order_no` = VALUES(`order_no`), '
-                . '`updated_at` = VALUES(`updated_at`)',
+                    . '`release_group_id` = VALUES(`release_group_id`), '
+                    . '`name` = VALUES(`name`), '
+                    . '`released_on` = VALUES(`released_on`), '
+                    . '`description` = VALUES(`description`), '
+                    . '`note` = VALUES(`note`), '
+                    . '`is_display` = VALUES(`is_display`), '
+                    . '`order_no` = VALUES(`order_no`), '
+                    . '`updated_at` = VALUES(`updated_at`)',
             )
             ->execute($this->queryFactory->pdo());
 
@@ -267,8 +270,10 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
         $songIdsByTrack = [];
 
         foreach ($trackSongRows as $trackSongRow) {
-            $songIdsByTrack[Row::int($trackSongRow, 'position')][Row::int($trackSongRow, 'track_no')][]
-                = $this->converter->toUuid(Row::string($trackSongRow, 'song_id'));
+            $songIdsByTrack[Row::int($trackSongRow, 'position')][Row::int(
+                $trackSongRow,
+                'track_no',
+            )][] = $this->converter->toUuid(Row::string($trackSongRow, 'song_id'));
         }
 
         $tracksByPosition = [];

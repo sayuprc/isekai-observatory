@@ -64,7 +64,10 @@ readonly class PersonQueryService implements PersonQueryServiceInterface
             $persons,
             $lastRow === null
                 ? null
-                : PersonListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'person_id'))),
+                : PersonListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'person_id')),
+                ),
         );
     }
 }

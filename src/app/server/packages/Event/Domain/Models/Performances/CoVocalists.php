@@ -56,6 +56,9 @@ readonly class CoVocalists extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (CoVocalist $coVocalist): array => $coVocalist->toArray(), $this->items));
+        return array_values(array_map(
+            static fn (CoVocalist $coVocalist): array => $coVocalist->toArray(),
+            $this->items,
+        ));
     }
 }

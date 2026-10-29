@@ -13,8 +13,7 @@ class Converter
 {
     public function toOpenApiTagSummary(Tag $tag, TagUsageCount $usage): OpenApiTagSummary
     {
-        return new OpenApiTagSummary()
-            ->setTagId($tag->tagId->value)
+        return new OpenApiTagSummary()->setTagId($tag->tagId->value)
             ->setName($tag->name->value)
             ->setOrderNo($tag->orderNo->value)
             ->setSongCount($usage->songCount)
@@ -25,8 +24,7 @@ class Converter
 
     public function toOpenApiTag(Tag $tag): OpenApiTag
     {
-        return new OpenApiTag()
-            ->setTagId($tag->tagId->value)
+        return new OpenApiTag()->setTagId($tag->tagId->value)
             ->setName($tag->name->value)
             ->setOrderNo($tag->orderNo->value);
     }

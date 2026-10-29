@@ -17,7 +17,15 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     private const string TABLE = 'release_groups';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['release_group_id', 'title', 'type', 'description', 'note', 'is_display', 'order_no'];
+    private const array COLUMNS = [
+        'release_group_id',
+        'title',
+        'type',
+        'description',
+        'note',
+        'is_display',
+        'order_no',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -50,7 +58,10 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
             $this->queryFactory->select()
                 ->withSelect(self::COLUMNS)
                 ->from(self::TABLE)
-                ->where('release_group_id', 'IN', array_map(fn (ReleaseGroupId $releaseGroupId): string => $this->converter->toBin($releaseGroupId->value), $releaseGroupIds)),
+                ->where('release_group_id', 'IN', array_map(
+                    fn (ReleaseGroupId $releaseGroupId): string => $this->converter->toBin($releaseGroupId->value),
+                    $releaseGroupIds,
+                )),
         );
 
         return $this->hydrateAll($rows);
@@ -91,13 +102,13 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
             ->build()
             ->append(
                 'ON DUPLICATE KEY UPDATE '
-                . '`title` = VALUES(`title`), '
-                . '`type` = VALUES(`type`), '
-                . '`description` = VALUES(`description`), '
-                . '`note` = VALUES(`note`), '
-                . '`is_display` = VALUES(`is_display`), '
-                . '`order_no` = VALUES(`order_no`), '
-                . '`updated_at` = VALUES(`updated_at`)',
+                    . '`title` = VALUES(`title`), '
+                    . '`type` = VALUES(`type`), '
+                    . '`description` = VALUES(`description`), '
+                    . '`note` = VALUES(`note`), '
+                    . '`is_display` = VALUES(`is_display`), '
+                    . '`order_no` = VALUES(`order_no`), '
+                    . '`updated_at` = VALUES(`updated_at`)',
             )
             ->execute($this->queryFactory->pdo());
 
@@ -139,13 +150,19 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
                 ->withSelect(['release_group_taggings.release_group_id', 'release_group_taggings.tag_id'])
                 ->from('release_group_taggings')
                 ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
-                ->where('release_group_taggings.release_group_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $rows))
+                ->where('release_group_taggings.release_group_id', 'IN', array_map(
+                    static fn (array $row): string => Row::string($row, 'release_group_id'),
+                    $rows,
+                ))
                 ->orderBy('tags.order_no'),
         );
 
         $tags = [];
         foreach ($taggingRows as $taggingRow) {
-            $tags[Row::string($taggingRow, 'release_group_id')][] = ['tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id'))];
+            $tags[Row::string($taggingRow, 'release_group_id')][] = ['tagId' => $this->converter->toUuid(Row::string(
+                $taggingRow,
+                'tag_id',
+            ))];
         }
 
         return array_map(

@@ -51,7 +51,10 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
-        $tagIdsByMedia = $this->loadTagIds(array_map(static fn (array $row): string => Row::string($row, 'media_id'), $pageRows));
+        $tagIdsByMedia = $this->loadTagIds(array_map(static fn (array $row): string => Row::string(
+            $row,
+            'media_id',
+        ), $pageRows));
 
         $media = array_map(
             fn (array $row): MediaListItem => new MediaListItem(
@@ -71,7 +74,10 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
             $media,
             $lastRow === null
                 ? null
-                : MediaListPageToken::encode(Row::string($lastRow, 'title'), $this->converter->toUuid(Row::string($lastRow, 'media_id'))),
+                : MediaListPageToken::encode(
+                    Row::string($lastRow, 'title'),
+                    $this->converter->toUuid(Row::string($lastRow, 'media_id')),
+                ),
         );
     }
 

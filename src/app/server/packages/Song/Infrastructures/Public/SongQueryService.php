@@ -82,7 +82,10 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $songs,
             $lastRow === null
                 ? null
-                : SongListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'song_id'))),
+                : SongListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'song_id')),
+                ),
         );
     }
 

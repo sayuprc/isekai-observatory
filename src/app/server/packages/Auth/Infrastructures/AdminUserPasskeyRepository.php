@@ -90,8 +90,10 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     }
 
     #[Override]
-    public function findByAdminUserIdAndCredentialIdForUpdate(string $adminUserId, string $credentialId): ?AdminUserPasskey
-    {
+    public function findByAdminUserIdAndCredentialIdForUpdate(
+        string $adminUserId,
+        string $credentialId,
+    ): ?AdminUserPasskey {
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
                 ->withSelect(self::COLUMNS)

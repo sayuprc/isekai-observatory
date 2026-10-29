@@ -49,7 +49,10 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
-        $memberIdsByGroup = $this->loadMemberIds(array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $pageRows));
+        $memberIdsByGroup = $this->loadMemberIds(array_map(static fn (array $row): string => Row::string(
+            $row,
+            'person_group_id',
+        ), $pageRows));
 
         $personGroups = array_map(
             fn (array $row): PersonGroupListItem => new PersonGroupListItem(
@@ -66,7 +69,10 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
             $personGroups,
             $lastRow === null
                 ? null
-                : PersonGroupListPageToken::encode(Row::string($lastRow, 'display_name'), $this->converter->toUuid(Row::string($lastRow, 'person_group_id'))),
+                : PersonGroupListPageToken::encode(
+                    Row::string($lastRow, 'display_name'),
+                    $this->converter->toUuid(Row::string($lastRow, 'person_group_id')),
+                ),
         );
     }
 

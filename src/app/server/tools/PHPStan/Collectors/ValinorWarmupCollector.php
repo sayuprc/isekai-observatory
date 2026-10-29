@@ -32,7 +32,11 @@ final class ValinorWarmupCollector implements Collector
             return null;
         }
 
-        if (! $node->class instanceof Name || ! $node->name instanceof Identifier || $node->name->toLowerString() !== 'class') {
+        if (
+            ! $node->class instanceof Name
+            || ! $node->name instanceof Identifier
+            || $node->name->toLowerString() !== 'class'
+        ) {
             return null;
         }
 

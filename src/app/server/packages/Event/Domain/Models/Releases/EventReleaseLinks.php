@@ -38,7 +38,10 @@ readonly class EventReleaseLinks extends ImmutableCollection
     public static function reconstruct(array $items): self
     {
         return new self(array_map(
-            static fn (array $item): EventReleaseLink => new EventReleaseLink(new ReleaseId($item['releaseId']), new OrderNo($item['orderNo'])),
+            static fn (array $item): EventReleaseLink => new EventReleaseLink(
+                new ReleaseId($item['releaseId']),
+                new OrderNo($item['orderNo']),
+            ),
             $items,
         ));
     }

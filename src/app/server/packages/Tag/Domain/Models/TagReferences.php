@@ -41,7 +41,9 @@ readonly class TagReferences extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(static fn (array $item): TagReference => TagReference::reconstruct(...$item), $items));
+        return new self(array_map(static fn (array $item): TagReference => TagReference::reconstruct(
+            ...$item,
+        ), $items));
     }
 
     /**

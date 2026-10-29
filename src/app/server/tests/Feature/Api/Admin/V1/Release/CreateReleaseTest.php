@@ -58,13 +58,13 @@ class CreateReleaseTest extends DatabaseTestCase
                         'tracks' => [],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->whereType('releaseId', 'string')
+                        static fn (AssertableJson $json) => $json->whereType('releaseId', 'string')
                             ->where('releaseGroupId', $releaseGroupId)
                             ->where('name', '初回限定盤')
                             ->where('releasedOn', '2026-05-09')
@@ -121,13 +121,13 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songIds', [$songId])
+                        static fn (AssertableJson $json) => $json->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.title', null)
                             ->where('media.0.tracks.1.songIds', [])
                             ->where('media.0.tracks.1.title', '管理対象外の楽曲')
@@ -176,13 +176,13 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songIds', [$songId])
+                        static fn (AssertableJson $json) => $json->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.trackNo', 1)
                             ->where('media.0.tracks.1.songIds', [$songId])
                             ->where('media.0.tracks.1.trackNo', 2)
@@ -227,13 +227,16 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songIds', [$songId2, $songId1])
+                        static fn (AssertableJson $json) => $json->where('media.0.tracks.0.songIds', [
+                            $songId2,
+                            $songId1,
+                        ])
                             ->where('media.0.tracks.0.title', 'メドレー')
                             ->etc(),
                     ),
@@ -275,10 +278,10 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(
-                static fn (AssertableJson $json) => $json
-                    ->where('code', 'business_rule_violation')
+                static fn (AssertableJson $json) => $json->where('code', 'business_rule_violation')
                     ->where('message', '1 つの収録曲に同じ楽曲を複数指定することはできません。'),
             );
 
@@ -318,13 +321,13 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songIds', [$songId])
+                        static fn (AssertableJson $json) => $json->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.title', 'テスト楽曲1 -instrumental-')
                             ->where('media.0.tracks.0.trackNo', 1)
                             ->etc(),
@@ -365,10 +368,10 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(
-                static fn (AssertableJson $json) => $json
-                    ->where('code', 'business_rule_violation')
+                static fn (AssertableJson $json) => $json->where('code', 'business_rule_violation')
                     ->where('message', '収録曲には楽曲かタイトルの少なくとも一方を指定してください。'),
             );
     }
@@ -393,13 +396,13 @@ class CreateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->whereType('releaseId', 'string')
+                        static fn (AssertableJson $json) => $json->whereType('releaseId', 'string')
                             ->where('releaseGroupId', $releaseGroupId)
                             ->where('name', '')
                             ->where('releasedOn', '2026-05-09')
@@ -428,18 +431,17 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
-            ->postJson(route(ReleaseRouteMap::Create), [
-                'releaseGroupId' => $releaseGroupId,
-                'name' => '通常盤',
-                'releasedOn' => '2026-05-09',
-                'description' => '',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'formats' => [],
-                'media' => [],
-            ])->assertStatus(422);
+        $this->withAuth()->postJson(route(ReleaseRouteMap::Create), [
+            'releaseGroupId' => $releaseGroupId,
+            'name' => '通常盤',
+            'releasedOn' => '2026-05-09',
+            'description' => '',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'formats' => [],
+            'media' => [],
+        ])->assertStatus(422);
     }
 
     #[Test]
@@ -456,7 +458,8 @@ class CreateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(['message' => '指定されたリリースグループが存在しません。']);
     }
 
@@ -474,16 +477,15 @@ class CreateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
-            ])->assertStatus(422)
+            ])
+            ->assertStatus(422)
             ->assertJson(
-                static fn (AssertableJson $json) => $json
-                    ->where('code', 'validation_failed')
+                static fn (AssertableJson $json) => $json->where('code', 'validation_failed')
                     ->whereType('message', 'string')
                     ->has(
                         'details',
                         1,
-                        static fn (AssertableJson $json) => $json
-                            ->where('field', 'releasedOn')
+                        static fn (AssertableJson $json) => $json->where('field', 'releasedOn')
                             ->where('message', '日付は YYYY-MM-DD 形式で指定してください'),
                     ),
             );

@@ -27,8 +27,7 @@ class ListPresenter
 
     private function toOpenApiSong(SongListItem $song): OpenApiSong
     {
-        return new OpenApiSong()
-            ->setSongId($song->songId)
+        return new OpenApiSong()->setSongId($song->songId)
             ->setTitle($song->title)
             ->setDescription($song->description)
             ->setType(SongTypeValue::from($song->type->value))
@@ -39,8 +38,7 @@ class ListPresenter
 
     private function toOpenApiSongCredit(SongCredit $credit): OpenApiSongCredit
     {
-        return new OpenApiSongCredit()
-            ->setPersonId($credit->personId)
+        return new OpenApiSongCredit()->setPersonId($credit->personId)
             ->setRole(SongCreditRoleValue::from($credit->role->value));
     }
 }

@@ -23,8 +23,7 @@ class ListPresenter
 
     private function toOpenApiPersonGroup(PersonGroupListItem $personGroup): PersonGroup
     {
-        return new PersonGroup()
-            ->setPersonGroupId($personGroup->personGroupId)
+        return new PersonGroup()->setPersonGroupId($personGroup->personGroupId)
             ->setName($personGroup->name)
             ->setMemberIds($personGroup->memberIds);
     }

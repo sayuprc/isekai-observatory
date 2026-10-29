@@ -72,8 +72,7 @@ final readonly class QueryFactory
      */
     public function paginate(SelectBuilder $query, int $page, PerPage $perPage): SelectBuilder
     {
-        return $query
-            ->limit($perPage->value)
+        return $query->limit($perPage->value)
             ->offset(($page - 1) * $perPage->value);
     }
 

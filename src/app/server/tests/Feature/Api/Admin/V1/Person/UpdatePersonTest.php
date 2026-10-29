@@ -29,7 +29,8 @@ class UpdatePersonTest extends DatabaseTestCase
             ->putJson(route(PersonRouteMap::Update, $uuid), [
                 'name' => 'テスト人物',
                 'orderNo' => 20,
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson([
                 'person' => [
                     'personId' => $uuid,
@@ -52,7 +53,8 @@ class UpdatePersonTest extends DatabaseTestCase
                 'personId' => $bodyPersonId,
                 'name' => 'テスト人物',
                 'orderNo' => 20,
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson([
                 'person' => [
                     'personId' => $routePersonId,
@@ -67,11 +69,10 @@ class UpdatePersonTest extends DatabaseTestCase
     {
         $personId = $this->generateUuid();
 
-        $this->withAuth()
-            ->putJson(route(PersonRouteMap::Update, $personId), [
-                'name' => 'テスト人物',
-                'orderNo' => 20,
-            ])->assertStatus(404);
+        $this->withAuth()->putJson(route(PersonRouteMap::Update, $personId), [
+            'name' => 'テスト人物',
+            'orderNo' => 20,
+        ])->assertStatus(404);
     }
 
     #[Test]
@@ -89,7 +90,8 @@ class UpdatePersonTest extends DatabaseTestCase
             ->putJson(route(PersonRouteMap::Update, $targetId), [
                 'name' => 'テスト人物',
                 'orderNo' => 30,
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テスト人物"',
@@ -107,10 +109,10 @@ class UpdatePersonTest extends DatabaseTestCase
             ->putJson(route(PersonRouteMap::Update, $uuid), [
                 'name' => '',
                 'orderNo' => 0,
-            ])->assertStatus(422)
+            ])
+            ->assertStatus(422)
             ->assertJson(
-                static fn (AssertableJson $json) => $json
-                    ->where('code', 'validation_failed')
+                static fn (AssertableJson $json) => $json->where('code', 'validation_failed')
                     ->whereType('message', 'string')
                     ->has('details', 2)
                     ->where('details.0.field', 'name')

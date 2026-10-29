@@ -13,8 +13,7 @@ class LoginFinishPresenter
     public function present(LoginFinishOutputData $output): JsonResponse
     {
         return response()->json(
-            new LoginFinishResponse()
-                ->setAccessToken($output->accessToken->jwt->value)
+            new LoginFinishResponse()->setAccessToken($output->accessToken->jwt->value)
                 ->setRefreshTokenId($output->refreshTokenId)
                 ->setRefreshToken($output->plainRefreshToken),
             200,

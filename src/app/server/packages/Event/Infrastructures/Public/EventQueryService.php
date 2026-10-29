@@ -66,7 +66,15 @@ readonly class EventQueryService implements EventQueryServiceInterface
         $tagIdsByEvent = $this->loadTagIds($binEventIds);
 
         $events = array_map(
-            function (array $row) use ($venueIdsByEvent, $mediaIdsByEvent, $releaseIdsByEvent, $sourcesByEvent, $performancesByEvent, $setlistByEvent, $tagIdsByEvent): EventListItem {
+            function (array $row) use (
+                $venueIdsByEvent,
+                $mediaIdsByEvent,
+                $releaseIdsByEvent,
+                $sourcesByEvent,
+                $performancesByEvent,
+                $setlistByEvent,
+                $tagIdsByEvent,
+            ): EventListItem {
                 $binEventId = Row::string($row, 'event_id');
 
                 return new EventListItem(
@@ -95,7 +103,10 @@ readonly class EventQueryService implements EventQueryServiceInterface
             $events,
             $lastRow === null
                 ? null
-                : EventListPageToken::encode(Row::string($lastRow, 'title'), $this->converter->toUuid(Row::string($lastRow, 'event_id'))),
+                : EventListPageToken::encode(
+                    Row::string($lastRow, 'title'),
+                    $this->converter->toUuid(Row::string($lastRow, 'event_id')),
+                ),
         );
     }
 
@@ -201,7 +212,10 @@ readonly class EventQueryService implements EventQueryServiceInterface
                 ->where('event_id', 'IN', $binEventIds)
                 ->orderBy('order_no'),
         ) as $row) {
-            $grouped[Row::string($row, 'event_id')][] = new EventSourceItem(Row::string($row, 'name'), Row::string($row, 'url'));
+            $grouped[Row::string($row, 'event_id')][] = new EventSourceItem(
+                Row::string($row, 'name'),
+                Row::string($row, 'url'),
+            );
         }
 
         return $grouped;
@@ -222,13 +236,22 @@ readonly class EventQueryService implements EventQueryServiceInterface
 
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_performances.event_id', 'song_performances.performance_id', 'songs.song_id', 'songs.title', 'songs.is_display'])
+                ->withSelect([
+                    'song_performances.event_id',
+                    'song_performances.performance_id',
+                    'songs.song_id',
+                    'songs.title',
+                    'songs.is_display',
+                ])
                 ->from('song_performances')
                 ->join('songs', 'song_performances.song_id = songs.song_id')
                 ->where('song_performances.event_id', 'IN', $binEventIds)
                 ->orderBy('song_performances.order_no'),
         );
-        $coVocalistsByPerformance = $this->loadCoVocalists(array_map(static fn (array $row): string => Row::string($row, 'performance_id'), $rows));
+        $coVocalistsByPerformance = $this->loadCoVocalists(array_map(static fn (array $row): string => Row::string(
+            $row,
+            'performance_id',
+        ), $rows));
 
         $grouped = [];
         foreach ($rows as $row) {
@@ -295,14 +318,19 @@ readonly class EventQueryService implements EventQueryServiceInterface
         $binItemIds = array_map(static fn (array $row): string => Row::string($row, 'setlist_item_id'), $itemRows);
 
         $performanceIdsByItem = [];
-        foreach ($binItemIds === [] ? [] : $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['setlist_item_id', 'performance_id'])
-                ->from('event_setlist_item_performances')
-                ->where('setlist_item_id', 'IN', $binItemIds)
-                ->orderBy('order_no'),
-        ) as $row) {
-            $performanceIdsByItem[Row::string($row, 'setlist_item_id')][] = $this->converter->toUuid(Row::string($row, 'performance_id'));
+        foreach ($binItemIds === []
+            ? []
+            : $this->queryFactory->fetchAll(
+                $this->queryFactory->select()
+                    ->withSelect(['setlist_item_id', 'performance_id'])
+                    ->from('event_setlist_item_performances')
+                    ->where('setlist_item_id', 'IN', $binItemIds)
+                    ->orderBy('order_no'),
+            ) as $row) {
+            $performanceIdsByItem[Row::string($row, 'setlist_item_id')][] = $this->converter->toUuid(Row::string(
+                $row,
+                'performance_id',
+            ));
         }
 
         $grouped = [];

@@ -30,9 +30,12 @@ class YouTubeShortVideoQueryServiceTest extends TestCase
             new YouTubeUploadedVideo('normal-video', '通常動画', '2024-06-02T10:00:00Z'),
         ]);
 
-        $this->assertSame([
-            'short-video' => true,
-            'normal-video' => false,
-        ], $results);
+        $this->assertSame(
+            [
+                'short-video' => true,
+                'normal-video' => false,
+            ],
+            $results,
+        );
     }
 }

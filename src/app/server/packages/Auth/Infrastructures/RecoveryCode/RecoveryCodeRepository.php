@@ -55,7 +55,15 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
         }, $codes);
 
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['admin_user_recovery_code_id', 'admin_user_id', 'code', 'status', 'used_at', 'created_at', 'updated_at'])
+            ->into(self::TABLE, [
+                'admin_user_recovery_code_id',
+                'admin_user_id',
+                'code',
+                'status',
+                'used_at',
+                'created_at',
+                'updated_at',
+            ])
             ->values(...$rows)
             ->execute($this->queryFactory->pdo());
     }
@@ -105,7 +113,15 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
         $now = now()->toDateTimeString();
 
         $this->queryFactory->insert()
-            ->into(self::TABLE, ['admin_user_recovery_code_id', 'admin_user_id', 'code', 'status', 'used_at', 'created_at', 'updated_at'])
+            ->into(self::TABLE, [
+                'admin_user_recovery_code_id',
+                'admin_user_id',
+                'code',
+                'status',
+                'used_at',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $this->converter->toBin($data['admin_user_recovery_code_id']),
                 $this->converter->toBin($data['admin_user_id']),
@@ -116,7 +132,9 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append('ON DUPLICATE KEY UPDATE `status` = VALUES(`status`), `used_at` = VALUES(`used_at`), `updated_at` = VALUES(`updated_at`)')
+            ->append(
+                'ON DUPLICATE KEY UPDATE `status` = VALUES(`status`), `used_at` = VALUES(`used_at`), `updated_at` = VALUES(`updated_at`)',
+            )
             ->execute($this->queryFactory->pdo());
 
         return $code;

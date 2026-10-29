@@ -71,16 +71,24 @@ class RegisterStartUseCaseTest extends TestCase
         $adminUser = $this->createAdminUser($adminUserId, 'invitee@example.com', name: '名前');
 
         $this->consumeService->shouldReceive('verify')
-            ->withArgs(static fn (string $plainToken, Email $email): bool => $plainToken === 'plain-token'
-                && $email->value === 'invitee@example.com')
+            ->withArgs(
+                static fn (string $plainToken, Email $email): bool => (
+                    $plainToken === 'plain-token'
+                    && $email->value === 'invitee@example.com'
+                ),
+            )
             ->andReturn($token)
             ->once();
 
         $this->integrityService->shouldReceive('prepareForCreate')
-            ->withArgs(static fn (AdminUserName $name, Email $email, Role $role, Permissions $permissions): bool => $name->value === '名前'
-                && $email->value === 'invitee@example.com'
-                && $role === Role::General
-                && $permissions->toArray() === [])
+            ->withArgs(
+                static fn (AdminUserName $name, Email $email, Role $role, Permissions $permissions): bool => (
+                    $name->value === '名前'
+                    && $email->value === 'invitee@example.com'
+                    && $role === Role::General
+                    && $permissions->toArray() === []
+                ),
+            )
             ->andReturn($adminUser)
             ->once();
 
@@ -93,22 +101,34 @@ class RegisterStartUseCaseTest extends TestCase
             ->once();
 
         $this->passkeyAuthenticator->shouldReceive('startRegistration')
-            ->withArgs(static fn (string $userHandle, string $userName, string $displayName): bool => $userHandle === 'fixed-user-handle'
-                && $userName === 'invitee@example.com'
-                && $displayName === '名前')
+            ->withArgs(
+                static fn (string $userHandle, string $userName, string $displayName): bool => (
+                    $userHandle === 'fixed-user-handle'
+                    && $userName === 'invitee@example.com'
+                    && $displayName === '名前'
+                ),
+            )
             ->andReturn(new PasskeyStartResult('{"challenge":"challenge"}', ['challenge' => 'challenge']))
             ->once();
 
         $this->ceremonyStore->shouldReceive('put')
-            ->withArgs(static fn (PasskeyCeremonyState $state): bool => $state->authCeremonyId === $authCeremonyId
-                && $state->type === PasskeyCeremonyType::Register
-                && $state->email === 'invitee@example.com'
-                && $state->name === '名前'
-                && $state->adminUserId === $adminUserId
-                && $state->optionsJson === '{"challenge":"challenge"}')
+            ->withArgs(
+                static fn (PasskeyCeremonyState $state): bool => (
+                    $state->authCeremonyId === $authCeremonyId
+                    && $state->type === PasskeyCeremonyType::Register
+                    && $state->email === 'invitee@example.com'
+                    && $state->name === '名前'
+                    && $state->adminUserId === $adminUserId
+                    && $state->optionsJson === '{"challenge":"challenge"}'
+                ),
+            )
             ->once();
 
-        $output = $this->getInstance()->handle(new RegisterStartInputData('plain-token', 'invitee@example.com', '名前'));
+        $output = $this->getInstance()->handle(new RegisterStartInputData(
+            'plain-token',
+            'invitee@example.com',
+            '名前',
+        ));
 
         $this->assertSame($authCeremonyId, $output->authCeremonyId);
         $this->assertSame(['challenge' => 'challenge'], $output->publicKey);

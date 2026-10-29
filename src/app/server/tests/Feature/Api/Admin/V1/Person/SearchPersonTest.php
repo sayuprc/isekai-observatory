@@ -114,15 +114,30 @@ class SearchPersonTest extends DatabaseTestCase
         $songId = $this->generateUuid();
         $this->storePersons($this->createPerson($personId, '作詞作曲家', 1));
         // 1 曲で作詞と作曲を兼ねても、楽曲は 1 件と数える
-        $this->storeSongs($this->createSong($songId, '楽曲', '説明', SongType::Original, true, 1, [], tagsOrPersons: [
-            ['personId' => $personId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
-            ['personId' => $personId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 1],
-        ]));
-        $this->app->make(EventRepository::class)->save($this->createEvent($this->generateUuid(), performances: [
-            ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
-            ]],
-        ]));
+        $this->storeSongs($this->createSong(
+            $songId,
+            '楽曲',
+            '説明',
+            SongType::Original,
+            true,
+            1,
+            [],
+            tagsOrPersons: [
+                ['personId' => $personId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
+                ['personId' => $personId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 1],
+            ],
+        ));
+        $this->app->make(EventRepository::class)
+            ->save($this->createEvent($this->generateUuid(), performances: [
+                [
+                    'performanceId' => $this->generateUuid(),
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [
+                        ['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                    ],
+                ],
+            ]));
 
         $this->withAuth()
             ->getJson(route(PersonRouteMap::Search))

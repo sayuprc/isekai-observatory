@@ -32,7 +32,11 @@ readonly class CreateUseCase
         $this->authorizer->authorize(Permission::WritePerson);
 
         return $this->transaction->scope(function () use ($inputData): CreateOutputData {
-            $personGroup = $this->service->prepareForCreate($inputData->name, $inputData->displayName, $inputData->members);
+            $personGroup = $this->service->prepareForCreate(
+                $inputData->name,
+                $inputData->displayName,
+                $inputData->members,
+            );
 
             $this->repository->save($personGroup);
 
@@ -44,7 +48,9 @@ readonly class CreateUseCase
             );
 
             return new CreateOutputData(
-                $this->query->find($personGroup->personGroupId) ?? throw new LogicException('保存した人物グループを取得できません'),
+                $this->query->find($personGroup->personGroupId) ?? throw new LogicException(
+                    '保存した人物グループを取得できません',
+                ),
             );
         });
     }

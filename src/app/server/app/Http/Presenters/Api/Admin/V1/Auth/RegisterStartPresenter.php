@@ -13,8 +13,7 @@ class RegisterStartPresenter
     public function present(RegisterStartOutputData $output): JsonResponse
     {
         return response()->json(
-            new RegisterStartResponse()
-                ->setAuthCeremonyId($output->authCeremonyId)
+            new RegisterStartResponse()->setAuthCeremonyId($output->authCeremonyId)
                 ->setPublicKey($output->publicKey),
             200,
         );

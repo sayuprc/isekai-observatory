@@ -65,8 +65,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
         }
 
         $groupRows = $this->queryFactory->fetchAll(
-            $query
-                ->orderBy('first_released_on', 'desc')
+            $query->orderBy('first_released_on', 'desc')
                 ->orderBy('release_groups.order_no', 'desc')
                 ->orderBy('release_groups.release_group_id')
                 ->limit($limit + 1),
@@ -259,11 +258,12 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
         $songsByTrack = [];
 
         foreach ($trackSongRows as $row) {
-            $songsByTrack[Row::string($row, 'release_id')][Row::int($row, 'position')][Row::int($row, 'track_no')][] = new ReleaseTrackSong(
-                $this->converter->toUuid(Row::string($row, 'song_id')),
-                Row::string($row, 'title'),
-                Row::bool($row, 'is_display'),
-            );
+            $songsByTrack[Row::string($row, 'release_id')][Row::int($row, 'position')][Row::int($row, 'track_no')][] =
+                new ReleaseTrackSong(
+                    $this->converter->toUuid(Row::string($row, 'song_id')),
+                    Row::string($row, 'title'),
+                    Row::bool($row, 'is_display'),
+                );
         }
 
         $tracksByMedium = [];

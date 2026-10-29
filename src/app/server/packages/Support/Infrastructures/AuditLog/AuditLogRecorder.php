@@ -46,7 +46,15 @@ readonly class AuditLogRecorder implements AuditLogRecorderInterface
         }
 
         $this->queryFactory->insert()
-            ->into('audit_logs', ['audit_log_id', 'admin_user_id', 'action', 'target_type', 'target_id', 'snapshot', 'created_at'])
+            ->into('audit_logs', [
+                'audit_log_id',
+                'admin_user_id',
+                'action',
+                'target_type',
+                'target_id',
+                'snapshot',
+                'created_at',
+            ])
             ->values([
                 $this->uuidConverter->toBin($this->uuidGenerator->generate()),
                 $this->uuidConverter->toBin($resolvedActor->value),

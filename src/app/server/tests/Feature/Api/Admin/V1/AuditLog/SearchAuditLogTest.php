@@ -26,7 +26,12 @@ class SearchAuditLogTest extends DatabaseTestCase
     public function returnsListWithPermission(): void
     {
         $actorId = $this->generateUuid();
-        $this->storeAdminUsers($this->createAdminUser($actorId, 'actor@example.com', Role::Privilege, name: '監査テストユーザーA'));
+        $this->storeAdminUsers($this->createAdminUser(
+            $actorId,
+            'actor@example.com',
+            Role::Privilege,
+            name: '監査テストユーザーA',
+        ));
 
         $auditLogId = $this->generateUuid();
         $targetId = $this->generateUuid();
@@ -60,7 +65,12 @@ class SearchAuditLogTest extends DatabaseTestCase
     public function canFilterReleaseTargetType(): void
     {
         $actorId = $this->generateUuid();
-        $this->storeAdminUsers($this->createAdminUser($actorId, 'actor@example.com', Role::Privilege, name: '監査テストユーザーA'));
+        $this->storeAdminUsers($this->createAdminUser(
+            $actorId,
+            'actor@example.com',
+            Role::Privilege,
+            name: '監査テストユーザーA',
+        ));
 
         $releaseAuditLogId = $this->generateUuid();
 
@@ -97,7 +107,12 @@ class SearchAuditLogTest extends DatabaseTestCase
     public function canFilterRegisterAction(): void
     {
         $actorId = $this->generateUuid();
-        $this->storeAdminUsers($this->createAdminUser($actorId, 'actor@example.com', Role::Privilege, name: '監査テストユーザーA'));
+        $this->storeAdminUsers($this->createAdminUser(
+            $actorId,
+            'actor@example.com',
+            Role::Privilege,
+            name: '監査テストユーザーA',
+        ));
 
         $registerAuditLogId = $this->generateUuid();
 

@@ -17,8 +17,10 @@ class GetPresenter
     public function present(GetOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new ReleaseGroupGetResponse()
-                ->setReleaseGroup($this->converter->toOpenApiReleaseGroup($outputData->releaseGroup, $outputData->tags))
+            new ReleaseGroupGetResponse()->setReleaseGroup($this->converter->toOpenApiReleaseGroup(
+                $outputData->releaseGroup,
+                $outputData->tags,
+            ))
                 ->setReleases(array_map($this->converter->toOpenApiReferencedRelease(...), $outputData->releases)),
             200,
         );

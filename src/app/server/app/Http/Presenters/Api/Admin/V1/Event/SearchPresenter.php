@@ -17,8 +17,10 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new EventSearchResponse()
-                ->setEvents(array_map($this->converter->toOpenApiEventSummary(...), $outputData->events))
+            new EventSearchResponse()->setEvents(array_map(
+                $this->converter->toOpenApiEventSummary(...),
+                $outputData->events,
+            ))
                 ->setMaxPage($outputData->maxPage),
             200,
         );

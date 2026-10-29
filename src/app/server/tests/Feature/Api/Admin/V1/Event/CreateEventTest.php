@@ -36,11 +36,23 @@ class CreateEventTest extends DatabaseTestCase
         $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
-        $this->storeMedia($this->createMedia($mediaId, '配信アーカイブ', 'https://example.com/archive', MediaType::LiveStream, true));
+        $this->storeMedia($this->createMedia(
+            $mediaId,
+            '配信アーカイブ',
+            'https://example.com/archive',
+            MediaType::LiveStream,
+            true,
+        ));
         $releaseGroupId = $this->generateUuid();
         $releaseId = $this->generateUuid();
-        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'ライブ映像作品', ReleaseGroupType::Other));
-        $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, 'Blu-ray', true, formats: [ReleaseFormat::BluRay->value]));
+        $this->storeReleaseGroups($this->createReleaseGroup(
+            $releaseGroupId,
+            'ライブ映像作品',
+            ReleaseGroupType::Other,
+        ));
+        $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, 'Blu-ray', true, formats: [
+            ReleaseFormat::BluRay->value,
+        ]));
 
         $performanceId = $this->generateUuid();
         $response = $this->withAuth()
@@ -56,8 +68,23 @@ class CreateEventTest extends DatabaseTestCase
                 'media' => [['mediaId' => $mediaId, 'orderNo' => 1]],
                 'releases' => [['releaseId' => $releaseId, 'orderNo' => 1]],
                 'sources' => [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
-                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'personGroupId' => null, 'orderNo' => 1]]]],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
+                'performances' => [[
+                    'performanceId' => $performanceId,
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [[
+                        'personId' => $personId,
+                        'creditName' => 'ゲスト',
+                        'personGroupId' => null,
+                        'orderNo' => 1,
+                    ]],
+                ]],
+                'setlist' => [[
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 1,
+                    'label' => '本編',
+                    'performanceIds' => [$performanceId],
+                ]],
                 'tags' => [],
             ])
             ->assertStatus(200)
@@ -84,7 +111,10 @@ class CreateEventTest extends DatabaseTestCase
         $eventId = $response->json('event.eventId');
         $this->assertIsString($eventId);
         $this->assertAuditLogCount(1);
-        $this->assertSame('テストライブ', $this->findAuditLog(AuditAction::Create, AuditTargetType::Event, $eventId)['snapshot']['title']);
+        $this->assertSame(
+            'テストライブ',
+            $this->findAuditLog(AuditAction::Create, AuditTargetType::Event, $eventId)['snapshot']['title'],
+        );
     }
 
     #[Test]
@@ -95,7 +125,10 @@ class CreateEventTest extends DatabaseTestCase
         $person2 = $this->generateUuid();
         $personGroupId = $this->generateUuid();
         $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
-        $this->storePersons($this->createPerson($person1, 'メンバー1', 1), $this->createPerson($person2, 'メンバー2', 2));
+        $this->storePersons(
+            $this->createPerson($person1, 'メンバー1', 1),
+            $this->createPerson($person2, 'メンバー2', 2),
+        );
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$person1, $person2]));
 
         $this->withAuth()
@@ -111,10 +144,25 @@ class CreateEventTest extends DatabaseTestCase
                 'media' => [],
                 'releases' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                    ['personId' => $person1, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
-                    ['personId' => $person2, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 2],
-                ]]],
+                'performances' => [[
+                    'performanceId' => $this->generateUuid(),
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [
+                        [
+                            'personId' => $person1,
+                            'creditName' => null,
+                            'personGroupId' => $personGroupId,
+                            'orderNo' => 1,
+                        ],
+                        [
+                            'personId' => $person2,
+                            'creditName' => null,
+                            'personGroupId' => $personGroupId,
+                            'orderNo' => 2,
+                        ],
+                    ],
+                ]],
                 'setlist' => [],
                 'tags' => [],
             ])
@@ -142,7 +190,12 @@ class CreateEventTest extends DatabaseTestCase
                 'releases' => [],
                 'sources' => [],
                 'performances' => [],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '展示作品', 'performanceIds' => []]],
+                'setlist' => [[
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 1,
+                    'label' => '展示作品',
+                    'performanceIds' => [],
+                ]],
                 'tags' => [],
             ])
             ->assertStatus(400)
@@ -168,7 +221,12 @@ class CreateEventTest extends DatabaseTestCase
                 'media' => [],
                 'releases' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
+                'performances' => [[
+                    'performanceId' => $this->generateUuid(),
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [],
+                ]],
                 'setlist' => [],
                 'tags' => [],
             ])
@@ -193,7 +251,12 @@ class CreateEventTest extends DatabaseTestCase
                 'releases' => [],
                 'sources' => [],
                 'performances' => [],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'オープニング', 'performanceIds' => []]],
+                'setlist' => [[
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 1,
+                    'label' => 'オープニング',
+                    'performanceIds' => [],
+                ]],
                 'tags' => [],
             ])
             ->assertStatus(400)

@@ -38,7 +38,10 @@ readonly class EventMediaLinks extends ImmutableCollection
     public static function reconstruct(array $items): self
     {
         return new self(array_map(
-            static fn (array $item): EventMediaLink => new EventMediaLink(new MediaId($item['mediaId']), new OrderNo($item['orderNo'])),
+            static fn (array $item): EventMediaLink => new EventMediaLink(
+                new MediaId($item['mediaId']),
+                new OrderNo($item['orderNo']),
+            ),
             $items,
         ));
     }

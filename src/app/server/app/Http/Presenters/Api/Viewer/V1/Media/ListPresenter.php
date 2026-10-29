@@ -47,8 +47,7 @@ class ListPresenter
      */
     private function toOpenApiTag(array $tag): AttachedTag
     {
-        return new AttachedTag()
-            ->setTagId($tag['tagId'])
+        return new AttachedTag()->setTagId($tag['tagId'])
             ->setName($tag['name'])
             ->setOrderNo($tag['orderNo']);
     }

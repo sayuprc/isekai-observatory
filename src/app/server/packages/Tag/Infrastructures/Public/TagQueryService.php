@@ -92,7 +92,10 @@ readonly class TagQueryService implements TagQueryServiceInterface
             $tags,
             $lastRow === null
                 ? null
-                : TagListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'tag_id'))),
+                : TagListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'tag_id')),
+                ),
         );
     }
 }

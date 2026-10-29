@@ -23,16 +23,17 @@ class ListAdminUserTest extends DatabaseTestCase
     {
         $uuid = $this->generateUuid();
 
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser(
-                $uuid,
-                'admin@example.com',
-                Role::Console,
-                [],
-                new DateTimeImmutable('2019-12-09 10:20:30'),
-                'コンソールユーザー',
-            ),
-        );
+        $this->app->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser(
+                    $uuid,
+                    'admin@example.com',
+                    Role::Console,
+                    [],
+                    new DateTimeImmutable('2019-12-09 10:20:30'),
+                    'コンソールユーザー',
+                ),
+            );
 
         $response = $this->withAuth()
             ->get(route(AdminUserRouteMap::List))

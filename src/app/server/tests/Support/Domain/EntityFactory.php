@@ -252,10 +252,22 @@ trait EntityFactory
         ];
 
         return [
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Lyricist), $personsOrLyricists),
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Composer), $composersOrLegacyLyricists),
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Arranger), $arrangersOrLegacyComposers),
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Arranger), $legacyArrangers),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Lyricist,
+            ), $personsOrLyricists),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Composer,
+            ), $composersOrLegacyLyricists),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Arranger,
+            ), $arrangersOrLegacyComposers),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Arranger,
+            ), $legacyArrangers),
         ];
     }
 

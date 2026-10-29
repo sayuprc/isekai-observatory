@@ -82,7 +82,10 @@ final class BodyErrorCollector
         $validator = self::$validators[$this->yamlPath] ?? null;
 
         if ($validator === null) {
-            $document = json_decode(json_encode(Yaml::parseFile($this->yamlPath), JSON_THROW_ON_ERROR), flags: JSON_THROW_ON_ERROR);
+            $document = json_decode(
+                json_encode(Yaml::parseFile($this->yamlPath), JSON_THROW_ON_ERROR),
+                flags: JSON_THROW_ON_ERROR,
+            );
 
             // collect の catch (RuntimeException) に握られないよう、設定バグは LogicException で区別する
             if (! is_object($document)) {

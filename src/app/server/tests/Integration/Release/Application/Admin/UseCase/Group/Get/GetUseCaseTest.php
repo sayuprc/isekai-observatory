@@ -32,13 +32,31 @@ class GetUseCaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
         $this->storeReleases(
-            $this->createRelease($releaseId2, $releaseGroupId, 'CD+DVD', true, new ImmutableDate('2026-06-01'), formats: [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value], media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-                ['position' => 2, 'name' => null, 'tracks' => []],
-            ], orderNo: 10),
-            $this->createRelease($releaseId1, $releaseGroupId, '配信', true, new ImmutableDate('2026-05-01'), formats: [ReleaseFormat::Digital->value], media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ], orderNo: 20),
+            $this->createRelease(
+                $releaseId2,
+                $releaseGroupId,
+                'CD+DVD',
+                true,
+                new ImmutableDate('2026-06-01'),
+                formats: [ReleaseFormat::Cd->value, ReleaseFormat::Dvd->value],
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                    ['position' => 2, 'name' => null, 'tracks' => []],
+                ],
+                orderNo: 10,
+            ),
+            $this->createRelease(
+                $releaseId1,
+                $releaseGroupId,
+                '配信',
+                true,
+                new ImmutableDate('2026-05-01'),
+                formats: [ReleaseFormat::Digital->value],
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+                orderNo: 20,
+            ),
         );
 
         $result = $this->getInstance()->handle(new GetInputData($releaseGroupId));
@@ -67,8 +85,22 @@ class GetUseCaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '同日リリースの作品', ReleaseGroupType::Album, true),
         );
         $this->storeReleases(
-            $this->createRelease($releaseId2, $releaseGroupId, '同日で order_no が大きい版', true, new ImmutableDate('2026-01-01'), orderNo: 2),
-            $this->createRelease($releaseId1, $releaseGroupId, '同日で order_no が小さい版', true, new ImmutableDate('2026-01-01'), orderNo: 1),
+            $this->createRelease(
+                $releaseId2,
+                $releaseGroupId,
+                '同日で order_no が大きい版',
+                true,
+                new ImmutableDate('2026-01-01'),
+                orderNo: 2,
+            ),
+            $this->createRelease(
+                $releaseId1,
+                $releaseGroupId,
+                '同日で order_no が小さい版',
+                true,
+                new ImmutableDate('2026-01-01'),
+                orderNo: 1,
+            ),
         );
 
         $result = $this->getInstance()->handle(new GetInputData($releaseGroupId));

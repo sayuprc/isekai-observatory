@@ -13,8 +13,7 @@ class RecoveryStartPresenter
     public function present(RecoveryStartOutputData $output): JsonResponse
     {
         return response()->json(
-            new RecoveryStartResponse()
-                ->setAuthCeremonyId($output->authCeremonyId)
+            new RecoveryStartResponse()->setAuthCeremonyId($output->authCeremonyId)
                 ->setPublicKey($output->publicKey),
             200,
         );

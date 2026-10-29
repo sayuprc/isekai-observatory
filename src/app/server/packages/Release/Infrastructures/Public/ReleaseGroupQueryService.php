@@ -82,7 +82,10 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             $releaseGroups,
             $lastRow === null
                 ? null
-                : ReleaseGroupListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'release_group_id'))),
+                : ReleaseGroupListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'release_group_id')),
+                ),
         );
     }
 
@@ -200,10 +203,11 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
 
         $songsByTrack = [];
         foreach ($trackSongRows as $row) {
-            $songsByTrack[Row::string($row, 'release_id')][Row::int($row, 'position')][Row::int($row, 'track_no')][] = new ReleaseTrackSongItem(
-                Row::bool($row, 'is_display') ? $this->converter->toUuid(Row::string($row, 'song_id')) : null,
-                Row::string($row, 'title'),
-            );
+            $songsByTrack[Row::string($row, 'release_id')][Row::int($row, 'position')][Row::int($row, 'track_no')][] =
+                new ReleaseTrackSongItem(
+                    Row::bool($row, 'is_display') ? $this->converter->toUuid(Row::string($row, 'song_id')) : null,
+                    Row::string($row, 'title'),
+                );
         }
 
         $tracksByMedium = [];

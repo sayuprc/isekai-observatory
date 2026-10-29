@@ -20,8 +20,7 @@ class Converter
 {
     public function toOpenApiRelease(Release $release): OpenApiRelease
     {
-        return new OpenApiRelease()
-            ->setReleaseId($release->releaseId->value)
+        return new OpenApiRelease()->setReleaseId($release->releaseId->value)
             ->setReleaseGroupId($release->releaseGroupId->value)
             ->setName($release->name->value)
             ->setReleasedOn($release->releasedOn->value->toMutable())
@@ -29,27 +28,37 @@ class Converter
             ->setNote($release->note->value)
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo->value)
-            ->setFormats($release->formats->toGeneric()->map(
-                static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
-            )->toArray())
-            ->setMedia($release->media->toGeneric()->map($this->toOpenApiMedium(...))->toArray());
+            ->setFormats(
+                $release->formats->toGeneric()
+                    ->map(
+                        static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
+                    )
+                    ->toArray(),
+            )
+            ->setMedia(
+                $release->media->toGeneric()
+                    ->map($this->toOpenApiMedium(...))
+                    ->toArray(),
+            );
     }
 
     public function toOpenApiMedium(Medium $medium): OpenApiMedium
     {
         return new OpenApiMedium([
             'name' => $medium->name?->value,
-        ])
-            ->setPosition($medium->position->value)
-            ->setTracks($medium->tracks->toGeneric()->map($this->toOpenApiTrack(...))->toArray());
+        ])->setPosition($medium->position->value)
+            ->setTracks(
+                $medium->tracks->toGeneric()
+                    ->map($this->toOpenApiTrack(...))
+                    ->toArray(),
+            );
     }
 
     public function toOpenApiTrack(Track $track): OpenApiTrack
     {
         return new OpenApiTrack([
             'title' => $track->title?->value,
-        ])
-            ->setSongIds(array_map(static fn (SongId $songId): string => $songId->value, $track->songIds))
+        ])->setSongIds(array_map(static fn (SongId $songId): string => $songId->value, $track->songIds))
             ->setTrackNo($track->trackNo->value);
     }
 
@@ -57,8 +66,7 @@ class Converter
     {
         return new OpenApiReleaseReferencedSong([
             'song_id' => $song->songId,
-        ])
-            ->setMediumPosition($song->mediumPosition)
+        ])->setMediumPosition($song->mediumPosition)
             ->setTrackNo($song->trackNo)
             ->setTitle($song->title);
     }

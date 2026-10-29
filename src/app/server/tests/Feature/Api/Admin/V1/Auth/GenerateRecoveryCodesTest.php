@@ -62,11 +62,18 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
         }
 
         foreach ($plainCodes as $plainCode) {
-            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify($plainCode, $stored));
+            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify(
+                $plainCode,
+                $stored,
+            ));
             $this->assertCount(1, $matched);
         }
 
-        $log = $this->findAuditLog(AuditAction::RecoveryCodeIssue, AuditTargetType::AdminUser, $user->adminUserId->value);
+        $log = $this->findAuditLog(
+            AuditAction::RecoveryCodeIssue,
+            AuditTargetType::AdminUser,
+            $user->adminUserId->value,
+        );
         $snapshot = $log['snapshot'];
         $this->assertIsArray($snapshot);
         $this->assertSame(10, $snapshot['count'] ?? null);
@@ -89,7 +96,10 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
         $storedCodes = DB::table('admin_user_recovery_codes')->pluck('code')->all();
 
         foreach ($firstCodes as $oldCode) {
-            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify($oldCode, $stored));
+            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify(
+                $oldCode,
+                $stored,
+            ));
             $this->assertCount(0, $matched);
         }
     }

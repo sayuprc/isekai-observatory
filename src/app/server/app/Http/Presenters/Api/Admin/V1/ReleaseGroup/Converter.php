@@ -23,8 +23,7 @@ class Converter
      */
     public function toOpenApiReleaseGroup(ReleaseGroup $releaseGroup, array $tags): OpenApiReleaseGroup
     {
-        return new OpenApiReleaseGroup()
-            ->setReleaseGroupId($releaseGroup->releaseGroupId->value)
+        return new OpenApiReleaseGroup()->setReleaseGroupId($releaseGroup->releaseGroupId->value)
             ->setTitle($releaseGroup->title->value)
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description->value)
@@ -32,7 +31,8 @@ class Converter
             ->setIsDisplay($releaseGroup->isDisplay)
             ->setOrderNo($releaseGroup->orderNo->value)
             ->setTags(array_values(array_map(
-                static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()->setTagId($tag->tagId->value)->setName($tag->name->value),
+                static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()->setTagId($tag->tagId->value)
+                    ->setName($tag->name->value),
                 $tags,
             )));
     }
@@ -41,8 +41,7 @@ class Converter
     {
         return new OpenApiReleaseGroupSummary([
             'first_released_on' => $summary->firstReleasedOn === null ? null : new DateTime($summary->firstReleasedOn),
-        ])
-            ->setReleaseGroupId($summary->releaseGroupId)
+        ])->setReleaseGroupId($summary->releaseGroupId)
             ->setTitle($summary->title)
             ->setType(ReleaseGroupTypeValue::from($summary->typeValue))
             ->setDescription($summary->description)
@@ -54,8 +53,7 @@ class Converter
 
     public function toOpenApiReferencedRelease(ReleaseGroupReferencedRelease $release): OpenApiReleaseGroupReferencedRelease
     {
-        return new OpenApiReleaseGroupReferencedRelease()
-            ->setReleaseId($release->releaseId)
+        return new OpenApiReleaseGroupReferencedRelease()->setReleaseId($release->releaseId)
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setIsDisplay($release->isDisplay)

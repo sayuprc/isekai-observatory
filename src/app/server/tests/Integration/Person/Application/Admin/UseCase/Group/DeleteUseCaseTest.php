@@ -54,7 +54,12 @@ class DeleteUseCaseTest extends DatabaseTestCase
                 'performanceId' => $this->generateUuid(),
                 'songId' => $songId,
                 'orderNo' => 1,
-                'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1]],
+                'coVocalists' => [[
+                    'personId' => $personId,
+                    'creditName' => null,
+                    'personGroupId' => $personGroupId,
+                    'orderNo' => 1,
+                ]],
             ]],
         ));
 

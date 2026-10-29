@@ -17,8 +17,7 @@ class UpdatePresenter
     public function present(UpdateOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new MediaUpdateResponse()
-                ->setMedia($this->converter->toOpenApiMedia($outputData->media))
+            new MediaUpdateResponse()->setMedia($this->converter->toOpenApiMedia($outputData->media))
                 ->setTags($this->converter->toOpenApiTags($outputData->tags)),
             200,
         );

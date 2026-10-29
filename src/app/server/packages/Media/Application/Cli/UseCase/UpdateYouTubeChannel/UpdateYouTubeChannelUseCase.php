@@ -25,7 +25,10 @@ readonly class UpdateYouTubeChannelUseCase
             $channelId = new YouTubeChannelId($inputData->channelId);
 
             if ($this->repository->find($channelId) === null) {
-                throw new BusinessRuleViolationException(sprintf('登録されていないチャンネルです "%s"', $channelId->value));
+                throw new BusinessRuleViolationException(sprintf(
+                    '登録されていないチャンネルです "%s"',
+                    $channelId->value,
+                ));
             }
 
             $channel = new YouTubeChannel($channelId, new YouTubeChannelName($inputData->name));

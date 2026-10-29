@@ -16,8 +16,7 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new SongSearchResponse()
-                ->setSongs(array_map($this->toOpenApiSongSummary(...), $outputData->songs))
+            new SongSearchResponse()->setSongs(array_map($this->toOpenApiSongSummary(...), $outputData->songs))
                 ->setMaxPage($outputData->maxPage),
             200,
         );
@@ -25,8 +24,7 @@ class SearchPresenter
 
     private function toOpenApiSongSummary(SongSummary $song): OpenApiSongSummary
     {
-        return new OpenApiSongSummary()
-            ->setSongId($song->songId)
+        return new OpenApiSongSummary()->setSongId($song->songId)
             ->setTitle($song->title)
             ->setType(SongTypeValue::from($song->type->value))
             ->setIsDisplay($song->isDisplay)

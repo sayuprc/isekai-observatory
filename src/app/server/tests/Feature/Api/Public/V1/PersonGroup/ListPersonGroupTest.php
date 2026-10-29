@@ -32,23 +32,52 @@ class ListPersonGroupTest extends DatabaseTestCase
             $this->createPerson($secondMemberId, 'メンバー B', 2),
         );
         $this->storePersonGroups(
-            $this->createPersonGroup($publicGroupId, '管理用の名称', [$secondMemberId, $firstMemberId], '公開イベントのグループ'),
+            $this->createPersonGroup(
+                $publicGroupId,
+                '管理用の名称',
+                [$secondMemberId, $firstMemberId],
+                '公開イベントのグループ',
+            ),
             $this->createPersonGroup($privateGroupId, '非公開イベントのグループ', [$firstMemberId]),
             $this->createPersonGroup($unusedGroupId, '未使用のグループ', [$firstMemberId]),
         );
         $this->storeEvents(
-            $this->createEvent($this->generateUuid(), performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $secondMemberId, 'creditName' => null, 'personGroupId' => $publicGroupId, 'orderNo' => 1],
-            ]]]),
-            $this->createEvent($this->generateUuid(), isDisplay: false, performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $firstMemberId, 'creditName' => null, 'personGroupId' => $privateGroupId, 'orderNo' => 1],
-            ]]]),
+            $this->createEvent($this->generateUuid(), performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    [
+                        'personId' => $secondMemberId,
+                        'creditName' => null,
+                        'personGroupId' => $publicGroupId,
+                        'orderNo' => 1,
+                    ],
+                ],
+            ]]),
+            $this->createEvent($this->generateUuid(), isDisplay: false, performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    [
+                        'personId' => $firstMemberId,
+                        'creditName' => null,
+                        'personGroupId' => $privateGroupId,
+                        'orderNo' => 1,
+                    ],
+                ],
+            ]]),
         );
 
         $this->get(route(PublicPersonGroupRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([
-                'items' => [['personGroupId' => $publicGroupId, 'name' => '公開イベントのグループ', 'memberIds' => [$secondMemberId, $firstMemberId]]],
+                'items' => [[
+                    'personGroupId' => $publicGroupId,
+                    'name' => '公開イベントのグループ',
+                    'memberIds' => [$secondMemberId, $firstMemberId],
+                ]],
             ]);
     }
 }

@@ -67,7 +67,13 @@ readonly class SongQueryService implements SongQueryServiceInterface
         $tagsBySong = $this->loadTags($binSongIds);
 
         $songs = array_map(
-            function (array $songRow) use ($personsBySong, $mediaBySong, $releaseGroupsBySong, $performancesBySong, $tagsBySong): SongListItem {
+            function (array $songRow) use (
+                $personsBySong,
+                $mediaBySong,
+                $releaseGroupsBySong,
+                $performancesBySong,
+                $tagsBySong,
+            ): SongListItem {
                 $binSongId = Row::string($songRow, 'song_id');
                 $personRows = $personsBySong[$binSongId] ?? [];
                 $mediaRows = $mediaBySong[$binSongId] ?? [];
@@ -241,7 +247,9 @@ readonly class SongQueryService implements SongQueryServiceInterface
         foreach ($grouped as &$summaries) {
             usort(
                 $summaries,
-                static fn (SongReleaseGroupSummary $a, SongReleaseGroupSummary $b): int => [$b->firstReleasedOn, $a->title] <=> [$a->firstReleasedOn, $b->title],
+                static fn (SongReleaseGroupSummary $a, SongReleaseGroupSummary $b): int => (
+                    [$b->firstReleasedOn, $a->title] <=> [$a->firstReleasedOn, $b->title]
+                ),
             );
         }
 
@@ -343,7 +351,15 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_performances.song_id', 'song_performances.performance_id', 'events.event_id', 'events.title', 'events.type', 'events.start_on', 'events.end_on'])
+                ->withSelect([
+                    'song_performances.song_id',
+                    'song_performances.performance_id',
+                    'events.event_id',
+                    'events.title',
+                    'events.type',
+                    'events.start_on',
+                    'events.end_on',
+                ])
                 ->from('song_performances')
                 ->join('events', 'song_performances.event_id = events.event_id')
                 ->where('song_performances.song_id', 'IN', $binSongIds)
@@ -385,7 +401,12 @@ readonly class SongQueryService implements SongQueryServiceInterface
 
         $rows = $this->queryFactory->fetchAll(
             $this->queryFactory->select()
-                ->withSelect(['song_performance_persons.performance_id', 'song_performance_persons.credit_name', 'persons.name', 'person_groups.person_group_id'])
+                ->withSelect([
+                    'song_performance_persons.performance_id',
+                    'song_performance_persons.credit_name',
+                    'persons.name',
+                    'person_groups.person_group_id',
+                ])
                 ->select('person_groups.display_name', 'person_group_name')
                 ->from('song_performance_persons')
                 ->join('persons', 'song_performance_persons.person_id = persons.person_id')

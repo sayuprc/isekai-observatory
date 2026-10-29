@@ -31,7 +31,10 @@ class AdminUserIntegrityService
     public function prepareForCreate(AdminUserName $name, Email $email, Role $role, Permissions $permissions): AdminUser
     {
         if ($this->repository->findByEmail($email) !== null) {
-            throw new BusinessRuleViolationException(sprintf('すでに使われているメールアドレスです "%s"', $email->value));
+            throw new BusinessRuleViolationException(sprintf(
+                'すでに使われているメールアドレスです "%s"',
+                $email->value,
+            ));
         }
 
         return $this->build(new AdminUserId($this->generator->generate()), $name, $email, $role, $permissions);
@@ -48,7 +51,10 @@ class AdminUserIntegrityService
         Permissions $permissions,
     ): AdminUser {
         if ($this->repository->findByEmailForUpdate($email) !== null) {
-            throw new BusinessRuleViolationException(sprintf('すでに使われているメールアドレスです "%s"', $email->value));
+            throw new BusinessRuleViolationException(sprintf(
+                'すでに使われているメールアドレスです "%s"',
+                $email->value,
+            ));
         }
 
         return $this->build($adminUserId, $name, $email, $role, $permissions);

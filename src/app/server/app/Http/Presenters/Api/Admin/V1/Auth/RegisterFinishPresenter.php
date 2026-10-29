@@ -13,8 +13,7 @@ class RegisterFinishPresenter
     public function present(RegisterFinishOutputData $output): JsonResponse
     {
         return response()->json(
-            new RegisterFinishResponse()
-                ->setAccessToken($output->accessToken->jwt->value)
+            new RegisterFinishResponse()->setAccessToken($output->accessToken->jwt->value)
                 ->setRefreshTokenId($output->refreshTokenId)
                 ->setRefreshToken($output->plainRefreshToken),
             200,

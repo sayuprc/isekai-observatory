@@ -108,10 +108,14 @@ class LoginFinishUseCaseTest extends TestCase
             ->andReturn($now)
             ->once();
         $this->passkeyRepository->shouldReceive('updateCounter')
-            ->withArgs(static fn (AdminUserPasskey $updated, int $expectedSignCount): bool => $updated->adminUserPasskeyId === $passkey->adminUserPasskeyId
-                && $updated->signCount === 456
-                && $updated->lastUsedAt === $now
-                && $expectedSignCount === 123)
+            ->withArgs(
+                static fn (AdminUserPasskey $updated, int $expectedSignCount): bool => (
+                    $updated->adminUserPasskeyId === $passkey->adminUserPasskeyId
+                    && $updated->signCount === 456
+                    && $updated->lastUsedAt === $now
+                    && $expectedSignCount === 123
+                ),
+            )
             ->andReturnTrue()
             ->once();
         $this->accessTokenIssueService->shouldReceive('issue')
@@ -123,11 +127,17 @@ class LoginFinishUseCaseTest extends TestCase
             ->andReturn($refreshToken)
             ->once();
         $this->recorder->shouldReceive('record')
-            ->withArgs(static fn (AuditAction $action, AuditTargetType $targetType): bool => $action === AuditAction::Login
-                && $targetType === AuditTargetType::AdminUser)
+            ->withArgs(
+                static fn (AuditAction $action, AuditTargetType $targetType): bool => (
+                    $action === AuditAction::Login
+                    && $targetType === AuditTargetType::AdminUser
+                ),
+            )
             ->once();
 
-        $output = $this->getInstance()->handle(new LoginFinishInputData($state->authCeremonyId, ['id' => 'credential-id']));
+        $output = $this->getInstance()->handle(new LoginFinishInputData($state->authCeremonyId, [
+            'id' => 'credential-id',
+        ]));
 
         $this->assertSame('access-token', $output->accessToken->jwt->value);
         $this->assertSame($refreshToken->refreshTokenId->value, $output->refreshTokenId);

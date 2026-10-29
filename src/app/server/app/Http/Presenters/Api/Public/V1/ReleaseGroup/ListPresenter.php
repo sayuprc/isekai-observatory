@@ -35,8 +35,7 @@ class ListPresenter
 
     private function toOpenApiReleaseGroup(ReleaseGroupListItem $releaseGroup): ReleaseGroup
     {
-        return new ReleaseGroup()
-            ->setReleaseGroupId($releaseGroup->releaseGroupId)
+        return new ReleaseGroup()->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)
             ->setType(ReleaseGroupTypeValue::from($releaseGroup->type->value))
             ->setDescription($releaseGroup->description)
@@ -46,12 +45,14 @@ class ListPresenter
 
     private function toOpenApiRelease(ReleaseItem $release): Release
     {
-        return new Release()
-            ->setReleaseId($release->releaseId)
+        return new Release()->setReleaseId($release->releaseId)
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setDescription($release->description)
-            ->setFormats(array_map(static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value), $release->formats))
+            ->setFormats(array_map(
+                static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
+                $release->formats,
+            ))
             ->setMedia(array_map($this->toOpenApiMedium(...), $release->media));
     }
 

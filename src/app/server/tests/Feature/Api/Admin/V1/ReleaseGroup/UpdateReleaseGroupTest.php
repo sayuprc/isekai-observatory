@@ -37,13 +37,13 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'isDisplay' => false,
                 'orderNo' => 3,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'releaseGroup',
-                        static fn (AssertableJson $json) => $json
-                            ->where('releaseGroupId', $releaseGroupId)
+                        static fn (AssertableJson $json) => $json->where('releaseGroupId', $releaseGroupId)
                             ->where('title', '新タイトル')
                             ->where('type', ReleaseGroupType::Single->value)
                             ->where('description', '更新後の説明')
@@ -65,16 +65,15 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
-            ->putJson(route(ReleaseGroupRouteMap::Update, $this->generateUuid()), [
-                'title' => '新タイトル',
-                'type' => ReleaseGroupType::Album->value,
-                'description' => '説明',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'tags' => [],
-            ])->assertStatus(404);
+        $this->withAuth()->putJson(route(ReleaseGroupRouteMap::Update, $this->generateUuid()), [
+            'title' => '新タイトル',
+            'type' => ReleaseGroupType::Album->value,
+            'description' => '説明',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'tags' => [],
+        ])->assertStatus(404);
     }
 
     #[Test]
@@ -86,15 +85,14 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '旧タイトル', ReleaseGroupType::Album, true),
         );
 
-        $this->withGeneralAuth()
-            ->putJson(route(ReleaseGroupRouteMap::Update, $releaseGroupId), [
-                'title' => '新タイトル',
-                'type' => ReleaseGroupType::Album->value,
-                'description' => '説明',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'tags' => [],
-            ])->assertStatus(403);
+        $this->withGeneralAuth()->putJson(route(ReleaseGroupRouteMap::Update, $releaseGroupId), [
+            'title' => '新タイトル',
+            'type' => ReleaseGroupType::Album->value,
+            'description' => '説明',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'tags' => [],
+        ])->assertStatus(403);
     }
 }

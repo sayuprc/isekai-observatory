@@ -29,13 +29,20 @@ class ListVenueTest extends DatabaseTestCase
         );
         $this->storeEvents(
             $this->createEvent($this->generateUuid(), venues: [['venueId' => $publicVenueId, 'orderNo' => 1]]),
-            $this->createEvent($this->generateUuid(), isDisplay: false, venues: [['venueId' => $privateVenueId, 'orderNo' => 1]]),
+            $this->createEvent($this->generateUuid(), isDisplay: false, venues: [[
+                'venueId' => $privateVenueId,
+                'orderNo' => 1,
+            ]]),
         );
 
         $this->get(route(PublicVenueRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([
-                'items' => [['venueId' => $publicVenueId, 'name' => '公開イベントの会場', 'kind' => VenueKind::Physical->value]],
+                'items' => [[
+                    'venueId' => $publicVenueId,
+                    'name' => '公開イベントの会場',
+                    'kind' => VenueKind::Physical->value,
+                ]],
             ]);
     }
 

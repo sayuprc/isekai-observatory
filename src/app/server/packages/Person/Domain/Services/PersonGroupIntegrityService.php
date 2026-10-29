@@ -41,8 +41,12 @@ class PersonGroupIntegrityService
      *
      * @throws BusinessRuleViolationException
      */
-    public function prepareForUpdate(string $personGroupId, string $name, string $displayName, array $members): PersonGroup
-    {
+    public function prepareForUpdate(
+        string $personGroupId,
+        string $name,
+        string $displayName,
+        array $members,
+    ): PersonGroup {
         return $this->build($personGroupId, $name, $displayName, $members);
     }
 

@@ -37,8 +37,8 @@ readonly class ReleaseDetailQueryService implements ReleaseDetailQueryServiceInt
                 ->outerJoin(
                     'release_track_songs',
                     'release_track_songs.release_id = release_tracks.release_id'
-                    . ' AND release_track_songs.position = release_tracks.position'
-                    . ' AND release_track_songs.track_no = release_tracks.track_no',
+                        . ' AND release_track_songs.position = release_tracks.position'
+                        . ' AND release_track_songs.track_no = release_tracks.track_no',
                 )
                 ->outerJoin('songs', 'release_track_songs.song_id = songs.song_id')
                 ->where('release_tracks.release_id', '=', $this->converter->toBin($releaseId->value))

@@ -78,9 +78,13 @@ class IssueRegistrationTokenUseCaseTest extends TestCase
             ->once();
 
         $this->issueService->shouldReceive('issue')
-            ->withArgs(static fn (Email $arg, Role $role, Permissions $permissions): bool => $arg->value === $email
-                && $role === Role::General
-                && $permissions->toArray() === [])
+            ->withArgs(
+                static fn (Email $arg, Role $role, Permissions $permissions): bool => (
+                    $arg->value === $email
+                    && $role === Role::General
+                    && $permissions->toArray() === []
+                ),
+            )
             ->andReturn(['token' => $token, 'plainToken' => $plainToken])
             ->once();
 

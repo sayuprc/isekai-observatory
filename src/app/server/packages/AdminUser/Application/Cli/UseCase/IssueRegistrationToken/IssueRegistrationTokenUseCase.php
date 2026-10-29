@@ -31,7 +31,10 @@ readonly class IssueRegistrationTokenUseCase
             $permissions = Permissions::fromArray($inputData->permissions);
 
             if ($this->adminUserRepository->findByEmail($email) !== null) {
-                throw new BusinessRuleViolationException(sprintf('すでに使われているメールアドレスです "%s"', $inputData->email));
+                throw new BusinessRuleViolationException(sprintf(
+                    'すでに使われているメールアドレスです "%s"',
+                    $inputData->email,
+                ));
             }
 
             $issued = $this->issueService->issue($email, $role, $permissions);

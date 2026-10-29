@@ -17,8 +17,10 @@ class SearchPresenter
     public function present(SearchOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new AuditLogSearchResponse()
-                ->setAuditLogs(array_map($this->converter->toOpenApiSummary(...), $outputData->auditLogs))
+            new AuditLogSearchResponse()->setAuditLogs(array_map(
+                $this->converter->toOpenApiSummary(...),
+                $outputData->auditLogs,
+            ))
                 ->setMaxPage($outputData->maxPage),
             200,
         );

@@ -80,13 +80,13 @@ class UpdateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('releaseId', $releaseId)
+                        static fn (AssertableJson $json) => $json->where('releaseId', $releaseId)
                             ->where('releaseGroupId', $releaseGroupId)
                             ->where('name', '新版名')
                             ->where('releasedOn', '2026-05-09')
@@ -163,13 +163,13 @@ class UpdateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.1.songIds', [])
+                        static fn (AssertableJson $json) => $json->where('media.0.tracks.1.songIds', [])
                             ->where('media.0.tracks.1.title', '管理対象外の楽曲')
                             ->where('media.0.tracks.1.trackNo', 2)
                             ->etc(),
@@ -230,13 +230,13 @@ class UpdateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songIds', [$songId])
+                        static fn (AssertableJson $json) => $json->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.0.tracks.0.title', 'テスト楽曲1 -instrumental-')
                             ->where('media.0.tracks.0.trackNo', 1)
                             ->etc(),
@@ -262,17 +262,16 @@ class UpdateReleaseTest extends DatabaseTestCase
             $this->createRelease($releaseId, $releaseGroupId, '旧版名', true),
         );
 
-        $this->withAuth()
-            ->putJson(route(ReleaseRouteMap::Update, $releaseId), [
-                'name' => '新版名',
-                'releasedOn' => '2026-05-09',
-                'description' => '説明',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'formats' => [],
-                'media' => [],
-            ])->assertStatus(422);
+        $this->withAuth()->putJson(route(ReleaseRouteMap::Update, $releaseId), [
+            'name' => '新版名',
+            'releasedOn' => '2026-05-09',
+            'description' => '説明',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'formats' => [],
+            'media' => [],
+        ])->assertStatus(422);
     }
 
     #[Test]
@@ -288,7 +287,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
-            ])->assertStatus(404);
+            ])
+            ->assertStatus(404);
     }
 
     #[Test]
@@ -304,7 +304,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
-            ])->assertStatus(404);
+            ])
+            ->assertStatus(404);
     }
 
     #[Test]
@@ -330,7 +331,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
-            ])->assertStatus(403);
+            ])
+            ->assertStatus(403);
     }
 
     #[Test]
@@ -371,13 +373,13 @@ class UpdateReleaseTest extends DatabaseTestCase
                         'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
                         'release',
-                        static fn (AssertableJson $json) => $json
-                            ->where('media.0.tracks.0.songIds', [$songId])
+                        static fn (AssertableJson $json) => $json->where('media.0.tracks.0.songIds', [$songId])
                             ->where('media.1.tracks.0.songIds', [$songId])
                             ->etc(),
                     ),

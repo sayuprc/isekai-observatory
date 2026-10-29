@@ -240,13 +240,19 @@ readonly class MediaRepository implements MediaRepositoryInterface
                 ->withSelect(['media_taggings.media_id', 'media_taggings.tag_id'])
                 ->from('media_taggings')
                 ->join('tags', 'media_taggings.tag_id = tags.tag_id')
-                ->where('media_taggings.media_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'media_id'), $rows))
+                ->where('media_taggings.media_id', 'IN', array_map(static fn (array $row): string => Row::string(
+                    $row,
+                    'media_id',
+                ), $rows))
                 ->orderBy('tags.order_no'),
         );
 
         $tags = [];
         foreach ($taggingRows as $taggingRow) {
-            $tags[Row::string($taggingRow, 'media_id')][] = ['tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id'))];
+            $tags[Row::string($taggingRow, 'media_id')][] = ['tagId' => $this->converter->toUuid(Row::string(
+                $taggingRow,
+                'tag_id',
+            ))];
         }
 
         return array_map(

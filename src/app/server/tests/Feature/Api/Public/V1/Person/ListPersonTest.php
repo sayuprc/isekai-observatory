@@ -38,20 +38,53 @@ class ListPersonTest extends DatabaseTestCase
         );
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$coVocalistId, $groupMemberId]));
         $this->storeSongs(
-            $this->createSong($songId, '公開楽曲', '説明', SongType::Original, true, 1, [], [
-                ['personId' => $creditedId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
-            ]),
-            $this->createSong($privateSongId, '非公開楽曲', '説明', SongType::Original, false, 2, [], [
-                ['personId' => $privateOnlyId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 1],
-            ]),
+            $this->createSong(
+                $songId,
+                '公開楽曲',
+                '説明',
+                SongType::Original,
+                true,
+                1,
+                [],
+                [
+                    ['personId' => $creditedId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
+                ],
+            ),
+            $this->createSong(
+                $privateSongId,
+                '非公開楽曲',
+                '説明',
+                SongType::Original,
+                false,
+                2,
+                [],
+                [
+                    ['personId' => $privateOnlyId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 1],
+                ],
+            ),
         );
         $this->storeEvents(
-            $this->createEvent($this->generateUuid(), performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $coVocalistId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
-            ]]]),
-            $this->createEvent($this->generateUuid(), isDisplay: false, performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $privateOnlyId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
-            ]]]),
+            $this->createEvent($this->generateUuid(), performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    [
+                        'personId' => $coVocalistId,
+                        'creditName' => null,
+                        'personGroupId' => $personGroupId,
+                        'orderNo' => 1,
+                    ],
+                ],
+            ]]),
+            $this->createEvent($this->generateUuid(), isDisplay: false, performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    ['personId' => $privateOnlyId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                ],
+            ]]),
         );
 
         $this->get(route(PublicPersonRouteMap::List))
@@ -75,10 +108,19 @@ class ListPersonTest extends DatabaseTestCase
             $this->createPerson($secondId, '作曲者', 2),
             $this->createPerson($firstId, '作詞者', 1),
         );
-        $this->storeSongs($this->createSong($songId, '公開楽曲', '説明', SongType::Original, true, 1, [], [
-            ['personId' => $secondId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 1],
-            ['personId' => $firstId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 2],
-        ]));
+        $this->storeSongs($this->createSong(
+            $songId,
+            '公開楽曲',
+            '説明',
+            SongType::Original,
+            true,
+            1,
+            [],
+            [
+                ['personId' => $secondId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 1],
+                ['personId' => $firstId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 2],
+            ],
+        ));
 
         $first = $this->get(route(PublicPersonRouteMap::List, ['pageSize' => 1]))
             ->assertStatus(200)

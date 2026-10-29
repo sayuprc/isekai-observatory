@@ -52,7 +52,10 @@ readonly class PersonGroupMembers extends ImmutableCollection
      */
     public function personIds(): array
     {
-        return array_values(array_map(static fn (PersonGroupMember $member): PersonId => $member->personId, $this->items));
+        return array_values(array_map(
+            static fn (PersonGroupMember $member): PersonId => $member->personId,
+            $this->items,
+        ));
     }
 
     /**
@@ -60,6 +63,9 @@ readonly class PersonGroupMembers extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (PersonGroupMember $member): array => $member->toArray(), $this->items));
+        return array_values(array_map(
+            static fn (PersonGroupMember $member): array => $member->toArray(),
+            $this->items,
+        ));
     }
 }

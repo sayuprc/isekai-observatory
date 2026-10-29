@@ -23,9 +23,10 @@ class AdminUserPasskeyRepositoryTest extends DatabaseTestCase
     public function saveAndFindAndUpdate(): void
     {
         $adminUserId = $this->generateUuid();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
-        );
+        $this->app->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
+            );
 
         $repository = $this->app->make(AdminUserPasskeyRepository::class);
         $passkey = new AdminUserPasskey(
@@ -64,12 +65,14 @@ class AdminUserPasskeyRepositoryTest extends DatabaseTestCase
     {
         $adminUserId = $this->generateUuid();
         $otherAdminUserId = $this->generateUuid();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
-        );
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($otherAdminUserId, 'other@example.com', Role::General),
-        );
+        $this->app->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
+            );
+        $this->app->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($otherAdminUserId, 'other@example.com', Role::General),
+            );
 
         $repository = $this->app->make(AdminUserPasskeyRepository::class);
         $passkey = new AdminUserPasskey(
@@ -90,7 +93,10 @@ class AdminUserPasskeyRepositoryTest extends DatabaseTestCase
 
         $repository->save($passkey);
 
-        $this->assertEquals($passkey, $repository->findByAdminUserIdAndCredentialIdForUpdate($adminUserId, 'credential-id'));
+        $this->assertEquals($passkey, $repository->findByAdminUserIdAndCredentialIdForUpdate(
+            $adminUserId,
+            'credential-id',
+        ));
         $this->assertNull($repository->findByAdminUserIdAndCredentialIdForUpdate($otherAdminUserId, 'credential-id'));
     }
 
@@ -98,25 +104,27 @@ class AdminUserPasskeyRepositoryTest extends DatabaseTestCase
     public function findByAdminUserIdAndCredentialIdForUpdateIssuesSelectForUpdate(): void
     {
         $adminUserId = $this->generateUuid();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
-        );
+        $this->app->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
+            );
 
-        $this->app->make(AdminUserPasskeyRepository::class)->save(new AdminUserPasskey(
-            $this->generateUuid(),
-            $adminUserId,
-            'user-handle',
-            'Primary passkey',
-            'credential-id',
-            'public-key',
-            '00000000-0000-0000-0000-000000000000',
-            ['internal'],
-            true,
-            false,
-            1,
-            new DateTimeImmutable('2026-01-01 00:00:00'),
-            null,
-        ));
+        $this->app->make(AdminUserPasskeyRepository::class)
+            ->save(new AdminUserPasskey(
+                $this->generateUuid(),
+                $adminUserId,
+                'user-handle',
+                'Primary passkey',
+                'credential-id',
+                'public-key',
+                '00000000-0000-0000-0000-000000000000',
+                ['internal'],
+                true,
+                false,
+                1,
+                new DateTimeImmutable('2026-01-01 00:00:00'),
+                null,
+            ));
 
         $this->startCapturingQueries();
 
@@ -125,8 +133,10 @@ class AdminUserPasskeyRepositoryTest extends DatabaseTestCase
 
         $selectQueries = array_values(array_filter(
             $this->capturedQueries(),
-            static fn (string $query): bool => str_starts_with(strtolower($query), 'select')
-                && str_contains($query, 'admin_user_passkeys'),
+            static fn (string $query): bool => (
+                str_starts_with(strtolower($query), 'select')
+                && str_contains($query, 'admin_user_passkeys')
+            ),
         ));
 
         $this->assertNotSame([], $selectQueries);
@@ -137,9 +147,10 @@ class AdminUserPasskeyRepositoryTest extends DatabaseTestCase
     public function updateCounterReturnsFalseWhenExpectedSignCountDoesNotMatch(): void
     {
         $adminUserId = $this->generateUuid();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
-        );
+        $this->app->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($adminUserId, 'user@example.com', Role::General),
+            );
 
         $repository = $this->app->make(AdminUserPasskeyRepository::class);
         $passkey = new AdminUserPasskey(
