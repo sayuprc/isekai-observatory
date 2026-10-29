@@ -12,7 +12,7 @@
 - 管理画面 (`src/app/admin`) は `lg` 未満で DaisyUI drawer によるサイドバー開閉、`lg` 以上で常時表示とする
 - 非同期処理やフォームには loading / error / empty state を用意する
 - 既存スタックで解けるなら依存を増やしすぎない
-- パッケージ管理は `src/app/` の pnpm workspace で行い、依存関係は `mise run pnpm:install` でインストールする
+- パッケージ管理は `src/app/` の pnpm workspace で行い、依存関係は `mise run app:install` でインストールする
 - 各 package script は Bun 実行環境で `cd src/app && bun --filter <package> <script>` として実行する
 
 ## 境界の参照先

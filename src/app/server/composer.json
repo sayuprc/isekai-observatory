@@ -79,17 +79,17 @@
       "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
       "@php artisan migrate --graceful --ansi"
     ],
-    "phpstan": "phpstan analyse --memory-limit=-1 --no-progress",
-    "phpstan-clear-cache": "phpstan clear-result-cache",
-    "arkitect": "phparkitect check",
-    "ecs": "vendor/bin/ecs check --ansi --no-progress-bar",
-    "ecs-fix": "vendor/bin/ecs check --fix --ansi --no-progress-bar",
+    "analyze": "phpstan analyse --memory-limit=-1 --no-progress",
+    "analyze-clear-cache": "phpstan clear-result-cache",
+    "architecture": "phparkitect check",
+    "format-check": "vendor/bin/ecs check --ansi --no-progress-bar",
+    "format": "vendor/bin/ecs check --fix --ansi --no-progress-bar",
     "test-all": "paratest",
     "test-unit": "paratest tests/Unit",
     "test-integration": "paratest tests/Integration",
     "test-feature": "paratest tests/Feature",
     "coverage": "php artisan test --env=testing --coverage-html=\"reports/coverage\"",
-    "infection": "infection --threads=4",
+    "mutation": "infection --threads=4",
     "metrics": "phpmetrics --config=phpmetrics.json"
   },
   "extra": {

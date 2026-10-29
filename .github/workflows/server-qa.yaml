@@ -115,10 +115,10 @@ jobs:
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
       - name: Composer install
-        run: mise run api:composer:install
+        run: mise run api:install
 
       - name: Dump autoload
-        run: mise run api:composer:dump
+        run: mise run api:autoload
 
       - name: Check generate code has diff
         run: |
@@ -130,9 +130,9 @@ jobs:
             exit 1
           fi
 
-  arkitect:
+  architecture:
     needs: setup
-    name: Arkitect
+    name: Architecture
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -160,12 +160,12 @@ jobs:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
-      - name: Check Layer
-        run: mise run api:arkitect
+      - name: Run Architecture Check
+        run: mise run api:architecture
 
-  ecs:
+  format:
     needs: setup
-    name: EasyCodingStandard
+    name: Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -193,12 +193,12 @@ jobs:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
-      - name: Run ecs
-        run: mise run api:ecs
+      - name: Run Format Check
+        run: mise run api:format:check
 
-  phpstan:
+  analyze:
     needs: setup
-    name: PHPStan
+    name: Static Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -226,12 +226,12 @@ jobs:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
-      - name: Run PHPStan
-        run: mise run api:phpstan
+      - name: Run Static Analysis
+        run: mise run api:analyze
 
-  phpunit:
+  test:
     needs: setup
-    name: PHPUnit (${{ matrix.suite }})
+    name: Test (${{ matrix.suite }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -295,5 +295,5 @@ jobs:
         if: ${{ matrix.db }}
         run: mise run migrate:local --auto-approve
 
-      - name: Run PHPUnit
+      - name: Run Test
         run: mise run api:test:${{ matrix.suite }}

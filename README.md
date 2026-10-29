@@ -27,7 +27,7 @@
 
 `git worktree` を使うローカル開発運用は `docs/design-docs/local-runtime-topology.md` を参照する
 
-TypeScript 関連: パッケージ管理は `src/app/` の pnpm workspace で行い、依存関係は `mise run pnpm:install` でインストールする。各 package script は Bun 実行環境で `cd src/app && bun --filter <package> <script>` として実行する
+TypeScript 関連: パッケージ管理は `src/app/` の pnpm workspace で行い、依存関係は `mise run app:install` でインストールする。各 package script は Bun 実行環境で `cd src/app && bun --filter <package> <script>` として実行する
 
 ## ドキュメント
 

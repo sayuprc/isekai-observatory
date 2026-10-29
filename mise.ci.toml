@@ -41,7 +41,7 @@ run = "docker compose up -d php"
 description = "CI 環境でテスト用コンテナを起動する"
 run = "docker compose up -d php mysql"
 
-[tasks."api:composer:install"]
+[tasks."api:install"]
 description = "CI 環境で composer install を実行する"
 run = "docker compose exec -T php composer install -n --prefer-dist"
 
@@ -72,6 +72,6 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 '''
 
-[tasks."pnpm:install"]
+[tasks."app:install"]
 dir = "src/app"
 run = "pnpm i --frozen-lockfile"

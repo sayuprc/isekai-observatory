@@ -62,10 +62,10 @@ FIX: mise run up を実行してコンテナを起動してください。"
     container_path="${file#*src/app/server/}"
 
     # 自動修正
-    mise run api:ecs:fix -- "$container_path" >/dev/null 2>&1 || true
+    mise run api:format -- "$container_path" >/dev/null 2>&1 || true
 
     # 残った違反をチェック
-    diag="$(mise run api:ecs -- "$container_path" 2>&1 | head -30)" || true
+    diag="$(mise run api:format:check -- "$container_path" 2>&1 | head -30)" || true
 
     if [ -n "$diag" ] && echo "$diag" | grep -qiE 'error|found'; then
       add_context "ECS violations in ${container_path}:
