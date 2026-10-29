@@ -16,7 +16,7 @@ file="$(hook_file_path)"
 basename_file="$(basename "$file")"
 
 PROTECTED_FILES=(
-  "ecs.php"
+  "mago.toml"
   "phpstan.neon"
   "phparkitect.php"
   "eslint.config.mjs"

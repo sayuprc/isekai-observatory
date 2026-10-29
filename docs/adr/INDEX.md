@@ -44,3 +44,4 @@
 | ADR-0038 | accepted | Public API は deploy 時の静的スナップショットとして配信し、参照を ID で返す | [api, public-api] |
 | ADR-0039 | accepted | Public API のリファレンスは Scalar で作り、専用の Worker とサブドメインで配信する | [public-api] |
 | ADR-0040 | proposed | Public API の一覧に検索条件を足し、MiniSearch の索引を静的ファイルで配信する | [api, public-api] |
+| ADR-0041 | accepted | PHP の整形と ecs 相当の lint を Mago に移す | [api] |

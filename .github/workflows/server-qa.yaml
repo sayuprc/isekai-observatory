@@ -164,7 +164,6 @@ jobs:
         run: mise run api:architecture
 
   format:
-    needs: setup
     name: Format
     runs-on: ubuntu-latest
     steps:
@@ -176,25 +175,23 @@ jobs:
       - name: Setup mise
         uses: ./.github/actions/setup-mise
 
-      - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Container
-        run: mise run up
-
-      - name: Cache composer
-        id: cache-composer
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ env.VENDOR_PATH }}
-          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
-
       - name: Run Format Check
         run: mise run api:format:check
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup mise
+        uses: ./.github/actions/setup-mise
+
+      - name: Run Lint
+        run: mise run api:lint
 
   analyze:
     needs: setup

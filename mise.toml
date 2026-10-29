@@ -2,7 +2,7 @@
 atlas = "1.3.0"
 bun = "1.4.4"
 lefthook = "2.2.2"
-mago = "1.58.2"
+mago = "1.59.0"
 mkcert = "1.4.4"
 node = "24.22.1"
 pnpm = "12.14.0"
@@ -271,15 +271,30 @@ run = "docker compose exec php composer analyze-clear-cache"
 description = "PHPArkitect を実行する"
 run = "docker compose exec php composer architecture"
 
+# mago はホストで動くため、コンテナを経由しない
 [tasks."api:format:check"]
-description = "ECS を実行し、コードフォーマットをチェックする"
+description = "Mago を実行し、コードフォーマットをチェックする"
 usage = 'arg "[path]" var=#true help="フォーマットチェック対象パス"'
-run = "docker compose exec php composer format-check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+dir = "src/app/server"
+run = "mago fmt --check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:format"]
-description = "ECS を実行し、フォーマットを自動修正する"
+description = "Mago を実行し、フォーマットを自動修正する"
 usage = 'arg "[path]" var=#true help="フォーマット自動修正対象パス"'
-run = "docker compose exec php composer format {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+dir = "src/app/server"
+run = "mago fmt {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+
+[tasks."api:lint"]
+description = "Mago の linter を実行する"
+usage = 'arg "[path]" var=#true help="lint 対象パス"'
+dir = "src/app/server"
+run = "mago lint {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+
+[tasks."api:lint:fix"]
+description = "Mago の linter を --fix オプション付きで実行する"
+usage = 'arg "[path]" var=#true help="lint 自動修正対象パス"'
+dir = "src/app/server"
+run = "mago lint --fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:test"]
 description = "テストを実行する"

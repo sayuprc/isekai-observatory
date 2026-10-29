@@ -11,6 +11,11 @@ pre-commit:
       glob: "src/app/server/{app,bootstrap,config,database,packages,routes,tests,tools}/**/*.php"
       run: mise run api:format:check -- {staged_files}
 
+    api-lint:
+      root: "src/app/server/"
+      glob: "src/app/server/{app,bootstrap,config,database,packages,routes,tests,tools}/**/*.php"
+      run: mise run api:lint -- {staged_files}
+
     api-analyze:
       root: "src/app/server/"
       glob: "src/app/server/{app,bootstrap,packages}/**/*.php"

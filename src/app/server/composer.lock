@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a937b6bb9133b3ed83ed97924d74f8c1",
+    "content-hash": "f3544509139c7cd6ea7eeeb48b5df727",
     "packages": [
         {
             "name": "brick/math",
@@ -13421,54 +13421,6 @@
                 }
             ],
             "time": "2026-10-06T20:05:50+00:00"
-        },
-        {
-            "name": "symplify/easy-coding-standard",
-            "version": "13.3.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ecsphp/ecs.git",
-                "reference": "c4c68c81775e8227dd01c064776edd46975d9d86"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ecsphp/ecs/zipball/c4c68c81775e8227dd01c064776edd46975d9d86",
-                "reference": "c4c68c81775e8227dd01c064776edd46975d9d86",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "conflict": {
-                "friendsofphp/php-cs-fixer": "<3.95.20",
-                "phpcsstandards/php_codesniffer": "<4.0.4",
-                "symplify/coding-standard": "<13.0"
-            },
-            "bin": [
-                "bin/ecs"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer",
-            "keywords": [
-                "Code style",
-                "automation",
-                "fixer",
-                "static analysis"
-            ],
-            "support": {
-                "issues": "https://github.com/ecsphp/ecs/issues",
-                "source": "https://github.com/ecsphp/ecs/tree/13.3.9"
-            },
-            "time": "2026-10-23T12:59:45+00:00"
         },
         {
             "name": "thecodingmachine/safe",

@@ -62,8 +62,8 @@ src/app/server/tools/
 
 src/app/server/.gitattributes
 src/app/server/baseline.php
-src/app/server/ecs.php
 src/app/server/infection.json5
+src/app/server/mago.toml
 src/app/server/phparkitect.php
 src/app/server/phpmetrics.json
 src/app/server/phpstan.neon

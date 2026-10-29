@@ -8,6 +8,7 @@ paths:
 ## 実行環境
 
 - Composer / artisan / テスト / 静的解析は Docker コンテナ経由で実行する
+- 整形と lint は Mago をホストで実行する (ADR-0041)
 - 共通コマンドの入口には `mise` を使う
 
 ## 構成
@@ -43,4 +44,4 @@ paths:
 ## 検証
 
 - 変更に最も近いタスクから実行する
-- 代表例: `mise run api:format:check`, `mise run api:analyze`, `mise run api:architecture`, `mise run api:test`
+- 代表例: `mise run api:format:check`, `mise run api:lint`, `mise run api:analyze`, `mise run api:architecture`, `mise run api:test`

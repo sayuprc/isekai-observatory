@@ -1,0 +1,174 @@
+#:schema https://mago.carthage.software/1.59.0/schema.json
+version = "1"
+php-version = "8.5.0"
+
+[source]
+workspace = "."
+paths = ["app", "bootstrap", "config", "database", "packages", "public", "routes", "tests", "tools", "artisan", "phparkitect.php"]
+excludes = ["bootstrap/cache/**"]
+
+[formatter]
+print-width = 120
+tab-width = 4
+use-tabs = false
+# ecs (PSR-12) は空の本体を `{\n}` で書くため 1 行にまとめない
+inline-empty-constructor-braces = false
+inline-empty-method-braces = false
+inline-empty-function-braces = false
+inline-empty-classlike-braces = false
+inline-empty-anonymous-class-braces = false
+# FunctionDeclarationFixer の `fn ()` に合わせる
+space-before-arrow-function-parameter-list-parenthesis = true
+# NotOperatorWithSuccessorSpaceFixer
+space-after-logical-not-unary-prefix-operator = true
+# CastSpacesFixer (space: none)
+space-after-cast-unary-prefix-operators = false
+# ecs は行の折り返しを決めないため、既存コードの改行位置をできるだけ保つ
+method-chain-breaking-style = "same_line"
+first-method-chain-on-new-line = false
+preserve-breaking-member-access-chain = true
+preserve-breaking-member-access-chain-first-method-on-same-line = true
+preserve-breaking-argument-list = true
+preserve-breaking-parameter-list = true
+preserve-breaking-attribute-list = true
+preserve-breaking-conditional-expression = true
+preserve-breaking-condition-expression = true
+preserve-breaking-binary-expression = true
+preserve-breaking-pipe-expression = true
+# MultilinePromotedPropertiesFixer は 2 引数以上のみ対象なので常時展開しない
+break-promoted-properties-list = false
+# BinaryOperatorSpacesFixer は `=>` を single_space にしている
+array-table-style-alignment = false
+
+[linter]
+excludes = ["bootstrap/cache/**"]
+# ecs は違反を 1 件でも残すと失敗していたため、それに合わせる
+minimum-fail-level = "note"
+
+[linter.rules]
+# ecs の fixer に対応するルールだけを有効にする
+# 既定で有効なもののうち、対応するもの
+# array-style: ArraySyntaxFixer
+# braced-string-interpolation: SimpleToComplexStringVariableFixer / ExplicitStringVariableFixer
+# explicit-nullable-param: NullableTypeDeclarationForDefaultNullValueFixer
+# identity-comparison: StrictComparisonFixer
+# inline-variable-return: ReturnAssignmentFixer
+# lowercase-keyword: PSR-12 (LowercaseKeywordsFixer)
+# lowercase-type-hint: NativeTypeDeclarationCasingFixer
+# no-closing-tag: PSR-12 (NoClosingTagFixer)
+# no-empty-comment: NoEmptyCommentFixer
+# no-hash-comment: SingleLineCommentStyleFixer
+# no-noop: NoEmptyStatementFixer
+# no-redundant-string-concat: NoUselessConcatOperatorFixer
+# no-redundant-use: NoUnusedImportsFixer
+# no-short-opening-tag: PSR-12 (FullOpeningTagFixer)
+# no-trailing-space: PSR-12 (NoTrailingWhitespaceFixer)
+# prefer-static-closure: StaticLambdaFixer
+# strict-types: DeclareStrictTypesFixer
+# 既定で無効なもののうち、対応するもの
+# GlobalNamespaceImportFixer (import_classes)
+# ecs でも FullyQualifiedStrictTypesFixer の対象外にしていたファイル
+no-fully-qualified-global-class-like = { enabled = true, exclude = ["bootstrap/providers.php", "app/Providers/EnvProviders/", "app/Providers/WebRequestServiceProvider.php", "config/valinor.php"] }
+# IsNullFixer
+no-is-null = { enabled = true }
+# NoUselessElseFixer
+no-redundant-else = { enabled = true }
+# LambdaNotUsedImportFixer
+no-unused-closure-capture = { enabled = true }
+# 既定で有効だが ecs に対応しないもの
+assert-description = { enabled = false }
+block-statement = { enabled = false }
+class-name = { enabled = false }
+combine-consecutive-issets = { enabled = false }
+constant-condition = { enabled = false }
+constant-name = { enabled = false }
+cyclomatic-complexity = { enabled = false }
+deprecated-cast = { enabled = false }
+deprecated-shell-execute-string = { enabled = false }
+deprecated-switch-semicolon = { enabled = false }
+disallowed-functions = { enabled = false }
+enum-name = { enabled = false }
+excessive-nesting = { enabled = false }
+excessive-parameter-list = { enabled = false }
+explicit-octal = { enabled = false }
+file-name = { enabled = false }
+function-name = { enabled = false }
+halstead = { enabled = false }
+ineffective-format-ignore-next = { enabled = false }
+ineffective-format-ignore-region = { enabled = false }
+instanceof-stringable = { enabled = false }
+interface-name = { enabled = false }
+invalid-open-tag = { enabled = false }
+kan-defect = { enabled = false }
+literal-named-argument = { enabled = false }
+loop-does-not-iterate = { enabled = false }
+no-alias-function = { enabled = false }
+no-assign-in-condition = { enabled = false }
+no-boolean-flag-parameter = { enabled = false }
+no-debug-symbols = { enabled = false }
+no-duplicate-match-arm = { enabled = false }
+no-else-clause = { enabled = false }
+no-empty = { enabled = false }
+no-empty-catch-clause = { enabled = false }
+no-empty-loop = { enabled = false }
+no-error-control-operator = { enabled = false }
+no-eval = { enabled = false }
+no-ffi = { enabled = false }
+no-global = { enabled = false }
+no-goto = { enabled = false }
+no-hash-emoji = { enabled = false }
+no-ini-set = { enabled = false }
+no-insecure-comparison = { enabled = false }
+no-isset = { enabled = false }
+no-literal-password = { enabled = false }
+no-missing-format-argument = { enabled = false }
+no-multi-assignments = { enabled = false }
+no-nested-ternary = { enabled = false }
+no-php-tag-terminator = { enabled = false }
+no-protected-in-final = { enabled = false }
+no-redundant-binary-string-prefix = { enabled = false }
+no-redundant-block = { enabled = false }
+no-redundant-continue = { enabled = false }
+no-redundant-file = { enabled = false }
+no-redundant-final = { enabled = false }
+no-redundant-isset = { enabled = false }
+no-redundant-label = { enabled = false }
+no-redundant-literal-return = { enabled = false }
+no-redundant-math = { enabled = false }
+no-redundant-method-override = { enabled = false }
+no-redundant-nullsafe = { enabled = false }
+no-redundant-parentheses = { enabled = false }
+no-redundant-readonly = { enabled = false }
+no-redundant-write-visibility = { enabled = false }
+no-redundant-yield-from = { enabled = false }
+no-request-variable = { enabled = false }
+no-self-assignment = { enabled = false }
+no-shell-execute-string = { enabled = false }
+no-shorthand-ternary = { enabled = false }
+no-sprintf-concat = { enabled = false }
+no-underscore-class = { enabled = false }
+no-unsafe-finally = { enabled = false }
+no-variable-variable = { enabled = false }
+no-void-reference-return = { enabled = false }
+optional-param-order = { enabled = false }
+prefer-arrow-function = { enabled = false }
+prefer-early-continue = { enabled = false }
+prefer-first-class-callable = { enabled = false }
+prefer-while-loop = { enabled = false }
+readable-literal = { enabled = false }
+require-preg-quote-delimiter = { enabled = false }
+sensitive-parameter = { enabled = false }
+single-class-per-file = { enabled = false }
+str-contains = { enabled = false }
+str-starts-with = { enabled = false }
+strict-behavior = { enabled = false }
+suspicious-explode-arguments = { enabled = false }
+tagged-fixme = { enabled = false }
+tagged-todo = { enabled = false }
+tainted-data-to-sink = { enabled = false }
+too-many-enum-cases = { enabled = false }
+too-many-methods = { enabled = false }
+too-many-properties = { enabled = false }
+trait-name = { enabled = false }
+use-compound-assignment = { enabled = false }
+valid-docblock = { enabled = false }

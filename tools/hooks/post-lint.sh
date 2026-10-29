@@ -50,34 +50,16 @@ case "$file" in
   */src/app/server/*.php)
     cd "$repo_root"
 
-    # Docker コンテナが起動していなければエラーフィードバック
-    if ! docker compose exec -T php true 2>/dev/null; then
-      add_context "ERROR: PHP コンテナが起動していません。
-FIX: mise run up を実行してコンテナを起動してください。"
-      emit_collected_contexts
-      exit 0
-    fi
-
-    # コンテナ内パスに変換
-    container_path="${file#*src/app/server/}"
-
-    # 自動修正
-    mise run api:format -- "$container_path" >/dev/null 2>&1 || true
+    # 自動修正 (mago はホストで動くため、コンテナを必要としない)
+    mise run api:format -- "$file" >/dev/null 2>&1 || true
+    mise run api:lint:fix -- "$file" >/dev/null 2>&1 || true
 
     # 残った違反をチェック
-    diag="$(mise run api:format:check -- "$container_path" 2>&1 | head -30)" || true
+    diag="$(mise run api:lint -- "$file" 2>&1 | head -30)" || true
 
-    if [ -n "$diag" ] && echo "$diag" | grep -qiE 'error|found'; then
-      add_context "ECS violations in ${container_path}:
-${diag}"
-    fi
-
-    # mago lint(ホスト上で高速実行)
-    mago_diag="$(mago lint "$file" 2>&1 | head -30)" || true
-
-    if [ -n "$mago_diag" ] && echo "$mago_diag" | grep -qiE 'warning|error|help'; then
+    if [ -n "$diag" ] && echo "$diag" | grep -qiE 'note|help|warning|error'; then
       add_context "mago lint:
-${mago_diag}"
+${diag}"
     fi
     ;;
 
