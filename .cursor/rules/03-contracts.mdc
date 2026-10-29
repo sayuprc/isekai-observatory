@@ -1,6 +1,6 @@
 ---
-description: "Use when editing TypeSpec contracts, API shapes, versioned endpoints, or OpenAPI generation in src/app/contracts. Covers entrypoints, generated outputs, and validation."
-globs: "src/app/contracts/**"
+description: Use when editing TypeSpec contracts, API shapes, versioned endpoints, or OpenAPI generation in src/app/contracts. Covers entrypoints, generated outputs, and validation.
+globs: src/app/contracts/**
 ---
 
 # コントラクト規約

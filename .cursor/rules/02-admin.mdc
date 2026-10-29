@@ -1,6 +1,6 @@
 ---
-description: "Use when editing Astro pages, SolidJS components, Elysia BFF routes, or generated API clients in src/app/admin. Covers admin-specific structure, regeneration flow, and validation."
-globs: "src/app/admin/**"
+description: Use when editing Astro pages, SolidJS components, Elysia BFF routes, or generated API clients in src/app/admin. Covers admin-specific structure, regeneration flow, and validation.
+globs: src/app/admin/**
 ---
 
 # 管理画面規約

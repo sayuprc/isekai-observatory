@@ -1,6 +1,6 @@
 ---
-description: "Use when editing the MoonBit Discord notifier in src/notification/discord-notifier. Covers module layout, env-based routing, README as contract SoT, and validation."
-globs: "src/notification/discord-notifier/**"
+description: Use when editing the MoonBit Discord notifier in src/notification/discord-notifier. Covers module layout, env-based routing, README as contract SoT, and validation.
+globs: src/notification/discord-notifier/**
 ---
 
 # Discord Notifier 規約

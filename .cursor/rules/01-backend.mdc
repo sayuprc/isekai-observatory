@@ -1,6 +1,6 @@
 ---
-description: "Use when editing PHP/Laravel code in src/app/server, implementing API endpoints, changing domain logic, repositories, or writing server-side tests. Covers ADOP layering, exception-based error handling (ADR-0013/0014), generated files, and validation."
-globs: "src/app/server/**"
+description: Use when editing PHP/Laravel code in src/app/server, implementing API endpoints, changing domain logic, repositories, or writing server-side tests. Covers ADOP layering, exception-based error handling (ADR-0013/0014), generated files, and validation.
+globs: src/app/server/**
 ---
 
 # サーバー規約
