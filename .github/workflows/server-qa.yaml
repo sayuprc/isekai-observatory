@@ -191,7 +191,7 @@ jobs:
         uses: ./.github/actions/setup-mise
 
       - name: Run Lint
-        run: mise run api:lint
+        run: mise run api:lint:check
 
   analyze:
     needs: setup

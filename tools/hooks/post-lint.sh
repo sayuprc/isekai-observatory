@@ -52,10 +52,10 @@ case "$file" in
 
     # 自動修正 (mago はホストで動くため、コンテナを必要としない)
     mise run api:format -- "$file" >/dev/null 2>&1 || true
-    mise run api:lint:fix -- "$file" >/dev/null 2>&1 || true
+    mise run api:lint -- "$file" >/dev/null 2>&1 || true
 
     # 残った違反をチェック
-    diag="$(mise run api:lint -- "$file" 2>&1 | head -30)" || true
+    diag="$(mise run api:lint:check -- "$file" 2>&1 | head -30)" || true
 
     if [ -n "$diag" ] && echo "$diag" | grep -qiE 'note|help|warning|error'; then
       add_context "mago lint:

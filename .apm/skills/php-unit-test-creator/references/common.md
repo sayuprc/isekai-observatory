@@ -12,5 +12,5 @@ Unit / Feature / Integration で共通するルール
 ## 品質ゲート
 
 - フォーマット: `mise run api:format`
-- lint の自動修正: `mise run api:lint:fix`
+- lint の自動修正: `mise run api:lint`
 - 実行: `mise run api:test <作成したテストのパス>` (または各 skill 記載の `api:test:unit` / `feature` / `integration`)

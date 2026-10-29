@@ -285,16 +285,16 @@ dir = "src/app/server"
 run = "mago fmt {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:lint"]
-description = "Mago の linter を実行する"
-usage = 'arg "[path]" var=#true help="lint 対象パス"'
-dir = "src/app/server"
-run = "mago lint {% for p in usage.path %}{{ p | quote }} {% endfor %}"
-
-[tasks."api:lint:fix"]
-description = "Mago の linter を --fix オプション付きで実行する"
+description = "Mago の linter を実行し、自動修正する"
 usage = 'arg "[path]" var=#true help="lint 自動修正対象パス"'
 dir = "src/app/server"
 run = "mago lint --fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+
+[tasks."api:lint:check"]
+description = "Mago の linter を実行し、違反をチェックする"
+usage = 'arg "[path]" var=#true help="lint チェック対象パス"'
+dir = "src/app/server"
+run = "mago lint {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:test"]
 description = "テストを実行する"

@@ -45,7 +45,7 @@
 | 変更したいもの | 最初に触る場所 | 続けて触る場所 | 代表的な確認 |
 |---|---|---|---|
 | API の request / response 形状 | `src/app/contracts` | `mise run generate` の影響先 | `mise run contract:format:check`, `contract:test`, `contract:typecheck`, `contract:compile:*` |
-| サーバーの業務ロジック | `src/app/server` | 必要なら `src/app/contracts` | `mise run api:format:check`, `api:lint`, `api:analyze`, `api:architecture`, `api:test` |
+| サーバーの業務ロジック | `src/app/server` | 必要なら `src/app/contracts` | `mise run api:format:check`, `api:lint:check`, `api:analyze`, `api:architecture`, `api:test` |
 | 管理画面の UI / BFF | `src/app/admin` | 必要なら `src/app/contracts` | `mise run admin:check`, `cd src/app && bun --filter admin build` |
 | 閲覧サイトの UI | `src/app/viewer` | 必要なら `src/app/contracts` | `mise run viewer:check`, `cd src/app && bun --filter viewer build` |
 | Public API の書き出し / 配信 | `src/app/public-api` | 必要なら `src/app/contracts`、`infra/docker/viewer` | `mise run public-api:check` |
