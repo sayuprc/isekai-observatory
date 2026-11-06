@@ -42,15 +42,15 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Setup MoonBit
-        uses: ./.github/actions/setup-moonbit
+        uses: $/.github/actions/setup-moonbit
 
       - name: Run check / test
         run: mise run notify-publish:check
