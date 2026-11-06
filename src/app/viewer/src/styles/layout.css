@@ -106,7 +106,17 @@
 [data-palette='nemophila-1'] .brand-logo-dark,
 [data-palette='nemophila-1'] .footer-logo-dark,
 [data-palette='sunflower-1'] .brand-logo-dark,
-[data-palette='sunflower-1'] .footer-logo-dark {
+[data-palette='sunflower-1'] .footer-logo-dark,
+[data-palette='seventh-heaven'] .brand-logo-dark,
+[data-palette='seventh-heaven'] .footer-logo-dark,
+[data-palette='calla-lily'] .brand-logo-dark,
+[data-palette='calla-lily'] .footer-logo-dark,
+[data-palette='edelweiss'] .brand-logo-dark,
+[data-palette='edelweiss'] .footer-logo-dark,
+[data-palette='margaret-sol'] .brand-logo-dark,
+[data-palette='margaret-sol'] .footer-logo-dark,
+[data-palette='heliotrope-1'] .brand-logo-dark,
+[data-palette='heliotrope-1'] .footer-logo-dark {
   display: none;
 }
 
@@ -115,7 +125,17 @@
 [data-palette='nemophila-1'] .brand-logo-light,
 [data-palette='nemophila-1'] .footer-logo-light,
 [data-palette='sunflower-1'] .brand-logo-light,
-[data-palette='sunflower-1'] .footer-logo-light {
+[data-palette='sunflower-1'] .footer-logo-light,
+[data-palette='seventh-heaven'] .brand-logo-light,
+[data-palette='seventh-heaven'] .footer-logo-light,
+[data-palette='calla-lily'] .brand-logo-light,
+[data-palette='calla-lily'] .footer-logo-light,
+[data-palette='edelweiss'] .brand-logo-light,
+[data-palette='edelweiss'] .footer-logo-light,
+[data-palette='margaret-sol'] .brand-logo-light,
+[data-palette='margaret-sol'] .footer-logo-light,
+[data-palette='heliotrope-1'] .brand-logo-light,
+[data-palette='heliotrope-1'] .footer-logo-light {
   display: block;
 }
 
@@ -285,7 +305,9 @@
   right: 0;
   z-index: 91;
   width: 360px;
+  max-height: calc(100vh - 100px);
   padding: 18px 18px 16px;
+  overflow-y: auto;
   background: color-mix(in oklab, var(--bg) 94%, transparent);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
@@ -308,11 +330,17 @@
   letter-spacing: 0.12em;
 }
 
-.theme-pop-title-en {
-  font-family: 'EB Garamond', serif;
-  font-size: 11px;
-  font-style: italic;
+.theme-group + .theme-group {
+  margin-top: 14px;
+}
+
+.theme-group-title {
+  margin: 0 0 6px;
+  font-family: 'Shippori Mincho', serif;
+  font-size: 12px;
+  font-weight: 400;
   color: var(--fg-muted);
+  letter-spacing: 0.12em;
 }
 
 .theme-grid {

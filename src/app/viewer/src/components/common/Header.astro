@@ -1,7 +1,7 @@
 ---
 import { navLinks } from '../../shared/nav';
 import { isActivePath } from '../../shared/routing';
-import { DEFAULT_PALETTE, THEMES, themeByValue } from '../../shared/themes';
+import { DEFAULT_PALETTE, THEME_GROUPS, THEMES, themeByValue } from '../../shared/themes';
 import EnvironmentBadge from './EnvironmentBadge.astro';
 
 interface Props {
@@ -77,21 +77,25 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
             <span class="theme-pop-title" id="theme-pop-title">
               カラーテーマ
             </span>
-            <span class="theme-pop-title-en">Color Themes</span>
           </div>
-          <div class="theme-grid">
-            {THEMES.map((theme) => (
-              <button
-                class:list={['theme-opt', theme.value === DEFAULT_PALETTE && 'is-active']}
-                type="button"
-                aria-pressed={theme.value === DEFAULT_PALETTE ? 'true' : 'false'}
-                data-palette-option={theme.value}
-              >
-                <span class="name">{theme.name}</span>
-                <span class="check">●</span>
-              </button>
-            ))}
-          </div>
+          {THEME_GROUPS.map((group) => (
+            <section class="theme-group" aria-label={group.name}>
+              <h3 class="theme-group-title">{group.name}</h3>
+              <div class="theme-grid">
+                {THEMES.filter((theme) => theme.group === group.value).map((theme) => (
+                  <button
+                    class:list={['theme-opt', theme.value === DEFAULT_PALETTE && 'is-active']}
+                    type="button"
+                    aria-pressed={theme.value === DEFAULT_PALETTE ? 'true' : 'false'}
+                    data-palette-option={theme.value}
+                  >
+                    <span class="name">{theme.name}</span>
+                    <span class="check">●</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       </div>
     </div>
