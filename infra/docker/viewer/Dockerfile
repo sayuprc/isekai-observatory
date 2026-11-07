@@ -54,8 +54,7 @@ COPY infra/docker/viewer/viewer-deploy /usr/local/bin/viewer-deploy
 COPY mise.toml ./
 
 RUN test -n "${DEPLOY_ENV}" \
-  && corepack enable \
-  && corepack prepare "pnpm@$(sed -n 's/^pnpm = "\(.*\)"$/\1/p' mise.toml)" --activate \
+  && npm install -g "pnpm@$(sed -n 's/^pnpm = "\(.*\)"$/\1/p' mise.toml)" \
   && chmod +x /usr/local/bin/viewer-deploy /usr/local/bin/notify-publish
 
 WORKDIR /app/src

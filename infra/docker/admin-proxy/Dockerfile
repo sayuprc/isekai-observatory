@@ -19,8 +19,7 @@ COPY infra/docker/admin-proxy/admin-proxy-deploy /usr/local/bin/admin-proxy-depl
 COPY mise.toml ./
 
 RUN test -n "${DEPLOY_ENV}" \
-  && corepack enable \
-  && corepack prepare "pnpm@$(sed -n 's/^pnpm = "\(.*\)"$/\1/p' mise.toml)" --activate \
+  && npm install -g "pnpm@$(sed -n 's/^pnpm = "\(.*\)"$/\1/p' mise.toml)" \
   && chmod +x /usr/local/bin/admin-proxy-deploy
 
 WORKDIR /app/src
