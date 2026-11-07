@@ -102,6 +102,91 @@
   color: var(--fg-muted);
 }
 
+/* 詳細ページのタブ: セクションや版をタブで切り替え、選んだ分だけ出す
+   ラジオボタンと兄弟セレクタだけで切り替えるので、JS は使わない
+   .detail-tab-item を display: contents にして、タブを 1 行に並べ、パネルを次の行に送る */
+
+.detail-tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.detail-tabs::after {
+  flex: 0 0 100%;
+  order: 1;
+  height: 1px;
+  content: '';
+  background: var(--line);
+}
+
+.detail-tab-item {
+  display: contents;
+}
+
+.detail-tab-radio {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.detail-tab {
+  order: 1;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: var(--fg-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.18s ease;
+}
+
+.detail-tab:hover {
+  color: var(--fg);
+}
+
+.detail-tab-count {
+  margin-left: 6px;
+  font-family: Spectral, serif;
+  font-size: 13px;
+  color: var(--fg-faint);
+}
+
+.detail-tab-radio:checked + .detail-tab {
+  color: var(--fg);
+  border-bottom-color: var(--accent-strong);
+}
+
+.detail-tab-radio:focus-visible + .detail-tab {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+.detail-tab-panel {
+  display: none;
+  flex: 0 0 100%;
+  order: 2;
+  min-width: 0;
+  margin-top: 18px;
+}
+
+.detail-tab-radio:checked ~ .detail-tab-panel {
+  display: block;
+}
+
+/* タブが 1 つだけなら、切り替えがないのでタブの見出しと区切り線を隠す
+   labeled のときは、見出しとして残す */
+
+.detail-tabs:not(.detail-tabs-labeled):has(> .detail-tab-item:only-child)::after,
+.detail-tabs:not(.detail-tabs-labeled) > .detail-tab-item:only-child .detail-tab {
+  display: none;
+}
+
+.detail-tabs:not(.detail-tabs-labeled) > .detail-tab-item:only-child .detail-tab-panel {
+  display: block;
+  margin-top: 0;
+}
+
 .detail-page-content {
   min-width: 0;
 }

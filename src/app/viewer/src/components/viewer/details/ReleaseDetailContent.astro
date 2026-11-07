@@ -1,6 +1,8 @@
 ---
 import { RELEASE_GROUP_TYPE_NAMES, releaseFormatText, type ReleaseGroup } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
+import DetailTab from './DetailTab.astro';
+import DetailTabs from './DetailTabs.astro';
 import ReleaseVersionBody from './ReleaseVersionBody.astro';
 import TagChips from './TagChips.astro';
 
@@ -9,7 +11,7 @@ interface Props {
 }
 
 const { releaseGroup } = Astro.props;
-const isSingleReleaseGroup = releaseGroup.releases.length === 1;
+const tabGroup = `release-${releaseGroup.releaseGroupId}`;
 ---
 
 <div class="detail-page-content release-detail-content" data-share-title={releaseGroup.title}>
@@ -26,40 +28,24 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
   )}
   <TagChips tags={releaseGroup.tags} />
 
-  <div
-    class:list={['release-versions', isSingleReleaseGroup && 'release-versions-single']}
-    role={isSingleReleaseGroup ? undefined : 'radiogroup'}
-    aria-label={isSingleReleaseGroup ? undefined : '版'}
-  >
+  <DetailTabs label="版">
     {releaseGroup.releases.map((release, index) => {
-      const tabId = `release-version-${releaseGroup.releaseGroupId}-${index}`;
       const formats = releaseFormatText(release.formats);
 
       return (
-        <section class="release-version">
-          {!isSingleReleaseGroup && (
-            <>
-              <input
-                class="release-version-radio"
-                type="radio"
-                name={`release-version-${releaseGroup.releaseGroupId}`}
-                id={tabId}
-                checked={index === 0}
-              />
-              <label class="release-version-tab" for={tabId}>
-                {release.name !== '' ? release.name : formats}
-              </label>
-            </>
-          )}
-          <div class="release-version-panel">
-            <div class="release-version-info">
-              <span class="label-mono">{dottedDate(release.releasedOn)}</span>
-              <span class="label-mono">{formats}</span>
-            </div>
-            <ReleaseVersionBody release={release} />
+        <DetailTab
+          group={tabGroup}
+          id={String(index)}
+          label={release.name !== '' ? release.name : formats}
+          checked={index === 0}
+        >
+          <div class="release-version-info">
+            <span class="label-mono">{dottedDate(release.releasedOn)}</span>
+            <span class="label-mono">{formats}</span>
           </div>
-        </section>
+          <ReleaseVersionBody release={release} />
+        </DetailTab>
       );
     })}
-  </div>
+  </DetailTabs>
 </div>

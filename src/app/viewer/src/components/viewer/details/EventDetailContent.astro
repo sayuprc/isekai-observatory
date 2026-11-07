@@ -3,8 +3,9 @@ import type { Event } from '../../../features/events/types';
 import { EVENT_TYPE_NAMES, coVocalistNames, eventDetailDate, eventStatusName } from '../../../features/events/types';
 import { releaseFormatText } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
-import DetailSectionHead from './DetailSectionHead.astro';
 import DetailSongList from './DetailSongList.astro';
+import DetailTab from './DetailTab.astro';
+import DetailTabs from './DetailTabs.astro';
 import MediaChip from './MediaChip.astro';
 import TagChips from './TagChips.astro';
 
@@ -47,6 +48,17 @@ const releases = event.releases.map((release) => ({
   sub: [dottedDate(release.releasedOn), releaseFormatText(release.formats)].filter((part) => part !== '').join(' · '),
 }));
 
+// 最初に開くタブは、中身のある先頭のもの
+const tabGroup = `event-${event.eventId}`;
+const tabKeys = [
+  { key: 'setlist', visible: setlistItems.length > 0 },
+  { key: 'loose', visible: looseSongs.length > 0 },
+  { key: 'releases', visible: releases.length > 0 },
+  { key: 'media', visible: event.media.length > 0 },
+  { key: 'sources', visible: event.sources.length > 0 },
+];
+const firstTab = tabKeys.find((tab) => tab.visible)?.key ?? null;
+
 const hostname = (url: string): string => {
   try {
     return new URL(url).hostname;
@@ -81,62 +93,91 @@ const hostname = (url: string): string => {
     ))}
   </dl>
 
-  {setlistItems.length > 0 && (
-    <>
-      <DetailSectionHead title="セットリスト" count={setlistItems.length} />
-      <DetailSongList items={setlistItems} />
-    </>
-  )}
+  {firstTab !== null && (
+    <DetailTabs label="イベントの情報" labeled>
+      {setlistItems.length > 0 && (
+        <DetailTab
+          group={tabGroup}
+          id="setlist"
+          label="セットリスト"
+          count={setlistItems.length}
+          checked={firstTab === 'setlist'}
+        >
+          <DetailSongList items={setlistItems} />
+        </DetailTab>
+      )}
 
-  {looseSongs.length > 0 && (
-    <>
-      <DetailSectionHead title={looseTitle} count={looseSongs.length} />
-      <DetailSongList items={[{ index: null, label: null, songs: looseSongs }]} />
-    </>
-  )}
+      {looseSongs.length > 0 && (
+        <DetailTab
+          group={tabGroup}
+          id="loose"
+          label={looseTitle}
+          count={looseSongs.length}
+          checked={firstTab === 'loose'}
+        >
+          <DetailSongList items={[{ index: null, label: null, songs: looseSongs }]} />
+        </DetailTab>
+      )}
 
-  {releases.length > 0 && (
-    <>
-      <DetailSectionHead title="関連リリース" count={releases.length} />
-      <div class="rel-list">
-        {releases.map((release) => (
-          <a class="rel-chip" href={release.href}>
-            <div class="rel-copy">
-              <div class="rel-main">{release.title}</div>
-              <div class="label-mono rel-sub">{release.sub}</div>
-            </div>
-            <span class="rel-arrow rel-arrow-muted">→</span>
-          </a>
-        ))}
-      </div>
-    </>
-  )}
+      {releases.length > 0 && (
+        <DetailTab
+          group={tabGroup}
+          id="releases"
+          label="関連リリース"
+          count={releases.length}
+          checked={firstTab === 'releases'}
+        >
+          <div class="rel-list">
+            {releases.map((release) => (
+              <a class="rel-chip" href={release.href}>
+                <div class="rel-copy">
+                  <div class="rel-main">{release.title}</div>
+                  <div class="label-mono rel-sub">{release.sub}</div>
+                </div>
+                <span class="rel-arrow rel-arrow-muted">→</span>
+              </a>
+            ))}
+          </div>
+        </DetailTab>
+      )}
 
-  {event.media.length > 0 && (
-    <>
-      <DetailSectionHead title="関連メディア" count={event.media.length} />
-      <div class="rel-list">
-        {event.media.map((media) => (
-          <MediaChip media={media} />
-        ))}
-      </div>
-    </>
-  )}
+      {event.media.length > 0 && (
+        <DetailTab
+          group={tabGroup}
+          id="media"
+          label="関連メディア"
+          count={event.media.length}
+          checked={firstTab === 'media'}
+        >
+          <div class="rel-list">
+            {event.media.map((media) => (
+              <MediaChip media={media} />
+            ))}
+          </div>
+        </DetailTab>
+      )}
 
-  {event.sources.length > 0 && (
-    <>
-      <DetailSectionHead title="出典" count={event.sources.length} />
-      <div class="rel-list">
-        {event.sources.map((source) => (
-          <a class="rel-chip" href={source.url} target="_blank" rel="noopener noreferrer">
-            <div class="rel-copy">
-              <div class="rel-main">{source.displayName}</div>
-              <div class="label-mono rel-sub">{hostname(source.url)}</div>
-            </div>
-            <span class="rel-arrow rel-arrow-muted">↗</span>
-          </a>
-        ))}
-      </div>
-    </>
+      {event.sources.length > 0 && (
+        <DetailTab
+          group={tabGroup}
+          id="sources"
+          label="出典"
+          count={event.sources.length}
+          checked={firstTab === 'sources'}
+        >
+          <div class="rel-list">
+            {event.sources.map((source) => (
+              <a class="rel-chip" href={source.url} target="_blank" rel="noopener noreferrer">
+                <div class="rel-copy">
+                  <div class="rel-main">{source.displayName}</div>
+                  <div class="label-mono rel-sub">{hostname(source.url)}</div>
+                </div>
+                <span class="rel-arrow rel-arrow-muted">↗</span>
+              </a>
+            ))}
+          </div>
+        </DetailTab>
+      )}
+    </DetailTabs>
   )}
 </div>
