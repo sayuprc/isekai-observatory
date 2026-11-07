@@ -164,23 +164,37 @@
 .home-feature-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 48px;
+  gap: 72px 48px;
   align-items: stretch;
 }
 
 /* 2 カラムに割れない幅ではカードを中央に置き、右側だけが空く状態を作らない
    見出しの罫線もカードと同じ幅で終わらせる */
 
+/* 見出しをホームで一番目立たせ、そのあとにタイトルと内容が目に入る順にする
+   見出しの下線の左端にアクセントの太い線を重ねて、どこからどこまでが 1 つのまとまりかを示す */
+
 .home-feature .section-head {
+  position: relative;
   width: 100%;
-  padding: 0 0 22px;
-  margin: 0 0 26px;
+  padding: 0 0 18px;
+  margin: 0 0 28px;
   border-bottom: 1px solid color-mix(in oklab, var(--fg) 24%, var(--bg));
 }
 
+.home-feature .section-head::after {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 56px;
+  height: 3px;
+  content: '';
+  background: var(--accent-strong);
+}
+
 .home-feature .section-head h2 {
-  font-size: 22px;
-  font-weight: 400;
+  font-size: 28px;
+  font-weight: 500;
   letter-spacing: 0.12em;
 }
 
@@ -210,7 +224,7 @@
 
 .home-feature .feature-title {
   margin: 12px 0 20px;
-  font-size: clamp(26px, 2.6vw, 38px);
+  font-size: clamp(20px, 2vw, 26px);
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
