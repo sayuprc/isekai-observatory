@@ -13,8 +13,11 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
 ---
 
 <div class="detail-page-content release-detail-content" data-share-title={releaseGroup.title}>
-  <div class="label-mono">
-    {dottedDate(releaseGroup.firstReleasedOn)} · {RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}
+  <div class="meta-row">
+    <span class="label-mono">{dottedDate(releaseGroup.firstReleasedOn)}</span>
+    <span class="pill" data-release-type={String(releaseGroup.type)}>
+      {RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}
+    </span>
   </div>
   <h1 class="detail-title">{releaseGroup.title}</h1>
   {releaseGroup.description && (
