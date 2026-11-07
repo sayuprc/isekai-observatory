@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+set -eu
+
+: "${DB_USERNAME:?}"
+: "${DB_PASSWORD:?}"
+: "${DB_HOST:?}"
+: "${DB_PORT:?}"
+: "${DB_DATABASE:?}"
+: "${DEPLOY_ENV:?}"
+
+atlas schema apply --var "schema_name=${DB_DATABASE}" --env "${DEPLOY_ENV}" --auto-approve

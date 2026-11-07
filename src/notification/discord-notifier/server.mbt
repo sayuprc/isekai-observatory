@@ -1,9 +1,9 @@
 ///|
 async fn respond(
   conn : @http.ServerConnection,
-  code : Int,
+  code : Int32,
   reason : String,
-  body? : String = "",
+  body~ : String = "",
 ) -> Unit {
   conn.send_response(code, reason, extra_headers={
     "Content-Type": "text/plain; charset=utf-8",

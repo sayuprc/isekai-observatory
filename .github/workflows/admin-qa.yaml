@@ -44,16 +44,16 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Cache node modules
         id: cache-node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: |
             src/app/node_modules
@@ -61,7 +61,7 @@ jobs:
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Check generate code has diff
         run: mise run admin:generate
@@ -73,16 +73,16 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Cache node modules
         id: cache-node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: |
             src/app/node_modules
@@ -90,28 +90,28 @@ jobs:
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Run Format Check
         run: mise run admin:format:check
 
   lint:
-    name: ESLint
+    name: Lint
 
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Cache node modules
         id: cache-node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: |
             src/app/node_modules
@@ -119,10 +119,10 @@ jobs:
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
-      - name: Run ESLint
-        run: mise run admin:lint
+      - name: Run Lint
+        run: mise run admin:lint:check
 
   typecheck:
     name: Type Check
@@ -131,16 +131,16 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Cache node modules
         id: cache-node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: |
             src/app/node_modules
@@ -148,28 +148,28 @@ jobs:
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Run Type Check
         run: mise run admin:typecheck
 
   style:
-    name: Stylelint
+    name: Style
 
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Cache node modules
         id: cache-node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: |
             src/app/node_modules
@@ -177,10 +177,10 @@ jobs:
           key: admin-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
-      - name: Run Stylelint
-        run: mise run admin:style
+      - name: Run Style Check
+        run: mise run admin:style:check
 
       # - name: Run Build
       #   run: bun run build

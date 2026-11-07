@@ -1,4 +1,6 @@
-import { For, Show, createEffect, createSignal } from 'solid-js';
+import { Show, createEffect, createSignal } from 'solid-js';
+
+import ViewerSelect from './ViewerSelect';
 
 type FilterOption = { value: string; label: string };
 
@@ -125,25 +127,20 @@ export default function FilterBar(props: Props) {
 
   return (
     <div class="viewer-filters">
-      <div class="viewer-select">
-        <select aria-label="種別で絞り込む" value={filter()} onChange={(event) => setFilter(event.currentTarget.value)}>
-          <For each={props.filters}>{(option) => <option value={option.value}>{option.label}</option>}</For>
-        </select>
-      </div>
+      <ViewerSelect label="種別で絞り込む" options={props.filters} value={filter()} onChange={setFilter} />
       <Show when={props.tagAttr && props.tags && props.tags.length > 0}>
-        <div class="viewer-select">
-          <select aria-label="タグで絞り込む" value={tag()} onChange={(event) => setTag(event.currentTarget.value)}>
-            <option value={ALL_TAGS}>すべてのタグ</option>
-            <For each={props.tags}>{(option) => <option value={option.tagId}>{option.name}</option>}</For>
-          </select>
-        </div>
+        <ViewerSelect
+          label="タグで絞り込む"
+          options={[
+            { value: ALL_TAGS, label: 'すべてのタグ' },
+            ...(props.tags ?? []).map((t) => ({ value: t.tagId, label: t.name })),
+          ]}
+          value={tag()}
+          onChange={setTag}
+        />
       </Show>
       <Show when={props.sorts && props.sorts.length > 0}>
-        <div class="viewer-select">
-          <select aria-label="並び替える" value={sort()} onChange={(event) => setSort(event.currentTarget.value)}>
-            <For each={props.sorts}>{(option) => <option value={option.value}>{option.label}</option>}</For>
-          </select>
-        </div>
+        <ViewerSelect label="並び替える" options={props.sorts ?? []} value={sort()} onChange={setSort} />
       </Show>
       <Show when={props.searchAttr}>
         <div class="viewer-filters-spacer" />

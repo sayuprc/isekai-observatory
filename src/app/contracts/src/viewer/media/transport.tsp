@@ -18,6 +18,7 @@ namespace IsekaiObservatory.Viewer;
       type: MediaTypeValue.Mv,
       counts: #{ songCount: 1 },
       songs: #[#{ songId: "3cd42c09-ff3c-4cd2-913f-a279c4ea89b4", title: "テスト楽曲", type: SongTypeValue.Original }],
+      tags: #[#{ tagId: "5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90", name: "テストタグ", orderNo: 10 }],
     }
   ],
   nextCursor: "eyJwdWJsaXNoZWRBdCI6IjIwMjQtMDMtMDEiLCJtZWRpYUlkIjoiMTExMTExMTEtMTExMS0xMTExLTExMTEtMTExMTExMTExMTExIn0=",

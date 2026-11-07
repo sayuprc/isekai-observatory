@@ -1,6 +1,6 @@
 ---
-description: "Use when editing the MoonBit notify-publish CLI in src/notification/publish. Covers module layout, publish-only responsibility, README as contract SoT, and validation."
-globs: "src/notification/publish/**"
+description: Use when editing the MoonBit notify-publish CLI in src/notification/publish. Covers module layout, publish-only responsibility, README as contract SoT, and validation.
+globs: src/notification/publish/**
 ---
 
 # Notify Publish 規約

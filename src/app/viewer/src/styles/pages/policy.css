@@ -48,6 +48,17 @@
   list-style-type: disc;
 }
 
+/* 入れ子の箇条書きは、親より詰めて、マーカーを変えて階層を見分けられるようにする */
+
+.shell.page-section .markdown-doc li > ul {
+  margin: 8px 0 0;
+  list-style-type: circle;
+}
+
+.shell.page-section .markdown-doc li li {
+  margin-bottom: 4px;
+}
+
 .shell.page-section .markdown-doc ol {
   padding-left: 1.4em;
   margin: 0 0 18px;

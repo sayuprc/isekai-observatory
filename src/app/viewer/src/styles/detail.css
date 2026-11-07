@@ -96,15 +96,95 @@
 }
 
 .detail-section-head-count {
-  min-width: 28px;
-  padding: 2px 8px;
   font-family: Spectral, serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--fg-muted);
-  text-align: center;
-  background: var(--bg-elev-2);
-  border-radius: 20px;
+}
+
+/* 詳細ページのタブ: セクションや版をタブで切り替え、選んだ分だけ出す
+   ラジオボタンと兄弟セレクタだけで切り替えるので、JS は使わない
+   .detail-tab-item を display: contents にして、タブを 1 行に並べ、パネルを次の行に送る */
+
+.detail-tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.detail-tabs::after {
+  flex: 0 0 100%;
+  order: 1;
+  height: 1px;
+  content: '';
+  background: var(--line);
+}
+
+.detail-tab-item {
+  display: contents;
+}
+
+.detail-tab-radio {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.detail-tab {
+  order: 1;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: var(--fg-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.18s ease;
+}
+
+.detail-tab:hover {
+  color: var(--fg);
+}
+
+.detail-tab-count {
+  margin-left: 6px;
+  font-family: Spectral, serif;
+  font-size: 13px;
+  color: var(--fg-faint);
+}
+
+.detail-tab-radio:checked + .detail-tab {
+  color: var(--fg);
+  border-bottom-color: var(--accent-strong);
+}
+
+.detail-tab-radio:focus-visible + .detail-tab {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+.detail-tab-panel {
+  display: none;
+  flex: 0 0 100%;
+  order: 2;
+  min-width: 0;
+  margin-top: 18px;
+}
+
+.detail-tab-radio:checked ~ .detail-tab-panel {
+  display: block;
+}
+
+/* タブが 1 つだけなら、切り替えがないのでタブの見出しと区切り線を隠す
+   labeled のときは、見出しとして残す */
+
+.detail-tabs:not(.detail-tabs-labeled):has(> .detail-tab-item:only-child)::after,
+.detail-tabs:not(.detail-tabs-labeled) > .detail-tab-item:only-child .detail-tab {
+  display: none;
+}
+
+.detail-tabs:not(.detail-tabs-labeled) > .detail-tab-item:only-child .detail-tab-panel {
+  display: block;
+  margin-top: 0;
 }
 
 .detail-page-content {
@@ -113,18 +193,16 @@
 
 .detail-page > .detail-page-content {
   padding: 40px;
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  border-radius: 6px;
 }
 
-.detail-page-content > .label-mono {
-  display: inline-block;
+/* 詳細の見出しの種別バッジは、一覧より大きく、どの詳細でも同じ大きさにそろえる */
+
+.detail-page-content .meta-row .pill,
+.detail-page-content .event-detail-meta .pill {
   padding: 6px 12px;
+  font-size: 13px;
   line-height: 1.8;
-  background: var(--bg-elev-2);
-  border: 1px solid var(--line-soft);
-  border-radius: 4px;
+  letter-spacing: 0.06em;
 }
 
 .detail-page-content .detail-title {
@@ -260,14 +338,24 @@ span.detail-song-list-song-title {
 .tag-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px 14px;
   padding: 0;
   margin: 20px 0 0;
   list-style: none;
 }
 
 .tag-chip {
+  padding: 0;
+  font-family: inherit;
+  font-size: 13px;
   letter-spacing: 0.04em;
+  border: 0;
+}
+
+.tag-chip::before {
+  margin-right: 1px;
+  color: var(--accent-strong);
+  content: '#';
 }
 
 .rel-main {

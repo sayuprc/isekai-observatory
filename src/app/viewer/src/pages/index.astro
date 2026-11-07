@@ -8,11 +8,9 @@ import { EVENT_STATUS } from '../features/events/types';
 import { mediaContentRepository } from '../features/media/content';
 import { YOUTUBE_THUMBNAIL_ORIGIN, youtubeThumbnailFromUrl } from '../features/media/labels';
 import { releaseGroupContentRepository } from '../features/releases/content';
-import { RELEASE_GROUP_TYPE_NAMES, trackSongListItem } from '../features/releases/types';
+import { trackSongListItem } from '../features/releases/types';
 import { songContentRepository } from '../features/songs/content';
-import { SONG_TYPE_NAMES } from '../features/songs/types';
 import Layout from '../layouts/Layout.astro';
-import { dottedDate } from '../shared/date';
 import { SITE_DESCRIPTION } from '../shared/site';
 
 const latestReleaseGroup = await releaseGroupContentRepository.latest();
@@ -84,7 +82,6 @@ const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(ent
             />
           </a>
           <div class="feature-body">
-            <div class="eyebrow">{SONG_TYPE_NAMES[latestSong.type]}</div>
             <h3 class="feature-title">
               <a href={`/songs/${latestSong.songId}`}>{latestSong.title}</a>
             </h3>
@@ -101,9 +98,6 @@ const preconnect = latestSong?.media.some((entry) => youtubeThumbnailFromUrl(ent
       <section class="home-feature">
         <SectionHead title="最新リリース" />
         <div class="feature-release">
-          <div class="eyebrow">
-            {RELEASE_GROUP_TYPE_NAMES[latestReleaseGroup.type]} — {dottedDate(latestReleaseGroup.firstReleasedOn)}
-          </div>
           <h3 class="feature-title">
             <a href={`/releases/${latestReleaseGroup.releaseGroupId}`}>{latestReleaseGroup.title}</a>
           </h3>

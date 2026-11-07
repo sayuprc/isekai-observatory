@@ -8,6 +8,7 @@
 | 項目 | 値 |
 |---|---|
 | Cloud Build trigger | stg と同じ substitution key を prod 用の値で設定 |
+| build arg `DEPLOY_ENV` | `production` |
 | service / job 名 | `prod-*` |
 | media youtube import job | `prod-media-youtube-import` |
 | Viewer deploy job | `prod-viewer-deploy` |

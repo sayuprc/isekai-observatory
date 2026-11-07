@@ -48,15 +48,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Cache server docker image
         id: cache-server-docker-image
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.SERVER_DOCKER_PATH }}
           key: docker-server-${{ env.SERVER_IMAGE }}-${{ hashFiles('./infra/local/docker/php/Dockerfile') }}
@@ -77,7 +77,7 @@ jobs:
 
       - name: Cache openapi-generator-cli docker image
         id: cache-openapi-generator-cli-docker-image
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.OPENAPI_GENERATOR_CLI_DOCKER_PATH }}
           key: docker-openapi-generator-cli-${{ env.OPENAPI_IMAGE }}-${{ hashFiles('./infra/local/docker/openapi-generator/Dockerfile') }}
@@ -90,7 +90,7 @@ jobs:
 
       - name: Cache mysql docker image
         id: cache-mysql-docker-image
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.MYSQL_DOCKER_PATH }}
           key: docker-mysql-${{ env.MYSQL_IMAGE }}-${{ hashFiles('./infra/local/docker/mysql/Dockerfile', './infra/local/docker/mysql/my.cnf', './infra/local/docker/mysql/init/*') }}
@@ -109,16 +109,16 @@ jobs:
 
       - name: Cache composer
         id: cache-composer
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
       - name: Composer install
-        run: mise run api:composer:install
+        run: mise run api:install
 
       - name: Dump autoload
-        run: mise run api:composer:dump
+        run: mise run api:autoload
 
       - name: Check generate code has diff
         run: |
@@ -130,21 +130,21 @@ jobs:
             exit 1
           fi
 
-  arkitect:
+  architecture:
     needs: setup
-    name: Arkitect
+    name: Architecture
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -155,29 +155,29 @@ jobs:
 
       - name: Cache composer
         id: cache-composer
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
-      - name: Check Layer
-        run: mise run api:arkitect
+      - name: Run Architecture Check
+        run: mise run api:architecture
 
-  ecs:
+  format:
     needs: setup
-    name: EasyCodingStandard
+    name: Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -188,29 +188,29 @@ jobs:
 
       - name: Cache composer
         id: cache-composer
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
-      - name: Run ecs
-        run: mise run api:ecs
+      - name: Run Format Check
+        run: mise run api:format:check
 
-  phpstan:
+  analyze:
     needs: setup
-    name: PHPStan
+    name: Static Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -221,17 +221,17 @@ jobs:
 
       - name: Cache composer
         id: cache-composer
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
 
-      - name: Run PHPStan
-        run: mise run api:phpstan
+      - name: Run Static Analysis
+        run: mise run api:analyze
 
-  phpunit:
+  test:
     needs: setup
-    name: PHPUnit (${{ matrix.suite }})
+    name: Test (${{ matrix.suite }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -245,15 +245,15 @@ jobs:
             db: true
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -283,7 +283,7 @@ jobs:
 
       - name: Cache composer
         id: cache-composer
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ env.VENDOR_PATH }}
           key: composer-${{ hashFiles('./src/app/server/composer.*') }}
@@ -295,5 +295,5 @@ jobs:
         if: ${{ matrix.db }}
         run: mise run migrate:local --auto-approve
 
-      - name: Run PHPUnit
+      - name: Run Test
         run: mise run api:test:${{ matrix.suite }}

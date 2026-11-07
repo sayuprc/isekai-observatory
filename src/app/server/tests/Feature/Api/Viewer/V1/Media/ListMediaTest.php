@@ -28,6 +28,14 @@ class ListMediaTest extends DatabaseTestCase
         $firstSongId = $this->generateUuid();
         $secondSongId = $this->generateUuid();
         $hiddenSongId = $this->generateUuid();
+        $tagIdFirst = $this->generateUuid();
+        $tagIdSecond = $this->generateUuid();
+
+        // タグは作成順ではなく表示順で並ぶ
+        $this->storeTags(
+            $this->createTag($tagIdSecond, 'コラボB', 20),
+            $this->createTag($tagIdFirst, 'コラボA', 10),
+        );
 
         $this->storeMedia(
             $this->createMedia(
@@ -37,6 +45,7 @@ class ListMediaTest extends DatabaseTestCase
                 MediaType::Mv,
                 true,
                 new DateTimeImmutable('2024-03-01 12:00:00'),
+                [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
             ),
             $this->createMedia(
                 $secondMediaId,
@@ -132,6 +141,10 @@ class ListMediaTest extends DatabaseTestCase
                                 'type' => 2,
                             ],
                         ],
+                        'tags' => [
+                            ['tagId' => $tagIdFirst, 'name' => 'コラボA', 'orderNo' => 10],
+                            ['tagId' => $tagIdSecond, 'name' => 'コラボB', 'orderNo' => 20],
+                        ],
                     ],
                 ],
                 'nextCursor' => base64_encode((string)json_encode([
@@ -158,6 +171,7 @@ class ListMediaTest extends DatabaseTestCase
                             'songCount' => 0,
                         ],
                         'songs' => [],
+                        'tags' => [],
                     ],
                 ],
             ]);

@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Config {
   project : String
   topic : String
   metadata_base_url : String
-} derive(Eq, Debug)
+}
 
 ///|
 #deprecated

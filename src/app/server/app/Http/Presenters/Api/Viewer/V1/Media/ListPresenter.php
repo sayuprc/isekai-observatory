@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Media\Application\Viewer\Query\MediaListItem;
 use Media\Application\Viewer\Query\MediaSongSummary;
 use Media\Application\Viewer\UseCase\List\ListOutputData;
+use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\MediaListItem as OpenApiMediaListItem;
 use OpenAPI\Viewer\Client\Model\MediaListResponse;
 use OpenAPI\Viewer\Client\Model\MediaRelationCounts;
@@ -37,7 +38,19 @@ class ListPresenter
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
             ->setType(MediaTypeValue::from($media->type->value))
             ->setCounts(new MediaRelationCounts()->setSongCount(count($songs)))
-            ->setSongs($songs);
+            ->setSongs($songs)
+            ->setTags(array_map($this->toOpenApiTag(...), $media->tags));
+    }
+
+    /**
+     * @param array{tagId: string, name: string, orderNo: int} $tag
+     */
+    private function toOpenApiTag(array $tag): AttachedTag
+    {
+        return new AttachedTag()
+            ->setTagId($tag['tagId'])
+            ->setName($tag['name'])
+            ->setOrderNo($tag['orderNo']);
     }
 
     private function toOpenApiMediaSongSummary(MediaSongSummary $song): OpenApiMediaSongSummary

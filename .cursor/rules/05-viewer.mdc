@@ -1,6 +1,6 @@
 ---
-description: "Use when editing public viewer Astro pages, UI components, generated API clients, or viewer-specific styles in src/app/viewer. Covers viewer structure, regeneration flow, preserved placeholders, and validation."
-globs: "src/app/viewer/**"
+description: Use when editing public viewer Astro pages, UI components, generated API clients, or viewer-specific styles in src/app/viewer. Covers viewer structure, regeneration flow, preserved placeholders, and validation.
+globs: src/app/viewer/**
 ---
 
 # 閲覧サイト規約

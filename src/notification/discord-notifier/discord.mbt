@@ -1,6 +1,6 @@
 ///|
 /// Discord embed の色 (RGB を Int で表す)
-fn embed_color_for_status(status : String) -> Int {
+fn embed_color_for_status(status : String) -> Int32 {
   match status {
     "succeeded" => 0x57F287
     "failed" | "alert" => 0xED4245
@@ -11,7 +11,7 @@ fn embed_color_for_status(status : String) -> Int {
 
 ///|
 /// embed に color が無ければ status 由来の色を付ける
-fn ensure_embed_color(embed : Json, color : Int) -> Json {
+fn ensure_embed_color(embed : Json, color : Int32) -> Json {
   guard embed is Object(map) else { return embed }
   match map.get("color") {
     Some(_) => embed
@@ -20,8 +20,8 @@ fn ensure_embed_color(embed : Json, color : Int) -> Json {
       for k, v in map {
         out[k] = v
       }
-      out["color"] = color.to_json()
-      out.to_json()
+      out["color"] = ToJson::to_json(color)
+      ToJson::to_json(out)
     }
   }
 }
@@ -34,7 +34,7 @@ fn apply_status_colors(embeds : Json, status : String) -> Json {
   for embed in items {
     out.push(ensure_embed_color(embed, color))
   }
-  out.to_json()
+  ToJson::to_json(out)
 }
 
 ///|

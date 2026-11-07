@@ -4,10 +4,11 @@ package "isekai-observatory/notify-publish"
 import {
   "isekai-observatory/notify-contract",
   "moonbitlang/core/debug",
+  "moonbitlang/core/json",
 }
 
 // Values
-pub fn build_publish_body(String) -> Json
+pub fn build_publish_body(String) -> @json.Json
 
 pub async fn fetch_access_token(Config) -> String
 
@@ -20,11 +21,12 @@ pub fn validate_notification_json(String) -> Unit raise @notify-contract.Notific
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub(all) struct Config {
   project : String
   topic : String
   metadata_base_url : String
-} derive(Eq, @debug.Debug)
+}
 pub fn Config::access_token_url(Self) -> String
 #deprecated
 pub fn Config::equal(Self, Self) -> Bool

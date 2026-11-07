@@ -1,81 +1,13 @@
 /* リリース一覧とリリース詳細 */
 
-.release-version {
-  padding: 24px;
-  margin-top: 24px;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 5px;
-}
+/* リリース詳細の版 (タブの仕組みは detail.css の .detail-tabs) */
 
-.release-version-summary {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 18px;
-  gap: 16px;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  list-style: none;
-}
-
-.release-version-single {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.release-version-meta {
+.release-version-info {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
-
-.release-version-summary::-webkit-details-marker {
-  display: none;
-}
-
-.release-version-summary::marker {
-  content: '';
-}
-
-.release-version-summary::after {
-  display: block;
-  width: 8px;
-  height: 8px;
-  content: '';
-  border-right: 1px solid var(--fg-muted);
-  border-bottom: 1px solid var(--fg-muted);
-  transform: rotate(45deg) translateY(-2px);
-  transition: transform 0.18s ease;
-}
-
-.release-version[open] .release-version-summary::after {
-  transform: rotate(225deg) translateY(-2px);
-}
-
-.release-version-body-shell {
-  display: grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  transition:
-    grid-template-rows 0.26s ease,
-    opacity 0.18s ease;
-}
-
-.release-version[open] .release-version-body-shell {
-  grid-template-rows: 1fr;
-  padding-top: 24px;
-  opacity: 1;
-}
-
-.release-version-body {
-  min-height: 0;
-  overflow: hidden;
+  align-items: baseline;
+  margin-bottom: 14px;
 }
 
 .release-version-content {
@@ -85,21 +17,6 @@
 
 .release-version-track-list {
   min-width: 0;
-}
-
-.release-version-heading {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: baseline;
-  min-width: 0;
-}
-
-.release-version-name {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 18px;
-  color: var(--fg);
-  overflow-wrap: anywhere;
 }
 
 .release-version-description,
