@@ -108,9 +108,6 @@
 
 .detail-page > .detail-page-content {
   padding: 40px;
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  border-radius: 6px;
 }
 
 .detail-page-content > .label-mono {

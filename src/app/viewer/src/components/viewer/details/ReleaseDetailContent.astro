@@ -27,7 +27,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
   )}
   <TagChips tags={releaseGroup.tags} />
 
-  {releaseGroup.releases.map((release, index) =>
+  {releaseGroup.releases.map((release) =>
     isSingleReleaseGroup ? (
       <section class="release-version release-version-single">
         <div class="release-version-meta">
@@ -39,7 +39,7 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
         </div>
       </section>
     ) : (
-      <details class="release-version" open={index === 0}>
+      <details class="release-version" open>
         <summary class="release-version-summary">
           <div class="release-version-heading">
             <span class="label-mono">{dottedDate(release.releasedOn)}</span>
