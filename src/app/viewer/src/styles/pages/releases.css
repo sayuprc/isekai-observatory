@@ -1,11 +1,18 @@
 /* リリース一覧とリリース詳細 */
 
+/* 版が増えても箱が並ばないよう、囲わずに罫線で区切る */
+
 .release-version {
-  padding: 24px;
-  margin-top: 24px;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 5px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.release-version:first-of-type {
+  margin-top: 28px;
+}
+
+.release-version:last-of-type {
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .release-version-summary {
