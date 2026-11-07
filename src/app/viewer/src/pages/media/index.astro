@@ -101,8 +101,11 @@ const searchText = (entry: Media) =>
               )}
             </div>
             <div class="media-card-body">
-              <div class="label-mono">
-                {dottedDateOfDateTime(entry.publishedAt)} · {platformName} · {MEDIA_TYPE_NAMES[entry.type]}
+              <div class="meta-row">
+                <span class="label-mono">{dottedDateOfDateTime(entry.publishedAt)}</span>
+                <span class="pill" data-media-type={String(entry.type)}>
+                  {MEDIA_TYPE_NAMES[entry.type]}
+                </span>
               </div>
               <div class="media-card-title">{entry.title}</div>
               {entry.songs.length > 0 && (

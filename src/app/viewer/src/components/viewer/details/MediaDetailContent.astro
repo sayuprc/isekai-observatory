@@ -39,8 +39,11 @@ const thumbnailUrl = youtubeThumbnailFromUrl(media.url);
     <span class="media-detail-thumbnail-overlay">{platformName} で開く ↗</span>
   </a>
 
-  <div class="label-mono">
-    {dottedDateOfDateTime(media.publishedAt)} · {platformName} · {MEDIA_TYPE_NAMES[media.type]}
+  <div class="meta-row">
+    <span class="label-mono">{dottedDateOfDateTime(media.publishedAt)}</span>
+    <span class="pill" data-media-type={String(media.type)}>
+      {MEDIA_TYPE_NAMES[media.type]}
+    </span>
     {/* API に views が無いため未提供セクションとして雛形を残す */}
     {/* {entry.views ? ` · ${entry.views} views` : ''} */}
   </div>

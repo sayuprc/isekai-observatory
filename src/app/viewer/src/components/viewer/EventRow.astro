@@ -33,7 +33,9 @@ const venueNames = event.venues.map((venue) => venue.name).join(' / ');
       {statusName && <span class="event-line-status">{statusName}</span>}
     </span>
     <span class="event-line-meta">
-      <span class="pill">{EVENT_TYPE_NAMES[event.type]}</span>
+      <span class="pill" data-event-type={String(event.type)}>
+        {EVENT_TYPE_NAMES[event.type]}
+      </span>
       {venueNames && <span class="event-line-venue">{venueNames}</span>}
     </span>
   </span>
