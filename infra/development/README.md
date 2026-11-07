@@ -8,6 +8,7 @@
 | 項目 | 値 |
 |---|---|
 | Cloud Build trigger | dev 用の substitution value |
+| build arg `DEPLOY_ENV` | `development` |
 | service / job 名 | `dev-*` |
 | media youtube import job | `dev-media-youtube-import` |
 | Viewer deploy job | `dev-viewer-deploy` |

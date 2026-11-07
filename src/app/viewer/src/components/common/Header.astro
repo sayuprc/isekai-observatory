@@ -1,7 +1,7 @@
 ---
 import { navLinks } from '../../shared/nav';
 import { isActivePath } from '../../shared/routing';
-import { DEFAULT_PALETTE, THEMES, themeByValue } from '../../shared/themes';
+import { DEFAULT_PALETTE, THEME_GROUPS, THEMES, themeByValue } from '../../shared/themes';
 import EnvironmentBadge from './EnvironmentBadge.astro';
 
 interface Props {
@@ -21,7 +21,6 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
       <img class="brand-logo brand-logo-light" src="/logo-light.svg" alt="" width="300" height="200" decoding="async" />
       <div class="brand-text">
         <span class="brand-mark">ヰ世界観測所</span>
-        <span class="brand-en">Isekai Observatory</span>
       </div>
     </a>
     <EnvironmentBadge />
@@ -77,21 +76,53 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
             <span class="theme-pop-title" id="theme-pop-title">
               カラーテーマ
             </span>
-            <span class="theme-pop-title-en">Color Themes</span>
-          </div>
-          <div class="theme-grid">
-            {THEMES.map((theme) => (
-              <button
-                class:list={['theme-opt', theme.value === DEFAULT_PALETTE && 'is-active']}
-                type="button"
-                aria-pressed={theme.value === DEFAULT_PALETTE ? 'true' : 'false'}
-                data-palette-option={theme.value}
+            <button
+              class="theme-petals"
+              type="button"
+              aria-pressed="true"
+              aria-label="花びらのアニメーション"
+              title="花びらのアニメーション"
+              data-theme-petals
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
               >
-                <span class="name">{theme.name}</span>
-                <span class="check">●</span>
-              </button>
-            ))}
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(0 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(72 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(144 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(216 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(288 12 12)" />
+                <circle cx="12" cy="12" r="1.6" />
+                <path class="theme-petals-slash" d="M4 4L20 20" />
+              </svg>
+            </button>
           </div>
+          {THEME_GROUPS.map((group) => (
+            <section class="theme-group" aria-label={group.name}>
+              <h3 class="theme-group-title">{group.name}</h3>
+              <div class="theme-grid">
+                {THEMES.filter((theme) => theme.group === group.value).map((theme) => (
+                  <button
+                    class:list={['theme-opt', theme.value === DEFAULT_PALETTE && 'is-active']}
+                    type="button"
+                    aria-pressed={theme.value === DEFAULT_PALETTE ? 'true' : 'false'}
+                    data-palette-option={theme.value}
+                  >
+                    <span class="name">{theme.name}</span>
+                    <span class="check">●</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       </div>
     </div>
@@ -99,6 +130,7 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
 </nav>
 
 <script>
+  import { isPetalsEnabled, playCostumeChange, setPetalsEnabled } from '../../shared/costumeChange';
   import { DEFAULT_PALETTE, PALETTE_STORAGE_KEY, themeByValue } from '../../shared/themes';
 
   const initThemePicker = () => {
@@ -114,6 +146,7 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
     const pop = picker.querySelector<HTMLElement>('[data-theme-pop]');
     const currentLabel = picker.querySelector<HTMLElement>('[data-theme-current]');
     const options = [...picker.querySelectorAll<HTMLButtonElement>('[data-palette-option]')];
+    const petalsToggle = picker.querySelector<HTMLButtonElement>('[data-theme-petals]');
 
     if (trigger === null || overlay === null || pop === null || currentLabel === null || options.length === 0) {
       return;
@@ -181,11 +214,27 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
 
     for (const option of options) {
       option.addEventListener('click', () => {
-        applyPalette(option.dataset.paletteOption ?? DEFAULT_PALETTE);
+        const value = option.dataset.paletteOption ?? DEFAULT_PALETTE;
+        const changed = root.dataset.palette !== value;
+
         close(true);
+
+        if (changed) {
+          playCostumeChange(() => applyPalette(value), themeByValue(value));
+        } else {
+          applyPalette(value);
+        }
       });
     }
 
+    petalsToggle?.addEventListener('click', () => {
+      const next = !isPetalsEnabled();
+
+      setPetalsEnabled(next);
+      petalsToggle.setAttribute('aria-pressed', String(next));
+    });
+
+    petalsToggle?.setAttribute('aria-pressed', String(isPetalsEnabled()));
     applyPalette(root.dataset.palette ?? DEFAULT_PALETTE);
     picker.dataset.themeReady = 'true';
   };

@@ -11,5 +11,5 @@ Unit / Feature / Integration で共通するルール
 
 ## 品質ゲート
 
-- フォーマット: `mise run api:ecs:fix`
+- フォーマット: `mise run api:format`
 - 実行: `mise run api:test <作成したテストのパス>` (または各 skill 記載の `api:test:unit` / `feature` / `integration`)

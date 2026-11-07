@@ -114,10 +114,6 @@
     padding-top: 40px;
   }
 
-  .home-feature {
-    padding: 24px;
-  }
-
   .song-grid {
     grid-template-columns: 1fr;
   }
@@ -149,23 +145,6 @@
     width: 72px;
     height: auto;
     aspect-ratio: 16 / 9;
-  }
-
-  .release-version {
-    padding: 18px 14px;
-  }
-
-  .release-version-summary {
-    grid-template-columns: minmax(0, 1fr) 16px;
-    gap: 12px;
-  }
-
-  .release-version-summary > .label-mono {
-    grid-row: 2;
-  }
-
-  .release-version-summary::after {
-    grid-area: 1 / 2;
   }
 
   .detail-panel {
@@ -343,9 +322,7 @@
     transition: none;
   }
 
-  .detail-page-content .rel-chip,
-  .release-version-body-shell,
-  .release-version-summary::after {
+  .detail-page-content .rel-chip {
     transition: none;
   }
 

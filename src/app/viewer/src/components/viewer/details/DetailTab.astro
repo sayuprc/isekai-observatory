@@ -1,0 +1,25 @@
+---
+interface Props {
+  // 同じ DetailTabs に入れるタブで共通の名前 ページ内で重複しない値にする
+  group: string;
+  // タブを識別する値 group の中で重複しない値にする
+  id: string;
+  label: string;
+  count?: number;
+  checked?: boolean;
+}
+
+const { group, id, label, count, checked = false } = Astro.props;
+const inputId = `${group}-${id}`;
+---
+
+<section class="detail-tab-item">
+  <input class="detail-tab-radio" type="radio" name={group} id={inputId} checked={checked} />
+  <label class="detail-tab" for={inputId}>
+    {label}
+    {count !== undefined && <span class="detail-tab-count">{count}</span>}
+  </label>
+  <div class="detail-tab-panel">
+    <slot />
+  </div>
+</section>

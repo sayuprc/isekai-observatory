@@ -437,6 +437,7 @@ components:
         - type
         - counts
         - songs
+        - tags
       properties:
         mediaId:
           $ref: '#/components/schemas/mediaId'
@@ -454,6 +455,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MediaSongSummary'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachedTag'
+          description: 付いているタグ(タグの表示順)
       examples:
         - mediaId: 11111111-1111-1111-1111-111111111111
           title: テストメディアMV
@@ -466,6 +472,10 @@ components:
             - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
               title: テスト楽曲
               type: 1
+          tags:
+            - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+              name: テストタグ
+              orderNo: 10
     MediaListResponse:
       type: object
       required:
@@ -491,6 +501,10 @@ components:
                 - songId: 3cd42c09-ff3c-4cd2-913f-a279c4ea89b4
                   title: テスト楽曲
                   type: 1
+              tags:
+                - tagId: 5f0c8d1e-2b7a-4c3e-9a41-6d8e2f1b7c90
+                  name: テストタグ
+                  orderNo: 10
           nextCursor: eyJwdWJsaXNoZWRBdCI6IjIwMjQtMDMtMDEiLCJtZWRpYUlkIjoiMTExMTExMTEtMTExMS0xMTExLTExMTEtMTExMTExMTExMTExIn0=
     MediaRelationCounts:
       type: object

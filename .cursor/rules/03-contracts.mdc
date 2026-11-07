@@ -1,13 +1,13 @@
 ---
-description: "Use when editing TypeSpec contracts, API shapes, versioned endpoints, or OpenAPI generation in src/app/contracts. Covers entrypoints, generated outputs, and validation."
-globs: "src/app/contracts/**"
+description: Use when editing TypeSpec contracts, API shapes, versioned endpoints, or OpenAPI generation in src/app/contracts. Covers entrypoints, generated outputs, and validation.
+globs: src/app/contracts/**
 ---
 
 # コントラクト規約
 
 ## 実行環境
 
-- 依存管理には `pnpm` を使い、インストールは root から `mise run pnpm:install` を実行する
+- 依存管理には `pnpm` を使い、インストールは root から `mise run app:install` を実行する
 - スクリプト実行には `bun` を使う
 - `src/` は `admin` / `viewer` / `contracts` を束ねる pnpm workspace のルート
 - 契約まわりの共通タスクはリポジトリ root の `mise.toml` で `mise run contract:<task>` として実行する

@@ -13,7 +13,15 @@ use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 
 class SchemaProvider
 {
+    /** @var array<string, OpenApi> */
+    private static array $schemas = [];
+
     public function provide(string $yamlPath): OpenApi
+    {
+        return self::$schemas[$yamlPath] ??= $this->build($yamlPath);
+    }
+
+    private function build(string $yamlPath): OpenApi
     {
         $builder = new CachedValidatorBuilder()->fromYamlFile($yamlPath);
 

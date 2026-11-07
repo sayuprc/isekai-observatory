@@ -1,6 +1,6 @@
 ---
-description: "Use when editing PHP/Laravel code in src/app/server, implementing API endpoints, changing domain logic, repositories, or writing server-side tests. Covers ADOP layering, exception-based error handling (ADR-0013/0014), generated files, and validation."
-globs: "src/app/server/**"
+description: Use when editing PHP/Laravel code in src/app/server, implementing API endpoints, changing domain logic, repositories, or writing server-side tests. Covers ADOP layering, exception-based error handling (ADR-0013/0014), generated files, and validation.
+globs: src/app/server/**
 ---
 
 # サーバー規約
@@ -43,4 +43,4 @@ globs: "src/app/server/**"
 ## 検証
 
 - 変更に最も近いタスクから実行する
-- 代表例: `mise run api:ecs`, `mise run api:phpstan`, `mise run api:arkitect`, `mise run api:test`
+- 代表例: `mise run api:format:check`, `mise run api:analyze`, `mise run api:architecture`, `mise run api:test`

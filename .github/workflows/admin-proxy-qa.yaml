@@ -42,16 +42,16 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
       - name: Setup mise
-        uses: ./.github/actions/setup-mise
+        uses: $/.github/actions/setup-mise
 
       - name: Cache node modules
         id: cache-node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: |
             src/app/node_modules
@@ -59,7 +59,7 @@ jobs:
           key: admin-proxy-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install packages
-        run: mise run pnpm:install
+        run: mise run app:install
 
       - name: Run check
         run: mise run admin-proxy:check

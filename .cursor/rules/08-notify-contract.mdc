@@ -1,6 +1,6 @@
 ---
-description: "Use when editing the MoonBit notify-contract package in src/notification/contract. Covers shared app notification JSON contract, parse/validate API, and validation."
-globs: "src/notification/contract/**"
+description: Use when editing the MoonBit notify-contract package in src/notification/contract. Covers shared app notification JSON contract, parse/validate API, and validation.
+globs: src/notification/contract/**
 ---
 
 # Notify Contract 規約

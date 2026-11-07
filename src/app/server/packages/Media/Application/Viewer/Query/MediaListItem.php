@@ -10,7 +10,8 @@ use Media\Domain\Models\MediaType;
 readonly class MediaListItem
 {
     /**
-     * @param array<MediaSongSummary> $songs
+     * @param array<MediaSongSummary>                                 $songs
+     * @param array<array{tagId: string, name: string, orderNo: int}> $tags  タグの表示順
      */
     public function __construct(
         public string $mediaId,
@@ -19,6 +20,7 @@ readonly class MediaListItem
         public DateTimeImmutable $publishedAt,
         public MediaType $type,
         public array $songs,
+        public array $tags,
     ) {
     }
 }

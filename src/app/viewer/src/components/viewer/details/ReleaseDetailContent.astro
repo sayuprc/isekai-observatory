@@ -1,6 +1,8 @@
 ---
 import { RELEASE_GROUP_TYPE_NAMES, releaseFormatText, type ReleaseGroup } from '../../../features/releases/types';
 import { dottedDate } from '../../../shared/date';
+import DetailTab from './DetailTab.astro';
+import DetailTabs from './DetailTabs.astro';
 import ReleaseVersionBody from './ReleaseVersionBody.astro';
 import TagChips from './TagChips.astro';
 
@@ -9,12 +11,14 @@ interface Props {
 }
 
 const { releaseGroup } = Astro.props;
-const isSingleReleaseGroup = releaseGroup.releases.length === 1;
+const tabGroup = `release-${releaseGroup.releaseGroupId}`;
 ---
 
 <div class="detail-page-content release-detail-content" data-share-title={releaseGroup.title}>
-  <div class="label-mono">
-    {dottedDate(releaseGroup.firstReleasedOn)} · {RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}
+  <div class="meta-row">
+    <span class="pill" data-release-type={String(releaseGroup.type)}>
+      {RELEASE_GROUP_TYPE_NAMES[releaseGroup.type]}
+    </span>
   </div>
   <h1 class="detail-title">{releaseGroup.title}</h1>
   {releaseGroup.description && (
@@ -24,32 +28,24 @@ const isSingleReleaseGroup = releaseGroup.releases.length === 1;
   )}
   <TagChips tags={releaseGroup.tags} />
 
-  {releaseGroup.releases.map((release, index) =>
-    isSingleReleaseGroup ? (
-      <section class="release-version release-version-single">
-        <div class="release-version-meta">
-          <span class="label-mono">{dottedDate(release.releasedOn)}</span>
-          <span class="label-mono">{releaseFormatText(release.formats)}</span>
-        </div>
-        <div class="release-version-body">
-          <ReleaseVersionBody release={release} />
-        </div>
-      </section>
-    ) : (
-      <details class="release-version" open={index === 0}>
-        <summary class="release-version-summary">
-          <div class="release-version-heading">
+  <DetailTabs label="版">
+    {releaseGroup.releases.map((release, index) => {
+      const formats = releaseFormatText(release.formats);
+
+      return (
+        <DetailTab
+          group={tabGroup}
+          id={String(index)}
+          label={release.name !== '' ? release.name : formats}
+          checked={index === 0}
+        >
+          <div class="release-version-info">
             <span class="label-mono">{dottedDate(release.releasedOn)}</span>
-            {release.name !== '' && <span class="release-version-name">{release.name}</span>}
+            <span class="label-mono">{formats}</span>
           </div>
-          <span class="label-mono">{releaseFormatText(release.formats)}</span>
-        </summary>
-        <div class="release-version-body-shell">
-          <div class="release-version-body">
-            <ReleaseVersionBody release={release} />
-          </div>
-        </div>
-      </details>
-    ),
-  )}
+          <ReleaseVersionBody release={release} />
+        </DetailTab>
+      );
+    })}
+  </DetailTabs>
 </div>

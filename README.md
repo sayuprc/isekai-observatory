@@ -8,6 +8,7 @@
 - 通知基盤: `src/notification/`
 - ローカル開発環境: `compose.yaml`, `infra/local/`, `mise.toml`
 - 環境別インフラ定義: `infra/development/`, `infra/staging/`, `infra/production/`
+- 全環境共通の Dockerfile: `infra/docker/`
 - インフラ入口: `infra/README.md`
 - 詳細: `ARCHITECTURE.md`
 
@@ -26,7 +27,7 @@
 
 `git worktree` を使うローカル開発運用は `docs/design-docs/local-runtime-topology.md` を参照する
 
-TypeScript 関連: パッケージ管理は `src/app/` の pnpm workspace で行い、依存関係は `mise run pnpm:install` でインストールする。各 package script は Bun 実行環境で `cd src/app && bun --filter <package> <script>` として実行する
+TypeScript 関連: パッケージ管理は `src/app/` の pnpm workspace で行い、依存関係は `mise run app:install` でインストールする。各 package script は Bun 実行環境で `cd src/app && bun --filter <package> <script>` として実行する
 
 ## ドキュメント
 
