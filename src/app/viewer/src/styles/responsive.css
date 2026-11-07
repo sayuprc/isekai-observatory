@@ -114,10 +114,6 @@
     padding-top: 40px;
   }
 
-  .home-feature {
-    padding: 24px;
-  }
-
   .song-grid {
     grid-template-columns: 1fr;
   }
