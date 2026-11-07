@@ -2,10 +2,10 @@
 atlas = "1.3.0"
 bun = "1.4.4"
 lefthook = "2.2.2"
-mago = "1.58.2"
+mago = "1.59.0"
 mkcert = "1.4.4"
 node = "26.13.0"
-pnpm = "12.14.0"
+pnpm = "12.17.0"
 
 [vars]
 # moonc の version 文字列 (moon version --all の moonc 行から先頭の v を除いたもの)
