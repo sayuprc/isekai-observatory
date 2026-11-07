@@ -1,0 +1,14 @@
+---
+interface Props {
+  // ラジオグループの名前 スクリーンリーダーが何の切り替えかを伝えるのに使う
+  label: string;
+  // タブが 1 つだけのときも、タブの名前を見出しとして出す
+  labeled?: boolean;
+}
+
+const { label, labeled = false } = Astro.props;
+---
+
+<div class:list={['detail-tabs', labeled && 'detail-tabs-labeled']} role="radiogroup" aria-label={label}>
+  <slot />
+</div>
