@@ -230,15 +230,6 @@
   align-items: center;
 }
 
-.event-detail-meta > .label-mono {
-  display: inline-block;
-  padding: 6px 12px;
-  line-height: 1.8;
-  background: var(--bg-elev-2);
-  border: 1px solid var(--line-soft);
-  border-radius: 4px;
-}
-
 .event-detail-status {
   padding: 6px 12px;
   font-size: 12px;

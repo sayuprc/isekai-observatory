@@ -70,7 +70,9 @@ const hostname = (url: string): string => {
 
 <div class="detail-page-content event-detail-content" data-share-title={event.title}>
   <div class="event-detail-meta">
-    <span class="label-mono">{EVENT_TYPE_NAMES[event.type]}</span>
+    <span class="pill" data-event-type={String(event.type)}>
+      {EVENT_TYPE_NAMES[event.type]}
+    </span>
     {statusName && <span class="event-detail-status">{statusName}</span>}
   </div>
   <h1 class="detail-title">{event.title}</h1>

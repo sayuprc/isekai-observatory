@@ -195,13 +195,14 @@
   padding: 40px;
 }
 
-.detail-page-content > .label-mono {
-  display: inline-block;
+/* 詳細の見出しの種別バッジは、一覧より大きく、どの詳細でも同じ大きさにそろえる */
+
+.detail-page-content .meta-row .pill,
+.detail-page-content .event-detail-meta .pill {
   padding: 6px 12px;
+  font-size: 13px;
   line-height: 1.8;
-  background: var(--bg-elev-2);
-  border: 1px solid var(--line-soft);
-  border-radius: 4px;
+  letter-spacing: 0.06em;
 }
 
 .detail-page-content .detail-title {
