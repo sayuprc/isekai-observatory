@@ -76,6 +76,34 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
             <span class="theme-pop-title" id="theme-pop-title">
               カラーテーマ
             </span>
+            <button
+              class="theme-petals"
+              type="button"
+              aria-pressed="true"
+              aria-label="花びらのアニメーション"
+              title="花びらのアニメーション"
+              data-theme-petals
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(0 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(72 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(144 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(216 12 12)" />
+                <ellipse cx="12" cy="6.6" rx="2.6" ry="3.6" transform="rotate(288 12 12)" />
+                <circle cx="12" cy="12" r="1.6" />
+                <path class="theme-petals-slash" d="M4 4L20 20" />
+              </svg>
+            </button>
           </div>
           {THEME_GROUPS.map((group) => (
             <section class="theme-group" aria-label={group.name}>
@@ -102,6 +130,7 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
 </nav>
 
 <script>
+  import { isPetalsEnabled, playCostumeChange, setPetalsEnabled } from '../../shared/costumeChange';
   import { DEFAULT_PALETTE, PALETTE_STORAGE_KEY, themeByValue } from '../../shared/themes';
 
   const initThemePicker = () => {
@@ -117,6 +146,7 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
     const pop = picker.querySelector<HTMLElement>('[data-theme-pop]');
     const currentLabel = picker.querySelector<HTMLElement>('[data-theme-current]');
     const options = [...picker.querySelectorAll<HTMLButtonElement>('[data-palette-option]')];
+    const petalsToggle = picker.querySelector<HTMLButtonElement>('[data-theme-petals]');
 
     if (trigger === null || overlay === null || pop === null || currentLabel === null || options.length === 0) {
       return;
@@ -184,11 +214,27 @@ const defaultTheme = themeByValue(DEFAULT_PALETTE);
 
     for (const option of options) {
       option.addEventListener('click', () => {
-        applyPalette(option.dataset.paletteOption ?? DEFAULT_PALETTE);
+        const value = option.dataset.paletteOption ?? DEFAULT_PALETTE;
+        const changed = root.dataset.palette !== value;
+
         close(true);
+
+        if (changed) {
+          playCostumeChange(() => applyPalette(value), themeByValue(value));
+        } else {
+          applyPalette(value);
+        }
       });
     }
 
+    petalsToggle?.addEventListener('click', () => {
+      const next = !isPetalsEnabled();
+
+      setPetalsEnabled(next);
+      petalsToggle.setAttribute('aria-pressed', String(next));
+    });
+
+    petalsToggle?.setAttribute('aria-pressed', String(isPetalsEnabled()));
     applyPalette(root.dataset.palette ?? DEFAULT_PALETTE);
     picker.dataset.themeReady = 'true';
   };
