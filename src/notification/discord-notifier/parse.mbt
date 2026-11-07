@@ -169,7 +169,7 @@ fn json_string_field(obj : Json, key : String) -> String {
 }
 
 ///|
-fn truncate_text(text : String, max_len : Int) -> String {
+fn truncate_text(text : String, max_len : Int32) -> String {
   if text.length() <= max_len {
     text
   } else {

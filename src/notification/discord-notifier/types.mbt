@@ -1,11 +1,12 @@
 ///|
 /// 1 メッセージ処理の結果
+#derive(Eq, Debug)
 pub(all) enum Outcome {
   /// Pub/Sub に ack してよい (配達成功 / 意図的スキップ / 恒久失敗)
   Ack
   /// 一時失敗。Pub/Sub に再送させる
   Retry(String)
-} derive(Eq, Debug)
+}
 
 ///|
 #deprecated
@@ -16,11 +17,12 @@ pub extend Outcome with Eq::{not_equal, equal}
 pub extend Outcome with @debug.Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub suberror ParseError {
   InvalidJson(String)
   InvalidBase64(String)
   InvalidPayload(String)
-} derive(Eq, Debug)
+}
 
 ///|
 #deprecated

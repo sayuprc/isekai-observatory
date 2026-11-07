@@ -1,10 +1,11 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Config {
   default_channel : String
   action_routing : Map[String, String]
   cloud_build_trigger_name : String
-  port : Int
-} derive(Eq, Debug)
+  port : Int32
+}
 
 ///|
 #deprecated
