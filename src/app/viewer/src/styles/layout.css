@@ -319,6 +319,42 @@
   letter-spacing: 0.12em;
 }
 
+.theme-petals {
+  display: inline-flex;
+  padding: 4px;
+  color: var(--fg);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  transition:
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.theme-petals:hover {
+  color: var(--accent-strong);
+}
+
+.theme-petals:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* オフのときは薄くして、斜線で打ち消す */
+
+.theme-petals[aria-pressed='false'] {
+  opacity: 0.45;
+}
+
+.theme-petals-slash {
+  display: none;
+}
+
+.theme-petals[aria-pressed='false'] .theme-petals-slash {
+  display: inline;
+}
+
 .theme-group + .theme-group {
   margin-top: 14px;
 }
@@ -499,4 +535,58 @@
 
 .breadcrumb-current {
   color: var(--fg);
+}
+
+/* テーマを変えたときに渦巻く花びら 動きは shared/costumeChange.ts が要素ごとに付ける */
+
+.petal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+
+  /* 着替えの切り抜きの外に出して、花びらが隠れないようにする */
+  view-transition-name: petals;
+}
+
+.petal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: calc(var(--size) * 1.4);
+  margin: calc(var(--size) * -0.7) 0 0 calc(var(--size) * -0.5);
+  background: color-mix(in oklab, var(--petal-color) 88%, transparent);
+  border-radius: 80% 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* 着替え: 新しいテーマが、画面の下から上へ向かって現れる */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: viewer-costume-wipe 1.4s cubic-bezier(0.45, 0, 0.35, 1) both;
+}
+
+::view-transition-group(petals),
+::view-transition-old(petals),
+::view-transition-new(petals) {
+  animation: none;
+}
+
+@keyframes viewer-costume-wipe {
+  from {
+    clip-path: inset(100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
 }
