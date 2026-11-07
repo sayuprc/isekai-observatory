@@ -189,6 +189,7 @@
   flex: 1;
   flex-direction: column;
   gap: 26px;
+  align-items: stretch;
   width: 100%;
   max-width: none;
 }
@@ -260,8 +261,14 @@
   flex: 1;
   width: 100%;
   max-width: none;
-  padding: 24px 0 0;
+  padding: 0;
   border: 0;
+}
+
+/* 先頭がサムネの最新楽曲と、タイトルの上端を揃える */
+
+.home-feature .feature-release .feature-title {
+  margin-top: 0;
 }
 
 .home-feature .feature-more {

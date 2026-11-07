@@ -47,17 +47,6 @@
   white-space: nowrap;
 }
 
-.brand-en {
-  font-family: 'EB Garamond', serif;
-  font-size: 12px;
-  font-style: italic;
-  font-weight: 500;
-  line-height: 1;
-  color: var(--fg-muted);
-  letter-spacing: 0.1em;
-  white-space: nowrap;
-}
-
 .brand-logo {
   display: block;
   width: auto;
