@@ -14,7 +14,9 @@ const HeadingTag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
       <HeadingTag class="section-title">{title}</HeadingTag>
     </div>
   </div>
-  <div>
-    <slot name="right" />
-  </div>
+  {Astro.slots.has('right') && (
+    <div>
+      <slot name="right" />
+    </div>
+  )}
 </div>
