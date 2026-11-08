@@ -119,6 +119,35 @@ export type Event = {
     tags: Array<AttachedTag>;
 };
 
+/**
+ * イベント一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ */
+export type EventBulkUpdateRequest = {
+    /**
+     * 対象のイベントID。1 リクエストで受け付ける上限は 100 件
+     */
+    eventIds: Array<EventId>;
+    /**
+     * 付与するタグ。付いているものは何もしない
+     */
+    addTagIds?: Array<TagId>;
+    /**
+     * 除去するタグ。付いていないものは何もしない
+     */
+    removeTagIds?: Array<TagId>;
+    /**
+     * 表示設定の切り替え先
+     */
+    isDisplay?: boolean;
+};
+
+export type EventBulkUpdateResponse = {
+    /**
+     * 更新したイベントの件数
+     */
+    updatedCount: number;
+};
+
 export type EventCreateRequest = {
     title: EventTitle;
     description: EventDescription;
@@ -1899,6 +1928,59 @@ export type EventServiceCreateEventResponses = {
 };
 
 export type EventServiceCreateEventResponse = EventServiceCreateEventResponses[keyof EventServiceCreateEventResponses];
+
+export type EventServiceBulkUpdateEventsData = {
+    body: EventBulkUpdateRequest;
+    path?: never;
+    query?: never;
+    url: '/events/bulk-update';
+};
+
+export type EventServiceBulkUpdateEventsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type EventServiceBulkUpdateEventsError = EventServiceBulkUpdateEventsErrors[keyof EventServiceBulkUpdateEventsErrors];
+
+export type EventServiceBulkUpdateEventsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: EventBulkUpdateResponse;
+};
+
+export type EventServiceBulkUpdateEventsResponse = EventServiceBulkUpdateEventsResponses[keyof EventServiceBulkUpdateEventsResponses];
 
 export type EventServiceSearchEventsData = {
     body?: never;

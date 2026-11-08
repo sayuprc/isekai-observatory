@@ -12,6 +12,7 @@ return [
     'warmup' => [
         \Auth\Application\Admin\UseCase\Refresh\RefreshInputData::class,
         \Auth\Domain\Services\Token\AccessToken\AccessTokenPayload::class,
+        \Event\Application\Admin\UseCase\BulkUpdate\BulkUpdateInputData::class,
         \Event\Application\Admin\UseCase\Create\CreateInputData::class,
         \Event\Application\Admin\UseCase\Search\SearchInputData::class,
         \Event\Application\Admin\UseCase\Update\UpdateInputData::class,
