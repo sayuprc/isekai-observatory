@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import {
+  releaseGroupServiceBulkUpdateReleaseGroups,
   releaseGroupServiceCreateReleaseGroup,
   releaseGroupServiceDeleteReleaseGroup,
   releaseGroupServiceGetReleaseGroup,
@@ -104,6 +105,20 @@ export const releaseGroups = new Elysia({ prefix: '/release-groups' })
         isDisplay: t.Boolean(),
         orderNo: t.Number(),
         tags: t.Array(t.Object({ tagId: t.String() })),
+      }),
+    },
+  )
+  .post(
+    '/bulk-update',
+    async ({ body, authSession }) => {
+      return requestWithAuth(authSession, (client) => releaseGroupServiceBulkUpdateReleaseGroups({ client, body }));
+    },
+    {
+      body: t.Object({
+        releaseGroupIds: t.Array(t.String(), { minItems: 1, maxItems: 100 }),
+        addTagIds: t.Optional(t.Array(t.String())),
+        removeTagIds: t.Optional(t.Array(t.String())),
+        isDisplay: t.Optional(t.Boolean()),
       }),
     },
   )
