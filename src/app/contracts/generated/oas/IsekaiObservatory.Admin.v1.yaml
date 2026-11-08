@@ -910,6 +910,68 @@ paths:
               $ref: '#/components/schemas/MediaCreateRequest'
       security:
         - BearerAuth: []
+  /media/bulk-update:
+    post:
+      operationId: MediaService_bulkUpdateMedia
+      description: メディア一括更新API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaBulkUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Media
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediaBulkUpdateRequest'
+      security:
+        - BearerAuth: []
   /media/search:
     get:
       operationId: MediaService_searchMedia
@@ -4040,6 +4102,41 @@ components:
           $ref: '#/components/schemas/MediaTypeValue'
         isDisplay:
           type: boolean
+    MediaBulkUpdateRequest:
+      type: object
+      required:
+        - mediaIds
+      properties:
+        mediaIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/mediaId'
+          minItems: 1
+          maxItems: 100
+          description: 対象のメディアID。1 リクエストで受け付ける上限は 100 件
+        addTagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: 付与するタグ。付いているものは何もしない
+        removeTagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: 除去するタグ。付いていないものは何もしない
+        isDisplay:
+          type: boolean
+          description: 表示設定の切り替え先
+      description: メディア一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+    MediaBulkUpdateResponse:
+      type: object
+      required:
+        - updatedCount
+      properties:
+        updatedCount:
+          type: integer
+          format: int32
+          description: 更新したメディアの件数
     MediaCreateRequest:
       type: object
       required:

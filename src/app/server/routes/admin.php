@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\Admin\V1\Event\DeleteEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\GetEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\SearchEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\UpdateEventController;
+use App\Http\Controllers\Api\Admin\V1\Media\BulkUpdateMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\CreateMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\DeleteMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\GetMediaController;
@@ -124,6 +125,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('media')->group(static function () {
                     Route::post('/', [CreateMediaController::class, 'handle'])->name(MediaRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateMediaController::class, 'handle'])->name(MediaRouteMap::BulkUpdate);
                     Route::delete('/{mediaId}', [DeleteMediaController::class, 'handle'])->name(MediaRouteMap::Delete);
                     Route::put('/{mediaId}', [UpdateMediaController::class, 'handle'])->name(MediaRouteMap::Update);
                     Route::get('/search', [SearchMediaController::class, 'handle'])->name(MediaRouteMap::Search);

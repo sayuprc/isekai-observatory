@@ -15,6 +15,7 @@ return [
         \Event\Application\Admin\UseCase\Create\CreateInputData::class,
         \Event\Application\Admin\UseCase\Search\SearchInputData::class,
         \Event\Application\Admin\UseCase\Update\UpdateInputData::class,
+        \Media\Application\Admin\UseCase\BulkUpdate\BulkUpdateInputData::class,
         \Media\Application\Admin\UseCase\Create\CreateInputData::class,
         \Media\Application\Admin\UseCase\Search\SearchInputData::class,
         \Media\Application\Admin\UseCase\Update\UpdateInputData::class,
