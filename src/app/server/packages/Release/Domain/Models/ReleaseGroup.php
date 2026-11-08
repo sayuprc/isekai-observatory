@@ -64,6 +64,16 @@ readonly class ReleaseGroup
         ];
     }
 
+    public function withDisplay(bool $isDisplay): self
+    {
+        return clone ($this, ['isDisplay' => $isDisplay]);
+    }
+
+    public function withTags(TagReferences $tags): self
+    {
+        return clone ($this, ['tags' => $tags]);
+    }
+
     public function equals(self $other): bool
     {
         return $this->releaseGroupId->equals($other->releaseGroupId);
