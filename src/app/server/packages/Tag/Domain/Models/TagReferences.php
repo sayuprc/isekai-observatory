@@ -53,4 +53,37 @@ readonly class TagReferences extends ImmutableCollection
             ->map(static fn (TagReference $item): array => $item->toArray())
             ->toList();
     }
+
+    /**
+     * 付いていないタグだけを末尾に足す
+     */
+    public function with(TagId ...$tagIds): self
+    {
+        $items = $this->items;
+        $existing = array_map(static fn (TagReference $item): string => $item->tagId->value, $items);
+
+        foreach ($tagIds as $tagId) {
+            if (in_array($tagId->value, $existing, true)) {
+                continue;
+            }
+
+            $items[] = new TagReference($tagId);
+            $existing[] = $tagId->value;
+        }
+
+        return new self($items);
+    }
+
+    /**
+     * 付いているタグだけを外す
+     */
+    public function without(TagId ...$tagIds): self
+    {
+        $removed = array_map(static fn (TagId $tagId): string => $tagId->value, $tagIds);
+
+        return new self(array_values(array_filter(
+            $this->items,
+            static fn (TagReference $item): bool => ! in_array($item->tagId->value, $removed, true),
+        )));
+    }
 }

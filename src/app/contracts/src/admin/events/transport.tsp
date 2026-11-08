@@ -93,3 +93,25 @@ model RequestSetlistItem {
   ...PickProperties<SetlistItem, "setlistItemId" | "orderNo" | "label">;
   performanceIds: performanceId[];
 }
+
+@doc("イベント一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する")
+model EventBulkUpdateRequest {
+  @doc("対象のイベントID。1 リクエストで受け付ける上限は 100 件")
+  @minItems(1)
+  @maxItems(100)
+  eventIds: eventId[];
+
+  @doc("付与するタグ。付いているものは何もしない")
+  addTagIds?: tagId[];
+
+  @doc("除去するタグ。付いていないものは何もしない")
+  removeTagIds?: tagId[];
+
+  @doc("表示設定の切り替え先")
+  isDisplay?: boolean;
+}
+
+model EventBulkUpdateResponse {
+  @doc("更新したイベントの件数")
+  updatedCount: int32;
+}

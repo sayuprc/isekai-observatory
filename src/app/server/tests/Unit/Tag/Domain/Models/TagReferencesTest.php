@@ -6,6 +6,7 @@ namespace Tests\Unit\Tag\Domain\Models;
 
 use PHPUnit\Framework\Attributes\Test;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Tag\Domain\Models\TagId;
 use Tag\Domain\Models\TagReferences;
 use Tests\TestCase;
 
@@ -50,5 +51,37 @@ class TagReferencesTest extends TestCase
         $result = TagReferences::fromArray([]);
 
         $this->assertCount(0, $result);
+    }
+
+    #[Test]
+    public function withAddsOnlyMissingTags(): void
+    {
+        $tags = TagReferences::fromArray([['tagId' => 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA']]);
+
+        $result = $tags->with(
+            new TagId('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'),
+            new TagId('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'),
+        );
+
+        $this->assertSame(
+            ['AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'],
+            array_column($result->toArray(), 'tag_id'),
+        );
+    }
+
+    #[Test]
+    public function withoutRemovesOnlyAttachedTags(): void
+    {
+        $tags = TagReferences::fromArray([
+            ['tagId' => 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'],
+            ['tagId' => 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'],
+        ]);
+
+        $result = $tags->without(
+            new TagId('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'),
+            new TagId('CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC'),
+        );
+
+        $this->assertSame(['BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'], array_column($result->toArray(), 'tag_id'));
     }
 }
