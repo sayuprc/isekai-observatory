@@ -70,6 +70,18 @@ interface MediaService {
     | Unprocessable
     | ServerError;
 
+  @doc("メディア一括更新API")
+  @route("/bulk-update")
+  @post
+  bulkUpdateMedia(@body request: MediaBulkUpdateRequest):
+    | Ok<MediaBulkUpdateResponse>
+    | BadRequest
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | Unprocessable
+    | ServerError;
+
   @doc("メディア削除API")
   @delete
   deleteMedia(@path mediaId: mediaId): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;
