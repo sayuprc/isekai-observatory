@@ -10,6 +10,9 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { createBulkSelection } from '../bulk/bulk-selection';
+import { BulkActionBar } from '../bulk/BulkActionBar';
+import { BulkSelectAllHeader, BulkSelectCell } from '../bulk/BulkCheckbox';
 import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
@@ -77,7 +80,7 @@ const toQuery = (params: SearchParams) => ({
   per_page: params.perPage,
 });
 
-export const SearchList = () => {
+export const SearchList = (props: { bulk?: boolean }) => {
   const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
     defaults: DEFAULT_PARAMS,
     parse: parseParams,
@@ -97,6 +100,9 @@ export const SearchList = () => {
       },
     }),
   );
+
+  const selection = createBulkSelection();
+  const colSpan = () => 8 + (props.bulk ? 1 : 0);
 
   const detailUrl = (songId: string) => `/songs/${songId}?back=${encodeURIComponent(window.location.search)}`;
   return (
@@ -227,15 +233,35 @@ export const SearchList = () => {
           リセット
         </button>
       </form>
-      <div class="mb-4 flex justify-end">
-        <a href="/songs/create" class="btn btn-primary btn-sm">
-          新規作成
-        </a>
+      <div class="mb-4 flex justify-end gap-2">
+        <Show
+          when={props.bulk}
+          fallback={
+            <>
+              <a href={`/songs/bulk${window.location.search}`} class="btn btn-outline btn-sm">
+                一括操作
+              </a>
+              <a href="/songs/create" class="btn btn-primary btn-sm">
+                新規作成
+              </a>
+            </>
+          }
+        >
+          <a href={`/songs${window.location.search}`} class="btn btn-outline btn-sm">
+            一覧に戻る
+          </a>
+        </Show>
       </div>
+      <Show when={props.bulk}>
+        <BulkActionBar target="songs" label="楽曲" selection={selection} onDone={() => refetch()} />
+      </Show>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
         <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
+              <Show when={props.bulk}>
+                <BulkSelectAllHeader selection={selection} pageIds={data()?.songs.map((item) => item.songId) ?? []} />
+              </Show>
               <th>楽曲名</th>
               <th>楽曲種別</th>
               <th class="text-right">披露</th>
@@ -249,19 +275,24 @@ export const SearchList = () => {
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={8} />
+                <ListState state="loading" colSpan={colSpan()} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={8} message={message()} onRetry={() => refetch()} />}
+                {(message) => (
+                  <ListState state="error" colSpan={colSpan()} message={message()} onRetry={() => refetch()} />
+                )}
               </Match>
               <Match when={data() && data()!.songs.length === 0}>
-                <ListState state="empty" colSpan={8} />
+                <ListState state="empty" colSpan={colSpan()} />
               </Match>
               <Match when={data()}>
                 {(result) => (
                   <For each={result().songs}>
                     {(song) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
+                        <Show when={props.bulk}>
+                          <BulkSelectCell selection={selection} id={song.songId} title={song.title} />
+                        </Show>
                         <td>
                           <a href={detailUrl(song.songId)} class="link link-hover font-medium">
                             {song.title}

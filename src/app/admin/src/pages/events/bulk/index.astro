@@ -1,0 +1,10 @@
+---
+import { SearchList } from '../../../components/event/SearchList';
+import { FlashMessage } from '../../../components/Flash';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout pageTitle="イベントの一括操作">
+  <FlashMessage client:only="solid-js" />
+  <SearchList bulk client:only="solid-js" />
+</Layout>
