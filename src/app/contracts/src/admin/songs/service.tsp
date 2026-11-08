@@ -83,6 +83,18 @@ interface SongService {
     | Unprocessable
     | ServerError;
 
+  @doc("楽曲一括更新API")
+  @route("/bulk-update")
+  @post
+  bulkUpdateSongs(@body request: SongBulkUpdateRequest):
+    | Ok<SongBulkUpdateResponse>
+    | BadRequest
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | Unprocessable
+    | ServerError;
+
   @doc("楽曲削除API")
   @delete
   deleteSong(@path songId: songId): NoContent | BadRequest | Unauthorized | Forbidden | Unprocessable | ServerError;

@@ -30,6 +30,7 @@ return [
         \Release\Application\Admin\UseCase\Group\Search\SearchInputData::class,
         \Release\Application\Admin\UseCase\Group\Update\UpdateInputData::class,
         \Release\Application\Admin\UseCase\Update\UpdateInputData::class,
+        \Song\Application\Admin\UseCase\BulkUpdate\BulkUpdateInputData::class,
         \Song\Application\Admin\UseCase\Create\CreateInputData::class,
         \Song\Application\Admin\UseCase\Search\SearchInputData::class,
         \Song\Application\Admin\UseCase\Update\UpdateInputData::class,

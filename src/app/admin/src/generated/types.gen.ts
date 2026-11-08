@@ -869,6 +869,35 @@ export type Song = {
     media: Array<SongLinkedMedia>;
 };
 
+/**
+ * 楽曲一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ */
+export type SongBulkUpdateRequest = {
+    /**
+     * 対象の楽曲ID。1 リクエストで受け付ける上限は 100 件
+     */
+    songIds: Array<SongId>;
+    /**
+     * 付与するタグ。付いているものは何もしない
+     */
+    addTagIds?: Array<TagId>;
+    /**
+     * 除去するタグ。付いていないものは何もしない
+     */
+    removeTagIds?: Array<TagId>;
+    /**
+     * 表示設定の切り替え先
+     */
+    isDisplay?: boolean;
+};
+
+export type SongBulkUpdateResponse = {
+    /**
+     * 更新した楽曲の件数
+     */
+    updatedCount: number;
+};
+
 export type SongCreateRequest = {
     title: Title;
     description: Description;
@@ -3497,6 +3526,59 @@ export type SongServiceCreateSongResponses = {
 };
 
 export type SongServiceCreateSongResponse = SongServiceCreateSongResponses[keyof SongServiceCreateSongResponses];
+
+export type SongServiceBulkUpdateSongsData = {
+    body: SongBulkUpdateRequest;
+    path?: never;
+    query?: never;
+    url: '/songs/bulk-update';
+};
+
+export type SongServiceBulkUpdateSongsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type SongServiceBulkUpdateSongsError = SongServiceBulkUpdateSongsErrors[keyof SongServiceBulkUpdateSongsErrors];
+
+export type SongServiceBulkUpdateSongsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: SongBulkUpdateResponse;
+};
+
+export type SongServiceBulkUpdateSongsResponse = SongServiceBulkUpdateSongsResponses[keyof SongServiceBulkUpdateSongsResponses];
 
 export type SongServiceSearchSongsData = {
     body?: never;
