@@ -166,17 +166,17 @@ class ReleaseIntegrityService
 
     private function existsSongs(Media $media): bool
     {
+        $ids = [];
+
         foreach ($media as $medium) {
             foreach ($medium->tracks as $track) {
                 foreach ($track->songIds as $songId) {
-                    if ($this->songRepository->find($songId) === null) {
-                        return false;
-                    }
+                    $ids[$songId->value] = $songId;
                 }
             }
         }
 
-        return true;
+        return $ids === [] || count($this->songRepository->findByIds(...array_values($ids))) === count($ids);
     }
 
     /**

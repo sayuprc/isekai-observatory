@@ -8,9 +8,9 @@ use Release\Application\Viewer\Query\ReleaseGroupQueryServiceInterface;
 
 readonly class ListUseCase
 {
-    private const DEFAULT_LIMIT = 50;
+    private const int DEFAULT_LIMIT = 50;
 
-    private const MAX_LIMIT = 50;
+    private const int MAX_LIMIT = 50;
 
     public function __construct(private ReleaseGroupQueryServiceInterface $query)
     {

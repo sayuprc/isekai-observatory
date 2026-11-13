@@ -30,11 +30,8 @@ class SongAssembler
         }
 
         $personMap = [];
-        if (! empty($allPersonIds)) {
-            $persons = $this->personRepository->findByIds(...array_values($allPersonIds));
-            foreach ($persons as $person) {
-                $personMap[$person->personId->value] = $person;
-            }
+        foreach ($this->personRepository->findByIds(...$allPersonIds) as $person) {
+            $personMap[$person->personId->value] = $person;
         }
 
         $allTagIds = [];
@@ -43,11 +40,8 @@ class SongAssembler
         }
 
         $tagMap = [];
-        if (! empty($allTagIds)) {
-            $tags = $this->tagRepository->findByIds(...array_values($allTagIds));
-            foreach ($tags as $tag) {
-                $tagMap[$tag->tagId->value] = $tag;
-            }
+        foreach ($this->tagRepository->findByIds(...$allTagIds) as $tag) {
+            $tagMap[$tag->tagId->value] = $tag;
         }
 
         $allMediaIds = [];
@@ -56,11 +50,8 @@ class SongAssembler
         }
 
         $mediaMap = [];
-        if (! empty($allMediaIds)) {
-            $mediaItems = $this->mediaRepository->findByIds(...array_values($allMediaIds));
-            foreach ($mediaItems as $media) {
-                $mediaMap[$media->mediaId->value] = $media;
-            }
+        foreach ($this->mediaRepository->findByIds(...$allMediaIds) as $media) {
+            $mediaMap[$media->mediaId->value] = $media;
         }
 
         $toAssembled = static function (SongPerson $person) use ($personMap): AssembledPerson {

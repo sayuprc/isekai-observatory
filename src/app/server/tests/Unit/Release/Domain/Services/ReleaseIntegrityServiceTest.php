@@ -62,9 +62,9 @@ class ReleaseIntegrityServiceTest extends TestCase
             ->once();
 
         // 参照トラックの 1 曲だけ存在確認される(タイトルのみトラックはスキップ)
-        $this->songRepository->shouldReceive('find')
-            ->withArgs(static fn (SongId $arg): bool => $arg->value === self::SONG_ID)
-            ->andReturn($this->createSong(self::SONG_ID, 'テスト楽曲', '説明', SongType::Original, true, 10))
+        $this->songRepository->shouldReceive('findByIds')
+            ->withArgs(static fn (SongId ...$args): bool => count($args) === 1 && $args[0]->value === self::SONG_ID)
+            ->andReturn([$this->createSong(self::SONG_ID, 'テスト楽曲', '説明', SongType::Original, true, 10)])
             ->once();
 
         $result = $this->getInstance()->prepareForCreate(
@@ -107,9 +107,9 @@ class ReleaseIntegrityServiceTest extends TestCase
             ->andReturn($this->createReleaseGroup(self::RELEASE_GROUP_ID, '観測された春', ReleaseGroupType::Album))
             ->once();
 
-        $this->songRepository->shouldReceive('find')
-            ->withArgs(static fn (SongId $arg): bool => $arg->value === self::SONG_ID)
-            ->andReturn(null)
+        $this->songRepository->shouldReceive('findByIds')
+            ->withArgs(static fn (SongId ...$args): bool => count($args) === 1 && $args[0]->value === self::SONG_ID)
+            ->andReturn([])
             ->once();
 
         $this->expectException(BusinessRuleViolationException::class);
@@ -128,6 +128,51 @@ class ReleaseIntegrityServiceTest extends TestCase
                     'position' => 1,
                     'name' => null,
                     'tracks' => [['songIds' => [self::SONG_ID], 'title' => null, 'trackNo' => 1]],
+                ],
+            ],
+        );
+    }
+
+    #[Test]
+    public function prepareForCreateFailsWhenOnlySomeReferencedSongsExist(): void
+    {
+        $otherSongId = 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD';
+
+        $this->generator->shouldReceive('generate')
+            ->with()
+            ->andReturn(self::RELEASE_ID)
+            ->once();
+
+        $this->releaseGroupRepository->shouldReceive('find')
+            ->withArgs(static fn (ReleaseGroupId $arg): bool => $arg->value === self::RELEASE_GROUP_ID)
+            ->andReturn($this->createReleaseGroup(self::RELEASE_GROUP_ID, '観測された春', ReleaseGroupType::Album))
+            ->once();
+
+        // 同じ楽曲が複数トラックに現れても重複を除いて 1 回の問い合わせにまとめる
+        $this->songRepository->shouldReceive('findByIds')
+            ->withArgs(static fn (SongId ...$args): bool => count($args) === 2)
+            ->andReturn([$this->createSong(self::SONG_ID, 'テスト楽曲', '説明', SongType::Original, true, 10)])
+            ->once();
+
+        $this->expectException(BusinessRuleViolationException::class);
+
+        $this->getInstance()->prepareForCreate(
+            self::RELEASE_GROUP_ID,
+            '初回限定盤',
+            '2024-01-01',
+            '説明',
+            '',
+            true,
+            1,
+            [ReleaseFormat::Cd->value],
+            [
+                [
+                    'position' => 1,
+                    'name' => null,
+                    'tracks' => [
+                        ['songIds' => [self::SONG_ID], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [self::SONG_ID, $otherSongId], 'title' => null, 'trackNo' => 2],
+                    ],
                 ],
             ],
         );
