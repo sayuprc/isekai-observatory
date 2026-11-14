@@ -14,5 +14,7 @@ enum EventRouteMap: string
 
     case Update = 'events.update';
 
+    case BulkUpdate = 'event.bulk-update';
+
     case Delete = 'events.delete';
 }

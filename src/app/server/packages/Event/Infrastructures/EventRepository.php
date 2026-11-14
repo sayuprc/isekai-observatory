@@ -55,6 +55,22 @@ readonly class EventRepository implements EventRepositoryInterface
     }
 
     #[Override]
+    public function findByIds(EventId ...$eventIds): array
+    {
+        $events = [];
+
+        foreach ($eventIds as $eventId) {
+            $event = $this->find($eventId);
+
+            if ($event !== null) {
+                $events[] = $event;
+            }
+        }
+
+        return $events;
+    }
+
+    #[Override]
     public function save(Event $event): Event
     {
         $binEventId = $this->converter->toBin($event->eventId->value);

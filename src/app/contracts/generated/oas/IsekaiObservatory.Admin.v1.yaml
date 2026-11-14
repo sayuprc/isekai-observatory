@@ -580,6 +580,68 @@ paths:
               $ref: '#/components/schemas/EventCreateRequest'
       security:
         - BearerAuth: []
+  /events/bulk-update:
+    post:
+      operationId: EventService_bulkUpdateEvents
+      description: イベント一括更新API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventBulkUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventBulkUpdateRequest'
+      security:
+        - BearerAuth: []
   /events/search:
     get:
       operationId: EventService_searchEvents
@@ -3778,6 +3840,41 @@ components:
           items:
             $ref: '#/components/schemas/AttachedTag'
       description: イベント
+    EventBulkUpdateRequest:
+      type: object
+      required:
+        - eventIds
+      properties:
+        eventIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/eventId'
+          minItems: 1
+          maxItems: 100
+          description: 対象のイベントID。1 リクエストで受け付ける上限は 100 件
+        addTagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: 付与するタグ。付いているものは何もしない
+        removeTagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: 除去するタグ。付いていないものは何もしない
+        isDisplay:
+          type: boolean
+          description: 表示設定の切り替え先
+      description: イベント一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+    EventBulkUpdateResponse:
+      type: object
+      required:
+        - updatedCount
+      properties:
+        updatedCount:
+          type: integer
+          format: int32
+          description: 更新したイベントの件数
     EventCreateRequest:
       type: object
       required:

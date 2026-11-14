@@ -71,6 +71,18 @@ interface EventService {
     | Unprocessable
     | ServerError;
 
+  @doc("イベント一括更新API")
+  @route("/bulk-update")
+  @post
+  bulkUpdateEvents(@body request: EventBulkUpdateRequest):
+    | Ok<EventBulkUpdateResponse>
+    | BadRequest
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | Unprocessable
+    | ServerError;
+
   @doc("イベント削除API")
   @delete
   deleteEvent(@path eventId: eventId):

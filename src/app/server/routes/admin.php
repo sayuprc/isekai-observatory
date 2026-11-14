@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Admin\V1\Auth\RecoveryStartController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RefreshController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RegisterFinishController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RegisterStartController;
+use App\Http\Controllers\Api\Admin\V1\Event\BulkUpdateEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\CreateEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\DeleteEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\GetEventController;
@@ -143,6 +144,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('events')->group(static function () {
                     Route::post('/', [CreateEventController::class, 'handle'])->name(EventRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateEventController::class, 'handle'])->name(EventRouteMap::BulkUpdate);
                     Route::put('/{eventId}', [UpdateEventController::class, 'handle'])->name(EventRouteMap::Update);
                     Route::delete('/{eventId}', [DeleteEventController::class, 'handle'])->name(EventRouteMap::Delete);
                     Route::get('/search', [SearchEventController::class, 'handle'])->name(EventRouteMap::Search);
