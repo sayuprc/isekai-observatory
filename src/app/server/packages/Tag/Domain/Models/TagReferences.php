@@ -80,10 +80,8 @@ readonly class TagReferences extends ImmutableCollection
     public function without(TagId ...$tagIds): self
     {
         $removed = array_map(static fn (TagId $tagId): string => $tagId->value, $tagIds);
+        $filter = static fn (TagReference $item): bool => ! in_array($item->tagId->value, $removed, true);
 
-        return new self(array_values(array_filter(
-            $this->items,
-            static fn (TagReference $item): bool => ! in_array($item->tagId->value, $removed, true),
-        )));
+        return new self(array_filter($this->items, $filter) |> array_values(...));
     }
 }
