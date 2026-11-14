@@ -21,7 +21,7 @@ catalogs:
     "@fontsource/shippori-mincho": 5.3.0
     "@fontsource/spectral": 5.3.0
   astro:
-    astro: 7.4.4
+    astro: 7.4.7
     "@astrojs/check": 0.9.12
     "@astrojs/sitemap": 3.7.4
     "@astrojs/solid-js": 7.1.2
@@ -63,3 +63,5 @@ overrides:
   undici@>=7.0.0 <7.30.1: 7.30.1
 minimumReleaseAgeExclude:
   - fast-uri@3.1.9
+  # Renovate security update: astro@7.4.7
+  - astro@7.4.7
