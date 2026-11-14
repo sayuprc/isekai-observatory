@@ -16,6 +16,7 @@ use Event\Application\Public\Query\SetlistItem;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -29,7 +30,7 @@ readonly class EventQueryService implements EventQueryServiceInterface
     }
 
     #[Override]
-    public function list(?string $pageToken, int $pageSize): EventListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): EventListPage
     {
         $query = $this->queryFactory
             ->select()

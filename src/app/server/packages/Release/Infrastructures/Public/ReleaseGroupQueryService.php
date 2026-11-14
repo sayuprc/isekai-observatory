@@ -16,6 +16,7 @@ use Release\Application\Public\Query\ReleaseTrackItem;
 use Release\Application\Public\Query\ReleaseTrackSongItem;
 use Release\Domain\Models\ReleaseFormat;
 use Release\Domain\Models\ReleaseGroupType;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -32,7 +33,7 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
      * 公開リリースを 1 件以上持つ公開リリースグループだけを返す
      */
     #[Override]
-    public function list(?string $pageToken, int $pageSize): ReleaseGroupListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): ReleaseGroupListPage
     {
         $query = $this->queryFactory
             ->select()

@@ -6,6 +6,7 @@ namespace Tag\Infrastructures\Public;
 
 use Emonkak\Orm\Sql;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -51,7 +52,7 @@ readonly class TagQueryService implements TagQueryServiceInterface
     }
 
     #[Override]
-    public function list(?string $pageToken, int $pageSize): TagListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): TagListPage
     {
         $query = $this->queryFactory
             ->select()

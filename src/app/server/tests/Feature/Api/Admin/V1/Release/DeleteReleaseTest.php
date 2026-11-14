@@ -39,7 +39,7 @@ class DeleteReleaseTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertNull($repository->find(new ReleaseId($releaseId)));
     }
@@ -78,7 +78,7 @@ class DeleteReleaseTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertNull($repository->find(new ReleaseId($releaseId)));
         $this->assertDatabaseCount('release_media', 0);
@@ -91,7 +91,7 @@ class DeleteReleaseTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     #[Test]
@@ -110,7 +110,7 @@ class DeleteReleaseTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 
     #[Test]
@@ -119,6 +119,6 @@ class DeleteReleaseTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete('/api/admin/v1/releases/invalid-id')
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

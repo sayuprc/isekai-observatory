@@ -16,6 +16,7 @@ use AdminUser\Infrastructures\RegistrationToken\RegistrationTokenRepository;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Test;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Tests\Support\Database\CapturesQueries;
 use Tests\Support\DatabaseTestCase;
@@ -175,6 +176,7 @@ class RegistrationTokenRepositoryTest extends DatabaseTestCase
      */
     private function buildToken(
         string $email,
+        #[SensitiveParameter]
         string $hashedToken,
         ConsumptionStatus $status,
         array $permissions = [],

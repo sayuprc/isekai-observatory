@@ -60,7 +60,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -125,7 +125,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -182,7 +182,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -235,7 +235,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -285,7 +285,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -330,7 +330,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -379,7 +379,7 @@ class CreateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -409,7 +409,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -454,7 +454,7 @@ class CreateReleaseTest extends DatabaseTestCase
             'orderNo' => 1,
             'formats' => [],
             'media' => [],
-        ])->assertStatus(422);
+        ])->assertUnprocessable();
     }
 
     #[Test]
@@ -473,7 +473,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJson(['message' => '指定されたリリースグループが存在しません。']);
     }
 
@@ -493,7 +493,7 @@ class CreateReleaseTest extends DatabaseTestCase
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
             ])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

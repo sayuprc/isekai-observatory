@@ -33,7 +33,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -78,7 +78,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'orderNo' => 7,
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroup.orderNo', 7);
     }
 
@@ -93,7 +93,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
             'isDisplay' => true,
             'orderNo' => 1,
             'tags' => [],
-        ])->assertStatus(403);
+        ])->assertForbidden();
     }
 
     #[Test]
@@ -114,7 +114,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'tags' => [['tagId' => $secondTagId], ['tagId' => $firstTagId]],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroup.tags', [
                 ['tagId' => $firstTagId, 'name' => 'タグA'],
                 ['tagId' => $secondTagId, 'name' => 'タグB'],
@@ -138,7 +138,7 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'tags' => [['tagId' => $tagId], ['tagId' => $tagId]],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

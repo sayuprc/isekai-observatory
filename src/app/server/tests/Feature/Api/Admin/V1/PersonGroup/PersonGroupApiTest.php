@@ -32,7 +32,7 @@ class PersonGroupApiTest extends DatabaseTestCase
                 'displayName' => 'グループ',
                 'members' => [['personId' => $personId, 'orderNo' => 1]],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('personGroup.name', 'グループ (B不在)')
             ->assertJsonPath('personGroup.displayName', 'グループ')
             ->assertJsonPath('personGroup.members.0.personId', $personId)
@@ -46,7 +46,7 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->postJson(route(PersonGroupRouteMap::Create), ['name' => '', 'displayName' => 'グループ', 'members' => []])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJsonPath('code', 'validation_failed')
             ->assertJsonPath('details.0.field', 'name');
     }
@@ -57,7 +57,7 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->postJson(route(PersonGroupRouteMap::Create), ['name' => 'グループ', 'displayName' => '', 'members' => []])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJsonPath('code', 'validation_failed')
             ->assertJsonPath('details.0.field', 'displayName');
     }
@@ -76,7 +76,7 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(PersonGroupRouteMap::Search, ['name' => 'グループ']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('maxPage', 1)
             ->assertJsonCount(2, 'personGroups')
             ->assertJsonPath('personGroups.0.name', 'Aグループ')
@@ -91,7 +91,7 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(PersonGroupRouteMap::Get, $this->generateUuid()))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     #[Test]
@@ -107,7 +107,7 @@ class PersonGroupApiTest extends DatabaseTestCase
                 'displayName' => '表示名',
                 'members' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('personGroup.personGroupId', $personGroupId)
             ->assertJsonPath('personGroup.name', '新グループ')
             ->assertJsonPath('personGroup.displayName', '表示名');
@@ -122,7 +122,7 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(PersonGroupRouteMap::Delete, $personGroupId))
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     #[Test]
@@ -166,7 +166,7 @@ class PersonGroupApiTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(PersonGroupRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('personGroups.0.personGroupId', $personGroupId)
             ->assertJsonPath('personGroups.0.performanceCount', 1);
     }

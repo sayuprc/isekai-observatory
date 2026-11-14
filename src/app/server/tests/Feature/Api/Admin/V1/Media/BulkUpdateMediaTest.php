@@ -45,7 +45,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
                 'mediaIds' => [$first, $second],
                 'addTagIds' => [$tagId, $otherTagId],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $this->assertSame([$tagId, $otherTagId], $this->tagIdsOf($first));
@@ -74,7 +74,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
                 'mediaIds' => [$mediaId],
                 'removeTagIds' => [$tagId],
             ])
-            ->assertStatus(200);
+            ->assertOk();
 
         $this->assertSame([$keptTagId], $this->tagIdsOf($mediaId));
     }
@@ -95,7 +95,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
                 'mediaIds' => [$first, $second],
                 'isDisplay' => false,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(MediaRepository::class);
@@ -118,7 +118,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
                 'addTagIds' => [$tagId],
                 'isDisplay' => false,
             ])
-            ->assertStatus(404);
+            ->assertNotFound();
 
         $media = $this->app->make(MediaRepository::class)->find(new MediaId($existing));
         $this->assertTrue($media?->isDisplay);
@@ -137,7 +137,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
                 'mediaIds' => [$mediaId],
                 'addTagIds' => [$this->generateUuid()],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -150,7 +150,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), ['mediaIds' => [$mediaId]])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -169,7 +169,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
                 'addTagIds' => [$tagId],
                 'removeTagIds' => [$tagId],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -179,7 +179,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), ['mediaIds' => [], 'isDisplay' => false])
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     #[Test]
@@ -191,7 +191,7 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), ['mediaIds' => [$mediaId], 'isDisplay' => false])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 
     /**

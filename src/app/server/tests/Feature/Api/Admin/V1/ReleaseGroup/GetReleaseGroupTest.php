@@ -85,7 +85,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Get, $releaseGroupId))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'releaseGroup' => [
                     'releaseGroupId' => $releaseGroupId,
@@ -124,7 +124,7 @@ class GetReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Get, $this->generateUuid()))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     #[Test]
@@ -133,6 +133,6 @@ class GetReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson('/api/admin/v1/release-groups/invalid-id')
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

@@ -6,6 +6,7 @@ namespace Venue\Infrastructures\Public;
 
 use Emonkak\Orm\Sql;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -27,7 +28,7 @@ readonly class VenueQueryService implements VenueQueryServiceInterface
      * 公開イベントから参照されている開催先だけを返す
      */
     #[Override]
-    public function list(?string $pageToken, int $pageSize): VenueListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): VenueListPage
     {
         $query = $this->queryFactory
             ->select()

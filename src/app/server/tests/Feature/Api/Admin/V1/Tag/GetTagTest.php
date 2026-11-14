@@ -26,7 +26,7 @@ class GetTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Get, $uuid))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tag' => [
                     'tagId' => $uuid,
@@ -44,6 +44,6 @@ class GetTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Get, $uuid))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

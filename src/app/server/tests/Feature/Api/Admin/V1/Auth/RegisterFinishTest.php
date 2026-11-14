@@ -26,6 +26,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -61,7 +62,7 @@ class RegisterFinishTest extends DatabaseTestCase
                 'token' => 'plain-token',
                 'credential' => ['id' => 'credential-id'],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json->whereAllType([
                     'accessToken' => 'string',
@@ -122,7 +123,7 @@ class RegisterFinishTest extends DatabaseTestCase
             'authCeremonyId' => $authCeremonyId,
             'token' => 'plain-token',
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(400);
+        ])->assertBadRequest();
 
         $this->assertSame(0, DB::table('admin_users')->count());
         $this->assertSame(0, DB::table('admin_user_passkeys')->count());
@@ -139,7 +140,7 @@ class RegisterFinishTest extends DatabaseTestCase
             'token' => 'plain-token',
             'email' => 'invitee@example.com',
             'name' => '新規ユーザー',
-        ])->assertStatus(200);
+        ])->assertOk();
 
         $authCeremonyId = $response->json('authCeremonyId');
         $this->assertIsString($authCeremonyId);
@@ -202,7 +203,7 @@ class RegisterFinishTest extends DatabaseTestCase
         });
     }
 
-    private function saveToken(string $plainToken, string $email): string
+    private function saveToken(#[SensitiveParameter] string $plainToken, string $email): string
     {
         $id = $this->generateUuid();
         $hashedToken = $this->app->make(TokenHasherInterface::class)->hash($plainToken);

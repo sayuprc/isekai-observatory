@@ -30,7 +30,7 @@ class UpdateTagTest extends DatabaseTestCase
                 'name' => 'テストタグA',
                 'orderNo' => 2,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tag' => [
                     'tagId' => $uuid,
@@ -55,7 +55,7 @@ class UpdateTagTest extends DatabaseTestCase
                 'name' => 'テストタグA',
                 'orderNo' => 2,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tag' => [
                     'tagId' => $routeTagId,
@@ -81,7 +81,7 @@ class UpdateTagTest extends DatabaseTestCase
                 'name' => 'テストタグA',
                 'orderNo' => 3,
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テストタグA"',
@@ -96,7 +96,7 @@ class UpdateTagTest extends DatabaseTestCase
         $this->withAuth()->putJson(route(TagRouteMap::Update, $uuid), [
             'name' => 'テストタグA',
             'orderNo' => 2,
-        ])->assertStatus(404);
+        ])->assertNotFound();
     }
 
     #[Test]
@@ -112,7 +112,7 @@ class UpdateTagTest extends DatabaseTestCase
                 'name' => '',
                 'orderNo' => 0,
             ])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

@@ -42,7 +42,7 @@ class ListMediaTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicMediaRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.mediaId', $mediaId)
             ->assertJsonPath('items.0.title', '公開 MV')
@@ -64,12 +64,12 @@ class ListMediaTest extends DatabaseTestCase
 
         $first = $this
             ->get(route(PublicMediaRouteMap::List, ['pageSize' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.mediaId', $firstId);
 
         $this
             ->get(route(PublicMediaRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.mediaId', $secondId)
             ->assertJsonMissingPath('nextPageToken');
     }

@@ -54,7 +54,7 @@ class ListSongTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicSongRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'items' => [[
                     'songId' => $songId,
@@ -78,7 +78,7 @@ class ListSongTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicSongRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['items' => []]);
     }
 
@@ -96,13 +96,13 @@ class ListSongTest extends DatabaseTestCase
 
         $first = $this
             ->get(route(PublicSongRouteMap::List, ['pageSize' => 2]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.songId', $firstId)
             ->assertJsonPath('items.1.songId', $secondId);
 
         $this
             ->get(route(PublicSongRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.songId', $thirdId)
             ->assertJsonMissingPath('nextPageToken');
@@ -113,7 +113,7 @@ class ListSongTest extends DatabaseTestCase
     {
         $this
             ->get(route(PublicSongRouteMap::List, ['pageToken' => '***']))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

@@ -43,7 +43,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('songs.0.songId', $songId)
             ->assertJsonPath('songs.0.performances.0.eventId', $eventId)
             ->assertJsonPath('songs.0.performances.0.eventTitle', '披露ライブ')
@@ -86,7 +86,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('songs.0.performances.0.coVocalistNames', ['ゲスト', 'グループ']);
     }
 
@@ -109,7 +109,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('songs.0.songId', $songId)
             ->assertJsonCount(0, 'songs.0.performances');
     }

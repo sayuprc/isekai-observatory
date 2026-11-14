@@ -52,7 +52,7 @@ class SearchAuditLogTest extends DatabaseTestCase
         $response = $this
             ->withAuth()
             ->get(route(AuditLogRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->json();
 
         $this->assertSame(1, $response['maxPage']);
@@ -103,7 +103,7 @@ class SearchAuditLogTest extends DatabaseTestCase
         $response = $this
             ->withAuth()
             ->get(route(AuditLogRouteMap::Search, ['target_type' => 'Release']))
-            ->assertStatus(200)
+            ->assertOk()
             ->json();
 
         $this->assertCount(1, $response['auditLogs']);
@@ -149,7 +149,7 @@ class SearchAuditLogTest extends DatabaseTestCase
         $response = $this
             ->withAuth()
             ->get(route(AuditLogRouteMap::Search, ['action' => 'register']))
-            ->assertStatus(200)
+            ->assertOk()
             ->json();
 
         $this->assertCount(1, $response['auditLogs']);
@@ -190,7 +190,7 @@ class SearchAuditLogTest extends DatabaseTestCase
         $response = $this
             ->withAuth()
             ->get(route(AuditLogRouteMap::Search, ['admin_user_name' => '監査']))
-            ->assertStatus(200)
+            ->assertOk()
             ->json();
 
         $this->assertCount(1, $response['auditLogs']);
@@ -203,6 +203,6 @@ class SearchAuditLogTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->get(route(AuditLogRouteMap::Search))
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

@@ -29,8 +29,8 @@ class DeleteVenueTest extends DatabaseTestCase
         $this->storeVenues($this->createVenue($venueId, '会場サンプルA', VenueKind::Physical));
         $client = $this->withAuth();
 
-        $client->delete(route(VenueRouteMap::Delete, $venueId))->assertStatus(204);
-        $client->get(route(VenueRouteMap::Get, $venueId))->assertStatus(404);
+        $client->delete(route(VenueRouteMap::Delete, $venueId))->assertNoContent();
+        $client->get(route(VenueRouteMap::Get, $venueId))->assertNotFound();
 
         $this->assertAuditLogCount(1);
         $log = $this->findAuditLog(AuditAction::Delete, AuditTargetType::Venue, $venueId);
@@ -43,6 +43,6 @@ class DeleteVenueTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(VenueRouteMap::Delete, $this->generateUuid()))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

@@ -31,7 +31,7 @@ class UpdatePersonTest extends DatabaseTestCase
                 'name' => 'テスト人物',
                 'orderNo' => 20,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'person' => [
                     'personId' => $uuid,
@@ -56,7 +56,7 @@ class UpdatePersonTest extends DatabaseTestCase
                 'name' => 'テスト人物',
                 'orderNo' => 20,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'person' => [
                     'personId' => $routePersonId,
@@ -74,7 +74,7 @@ class UpdatePersonTest extends DatabaseTestCase
         $this->withAuth()->putJson(route(PersonRouteMap::Update, $personId), [
             'name' => 'テスト人物',
             'orderNo' => 20,
-        ])->assertStatus(404);
+        ])->assertNotFound();
     }
 
     #[Test]
@@ -94,7 +94,7 @@ class UpdatePersonTest extends DatabaseTestCase
                 'name' => 'テスト人物',
                 'orderNo' => 30,
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テスト人物"',
@@ -114,7 +114,7 @@ class UpdatePersonTest extends DatabaseTestCase
                 'name' => '',
                 'orderNo' => 0,
             ])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

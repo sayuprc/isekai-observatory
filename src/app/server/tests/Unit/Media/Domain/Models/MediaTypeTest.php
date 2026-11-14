@@ -34,7 +34,7 @@ class MediaTypeTest extends TestCase
     #[Test]
     public function unknownValueFallsBackToOther(): void
     {
-        $this->assertSame(MediaType::Other, MediaType::tryFrom(12345) ?? MediaType::Other);
-        $this->assertNull(MediaType::tryFrom(12345));
+        $this->assertSame(MediaType::Other, MediaType::tryFrom(12_345) ?? MediaType::Other);
+        $this->assertNull(MediaType::tryFrom(12_345));
     }
 }

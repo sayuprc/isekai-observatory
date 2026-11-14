@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Override;
 use RuntimeException;
+use SensitiveParameter;
 use Tests\TestCase;
 
 abstract class DatabaseTestCase extends TestCase
@@ -46,7 +47,7 @@ abstract class DatabaseTestCase extends TestCase
         return $app;
     }
 
-    private function createTestDatabase(Application $app, string $token): string
+    private function createTestDatabase(Application $app, #[SensitiveParameter] string $token): string
     {
         $config = $app->make('config');
         $baseDb = $config->get('database.connections.mysql.database');

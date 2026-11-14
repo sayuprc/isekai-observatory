@@ -30,7 +30,7 @@ class SearchPersonTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(PersonRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'persons' => [
                     [
@@ -59,7 +59,7 @@ class SearchPersonTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(PersonRouteMap::Search, ['name' => 'テスト人物1']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'persons' => [
                     [
@@ -88,7 +88,7 @@ class SearchPersonTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(PersonRouteMap::Search, ['sort' => 'name', 'order' => 'desc']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'persons' => [
                     [
@@ -146,7 +146,7 @@ class SearchPersonTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(PersonRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('persons.0.songCount', 1)
             ->assertJsonPath('persons.0.performanceCount', 1);
     }

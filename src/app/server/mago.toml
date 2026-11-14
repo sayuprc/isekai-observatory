@@ -60,6 +60,7 @@ preserve-breaking-binary-expression = true
 
 [linter]
 excludes = [
+  "Generated/",
   "bootstrap/",
   "config/",
   "public/",
@@ -69,11 +70,13 @@ integrations = ["symfony", "laravel"]
 
 [linter.rules]
 ambiguous-function-call = { enabled = false }
-literal-named-argument = { enabled = false }
 halstead = { effort-threshold = 7000 }
+literal-named-argument = { enabled = false }
+prefer-early-continue={enabled = false}
 
 [analyzer]
 excludes = [
+  "Generated/",
   "bootstrap/",
   "config/",
   "public/",

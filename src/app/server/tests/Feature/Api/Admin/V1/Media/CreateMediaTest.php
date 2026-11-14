@@ -33,7 +33,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(static fn (AssertableJson $json) => $json
                 ->whereType('media.mediaId', 'string')
                 ->where('media.title', 'テストメディアMV')
@@ -68,7 +68,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -93,7 +93,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [['tagId' => $secondTagId], ['tagId' => $firstTagId]],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags', [
                 ['tagId' => $firstTagId, 'name' => 'タグA'],
                 ['tagId' => $secondTagId, 'name' => 'タグB'],
@@ -116,7 +116,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [['tagId' => $tagId], ['tagId' => $tagId]],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

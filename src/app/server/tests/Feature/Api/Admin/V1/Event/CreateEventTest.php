@@ -94,7 +94,7 @@ class CreateEventTest extends DatabaseTestCase
                 ],
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('event.title', 'テストライブ')
             ->assertJsonPath('event.note', '備考')
             ->assertJsonPath('event.status', 1)
@@ -176,7 +176,7 @@ class CreateEventTest extends DatabaseTestCase
                 'setlist' => [],
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('event.performances.0.coVocalists.0.name', 'メンバー1')
             ->assertJsonPath('event.performances.0.coVocalists.0.personGroup.personGroupId', $personGroupId)
             ->assertJsonPath('event.performances.0.coVocalists.0.personGroup.name', 'グループ')
@@ -211,7 +211,7 @@ class CreateEventTest extends DatabaseTestCase
                 ],
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -246,7 +246,7 @@ class CreateEventTest extends DatabaseTestCase
                 'setlist' => [],
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -278,7 +278,7 @@ class CreateEventTest extends DatabaseTestCase
                 ],
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -303,7 +303,7 @@ class CreateEventTest extends DatabaseTestCase
                 'setlist' => [],
                 'tags' => [],
             ])
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     #[Test]
@@ -327,7 +327,7 @@ class CreateEventTest extends DatabaseTestCase
                 'setlist' => [],
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('event.schedule.startOn', null)
             ->assertJsonPath('event.schedule.endOn', null);
     }
@@ -353,7 +353,7 @@ class CreateEventTest extends DatabaseTestCase
                 'setlist' => [],
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -370,7 +370,7 @@ class CreateEventTest extends DatabaseTestCase
                 ...$this->minimalRequest(),
                 'tags' => [['tagId' => $secondTagId], ['tagId' => $firstTagId]],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('event.tags', [
                 ['tagId' => $firstTagId, 'name' => 'タグA'],
                 ['tagId' => $secondTagId, 'name' => 'タグB'],
@@ -389,7 +389,7 @@ class CreateEventTest extends DatabaseTestCase
                 ...$this->minimalRequest(),
                 'tags' => [['tagId' => $tagId], ['tagId' => $tagId]],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 

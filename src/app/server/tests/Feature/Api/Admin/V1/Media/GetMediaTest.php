@@ -59,7 +59,7 @@ class GetMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Get, $uuid))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'media' => [
                     'mediaId' => $uuid,
@@ -87,6 +87,6 @@ class GetMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Get, $this->generateUuid()))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

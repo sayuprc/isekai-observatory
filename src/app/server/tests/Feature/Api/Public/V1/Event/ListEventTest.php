@@ -10,6 +10,7 @@ use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseGroupType;
+use SensitiveParameter;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -83,7 +84,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicEventRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'items' => [[
                     'eventId' => $eventId,
@@ -129,7 +130,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicEventRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.performances.0.songId', null)
             ->assertJsonPath('items.0.performances.0.songTitle', '非公開楽曲');
     }
@@ -170,7 +171,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicEventRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.mediaIds', [$visibleMediaId])
             ->assertJsonPath('items.0.releaseIds', [$visibleReleaseId]);
     }
@@ -182,7 +183,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicEventRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['items' => []]);
     }
 
@@ -200,13 +201,13 @@ class ListEventTest extends DatabaseTestCase
 
         $first = $this
             ->get(route(PublicEventRouteMap::List, ['pageSize' => 2]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.eventId', $firstId)
             ->assertJsonPath('items.1.eventId', $secondId);
 
         $this
             ->get(route(PublicEventRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.eventId', $thirdId)
             ->assertJsonMissingPath('nextPageToken');
@@ -214,11 +215,11 @@ class ListEventTest extends DatabaseTestCase
 
     #[Test]
     #[DataProvider('provideInvalidPageTokens')]
-    public function rejectsInvalidPageToken(string $pageToken): void
+    public function rejectsInvalidPageToken(#[SensitiveParameter] string $pageToken): void
     {
         $this
             ->get(route(PublicEventRouteMap::List, ['pageToken' => $pageToken]))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -240,7 +241,7 @@ class ListEventTest extends DatabaseTestCase
     {
         $this
             ->get(route(PublicEventRouteMap::List, ['pageSize' => $pageSize]))
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJsonPath('code', 'validation_failed');
     }
 

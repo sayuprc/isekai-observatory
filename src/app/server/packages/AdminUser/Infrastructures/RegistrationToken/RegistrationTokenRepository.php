@@ -10,6 +10,7 @@ use AdminUser\Domain\Models\RegistrationToken\RegistrationToken;
 use AdminUser\Domain\Models\RegistrationToken\RegistrationTokenRepositoryInterface;
 use DateTimeImmutable;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -37,7 +38,7 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
     }
 
     #[Override]
-    public function save(RegistrationToken $token): RegistrationToken
+    public function save(#[SensitiveParameter] RegistrationToken $token): RegistrationToken
     {
         $data = $token->toArray();
         $id = $this->converter->toBin($data['admin_user_registration_token_id']);

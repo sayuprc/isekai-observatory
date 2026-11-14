@@ -62,10 +62,8 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         // origin 設定の不備をセレモニー開始時点で fail-fast する (finish 側は例外が握り潰されるため)
         $this->host();
 
-        $excludeCredentials = array_map(
-            fn (AdminUserPasskey $passkey): PublicKeyCredentialDescriptor => $this->toDescriptor($passkey),
-            $excludePasskeys,
-        );
+        $excludeCredentials = array_map($this->toDescriptor(...), $excludePasskeys);
+
         $options = PublicKeyCredentialCreationOptions::create(
             PublicKeyCredentialRpEntity::create(
                 $this->config->rpName,

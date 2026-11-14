@@ -37,7 +37,7 @@ class SearchVenueTest extends DatabaseTestCase
                 'sort' => 'name',
                 'order' => 'desc',
             ]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'venues' => [[
                     'venueId' => $onlineId,
@@ -52,7 +52,7 @@ class SearchVenueTest extends DatabaseTestCase
     #[Test]
     public function generalUserWithoutPermissionIsForbidden(): void
     {
-        $this->withGeneralAuth()->get(route(VenueRouteMap::Search))->assertStatus(403);
+        $this->withGeneralAuth()->get(route(VenueRouteMap::Search))->assertForbidden();
     }
 
     #[Test]
@@ -67,7 +67,7 @@ class SearchVenueTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(VenueRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('venues.0.eventCount', 2);
     }
 }

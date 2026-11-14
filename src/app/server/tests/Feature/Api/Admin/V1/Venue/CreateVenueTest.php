@@ -27,7 +27,7 @@ class CreateVenueTest extends DatabaseTestCase
                 'name' => '  配信先サンプルB  ',
                 'kind' => 2,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has('venue', static fn (AssertableJson $json) => $json
@@ -50,8 +50,8 @@ class CreateVenueTest extends DatabaseTestCase
         $payload = ['name' => '配信先サンプルB', 'kind' => 2];
         $client = $this->withAuth();
 
-        $client->postJson(route(VenueRouteMap::Create), $payload)->assertStatus(200);
-        $client->postJson(route(VenueRouteMap::Create), $payload)->assertStatus(200);
+        $client->postJson(route(VenueRouteMap::Create), $payload)->assertOk();
+        $client->postJson(route(VenueRouteMap::Create), $payload)->assertOk();
     }
 
     #[Test]
@@ -61,7 +61,7 @@ class CreateVenueTest extends DatabaseTestCase
 
         $client
             ->postJson(route(VenueRouteMap::Create), ['name' => str_repeat('あ', 256), 'kind' => 1])
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     #[Test]
@@ -70,6 +70,6 @@ class CreateVenueTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->postJson(route(VenueRouteMap::Create), ['name' => '会場サンプルA', 'kind' => 1])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

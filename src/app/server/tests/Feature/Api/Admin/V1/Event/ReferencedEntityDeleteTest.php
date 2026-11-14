@@ -33,7 +33,7 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(SongRouteMap::Delete, $songId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -45,7 +45,7 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(PersonRouteMap::Delete, $personId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -57,7 +57,7 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(VenueRouteMap::Delete, $venueId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -69,7 +69,7 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(MediaRouteMap::Delete, $mediaId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -81,7 +81,7 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 

@@ -118,7 +118,7 @@ class ListMediaTest extends DatabaseTestCase
 
         $response = $this
             ->get(route(ViewerMediaRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'media' => [
                     [
@@ -160,7 +160,7 @@ class ListMediaTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerMediaRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'media' => [
                     [
@@ -185,7 +185,7 @@ class ListMediaTest extends DatabaseTestCase
     {
         $this
             ->get(route(ViewerMediaRouteMap::List, ['cursor' => $cursor]))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'カーソルが不正です。',

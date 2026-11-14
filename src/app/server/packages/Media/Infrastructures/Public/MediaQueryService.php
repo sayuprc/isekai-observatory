@@ -12,6 +12,7 @@ use Media\Application\Public\Query\MediaListPageToken;
 use Media\Application\Public\Query\MediaQueryServiceInterface;
 use Media\Domain\Models\MediaType;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -25,7 +26,7 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
     }
 
     #[Override]
-    public function list(?string $pageToken, int $pageSize): MediaListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): MediaListPage
     {
         $query = $this->queryFactory
             ->select()

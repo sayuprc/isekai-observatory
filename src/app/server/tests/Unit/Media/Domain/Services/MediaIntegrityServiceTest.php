@@ -127,7 +127,7 @@ class MediaIntegrityServiceTest extends TestCase
             '新規メディア',
             'https://example.com/media',
             '2024-03-01T12:34:56+09:00',
-            12345,
+            12_345,
             true,
             [],
         );

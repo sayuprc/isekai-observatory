@@ -47,7 +47,7 @@ class BulkUpdateReleaseGroupTest extends DatabaseTestCase
                 'removeTagIds' => [$removeTagId],
                 'isDisplay' => false,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(ReleaseGroupRepository::class);
@@ -81,7 +81,7 @@ class BulkUpdateReleaseGroupTest extends DatabaseTestCase
                 'releaseGroupIds' => [$existing, $this->generateUuid()],
                 'isDisplay' => false,
             ])
-            ->assertStatus(404);
+            ->assertNotFound();
 
         $record = $this->app->make(ReleaseGroupRepository::class)->find(new ReleaseGroupId($existing));
         $this->assertTrue($record?->isDisplay);
@@ -96,6 +96,6 @@ class BulkUpdateReleaseGroupTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->postJson(route(ReleaseGroupRouteMap::BulkUpdate), ['releaseGroupIds' => [$id], 'isDisplay' => false])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

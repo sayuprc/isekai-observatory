@@ -6,6 +6,7 @@ namespace Song\Infrastructures\Public;
 
 use Emonkak\Orm\Sql;
 use Override;
+use SensitiveParameter;
 use Song\Application\Public\Query\SongCredit;
 use Song\Application\Public\Query\SongListItem;
 use Song\Application\Public\Query\SongListPage;
@@ -26,7 +27,7 @@ readonly class SongQueryService implements SongQueryServiceInterface
     }
 
     #[Override]
-    public function list(?string $pageToken, int $pageSize): SongListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): SongListPage
     {
         $query = $this->queryFactory
             ->select()

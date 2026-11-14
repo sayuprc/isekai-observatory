@@ -64,7 +64,7 @@ class CreateSongTest extends DatabaseTestCase
                     ['mediaId' => $media->mediaId->value, 'orderNo' => 1],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -137,7 +137,7 @@ class CreateSongTest extends DatabaseTestCase
                 'tags' => [],
                 'media' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('song.lyricsLink', null)
             ->assertJsonPath('song.media', []);
     }
@@ -158,7 +158,7 @@ class CreateSongTest extends DatabaseTestCase
                 'tags' => [],
                 'media' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('song.type', SongType::Guest->value);
     }
 
@@ -178,7 +178,7 @@ class CreateSongTest extends DatabaseTestCase
                 'tags' => [['tagId' => $this->generateUuid()]],
                 'media' => [],
             ])
-            ->assertStatus(400);
+            ->assertBadRequest();
     }
 
     #[Test]
@@ -203,7 +203,7 @@ class CreateSongTest extends DatabaseTestCase
                 ],
                 'media' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -227,7 +227,7 @@ class CreateSongTest extends DatabaseTestCase
                 'tags' => [],
                 'media' => [],
             ])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

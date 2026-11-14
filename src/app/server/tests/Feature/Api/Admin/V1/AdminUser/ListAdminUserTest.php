@@ -39,7 +39,7 @@ class ListAdminUserTest extends DatabaseTestCase
         $response = $this
             ->withAuth()
             ->get(route(AdminUserRouteMap::List))
-            ->assertStatus(200);
+            ->assertOk();
 
         $json = $response->json();
         $authUser = collect($json['adminUsers'])->firstWhere('email', 'root@example.com');

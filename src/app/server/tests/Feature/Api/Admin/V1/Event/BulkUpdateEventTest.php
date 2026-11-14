@@ -44,7 +44,7 @@ class BulkUpdateEventTest extends DatabaseTestCase
                 'removeTagIds' => [$removeTagId],
                 'isDisplay' => false,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(EventRepository::class);
@@ -72,7 +72,7 @@ class BulkUpdateEventTest extends DatabaseTestCase
                 'eventIds' => [$existing, $this->generateUuid()],
                 'isDisplay' => false,
             ])
-            ->assertStatus(404);
+            ->assertNotFound();
 
         $record = $this->app->make(EventRepository::class)->find(new EventId($existing));
         $this->assertTrue($record?->isDisplay);
@@ -87,6 +87,6 @@ class BulkUpdateEventTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->postJson(route(EventRouteMap::BulkUpdate), ['eventIds' => [$id], 'isDisplay' => false])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

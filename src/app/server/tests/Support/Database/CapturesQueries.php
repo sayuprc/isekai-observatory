@@ -36,6 +36,6 @@ trait CapturesQueries
      */
     private function capturedQueries(): array
     {
-        return $this->queryListener?->queries ?? [];
+        return $this->queryListener->queries ?? [];
     }
 }

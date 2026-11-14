@@ -25,7 +25,7 @@ class CreatePersonTest extends DatabaseTestCase
             ->postJson(route(PersonRouteMap::Create), [
                 'name' => 'テスト人物',
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -52,7 +52,7 @@ class CreatePersonTest extends DatabaseTestCase
             ->postJson(route(PersonRouteMap::Create), [
                 'name' => 'テスト人物',
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テスト人物"',
@@ -67,7 +67,7 @@ class CreatePersonTest extends DatabaseTestCase
             ->postJson(route(PersonRouteMap::Create), [
                 'name' => '',
             ])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

@@ -54,7 +54,7 @@ class LoginTest extends DatabaseTestCase
             ->postJson(route(AuthRouteMap::LoginStart), [
                 'email' => 'example@example.com',
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->whereType('authCeremonyId', 'string')
@@ -77,7 +77,7 @@ class LoginTest extends DatabaseTestCase
             ->postJson(route(AuthRouteMap::LoginStart), [
                 'email' => 'unknown@example.com',
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->whereType('authCeremonyId', 'string')
@@ -104,7 +104,7 @@ class LoginTest extends DatabaseTestCase
             ->postJson(route(AuthRouteMap::LoginStart), [
                 'email' => 'example@example.com',
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->whereType('authCeremonyId', 'string')
@@ -127,12 +127,12 @@ class LoginTest extends DatabaseTestCase
         foreach (range(1, 2) as $ignored) {
             $this->postJson(route(AuthRouteMap::LoginStart), [
                 'email' => 'throttle@example.com',
-            ])->assertStatus(200);
+            ])->assertOk();
         }
 
         $this->postJson(route(AuthRouteMap::LoginStart), [
             'email' => 'throttle@example.com',
-        ])->assertStatus(429);
+        ])->assertTooManyRequests();
 
         $this->assertSame(0, DB::table('refresh_tokens')->count());
     }
@@ -151,7 +151,7 @@ class LoginTest extends DatabaseTestCase
                 'authCeremonyId' => $authCeremonyId,
                 'credential' => ['id' => 'credential-id'],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json->whereAllType([
                     'accessToken' => 'string',
@@ -185,7 +185,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertSame(0, DB::table('refresh_tokens')->count());
         $this->assertAuditLogCount(0);
@@ -200,7 +200,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $this->generateUuid(),
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -226,7 +226,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -245,7 +245,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'other-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertPasskeyUnchanged('other-credential-id');
@@ -264,7 +264,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -275,7 +275,7 @@ class LoginTest extends DatabaseTestCase
     {
         $response = $this->postJson(route(AuthRouteMap::LoginStart), [
             'email' => $email,
-        ])->assertStatus(200);
+        ])->assertOk();
 
         $authCeremonyId = $response->json('authCeremonyId');
         $this->assertIsString($authCeremonyId);

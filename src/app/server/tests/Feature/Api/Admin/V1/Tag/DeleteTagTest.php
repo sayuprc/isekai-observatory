@@ -32,7 +32,7 @@ class DeleteTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(TagRouteMap::Delete, $uuid))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertNull($repository->find($this->createTag($uuid, 'テストタグA', 1)->tagId));
     }
@@ -61,7 +61,7 @@ class DeleteTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'このタグはほかの記録に付いているため削除できません',
@@ -80,7 +80,7 @@ class DeleteTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
     }
 
@@ -99,7 +99,7 @@ class DeleteTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
     }
 
@@ -120,7 +120,7 @@ class DeleteTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
     }
 
@@ -130,13 +130,13 @@ class DeleteTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(TagRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     #[Test]
     public function requiresAuthentication(): void
     {
         $this->delete(route(TagRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 }

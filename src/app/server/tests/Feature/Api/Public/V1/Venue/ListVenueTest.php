@@ -37,7 +37,7 @@ class ListVenueTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicVenueRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'items' => [[
                     'venueId' => $publicVenueId,
@@ -63,12 +63,12 @@ class ListVenueTest extends DatabaseTestCase
 
         $first = $this
             ->get(route(PublicVenueRouteMap::List, ['pageSize' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.venueId', $firstId);
 
         $this
             ->get(route(PublicVenueRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.venueId', $secondId)
             ->assertJsonMissingPath('nextPageToken');
     }

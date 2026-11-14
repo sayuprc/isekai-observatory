@@ -24,7 +24,7 @@ class SearchTagTest extends DatabaseTestCase
     public function returnUnauthorizedWhenUnauthenticated(): void
     {
         $this->get(route(TagRouteMap::Search))
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     #[Test]
@@ -39,7 +39,7 @@ class SearchTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [
                     [
@@ -70,7 +70,7 @@ class SearchTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Search, ['name' => 'テストタグA']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [
                     [
@@ -99,7 +99,7 @@ class SearchTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Search, ['name' => '存在しない']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [],
                 'maxPage' => 0,
@@ -129,7 +129,7 @@ class SearchTagTest extends DatabaseTestCase
                 'page' => 2,
                 'per_page' => 25,
             ]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [
                     [
@@ -163,7 +163,7 @@ class SearchTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.songCount', 2);
     }
 
@@ -180,7 +180,7 @@ class SearchTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.songCount', 0)
             ->assertJsonPath('tags.0.eventCount', 2);
     }
@@ -199,7 +199,7 @@ class SearchTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.releaseGroupCount', 1);
     }
 
@@ -217,7 +217,7 @@ class SearchTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.mediaCount', 1);
     }
 }

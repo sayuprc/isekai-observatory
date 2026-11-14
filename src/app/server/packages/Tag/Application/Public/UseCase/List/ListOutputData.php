@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tag\Application\Public\UseCase\List;
 
+use SensitiveParameter;
 use Tag\Application\Public\Query\TagListItem;
 
 readonly class ListOutputData
@@ -13,6 +14,7 @@ readonly class ListOutputData
      */
     public function __construct(
         public array $tags,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

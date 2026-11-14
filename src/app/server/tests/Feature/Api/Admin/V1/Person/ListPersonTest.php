@@ -27,7 +27,7 @@ class ListPersonTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(PersonRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'persons' => [
                     [
@@ -45,7 +45,7 @@ class ListPersonTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(PersonRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['persons' => []]);
     }
 }

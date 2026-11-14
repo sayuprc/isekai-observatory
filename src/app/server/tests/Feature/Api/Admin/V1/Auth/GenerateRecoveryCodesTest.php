@@ -45,7 +45,7 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
 
         $response = $this
             ->postJson(route(AuthRouteMap::GenerateRecoveryCodes))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json->has('recoveryCodes', 10)->etc(),
             );
@@ -85,11 +85,11 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
     {
         $this->authenticate();
 
-        $first = $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertStatus(200);
+        $first = $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertOk();
         /** @var list<string> $firstCodes */
         $firstCodes = $first->json('recoveryCodes');
 
-        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertStatus(200);
+        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertOk();
 
         $this->assertSame(10, DB::table('admin_user_recovery_codes')->count());
 
@@ -108,7 +108,7 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
     #[Test]
     public function requiresAuthentication(): void
     {
-        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertStatus(401);
+        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertUnauthorized();
 
         $this->assertSame(0, DB::table('admin_user_recovery_codes')->count());
     }

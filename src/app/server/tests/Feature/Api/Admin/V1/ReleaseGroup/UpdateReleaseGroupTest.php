@@ -39,7 +39,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
                 'orderNo' => 3,
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -75,7 +75,7 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
             'isDisplay' => true,
             'orderNo' => 1,
             'tags' => [],
-        ])->assertStatus(404);
+        ])->assertNotFound();
     }
 
     #[Test]
@@ -95,6 +95,6 @@ class UpdateReleaseGroupTest extends DatabaseTestCase
             'isDisplay' => true,
             'orderNo' => 1,
             'tags' => [],
-        ])->assertStatus(403);
+        ])->assertForbidden();
     }
 }

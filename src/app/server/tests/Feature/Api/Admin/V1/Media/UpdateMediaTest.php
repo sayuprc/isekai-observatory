@@ -46,7 +46,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'isDisplay' => false,
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'media' => [
                     'mediaId' => $uuid,
@@ -88,7 +88,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('media.mediaId', $routeMediaId);
     }
 
@@ -104,7 +104,7 @@ class UpdateMediaTest extends DatabaseTestCase
             'type' => MediaType::Mv->value,
             'isDisplay' => true,
             'tags' => [],
-        ])->assertStatus(404);
+        ])->assertNotFound();
     }
 
     #[Test]
@@ -133,7 +133,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [],
             ])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')
@@ -184,7 +184,7 @@ class UpdateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -214,13 +214,13 @@ class UpdateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [['tagId' => $newTagId]],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags', [['tagId' => $newTagId, 'name' => '新タグ']]);
 
         // 更新のレスポンスだけでなく、保存されたタグ付けも入れ替わっている
         $client
             ->getJson(route(MediaRouteMap::Get, $mediaId))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags', [['tagId' => $newTagId, 'name' => '新タグ']]);
     }
 }

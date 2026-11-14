@@ -50,12 +50,7 @@ readonly class ReleaseFormats extends ImmutableCollection
      */
     public static function reconstruct(array $values): self
     {
-        return new self(
-            array_map(
-                static fn (int $value): ReleaseFormat => ReleaseFormat::from($value),
-                $values,
-            ),
-        );
+        return new self(array_map(ReleaseFormat::from(...), $values));
     }
 
     /**

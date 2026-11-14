@@ -9,6 +9,7 @@ use Auth\Domain\Models\Token\RefreshToken\RefreshTokenId;
 use Auth\Domain\Models\Token\RefreshToken\RefreshTokenRepositoryInterface;
 use DateTimeImmutable;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\ClockInterface;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
@@ -51,7 +52,7 @@ readonly class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     }
 
     #[Override]
-    public function save(RefreshToken $refreshToken): RefreshToken
+    public function save(#[SensitiveParameter] RefreshToken $refreshToken): RefreshToken
     {
         $data = $refreshToken->toArray();
         $now = now()->toDateTimeString();

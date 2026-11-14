@@ -69,7 +69,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'items' => [[
                     'releaseGroupId' => $releaseGroupId,
@@ -129,7 +129,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['items' => []]);
     }
 
@@ -149,7 +149,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $first = $this
             ->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.releaseGroupId', $firstId);
 
         $this
@@ -157,7 +157,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
                 'pageSize' => 1,
                 'pageToken' => $first->json('nextPageToken'),
             ]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.releaseGroupId', $secondId)
             ->assertJsonMissingPath('nextPageToken');
     }

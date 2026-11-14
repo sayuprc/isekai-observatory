@@ -30,7 +30,7 @@ class SearchSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -75,7 +75,7 @@ class SearchSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Search, ['title' => 'テスト楽曲']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -130,7 +130,7 @@ class SearchSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Search, ['type' => SongType::Original->value]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -185,7 +185,7 @@ class SearchSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Search, ['is_display' => false]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -227,7 +227,7 @@ class SearchSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Search, ['tag_id' => $tagId]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'songs')
             ->assertJsonPath('songs.0.songId', $taggedSongId)
             ->assertJsonPath('maxPage', 1);
@@ -245,7 +245,7 @@ class SearchSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Search, ['title' => '存在しないタイトル']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [],
                 'maxPage' => 0,

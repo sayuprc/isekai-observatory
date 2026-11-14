@@ -62,7 +62,7 @@ class RecoveryTest extends DatabaseTestCase
                 'authCeremonyId' => $authCeremonyId,
                 'credential' => ['id' => 'new-credential-id'],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json->whereAllType([
                     'accessToken' => 'string',
@@ -114,7 +114,7 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'new-credential-id'],
-        ])->assertStatus(200);
+        ])->assertOk();
 
         // 消費されたのは入力したコード A のみで、コード B は未使用のまま
         $this->assertSame(
@@ -135,7 +135,7 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $secondCeremonyId,
             'credential' => ['id' => 'second-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertNull(
             $this->app->make(AdminUserPasskeyRepositoryInterface::class)->findByCredentialId('second-credential-id'),
@@ -163,7 +163,7 @@ class RecoveryTest extends DatabaseTestCase
                 'recoveryCode' => 'A3KP-9QXR',
                 'name' => '新しいパスキー',
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->whereType('authCeremonyId', 'string')
@@ -188,7 +188,7 @@ class RecoveryTest extends DatabaseTestCase
                 'recoveryCode' => 'WRONG-CODE',
                 'name' => '新しいパスキー',
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->whereType('authCeremonyId', 'string')
@@ -208,7 +208,7 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'new-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertSame(0, DB::table('admin_user_passkeys')->count());
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -227,7 +227,7 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'new-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertSame(1, DB::table('admin_user_passkeys')->count());
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -251,14 +251,14 @@ class RecoveryTest extends DatabaseTestCase
                 'email' => 'throttle@example.com',
                 'recoveryCode' => 'A3KP-9QXR',
                 'name' => '新しいパスキー',
-            ])->assertStatus(200);
+            ])->assertOk();
         }
 
         $this->postJson(route(AuthRouteMap::RecoveryStart), [
             'email' => 'throttle@example.com',
             'recoveryCode' => 'A3KP-9QXR',
             'name' => '新しいパスキー',
-        ])->assertStatus(429);
+        ])->assertTooManyRequests();
     }
 
     private function startRecovery(string $email, string $recoveryCode): string
@@ -267,7 +267,7 @@ class RecoveryTest extends DatabaseTestCase
             'email' => $email,
             'recoveryCode' => $recoveryCode,
             'name' => '新しいパスキー',
-        ])->assertStatus(200);
+        ])->assertOk();
 
         $authCeremonyId = $response->json('authCeremonyId');
         $this->assertIsString($authCeremonyId);

@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use DateTimeImmutable;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\Test;
+use SensitiveParameter;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 
@@ -39,7 +40,7 @@ class RefreshTest extends DatabaseTestCase
                 'refreshTokenId' => $refreshToken->refreshTokenId->value,
                 'refreshToken' => $plainToken,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has('accessToken')
@@ -68,12 +69,12 @@ class RefreshTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::Refresh), [
             'refreshTokenId' => $refreshToken->refreshTokenId->value,
             'refreshToken' => $plainToken,
-        ])->assertStatus(200);
+        ])->assertOk();
 
         $this->postJson(route(AuthRouteMap::Refresh), [
             'refreshTokenId' => $refreshToken->refreshTokenId->value,
             'refreshToken' => $plainToken,
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
     }
 
     #[Test]
@@ -92,7 +93,7 @@ class RefreshTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::Refresh), [
             'refreshTokenId' => $refreshToken->refreshTokenId->value,
             'refreshToken' => 'different-token',
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
     }
 
     #[Test]
@@ -111,11 +112,14 @@ class RefreshTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::Refresh), [
             'refreshTokenId' => $refreshToken->refreshTokenId->value,
             'refreshToken' => $plainToken,
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
     }
 
-    private function storeRefreshToken(string $plainToken, DateTimeImmutable $expiredAt): RefreshToken
-    {
+    private function storeRefreshToken(
+        #[SensitiveParameter]
+        string $plainToken,
+        DateTimeImmutable $expiredAt,
+    ): RefreshToken {
         $user = $this->createAdminUser($this->generateUuid(), 'example@example.com');
         $this->app->make(AdminUserRepository::class)->register($user);
 

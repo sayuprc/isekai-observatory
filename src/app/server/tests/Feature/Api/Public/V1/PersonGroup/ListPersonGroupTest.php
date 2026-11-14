@@ -72,7 +72,7 @@ class ListPersonGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicPersonGroupRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'items' => [[
                     'personGroupId' => $publicGroupId,

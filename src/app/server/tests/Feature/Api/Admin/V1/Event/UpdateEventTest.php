@@ -63,7 +63,7 @@ class UpdateEventTest extends DatabaseTestCase
                 ],
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('event.eventId', $eventId)
             ->assertJsonPath('event.title', '更新後のライブ')
             ->assertJsonPath('event.note', '備考')
@@ -109,7 +109,7 @@ class UpdateEventTest extends DatabaseTestCase
                 'setlist' => [],
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

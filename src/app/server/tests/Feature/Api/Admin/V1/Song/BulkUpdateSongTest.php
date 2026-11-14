@@ -47,7 +47,7 @@ class BulkUpdateSongTest extends DatabaseTestCase
                 'removeTagIds' => [$removeTagId],
                 'isDisplay' => false,
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(SongRepository::class);
@@ -84,7 +84,7 @@ class BulkUpdateSongTest extends DatabaseTestCase
                 'songIds' => [$existing, $this->generateUuid()],
                 'isDisplay' => false,
             ])
-            ->assertStatus(404);
+            ->assertNotFound();
 
         $record = $this->app->make(SongRepository::class)->find(new SongId($existing));
         $this->assertTrue($record?->isDisplay);
@@ -108,6 +108,6 @@ class BulkUpdateSongTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->postJson(route(SongRouteMap::BulkUpdate), ['songIds' => [$id], 'isDisplay' => false])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

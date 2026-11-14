@@ -42,7 +42,7 @@ class ListTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [
                     [
@@ -62,7 +62,7 @@ class ListTagTest extends DatabaseTestCase
     #[Test]
     public function requiresAuthentication(): void
     {
-        $this->get(route(TagRouteMap::List))->assertStatus(401);
+        $this->get(route(TagRouteMap::List))->assertUnauthorized();
     }
 
     #[Test]
@@ -71,7 +71,7 @@ class ListTagTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(TagRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [],
             ]);

@@ -31,7 +31,7 @@ class DeleteSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(SongRouteMap::Delete, $uuid))
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     #[Test]
@@ -40,7 +40,7 @@ class DeleteSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(SongRouteMap::Delete, 'invalid-id'))
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertExactJson([
                 'code' => 'validation_failed',
                 'message' => '入力内容に誤りがあります',

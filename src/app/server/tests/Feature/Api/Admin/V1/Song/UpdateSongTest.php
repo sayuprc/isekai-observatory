@@ -99,7 +99,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'tags' => [['tagId' => $newTag->tagId->value]],
                 'media' => [['mediaId' => $newMedia->mediaId->value, 'orderNo' => 1]],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'song' => [
                     'songId' => $songId,
@@ -182,7 +182,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'tags' => [],
                 'media' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('song.lyricsLink', null)
             ->assertJsonPath('song.media', []);
     }
@@ -242,7 +242,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'tags' => [],
                 'media' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'song' => [
                     'songId' => $routeSongId,
@@ -289,7 +289,7 @@ class UpdateSongTest extends DatabaseTestCase
             'persons' => [],
             'tags' => [],
             'media' => [],
-        ])->assertStatus(404);
+        ])->assertNotFound();
     }
 
     #[Test]
@@ -317,7 +317,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'tags' => [['tagId' => $this->generateUuid()]],
                 'media' => [],
             ])
-            ->assertStatus(400);
+            ->assertBadRequest();
     }
 
     #[Test]
@@ -351,7 +351,7 @@ class UpdateSongTest extends DatabaseTestCase
                 ],
                 'media' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -384,7 +384,7 @@ class UpdateSongTest extends DatabaseTestCase
                 'tags' => [],
                 'media' => [],
             ])
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

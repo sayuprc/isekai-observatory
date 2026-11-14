@@ -28,6 +28,7 @@ use Mockery;
 use Mockery\MockInterface;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Tests\Support\Domain\EntityFactory;
@@ -73,7 +74,7 @@ class RegisterStartUseCaseTest extends TestCase
         $this->consumeService
             ->shouldReceive('verify')
             ->withArgs(
-                static fn (string $plainToken, Email $email): bool => (
+                static fn (#[SensitiveParameter] string $plainToken, Email $email): bool => (
                     $plainToken === 'plain-token'
                     && $email->value === 'invitee@example.com'
                 ),

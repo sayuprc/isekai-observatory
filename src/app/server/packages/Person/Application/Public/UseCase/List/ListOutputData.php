@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Person\Application\Public\UseCase\List;
 
 use Person\Application\Public\Query\PersonListItem;
+use SensitiveParameter;
 
 readonly class ListOutputData
 {
@@ -13,6 +14,7 @@ readonly class ListOutputData
      */
     public function __construct(
         public array $persons,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

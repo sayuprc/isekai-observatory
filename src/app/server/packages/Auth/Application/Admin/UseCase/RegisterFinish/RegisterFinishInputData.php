@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Auth\Application\Admin\UseCase\RegisterFinish;
 
+use SensitiveParameter;
+
 readonly class RegisterFinishInputData
 {
     /**
@@ -11,6 +13,7 @@ readonly class RegisterFinishInputData
      */
     public function __construct(
         public string $authCeremonyId,
+        #[SensitiveParameter]
         public string $plainToken,
         public array $credential,
     ) {

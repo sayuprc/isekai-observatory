@@ -110,7 +110,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'releaseGroups' => [
                     [
@@ -263,7 +263,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(2, 'releaseGroups.0.releases.0.media.0.tracks')
             ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.0.songs.0.songId', $songId)
             ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.0.trackNo', 1)
@@ -302,7 +302,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroups.0.releases.0.releaseId', $releaseId1)
             ->assertJsonPath('releaseGroups.0.releases.1.releaseId', $releaseId2);
     }
@@ -322,7 +322,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroups.0.releases.0.releaseId', $releaseId)
             ->assertJsonPath('releaseGroups.0.releases.0.name', '');
     }
@@ -357,7 +357,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         // 最古発売日の降順なので新しい作品が先
         $response = $this
             ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2);
 
@@ -366,7 +366,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
             ->assertJsonMissingPath('nextCursor');
@@ -414,7 +414,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         // 同じ発売日なら order_no の降順で制御する
         $response = $this
             ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2);
 
@@ -423,7 +423,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
             ->assertJsonMissingPath('nextCursor');
@@ -435,7 +435,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
     {
         $this
             ->get(route(ViewerReleaseGroupRouteMap::List, ['cursor' => $cursor]))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'カーソルが不正です。',

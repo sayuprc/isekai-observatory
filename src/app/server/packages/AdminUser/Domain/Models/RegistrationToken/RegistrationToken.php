@@ -8,11 +8,13 @@ use AdminUser\Domain\Models\Email;
 use AdminUser\Domain\Models\Permissions;
 use AdminUser\Domain\Models\Role;
 use DateTimeImmutable;
+use SensitiveParameter;
 
 readonly class RegistrationToken
 {
     public function __construct(
         public RegistrationTokenId $registrationTokenId,
+        #[SensitiveParameter]
         public HashedTokenValue $token,
         public Email $email,
         public Role $role,
@@ -27,6 +29,7 @@ readonly class RegistrationToken
      */
     public static function reconstruct(
         string $registrationTokenId,
+        #[SensitiveParameter]
         string $token,
         string $email,
         int $role,

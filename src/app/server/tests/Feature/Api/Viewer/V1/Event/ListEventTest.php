@@ -80,7 +80,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.status', 1)
@@ -121,7 +121,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('events.0.performances.0.coVocalists.0.name', 'メンバー')
             ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup.personGroupId', $personGroupId)
             ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup.name', 'グループ');
@@ -160,7 +160,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'events.0.releases')
             ->assertJsonPath('events.0.releases.0.releaseId', $visibleReleaseId)
             ->assertJsonPath('events.0.releases.0.releaseGroupId', $publicGroupId)
@@ -184,7 +184,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.schedule.startOn', '2026-10-01')
             ->assertJsonPath('events.0.schedule.endOn', '2026-10-03');
@@ -204,7 +204,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.tags', [
                 ['tagId' => $tagIdFirst, 'name' => 'タイアップA', 'orderNo' => 10],
@@ -219,7 +219,7 @@ class ListEventTest extends DatabaseTestCase
 
         $this
             ->get(route(ViewerEventRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(0, 'events');
     }
 
@@ -237,13 +237,13 @@ class ListEventTest extends DatabaseTestCase
 
         $first = $this
             ->get(route(ViewerEventRouteMap::List, ['limit' => 2]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('events.0.eventId', $undatedId)
             ->assertJsonPath('events.1.eventId', $earlierId);
 
         $this
             ->get(route(ViewerEventRouteMap::List, ['limit' => 2, 'cursor' => $first->json('nextCursor')]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $laterId)
             ->assertJsonMissingPath('nextCursor');
@@ -255,7 +255,7 @@ class ListEventTest extends DatabaseTestCase
     {
         $this
             ->get(route(ViewerEventRouteMap::List, ['cursor' => $cursor]))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'カーソルが不正です。',

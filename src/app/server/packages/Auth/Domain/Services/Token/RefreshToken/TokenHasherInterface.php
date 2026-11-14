@@ -10,5 +10,5 @@ interface TokenHasherInterface
 {
     public function hash(#[SensitiveParameter] string $plainToken): string;
 
-    public function verify(#[SensitiveParameter] string $plainToken, string $hashedToken): bool;
+    public function verify(#[SensitiveParameter] string $plainToken, #[SensitiveParameter] string $hashedToken): bool;
 }

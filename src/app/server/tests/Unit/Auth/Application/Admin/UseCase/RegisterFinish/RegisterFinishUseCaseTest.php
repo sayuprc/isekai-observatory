@@ -39,6 +39,7 @@ use Mockery\MockInterface;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
+use SensitiveParameter;
 use Support\Contracts\ClockInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
@@ -156,7 +157,7 @@ class RegisterFinishUseCaseTest extends TestCase
         $this->consumeService
             ->shouldReceive('verify')
             ->withArgs(
-                static fn (string $plainToken, Email $email): bool => (
+                static fn (#[SensitiveParameter] string $plainToken, Email $email): bool => (
                     $plainToken === 'plain-token'
                     && $email->value === 'invitee@example.com'
                 ),
@@ -321,7 +322,7 @@ class RegisterFinishUseCaseTest extends TestCase
         $this->consumeService
             ->shouldReceive('verify')
             ->withArgs(
-                static fn (string $plainToken, Email $email): bool => (
+                static fn (#[SensitiveParameter] string $plainToken, Email $email): bool => (
                     $plainToken === 'plain-token'
                     && $email->value === 'invitee@example.com'
                 ),

@@ -68,7 +68,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'releaseGroups' => [
                     [
@@ -157,7 +157,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
             ->assertJsonPath('releaseGroups.1.releaseGroupId', $releaseGroupId1);
     }
@@ -210,7 +210,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
             ->assertJsonPath('releaseGroups.1.releaseGroupId', $releaseGroupId1);
     }
@@ -231,7 +231,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search) . '?title=春&type=2&is_display=1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1);
     }
@@ -274,7 +274,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search, ['sort' => 'first_released_on', 'order' => 'asc']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
             ->assertJsonPath('releaseGroups.1.releaseGroupId', $releaseGroupId2)
             ->assertJsonPath('releaseGroups.2.releaseGroupId', $releaseGroupId3);
@@ -294,7 +294,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search, ['sort' => 'title', 'order' => 'asc']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
             ->assertJsonPath('releaseGroups.1.releaseGroupId', $releaseGroupId1);
     }
@@ -319,7 +319,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search, ['tag_id' => $tagId]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $taggedId)
             ->assertJsonPath('maxPage', 1);

@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
+use SensitiveParameter;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 
@@ -45,7 +46,7 @@ class RegisterStartTest extends DatabaseTestCase
                 'email' => 'invitee@example.com',
                 'name' => '新規ユーザー',
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->whereType('authCeremonyId', 'string')
@@ -69,7 +70,7 @@ class RegisterStartTest extends DatabaseTestCase
             'token' => 'wrong-token',
             'email' => 'invitee@example.com',
             'name' => '新規ユーザー',
-        ])->assertStatus(400);
+        ])->assertBadRequest();
 
         $this->assertSame(0, DB::table('admin_users')->count());
         $token = DB::table('admin_user_registration_tokens')->first();
@@ -92,7 +93,7 @@ class RegisterStartTest extends DatabaseTestCase
             'token' => 'plain-token',
             'email' => 'invitee@example.com',
             'name' => '新規ユーザー',
-        ])->assertStatus(400);
+        ])->assertBadRequest();
 
         $this->assertSame(1, DB::table('admin_users')->count());
         $token = DB::table('admin_user_registration_tokens')->first();
@@ -109,7 +110,7 @@ class RegisterStartTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RegisterStart), [
             'email' => 'invitee@example.com',
             'name' => '新規ユーザー',
-        ])->assertStatus(422);
+        ])->assertUnprocessable();
 
         $this->assertSame(0, DB::table('admin_users')->count());
         $token = DB::table('admin_user_registration_tokens')->first();
@@ -155,7 +156,7 @@ class RegisterStartTest extends DatabaseTestCase
         });
     }
 
-    private function saveToken(string $plainToken, string $email): void
+    private function saveToken(#[SensitiveParameter] string $plainToken, string $email): void
     {
         $hashedToken = $this->app->make(TokenHasherInterface::class)->hash($plainToken);
 

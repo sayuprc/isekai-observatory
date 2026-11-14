@@ -45,7 +45,7 @@ class SearchMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['title' => 'テストメディア']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'media')
             ->assertJsonPath('media.0.title', 'テストメディアMV')
             ->assertJsonPath('media.0.publishedAt', '2024-03-01T12:00:00+09:00')
@@ -74,7 +74,7 @@ class SearchMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['title' => 'oBSERVATORY']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'media')
             ->assertJsonPath('media.0.title', 'Observatory MV');
     }
@@ -94,7 +94,7 @@ class SearchMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['per_page' => 25]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'media')
             ->assertJsonPath('media.0.title', 'テストメディアMV')
             ->assertJsonPath('maxPage', 1);
@@ -132,7 +132,7 @@ class SearchMediaTest extends DatabaseTestCase
                 'type' => MediaType::Mv->value,
                 'is_display' => 'true',
             ]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'media')
             ->assertJsonPath('media.0.title', 'MV')
             ->assertJsonPath('media.0.type', MediaType::Mv->value)
@@ -166,7 +166,7 @@ class SearchMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['sort' => 'published_at', 'order' => 'desc']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('media.0.mediaId', $newerId)
             ->assertJsonPath('media.1.mediaId', $olderId);
     }
@@ -183,7 +183,7 @@ class SearchMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['sort' => 'title', 'order' => 'asc']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('media.0.mediaId', $idA)
             ->assertJsonPath('media.1.mediaId', $idI);
     }
@@ -229,7 +229,7 @@ class SearchMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['sort' => 'published_at', 'order' => 'asc']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('media.0.mediaId', $mediaId)
             ->assertJsonPath('media.0.songCount', 2)
             ->assertJsonPath('media.0.eventCount', 1)
@@ -263,7 +263,7 @@ class SearchMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['tag_id' => $tagId]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'media')
             ->assertJsonPath('media.0.mediaId', $taggedId)
             ->assertJsonPath('maxPage', 1);

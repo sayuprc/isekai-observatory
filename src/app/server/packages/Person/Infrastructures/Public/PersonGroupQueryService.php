@@ -10,6 +10,7 @@ use Person\Application\Public\Query\PersonGroupListItem;
 use Person\Application\Public\Query\PersonGroupListPage;
 use Person\Application\Public\Query\PersonGroupListPageToken;
 use Person\Application\Public\Query\PersonGroupQueryServiceInterface;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -23,7 +24,7 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
     }
 
     #[Override]
-    public function list(?string $pageToken, int $pageSize): PersonGroupListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): PersonGroupListPage
     {
         $query = $this->queryFactory
             ->select()

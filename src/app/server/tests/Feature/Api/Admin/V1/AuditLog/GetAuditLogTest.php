@@ -58,7 +58,7 @@ class GetAuditLogTest extends DatabaseTestCase
         $response = $this
             ->withAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
-            ->assertStatus(200)
+            ->assertOk()
             ->json();
 
         $this->assertArrayHasKey('auditLog', $response);
@@ -105,7 +105,7 @@ class GetAuditLogTest extends DatabaseTestCase
         $response = $this
             ->withAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
-            ->assertStatus(200)
+            ->assertOk()
             ->json();
 
         $this->assertSame('Release', $response['auditLog']['targetType']);
@@ -133,7 +133,7 @@ class GetAuditLogTest extends DatabaseTestCase
         $this
             ->withGeneralAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 
     #[Test]
@@ -144,6 +144,6 @@ class GetAuditLogTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

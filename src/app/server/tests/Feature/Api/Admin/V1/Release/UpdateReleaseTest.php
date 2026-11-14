@@ -82,7 +82,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -167,7 +167,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -236,7 +236,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -277,7 +277,7 @@ class UpdateReleaseTest extends DatabaseTestCase
             'orderNo' => 1,
             'formats' => [],
             'media' => [],
-        ])->assertStatus(422);
+        ])->assertUnprocessable();
     }
 
     #[Test]
@@ -295,7 +295,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
             ])
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     #[Test]
@@ -313,7 +313,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
             ])
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     #[Test]
@@ -341,7 +341,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
             ])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 
     #[Test]
@@ -384,7 +384,7 @@ class UpdateReleaseTest extends DatabaseTestCase
                     ],
                 ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(

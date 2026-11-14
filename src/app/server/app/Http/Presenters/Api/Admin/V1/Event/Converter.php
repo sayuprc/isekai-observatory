@@ -113,10 +113,7 @@ class Converter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setIsDisplay($release->isDisplay)
-            ->setFormats(array_map(
-                static fn (int $formatValue): ReleaseFormatValue => ReleaseFormatValue::from($formatValue),
-                $release->formatValues,
-            ));
+            ->setFormats(array_map(ReleaseFormatValue::from(...), $release->formatValues));
     }
 
     private function toOpenApiSource(AssembledSource $source): OpenApiEventSource

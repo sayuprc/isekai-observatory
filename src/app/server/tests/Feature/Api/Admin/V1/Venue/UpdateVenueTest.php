@@ -31,7 +31,7 @@ class UpdateVenueTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->putJson(route(VenueRouteMap::Update, $venueId), ['name' => ' 配信先サンプルB ', 'kind' => 2])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'venue' => [
                     'venueId' => $venueId,
@@ -55,6 +55,6 @@ class UpdateVenueTest extends DatabaseTestCase
                 'name' => '配信先サンプルB',
                 'kind' => 2,
             ])
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

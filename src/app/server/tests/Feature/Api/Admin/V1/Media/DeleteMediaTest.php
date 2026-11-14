@@ -31,7 +31,7 @@ class DeleteMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(MediaRouteMap::Delete, $uuid))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertNull($repository->find($media->mediaId));
     }
@@ -66,7 +66,7 @@ class DeleteMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(MediaRouteMap::Delete, $mediaId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'このメディアは楽曲に使用されているため削除できません',
@@ -81,6 +81,6 @@ class DeleteMediaTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->delete(route(MediaRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 }

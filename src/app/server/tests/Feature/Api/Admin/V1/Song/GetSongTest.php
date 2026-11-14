@@ -78,7 +78,7 @@ class GetSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Get, $songId))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'song' => [
                     'songId' => $songId,
@@ -139,7 +139,7 @@ class GetSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Get, $songId))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('song.lyricsLink', null)
             ->assertJsonPath('song.media', []);
     }
@@ -152,6 +152,6 @@ class GetSongTest extends DatabaseTestCase
         $this
             ->withAuth()
             ->get(route(SongRouteMap::Get, $uuid))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Release\Application\Public\UseCase\List;
 
 use Release\Application\Public\Query\ReleaseGroupListItem;
+use SensitiveParameter;
 
 readonly class ListOutputData
 {
@@ -13,6 +14,7 @@ readonly class ListOutputData
      */
     public function __construct(
         public array $releaseGroups,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

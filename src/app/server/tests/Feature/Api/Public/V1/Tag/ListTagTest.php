@@ -92,7 +92,7 @@ class ListTagTest extends DatabaseTestCase
 
         $this
             ->get(route(PublicTagRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'items' => [
                     ['tagId' => $mediaTagId, 'name' => 'メディアのタグ'],
@@ -119,12 +119,12 @@ class ListTagTest extends DatabaseTestCase
 
         $first = $this
             ->get(route(PublicTagRouteMap::List, ['pageSize' => 1]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.tagId', $firstId);
 
         $this
             ->get(route(PublicTagRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('items.0.tagId', $secondId)
             ->assertJsonMissingPath('nextPageToken');
     }

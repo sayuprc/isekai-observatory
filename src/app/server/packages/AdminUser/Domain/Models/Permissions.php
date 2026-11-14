@@ -33,7 +33,7 @@ readonly class Permissions extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(static fn (string $item): Permission => Permission::from($item), $items));
+        return new self(array_map(Permission::from(...), $items));
     }
 
     /**

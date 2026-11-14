@@ -65,9 +65,6 @@ class Converter
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo)
-            ->setFormats(array_map(
-                static fn (int $formatValue): ReleaseFormatValue => ReleaseFormatValue::from($formatValue),
-                $release->formatValues,
-            ));
+            ->setFormats(array_map(ReleaseFormatValue::from(...), $release->formatValues));
     }
 }

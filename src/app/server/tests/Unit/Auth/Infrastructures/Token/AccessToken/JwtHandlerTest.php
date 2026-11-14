@@ -43,7 +43,7 @@ class JwtHandlerTest extends TestCase
         ));
 
         $elements = explode('.', $jwt);
-        $payload = json_decode(base64_decode($elements[1]), true);
+        $payload = json_decode(base64_decode($elements[1], strict: true), true);
 
         $this->assertSame(
             [
