@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Support\Infrastructures;
 
+use CuyZ\Valinor\Mapper\Configurator\MapKeysToCamelCase;
 use CuyZ\Valinor\Mapper\Source\Source;
 use CuyZ\Valinor\MapperBuilder;
 use Override;
@@ -23,7 +24,8 @@ readonly class Mapper implements MapperInterface
             : $source;
 
         return $this->builder
+            ->configureWith(new MapKeysToCamelCase())
             ->mapper()
-            ->map($signature, Source::json($json)->camelCaseKeys());
+            ->map($signature, Source::json($json));
     }
 }

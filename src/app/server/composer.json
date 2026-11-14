@@ -33,6 +33,7 @@
     "nunomaduro/collision": "^8.7",
     "phparkitect/phparkitect": "^1.2.0",
     "phpmetrics/phpmetrics": "^2.9",
+    "phpstan/phpstan-deprecation-rules": "^2.0",
     "symplify/easy-coding-standard": "^13.0"
   },
   "autoload": {
