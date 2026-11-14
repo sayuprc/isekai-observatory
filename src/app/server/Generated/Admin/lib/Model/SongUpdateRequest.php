@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * SongUpdateRequest
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,34 +33,40 @@
 
 namespace OpenAPI\Admin\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Admin\Client\ObjectSerializer;
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * SongUpdateRequest Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializable
+class SongUpdateRequest implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'SongUpdateRequest';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'title' => 'string',
         'description' => 'string',
@@ -66,16 +77,18 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'order_no' => 'int',
         'persons' => '\OpenAPI\Admin\Client\Model\RequestSongPerson[]',
         'tags' => '\OpenAPI\Admin\Client\Model\RequestTag[]',
-        'media' => '\OpenAPI\Admin\Client\Model\RequestSongMediaLink[]'
+        'media' => '\OpenAPI\Admin\Client\Model\RequestSongMediaLink[]',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'title' => null,
         'description' => null,
@@ -86,14 +99,14 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'order_no' => 'int32',
         'persons' => null,
         'tags' => null,
-        'media' => null
+        'media' => null,
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'title' => false,
         'description' => false,
@@ -104,14 +117,14 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'order_no' => false,
         'persons' => false,
         'tags' => false,
-        'media' => false
+        'media' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -136,8 +149,6 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -147,7 +158,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -157,7 +168,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -166,9 +177,6 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -177,9 +185,6 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -190,7 +195,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'title' => 'title',
@@ -202,13 +207,13 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'order_no' => 'orderNo',
         'persons' => 'persons',
         'tags' => 'tags',
-        'media' => 'media'
+        'media' => 'media',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'title' => 'setTitle',
@@ -220,13 +225,13 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'order_no' => 'setOrderNo',
         'persons' => 'setPersons',
         'tags' => 'setTags',
-        'media' => 'setMedia'
+        'media' => 'setMedia',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'title' => 'getTitle',
@@ -238,7 +243,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         'order_no' => 'getOrderNo',
         'persons' => 'getPersons',
         'tags' => 'getTags',
-        'media' => 'getMedia'
+        'media' => 'getMedia',
     ];
 
     /**
@@ -282,19 +287,18 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -311,17 +315,17 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -340,7 +344,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
         }
-        if ((mb_strlen($this->container['title']) < 1)) {
+        if (mb_strlen($this->container['title']) < 1) {
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
@@ -362,7 +366,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['order_no'] === null) {
             $invalidProperties[] = "'order_no' can't be null";
         }
-        if (($this->container['order_no'] < 1)) {
+        if ($this->container['order_no'] < 1) {
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
@@ -375,6 +379,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['media'] === null) {
             $invalidProperties[] = "'media' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -388,7 +393,6 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets title
@@ -409,12 +413,12 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     public function setTitle($title)
     {
-        if (is_null($title)) {
-            throw new \InvalidArgumentException('non-nullable title cannot be null');
+        if ($title === null) {
+            throw new InvalidArgumentException('non-nullable title cannot be null');
         }
 
-        if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling SongUpdateRequest., must be bigger than or equal to 1.');
+        if (mb_strlen($title) < 1) {
+            throw new InvalidArgumentException('invalid length for $title when calling SongUpdateRequest., must be bigger than or equal to 1.');
         }
 
         $this->container['title'] = $title;
@@ -441,8 +445,8 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     public function setDescription($description)
     {
-        if (is_null($description)) {
-            throw new \InvalidArgumentException('non-nullable description cannot be null');
+        if ($description === null) {
+            throw new InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
 
@@ -468,8 +472,8 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     public function setNote($note)
     {
-        if (is_null($note)) {
-            throw new \InvalidArgumentException('non-nullable note cannot be null');
+        if ($note === null) {
+            throw new InvalidArgumentException('non-nullable note cannot be null');
         }
         $this->container['note'] = $note;
 
@@ -495,12 +499,12 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     public function setLyricsLink($lyrics_link)
     {
-        if (is_null($lyrics_link)) {
+        if ($lyrics_link === null) {
             array_push($this->openAPINullablesSetToNull, 'lyrics_link');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
             $index = array_search('lyrics_link', $nullablesSetToNull);
-            if ($index !== FALSE) {
+            if ($index !== false) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
@@ -513,7 +517,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets type
      *
-     * @return \OpenAPI\Admin\Client\Model\SongTypeValue
+     * @return SongTypeValue
      */
     public function getType()
     {
@@ -523,14 +527,14 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets type
      *
-     * @param \OpenAPI\Admin\Client\Model\SongTypeValue $type type
+     * @param SongTypeValue $type type
      *
      * @return self
      */
     public function setType($type)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if ($type === null) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
         $this->container['type'] = $type;
 
@@ -556,8 +560,8 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     public function setIsDisplay($is_display)
     {
-        if (is_null($is_display)) {
-            throw new \InvalidArgumentException('non-nullable is_display cannot be null');
+        if ($is_display === null) {
+            throw new InvalidArgumentException('non-nullable is_display cannot be null');
         }
         $this->container['is_display'] = $is_display;
 
@@ -583,12 +587,12 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     public function setOrderNo($order_no)
     {
-        if (is_null($order_no)) {
-            throw new \InvalidArgumentException('non-nullable order_no cannot be null');
+        if ($order_no === null) {
+            throw new InvalidArgumentException('non-nullable order_no cannot be null');
         }
 
-        if (($order_no < 1)) {
-            throw new \InvalidArgumentException('invalid value for $order_no when calling SongUpdateRequest., must be bigger than or equal to 1.');
+        if ($order_no < 1) {
+            throw new InvalidArgumentException('invalid value for $order_no when calling SongUpdateRequest., must be bigger than or equal to 1.');
         }
 
         $this->container['order_no'] = $order_no;
@@ -599,7 +603,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets persons
      *
-     * @return \OpenAPI\Admin\Client\Model\RequestSongPerson[]
+     * @return array<RequestSongPerson>
      */
     public function getPersons()
     {
@@ -609,14 +613,14 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets persons
      *
-     * @param \OpenAPI\Admin\Client\Model\RequestSongPerson[] $persons persons
+     * @param array<RequestSongPerson> $persons persons
      *
      * @return self
      */
     public function setPersons($persons)
     {
-        if (is_null($persons)) {
-            throw new \InvalidArgumentException('non-nullable persons cannot be null');
+        if ($persons === null) {
+            throw new InvalidArgumentException('non-nullable persons cannot be null');
         }
         $this->container['persons'] = $persons;
 
@@ -626,7 +630,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets tags
      *
-     * @return \OpenAPI\Admin\Client\Model\RequestTag[]
+     * @return array<RequestTag>
      */
     public function getTags()
     {
@@ -636,14 +640,14 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets tags
      *
-     * @param \OpenAPI\Admin\Client\Model\RequestTag[] $tags tags
+     * @param array<RequestTag> $tags tags
      *
      * @return self
      */
     public function setTags($tags)
     {
-        if (is_null($tags)) {
-            throw new \InvalidArgumentException('non-nullable tags cannot be null');
+        if ($tags === null) {
+            throw new InvalidArgumentException('non-nullable tags cannot be null');
         }
         $this->container['tags'] = $tags;
 
@@ -653,7 +657,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets media
      *
-     * @return \OpenAPI\Admin\Client\Model\RequestSongMediaLink[]
+     * @return array<RequestSongMediaLink>
      */
     public function getMedia()
     {
@@ -663,25 +667,24 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets media
      *
-     * @param \OpenAPI\Admin\Client\Model\RequestSongMediaLink[] $media media
+     * @param array<RequestSongMediaLink> $media media
      *
      * @return self
      */
     public function setMedia($media)
     {
-        if (is_null($media)) {
-            throw new \InvalidArgumentException('non-nullable media cannot be null');
+        if ($media === null) {
+            throw new InvalidArgumentException('non-nullable media cannot be null');
         }
         $this->container['media'] = $media;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -691,11 +694,11 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -706,12 +709,10 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -721,9 +722,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -732,15 +731,16 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -752,7 +752,7 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -766,5 +766,3 @@ class SongUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

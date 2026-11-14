@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * RoleValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * RoleValue Class Doc Comment
  *
  * @category Class
+ *
  * @description 役割の値
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum RoleValue: int
@@ -54,7 +62,4 @@ enum RoleValue: int
      * 一般
      */
     case GENERAL = 3;
-
 }
-
-

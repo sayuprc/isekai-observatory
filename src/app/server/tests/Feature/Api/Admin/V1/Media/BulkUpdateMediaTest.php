@@ -34,14 +34,18 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($otherTagId, 'タグB', 20));
         $this->storeMedia(
             $this->createMedia($first, 'MV1', 'https://example.com/1', MediaType::Mv, true),
-            $this->createMedia($second, 'MV2', 'https://example.com/2', MediaType::Mv, true, tags: [['tagId' => $tagId]]),
+            $this->createMedia($second, 'MV2', 'https://example.com/2', MediaType::Mv, true, tags: [[
+                'tagId' => $tagId,
+            ]]),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), [
                 'mediaIds' => [$first, $second],
                 'addTagIds' => [$tagId, $otherTagId],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson(['updatedCount' => 2]);
 
         $this->assertSame([$tagId, $otherTagId], $this->tagIdsOf($first));
@@ -59,13 +63,18 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $keptTagId = $this->generateUuid();
         $mediaId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($keptTagId, 'タグB', 20));
-        $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $tagId], ['tagId' => $keptTagId]]));
+        $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [
+            ['tagId' => $tagId],
+            ['tagId' => $keptTagId],
+        ]));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), [
                 'mediaIds' => [$mediaId],
                 'removeTagIds' => [$tagId],
-            ])->assertStatus(200);
+            ])
+            ->assertStatus(200);
 
         $this->assertSame([$keptTagId], $this->tagIdsOf($mediaId));
     }
@@ -80,11 +89,13 @@ class BulkUpdateMediaTest extends DatabaseTestCase
             $this->createMedia($second, 'MV2', 'https://example.com/2', MediaType::Mv, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), [
                 'mediaIds' => [$first, $second],
                 'isDisplay' => false,
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(MediaRepository::class);
@@ -100,12 +111,14 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $this->storeTags($this->createTag($tagId, 'タグA', 10));
         $this->storeMedia($this->createMedia($existing, 'MV', 'https://example.com/mv', MediaType::Mv, true));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), [
                 'mediaIds' => [$existing, $this->generateUuid()],
                 'addTagIds' => [$tagId],
                 'isDisplay' => false,
-            ])->assertStatus(404);
+            ])
+            ->assertStatus(404);
 
         $media = $this->app->make(MediaRepository::class)->find(new MediaId($existing));
         $this->assertTrue($media?->isDisplay);
@@ -118,11 +131,13 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $mediaId = $this->generateUuid();
         $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), [
                 'mediaIds' => [$mediaId],
                 'addTagIds' => [$this->generateUuid()],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -132,7 +147,8 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $mediaId = $this->generateUuid();
         $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), ['mediaIds' => [$mediaId]])
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
@@ -146,19 +162,22 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $this->storeTags($this->createTag($tagId, 'タグA', 10));
         $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), [
                 'mediaIds' => [$mediaId],
                 'addTagIds' => [$tagId],
                 'removeTagIds' => [$tagId],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
     #[Test]
     public function emptyMediaIdsIsRejected(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), ['mediaIds' => [], 'isDisplay' => false])
             ->assertStatus(422);
     }
@@ -169,7 +188,8 @@ class BulkUpdateMediaTest extends DatabaseTestCase
         $mediaId = $this->generateUuid();
         $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true));
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->postJson(route(MediaRouteMap::BulkUpdate), ['mediaIds' => [$mediaId], 'isDisplay' => false])
             ->assertStatus(403);
     }

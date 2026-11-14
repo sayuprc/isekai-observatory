@@ -27,7 +27,8 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
     #[Override]
     public function list(?string $pageToken, int $pageSize): MediaListPage
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(['media_id', 'title', 'url', 'published_at', 'type'])
             ->from('media')
             ->where('is_display', '=', true);
@@ -35,23 +36,25 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
         if (is_string($pageToken)) {
             $decoded = MediaListPageToken::decode($pageToken);
 
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(title > %s OR (title = %s AND media_id > %s))',
                 Sql::value($decoded->title),
                 Sql::value($decoded->title),
                 Sql::value($this->converter->toBin($decoded->mediaId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $query->orderBy('title')
-                ->orderBy('media_id')
-                ->limit($pageSize + 1),
-        );
+        $rows = $query
+            ->orderBy('title')
+            ->orderBy('media_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
-        $tagIdsByMedia = $this->loadTagIds(array_map(static fn (array $row): string => Row::string($row, 'media_id'), $pageRows));
+        $tagIdsByMedia = array_map(static fn (array $row): string => Row::string($row, 'media_id'), $pageRows)
+            |> $this->loadTagIds(...);
 
         $media = array_map(
             fn (array $row): MediaListItem => new MediaListItem(
@@ -71,7 +74,10 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
             $media,
             $lastRow === null
                 ? null
-                : MediaListPageToken::encode(Row::string($lastRow, 'title'), $this->converter->toUuid(Row::string($lastRow, 'media_id'))),
+                : MediaListPageToken::encode(
+                    Row::string($lastRow, 'title'),
+                    $this->converter->toUuid(Row::string($lastRow, 'media_id')),
+                ),
         );
     }
 
@@ -86,16 +92,18 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['media_taggings.media_id', 'tags.tag_id'])
+            ->from('media_taggings')
+            ->join('tags', 'media_taggings.tag_id = tags.tag_id')
+            ->where('media_taggings.media_id', 'IN', $binMediaIds)
+            ->orderBy('tags.order_no')
+            ->orderBy('tags.tag_id')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['media_taggings.media_id', 'tags.tag_id'])
-                ->from('media_taggings')
-                ->join('tags', 'media_taggings.tag_id = tags.tag_id')
-                ->where('media_taggings.media_id', 'IN', $binMediaIds)
-                ->orderBy('tags.order_no')
-                ->orderBy('tags.tag_id'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'media_id')][] = $this->converter->toUuid(Row::string($row, 'tag_id'));
         }
 

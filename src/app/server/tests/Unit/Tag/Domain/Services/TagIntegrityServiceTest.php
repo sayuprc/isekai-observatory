@@ -40,19 +40,22 @@ class TagIntegrityServiceTest extends TestCase
         $uuid = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $maxOrderNo = 20;
 
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn($uuid)
             ->once();
 
-        $this->repository->shouldReceive('getMaxOrderNo')
+        $this->repository
+            ->shouldReceive('getMaxOrderNo')
             ->with()
             ->andReturn($maxOrderNo)
             ->once();
 
         $expectedTag = $this->createTag($uuid, $name, $maxOrderNo + 10);
 
-        $this->repository->shouldReceive('findByName')
+        $this->repository
+            ->shouldReceive('findByName')
             ->withArgs(static fn (TagName $arg): bool => $arg->value === $name)
             ->andReturnNull()
             ->once();
@@ -69,19 +72,22 @@ class TagIntegrityServiceTest extends TestCase
         $uuid = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $maxOrderNo = 20;
 
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn($uuid)
             ->once();
 
-        $this->repository->shouldReceive('getMaxOrderNo')
+        $this->repository
+            ->shouldReceive('getMaxOrderNo')
             ->with()
             ->andReturn($maxOrderNo)
             ->once();
 
         $expectedTag = $this->createTag($uuid, $name, $maxOrderNo + 10);
 
-        $this->repository->shouldReceive('findByName')
+        $this->repository
+            ->shouldReceive('findByName')
             ->withArgs(static fn (TagName $arg): bool => $arg->value === $name)
             ->andReturn($this->createTag('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', $name, 10))
             ->once();
@@ -100,7 +106,8 @@ class TagIntegrityServiceTest extends TestCase
 
         $expectedTag = $this->createTag($tagId, $name, $orderNo);
 
-        $this->repository->shouldReceive('findByName')
+        $this->repository
+            ->shouldReceive('findByName')
             ->withArgs(static fn (TagName $arg): bool => $arg->value === $name)
             ->andReturn($expectedTag)
             ->once();
@@ -119,7 +126,8 @@ class TagIntegrityServiceTest extends TestCase
 
         $expectedTag = $this->createTag($tagId, $name, $orderNo);
 
-        $this->repository->shouldReceive('findByName')
+        $this->repository
+            ->shouldReceive('findByName')
             ->withArgs(static fn (TagName $arg): bool => $arg->value === $name)
             ->andReturn($this->createTag('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', $name, 10))
             ->once();

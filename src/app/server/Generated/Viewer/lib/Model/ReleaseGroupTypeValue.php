@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseGroupTypeValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Viewer\Client\Model;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
 
 /**
  * ReleaseGroupTypeValue Class Doc Comment
  *
  * @category Class
+ *
  * @description リリースグループ種別の値
+ *
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum ReleaseGroupTypeValue: int
@@ -59,7 +67,4 @@ enum ReleaseGroupTypeValue: int
      * その他
      */
     case OTHER = 99;
-
 }
-
-

@@ -21,7 +21,9 @@ readonly class GetUseCase
     public function handle(GetInputData $inputData): GetOutputData
     {
         $this->authorizer->authorize(Permission::ReadVenue);
+
         $venueId = new VenueId($inputData->venueId);
+
         $venue = $this->repository->find($venueId);
 
         if ($venue === null) {

@@ -25,7 +25,8 @@ readonly class PersonQueryService implements PersonQueryServiceInterface
     #[Override]
     public function list(?string $pageToken, int $pageSize): PersonListPage
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(['person_id', 'name', 'order_no'])
             ->from('persons')
             ->where(new Sql('person_id IN (' . PublicReferenceSql::PERSON_IDS . ')'));
@@ -33,19 +34,20 @@ readonly class PersonQueryService implements PersonQueryServiceInterface
         if (is_string($pageToken)) {
             $decoded = PersonListPageToken::decode($pageToken);
 
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(order_no > %s OR (order_no = %s AND person_id > %s))',
                 Sql::value($decoded->orderNo),
                 Sql::value($decoded->orderNo),
                 Sql::value($this->converter->toBin($decoded->personId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $query->orderBy('order_no')
-                ->orderBy('person_id')
-                ->limit($pageSize + 1),
-        );
+        $rows = $query
+            ->orderBy('order_no')
+            ->orderBy('person_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
@@ -64,7 +66,10 @@ readonly class PersonQueryService implements PersonQueryServiceInterface
             $persons,
             $lastRow === null
                 ? null
-                : PersonListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'person_id'))),
+                : PersonListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'person_id')),
+                ),
         );
     }
 }

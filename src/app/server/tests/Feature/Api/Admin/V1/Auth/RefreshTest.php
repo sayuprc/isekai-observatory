@@ -34,12 +34,15 @@ class RefreshTest extends DatabaseTestCase
         $plainToken = 'plain-refresh-token';
         $refreshToken = $this->storeRefreshToken($plainToken, now()->addMinutes(30)->toDateTimeImmutable());
 
-        $this->postJson(route(AuthRouteMap::Refresh), [
-            'refreshTokenId' => $refreshToken->refreshTokenId->value,
-            'refreshToken' => $plainToken,
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::Refresh), [
+                'refreshTokenId' => $refreshToken->refreshTokenId->value,
+                'refreshToken' => $plainToken,
+            ])
+            ->assertStatus(200)
             ->assertJson(
-                static fn (AssertableJson $json) => $json->has('accessToken')
+                static fn (AssertableJson $json) => $json
+                    ->has('accessToken')
                     ->has('refreshTokenId')
                     ->has('refreshToken')
                     ->whereType('accessToken', 'string')

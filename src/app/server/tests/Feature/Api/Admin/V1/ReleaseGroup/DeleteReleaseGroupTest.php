@@ -27,7 +27,8 @@ class DeleteReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '削除対象', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseGroupRouteMap::Delete, $releaseGroupId))
             ->assertStatus(204);
 
@@ -47,7 +48,8 @@ class DeleteReleaseGroupTest extends DatabaseTestCase
             $this->createRelease($releaseId, $releaseGroupId, '通常盤', true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseGroupRouteMap::Delete, $releaseGroupId))
             ->assertStatus(400)
             ->assertJson(['message' => 'リリースが存在するため削除できません。']);
@@ -58,7 +60,8 @@ class DeleteReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function canDeleteEvenIfTargetDoesNotExist(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseGroupRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
             ->assertStatus(204);
     }
@@ -72,7 +75,8 @@ class DeleteReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '削除対象', ReleaseGroupType::Album, true),
         );
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->delete(route(ReleaseGroupRouteMap::Delete, $releaseGroupId))
             ->assertStatus(403);
     }
@@ -80,7 +84,8 @@ class DeleteReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function invalidId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete('/api/admin/v1/release-groups/invalid-id')
             ->assertStatus(404);
     }

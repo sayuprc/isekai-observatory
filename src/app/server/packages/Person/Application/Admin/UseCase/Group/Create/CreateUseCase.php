@@ -32,7 +32,11 @@ readonly class CreateUseCase
         $this->authorizer->authorize(Permission::WritePerson);
 
         return $this->transaction->scope(function () use ($inputData): CreateOutputData {
-            $personGroup = $this->service->prepareForCreate($inputData->name, $inputData->displayName, $inputData->members);
+            $personGroup = $this->service->prepareForCreate(
+                $inputData->name,
+                $inputData->displayName,
+                $inputData->members,
+            );
 
             $this->repository->save($personGroup);
 

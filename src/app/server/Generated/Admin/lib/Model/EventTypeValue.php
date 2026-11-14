@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * EventTypeValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * EventTypeValue Class Doc Comment
  *
  * @category Class
+ *
  * @description イベント種別
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum EventTypeValue: int
@@ -64,7 +72,4 @@ enum EventTypeValue: int
      * その他
      */
     case OTHER = 99;
-
 }
-
-

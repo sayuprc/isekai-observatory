@@ -23,11 +23,14 @@ class TracksTest extends TestCase
             ['songIds' => [self::SONG_ID], 'title' => '楽曲A -instrumental-', 'trackNo' => 3],
         ]);
 
-        $this->assertSame([
-            ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
-            ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
-            ['song_ids' => [self::SONG_ID], 'title' => '楽曲A -instrumental-', 'track_no' => 3],
-        ], $result->toArray());
+        $this->assertSame(
+            [
+                ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
+                ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
+                ['song_ids' => [self::SONG_ID], 'title' => '楽曲A -instrumental-', 'track_no' => 3],
+            ],
+            $result->toArray(),
+        );
     }
 
     #[Test]
@@ -71,9 +74,12 @@ class TracksTest extends TestCase
             ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 2],
         ]);
 
-        $this->assertSame([
-            ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
-            ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
-        ], $tracks->toArray());
+        $this->assertSame(
+            [
+                ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
+                ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
+            ],
+            $tracks->toArray(),
+        );
     }
 }

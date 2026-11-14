@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseGroupBulkUpdateRequest
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,73 +33,83 @@
 
 namespace OpenAPI\Admin\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Admin\Client\ObjectSerializer;
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * ReleaseGroupBulkUpdateRequest Class Doc Comment
  *
  * @category Class
+ *
  * @description リリースグループ一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \JsonSerializable
+class ReleaseGroupBulkUpdateRequest implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'ReleaseGroupBulkUpdateRequest';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'release_group_ids' => 'string[]',
         'add_tag_ids' => 'string[]',
         'remove_tag_ids' => 'string[]',
-        'is_display' => 'bool'
+        'is_display' => 'bool',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'release_group_ids' => 'uuid',
         'add_tag_ids' => 'uuid',
         'remove_tag_ids' => 'uuid',
-        'is_display' => null
+        'is_display' => null,
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'release_group_ids' => false,
         'add_tag_ids' => false,
         'remove_tag_ids' => false,
-        'is_display' => false
+        'is_display' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -119,8 +134,6 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -130,7 +143,7 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -140,7 +153,7 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -149,9 +162,6 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -160,9 +170,6 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -173,37 +180,37 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'release_group_ids' => 'releaseGroupIds',
         'add_tag_ids' => 'addTagIds',
         'remove_tag_ids' => 'removeTagIds',
-        'is_display' => 'isDisplay'
+        'is_display' => 'isDisplay',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'release_group_ids' => 'setReleaseGroupIds',
         'add_tag_ids' => 'setAddTagIds',
         'remove_tag_ids' => 'setRemoveTagIds',
-        'is_display' => 'setIsDisplay'
+        'is_display' => 'setIsDisplay',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'release_group_ids' => 'getReleaseGroupIds',
         'add_tag_ids' => 'getAddTagIds',
         'remove_tag_ids' => 'getRemoveTagIds',
-        'is_display' => 'getIsDisplay'
+        'is_display' => 'getIsDisplay',
     ];
 
     /**
@@ -247,19 +254,18 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -270,17 +276,17 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -299,11 +305,11 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
         if ($this->container['release_group_ids'] === null) {
             $invalidProperties[] = "'release_group_ids' can't be null";
         }
-        if ((count($this->container['release_group_ids']) > 100)) {
+        if (count($this->container['release_group_ids']) > 100) {
             $invalidProperties[] = "invalid value for 'release_group_ids', number of items must be less than or equal to 100.";
         }
 
-        if ((count($this->container['release_group_ids']) < 1)) {
+        if (count($this->container['release_group_ids']) < 1) {
             $invalidProperties[] = "invalid value for 'release_group_ids', number of items must be greater than or equal to 1.";
         }
 
@@ -321,11 +327,10 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
         return count($this->listInvalidProperties()) === 0;
     }
 
-
     /**
      * Gets release_group_ids
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getReleaseGroupIds()
     {
@@ -335,21 +340,21 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Sets release_group_ids
      *
-     * @param string[] $release_group_ids 対象のリリースグループID。1 リクエストで受け付ける上限は 100 件
+     * @param array<string> $release_group_ids 対象のリリースグループID。1 リクエストで受け付ける上限は 100 件
      *
      * @return self
      */
     public function setReleaseGroupIds($release_group_ids)
     {
-        if (is_null($release_group_ids)) {
-            throw new \InvalidArgumentException('non-nullable release_group_ids cannot be null');
+        if ($release_group_ids === null) {
+            throw new InvalidArgumentException('non-nullable release_group_ids cannot be null');
         }
 
-        if ((count($release_group_ids) > 100)) {
-            throw new \InvalidArgumentException('invalid value for $release_group_ids when calling ReleaseGroupBulkUpdateRequest., number of items must be less than or equal to 100.');
+        if (count($release_group_ids) > 100) {
+            throw new InvalidArgumentException('invalid value for $release_group_ids when calling ReleaseGroupBulkUpdateRequest., number of items must be less than or equal to 100.');
         }
-        if ((count($release_group_ids) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $release_group_ids when calling ReleaseGroupBulkUpdateRequest., number of items must be greater than or equal to 1.');
+        if (count($release_group_ids) < 1) {
+            throw new InvalidArgumentException('invalid length for $release_group_ids when calling ReleaseGroupBulkUpdateRequest., number of items must be greater than or equal to 1.');
         }
         $this->container['release_group_ids'] = $release_group_ids;
 
@@ -359,7 +364,7 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Gets add_tag_ids
      *
-     * @return string[]|null
+     * @return array<string>|null
      */
     public function getAddTagIds()
     {
@@ -369,14 +374,14 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Sets add_tag_ids
      *
-     * @param string[]|null $add_tag_ids 付与するタグ。付いているものは何もしない
+     * @param array<string>|null $add_tag_ids 付与するタグ。付いているものは何もしない
      *
      * @return self
      */
     public function setAddTagIds($add_tag_ids)
     {
-        if (is_null($add_tag_ids)) {
-            throw new \InvalidArgumentException('non-nullable add_tag_ids cannot be null');
+        if ($add_tag_ids === null) {
+            throw new InvalidArgumentException('non-nullable add_tag_ids cannot be null');
         }
         $this->container['add_tag_ids'] = $add_tag_ids;
 
@@ -386,7 +391,7 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Gets remove_tag_ids
      *
-     * @return string[]|null
+     * @return array<string>|null
      */
     public function getRemoveTagIds()
     {
@@ -396,14 +401,14 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Sets remove_tag_ids
      *
-     * @param string[]|null $remove_tag_ids 除去するタグ。付いていないものは何もしない
+     * @param array<string>|null $remove_tag_ids 除去するタグ。付いていないものは何もしない
      *
      * @return self
      */
     public function setRemoveTagIds($remove_tag_ids)
     {
-        if (is_null($remove_tag_ids)) {
-            throw new \InvalidArgumentException('non-nullable remove_tag_ids cannot be null');
+        if ($remove_tag_ids === null) {
+            throw new InvalidArgumentException('non-nullable remove_tag_ids cannot be null');
         }
         $this->container['remove_tag_ids'] = $remove_tag_ids;
 
@@ -429,19 +434,18 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
      */
     public function setIsDisplay($is_display)
     {
-        if (is_null($is_display)) {
-            throw new \InvalidArgumentException('non-nullable is_display cannot be null');
+        if ($is_display === null) {
+            throw new InvalidArgumentException('non-nullable is_display cannot be null');
         }
         $this->container['is_display'] = $is_display;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -451,11 +455,11 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -466,12 +470,10 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -481,9 +483,7 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -492,15 +492,16 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -512,7 +513,7 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -526,5 +527,3 @@ class ReleaseGroupBulkUpdateRequest implements ModelInterface, ArrayAccess, \Jso
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

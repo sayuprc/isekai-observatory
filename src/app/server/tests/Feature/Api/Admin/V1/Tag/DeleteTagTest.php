@@ -29,7 +29,8 @@ class DeleteTagTest extends DatabaseTestCase
         $repository = $this->app->make(TagRepository::class);
         $repository->save($this->createTag($uuid, 'テストタグA', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(TagRouteMap::Delete, $uuid))
             ->assertStatus(204);
 
@@ -57,7 +58,8 @@ class DeleteTagTest extends DatabaseTestCase
             [],
         ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
             ->assertStatus(400)
             ->assertExactJson([
@@ -75,7 +77,8 @@ class DeleteTagTest extends DatabaseTestCase
         $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
         $this->storeEvents($this->createEvent($this->generateUuid(), tags: [['tagId' => $tagId]]));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
             ->assertStatus(400)
             ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
@@ -86,9 +89,15 @@ class DeleteTagTest extends DatabaseTestCase
     {
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
-        $this->storeReleaseGroups($this->createReleaseGroup($this->generateUuid(), '作品', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]));
+        $this->storeReleaseGroups($this->createReleaseGroup(
+            $this->generateUuid(),
+            '作品',
+            ReleaseGroupType::Album,
+            tags: [['tagId' => $tagId]],
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
             ->assertStatus(400)
             ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
@@ -99,9 +108,17 @@ class DeleteTagTest extends DatabaseTestCase
     {
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
-        $this->storeMedia($this->createMedia($this->generateUuid(), 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $tagId]]));
+        $this->storeMedia($this->createMedia(
+            $this->generateUuid(),
+            'MV',
+            'https://example.com/mv',
+            MediaType::Mv,
+            true,
+            tags: [['tagId' => $tagId]],
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(TagRouteMap::Delete, $tagId))
             ->assertStatus(400)
             ->assertJsonPath('message', 'このタグはほかの記録に付いているため削除できません');
@@ -110,7 +127,8 @@ class DeleteTagTest extends DatabaseTestCase
     #[Test]
     public function canDeleteEvenIfTargetDoesNotExist(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(TagRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
             ->assertStatus(204);
     }

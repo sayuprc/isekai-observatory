@@ -36,7 +36,13 @@ class ListEventTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
-        $this->storeMedia($this->createMedia($mediaId, '公開メディア', 'https://example.com/public', MediaType::Mv, true));
+        $this->storeMedia($this->createMedia(
+            $mediaId,
+            '公開メディア',
+            'https://example.com/public',
+            MediaType::Mv,
+            true,
+        ));
         $tagIdFirst = $this->generateUuid();
         $tagIdSecond = $this->generateUuid();
         $this->storeTags(
@@ -52,15 +58,31 @@ class ListEventTest extends DatabaseTestCase
             media: [['mediaId' => $mediaId, 'orderNo' => 1]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/event', 'orderNo' => 1]],
             performances: [
-                ['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                    ['personId' => $personId, 'creditName' => '当日のユニット', 'personGroupId' => $personGroupId, 'orderNo' => 1],
-                ]],
+                [
+                    'performanceId' => $performanceId,
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [
+                        [
+                            'personId' => $personId,
+                            'creditName' => '当日のユニット',
+                            'personGroupId' => $personGroupId,
+                            'orderNo' => 1,
+                        ],
+                    ],
+                ],
             ],
-            setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
+            setlist: [[
+                'setlistItemId' => $this->generateUuid(),
+                'orderNo' => 1,
+                'label' => '本編',
+                'performanceIds' => [$performanceId],
+            ]],
             tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
         ));
 
-        $this->get(route(PublicEventRouteMap::List))
+        $this
+            ->get(route(PublicEventRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([
                 'items' => [[
@@ -78,7 +100,11 @@ class ListEventTest extends DatabaseTestCase
                         'performanceId' => $performanceId,
                         'songId' => $songId,
                         'songTitle' => '公開楽曲',
-                        'coVocalists' => [['personId' => $personId, 'creditName' => '当日のユニット', 'personGroupId' => $personGroupId]],
+                        'coVocalists' => [[
+                            'personId' => $personId,
+                            'creditName' => '当日のユニット',
+                            'personGroupId' => $personGroupId,
+                        ]],
                     ]],
                     'setlist' => [['label' => '本編', 'performanceIds' => [$performanceId]]],
                     'tagIds' => [$tagIdFirst, $tagIdSecond],
@@ -93,10 +119,16 @@ class ListEventTest extends DatabaseTestCase
         $this->storeSongs($this->createSong($songId, '非公開楽曲', '説明', SongType::Original, false, 1));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
-            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
+            performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [],
+            ]],
         ));
 
-        $this->get(route(PublicEventRouteMap::List))
+        $this
+            ->get(route(PublicEventRouteMap::List))
             ->assertStatus(200)
             ->assertJsonPath('items.0.performances.0.songId', null)
             ->assertJsonPath('items.0.performances.0.songTitle', '非公開楽曲');
@@ -136,7 +168,8 @@ class ListEventTest extends DatabaseTestCase
             ],
         ));
 
-        $this->get(route(PublicEventRouteMap::List))
+        $this
+            ->get(route(PublicEventRouteMap::List))
             ->assertStatus(200)
             ->assertJsonPath('items.0.mediaIds', [$visibleMediaId])
             ->assertJsonPath('items.0.releaseIds', [$visibleReleaseId]);
@@ -147,7 +180,8 @@ class ListEventTest extends DatabaseTestCase
     {
         $this->storeEvents($this->createEvent($this->generateUuid(), isDisplay: false));
 
-        $this->get(route(PublicEventRouteMap::List))
+        $this
+            ->get(route(PublicEventRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson(['items' => []]);
     }
@@ -164,12 +198,14 @@ class ListEventTest extends DatabaseTestCase
             $this->createEvent($secondId, title: 'B ライブ', startOn: null),
         );
 
-        $first = $this->get(route(PublicEventRouteMap::List, ['pageSize' => 2]))
+        $first = $this
+            ->get(route(PublicEventRouteMap::List, ['pageSize' => 2]))
             ->assertStatus(200)
             ->assertJsonPath('items.0.eventId', $firstId)
             ->assertJsonPath('items.1.eventId', $secondId);
 
-        $this->get(route(PublicEventRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
+        $this
+            ->get(route(PublicEventRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
             ->assertStatus(200)
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.eventId', $thirdId)
@@ -180,7 +216,8 @@ class ListEventTest extends DatabaseTestCase
     #[DataProvider('provideInvalidPageTokens')]
     public function rejectsInvalidPageToken(string $pageToken): void
     {
-        $this->get(route(PublicEventRouteMap::List, ['pageToken' => $pageToken]))
+        $this
+            ->get(route(PublicEventRouteMap::List, ['pageToken' => $pageToken]))
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
     }
@@ -201,7 +238,8 @@ class ListEventTest extends DatabaseTestCase
     #[DataProvider('provideOutOfRangePageSizes')]
     public function rejectsOutOfRangePageSize(int $pageSize): void
     {
-        $this->get(route(PublicEventRouteMap::List, ['pageSize' => $pageSize]))
+        $this
+            ->get(route(PublicEventRouteMap::List, ['pageSize' => $pageSize]))
             ->assertStatus(422)
             ->assertJsonPath('code', 'validation_failed');
     }

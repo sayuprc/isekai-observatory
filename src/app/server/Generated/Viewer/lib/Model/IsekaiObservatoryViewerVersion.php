@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * IsekaiObservatoryViewerVersion
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,14 +32,15 @@
  */
 
 namespace OpenAPI\Viewer\Client\Model;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
 
 /**
  * IsekaiObservatoryViewerVersion Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum IsekaiObservatoryViewerVersion: string
@@ -43,7 +49,4 @@ enum IsekaiObservatoryViewerVersion: string
      * バージョン 1
      */
     case V1 = 'v1';
-
 }
-
-

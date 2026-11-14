@@ -45,12 +45,14 @@ class SearchUseCaseTest extends TestCase
     {
         $tag = $this->createTag('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'テストタグA', 1);
 
-        $this->repository->shouldReceive('search')
+        $this->repository
+            ->shouldReceive('search')
             ->withArgs(static fn (TagSearchCriteria $criteria): bool => $criteria->name->isEmpty())
             ->andReturn([$tag])
             ->once();
 
-        $this->repository->shouldReceive('maxPage')
+        $this->repository
+            ->shouldReceive('maxPage')
             ->withArgs(static fn (TagSearchCriteria $criteria): bool => $criteria->name->isEmpty())
             ->andReturn(1)
             ->once();
@@ -68,13 +70,23 @@ class SearchUseCaseTest extends TestCase
     {
         $tag = $this->createTag('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'テストタグA', 1);
 
-        $this->repository->shouldReceive('search')
-            ->withArgs(static fn (TagSearchCriteria $criteria): bool => $criteria->name->isPresent() && $criteria->name->get() === 'テスト')
+        $this->repository
+            ->shouldReceive('search')
+            ->withArgs(
+                static fn (TagSearchCriteria $criteria): bool => (
+                    $criteria->name->isPresent() && $criteria->name->get() === 'テスト'
+                ),
+            )
             ->andReturn([$tag])
             ->once();
 
-        $this->repository->shouldReceive('maxPage')
-            ->withArgs(static fn (TagSearchCriteria $criteria): bool => $criteria->name->isPresent() && $criteria->name->get() === 'テスト')
+        $this->repository
+            ->shouldReceive('maxPage')
+            ->withArgs(
+                static fn (TagSearchCriteria $criteria): bool => (
+                    $criteria->name->isPresent() && $criteria->name->get() === 'テスト'
+                ),
+            )
             ->andReturn(1)
             ->once();
 
@@ -95,7 +107,11 @@ class SearchUseCaseTest extends TestCase
 
         $this->expectException(UnauthenticatedException::class);
 
-        $result = new SearchUseCase($this->authorizer($context), $this->repository, $this->usageCountQueryService)->handle(new SearchInputData());
+        $result = new SearchUseCase(
+            $this->authorizer($context),
+            $this->repository,
+            $this->usageCountQueryService,
+        )->handle(new SearchInputData());
     }
 
     #[Test]
@@ -117,7 +133,11 @@ class SearchUseCaseTest extends TestCase
 
         $this->expectException(PermissionDeniedException::class);
 
-        $result = new SearchUseCase($this->authorizer($context), $this->repository, $this->usageCountQueryService)->handle(new SearchInputData());
+        $result = new SearchUseCase(
+            $this->authorizer($context),
+            $this->repository,
+            $this->usageCountQueryService,
+        )->handle(new SearchInputData());
     }
 
     private function getInstance(): SearchUseCase

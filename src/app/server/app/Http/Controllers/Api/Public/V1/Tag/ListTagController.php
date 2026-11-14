@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use Tag\Application\Public\UseCase\List\ListInputData;
 use Tag\Application\Public\UseCase\List\ListUseCase;
 
-class ListTagController extends Controller
+final readonly class ListTagController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 

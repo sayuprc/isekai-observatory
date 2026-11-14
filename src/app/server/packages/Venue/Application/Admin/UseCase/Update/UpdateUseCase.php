@@ -29,6 +29,7 @@ readonly class UpdateUseCase
     public function handle(UpdateInputData $inputData): UpdateOutputData
     {
         $this->authorizer->authorize(Permission::WriteVenue);
+
         $venueId = new VenueId($inputData->venueId);
 
         return $this->transaction->scope(function () use ($inputData, $venueId): UpdateOutputData {
@@ -37,7 +38,9 @@ readonly class UpdateUseCase
             }
 
             $venue = $this->service->prepareForUpdate($inputData->venueId, $inputData->name, $inputData->kind);
+
             $this->repository->save($venue);
+
             $this->recorder->record(
                 AuditAction::Update,
                 AuditTargetType::Venue,

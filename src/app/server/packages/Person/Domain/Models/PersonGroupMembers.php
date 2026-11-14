@@ -38,13 +38,15 @@ readonly class PersonGroupMembers extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): PersonGroupMember => new PersonGroupMember(
-                new PersonId($item['personId']),
-                new OrderNo($item['orderNo']),
+        return new self(
+            array_map(
+                static fn (array $item): PersonGroupMember => new PersonGroupMember(
+                    new PersonId($item['personId']),
+                    new OrderNo($item['orderNo']),
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**
@@ -52,7 +54,11 @@ readonly class PersonGroupMembers extends ImmutableCollection
      */
     public function personIds(): array
     {
-        return array_values(array_map(static fn (PersonGroupMember $member): PersonId => $member->personId, $this->items));
+        return array_map(
+            static fn (PersonGroupMember $member): PersonId => $member->personId,
+            $this->items,
+        )
+            |> array_values(...);
     }
 
     /**
@@ -60,6 +66,10 @@ readonly class PersonGroupMembers extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (PersonGroupMember $member): array => $member->toArray(), $this->items));
+        return array_map(
+            static fn (PersonGroupMember $member): array => $member->toArray(),
+            $this->items,
+        )
+            |> array_values(...);
     }
 }

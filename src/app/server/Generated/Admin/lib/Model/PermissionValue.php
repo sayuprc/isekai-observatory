@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PermissionValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * PermissionValue Class Doc Comment
  *
  * @category Class
+ *
  * @description 権限の値
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum PermissionValue: string
@@ -124,7 +132,4 @@ enum PermissionValue: string
      * タグ編集
      */
     case WRITE_TAG = 'write_tag';
-
 }
-
-

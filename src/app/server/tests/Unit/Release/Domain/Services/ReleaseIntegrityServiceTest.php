@@ -51,18 +51,21 @@ class ReleaseIntegrityServiceTest extends TestCase
     #[Test]
     public function prepareForCreateSkipsSongExistenceCheckForTitleOnlyTracks(): void
     {
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn(self::RELEASE_ID)
             ->once();
 
-        $this->releaseGroupRepository->shouldReceive('find')
+        $this->releaseGroupRepository
+            ->shouldReceive('find')
             ->withArgs(static fn (ReleaseGroupId $arg): bool => $arg->value === self::RELEASE_GROUP_ID)
             ->andReturn($this->createReleaseGroup(self::RELEASE_GROUP_ID, '観測された春', ReleaseGroupType::Album))
             ->once();
 
         // 参照トラックの 1 曲だけ存在確認される(タイトルのみトラックはスキップ)
-        $this->songRepository->shouldReceive('find')
+        $this->songRepository
+            ->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === self::SONG_ID)
             ->andReturn($this->createSong(self::SONG_ID, 'テスト楽曲', '説明', SongType::Original, true, 10))
             ->once();
@@ -88,26 +91,32 @@ class ReleaseIntegrityServiceTest extends TestCase
             ],
         );
 
-        $this->assertSame([
-            ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
-            ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
-        ], $result->media->toArray()[0]['tracks']);
+        $this->assertSame(
+            [
+                ['song_ids' => [self::SONG_ID], 'title' => null, 'track_no' => 1],
+                ['song_ids' => [], 'title' => '管理対象外の楽曲', 'track_no' => 2],
+            ],
+            $result->media->toArray()[0]['tracks'],
+        );
     }
 
     #[Test]
     public function prepareForCreateFailsWhenReferencedSongDoesNotExist(): void
     {
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn(self::RELEASE_ID)
             ->once();
 
-        $this->releaseGroupRepository->shouldReceive('find')
+        $this->releaseGroupRepository
+            ->shouldReceive('find')
             ->withArgs(static fn (ReleaseGroupId $arg): bool => $arg->value === self::RELEASE_GROUP_ID)
             ->andReturn($this->createReleaseGroup(self::RELEASE_GROUP_ID, '観測された春', ReleaseGroupType::Album))
             ->once();
 
-        $this->songRepository->shouldReceive('find')
+        $this->songRepository
+            ->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === self::SONG_ID)
             ->andReturn(null)
             ->once();
@@ -136,7 +145,8 @@ class ReleaseIntegrityServiceTest extends TestCase
     #[Test]
     public function prepareForCreateFailsWhenFormatsAreEmpty(): void
     {
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn(self::RELEASE_ID)
             ->once();
@@ -159,7 +169,8 @@ class ReleaseIntegrityServiceTest extends TestCase
     #[Test]
     public function prepareForCreateFailsWhenFormatsAreDuplicated(): void
     {
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn(self::RELEASE_ID)
             ->once();

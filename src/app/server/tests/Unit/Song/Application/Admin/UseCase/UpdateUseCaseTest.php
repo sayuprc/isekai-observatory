@@ -71,18 +71,42 @@ class UpdateUseCaseTest extends TestCase
             ['personId' => $arrangerId = 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'role' => 3, 'orderNo' => 3],
         ];
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
-            ->andReturn($this->createSong($songId, $title, $description, $lyricsLink, SongType::from($typeValue), true, 1, note: $note))
+            ->andReturn($this->createSong(
+                $songId,
+                $title,
+                $description,
+                $lyricsLink,
+                SongType::from($typeValue),
+                true,
+                1,
+                note: $note,
+            ))
             ->once();
 
-        $this->service->shouldReceive('prepareForUpdate')
-            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
+        $this->service
+            ->shouldReceive('prepareForUpdate')
+            ->with(
+                $songId,
+                $title,
+                $description,
+                $note,
+                $lyricsLink,
+                $typeValue,
+                $isDisplay,
+                $orderNo,
+                [],
+                $persons,
+                [],
+            )
             ->andReturn(
                 $song = $this->createSong(
                     $songId,
@@ -99,13 +123,41 @@ class UpdateUseCaseTest extends TestCase
             )
             ->once();
 
-        $this->repository->shouldReceive('save')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+        $this->repository
+            ->shouldReceive('save')
+            ->withArgs(
+                fn (Song $arg): bool => $this->assertSong(
+                    $arg,
+                    $songId,
+                    $title,
+                    $description,
+                    $note,
+                    $lyricsLink,
+                    $typeValue,
+                    $isDisplay,
+                    $orderNo,
+                    $persons,
+                ),
+            )
             ->andReturn($song)
             ->once();
 
-        $this->assembler->shouldReceive('assemble')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+        $this->assembler
+            ->shouldReceive('assemble')
+            ->withArgs(
+                fn (Song $arg): bool => $this->assertSong(
+                    $arg,
+                    $songId,
+                    $title,
+                    $description,
+                    $note,
+                    $lyricsLink,
+                    $typeValue,
+                    $isDisplay,
+                    $orderNo,
+                    $persons,
+                ),
+            )
             ->andReturn(
                 new AssembledSong(
                     $song->songId->value,
@@ -159,18 +211,42 @@ class UpdateUseCaseTest extends TestCase
             ['personId' => 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'role' => 3, 'orderNo' => 3],
         ];
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
-            ->andReturn($this->createSong($songId, $title, $description, $lyricsLink, SongType::Original, true, 1, note: $note))
+            ->andReturn($this->createSong(
+                $songId,
+                $title,
+                $description,
+                $lyricsLink,
+                SongType::Original,
+                true,
+                1,
+                note: $note,
+            ))
             ->once();
 
-        $this->service->shouldReceive('prepareForUpdate')
-            ->with($songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, [], $persons, [])
+        $this->service
+            ->shouldReceive('prepareForUpdate')
+            ->with(
+                $songId,
+                $title,
+                $description,
+                $note,
+                $lyricsLink,
+                $typeValue,
+                $isDisplay,
+                $orderNo,
+                [],
+                $persons,
+                [],
+            )
             ->andThrow(new BusinessRuleViolationException('検証エラー'))
             ->once();
 
@@ -197,12 +273,14 @@ class UpdateUseCaseTest extends TestCase
     {
         $songId = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
             ->andReturnNull()
             ->once();

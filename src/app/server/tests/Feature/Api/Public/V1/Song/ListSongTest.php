@@ -52,7 +52,8 @@ class ListSongTest extends DatabaseTestCase
             media: [['mediaId' => $hiddenMediaId, 'orderNo' => 1], ['mediaId' => $visibleMediaId, 'orderNo' => 2]],
         ));
 
-        $this->get(route(PublicSongRouteMap::List))
+        $this
+            ->get(route(PublicSongRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([
                 'items' => [[
@@ -75,7 +76,8 @@ class ListSongTest extends DatabaseTestCase
     {
         $this->storeSongs($this->createSong($this->generateUuid(), '非公開楽曲', '説明', SongType::Original, false, 1));
 
-        $this->get(route(PublicSongRouteMap::List))
+        $this
+            ->get(route(PublicSongRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson(['items' => []]);
     }
@@ -92,12 +94,14 @@ class ListSongTest extends DatabaseTestCase
             $this->createSong($secondId, '楽曲 B', '説明', SongType::Original, true, 2),
         );
 
-        $first = $this->get(route(PublicSongRouteMap::List, ['pageSize' => 2]))
+        $first = $this
+            ->get(route(PublicSongRouteMap::List, ['pageSize' => 2]))
             ->assertStatus(200)
             ->assertJsonPath('items.0.songId', $firstId)
             ->assertJsonPath('items.1.songId', $secondId);
 
-        $this->get(route(PublicSongRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
+        $this
+            ->get(route(PublicSongRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
             ->assertStatus(200)
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.songId', $thirdId)
@@ -107,7 +111,8 @@ class ListSongTest extends DatabaseTestCase
     #[Test]
     public function rejectsInvalidPageToken(): void
     {
-        $this->get(route(PublicSongRouteMap::List, ['pageToken' => '***']))
+        $this
+            ->get(route(PublicSongRouteMap::List, ['pageToken' => '***']))
             ->assertStatus(400)
             ->assertJsonPath('code', 'business_rule_violation');
     }

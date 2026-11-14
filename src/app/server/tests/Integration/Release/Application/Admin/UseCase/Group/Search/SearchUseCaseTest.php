@@ -33,15 +33,36 @@ class SearchUseCaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId3, 'リリース未登録の作品', ReleaseGroupType::Ep, true),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, 'CD', true, new ImmutableDate('2026-03-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                'CD',
+                true,
+                new ImmutableDate('2026-03-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
         $result = $this->getInstance()->handle(new SearchInputData());
@@ -104,16 +125,42 @@ class SearchUseCaseTest extends DatabaseTestCase
         $releaseGroupId2 = $this->generateUuid();
 
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId1, '同日で order_no が小さい作品', ReleaseGroupType::Single, true, orderNo: 1),
-            $this->createReleaseGroup($releaseGroupId2, '同日で order_no が大きい作品', ReleaseGroupType::Album, true, orderNo: 2),
+            $this->createReleaseGroup(
+                $releaseGroupId1,
+                '同日で order_no が小さい作品',
+                ReleaseGroupType::Single,
+                true,
+                orderNo: 1,
+            ),
+            $this->createReleaseGroup(
+                $releaseGroupId2,
+                '同日で order_no が大きい作品',
+                ReleaseGroupType::Album,
+                true,
+                orderNo: 2,
+            ),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
         $result = $this->getInstance()->handle(new SearchInputData());
@@ -127,7 +174,12 @@ class SearchUseCaseTest extends DatabaseTestCase
     {
         foreach (range(1, 30) as $i) {
             $this->storeReleaseGroups(
-                $this->createReleaseGroup($this->generateUuid(), sprintf('作品%02d', $i), ReleaseGroupType::Single, true),
+                $this->createReleaseGroup(
+                    $this->generateUuid(),
+                    sprintf('作品%02d', $i),
+                    ReleaseGroupType::Single,
+                    true,
+                ),
             );
         }
 
@@ -154,14 +206,22 @@ class SearchUseCaseTest extends DatabaseTestCase
         // 楽曲1 は両方の版に収録されているが 1 曲と数え、タイトルだけのトラックは数えない
         $this->storeReleases(
             $this->createRelease($this->generateUuid(), $releaseGroupId, 'CD', true, media: [
-                ['position' => 1, 'name' => null, 'tracks' => [
-                    ['songIds' => [$songId1], 'title' => null, 'trackNo' => 1],
-                    ['songIds' => [$songId2], 'title' => null, 'trackNo' => 2],
-                    ['songIds' => [], 'title' => 'インスト', 'trackNo' => 3],
-                ]],
+                [
+                    'position' => 1,
+                    'name' => null,
+                    'tracks' => [
+                        ['songIds' => [$songId1], 'title' => null, 'trackNo' => 1],
+                        ['songIds' => [$songId2], 'title' => null, 'trackNo' => 2],
+                        ['songIds' => [], 'title' => 'インスト', 'trackNo' => 3],
+                    ],
+                ],
             ]),
             $this->createRelease($this->generateUuid(), $releaseGroupId, '配信', true, orderNo: 2, media: [
-                ['position' => 1, 'name' => null, 'tracks' => [['songIds' => [$songId1], 'title' => null, 'trackNo' => 1]]],
+                [
+                    'position' => 1,
+                    'name' => null,
+                    'tracks' => [['songIds' => [$songId1], 'title' => null, 'trackNo' => 1]],
+                ],
             ]),
         );
 

@@ -21,7 +21,8 @@ class CreateVenueTest extends DatabaseTestCase
     #[Test]
     public function canCreateAndNormalizeName(): void
     {
-        $response = $this->withAuth()
+        $response = $this
+            ->withAuth()
             ->postJson(route(VenueRouteMap::Create), [
                 'name' => '  配信先サンプルB  ',
                 'kind' => 2,
@@ -66,7 +67,8 @@ class CreateVenueTest extends DatabaseTestCase
     #[Test]
     public function generalUserWithoutPermissionIsForbidden(): void
     {
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->postJson(route(VenueRouteMap::Create), ['name' => '会場サンプルA', 'kind' => 1])
             ->assertStatus(403);
     }

@@ -33,18 +33,40 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         );
         $this->storeReleases(
             // 古い作品: 配信が先行、CD が後発。最古 2026-01-01 がグループの代表日になる
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, 'CD', true, new ImmutableDate('2026-03-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                'CD',
+                true,
+                new ImmutableDate('2026-03-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search))
             ->assertStatus(200)
             ->assertExactJson([
@@ -101,18 +123,39 @@ class SearchReleaseGroupTest extends DatabaseTestCase
 
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId1, '古いが先頭の作品', ReleaseGroupType::Single, true, orderNo: 1),
-            $this->createReleaseGroup($releaseGroupId2, '新しいが後続の作品', ReleaseGroupType::Album, true, orderNo: 2),
+            $this->createReleaseGroup(
+                $releaseGroupId2,
+                '新しいが後続の作品',
+                ReleaseGroupType::Album,
+                true,
+                orderNo: 2,
+            ),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search))
             ->assertStatus(200)
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
@@ -126,19 +169,46 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $releaseGroupId2 = $this->generateUuid();
 
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId1, '同日で order_no が小さい作品', ReleaseGroupType::Single, true, orderNo: 1),
-            $this->createReleaseGroup($releaseGroupId2, '同日で order_no が大きい作品', ReleaseGroupType::Album, true, orderNo: 2),
+            $this->createReleaseGroup(
+                $releaseGroupId1,
+                '同日で order_no が小さい作品',
+                ReleaseGroupType::Single,
+                true,
+                orderNo: 1,
+            ),
+            $this->createReleaseGroup(
+                $releaseGroupId2,
+                '同日で order_no が大きい作品',
+                ReleaseGroupType::Album,
+                true,
+                orderNo: 2,
+            ),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search))
             ->assertStatus(200)
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
@@ -158,7 +228,8 @@ class SearchReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId3, '非表示の春', ReleaseGroupType::Album, false),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search) . '?title=春&type=2&is_display=1')
             ->assertStatus(200)
             ->assertJsonCount(1, 'releaseGroups')
@@ -178,15 +249,30 @@ class SearchReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId3, 'リリース未登録の作品', ReleaseGroupType::Ep, true),
         );
         $this->storeReleases(
-            $this->createRelease($this->generateUuid(), $releaseGroupId1, '配信', true, new ImmutableDate('2026-01-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
-            $this->createRelease($this->generateUuid(), $releaseGroupId2, '配信', true, new ImmutableDate('2026-02-01'), media: [
-                ['position' => 1, 'name' => null, 'tracks' => []],
-            ]),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId1,
+                '配信',
+                true,
+                new ImmutableDate('2026-01-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
+            $this->createRelease(
+                $this->generateUuid(),
+                $releaseGroupId2,
+                '配信',
+                true,
+                new ImmutableDate('2026-02-01'),
+                media: [
+                    ['position' => 1, 'name' => null, 'tracks' => []],
+                ],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search, ['sort' => 'first_released_on', 'order' => 'asc']))
             ->assertStatus(200)
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
@@ -205,7 +291,8 @@ class SearchReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId2, 'あ作品', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search, ['sort' => 'title', 'order' => 'asc']))
             ->assertStatus(200)
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2)
@@ -220,12 +307,17 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $taggedId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($otherTagId, 'タグB', 20));
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($taggedId, 'タグ付きの作品', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]),
-            $this->createReleaseGroup($this->generateUuid(), '別タグの作品', ReleaseGroupType::Album, tags: [['tagId' => $otherTagId]]),
+            $this->createReleaseGroup($taggedId, 'タグ付きの作品', ReleaseGroupType::Album, tags: [[
+                'tagId' => $tagId,
+            ]]),
+            $this->createReleaseGroup($this->generateUuid(), '別タグの作品', ReleaseGroupType::Album, tags: [[
+                'tagId' => $otherTagId,
+            ]]),
             $this->createReleaseGroup($this->generateUuid(), 'タグなしの作品', ReleaseGroupType::Album),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Search, ['tag_id' => $tagId]))
             ->assertStatus(200)
             ->assertJsonCount(1, 'releaseGroups')

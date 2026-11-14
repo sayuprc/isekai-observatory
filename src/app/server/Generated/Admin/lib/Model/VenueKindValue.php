@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * VenueKindValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * VenueKindValue Class Doc Comment
  *
  * @category Class
+ *
  * @description 開催先種別の値
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum VenueKindValue: int
@@ -49,7 +57,4 @@ enum VenueKindValue: int
      * オンライン
      */
     case ONLINE = 2;
-
 }
-
-

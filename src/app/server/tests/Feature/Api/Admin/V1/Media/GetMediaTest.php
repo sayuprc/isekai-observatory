@@ -37,24 +37,27 @@ class GetMediaTest extends DatabaseTestCase
                 new DateTimeImmutable('2024-03-01 12:00:00'),
             ),
         );
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong(
-                $songId,
-                'テスト楽曲',
-                '説明',
-                SongType::Original,
-                true,
-                10,
-                [],
-                [],
-                [],
-                [],
-                [],
-                [['mediaId' => $uuid, 'orderNo' => 2]],
-            ),
-        );
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $songId,
+                    'テスト楽曲',
+                    '説明',
+                    SongType::Original,
+                    true,
+                    10,
+                    [],
+                    [],
+                    [],
+                    [],
+                    [],
+                    [['mediaId' => $uuid, 'orderNo' => 2]],
+                ),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Get, $uuid))
             ->assertStatus(200)
             ->assertExactJson([
@@ -67,19 +70,22 @@ class GetMediaTest extends DatabaseTestCase
                     'isDisplay' => true,
                 ],
                 'tags' => [],
-                'songs' => [[
-                    'songId' => $songId,
-                    'title' => 'テスト楽曲',
-                    'songOrderNo' => 10,
-                    'mediaOrderNo' => 2,
-                ]],
+                'songs' => [
+                    [
+                        'songId' => $songId,
+                        'title' => 'テスト楽曲',
+                        'songOrderNo' => 10,
+                        'mediaOrderNo' => 2,
+                    ],
+                ],
             ]);
     }
 
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Get, $this->generateUuid()))
             ->assertStatus(404);
     }

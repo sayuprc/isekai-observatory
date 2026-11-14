@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseGroupSummary
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,35 +33,44 @@
 
 namespace OpenAPI\Admin\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Admin\Client\ObjectSerializer;
+use ArrayAccess;
+use DateTime;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * ReleaseGroupSummary Class Doc Comment
  *
  * @category Class
+ *
  * @description リリースグループ一覧の 1 行分。firstReleasedOn は傘下リリースの最古発売日(リリース未登録なら null)
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializable
+class ReleaseGroupSummary implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'ReleaseGroupSummary';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'release_group_id' => 'string',
         'title' => 'string',
@@ -66,16 +80,18 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'int',
         'first_released_on' => '\DateTime',
         'release_count' => 'int',
-        'song_count' => 'int'
+        'song_count' => 'int',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'release_group_id' => 'uuid',
         'title' => null,
@@ -85,14 +101,14 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'int32',
         'first_released_on' => 'date',
         'release_count' => 'int32',
-        'song_count' => 'int32'
+        'song_count' => 'int32',
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'release_group_id' => false,
         'title' => false,
@@ -102,14 +118,14 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => false,
         'first_released_on' => true,
         'release_count' => false,
-        'song_count' => false
+        'song_count' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -134,8 +150,6 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -145,7 +159,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -155,7 +169,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -164,9 +178,6 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -175,9 +186,6 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -188,7 +196,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'release_group_id' => 'releaseGroupId',
@@ -199,13 +207,13 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'orderNo',
         'first_released_on' => 'firstReleasedOn',
         'release_count' => 'releaseCount',
-        'song_count' => 'songCount'
+        'song_count' => 'songCount',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'release_group_id' => 'setReleaseGroupId',
@@ -216,13 +224,13 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'setOrderNo',
         'first_released_on' => 'setFirstReleasedOn',
         'release_count' => 'setReleaseCount',
-        'song_count' => 'setSongCount'
+        'song_count' => 'setSongCount',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'release_group_id' => 'getReleaseGroupId',
@@ -233,7 +241,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'getOrderNo',
         'first_released_on' => 'getFirstReleasedOn',
         'release_count' => 'getReleaseCount',
-        'song_count' => 'getSongCount'
+        'song_count' => 'getSongCount',
     ];
 
     /**
@@ -277,19 +285,18 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -305,17 +312,17 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -337,7 +344,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
         }
-        if ((mb_strlen($this->container['title']) < 1)) {
+        if (mb_strlen($this->container['title']) < 1) {
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
@@ -353,7 +360,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         if ($this->container['order_no'] === null) {
             $invalidProperties[] = "'order_no' can't be null";
         }
-        if (($this->container['order_no'] < 1)) {
+        if ($this->container['order_no'] < 1) {
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
@@ -366,6 +373,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         if ($this->container['song_count'] === null) {
             $invalidProperties[] = "'song_count' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -379,7 +387,6 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets release_group_id
@@ -400,8 +407,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function setReleaseGroupId($release_group_id)
     {
-        if (is_null($release_group_id)) {
-            throw new \InvalidArgumentException('non-nullable release_group_id cannot be null');
+        if ($release_group_id === null) {
+            throw new InvalidArgumentException('non-nullable release_group_id cannot be null');
         }
         $this->container['release_group_id'] = $release_group_id;
 
@@ -427,12 +434,12 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function setTitle($title)
     {
-        if (is_null($title)) {
-            throw new \InvalidArgumentException('non-nullable title cannot be null');
+        if ($title === null) {
+            throw new InvalidArgumentException('non-nullable title cannot be null');
         }
 
-        if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling ReleaseGroupSummary., must be bigger than or equal to 1.');
+        if (mb_strlen($title) < 1) {
+            throw new InvalidArgumentException('invalid length for $title when calling ReleaseGroupSummary., must be bigger than or equal to 1.');
         }
 
         $this->container['title'] = $title;
@@ -443,7 +450,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets type
      *
-     * @return \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue
+     * @return ReleaseGroupTypeValue
      */
     public function getType()
     {
@@ -453,14 +460,14 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Sets type
      *
-     * @param \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue $type type
+     * @param ReleaseGroupTypeValue $type type
      *
      * @return self
      */
     public function setType($type)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if ($type === null) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
         $this->container['type'] = $type;
 
@@ -486,8 +493,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function setDescription($description)
     {
-        if (is_null($description)) {
-            throw new \InvalidArgumentException('non-nullable description cannot be null');
+        if ($description === null) {
+            throw new InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
 
@@ -513,8 +520,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function setIsDisplay($is_display)
     {
-        if (is_null($is_display)) {
-            throw new \InvalidArgumentException('non-nullable is_display cannot be null');
+        if ($is_display === null) {
+            throw new InvalidArgumentException('non-nullable is_display cannot be null');
         }
         $this->container['is_display'] = $is_display;
 
@@ -540,12 +547,12 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function setOrderNo($order_no)
     {
-        if (is_null($order_no)) {
-            throw new \InvalidArgumentException('non-nullable order_no cannot be null');
+        if ($order_no === null) {
+            throw new InvalidArgumentException('non-nullable order_no cannot be null');
         }
 
-        if (($order_no < 1)) {
-            throw new \InvalidArgumentException('invalid value for $order_no when calling ReleaseGroupSummary., must be bigger than or equal to 1.');
+        if ($order_no < 1) {
+            throw new InvalidArgumentException('invalid value for $order_no when calling ReleaseGroupSummary., must be bigger than or equal to 1.');
         }
 
         $this->container['order_no'] = $order_no;
@@ -556,7 +563,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets first_released_on
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getFirstReleasedOn()
     {
@@ -566,18 +573,18 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Sets first_released_on
      *
-     * @param \DateTime $first_released_on 発売日
+     * @param DateTime $first_released_on 発売日
      *
      * @return self
      */
     public function setFirstReleasedOn($first_released_on)
     {
-        if (is_null($first_released_on)) {
+        if ($first_released_on === null) {
             array_push($this->openAPINullablesSetToNull, 'first_released_on');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
             $index = array_search('first_released_on', $nullablesSetToNull);
-            if ($index !== FALSE) {
+            if ($index !== false) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
@@ -606,8 +613,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function setReleaseCount($release_count)
     {
-        if (is_null($release_count)) {
-            throw new \InvalidArgumentException('non-nullable release_count cannot be null');
+        if ($release_count === null) {
+            throw new InvalidArgumentException('non-nullable release_count cannot be null');
         }
         $this->container['release_count'] = $release_count;
 
@@ -633,19 +640,18 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function setSongCount($song_count)
     {
-        if (is_null($song_count)) {
-            throw new \InvalidArgumentException('non-nullable song_count cannot be null');
+        if ($song_count === null) {
+            throw new InvalidArgumentException('non-nullable song_count cannot be null');
         }
         $this->container['song_count'] = $song_count;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -655,11 +661,11 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -670,12 +676,10 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -685,9 +689,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -696,15 +698,16 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -716,7 +719,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -730,5 +733,3 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

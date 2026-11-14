@@ -29,7 +29,8 @@ class SearchVenueTest extends DatabaseTestCase
             $this->createVenue($onlineId, '配信先サンプルB', VenueKind::Online),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(VenueRouteMap::Search, [
                 'name' => '配信',
                 'kind' => 2,
@@ -63,7 +64,8 @@ class SearchVenueTest extends DatabaseTestCase
         $repository->save($this->createEvent($this->generateUuid(), venues: [['venueId' => $venueId, 'orderNo' => 1]]));
         $repository->save($this->createEvent($this->generateUuid(), venues: [['venueId' => $venueId, 'orderNo' => 1]]));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(VenueRouteMap::Search))
             ->assertStatus(200)
             ->assertJsonPath('venues.0.eventCount', 2);

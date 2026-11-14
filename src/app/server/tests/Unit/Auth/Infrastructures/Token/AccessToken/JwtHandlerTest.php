@@ -45,13 +45,16 @@ class JwtHandlerTest extends TestCase
         $elements = explode('.', $jwt);
         $payload = json_decode(base64_decode($elements[1]), true);
 
-        $this->assertSame([
-            'iss' => 'iss',
-            'iat' => 0,
-            'exp' => 180,
-            'nbf' => 0,
-            'jti' => 'jti',
-        ], $payload);
+        $this->assertSame(
+            [
+                'iss' => 'iss',
+                'iat' => 0,
+                'exp' => 180,
+                'nbf' => 0,
+                'jti' => 'jti',
+            ],
+            $payload,
+        );
     }
 
     #[Test]
@@ -70,12 +73,14 @@ class JwtHandlerTest extends TestCase
             jti: 'jti',
         ));
 
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->with()
             ->andReturn($now)
             ->once();
 
-        $this->mapper->shouldReceive('map')
+        $this->mapper
+            ->shouldReceive('map')
             ->withArgs(static fn (string $class, mixed $_) => $class === AccessTokenPayload::class)
             ->andReturn(new AccessTokenPayload(
                 'iss',
@@ -109,7 +114,8 @@ class JwtHandlerTest extends TestCase
             jti: 'jti',
         ));
 
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->with()
             ->andReturn(new DateTimeImmutable())
             ->once();
@@ -134,7 +140,8 @@ class JwtHandlerTest extends TestCase
 
         $otherKeyHandler = $this->getInstance(new JwtConfig('HS256', str_repeat('x', 256), 'iss'));
 
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->with()
             ->andReturn($now)
             ->once();
@@ -147,7 +154,8 @@ class JwtHandlerTest extends TestCase
     {
         $handler = $this->getInstance(new JwtConfig('HS256', str_repeat('k', 256), 'iss'));
 
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->with()
             ->andReturn(new DateTimeImmutable())
             ->once();

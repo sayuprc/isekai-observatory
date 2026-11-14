@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ModelInterface
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client\Model
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -32,6 +37,7 @@ namespace OpenAPI\Viewer\Client\Model;
  * Interface abstracting model access.
  *
  * @package OpenAPI\Viewer\Client\Model
+ *
  * @author  OpenAPI Generator team
  */
 interface ModelInterface
@@ -95,17 +101,11 @@ interface ModelInterface
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool;
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool;
 }

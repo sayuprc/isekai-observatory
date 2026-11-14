@@ -10,11 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Person\Application\Admin\UseCase\Group\Delete\DeleteInputData;
 use Person\Application\Admin\UseCase\Group\Delete\DeleteUseCase;
 
-class DeletePersonGroupController extends Controller
+final readonly class DeletePersonGroupController extends Controller
 {
     public function __construct(
-        private readonly DeleteUseCase $useCase,
-        private readonly DeletePresenter $presenter,
+        private DeleteUseCase $useCase,
+        private DeletePresenter $presenter,
     ) {
     }
 

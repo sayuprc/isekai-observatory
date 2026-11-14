@@ -34,7 +34,8 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
     #[Override]
     public function list(?string $pageToken, int $pageSize): ReleaseGroupListPage
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(['release_group_id', 'title', 'type', 'description', 'order_no'])
             ->from('release_groups')
             ->where('is_display', '=', true)
@@ -44,19 +45,20 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             $decoded = ReleaseGroupListPageToken::decode($pageToken);
 
             // 降順と昇順が混在し行値比較では表せないため、条件を展開して書く
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(order_no < %s OR (order_no = %s AND release_group_id > %s))',
                 Sql::value($decoded->orderNo),
                 Sql::value($decoded->orderNo),
                 Sql::value($this->converter->toBin($decoded->releaseGroupId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $query->orderBy('order_no', 'desc')
-                ->orderBy('release_group_id')
-                ->limit($pageSize + 1),
-        );
+        $rows = $query
+            ->orderBy('order_no', 'desc')
+            ->orderBy('release_group_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
@@ -82,7 +84,10 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             $releaseGroups,
             $lastRow === null
                 ? null
-                : ReleaseGroupListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'release_group_id'))),
+                : ReleaseGroupListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'release_group_id')),
+                ),
         );
     }
 
@@ -97,15 +102,15 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             return [];
         }
 
-        $releaseRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_id', 'release_group_id', 'name', 'released_on', 'description'])
-                ->from('releases')
-                ->where('release_group_id', 'IN', $binGroupIds)
-                ->where('is_display', '=', true)
-                ->orderBy('order_no')
-                ->orderBy('release_id'),
-        );
+        $releaseRows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_id', 'release_group_id', 'name', 'released_on', 'description'])
+            ->from('releases')
+            ->where('release_group_id', 'IN', $binGroupIds)
+            ->where('is_display', '=', true)
+            ->orderBy('order_no')
+            ->orderBy('release_id')
+            |> $this->queryFactory->fetchAll(...);
 
         $binReleaseIds = array_map(static fn (array $row): string => Row::string($row, 'release_id'), $releaseRows);
         $formatsByRelease = $this->loadFormats($binReleaseIds);
@@ -138,14 +143,16 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_id', 'format'])
+            ->from('release_formats')
+            ->where('release_id', 'IN', $binReleaseIds)
+            ->orderBy('format')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_id', 'format'])
-                ->from('release_formats')
-                ->where('release_id', 'IN', $binReleaseIds)
-                ->orderBy('format'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'release_id')][] = ReleaseFormat::from(Row::int($row, 'format'));
         }
 
@@ -165,42 +172,45 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             return [];
         }
 
-        $mediumRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_id', 'position', 'name'])
-                ->from('release_media')
-                ->where('release_id', 'IN', $binReleaseIds)
-                ->orderBy('position'),
-        );
+        $mediumRows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_id', 'position', 'name'])
+            ->from('release_media')
+            ->where('release_id', 'IN', $binReleaseIds)
+            ->orderBy('position')
+            |> $this->queryFactory->fetchAll(...);
 
-        $trackRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_id', 'position', 'track_no', 'title'])
-                ->from('release_tracks')
-                ->where('release_id', 'IN', $binReleaseIds)
-                ->orderBy('position')
-                ->orderBy('track_no'),
-        );
+        $trackRows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_id', 'position', 'track_no', 'title'])
+            ->from('release_tracks')
+            ->where('release_id', 'IN', $binReleaseIds)
+            ->orderBy('position')
+            ->orderBy('track_no')
+            |> $this->queryFactory->fetchAll(...);
 
-        $trackSongRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect([
-                    'release_track_songs.release_id',
-                    'release_track_songs.position',
-                    'release_track_songs.track_no',
-                    'release_track_songs.song_id',
-                    'songs.title',
-                    'songs.is_display',
-                ])
-                ->from('release_track_songs')
-                ->join('songs', 'songs.song_id = release_track_songs.song_id')
-                ->where('release_track_songs.release_id', 'IN', $binReleaseIds)
-                ->orderBy('release_track_songs.order_no'),
-        );
+        $trackSongRows = $this->queryFactory
+            ->select()
+            ->withSelect([
+                'release_track_songs.release_id',
+                'release_track_songs.position',
+                'release_track_songs.track_no',
+                'release_track_songs.song_id',
+                'songs.title',
+                'songs.is_display',
+            ])
+            ->from('release_track_songs')
+            ->join('songs', 'songs.song_id = release_track_songs.song_id')
+            ->where('release_track_songs.release_id', 'IN', $binReleaseIds)
+            ->orderBy('release_track_songs.order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         $songsByTrack = [];
         foreach ($trackSongRows as $row) {
-            $songsByTrack[Row::string($row, 'release_id')][Row::int($row, 'position')][Row::int($row, 'track_no')][] = new ReleaseTrackSongItem(
+            $releaseId = Row::string($row, 'release_id');
+            $position = Row::int($row, 'position');
+            $trackNo = Row::int($row, 'track_no');
+            $songsByTrack[$releaseId][$position][$trackNo][] = new ReleaseTrackSongItem(
                 Row::bool($row, 'is_display') ? $this->converter->toUuid(Row::string($row, 'song_id')) : null,
                 Row::string($row, 'title'),
             );
@@ -243,16 +253,18 @@ readonly class ReleaseGroupQueryService implements ReleaseGroupQueryServiceInter
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_group_taggings.release_group_id', 'tags.tag_id'])
+            ->from('release_group_taggings')
+            ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
+            ->where('release_group_taggings.release_group_id', 'IN', $binGroupIds)
+            ->orderBy('tags.order_no')
+            ->orderBy('tags.tag_id')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_group_taggings.release_group_id', 'tags.tag_id'])
-                ->from('release_group_taggings')
-                ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
-                ->where('release_group_taggings.release_group_id', 'IN', $binGroupIds)
-                ->orderBy('tags.order_no')
-                ->orderBy('tags.tag_id'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'release_group_id')][] = $this->converter->toUuid(Row::string($row, 'tag_id'));
         }
 

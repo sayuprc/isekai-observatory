@@ -29,10 +29,22 @@ class Converter
             ->setNote($release->note->value)
             ->setIsDisplay($release->isDisplay)
             ->setOrderNo($release->orderNo->value)
-            ->setFormats($release->formats->toGeneric()->map(
-                static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
-            )->toArray())
-            ->setMedia($release->media->toGeneric()->map($this->toOpenApiMedium(...))->toArray());
+            ->setFormats(
+                $release
+                    ->formats
+                    ->toGeneric()
+                    ->map(
+                        static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
+                    )
+                    ->toArray(),
+            )
+            ->setMedia(
+                $release
+                    ->media
+                    ->toGeneric()
+                    ->map($this->toOpenApiMedium(...))
+                    ->toArray(),
+            );
     }
 
     public function toOpenApiMedium(Medium $medium): OpenApiMedium
@@ -41,7 +53,13 @@ class Converter
             'name' => $medium->name?->value,
         ])
             ->setPosition($medium->position->value)
-            ->setTracks($medium->tracks->toGeneric()->map($this->toOpenApiTrack(...))->toArray());
+            ->setTracks(
+                $medium
+                    ->tracks
+                    ->toGeneric()
+                    ->map($this->toOpenApiTrack(...))
+                    ->toArray(),
+            );
     }
 
     public function toOpenApiTrack(Track $track): OpenApiTrack

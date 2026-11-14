@@ -27,15 +27,15 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
     #[Override]
     public function search(PersonGroupSearchCriteria $criteria): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $this->buildSearchQuery($criteria)
-                    ->withSelect(['person_group_id', 'name', 'display_name'])
-                    ->orderBy('name'),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $this
+                ->buildSearchQuery($criteria)
+                ->withSelect(['person_group_id', 'name', 'display_name'])
+                ->orderBy('name'),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->summarize($rows);
     }
@@ -49,13 +49,13 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
     #[Override]
     public function find(PersonGroupId $personGroupId): ?PersonGroupSummary
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['person_group_id', 'name', 'display_name'])
-                ->from('person_groups')
-                ->where('person_group_id', '=', $this->converter->toBin($personGroupId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['person_group_id', 'name', 'display_name'])
+            ->from('person_groups')
+            ->where('person_group_id', '=', $this->converter->toBin($personGroupId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->summarize($rows)[0] ?? null;
     }
@@ -86,23 +86,23 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
             return [];
         }
 
-        $memberRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect([
-                    'person_group_members.person_group_id',
-                    'person_group_members.person_id',
-                    'person_group_members.order_no',
-                    'persons.name',
-                ])
-                ->from('person_group_members')
-                ->join('persons', 'persons.person_id = person_group_members.person_id')
-                ->where(
-                    'person_group_members.person_group_id',
-                    'IN',
-                    array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $rows),
-                )
-                ->orderBy('person_group_members.order_no'),
-        );
+        $memberRows = $this->queryFactory
+            ->select()
+            ->withSelect([
+                'person_group_members.person_group_id',
+                'person_group_members.person_id',
+                'person_group_members.order_no',
+                'persons.name',
+            ])
+            ->from('person_group_members')
+            ->join('persons', 'persons.person_id = person_group_members.person_id')
+            ->where(
+                'person_group_members.person_group_id',
+                'IN',
+                array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $rows),
+            )
+            ->orderBy('person_group_members.order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         $membersByGroup = [];
         foreach ($memberRows as $memberRow) {

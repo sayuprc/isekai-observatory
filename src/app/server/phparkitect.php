@@ -19,7 +19,8 @@ return static function (Config $config): void {
         static function (Component $component, Define $define): Component {
             $name = $define->componentName();
 
-            $component = $component->component($name)
+            $component = $component
+                ->component($name)
                 ->definedBy($define->namespace())
                 ->where($name);
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * SongCreditRoleValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Public\Client\Model;
-use \OpenAPI\Public\Client\ObjectSerializer;
 
 /**
  * SongCreditRoleValue Class Doc Comment
  *
  * @category Class
+ *
  * @description クレジットの役割
+ *
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum SongCreditRoleValue: int
@@ -54,7 +62,4 @@ enum SongCreditRoleValue: int
      * 編曲
      */
     case ARRANGER = 3;
-
 }
-
-

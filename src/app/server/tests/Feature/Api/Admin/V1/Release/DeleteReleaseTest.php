@@ -36,7 +36,8 @@ class DeleteReleaseTest extends DatabaseTestCase
             $this->createRelease($releaseId, $releaseGroupId, '削除対象', true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
             ->assertStatus(204);
 
@@ -74,7 +75,8 @@ class DeleteReleaseTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
             ->assertStatus(204);
 
@@ -86,7 +88,8 @@ class DeleteReleaseTest extends DatabaseTestCase
     #[Test]
     public function canDeleteEvenIfTargetDoesNotExist(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
             ->assertStatus(204);
     }
@@ -104,7 +107,8 @@ class DeleteReleaseTest extends DatabaseTestCase
             $this->createRelease($releaseId, $releaseGroupId, '削除対象', true),
         );
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
             ->assertStatus(403);
     }
@@ -112,7 +116,8 @@ class DeleteReleaseTest extends DatabaseTestCase
     #[Test]
     public function invalidId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete('/api/admin/v1/releases/invalid-id')
             ->assertStatus(404);
     }

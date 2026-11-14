@@ -12,12 +12,12 @@ use Support\Contracts\MapperInterface;
 use Venue\Application\Admin\UseCase\Update\UpdateInputData;
 use Venue\Application\Admin\UseCase\Update\UpdateUseCase;
 
-class UpdateVenueController extends Controller
+final readonly class UpdateVenueController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly UpdateUseCase $useCase,
-        private readonly UpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private UpdateUseCase $useCase,
+        private UpdatePresenter $presenter,
     ) {
     }
 

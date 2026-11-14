@@ -28,7 +28,8 @@ readonly class SongQueryService implements SongQueryServiceInterface
     #[Override]
     public function list(?string $pageToken, int $pageSize): SongListPage
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(['song_id', 'title', 'description', 'type', 'order_no'])
             ->from('songs')
             ->where('is_display', '=', true);
@@ -37,19 +38,20 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $decoded = SongListPageToken::decode($pageToken);
 
             // 降順と昇順が混在し行値比較では表せないため、条件を展開して書く
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(order_no < %s OR (order_no = %s AND song_id > %s))',
                 Sql::value($decoded->orderNo),
                 Sql::value($decoded->orderNo),
                 Sql::value($this->converter->toBin($decoded->songId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $songRows = $this->queryFactory->fetchAll(
-            $query->orderBy('order_no', 'desc')
-                ->orderBy('song_id')
-                ->limit($pageSize + 1),
-        );
+        $songRows = $query
+            ->orderBy('order_no', 'desc')
+            ->orderBy('song_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($songRows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($songRows, 0, $pageSize) : $songRows;
@@ -82,7 +84,10 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $songs,
             $lastRow === null
                 ? null
-                : SongListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'song_id'))),
+                : SongListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'song_id')),
+                ),
         );
     }
 
@@ -97,14 +102,16 @@ readonly class SongQueryService implements SongQueryServiceInterface
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_id', 'person_id', 'role'])
+            ->from('song_persons')
+            ->where('song_id', 'IN', $binSongIds)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_id', 'person_id', 'role'])
-                ->from('song_persons')
-                ->where('song_id', 'IN', $binSongIds)
-                ->orderBy('order_no'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'song_id')][] = new SongCredit(
                 $this->converter->toUuid(Row::string($row, 'person_id')),
                 SongPersonRole::from(Row::int($row, 'role')),
@@ -125,16 +132,18 @@ readonly class SongQueryService implements SongQueryServiceInterface
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_media_links.song_id', 'media.media_id'])
+            ->from('song_media_links')
+            ->join('media', 'song_media_links.media_id = media.media_id')
+            ->where('song_media_links.song_id', 'IN', $binSongIds)
+            ->where('media.is_display', '=', true)
+            ->orderBy('song_media_links.order_no')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_media_links.song_id', 'media.media_id'])
-                ->from('song_media_links')
-                ->join('media', 'song_media_links.media_id = media.media_id')
-                ->where('song_media_links.song_id', 'IN', $binSongIds)
-                ->where('media.is_display', '=', true)
-                ->orderBy('song_media_links.order_no'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'song_id')][] = $this->converter->toUuid(Row::string($row, 'media_id'));
         }
 
@@ -152,16 +161,18 @@ readonly class SongQueryService implements SongQueryServiceInterface
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_taggings.song_id', 'tags.tag_id'])
+            ->from('song_taggings')
+            ->join('tags', 'song_taggings.tag_id = tags.tag_id')
+            ->where('song_taggings.song_id', 'IN', $binSongIds)
+            ->orderBy('tags.order_no')
+            ->orderBy('tags.tag_id')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_taggings.song_id', 'tags.tag_id'])
-                ->from('song_taggings')
-                ->join('tags', 'song_taggings.tag_id = tags.tag_id')
-                ->where('song_taggings.song_id', 'IN', $binSongIds)
-                ->orderBy('tags.order_no')
-                ->orderBy('tags.tag_id'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'song_id')][] = $this->converter->toUuid(Row::string($row, 'tag_id'));
         }
 

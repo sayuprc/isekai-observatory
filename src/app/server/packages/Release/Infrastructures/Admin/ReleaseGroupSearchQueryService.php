@@ -28,7 +28,8 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
     public function search(ReleaseGroupSearchCriteria $criteria): array
     {
         $query = $this->applyOrder(
-            $this->buildSearchQuery($criteria)
+            $this
+                ->buildSearchQuery($criteria)
                 ->withSelect([
                     'release_groups.release_group_id',
                     'release_groups.title',
@@ -48,9 +49,8 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
             $criteria,
         );
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate($query, $criteria->page, $criteria->perPage),
-        );
+        $rows = $this->queryFactory->paginate($query, $criteria->page, $criteria->perPage)
+            |> $this->queryFactory->fetchAll(...);
 
         // 件数は 1 ページ分のグループ ID でまとめて引き、行ごとの問い合わせを避ける
         $binGroupIds = array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $rows);
@@ -87,16 +87,18 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->select('releases.release_group_id')
+            ->select(new Sql('COUNT(DISTINCT release_track_songs.song_id)'), 'song_count')
+            ->from('release_track_songs')
+            ->join('releases', 'releases.release_id = release_track_songs.release_id')
+            ->where('releases.release_group_id', 'IN', $binGroupIds)
+            ->groupBy('releases.release_group_id')
+            |> $this->queryFactory->fetchAll(...);
+
         $counts = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->select('releases.release_group_id')
-                ->select(new Sql('COUNT(DISTINCT release_track_songs.song_id)'), 'song_count')
-                ->from('release_track_songs')
-                ->join('releases', 'releases.release_id = release_track_songs.release_id')
-                ->where('releases.release_group_id', 'IN', $binGroupIds)
-                ->groupBy('releases.release_group_id'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $counts[Row::string($row, 'release_group_id')] = Row::int($row, 'song_count');
         }
 
@@ -133,7 +135,8 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
             $query = $query->where(
                 'release_groups.release_group_id',
                 'IN',
-                $this->queryFactory->select()
+                $this->queryFactory
+                    ->select()
                     ->withSelect(['release_group_id'])
                     ->from('release_group_taggings')
                     ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),

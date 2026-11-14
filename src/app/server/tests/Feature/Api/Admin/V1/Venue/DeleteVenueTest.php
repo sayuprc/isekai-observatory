@@ -40,7 +40,8 @@ class DeleteVenueTest extends DatabaseTestCase
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(VenueRouteMap::Delete, $this->generateUuid()))
             ->assertStatus(404);
     }

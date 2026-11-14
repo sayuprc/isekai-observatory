@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseTrackItem
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,70 +33,80 @@
 
 namespace OpenAPI\Viewer\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Viewer\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * ReleaseTrackItem Class Doc Comment
  *
  * @category Class
+ *
  * @description 収録曲。songs は収録順で、2 件以上ならメドレー。title は楽曲 1 件なら上書き名、メドレーなら表示名、楽曲なしならタイトルで、無ければ null
+ *
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
+class ReleaseTrackItem implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'ReleaseTrackItem';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'track_no' => 'int',
         'title' => 'string',
-        'songs' => '\OpenAPI\Viewer\Client\Model\ReleaseTrackSong[]'
+        'songs' => '\OpenAPI\Viewer\Client\Model\ReleaseTrackSong[]',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'track_no' => 'int32',
         'title' => null,
-        'songs' => null
+        'songs' => null,
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'track_no' => false,
         'title' => true,
-        'songs' => false
+        'songs' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -116,8 +131,6 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -127,7 +140,7 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -137,7 +150,7 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -146,9 +159,6 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -157,9 +167,6 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -170,34 +177,34 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'track_no' => 'trackNo',
         'title' => 'title',
-        'songs' => 'songs'
+        'songs' => 'songs',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'track_no' => 'setTrackNo',
         'title' => 'setTitle',
-        'songs' => 'setSongs'
+        'songs' => 'setSongs',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'track_no' => 'getTrackNo',
         'title' => 'getTitle',
-        'songs' => 'getSongs'
+        'songs' => 'getSongs',
     ];
 
     /**
@@ -241,19 +248,18 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -263,17 +269,17 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -292,7 +298,7 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['track_no'] === null) {
             $invalidProperties[] = "'track_no' can't be null";
         }
-        if (($this->container['track_no'] < 1)) {
+        if ($this->container['track_no'] < 1) {
             $invalidProperties[] = "invalid value for 'track_no', must be bigger than or equal to 1.";
         }
 
@@ -302,6 +308,7 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['songs'] === null) {
             $invalidProperties[] = "'songs' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -315,7 +322,6 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets track_no
@@ -336,12 +342,12 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setTrackNo($track_no)
     {
-        if (is_null($track_no)) {
-            throw new \InvalidArgumentException('non-nullable track_no cannot be null');
+        if ($track_no === null) {
+            throw new InvalidArgumentException('non-nullable track_no cannot be null');
         }
 
-        if (($track_no < 1)) {
-            throw new \InvalidArgumentException('invalid value for $track_no when calling ReleaseTrackItem., must be bigger than or equal to 1.');
+        if ($track_no < 1) {
+            throw new InvalidArgumentException('invalid value for $track_no when calling ReleaseTrackItem., must be bigger than or equal to 1.');
         }
 
         $this->container['track_no'] = $track_no;
@@ -368,12 +374,12 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setTitle($title)
     {
-        if (is_null($title)) {
+        if ($title === null) {
             array_push($this->openAPINullablesSetToNull, 'title');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
             $index = array_search('title', $nullablesSetToNull);
-            if ($index !== FALSE) {
+            if ($index !== false) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
@@ -386,7 +392,7 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets songs
      *
-     * @return \OpenAPI\Viewer\Client\Model\ReleaseTrackSong[]
+     * @return array<ReleaseTrackSong>
      */
     public function getSongs()
     {
@@ -396,25 +402,24 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets songs
      *
-     * @param \OpenAPI\Viewer\Client\Model\ReleaseTrackSong[] $songs songs
+     * @param array<ReleaseTrackSong> $songs songs
      *
      * @return self
      */
     public function setSongs($songs)
     {
-        if (is_null($songs)) {
-            throw new \InvalidArgumentException('non-nullable songs cannot be null');
+        if ($songs === null) {
+            throw new InvalidArgumentException('non-nullable songs cannot be null');
         }
         $this->container['songs'] = $songs;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -424,11 +429,11 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -439,12 +444,10 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -454,9 +457,7 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -465,15 +466,16 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -485,7 +487,7 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -499,5 +501,3 @@ class ReleaseTrackItem implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

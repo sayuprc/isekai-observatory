@@ -12,12 +12,12 @@ use Support\Contracts\MapperInterface;
 use Venue\Application\Admin\UseCase\Search\SearchInputData;
 use Venue\Application\Admin\UseCase\Search\SearchUseCase;
 
-class SearchVenueController extends Controller
+final readonly class SearchVenueController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly SearchUseCase $useCase,
-        private readonly SearchPresenter $presenter,
+        private MapperInterface $mapper,
+        private SearchUseCase $useCase,
+        private SearchPresenter $presenter,
     ) {
     }
 

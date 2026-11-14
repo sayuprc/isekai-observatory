@@ -36,7 +36,8 @@ class UpdateMediaTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(MediaRouteMap::Update, $uuid), [
                 'title' => 'テストメディア配信アーカイブ',
                 'url' => 'https://example.com/archive',
@@ -44,7 +45,8 @@ class UpdateMediaTest extends DatabaseTestCase
                 'type' => MediaType::LiveStream->value,
                 'isDisplay' => false,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson([
                 'media' => [
                     'mediaId' => $uuid,
@@ -75,7 +77,8 @@ class UpdateMediaTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(MediaRouteMap::Update, $routeMediaId), [
                 'mediaId' => $bodyMediaId,
                 'title' => 'テストメディア配信アーカイブ',
@@ -84,7 +87,8 @@ class UpdateMediaTest extends DatabaseTestCase
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJsonPath('media.mediaId', $routeMediaId);
     }
 
@@ -93,15 +97,14 @@ class UpdateMediaTest extends DatabaseTestCase
     {
         $mediaId = $this->generateUuid();
 
-        $this->withAuth()
-            ->putJson(route(MediaRouteMap::Update, $mediaId), [
-                'title' => 'テストメディア',
-                'url' => 'https://example.com/media',
-                'publishedAt' => '2024-04-02T10:20:30+09:00',
-                'type' => MediaType::Mv->value,
-                'isDisplay' => true,
-                'tags' => [],
-            ])->assertStatus(404);
+        $this->withAuth()->putJson(route(MediaRouteMap::Update, $mediaId), [
+            'title' => 'テストメディア',
+            'url' => 'https://example.com/media',
+            'publishedAt' => '2024-04-02T10:20:30+09:00',
+            'type' => MediaType::Mv->value,
+            'isDisplay' => true,
+            'tags' => [],
+        ])->assertStatus(404);
     }
 
     #[Test]
@@ -120,7 +123,8 @@ class UpdateMediaTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(MediaRouteMap::Update, $uuid), [
                 'title' => '',
                 'url' => '',
@@ -128,7 +132,8 @@ class UpdateMediaTest extends DatabaseTestCase
                 'type' => 0,
                 'isDisplay' => true,
                 'tags' => [],
-            ])->assertStatus(422)
+            ])
+            ->assertStatus(422)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')
@@ -169,7 +174,8 @@ class UpdateMediaTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(MediaRouteMap::Update, $targetMediaId), [
                 'title' => '更新対象メディア',
                 'url' => 'https://example.com/existing',
@@ -177,7 +183,8 @@ class UpdateMediaTest extends DatabaseTestCase
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
                 'tags' => [],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -192,7 +199,9 @@ class UpdateMediaTest extends DatabaseTestCase
         $newTagId = $this->generateUuid();
         $mediaId = $this->generateUuid();
         $this->storeTags($this->createTag($oldTagId, '旧タグ', 10), $this->createTag($newTagId, '新タグ', 20));
-        $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $oldTagId]]));
+        $this->storeMedia($this->createMedia($mediaId, 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [[
+            'tagId' => $oldTagId,
+        ]]));
 
         $client = $this->withAuth();
 

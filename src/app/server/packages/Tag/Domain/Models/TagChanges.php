@@ -38,8 +38,11 @@ readonly class TagChanges
     public static function fromIds(array $addTagIds, array $removeTagIds): self
     {
         return new self(
-            array_map(static fn (string $id): TagId => new TagId($id), array_values(array_unique($addTagIds))),
-            array_map(static fn (string $id): TagId => new TagId($id), array_values(array_unique($removeTagIds))),
+            array_map(static fn (string $id): TagId => new TagId($id), array_unique($addTagIds) |> array_values(...)),
+            array_map(
+                static fn (string $id): TagId => new TagId($id),
+                array_unique($removeTagIds) |> array_values(...),
+            ),
         );
     }
 

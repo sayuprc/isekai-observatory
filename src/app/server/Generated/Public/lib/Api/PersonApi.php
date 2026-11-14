@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PersonApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -30,24 +35,32 @@ namespace OpenAPI\Public\Client\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Public\Client\ApiException;
+use OpenAPI\Public\Client\Configuration;
+use OpenAPI\Public\Client\HeaderSelector;
+use OpenAPI\Public\Client\Model\ErrorResponse;
+use OpenAPI\Public\Client\Model\PersonListResponse;
+use OpenAPI\Public\Client\ObjectSerializer;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Public\Client\ApiException;
-use OpenAPI\Public\Client\Configuration;
-use OpenAPI\Public\Client\FormDataProcessor;
-use OpenAPI\Public\Client\HeaderSelector;
-use OpenAPI\Public\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * PersonApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class PersonApi
@@ -72,7 +85,7 @@ class PersonApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'personServiceListPeople' => [
             'application/json',
@@ -80,16 +93,13 @@ class PersonApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -130,18 +140,24 @@ class PersonApi
      *
      * 人物一覧
      *
-     * @param  string|null $name 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
-     * @param  string|null $page_token page_token (optional)
-     * @param  int|null $page_size page_size (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
+     * @param string|null $name        名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
+     * @param string|null $page_token  page_token (optional)
+     * @param int|null    $page_size   page_size (optional)
+     * @param string      $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Public\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Public\Client\Model\PersonListResponse|\OpenAPI\Public\Client\Model\ErrorResponse|\OpenAPI\Public\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return PersonListResponse|ErrorResponse|ErrorResponse
      */
-    public function personServiceListPeople($name = null, $page_token = null, $page_size = null, string $contentType = self::contentTypes['personServiceListPeople'][0])
-    {
+    public function personServiceListPeople(
+        $name = null,
+        $page_token = null,
+        $page_size = null,
+        string $contentType = self::contentTypes['personServiceListPeople'][0],
+    ) {
         list($response) = $this->personServiceListPeopleWithHttpInfo($name, $page_token, $page_size, $contentType);
+
         return $response;
     }
 
@@ -150,44 +166,50 @@ class PersonApi
      *
      * 人物一覧
      *
-     * @param  string|null $name 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
-     * @param  string|null $page_token (optional)
-     * @param  int|null $page_size (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
+     * @param string|null $name        名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
+     * @param string|null $page_token  (optional)
+     * @param int|null    $page_size   (optional)
+     * @param string      $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Public\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Public\Client\Model\PersonListResponse|\OpenAPI\Public\Client\Model\ErrorResponse|\OpenAPI\Public\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function personServiceListPeopleWithHttpInfo($name = null, $page_token = null, $page_size = null, string $contentType = self::contentTypes['personServiceListPeople'][0])
-    {
+    public function personServiceListPeopleWithHttpInfo(
+        $name = null,
+        $page_token = null,
+        $page_size = null,
+        string $contentType = self::contentTypes['personServiceListPeople'][0],
+    ) {
         $request = $this->personServiceListPeopleRequest($name, $page_token, $page_size, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Public\Client\Model\PersonListResponse',
@@ -208,18 +230,16 @@ class PersonApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -234,28 +254,30 @@ class PersonApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Public\Client\Model\PersonListResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Public\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Public\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -266,21 +288,26 @@ class PersonApi
      *
      * 人物一覧
      *
-     * @param  string|null $name 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
-     * @param  string|null $page_token (optional)
-     * @param  int|null $page_size (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
+     * @param string|null $name        名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
+     * @param string|null $page_token  (optional)
+     * @param int|null    $page_size   (optional)
+     * @param string      $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function personServiceListPeopleAsync($name = null, $page_token = null, $page_size = null, string $contentType = self::contentTypes['personServiceListPeople'][0])
-    {
+    public function personServiceListPeopleAsync(
+        $name = null,
+        $page_token = null,
+        $page_size = null,
+        string $contentType = self::contentTypes['personServiceListPeople'][0],
+    ) {
         return $this->personServiceListPeopleAsyncWithHttpInfo($name, $page_token, $page_size, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
@@ -289,27 +316,32 @@ class PersonApi
      *
      * 人物一覧
      *
-     * @param  string|null $name 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
-     * @param  string|null $page_token (optional)
-     * @param  int|null $page_size (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
+     * @param string|null $name        名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
+     * @param string|null $page_token  (optional)
+     * @param int|null    $page_size   (optional)
+     * @param string      $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function personServiceListPeopleAsyncWithHttpInfo($name = null, $page_token = null, $page_size = null, string $contentType = self::contentTypes['personServiceListPeople'][0])
-    {
+    public function personServiceListPeopleAsyncWithHttpInfo(
+        $name = null,
+        $page_token = null,
+        $page_size = null,
+        string $contentType = self::contentTypes['personServiceListPeople'][0],
+    ) {
         $returnType = '\OpenAPI\Public\Client\Model\PersonListResponse';
         $request = $this->personServiceListPeopleRequest($name, $page_token, $page_size, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -318,7 +350,7 @@ class PersonApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -326,49 +358,51 @@ class PersonApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'personServiceListPeople'
      *
-     * @param  string|null $name 名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
-     * @param  string|null $page_token (optional)
-     * @param  int|null $page_size (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
+     * @param string|null $name        名前に含まれる語での絞り込み。空白区切りの語をすべて含むものに絞ります (optional)
+     * @param string|null $page_token  (optional)
+     * @param int|null    $page_size   (optional)
+     * @param string      $contentType The value for the Content-Type header. Check self::contentTypes['personServiceListPeople'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function personServiceListPeopleRequest($name = null, $page_token = null, $page_size = null, string $contentType = self::contentTypes['personServiceListPeople'][0])
-    {
-
-
-
+    public function personServiceListPeopleRequest(
+        $name = null,
+        $page_token = null,
+        $page_size = null,
+        string $contentType = self::contentTypes['personServiceListPeople'][0],
+    ) {
         if ($page_size !== null && $page_size > 100) {
-            throw new \InvalidArgumentException('invalid value for "$page_size" when calling PersonApi.personServiceListPeople, must be smaller than or equal to 100.');
+            throw new InvalidArgumentException('invalid value for "$page_size" when calling PersonApi.personServiceListPeople, must be smaller than or equal to 100.');
         }
         if ($page_size !== null && $page_size < 1) {
-            throw new \InvalidArgumentException('invalid value for "$page_size" when calling PersonApi.personServiceListPeople, must be bigger than or equal to 1.');
+            throw new InvalidArgumentException('invalid value for "$page_size" when calling PersonApi.personServiceListPeople, must be bigger than or equal to 1.');
         }
-        
 
         $resourcePath = '/people';
         $formParams = [];
@@ -384,7 +418,7 @@ class PersonApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -393,7 +427,7 @@ class PersonApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -402,16 +436,13 @@ class PersonApi
             'integer', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
 
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -423,26 +454,24 @@ class PersonApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
-
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -452,23 +481,25 @@ class PersonApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -476,8 +507,8 @@ class PersonApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -497,12 +528,8 @@ class PersonApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -510,24 +537,24 @@ class PersonApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -536,16 +563,16 @@ class PersonApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

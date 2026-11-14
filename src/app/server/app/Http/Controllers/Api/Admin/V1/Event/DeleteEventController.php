@@ -10,11 +10,11 @@ use Event\Application\Admin\UseCase\Delete\DeleteInputData;
 use Event\Application\Admin\UseCase\Delete\DeleteUseCase;
 use Illuminate\Http\JsonResponse;
 
-class DeleteEventController extends Controller
+final readonly class DeleteEventController extends Controller
 {
     public function __construct(
-        private readonly DeleteUseCase $useCase,
-        private readonly DeletePresenter $presenter,
+        private DeleteUseCase $useCase,
+        private DeletePresenter $presenter,
     ) {
     }
 

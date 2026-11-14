@@ -12,12 +12,12 @@ use Release\Application\Admin\UseCase\Create\CreateInputData;
 use Release\Application\Admin\UseCase\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
-class CreateReleaseController extends Controller
+final readonly class CreateReleaseController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly CreateUseCase $useCase,
-        private readonly CreatePresenter $presenter,
+        private MapperInterface $mapper,
+        private CreateUseCase $useCase,
+        private CreatePresenter $presenter,
     ) {
     }
 

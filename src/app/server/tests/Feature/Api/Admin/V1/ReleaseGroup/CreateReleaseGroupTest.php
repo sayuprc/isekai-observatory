@@ -22,7 +22,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function canCreate(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => '観測された春',
                 'type' => ReleaseGroupType::Album->value,
@@ -31,7 +32,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -65,7 +67,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($this->generateUuid(), '既存の作品', ReleaseGroupType::Single, true, orderNo: 15),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => '観測された春',
                 'type' => ReleaseGroupType::Album->value,
@@ -74,23 +77,23 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 7,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJsonPath('releaseGroup.orderNo', 7);
     }
 
     #[Test]
     public function forbidden(): void
     {
-        $this->withGeneralAuth()
-            ->postJson(route(ReleaseGroupRouteMap::Create), [
-                'title' => '観測された春',
-                'type' => ReleaseGroupType::Album->value,
-                'description' => '',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'tags' => [],
-            ])->assertStatus(403);
+        $this->withGeneralAuth()->postJson(route(ReleaseGroupRouteMap::Create), [
+            'title' => '観測された春',
+            'type' => ReleaseGroupType::Album->value,
+            'description' => '',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'tags' => [],
+        ])->assertStatus(403);
     }
 
     #[Test]
@@ -100,7 +103,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
         $secondTagId = $this->generateUuid();
         $this->storeTags($this->createTag($secondTagId, 'タグB', 20), $this->createTag($firstTagId, 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => 'タグ付きの作品',
                 'type' => ReleaseGroupType::Album->value,
@@ -123,7 +127,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => 'タグが重複した作品',
                 'type' => ReleaseGroupType::Album->value,

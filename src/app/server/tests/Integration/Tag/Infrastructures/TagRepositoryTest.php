@@ -144,8 +144,12 @@ class TagRepositoryTest extends DatabaseTestCase
         $repository->save($tag2);
         $repository->save($tag3);
 
-        $page1 = $repository->search(new TagSearchCriteria(new None(), Sort::OrderNo, Order::Asc, 1, PerPage::TwentyFive));
-        $page2 = $repository->search(new TagSearchCriteria(new None(), Sort::OrderNo, Order::Asc, 2, PerPage::TwentyFive));
+        $page1 = $repository->search(
+            new TagSearchCriteria(new None(), Sort::OrderNo, Order::Asc, 1, PerPage::TwentyFive),
+        );
+        $page2 = $repository->search(
+            new TagSearchCriteria(new None(), Sort::OrderNo, Order::Asc, 2, PerPage::TwentyFive),
+        );
 
         $this->assertCount(3, $page1);
         $this->assertCount(0, $page2);

@@ -14,9 +14,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $url = config()->string('app.url');
-
-        URL::forceScheme(str_starts_with($url, 'https') ? 'https' : 'http');
+        URL::forceScheme(str_starts_with(config()->string('app.url'), 'https') ? 'https' : 'http');
 
         $this->registerPasskeyRateLimiters();
     }
@@ -58,7 +56,9 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for(
             'passkey-refresh',
-            fn (Request $request): Limit => $this->limit('refresh')->by('refresh:' . $request->string('refreshTokenId')->toString()),
+            fn (Request $request): Limit => $this->limit('refresh')->by(
+                'refresh:' . $request->string('refreshTokenId')->toString(),
+            ),
         );
     }
 

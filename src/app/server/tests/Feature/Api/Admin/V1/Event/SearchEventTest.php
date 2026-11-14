@@ -28,7 +28,8 @@ class SearchEventTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: '非公開のライブ', isDisplay: false),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(EventRouteMap::Search, ['status' => '1', 'is_display' => 'true', 'per_page' => '25']))
             ->assertStatus(200)
             ->assertJsonCount(1, 'events')
@@ -47,7 +48,8 @@ class SearchEventTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: '配信'),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(EventRouteMap::Search, ['title' => 'ライブ', 'sort' => 'title', 'order' => 'desc']))
             ->assertStatus(200)
             ->assertJsonCount(2, 'events')
@@ -68,7 +70,8 @@ class SearchEventTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: 'タグなしのライブ'),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(EventRouteMap::Search, ['tag_id' => $tagId]))
             ->assertStatus(200)
             ->assertJsonCount(1, 'events')

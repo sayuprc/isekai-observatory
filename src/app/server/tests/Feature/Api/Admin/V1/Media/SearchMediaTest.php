@@ -26,10 +26,24 @@ class SearchMediaTest extends DatabaseTestCase
     public function canSearchByTitle(): void
     {
         $repository = $this->app->make(MediaRepository::class);
-        $repository->save($this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/mv', MediaType::Mv, true, new DateTimeImmutable('2024-03-01 12:00:00')));
-        $repository->save($this->createMedia($this->generateUuid(), '別の動画', 'https://example.com/other', MediaType::AudioVideo, true));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            'テストメディアMV',
+            'https://example.com/mv',
+            MediaType::Mv,
+            true,
+            new DateTimeImmutable('2024-03-01 12:00:00'),
+        ));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            '別の動画',
+            'https://example.com/other',
+            MediaType::AudioVideo,
+            true,
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['title' => 'テストメディア']))
             ->assertStatus(200)
             ->assertJsonCount(1, 'media')
@@ -42,10 +56,23 @@ class SearchMediaTest extends DatabaseTestCase
     public function canSearchByTitleCaseInsensitively(): void
     {
         $repository = $this->app->make(MediaRepository::class);
-        $repository->save($this->createMedia($this->generateUuid(), 'Observatory MV', 'https://example.com/mv', MediaType::Mv, true));
-        $repository->save($this->createMedia($this->generateUuid(), '別の動画', 'https://example.com/other', MediaType::AudioVideo, true));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            'Observatory MV',
+            'https://example.com/mv',
+            MediaType::Mv,
+            true,
+        ));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            '別の動画',
+            'https://example.com/other',
+            MediaType::AudioVideo,
+            true,
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['title' => 'oBSERVATORY']))
             ->assertStatus(200)
             ->assertJsonCount(1, 'media')
@@ -56,9 +83,16 @@ class SearchMediaTest extends DatabaseTestCase
     public function canSearchWithoutTitle(): void
     {
         $repository = $this->app->make(MediaRepository::class);
-        $repository->save($this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/mv', MediaType::Mv, true));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            'テストメディアMV',
+            'https://example.com/mv',
+            MediaType::Mv,
+            true,
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['per_page' => 25]))
             ->assertStatus(200)
             ->assertJsonCount(1, 'media')
@@ -70,11 +104,30 @@ class SearchMediaTest extends DatabaseTestCase
     public function canSearchByTypeAndDisplay(): void
     {
         $repository = $this->app->make(MediaRepository::class);
-        $repository->save($this->createMedia($this->generateUuid(), 'MV', 'https://example.com/mv', MediaType::Mv, true));
-        $repository->save($this->createMedia($this->generateUuid(), '非表示MV', 'https://example.com/hidden', MediaType::Mv, false));
-        $repository->save($this->createMedia($this->generateUuid(), '配信', 'https://example.com/stream', MediaType::LiveStream, true));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            'MV',
+            'https://example.com/mv',
+            MediaType::Mv,
+            true,
+        ));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            '非表示MV',
+            'https://example.com/hidden',
+            MediaType::Mv,
+            false,
+        ));
+        $repository->save($this->createMedia(
+            $this->generateUuid(),
+            '配信',
+            'https://example.com/stream',
+            MediaType::LiveStream,
+            true,
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, [
                 'type' => MediaType::Mv->value,
                 'is_display' => 'true',
@@ -93,10 +146,25 @@ class SearchMediaTest extends DatabaseTestCase
         $repository = $this->app->make(MediaRepository::class);
         $olderId = $this->generateUuid();
         $newerId = $this->generateUuid();
-        $repository->save($this->createMedia($olderId, '古い動画', 'https://example.com/old', MediaType::Mv, true, new DateTimeImmutable('2024-01-01 00:00:00')));
-        $repository->save($this->createMedia($newerId, '新しい動画', 'https://example.com/new', MediaType::Mv, true, new DateTimeImmutable('2024-03-01 12:00:00')));
+        $repository->save($this->createMedia(
+            $olderId,
+            '古い動画',
+            'https://example.com/old',
+            MediaType::Mv,
+            true,
+            new DateTimeImmutable('2024-01-01 00:00:00'),
+        ));
+        $repository->save($this->createMedia(
+            $newerId,
+            '新しい動画',
+            'https://example.com/new',
+            MediaType::Mv,
+            true,
+            new DateTimeImmutable('2024-03-01 12:00:00'),
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['sort' => 'published_at', 'order' => 'desc']))
             ->assertStatus(200)
             ->assertJsonPath('media.0.mediaId', $newerId)
@@ -112,7 +180,8 @@ class SearchMediaTest extends DatabaseTestCase
         $repository->save($this->createMedia($idI, 'い動画', 'https://example.com/i', MediaType::Mv, true));
         $repository->save($this->createMedia($idA, 'あ動画', 'https://example.com/a', MediaType::Mv, true));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['sort' => 'title', 'order' => 'asc']))
             ->assertStatus(200)
             ->assertJsonPath('media.0.mediaId', $idA)
@@ -125,17 +194,40 @@ class SearchMediaTest extends DatabaseTestCase
         $mediaId = $this->generateUuid();
         $unusedMediaId = $this->generateUuid();
         $repository = $this->app->make(MediaRepository::class);
-        $repository->save($this->createMedia($mediaId, 'A 参照あり', 'https://example.com/used', MediaType::Mv, true, new DateTimeImmutable('2024-01-01 00:00:00')));
-        $repository->save($this->createMedia($unusedMediaId, 'B 参照なし', 'https://example.com/unused', MediaType::Mv, true, new DateTimeImmutable('2024-02-01 00:00:00')));
+        $repository->save($this->createMedia(
+            $mediaId,
+            'A 参照あり',
+            'https://example.com/used',
+            MediaType::Mv,
+            true,
+            new DateTimeImmutable('2024-01-01 00:00:00'),
+        ));
+        $repository->save($this->createMedia(
+            $unusedMediaId,
+            'B 参照なし',
+            'https://example.com/unused',
+            MediaType::Mv,
+            true,
+            new DateTimeImmutable('2024-02-01 00:00:00'),
+        ));
         $this->storeSongs(
-            $this->createSong($this->generateUuid(), '楽曲1', '説明', SongType::Original, true, 1, media: [['mediaId' => $mediaId, 'orderNo' => 1]]),
-            $this->createSong($this->generateUuid(), '楽曲2', '説明', SongType::Original, true, 2, media: [['mediaId' => $mediaId, 'orderNo' => 1]]),
+            $this->createSong($this->generateUuid(), '楽曲1', '説明', SongType::Original, true, 1, media: [[
+                'mediaId' => $mediaId,
+                'orderNo' => 1,
+            ]]),
+            $this->createSong($this->generateUuid(), '楽曲2', '説明', SongType::Original, true, 2, media: [[
+                'mediaId' => $mediaId,
+                'orderNo' => 1,
+            ]]),
         );
-        $this->app->make(EventRepository::class)->save(
-            $this->createEvent($this->generateUuid(), media: [['mediaId' => $mediaId, 'orderNo' => 1]]),
-        );
+        $this->app
+            ->make(EventRepository::class)
+            ->save(
+                $this->createEvent($this->generateUuid(), media: [['mediaId' => $mediaId, 'orderNo' => 1]]),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['sort' => 'published_at', 'order' => 'asc']))
             ->assertStatus(200)
             ->assertJsonPath('media.0.mediaId', $mediaId)
@@ -154,12 +246,22 @@ class SearchMediaTest extends DatabaseTestCase
         $taggedId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグA', 10), $this->createTag($otherTagId, 'タグB', 20));
         $this->storeMedia(
-            $this->createMedia($taggedId, 'タグ付きのMV', 'https://example.com/tagged', MediaType::Mv, true, tags: [['tagId' => $tagId]]),
-            $this->createMedia($this->generateUuid(), '別タグのMV', 'https://example.com/other', MediaType::Mv, true, tags: [['tagId' => $otherTagId]]),
+            $this->createMedia($taggedId, 'タグ付きのMV', 'https://example.com/tagged', MediaType::Mv, true, tags: [[
+                'tagId' => $tagId,
+            ]]),
+            $this->createMedia(
+                $this->generateUuid(),
+                '別タグのMV',
+                'https://example.com/other',
+                MediaType::Mv,
+                true,
+                tags: [['tagId' => $otherTagId]],
+            ),
             $this->createMedia($this->generateUuid(), 'タグなしのMV', 'https://example.com/none', MediaType::Mv, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(MediaRouteMap::Search, ['tag_id' => $tagId]))
             ->assertStatus(200)
             ->assertJsonCount(1, 'media')

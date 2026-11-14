@@ -52,14 +52,16 @@ class AuthenticateUseCaseTest extends TestCase
     {
         $refreshTokenId = $this->generateUuid();
 
-        $this->jwtHandler->shouldReceive('verify')
+        $this->jwtHandler
+            ->shouldReceive('verify')
             ->with('access_token')
             ->andReturn(new AccessTokenPayload('', 0, 0, 0, $refreshTokenId))
             ->once();
 
         $adminUserId = $this->generateUuid();
 
-        $this->refreshTokenRepository->shouldReceive('findActive')
+        $this->refreshTokenRepository
+            ->shouldReceive('findActive')
             ->withArgs(static fn (RefreshTokenId $arg) => $arg->value === $refreshTokenId)
             ->andReturn(
                 $this->createRefreshToken(
@@ -72,7 +74,8 @@ class AuthenticateUseCaseTest extends TestCase
             )
             ->once();
 
-        $this->userRepository->shouldReceive('find')
+        $this->userRepository
+            ->shouldReceive('find')
             ->withArgs(static fn (AdminUserId $arg) => $arg->value === $adminUserId)
             ->andReturn($this->createAdminUser($adminUserId, 'example@example.com', Role::General, []))
             ->once();
@@ -85,7 +88,8 @@ class AuthenticateUseCaseTest extends TestCase
     #[Test]
     public function unauthenticatedWhenExpireToken(): void
     {
-        $this->jwtHandler->shouldReceive('verify')
+        $this->jwtHandler
+            ->shouldReceive('verify')
             ->with('access_token')
             ->andReturnNull()
             ->once();
@@ -100,12 +104,14 @@ class AuthenticateUseCaseTest extends TestCase
     {
         $refreshTokenId = $this->generateUuid();
 
-        $this->jwtHandler->shouldReceive('verify')
+        $this->jwtHandler
+            ->shouldReceive('verify')
             ->with('access_token')
             ->andReturn(new AccessTokenPayload('', 0, 0, 0, $refreshTokenId))
             ->once();
 
-        $this->refreshTokenRepository->shouldReceive('findActive')
+        $this->refreshTokenRepository
+            ->shouldReceive('findActive')
             ->withArgs(static fn (RefreshTokenId $arg) => $arg->value === $refreshTokenId)
             ->andReturnNull()
             ->once();
@@ -120,14 +126,16 @@ class AuthenticateUseCaseTest extends TestCase
     {
         $refreshTokenId = $this->generateUuid();
 
-        $this->jwtHandler->shouldReceive('verify')
+        $this->jwtHandler
+            ->shouldReceive('verify')
             ->with('access_token')
             ->andReturn(new AccessTokenPayload('', 0, 0, 0, $refreshTokenId))
             ->once();
 
         $adminUserId = $this->generateUuid();
 
-        $this->refreshTokenRepository->shouldReceive('findActive')
+        $this->refreshTokenRepository
+            ->shouldReceive('findActive')
             ->withArgs(static fn (RefreshTokenId $arg) => $arg->value === $refreshTokenId)
             ->andReturn(
                 $this->createRefreshToken(
@@ -140,7 +148,8 @@ class AuthenticateUseCaseTest extends TestCase
             )
             ->once();
 
-        $this->userRepository->shouldReceive('find')
+        $this->userRepository
+            ->shouldReceive('find')
             ->withArgs(static fn (AdminUserId $arg) => $arg->value === $adminUserId)
             ->andReturnNull()
             ->once();

@@ -68,7 +68,8 @@ class ImportYouTubeNotifierTest extends TestCase
             ],
         );
 
-        $this->driver->shouldReceive('notice')
+        $this->driver
+            ->shouldReceive('notice')
             ->once()
             ->with(Mockery::on(
                 static fn (NotificationMessage $message): bool => $message->toJson() === $expected->toJson(),
@@ -105,7 +106,8 @@ class ImportYouTubeNotifierTest extends TestCase
             );
         }
 
-        $this->driver->shouldReceive('notice')
+        $this->driver
+            ->shouldReceive('notice')
             ->once()
             ->with(Mockery::on(function (NotificationMessage $message): bool {
                 $payload = json_decode($message->toJson(), true);
@@ -139,7 +141,8 @@ class ImportYouTubeNotifierTest extends TestCase
             );
         }
 
-        $this->driver->shouldReceive('notice')
+        $this->driver
+            ->shouldReceive('notice')
             ->once()
             ->with(Mockery::on(function (NotificationMessage $message) use ($videos): bool {
                 $payload = json_decode($message->toJson(), true);
@@ -179,7 +182,8 @@ class ImportYouTubeNotifierTest extends TestCase
             ],
         );
 
-        $this->driver->shouldReceive('notice')
+        $this->driver
+            ->shouldReceive('notice')
             ->once()
             ->with(Mockery::on(
                 static fn (NotificationMessage $message): bool => $message->toJson() === $expected->toJson(),

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseCreateRequest
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,34 +33,41 @@
 
 namespace OpenAPI\Admin\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Admin\Client\ObjectSerializer;
+use ArrayAccess;
+use DateTime;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * ReleaseCreateRequest Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializable
+class ReleaseCreateRequest implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'ReleaseCreateRequest';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'release_group_id' => 'string',
         'name' => 'string',
@@ -65,16 +77,18 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'is_display' => 'bool',
         'order_no' => 'int',
         'formats' => '\OpenAPI\Admin\Client\Model\ReleaseFormatValue[]',
-        'media' => '\OpenAPI\Admin\Client\Model\Medium[]'
+        'media' => '\OpenAPI\Admin\Client\Model\Medium[]',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'release_group_id' => 'uuid',
         'name' => null,
@@ -84,14 +98,14 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'is_display' => null,
         'order_no' => 'int32',
         'formats' => null,
-        'media' => null
+        'media' => null,
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'release_group_id' => false,
         'name' => false,
@@ -101,14 +115,14 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'is_display' => false,
         'order_no' => false,
         'formats' => false,
-        'media' => false
+        'media' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -133,8 +147,6 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -144,7 +156,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -154,7 +166,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -163,9 +175,6 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -174,9 +183,6 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -187,7 +193,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'release_group_id' => 'releaseGroupId',
@@ -198,13 +204,13 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'is_display' => 'isDisplay',
         'order_no' => 'orderNo',
         'formats' => 'formats',
-        'media' => 'media'
+        'media' => 'media',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'release_group_id' => 'setReleaseGroupId',
@@ -215,13 +221,13 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'is_display' => 'setIsDisplay',
         'order_no' => 'setOrderNo',
         'formats' => 'setFormats',
-        'media' => 'setMedia'
+        'media' => 'setMedia',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'release_group_id' => 'getReleaseGroupId',
@@ -232,7 +238,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         'is_display' => 'getIsDisplay',
         'order_no' => 'getOrderNo',
         'formats' => 'getFormats',
-        'media' => 'getMedia'
+        'media' => 'getMedia',
     ];
 
     /**
@@ -276,19 +282,18 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -304,17 +309,17 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -351,20 +356,21 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['order_no'] === null) {
             $invalidProperties[] = "'order_no' can't be null";
         }
-        if (($this->container['order_no'] < 1)) {
+        if ($this->container['order_no'] < 1) {
             $invalidProperties[] = "invalid value for 'order_no', must be bigger than or equal to 1.";
         }
 
         if ($this->container['formats'] === null) {
             $invalidProperties[] = "'formats' can't be null";
         }
-        if ((count($this->container['formats']) < 1)) {
+        if (count($this->container['formats']) < 1) {
             $invalidProperties[] = "invalid value for 'formats', number of items must be greater than or equal to 1.";
         }
 
         if ($this->container['media'] === null) {
             $invalidProperties[] = "'media' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -378,7 +384,6 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets release_group_id
@@ -399,8 +404,8 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     public function setReleaseGroupId($release_group_id)
     {
-        if (is_null($release_group_id)) {
-            throw new \InvalidArgumentException('non-nullable release_group_id cannot be null');
+        if ($release_group_id === null) {
+            throw new InvalidArgumentException('non-nullable release_group_id cannot be null');
         }
         $this->container['release_group_id'] = $release_group_id;
 
@@ -426,8 +431,8 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     public function setName($name)
     {
-        if (is_null($name)) {
-            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        if ($name === null) {
+            throw new InvalidArgumentException('non-nullable name cannot be null');
         }
         $this->container['name'] = $name;
 
@@ -437,7 +442,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets released_on
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getReleasedOn()
     {
@@ -447,14 +452,14 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets released_on
      *
-     * @param \DateTime $released_on 発売日
+     * @param DateTime $released_on 発売日
      *
      * @return self
      */
     public function setReleasedOn($released_on)
     {
-        if (is_null($released_on)) {
-            throw new \InvalidArgumentException('non-nullable released_on cannot be null');
+        if ($released_on === null) {
+            throw new InvalidArgumentException('non-nullable released_on cannot be null');
         }
         $this->container['released_on'] = $released_on;
 
@@ -480,8 +485,8 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     public function setDescription($description)
     {
-        if (is_null($description)) {
-            throw new \InvalidArgumentException('non-nullable description cannot be null');
+        if ($description === null) {
+            throw new InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
 
@@ -507,8 +512,8 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     public function setNote($note)
     {
-        if (is_null($note)) {
-            throw new \InvalidArgumentException('non-nullable note cannot be null');
+        if ($note === null) {
+            throw new InvalidArgumentException('non-nullable note cannot be null');
         }
         $this->container['note'] = $note;
 
@@ -534,8 +539,8 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     public function setIsDisplay($is_display)
     {
-        if (is_null($is_display)) {
-            throw new \InvalidArgumentException('non-nullable is_display cannot be null');
+        if ($is_display === null) {
+            throw new InvalidArgumentException('non-nullable is_display cannot be null');
         }
         $this->container['is_display'] = $is_display;
 
@@ -561,12 +566,12 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     public function setOrderNo($order_no)
     {
-        if (is_null($order_no)) {
-            throw new \InvalidArgumentException('non-nullable order_no cannot be null');
+        if ($order_no === null) {
+            throw new InvalidArgumentException('non-nullable order_no cannot be null');
         }
 
-        if (($order_no < 1)) {
-            throw new \InvalidArgumentException('invalid value for $order_no when calling ReleaseCreateRequest., must be bigger than or equal to 1.');
+        if ($order_no < 1) {
+            throw new InvalidArgumentException('invalid value for $order_no when calling ReleaseCreateRequest., must be bigger than or equal to 1.');
         }
 
         $this->container['order_no'] = $order_no;
@@ -577,7 +582,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets formats
      *
-     * @return \OpenAPI\Admin\Client\Model\ReleaseFormatValue[]
+     * @return array<ReleaseFormatValue>
      */
     public function getFormats()
     {
@@ -587,19 +592,18 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets formats
      *
-     * @param \OpenAPI\Admin\Client\Model\ReleaseFormatValue[] $formats formats
+     * @param array<ReleaseFormatValue> $formats formats
      *
      * @return self
      */
     public function setFormats($formats)
     {
-        if (is_null($formats)) {
-            throw new \InvalidArgumentException('non-nullable formats cannot be null');
+        if ($formats === null) {
+            throw new InvalidArgumentException('non-nullable formats cannot be null');
         }
 
-
-        if ((count($formats) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $formats when calling ReleaseCreateRequest., number of items must be greater than or equal to 1.');
+        if (count($formats) < 1) {
+            throw new InvalidArgumentException('invalid length for $formats when calling ReleaseCreateRequest., number of items must be greater than or equal to 1.');
         }
         $this->container['formats'] = $formats;
 
@@ -609,7 +613,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets media
      *
-     * @return \OpenAPI\Admin\Client\Model\Medium[]
+     * @return array<Medium>
      */
     public function getMedia()
     {
@@ -619,25 +623,24 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets media
      *
-     * @param \OpenAPI\Admin\Client\Model\Medium[] $media media
+     * @param array<Medium> $media media
      *
      * @return self
      */
     public function setMedia($media)
     {
-        if (is_null($media)) {
-            throw new \InvalidArgumentException('non-nullable media cannot be null');
+        if ($media === null) {
+            throw new InvalidArgumentException('non-nullable media cannot be null');
         }
         $this->container['media'] = $media;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -647,11 +650,11 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -662,12 +665,10 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -677,9 +678,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -688,15 +687,16 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -708,7 +708,7 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -722,5 +722,3 @@ class ReleaseCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

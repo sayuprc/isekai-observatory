@@ -29,7 +29,8 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
     #[Override]
     public function list(?string $cursor, int $limit): MediaListPage
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(['media_id', 'title', 'url', 'published_at', 'type'])
             ->from('media')
             ->where('is_display', '=', true);
@@ -38,20 +39,20 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
             $decoded = MediaListCursor::decode($cursor);
 
             // 降順と昇順が混在し行値比較では表せないため、条件を展開して書く
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(published_at < %s OR (published_at = %s AND media_id > %s))',
                 Sql::value($decoded->publishedAt),
                 Sql::value($decoded->publishedAt),
                 Sql::value($this->converter->toBin($decoded->mediaId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $mediaRows = $this->queryFactory->fetchAll(
-            $query
-                ->orderBy('published_at', 'desc')
-                ->orderBy('media_id')
-                ->limit($limit + 1),
-        );
+        $mediaRows = $query
+            ->orderBy('published_at', 'desc')
+            ->orderBy('media_id')
+            ->limit($limit + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($mediaRows) > $limit;
         $pageRows = $hasNextPage ? array_slice($mediaRows, 0, $limit) : $mediaRows;
@@ -99,15 +100,15 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
             return [];
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_media_links.media_id', 'songs.song_id', 'songs.title', 'songs.type'])
-                ->from('song_media_links')
-                ->join('songs', 'song_media_links.song_id = songs.song_id')
-                ->where('song_media_links.media_id', 'IN', $binMediaIds)
-                ->where('songs.is_display', '=', true)
-                ->orderBy('song_media_links.order_no'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_media_links.media_id', 'songs.song_id', 'songs.title', 'songs.type'])
+            ->from('song_media_links')
+            ->join('songs', 'song_media_links.song_id = songs.song_id')
+            ->where('song_media_links.media_id', 'IN', $binMediaIds)
+            ->where('songs.is_display', '=', true)
+            ->orderBy('song_media_links.order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         $grouped = [];
 
@@ -129,15 +130,15 @@ readonly class MediaQueryService implements MediaQueryServiceInterface
             return [];
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['media_taggings.media_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
-                ->from('media_taggings')
-                ->join('tags', 'media_taggings.tag_id = tags.tag_id')
-                ->where('media_taggings.media_id', 'IN', $binMediaIds)
-                ->orderBy('tags.order_no')
-                ->orderBy('tags.tag_id'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['media_taggings.media_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+            ->from('media_taggings')
+            ->join('tags', 'media_taggings.tag_id = tags.tag_id')
+            ->where('media_taggings.media_id', 'IN', $binMediaIds)
+            ->orderBy('tags.order_no')
+            ->orderBy('tags.tag_id')
+            |> $this->queryFactory->fetchAll(...);
 
         $grouped = [];
 

@@ -22,7 +22,12 @@ readonly class PersonGroupUsageCountQueryService implements PersonGroupUsageCoun
     {
         // 件数は渡された ID でまとめて引き、1 件ごとの問い合わせを避ける
         $binIds = array_map($this->converter->toBin(...), $personGroupIds);
-        $counts = $this->queryFactory->countBy('song_performance_persons', 'person_group_id', $binIds, 'performance_id');
+        $counts = $this->queryFactory->countBy(
+            'song_performance_persons',
+            'person_group_id',
+            $binIds,
+            'performance_id',
+        );
 
         $result = [];
         foreach ($binIds as $binId) {

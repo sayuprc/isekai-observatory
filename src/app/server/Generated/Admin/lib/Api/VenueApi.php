@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * VenueApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -30,24 +35,41 @@ namespace OpenAPI\Admin\Client\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Admin\Client\ApiException;
+use OpenAPI\Admin\Client\Configuration;
+use OpenAPI\Admin\Client\HeaderSelector;
+use OpenAPI\Admin\Client\Model\ErrorResponse;
+use OpenAPI\Admin\Client\Model\VenueCreateRequest;
+use OpenAPI\Admin\Client\Model\VenueCreateResponse;
+use OpenAPI\Admin\Client\Model\VenueGetResponse;
+use OpenAPI\Admin\Client\Model\VenueKindValue;
+use OpenAPI\Admin\Client\Model\VenueSearchResponse;
+use OpenAPI\Admin\Client\Model\VenueUpdateRequest;
+use OpenAPI\Admin\Client\Model\VenueUpdateResponse;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use OpenAPIAdminClientModelPerPage;
+use OpenAPIAdminClientModelSortOrder;
+use OpenAPIAdminClientModelVenueSearchSortBy;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Admin\Client\ApiException;
-use OpenAPI\Admin\Client\Configuration;
-use OpenAPI\Admin\Client\FormDataProcessor;
-use OpenAPI\Admin\Client\HeaderSelector;
-use OpenAPI\Admin\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * VenueApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class VenueApi
@@ -72,7 +94,7 @@ class VenueApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'venueServiceCreateVenue' => [
             'application/json',
@@ -92,16 +114,13 @@ class VenueApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -140,58 +159,66 @@ class VenueApi
     /**
      * Operation venueServiceCreateVenue
      *
-     * @param  \OpenAPI\Admin\Client\Model\VenueCreateRequest $venue_create_request venue_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
+     * @param VenueCreateRequest $venue_create_request venue_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\VenueCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return VenueCreateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function venueServiceCreateVenue($venue_create_request, string $contentType = self::contentTypes['venueServiceCreateVenue'][0])
-    {
+    public function venueServiceCreateVenue(
+        $venue_create_request,
+        string $contentType = self::contentTypes['venueServiceCreateVenue'][0],
+    ) {
         list($response) = $this->venueServiceCreateVenueWithHttpInfo($venue_create_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation venueServiceCreateVenueWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\VenueCreateRequest $venue_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
+     * @param VenueCreateRequest $venue_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\VenueCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function venueServiceCreateVenueWithHttpInfo($venue_create_request, string $contentType = self::contentTypes['venueServiceCreateVenue'][0])
-    {
+    public function venueServiceCreateVenueWithHttpInfo(
+        $venue_create_request,
+        string $contentType = self::contentTypes['venueServiceCreateVenue'][0],
+    ) {
         $request = $this->venueServiceCreateVenueRequest($venue_create_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\VenueCreateResponse',
@@ -230,18 +257,16 @@ class VenueApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -256,52 +281,57 @@ class VenueApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\VenueCreateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -310,44 +340,50 @@ class VenueApi
     /**
      * Operation venueServiceCreateVenueAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\VenueCreateRequest $venue_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
+     * @param VenueCreateRequest $venue_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceCreateVenueAsync($venue_create_request, string $contentType = self::contentTypes['venueServiceCreateVenue'][0])
-    {
+    public function venueServiceCreateVenueAsync(
+        $venue_create_request,
+        string $contentType = self::contentTypes['venueServiceCreateVenue'][0],
+    ) {
         return $this->venueServiceCreateVenueAsyncWithHttpInfo($venue_create_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation venueServiceCreateVenueAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\VenueCreateRequest $venue_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
+     * @param VenueCreateRequest $venue_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceCreateVenueAsyncWithHttpInfo($venue_create_request, string $contentType = self::contentTypes['venueServiceCreateVenue'][0])
-    {
+    public function venueServiceCreateVenueAsyncWithHttpInfo(
+        $venue_create_request,
+        string $contentType = self::contentTypes['venueServiceCreateVenue'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\VenueCreateResponse';
         $request = $this->venueServiceCreateVenueRequest($venue_create_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -356,7 +392,7 @@ class VenueApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -364,45 +400,45 @@ class VenueApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'venueServiceCreateVenue'
      *
-     * @param  \OpenAPI\Admin\Client\Model\VenueCreateRequest $venue_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
+     * @param VenueCreateRequest $venue_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceCreateVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function venueServiceCreateVenueRequest($venue_create_request, string $contentType = self::contentTypes['venueServiceCreateVenue'][0])
-    {
-
+    public function venueServiceCreateVenueRequest(
+        $venue_create_request,
+        string $contentType = self::contentTypes['venueServiceCreateVenue'][0],
+    ) {
         // verify the required parameter 'venue_create_request' is set
-        if ($venue_create_request === null || (is_array($venue_create_request) && count($venue_create_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $venue_create_request when calling venueServiceCreateVenue'
-            );
+        if ($venue_create_request === null || is_array($venue_create_request) && count($venue_create_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $venue_create_request when calling venueServiceCreateVenue');
         }
-
 
         $resourcePath = '/venues';
         $formParams = [];
@@ -411,24 +447,23 @@ class VenueApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($venue_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($venue_create_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($venue_create_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $venue_create_request;
@@ -441,19 +476,18 @@ class VenueApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -462,7 +496,7 @@ class VenueApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -474,71 +508,79 @@ class VenueApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation venueServiceDeleteVenue
      *
-     * @param  string $venue_id venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
+     * @param string $venue_id    venue_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return void
      */
-    public function venueServiceDeleteVenue($venue_id, string $contentType = self::contentTypes['venueServiceDeleteVenue'][0])
-    {
+    public function venueServiceDeleteVenue(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceDeleteVenue'][0],
+    ) {
         $this->venueServiceDeleteVenueWithHttpInfo($venue_id, $contentType);
     }
 
     /**
      * Operation venueServiceDeleteVenueWithHttpInfo
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function venueServiceDeleteVenueWithHttpInfo($venue_id, string $contentType = self::contentTypes['venueServiceDeleteVenue'][0])
-    {
+    public function venueServiceDeleteVenueWithHttpInfo(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceDeleteVenue'][0],
+    ) {
         $request = $this->venueServiceDeleteVenueRequest($venue_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
-
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
@@ -547,52 +589,57 @@ class VenueApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -601,40 +648,46 @@ class VenueApi
     /**
      * Operation venueServiceDeleteVenueAsync
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceDeleteVenueAsync($venue_id, string $contentType = self::contentTypes['venueServiceDeleteVenue'][0])
-    {
+    public function venueServiceDeleteVenueAsync(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceDeleteVenue'][0],
+    ) {
         return $this->venueServiceDeleteVenueAsyncWithHttpInfo($venue_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation venueServiceDeleteVenueAsyncWithHttpInfo
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceDeleteVenueAsyncWithHttpInfo($venue_id, string $contentType = self::contentTypes['venueServiceDeleteVenue'][0])
-    {
+    public function venueServiceDeleteVenueAsyncWithHttpInfo(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceDeleteVenue'][0],
+    ) {
         $returnType = '';
         $request = $this->venueServiceDeleteVenueRequest($venue_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -642,45 +695,45 @@ class VenueApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'venueServiceDeleteVenue'
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceDeleteVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function venueServiceDeleteVenueRequest($venue_id, string $contentType = self::contentTypes['venueServiceDeleteVenue'][0])
-    {
-
+    public function venueServiceDeleteVenueRequest(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceDeleteVenue'][0],
+    ) {
         // verify the required parameter 'venue_id' is set
-        if ($venue_id === null || (is_array($venue_id) && count($venue_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $venue_id when calling venueServiceDeleteVenue'
-            );
+        if ($venue_id === null || is_array($venue_id) && count($venue_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $venue_id when calling venueServiceDeleteVenue');
         }
-
 
         $resourcePath = '/venues/{venueId}';
         $formParams = [];
@@ -689,22 +742,19 @@ class VenueApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($venue_id !== null) {
             $resourcePath = str_replace(
                 '{venueId}',
                 ObjectSerializer::toPathValue($venue_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -716,19 +766,18 @@ class VenueApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -737,7 +786,7 @@ class VenueApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -749,74 +798,81 @@ class VenueApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'DELETE',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation venueServiceGetVenue
      *
-     * @param  string $venue_id venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
+     * @param string $venue_id    venue_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\VenueGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return VenueGetResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
     public function venueServiceGetVenue($venue_id, string $contentType = self::contentTypes['venueServiceGetVenue'][0])
     {
         list($response) = $this->venueServiceGetVenueWithHttpInfo($venue_id, $contentType);
+
         return $response;
     }
 
     /**
      * Operation venueServiceGetVenueWithHttpInfo
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\VenueGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function venueServiceGetVenueWithHttpInfo($venue_id, string $contentType = self::contentTypes['venueServiceGetVenue'][0])
-    {
+    public function venueServiceGetVenueWithHttpInfo(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceGetVenue'][0],
+    ) {
         $request = $this->venueServiceGetVenueRequest($venue_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\VenueGetResponse',
@@ -855,18 +911,16 @@ class VenueApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -881,52 +935,57 @@ class VenueApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\VenueGetResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -935,44 +994,50 @@ class VenueApi
     /**
      * Operation venueServiceGetVenueAsync
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceGetVenueAsync($venue_id, string $contentType = self::contentTypes['venueServiceGetVenue'][0])
-    {
+    public function venueServiceGetVenueAsync(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceGetVenue'][0],
+    ) {
         return $this->venueServiceGetVenueAsyncWithHttpInfo($venue_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation venueServiceGetVenueAsyncWithHttpInfo
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceGetVenueAsyncWithHttpInfo($venue_id, string $contentType = self::contentTypes['venueServiceGetVenue'][0])
-    {
+    public function venueServiceGetVenueAsyncWithHttpInfo(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceGetVenue'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\VenueGetResponse';
         $request = $this->venueServiceGetVenueRequest($venue_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -981,7 +1046,7 @@ class VenueApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -989,45 +1054,45 @@ class VenueApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'venueServiceGetVenue'
      *
-     * @param  string $venue_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
+     * @param string $venue_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceGetVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function venueServiceGetVenueRequest($venue_id, string $contentType = self::contentTypes['venueServiceGetVenue'][0])
-    {
-
+    public function venueServiceGetVenueRequest(
+        $venue_id,
+        string $contentType = self::contentTypes['venueServiceGetVenue'][0],
+    ) {
         // verify the required parameter 'venue_id' is set
-        if ($venue_id === null || (is_array($venue_id) && count($venue_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $venue_id when calling venueServiceGetVenue'
-            );
+        if ($venue_id === null || is_array($venue_id) && count($venue_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $venue_id when calling venueServiceGetVenue');
         }
-
 
         $resourcePath = '/venues/{venueId}';
         $formParams = [];
@@ -1036,22 +1101,19 @@ class VenueApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($venue_id !== null) {
             $resourcePath = str_replace(
                 '{venueId}',
                 ObjectSerializer::toPathValue($venue_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1063,19 +1125,18 @@ class VenueApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1084,7 +1145,7 @@ class VenueApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1096,84 +1157,111 @@ class VenueApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation venueServiceSearchVenues
      *
-     * @param  string|null $name name (optional)
-     * @param  \OpenAPI\Admin\Client\Model\VenueKindValue|null $kind kind (optional)
-     * @param  \OpenAPIAdminClientModelVenueSearchSortBy|null $sort sort (optional, default to 'name')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order order (optional, default to 'asc')
-     * @param  Int|null $page page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
+     * @param string|null                                   $name        name (optional)
+     * @param VenueKindValue|null                           $kind        kind (optional)
+     * @param OpenAPIAdminClientModelVenueSearchSortBy|null $sort        sort (optional, default to 'name')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       order (optional, default to 'asc')
+     * @param int|null                                      $page        page (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    per_page (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\VenueSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return VenueSearchResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function venueServiceSearchVenues($name = null, $kind = null, $sort = 'name', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['venueServiceSearchVenues'][0])
-    {
-        list($response) = $this->venueServiceSearchVenuesWithHttpInfo($name, $kind, $sort, $order, $page, $per_page, $contentType);
+    public function venueServiceSearchVenues(
+        $name = null,
+        $kind = null,
+        $sort = 'name',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['venueServiceSearchVenues'][0],
+    ) {
+        list($response) = $this->venueServiceSearchVenuesWithHttpInfo(
+            $name,
+            $kind,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation venueServiceSearchVenuesWithHttpInfo
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPI\Admin\Client\Model\VenueKindValue|null $kind (optional)
-     * @param  \OpenAPIAdminClientModelVenueSearchSortBy|null $sort (optional, default to 'name')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
+     * @param string|null                                   $name        (optional)
+     * @param VenueKindValue|null                           $kind        (optional)
+     * @param OpenAPIAdminClientModelVenueSearchSortBy|null $sort        (optional, default to 'name')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\VenueSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function venueServiceSearchVenuesWithHttpInfo($name = null, $kind = null, $sort = 'name', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['venueServiceSearchVenues'][0])
-    {
+    public function venueServiceSearchVenuesWithHttpInfo(
+        $name = null,
+        $kind = null,
+        $sort = 'name',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['venueServiceSearchVenues'][0],
+    ) {
         $request = $this->venueServiceSearchVenuesRequest($name, $kind, $sort, $order, $page, $per_page, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\VenueSearchResponse',
@@ -1200,18 +1288,16 @@ class VenueApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1226,36 +1312,39 @@ class VenueApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\VenueSearchResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1264,54 +1353,78 @@ class VenueApi
     /**
      * Operation venueServiceSearchVenuesAsync
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPI\Admin\Client\Model\VenueKindValue|null $kind (optional)
-     * @param  \OpenAPIAdminClientModelVenueSearchSortBy|null $sort (optional, default to 'name')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
+     * @param string|null                                   $name        (optional)
+     * @param VenueKindValue|null                           $kind        (optional)
+     * @param OpenAPIAdminClientModelVenueSearchSortBy|null $sort        (optional, default to 'name')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceSearchVenuesAsync($name = null, $kind = null, $sort = 'name', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['venueServiceSearchVenues'][0])
-    {
-        return $this->venueServiceSearchVenuesAsyncWithHttpInfo($name, $kind, $sort, $order, $page, $per_page, $contentType)
+    public function venueServiceSearchVenuesAsync(
+        $name = null,
+        $kind = null,
+        $sort = 'name',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['venueServiceSearchVenues'][0],
+    ) {
+        return $this->venueServiceSearchVenuesAsyncWithHttpInfo(
+            $name,
+            $kind,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation venueServiceSearchVenuesAsyncWithHttpInfo
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPI\Admin\Client\Model\VenueKindValue|null $kind (optional)
-     * @param  \OpenAPIAdminClientModelVenueSearchSortBy|null $sort (optional, default to 'name')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
+     * @param string|null                                   $name        (optional)
+     * @param VenueKindValue|null                           $kind        (optional)
+     * @param OpenAPIAdminClientModelVenueSearchSortBy|null $sort        (optional, default to 'name')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceSearchVenuesAsyncWithHttpInfo($name = null, $kind = null, $sort = 'name', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['venueServiceSearchVenues'][0])
-    {
+    public function venueServiceSearchVenuesAsyncWithHttpInfo(
+        $name = null,
+        $kind = null,
+        $sort = 'name',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['venueServiceSearchVenues'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\VenueSearchResponse';
         $request = $this->venueServiceSearchVenuesRequest($name, $kind, $sort, $order, $page, $per_page, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1320,7 +1433,7 @@ class VenueApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1328,50 +1441,51 @@ class VenueApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'venueServiceSearchVenues'
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPI\Admin\Client\Model\VenueKindValue|null $kind (optional)
-     * @param  \OpenAPIAdminClientModelVenueSearchSortBy|null $sort (optional, default to 'name')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
+     * @param string|null                                   $name        (optional)
+     * @param VenueKindValue|null                           $kind        (optional)
+     * @param OpenAPIAdminClientModelVenueSearchSortBy|null $sort        (optional, default to 'name')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceSearchVenues'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function venueServiceSearchVenuesRequest($name = null, $kind = null, $sort = 'name', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['venueServiceSearchVenues'][0])
-    {
-
-
-
-
-
-
-
-
+    public function venueServiceSearchVenuesRequest(
+        $name = null,
+        $kind = null,
+        $sort = 'name',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['venueServiceSearchVenues'][0],
+    ) {
         $resourcePath = '/venues/search';
         $formParams = [];
         $queryParams = [];
@@ -1386,7 +1500,7 @@ class VenueApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1395,7 +1509,7 @@ class VenueApi
             'VenueKindValue', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1404,7 +1518,7 @@ class VenueApi
             'VenueSearchSortBy', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1413,7 +1527,7 @@ class VenueApi
             'SortOrder', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1422,7 +1536,7 @@ class VenueApi
             'integer', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1431,16 +1545,13 @@ class VenueApi
             'PerPage', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
 
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1452,19 +1563,18 @@ class VenueApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1473,7 +1583,7 @@ class VenueApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1485,76 +1595,87 @@ class VenueApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation venueServiceUpdateVenue
      *
-     * @param  string $venue_id venue_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\VenueUpdateRequest $venue_update_request venue_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
+     * @param string             $venue_id             venue_id (required)
+     * @param VenueUpdateRequest $venue_update_request venue_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\VenueUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return VenueUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function venueServiceUpdateVenue($venue_id, $venue_update_request, string $contentType = self::contentTypes['venueServiceUpdateVenue'][0])
-    {
+    public function venueServiceUpdateVenue(
+        $venue_id,
+        $venue_update_request,
+        string $contentType = self::contentTypes['venueServiceUpdateVenue'][0],
+    ) {
         list($response) = $this->venueServiceUpdateVenueWithHttpInfo($venue_id, $venue_update_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation venueServiceUpdateVenueWithHttpInfo
      *
-     * @param  string $venue_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\VenueUpdateRequest $venue_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
+     * @param string             $venue_id             (required)
+     * @param VenueUpdateRequest $venue_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\VenueUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function venueServiceUpdateVenueWithHttpInfo($venue_id, $venue_update_request, string $contentType = self::contentTypes['venueServiceUpdateVenue'][0])
-    {
+    public function venueServiceUpdateVenueWithHttpInfo(
+        $venue_id,
+        $venue_update_request,
+        string $contentType = self::contentTypes['venueServiceUpdateVenue'][0],
+    ) {
         $request = $this->venueServiceUpdateVenueRequest($venue_id, $venue_update_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\VenueUpdateResponse',
@@ -1599,18 +1720,16 @@ class VenueApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1625,60 +1744,66 @@ class VenueApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\VenueUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1687,46 +1812,54 @@ class VenueApi
     /**
      * Operation venueServiceUpdateVenueAsync
      *
-     * @param  string $venue_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\VenueUpdateRequest $venue_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
+     * @param string             $venue_id             (required)
+     * @param VenueUpdateRequest $venue_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceUpdateVenueAsync($venue_id, $venue_update_request, string $contentType = self::contentTypes['venueServiceUpdateVenue'][0])
-    {
+    public function venueServiceUpdateVenueAsync(
+        $venue_id,
+        $venue_update_request,
+        string $contentType = self::contentTypes['venueServiceUpdateVenue'][0],
+    ) {
         return $this->venueServiceUpdateVenueAsyncWithHttpInfo($venue_id, $venue_update_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation venueServiceUpdateVenueAsyncWithHttpInfo
      *
-     * @param  string $venue_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\VenueUpdateRequest $venue_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
+     * @param string             $venue_id             (required)
+     * @param VenueUpdateRequest $venue_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function venueServiceUpdateVenueAsyncWithHttpInfo($venue_id, $venue_update_request, string $contentType = self::contentTypes['venueServiceUpdateVenue'][0])
-    {
+    public function venueServiceUpdateVenueAsyncWithHttpInfo(
+        $venue_id,
+        $venue_update_request,
+        string $contentType = self::contentTypes['venueServiceUpdateVenue'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\VenueUpdateResponse';
         $request = $this->venueServiceUpdateVenueRequest($venue_id, $venue_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1735,7 +1868,7 @@ class VenueApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1743,53 +1876,52 @@ class VenueApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'venueServiceUpdateVenue'
      *
-     * @param  string $venue_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\VenueUpdateRequest $venue_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
+     * @param string             $venue_id             (required)
+     * @param VenueUpdateRequest $venue_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['venueServiceUpdateVenue'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function venueServiceUpdateVenueRequest($venue_id, $venue_update_request, string $contentType = self::contentTypes['venueServiceUpdateVenue'][0])
-    {
-
+    public function venueServiceUpdateVenueRequest(
+        $venue_id,
+        $venue_update_request,
+        string $contentType = self::contentTypes['venueServiceUpdateVenue'][0],
+    ) {
         // verify the required parameter 'venue_id' is set
-        if ($venue_id === null || (is_array($venue_id) && count($venue_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $venue_id when calling venueServiceUpdateVenue'
-            );
+        if ($venue_id === null || is_array($venue_id) && count($venue_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $venue_id when calling venueServiceUpdateVenue');
         }
 
         // verify the required parameter 'venue_update_request' is set
-        if ($venue_update_request === null || (is_array($venue_update_request) && count($venue_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $venue_update_request when calling venueServiceUpdateVenue'
-            );
+        if ($venue_update_request === null || is_array($venue_update_request) && count($venue_update_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $venue_update_request when calling venueServiceUpdateVenue');
         }
-
 
         $resourcePath = '/venues/{venueId}';
         $formParams = [];
@@ -1798,32 +1930,32 @@ class VenueApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($venue_id !== null) {
             $resourcePath = str_replace(
                 '{venueId}',
                 ObjectSerializer::toPathValue($venue_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($venue_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($venue_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($venue_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $venue_update_request;
@@ -1836,19 +1968,18 @@ class VenueApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1857,7 +1988,7 @@ class VenueApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1869,23 +2000,25 @@ class VenueApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -1893,8 +2026,8 @@ class VenueApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -1914,12 +2047,8 @@ class VenueApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -1927,24 +2056,24 @@ class VenueApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -1953,16 +2082,16 @@ class VenueApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

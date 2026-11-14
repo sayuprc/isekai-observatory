@@ -10,25 +10,21 @@ use Auth\Application\Admin\UseCase\Recovery\RecoveryFinishInputData;
 use Auth\Application\Admin\UseCase\Recovery\RecoveryFinishUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Support\Contracts\MapperInterface;
 
-class RecoveryFinishController extends Controller
+final readonly class RecoveryFinishController extends Controller
 {
     public function __construct(
-        private readonly RecoveryFinishUseCase $recoveryFinishUseCase,
-        private readonly RecoveryFinishPresenter $presenter,
+        private MapperInterface $mapper,
+        private RecoveryFinishUseCase $useCase,
+        private RecoveryFinishPresenter $presenter,
     ) {
     }
 
     public function handle(Request $request): JsonResponse
     {
-        /** @var array<string, mixed> $credential */
-        $credential = $request->array('credential');
-
-        $inputData = new RecoveryFinishInputData(
-            $request->string('authCeremonyId')->toString(),
-            $credential,
-        );
-
-        return $this->presenter->present($this->recoveryFinishUseCase->handle($inputData));
+        return $this->mapper->map(RecoveryFinishInputData::class, $request->all())
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

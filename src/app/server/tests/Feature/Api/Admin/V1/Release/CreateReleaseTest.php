@@ -34,7 +34,8 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => '初回限定盤',
@@ -58,7 +59,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         'tracks' => [],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -101,7 +103,8 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => '初回限定盤',
@@ -121,7 +124,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -156,7 +160,8 @@ class CreateReleaseTest extends DatabaseTestCase
         );
 
         // ライブ盤のアンコールなど、同じ楽曲が同一媒体に複数回収録されるケース
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => 'ライブ盤',
@@ -176,7 +181,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -208,7 +214,8 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => 'ライブ盤',
@@ -227,7 +234,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -256,7 +264,8 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => 'ライブ盤',
@@ -275,7 +284,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -299,7 +309,8 @@ class CreateReleaseTest extends DatabaseTestCase
         );
 
         // 楽曲への紐づきを維持したまま、トラックとしての表示名だけを上書きするケース
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => '初回限定盤',
@@ -318,7 +329,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -346,7 +358,8 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => '初回限定盤',
@@ -365,7 +378,8 @@ class CreateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -382,7 +396,8 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $releaseGroupId,
                 'name' => '',
@@ -393,7 +408,8 @@ class CreateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -428,24 +444,24 @@ class CreateReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $this->withAuth()
-            ->postJson(route(ReleaseRouteMap::Create), [
-                'releaseGroupId' => $releaseGroupId,
-                'name' => '通常盤',
-                'releasedOn' => '2026-05-09',
-                'description' => '',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'formats' => [],
-                'media' => [],
-            ])->assertStatus(422);
+        $this->withAuth()->postJson(route(ReleaseRouteMap::Create), [
+            'releaseGroupId' => $releaseGroupId,
+            'name' => '通常盤',
+            'releasedOn' => '2026-05-09',
+            'description' => '',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'formats' => [],
+            'media' => [],
+        ])->assertStatus(422);
     }
 
     #[Test]
     public function createFailsWhenReleaseGroupDoesNotExist(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $this->generateUuid(),
                 'name' => '通常盤',
@@ -456,14 +472,16 @@ class CreateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertJson(['message' => '指定されたリリースグループが存在しません。']);
     }
 
     #[Test]
     public function createFailsWhenReleasedOnIsInvalid(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseRouteMap::Create), [
                 'releaseGroupId' => $this->generateUuid(),
                 'name' => '通常盤',
@@ -474,7 +492,8 @@ class CreateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Digital->value],
                 'media' => [],
-            ])->assertStatus(422)
+            ])
+            ->assertStatus(422)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

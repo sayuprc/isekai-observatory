@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * IsekaiObservatoryPublicVersion
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,14 +32,15 @@
  */
 
 namespace OpenAPI\Public\Client\Model;
-use \OpenAPI\Public\Client\ObjectSerializer;
 
 /**
  * IsekaiObservatoryPublicVersion Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum IsekaiObservatoryPublicVersion: string
@@ -43,7 +49,4 @@ enum IsekaiObservatoryPublicVersion: string
      * バージョン 1
      */
     case V1 = 'v1';
-
 }
-
-

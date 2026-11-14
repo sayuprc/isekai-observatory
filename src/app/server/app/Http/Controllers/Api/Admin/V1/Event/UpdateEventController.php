@@ -12,12 +12,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
 
-class UpdateEventController extends Controller
+final readonly class UpdateEventController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly UpdateUseCase $useCase,
-        private readonly UpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private UpdateUseCase $useCase,
+        private UpdatePresenter $presenter,
     ) {
     }
 

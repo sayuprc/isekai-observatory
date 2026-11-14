@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * TagSearchSortBy
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * TagSearchSortBy Class Doc Comment
  *
  * @category Class
+ *
  * @description タグ検索のソート条件
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum TagSearchSortBy: string
@@ -49,7 +57,4 @@ enum TagSearchSortBy: string
      * 表示順
      */
     case ORDER_NO = 'order_no';
-
 }
-
-

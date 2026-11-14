@@ -25,12 +25,14 @@ class PersonGroupApiTest extends DatabaseTestCase
         $personId = $this->generateUuid();
         $this->storePersons($this->createPerson($personId, '人物', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(PersonGroupRouteMap::Create), [
                 'name' => 'グループ (B不在)',
                 'displayName' => 'グループ',
                 'members' => [['personId' => $personId, 'orderNo' => 1]],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJsonPath('personGroup.name', 'グループ (B不在)')
             ->assertJsonPath('personGroup.displayName', 'グループ')
             ->assertJsonPath('personGroup.members.0.personId', $personId)
@@ -41,7 +43,8 @@ class PersonGroupApiTest extends DatabaseTestCase
     #[Test]
     public function createFailsWhenNameIsEmpty(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(PersonGroupRouteMap::Create), ['name' => '', 'displayName' => 'グループ', 'members' => []])
             ->assertStatus(422)
             ->assertJsonPath('code', 'validation_failed')
@@ -51,7 +54,8 @@ class PersonGroupApiTest extends DatabaseTestCase
     #[Test]
     public function createFailsWhenDisplayNameIsEmpty(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(PersonGroupRouteMap::Create), ['name' => 'グループ', 'displayName' => '', 'members' => []])
             ->assertStatus(422)
             ->assertJsonPath('code', 'validation_failed')
@@ -69,7 +73,8 @@ class PersonGroupApiTest extends DatabaseTestCase
             $this->createPersonGroup($this->generateUuid(), '別名'),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(PersonGroupRouteMap::Search, ['name' => 'グループ']))
             ->assertStatus(200)
             ->assertJsonPath('maxPage', 1)
@@ -83,7 +88,8 @@ class PersonGroupApiTest extends DatabaseTestCase
     #[Test]
     public function getReturnsNotFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(PersonGroupRouteMap::Get, $this->generateUuid()))
             ->assertStatus(404);
     }
@@ -94,8 +100,13 @@ class PersonGroupApiTest extends DatabaseTestCase
         $personGroupId = $this->generateUuid();
         $this->storePersonGroups($this->createPersonGroup($personGroupId, '旧グループ'));
 
-        $this->withAuth()
-            ->putJson(route(PersonGroupRouteMap::Update, $personGroupId), ['name' => '新グループ', 'displayName' => '表示名', 'members' => []])
+        $this
+            ->withAuth()
+            ->putJson(route(PersonGroupRouteMap::Update, $personGroupId), [
+                'name' => '新グループ',
+                'displayName' => '表示名',
+                'members' => [],
+            ])
             ->assertStatus(200)
             ->assertJsonPath('personGroup.personGroupId', $personGroupId)
             ->assertJsonPath('personGroup.name', '新グループ')
@@ -108,7 +119,8 @@ class PersonGroupApiTest extends DatabaseTestCase
         $personGroupId = $this->generateUuid();
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ'));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonGroupRouteMap::Delete, $personGroupId))
             ->assertStatus(204);
     }
@@ -120,18 +132,39 @@ class PersonGroupApiTest extends DatabaseTestCase
         $memberId2 = $this->generateUuid();
         $personGroupId = $this->generateUuid();
         $songId = $this->generateUuid();
-        $this->storePersons($this->createPerson($memberId1, 'メンバー1', 1), $this->createPerson($memberId2, 'メンバー2', 2));
+        $this->storePersons(
+            $this->createPerson($memberId1, 'メンバー1', 1),
+            $this->createPerson($memberId2, 'メンバー2', 2),
+        );
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$memberId1, $memberId2]));
         $this->storeSongs($this->createSong($songId, '楽曲', '説明', SongType::Original, true, 1));
         // メンバー 2 人を同じ楽曲披露に入れても、楽曲披露は 1 件と数える
-        $this->app->make(EventRepository::class)->save($this->createEvent($this->generateUuid(), performances: [
-            ['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $memberId1, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
-                ['personId' => $memberId2, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 2],
-            ]],
-        ]));
+        $this->app
+            ->make(EventRepository::class)
+            ->save($this->createEvent($this->generateUuid(), performances: [
+                [
+                    'performanceId' => $this->generateUuid(),
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [
+                        [
+                            'personId' => $memberId1,
+                            'creditName' => null,
+                            'personGroupId' => $personGroupId,
+                            'orderNo' => 1,
+                        ],
+                        [
+                            'personId' => $memberId2,
+                            'creditName' => null,
+                            'personGroupId' => $personGroupId,
+                            'orderNo' => 2,
+                        ],
+                    ],
+                ],
+            ]));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(PersonGroupRouteMap::Search))
             ->assertStatus(200)
             ->assertJsonPath('personGroups.0.personGroupId', $personGroupId)

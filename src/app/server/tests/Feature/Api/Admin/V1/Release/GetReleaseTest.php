@@ -58,7 +58,8 @@ class GetReleaseTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseRouteMap::Get, $releaseId))
             ->assertStatus(200)
             ->assertExactJson([
@@ -146,7 +147,8 @@ class GetReleaseTest extends DatabaseTestCase
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseRouteMap::Get, $this->generateUuid()))
             ->assertStatus(404);
     }
@@ -154,7 +156,8 @@ class GetReleaseTest extends DatabaseTestCase
     #[Test]
     public function invalidId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson('/api/admin/v1/releases/invalid-id')
             ->assertStatus(404);
     }

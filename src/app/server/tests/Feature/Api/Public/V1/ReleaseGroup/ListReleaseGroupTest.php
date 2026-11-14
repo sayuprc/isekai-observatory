@@ -67,7 +67,8 @@ class ListReleaseGroupTest extends DatabaseTestCase
             $this->createRelease($this->generateUuid(), $releaseGroupId, '非公開盤', false, orderNo: 2),
         );
 
-        $this->get(route(PublicReleaseGroupRouteMap::List))
+        $this
+            ->get(route(PublicReleaseGroupRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([
                 'items' => [[
@@ -85,13 +86,25 @@ class ListReleaseGroupTest extends DatabaseTestCase
                             'position' => 1,
                             'name' => 'Disc 1',
                             'tracks' => [
-                                ['trackNo' => 1, 'title' => null, 'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲']]],
-                                ['trackNo' => 2, 'title' => null, 'songs' => [['songId' => null, 'title' => '非公開楽曲']]],
+                                [
+                                    'trackNo' => 1,
+                                    'title' => null,
+                                    'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲']],
+                                ],
+                                [
+                                    'trackNo' => 2,
+                                    'title' => null,
+                                    'songs' => [['songId' => null, 'title' => '非公開楽曲']],
+                                ],
                                 ['trackNo' => 3, 'title' => '管理対象外の楽曲', 'songs' => []],
-                                ['trackNo' => 4, 'title' => 'メドレー', 'songs' => [
-                                    ['songId' => null, 'title' => '非公開楽曲'],
-                                    ['songId' => $visibleSongId, 'title' => '公開楽曲'],
-                                ]],
+                                [
+                                    'trackNo' => 4,
+                                    'title' => 'メドレー',
+                                    'songs' => [
+                                        ['songId' => null, 'title' => '非公開楽曲'],
+                                        ['songId' => $visibleSongId, 'title' => '公開楽曲'],
+                                    ],
+                                ],
                             ],
                         ]],
                     ]],
@@ -114,7 +127,8 @@ class ListReleaseGroupTest extends DatabaseTestCase
             $this->createRelease($this->generateUuid(), $emptyGroupId, '非公開盤', false),
         );
 
-        $this->get(route(PublicReleaseGroupRouteMap::List))
+        $this
+            ->get(route(PublicReleaseGroupRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson(['items' => []]);
     }
@@ -133,11 +147,16 @@ class ListReleaseGroupTest extends DatabaseTestCase
             $this->createRelease($this->generateUuid(), $secondId, '通常盤', true),
         );
 
-        $first = $this->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1]))
+        $first = $this
+            ->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1]))
             ->assertStatus(200)
             ->assertJsonPath('items.0.releaseGroupId', $firstId);
 
-        $this->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+        $this
+            ->get(route(PublicReleaseGroupRouteMap::List, [
+                'pageSize' => 1,
+                'pageToken' => $first->json('nextPageToken'),
+            ]))
             ->assertStatus(200)
             ->assertJsonPath('items.0.releaseGroupId', $secondId)
             ->assertJsonMissingPath('nextPageToken');

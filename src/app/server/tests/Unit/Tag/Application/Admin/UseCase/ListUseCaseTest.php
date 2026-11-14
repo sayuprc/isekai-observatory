@@ -36,7 +36,8 @@ class ListUseCaseTest extends TestCase
     #[Test]
     public function listTags(): void
     {
-        $this->repository->shouldReceive('all')
+        $this->repository
+            ->shouldReceive('all')
             ->once()
             ->andReturn([
                 $this->createTag('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'タグA', 10),

@@ -25,11 +25,13 @@ class UpdatePersonTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($uuid, '人物', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(PersonRouteMap::Update, $uuid), [
                 'name' => 'テスト人物',
                 'orderNo' => 20,
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson([
                 'person' => [
                     'personId' => $uuid,
@@ -47,12 +49,14 @@ class UpdatePersonTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($routePersonId, '人物', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(PersonRouteMap::Update, $routePersonId), [
                 'personId' => $bodyPersonId,
                 'name' => 'テスト人物',
                 'orderNo' => 20,
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson([
                 'person' => [
                     'personId' => $routePersonId,
@@ -67,11 +71,10 @@ class UpdatePersonTest extends DatabaseTestCase
     {
         $personId = $this->generateUuid();
 
-        $this->withAuth()
-            ->putJson(route(PersonRouteMap::Update, $personId), [
-                'name' => 'テスト人物',
-                'orderNo' => 20,
-            ])->assertStatus(404);
+        $this->withAuth()->putJson(route(PersonRouteMap::Update, $personId), [
+            'name' => 'テスト人物',
+            'orderNo' => 20,
+        ])->assertStatus(404);
     }
 
     #[Test]
@@ -85,11 +88,13 @@ class UpdatePersonTest extends DatabaseTestCase
             $this->createPerson($otherId, 'テスト人物', 20),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(PersonRouteMap::Update, $targetId), [
                 'name' => 'テスト人物',
                 'orderNo' => 30,
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テスト人物"',
@@ -103,11 +108,13 @@ class UpdatePersonTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($uuid, '人物', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(PersonRouteMap::Update, $uuid), [
                 'name' => '',
                 'orderNo' => 0,
-            ])->assertStatus(422)
+            ])
+            ->assertStatus(422)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

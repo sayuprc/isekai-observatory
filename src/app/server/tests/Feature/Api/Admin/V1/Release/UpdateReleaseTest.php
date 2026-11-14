@@ -61,7 +61,8 @@ class UpdateReleaseTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(ReleaseRouteMap::Update, $releaseId), [
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
@@ -80,7 +81,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -144,7 +146,8 @@ class UpdateReleaseTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(ReleaseRouteMap::Update, $releaseId), [
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
@@ -163,7 +166,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -212,7 +216,8 @@ class UpdateReleaseTest extends DatabaseTestCase
         );
 
         // 既存の参照トラックに表示名の上書きを設定するケース
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(ReleaseRouteMap::Update, $releaseId), [
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
@@ -230,7 +235,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                         ],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -262,23 +268,23 @@ class UpdateReleaseTest extends DatabaseTestCase
             $this->createRelease($releaseId, $releaseGroupId, '旧版名', true),
         );
 
-        $this->withAuth()
-            ->putJson(route(ReleaseRouteMap::Update, $releaseId), [
-                'name' => '新版名',
-                'releasedOn' => '2026-05-09',
-                'description' => '説明',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'formats' => [],
-                'media' => [],
-            ])->assertStatus(422);
+        $this->withAuth()->putJson(route(ReleaseRouteMap::Update, $releaseId), [
+            'name' => '新版名',
+            'releasedOn' => '2026-05-09',
+            'description' => '説明',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'formats' => [],
+            'media' => [],
+        ])->assertStatus(422);
     }
 
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(ReleaseRouteMap::Update, $this->generateUuid()), [
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
@@ -288,13 +294,15 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
-            ])->assertStatus(404);
+            ])
+            ->assertStatus(404);
     }
 
     #[Test]
     public function invalidId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson('/api/admin/v1/releases/invalid-id', [
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
@@ -304,7 +312,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
-            ])->assertStatus(404);
+            ])
+            ->assertStatus(404);
     }
 
     #[Test]
@@ -320,7 +329,8 @@ class UpdateReleaseTest extends DatabaseTestCase
             $this->createRelease($releaseId, $releaseGroupId, '旧版名', true),
         );
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->putJson(route(ReleaseRouteMap::Update, $releaseId), [
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
@@ -330,7 +340,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                 'orderNo' => 1,
                 'formats' => [ReleaseFormat::Cd->value],
                 'media' => [],
-            ])->assertStatus(403);
+            ])
+            ->assertStatus(403);
     }
 
     #[Test]
@@ -350,7 +361,8 @@ class UpdateReleaseTest extends DatabaseTestCase
             $this->createRelease($releaseId, $releaseGroupId, '旧版名', true),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(ReleaseRouteMap::Update, $releaseId), [
                 'name' => '新版名',
                 'releasedOn' => '2026-05-09',
@@ -371,7 +383,8 @@ class UpdateReleaseTest extends DatabaseTestCase
                         'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
                     ],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(

@@ -24,11 +24,13 @@ class UpdateTagTest extends DatabaseTestCase
 
         $this->app->make(TagRepository::class)->save($this->createTag($uuid, '旧タグ', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(TagRouteMap::Update, $uuid), [
                 'name' => 'テストタグA',
                 'orderNo' => 2,
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson([
                 'tag' => [
                     'tagId' => $uuid,
@@ -46,12 +48,14 @@ class UpdateTagTest extends DatabaseTestCase
 
         $this->app->make(TagRepository::class)->save($this->createTag($routeTagId, '旧タグ', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(TagRouteMap::Update, $routeTagId), [
                 'tagId' => $bodyTagId,
                 'name' => 'テストタグA',
                 'orderNo' => 2,
-            ])->assertStatus(200)
+            ])
+            ->assertStatus(200)
             ->assertExactJson([
                 'tag' => [
                     'tagId' => $routeTagId,
@@ -71,11 +75,13 @@ class UpdateTagTest extends DatabaseTestCase
         $repository->save($this->createTag($targetId, '旧タグ', 1));
         $repository->save($this->createTag($otherId, 'テストタグA', 2));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(TagRouteMap::Update, $targetId), [
                 'name' => 'テストタグA',
                 'orderNo' => 3,
-            ])->assertStatus(400)
+            ])
+            ->assertStatus(400)
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テストタグA"',
@@ -87,11 +93,10 @@ class UpdateTagTest extends DatabaseTestCase
     {
         $uuid = $this->generateUuid();
 
-        $this->withAuth()
-            ->putJson(route(TagRouteMap::Update, $uuid), [
-                'name' => 'テストタグA',
-                'orderNo' => 2,
-            ])->assertStatus(404);
+        $this->withAuth()->putJson(route(TagRouteMap::Update, $uuid), [
+            'name' => 'テストタグA',
+            'orderNo' => 2,
+        ])->assertStatus(404);
     }
 
     #[Test]
@@ -101,11 +106,13 @@ class UpdateTagTest extends DatabaseTestCase
 
         $this->app->make(TagRepository::class)->save($this->createTag($uuid, '旧タグ', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(TagRouteMap::Update, $uuid), [
                 'name' => '',
                 'orderNo' => 0,
-            ])->assertStatus(422)
+            ])
+            ->assertStatus(422)
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

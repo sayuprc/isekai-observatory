@@ -11,11 +11,11 @@ use Event\Application\Viewer\UseCase\List\ListUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ListEventController extends Controller
+final readonly class ListEventController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 

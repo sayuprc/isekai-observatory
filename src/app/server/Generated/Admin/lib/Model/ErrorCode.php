@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ErrorCode
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * ErrorCode Class Doc Comment
  *
  * @category Class
+ *
  * @description エラー分類を表す機械可読なコード
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum ErrorCode: string
@@ -69,7 +77,4 @@ enum ErrorCode: string
      * 予期しないエラーが発生した (500)
      */
     case INTERNAL_ERROR = 'internal_error';
-
 }
-
-

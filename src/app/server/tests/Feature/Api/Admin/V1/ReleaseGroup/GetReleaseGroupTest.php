@@ -33,7 +33,14 @@ class GetReleaseGroupTest extends DatabaseTestCase
             $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 10),
         );
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true, '1st アルバム', orderNo: 5),
+            $this->createReleaseGroup(
+                $releaseGroupId,
+                '観測された春',
+                ReleaseGroupType::Album,
+                true,
+                '1st アルバム',
+                orderNo: 5,
+            ),
         );
         $this->storeReleases(
             $this->createRelease(
@@ -75,7 +82,8 @@ class GetReleaseGroupTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Get, $releaseGroupId))
             ->assertStatus(200)
             ->assertExactJson([
@@ -113,7 +121,8 @@ class GetReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Get, $this->generateUuid()))
             ->assertStatus(404);
     }
@@ -121,7 +130,8 @@ class GetReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function invalidId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson('/api/admin/v1/release-groups/invalid-id')
             ->assertStatus(404);
     }

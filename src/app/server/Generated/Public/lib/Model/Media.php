@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Media
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,79 +33,90 @@
 
 namespace OpenAPI\Public\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Public\Client\ObjectSerializer;
+use ArrayAccess;
+use DateTime;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Public\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * Media Class Doc Comment
  *
  * @category Class
+ *
  * @description 公開メディア
+ *
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class Media implements ModelInterface, ArrayAccess, \JsonSerializable
+class Media implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'Media';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'media_id' => 'string',
         'title' => 'string',
         'url' => 'string',
         'published_at' => '\DateTime',
         'type' => '\OpenAPI\Public\Client\Model\MediaTypeValue',
-        'tag_ids' => 'string[]'
+        'tag_ids' => 'string[]',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'media_id' => 'uuid',
         'title' => null,
         'url' => 'uri',
         'published_at' => 'date-time',
         'type' => null,
-        'tag_ids' => 'uuid'
+        'tag_ids' => 'uuid',
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'media_id' => false,
         'title' => false,
         'url' => false,
         'published_at' => false,
         'type' => false,
-        'tag_ids' => false
+        'tag_ids' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -125,8 +141,6 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -136,7 +150,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -146,7 +160,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -155,9 +169,6 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -166,9 +177,6 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -179,7 +187,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'media_id' => 'mediaId',
@@ -187,13 +195,13 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'url' => 'url',
         'published_at' => 'publishedAt',
         'type' => 'type',
-        'tag_ids' => 'tagIds'
+        'tag_ids' => 'tagIds',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'media_id' => 'setMediaId',
@@ -201,13 +209,13 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'url' => 'setUrl',
         'published_at' => 'setPublishedAt',
         'type' => 'setType',
-        'tag_ids' => 'setTagIds'
+        'tag_ids' => 'setTagIds',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'media_id' => 'getMediaId',
@@ -215,7 +223,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         'url' => 'getUrl',
         'published_at' => 'getPublishedAt',
         'type' => 'getType',
-        'tag_ids' => 'getTagIds'
+        'tag_ids' => 'getTagIds',
     ];
 
     /**
@@ -259,19 +267,18 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -284,17 +291,17 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -316,7 +323,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
         }
-        if ((mb_strlen($this->container['title']) < 1)) {
+        if (mb_strlen($this->container['title']) < 1) {
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
@@ -332,6 +339,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['tag_ids'] === null) {
             $invalidProperties[] = "'tag_ids' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -345,7 +353,6 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets media_id
@@ -366,8 +373,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setMediaId($media_id)
     {
-        if (is_null($media_id)) {
-            throw new \InvalidArgumentException('non-nullable media_id cannot be null');
+        if ($media_id === null) {
+            throw new InvalidArgumentException('non-nullable media_id cannot be null');
         }
         $this->container['media_id'] = $media_id;
 
@@ -393,12 +400,12 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setTitle($title)
     {
-        if (is_null($title)) {
-            throw new \InvalidArgumentException('non-nullable title cannot be null');
+        if ($title === null) {
+            throw new InvalidArgumentException('non-nullable title cannot be null');
         }
 
-        if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling Media., must be bigger than or equal to 1.');
+        if (mb_strlen($title) < 1) {
+            throw new InvalidArgumentException('invalid length for $title when calling Media., must be bigger than or equal to 1.');
         }
 
         $this->container['title'] = $title;
@@ -425,8 +432,8 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setUrl($url)
     {
-        if (is_null($url)) {
-            throw new \InvalidArgumentException('non-nullable url cannot be null');
+        if ($url === null) {
+            throw new InvalidArgumentException('non-nullable url cannot be null');
         }
         $this->container['url'] = $url;
 
@@ -436,7 +443,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets published_at
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getPublishedAt()
     {
@@ -446,14 +453,14 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets published_at
      *
-     * @param \DateTime $published_at 公開日時
+     * @param DateTime $published_at 公開日時
      *
      * @return self
      */
     public function setPublishedAt($published_at)
     {
-        if (is_null($published_at)) {
-            throw new \InvalidArgumentException('non-nullable published_at cannot be null');
+        if ($published_at === null) {
+            throw new InvalidArgumentException('non-nullable published_at cannot be null');
         }
         $this->container['published_at'] = $published_at;
 
@@ -463,7 +470,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Public\Client\Model\MediaTypeValue
+     * @return MediaTypeValue
      */
     public function getType()
     {
@@ -473,14 +480,14 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Public\Client\Model\MediaTypeValue $type type
+     * @param MediaTypeValue $type type
      *
      * @return self
      */
     public function setType($type)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if ($type === null) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
         $this->container['type'] = $type;
 
@@ -490,7 +497,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets tag_ids
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getTagIds()
     {
@@ -500,25 +507,24 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets tag_ids
      *
-     * @param string[] $tag_ids タグの ID (タグの表示順)
+     * @param array<string> $tag_ids タグの ID (タグの表示順)
      *
      * @return self
      */
     public function setTagIds($tag_ids)
     {
-        if (is_null($tag_ids)) {
-            throw new \InvalidArgumentException('non-nullable tag_ids cannot be null');
+        if ($tag_ids === null) {
+            throw new InvalidArgumentException('non-nullable tag_ids cannot be null');
         }
         $this->container['tag_ids'] = $tag_ids;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -528,11 +534,11 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -543,12 +549,10 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -558,9 +562,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -569,15 +571,16 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -589,7 +592,7 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -603,5 +606,3 @@ class Media implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

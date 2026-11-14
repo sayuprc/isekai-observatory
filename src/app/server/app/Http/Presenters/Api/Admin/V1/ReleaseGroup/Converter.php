@@ -31,10 +31,15 @@ class Converter
             ->setNote($releaseGroup->note->value)
             ->setIsDisplay($releaseGroup->isDisplay)
             ->setOrderNo($releaseGroup->orderNo->value)
-            ->setTags(array_values(array_map(
-                static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()->setTagId($tag->tagId->value)->setName($tag->name->value),
-                $tags,
-            )));
+            ->setTags(
+                array_map(
+                    static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()
+                        ->setTagId($tag->tagId->value)
+                        ->setName($tag->name->value),
+                    $tags,
+                )
+                    |> array_values(...),
+            );
     }
 
     public function toOpenApiSummary(ReleaseGroupSummary $summary): OpenApiReleaseGroupSummary

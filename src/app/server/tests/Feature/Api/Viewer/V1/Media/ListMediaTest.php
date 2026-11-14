@@ -116,7 +116,8 @@ class ListMediaTest extends DatabaseTestCase
             ),
         );
 
-        $response = $this->get(route(ViewerMediaRouteMap::List, ['limit' => 1]))
+        $response = $this
+            ->get(route(ViewerMediaRouteMap::List, ['limit' => 1]))
             ->assertStatus(200)
             ->assertExactJson([
                 'media' => [
@@ -157,7 +158,8 @@ class ListMediaTest extends DatabaseTestCase
 
         $this->assertIsString($cursor);
 
-        $this->get(route(ViewerMediaRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+        $this
+            ->get(route(ViewerMediaRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
             ->assertStatus(200)
             ->assertExactJson([
                 'media' => [
@@ -181,7 +183,8 @@ class ListMediaTest extends DatabaseTestCase
     #[DataProvider('provideInvalidCursors')]
     public function rejectsInvalidCursor(string $cursor): void
     {
-        $this->get(route(ViewerMediaRouteMap::List, ['cursor' => $cursor]))
+        $this
+            ->get(route(ViewerMediaRouteMap::List, ['cursor' => $cursor]))
             ->assertStatus(400)
             ->assertExactJson([
                 'code' => 'business_rule_violation',

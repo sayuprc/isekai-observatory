@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseGroupSearchSortBy
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * ReleaseGroupSearchSortBy Class Doc Comment
  *
  * @category Class
+ *
  * @description リリースグループ検索のソート条件
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum ReleaseGroupSearchSortBy: string
@@ -49,7 +57,4 @@ enum ReleaseGroupSearchSortBy: string
      * タイトル
      */
     case TITLE = 'title';
-
 }
-
-

@@ -109,77 +109,137 @@ class RegisterFinishUseCaseTest extends TestCase
         $passkeyId = 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC';
         $refreshTokenId = 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD';
         $now = new DateTimeImmutable('2026-01-01 00:00:00');
-        $state = new PasskeyCeremonyState('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', PasskeyCeremonyType::Register, 'invitee@example.com', '名前', $adminUserId, '{"challenge":"challenge"}');
-        $verification = new PasskeyRegistrationResult('credential-id', 'public-key', 'user-handle', '00000000-0000-0000-0000-000000000000', ['internal'], true, false, 123);
+        $state = new PasskeyCeremonyState(
+            'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE',
+            PasskeyCeremonyType::Register,
+            'invitee@example.com',
+            '名前',
+            $adminUserId,
+            '{"challenge":"challenge"}',
+        );
+        $verification = new PasskeyRegistrationResult(
+            'credential-id',
+            'public-key',
+            'user-handle',
+            '00000000-0000-0000-0000-000000000000',
+            ['internal'],
+            true,
+            false,
+            123,
+        );
         $token = $this->buildToken('invitee@example.com');
         $adminUser = $this->createAdminUser($adminUserId, 'invitee@example.com', name: '名前');
-        $refreshToken = $this->createRefreshToken($refreshTokenId, $adminUserId, 'hashed-refresh', new DateTimeImmutable('+7 days'), RefreshConsumptionStatus::Unused);
+        $refreshToken = $this->createRefreshToken(
+            $refreshTokenId,
+            $adminUserId,
+            'hashed-refresh',
+            new DateTimeImmutable('+7 days'),
+            RefreshConsumptionStatus::Unused,
+        );
         $accessToken = $this->createAccessToken('jwt-value');
 
-        $this->ceremonyStore->shouldReceive('pull')->with('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE')->andReturn($state)->once();
-        $this->passkeyAuthenticator->shouldReceive('finishRegistration')
+        $this->ceremonyStore
+            ->shouldReceive('pull')
+            ->with('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE')
+            ->andReturn($state)
+            ->once();
+        $this->passkeyAuthenticator
+            ->shouldReceive('finishRegistration')
             ->with(['id' => 'credential-id'], '{"challenge":"challenge"}')
             ->andReturn($verification)
             ->once();
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_): bool => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
-        $this->consumeService->shouldReceive('verify')
-            ->withArgs(static fn (string $plainToken, Email $email): bool => $plainToken === 'plain-token'
-                && $email->value === 'invitee@example.com')
+        $this->consumeService
+            ->shouldReceive('verify')
+            ->withArgs(
+                static fn (string $plainToken, Email $email): bool => (
+                    $plainToken === 'plain-token'
+                    && $email->value === 'invitee@example.com'
+                ),
+            )
             ->andReturn($token)
             ->once();
-        $this->integrityService->shouldReceive('prepareForCreateWithId')
-            ->withArgs(static fn (AdminUserId $id, AdminUserName $name, Email $email, Role $role, Permissions $permissions): bool => $id->value === $adminUserId
-                && $name->value === '名前'
-                && $email->value === 'invitee@example.com'
-                && $role === Role::General
-                && $permissions->toArray() === [])
+        $this->integrityService
+            ->shouldReceive('prepareForCreateWithId')
+            ->withArgs(
+                static fn (
+                    AdminUserId $id,
+                    AdminUserName $name,
+                    Email $email,
+                    Role $role,
+                    Permissions $permissions,
+                ): bool => (
+                    $id->value === $adminUserId
+                    && $name->value === '名前'
+                    && $email->value === 'invitee@example.com'
+                    && $role === Role::General
+                    && $permissions->toArray() === []
+                ),
+            )
             ->andReturn($adminUser)
             ->once();
-        $this->adminUserRepository->shouldReceive('register')
+        $this->adminUserRepository
+            ->shouldReceive('register')
             ->withArgs(static fn (AdminUser $user): bool => $user->equals($adminUser))
             ->andReturn($adminUser)
             ->once();
         $this->uuidGenerator->shouldReceive('generate')->andReturn($passkeyId)->once();
         $this->clock->shouldReceive('now')->andReturn($now)->once();
-        $this->passkeyRepository->shouldReceive('save')
-            ->withArgs(static fn (AdminUserPasskey $passkey): bool => $passkey->adminUserPasskeyId === $passkeyId
-                && $passkey->adminUserId === $adminUserId
-                && $passkey->userHandle === 'user-handle'
-                && $passkey->credentialId === 'credential-id'
-                && $passkey->aaguid === '00000000-0000-0000-0000-000000000000'
-                && $passkey->transports === ['internal']
-                && $passkey->backupEligible === true
-                && $passkey->backupState === false)
+        $this->passkeyRepository
+            ->shouldReceive('save')
+            ->withArgs(
+                static fn (AdminUserPasskey $passkey): bool => (
+                    $passkey->adminUserPasskeyId === $passkeyId
+                    && $passkey->adminUserId === $adminUserId
+                    && $passkey->userHandle === 'user-handle'
+                    && $passkey->credentialId === 'credential-id'
+                    && $passkey->aaguid === '00000000-0000-0000-0000-000000000000'
+                    && $passkey->transports === ['internal']
+                    && $passkey->backupEligible === true
+                    && $passkey->backupState === false
+                ),
+            )
             ->andReturnUsing(static fn (AdminUserPasskey $passkey): AdminUserPasskey => $passkey)
             ->once();
         $this->registrationTokenRepository->shouldReceive('save')->andReturn($token->consume())->once();
-        $this->refreshTokenIssueService->shouldReceive('issue')
+        $this->refreshTokenIssueService
+            ->shouldReceive('issue')
             ->with($adminUserId)
             ->andReturn(['token' => $refreshToken, 'plainToken' => 'plain-refresh'])
             ->once();
         $this->accessTokenIssueService->shouldReceive('issue')->with($refreshTokenId)->andReturn($accessToken)->once();
         $this->refreshTokenRepository->shouldReceive('save')->with($refreshToken)->andReturn($refreshToken)->once();
-        $this->recorder->shouldReceive('record')
-            ->withArgs(static fn (
-                AuditAction $action,
-                AuditTargetType $targetType,
-                mixed $targetId,
-                array $snapshot,
-                mixed $actorId,
-            ): bool => $action === AuditAction::Register
-                && $targetType === AuditTargetType::AdminUser
-                && $targetId->value === $adminUserId
-                && $snapshot === [
-                    'admin_user_passkey_id' => $passkeyId,
-                    'refresh_token_id' => $refreshTokenId,
-                ]
-                && $actorId->value === $adminUserId)
+        $this->recorder
+            ->shouldReceive('record')
+            ->withArgs(
+                static fn (
+                    AuditAction $action,
+                    AuditTargetType $targetType,
+                    mixed $targetId,
+                    array $snapshot,
+                    mixed $actorId,
+                ): bool => (
+                    $action === AuditAction::Register
+                    && $targetType === AuditTargetType::AdminUser
+                    && $targetId->value === $adminUserId
+                    && $snapshot === [
+                        'admin_user_passkey_id' => $passkeyId,
+                        'refresh_token_id' => $refreshTokenId,
+                    ]
+                    && $actorId->value === $adminUserId
+                ),
+            )
             ->once();
 
-        $output = $this->getInstance()->handle(new RegisterFinishInputData('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', 'plain-token', ['id' => 'credential-id']));
+        $output = $this->getInstance()->handle(new RegisterFinishInputData(
+            'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE',
+            'plain-token',
+            ['id' => 'credential-id'],
+        ));
 
         $this->assertSame('jwt-value', $output->accessToken->jwt->value);
     }
@@ -187,10 +247,24 @@ class RegisterFinishUseCaseTest extends TestCase
     #[Test]
     public function doesNotPersistWhenPasskeyVerificationFails(): void
     {
-        $state = new PasskeyCeremonyState('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', PasskeyCeremonyType::Register, 'invitee@example.com', '名前', 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', '{}');
+        $state = new PasskeyCeremonyState(
+            'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE',
+            PasskeyCeremonyType::Register,
+            'invitee@example.com',
+            '名前',
+            'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB',
+            '{}',
+        );
 
-        $this->ceremonyStore->shouldReceive('pull')->with('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE')->andReturn($state)->once();
-        $this->passkeyAuthenticator->shouldReceive('finishRegistration')->andThrow(new RuntimeException('failed'))->once();
+        $this->ceremonyStore
+            ->shouldReceive('pull')
+            ->with('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE')
+            ->andReturn($state)
+            ->once();
+        $this->passkeyAuthenticator
+            ->shouldReceive('finishRegistration')
+            ->andThrow(new RuntimeException('failed'))
+            ->once();
         $this->transaction->shouldReceive('scope')->never();
         $this->adminUserRepository->shouldReceive('register')->never();
         $this->passkeyRepository->shouldReceive('save')->never();
@@ -198,33 +272,73 @@ class RegisterFinishUseCaseTest extends TestCase
 
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->handle(new RegisterFinishInputData('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', 'plain-token', ['id' => 'credential-id']));
+        $this->getInstance()->handle(new RegisterFinishInputData(
+            'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE',
+            'plain-token',
+            ['id' => 'credential-id'],
+        ));
     }
 
     #[Test]
     public function doesNotPersistWhenEmailAlreadyExists(): void
     {
         $adminUserId = 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB';
-        $state = new PasskeyCeremonyState('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', PasskeyCeremonyType::Register, 'invitee@example.com', '名前', $adminUserId, '{"challenge":"challenge"}');
-        $verification = new PasskeyRegistrationResult('credential-id', 'public-key', 'user-handle', '00000000-0000-0000-0000-000000000000', [], null, null, 123);
+        $state = new PasskeyCeremonyState(
+            'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE',
+            PasskeyCeremonyType::Register,
+            'invitee@example.com',
+            '名前',
+            $adminUserId,
+            '{"challenge":"challenge"}',
+        );
+        $verification = new PasskeyRegistrationResult(
+            'credential-id',
+            'public-key',
+            'user-handle',
+            '00000000-0000-0000-0000-000000000000',
+            [],
+            null,
+            null,
+            123,
+        );
         $token = $this->buildToken('invitee@example.com');
 
-        $this->ceremonyStore->shouldReceive('pull')->with('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE')->andReturn($state)->once();
-        $this->passkeyAuthenticator->shouldReceive('finishRegistration')
+        $this->ceremonyStore
+            ->shouldReceive('pull')
+            ->with('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE')
+            ->andReturn($state)
+            ->once();
+        $this->passkeyAuthenticator
+            ->shouldReceive('finishRegistration')
             ->with(['id' => 'credential-id'], '{"challenge":"challenge"}')
             ->andReturn($verification)
             ->once();
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_): bool => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
-        $this->consumeService->shouldReceive('verify')
-            ->withArgs(static fn (string $plainToken, Email $email): bool => $plainToken === 'plain-token'
-                && $email->value === 'invitee@example.com')
+        $this->consumeService
+            ->shouldReceive('verify')
+            ->withArgs(
+                static fn (string $plainToken, Email $email): bool => (
+                    $plainToken === 'plain-token'
+                    && $email->value === 'invitee@example.com'
+                ),
+            )
             ->andReturn($token)
             ->once();
-        $this->integrityService->shouldReceive('prepareForCreateWithId')
-            ->withArgs(static fn (AdminUserId $id, AdminUserName $name, Email $email, Role $role, Permissions $permissions): bool => $id->value === $adminUserId)
+        $this->integrityService
+            ->shouldReceive('prepareForCreateWithId')
+            ->withArgs(
+                static fn (
+                    AdminUserId $id,
+                    AdminUserName $name,
+                    Email $email,
+                    Role $role,
+                    Permissions $permissions,
+                ): bool => $id->value === $adminUserId,
+            )
             ->andThrow(new BusinessRuleViolationException('すでに使われているメールアドレスです "invitee@example.com"'))
             ->once();
         $this->refreshTokenIssueService->shouldReceive('issue')->never();
@@ -236,7 +350,11 @@ class RegisterFinishUseCaseTest extends TestCase
 
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->getInstance()->handle(new RegisterFinishInputData('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', 'plain-token', ['id' => 'credential-id']));
+        $this->getInstance()->handle(new RegisterFinishInputData(
+            'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE',
+            'plain-token',
+            ['id' => 'credential-id'],
+        ));
     }
 
     private function buildToken(string $email): RegistrationToken

@@ -22,7 +22,8 @@ class RemoveYouTubeChannelCommandTest extends DatabaseTestCase
     {
         $this->storeYouTubeChannels($this->createYouTubeChannel(self::CHANNEL_ID, 'テストチャンネル'));
 
-        $this->artisan(sprintf('media:youtube-channel:remove %s', self::CHANNEL_ID))
+        $this
+            ->artisan(sprintf('media:youtube-channel:remove %s', self::CHANNEL_ID))
             ->expectsOutput(sprintf('チャンネルを削除しました: %s', self::CHANNEL_ID))
             ->assertSuccessful();
 
@@ -32,7 +33,8 @@ class RemoveYouTubeChannelCommandTest extends DatabaseTestCase
     #[Test]
     public function failureWhenChannelNotRegistered(): void
     {
-        $this->artisan(sprintf('media:youtube-channel:remove %s', self::CHANNEL_ID))
+        $this
+            ->artisan(sprintf('media:youtube-channel:remove %s', self::CHANNEL_ID))
             ->expectsOutput(sprintf('登録されていないチャンネルです "%s"', self::CHANNEL_ID))
             ->assertFailed();
     }
@@ -40,7 +42,8 @@ class RemoveYouTubeChannelCommandTest extends DatabaseTestCase
     #[Test]
     public function failureWithInvalidChannelId(): void
     {
-        $this->artisan('media:youtube-channel:remove invalid-channel-id')
+        $this
+            ->artisan('media:youtube-channel:remove invalid-channel-id')
             ->expectsOutput('YouTube チャンネルIDの形式が不正です: invalid-channel-id')
             ->assertFailed();
     }

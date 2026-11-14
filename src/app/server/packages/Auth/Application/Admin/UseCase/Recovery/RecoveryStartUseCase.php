@@ -56,15 +56,17 @@ readonly class RecoveryStartUseCase
             $inputData->name,
         );
 
-        $this->ceremonyStore->put(new PasskeyCeremonyState(
-            $authCeremonyId,
-            PasskeyCeremonyType::Recovery,
-            $email->value,
-            $inputData->name,
-            $adminUserId,
-            $startResult->optionsJson,
-            $recoveryCodeId,
-        ));
+        $this->ceremonyStore->put(
+            new PasskeyCeremonyState(
+                $authCeremonyId,
+                PasskeyCeremonyType::Recovery,
+                $email->value,
+                $inputData->name,
+                $adminUserId,
+                $startResult->optionsJson,
+                $recoveryCodeId,
+            ),
+        );
 
         return new RecoveryStartOutputData($authCeremonyId, $startResult->publicKey);
     }

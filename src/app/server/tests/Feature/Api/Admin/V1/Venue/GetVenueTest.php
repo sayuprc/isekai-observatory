@@ -24,7 +24,8 @@ class GetVenueTest extends DatabaseTestCase
         $venueId = $this->generateUuid();
         $this->storeVenues($this->createVenue($venueId, '会場サンプルA', VenueKind::Physical));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(VenueRouteMap::Get, $venueId))
             ->assertStatus(200)
             ->assertExactJson([
@@ -39,7 +40,8 @@ class GetVenueTest extends DatabaseTestCase
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(VenueRouteMap::Get, $this->generateUuid()))
             ->assertStatus(404);
     }

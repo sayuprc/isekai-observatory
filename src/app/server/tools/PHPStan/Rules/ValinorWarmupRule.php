@@ -58,11 +58,12 @@ final class ValinorWarmupRule implements Rule
                     continue;
                 }
 
-                $errors[] = RuleErrorBuilder::message(sprintf('%s が config/valinor.php の warmup に載っていません', $class))
-                    ->file($file)
-                    ->line($line)
-                    ->identifier('valinor.warmupMissing')
-                    ->build();
+                $errors[] = sprintf('%s が config/valinor.php の warmup に載っていません', $class)
+                    |> RuleErrorBuilder::message(...)
+                        ->file($file)
+                        ->line($line)
+                        ->identifier('valinor.warmupMissing')
+                        ->build();
             }
         }
 

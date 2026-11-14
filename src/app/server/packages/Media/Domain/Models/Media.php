@@ -53,7 +53,8 @@ readonly class Media
             'media_id' => $this->mediaId->value,
             'title' => $this->title->value,
             'url' => $this->url->value,
-            'published_at' => $this->publishedAt->value
+            'published_at' => $this->publishedAt
+                ->value
                 ->setTimezone(new DateTimeZone(date_default_timezone_get()))
                 ->format('Y-m-d H:i:s'),
             'type' => $this->type->value,

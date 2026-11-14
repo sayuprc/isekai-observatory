@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * AuditAction
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * AuditAction Class Doc Comment
  *
  * @category Class
+ *
  * @description 監査ログの操作種別
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum AuditAction: string
@@ -79,7 +87,4 @@ enum AuditAction: string
      * リカバリーコード使用
      */
     case RECOVERY_CODE_USE = 'recovery_code_use';
-
 }
-
-

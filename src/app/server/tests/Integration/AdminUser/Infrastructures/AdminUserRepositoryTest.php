@@ -25,8 +25,20 @@ class AdminUserRepositoryTest extends DatabaseTestCase
     {
         $repository = $this->getInstance();
 
-        $user1 = $this->createAdminUser($this->generateUuid(), 'user1@example.com', Role::General, [], new DateTimeImmutable('2026-01-01 00:00:00'));
-        $user2 = $this->createAdminUser($this->generateUuid(), 'user2@example.com', Role::Privilege, [], new DateTimeImmutable('2026-01-02 00:00:00'));
+        $user1 = $this->createAdminUser(
+            $this->generateUuid(),
+            'user1@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable('2026-01-01 00:00:00'),
+        );
+        $user2 = $this->createAdminUser(
+            $this->generateUuid(),
+            'user2@example.com',
+            Role::Privilege,
+            [],
+            new DateTimeImmutable('2026-01-02 00:00:00'),
+        );
 
         $repository->register($user1);
         $repository->register($user2);
@@ -105,8 +117,10 @@ class AdminUserRepositoryTest extends DatabaseTestCase
 
         $selectQueries = array_values(array_filter(
             $this->capturedQueries(),
-            static fn (string $query): bool => str_starts_with(strtolower($query), 'select')
-                && str_contains($query, 'admin_users'),
+            static fn (string $query): bool => (
+                str_starts_with(strtolower($query), 'select')
+                && str_contains($query, 'admin_users')
+            ),
         ));
 
         $this->assertNotNull($found);
@@ -129,8 +143,10 @@ class AdminUserRepositoryTest extends DatabaseTestCase
 
         $selectQueries = array_values(array_filter(
             $this->capturedQueries(),
-            static fn (string $query): bool => str_starts_with(strtolower($query), 'select')
-                && str_contains($query, 'admin_users'),
+            static fn (string $query): bool => (
+                str_starts_with(strtolower($query), 'select')
+                && str_contains($query, 'admin_users')
+            ),
         ));
 
         $this->assertNotNull($found);

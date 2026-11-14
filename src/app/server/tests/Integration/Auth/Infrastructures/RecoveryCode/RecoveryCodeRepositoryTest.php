@@ -34,7 +34,13 @@ class RecoveryCodeRepositoryTest extends DatabaseTestCase
 
         Carbon::setTestNow('2026-01-01 00:00:00');
 
-        $adminUser = $this->createAdminUser($this->generateUuid(), 'user@example.com', Role::General, [], new DateTimeImmutable());
+        $adminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'user@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($adminUser);
 
         $this->adminUserId = $adminUser->adminUserId;
@@ -62,7 +68,12 @@ class RecoveryCodeRepositoryTest extends DatabaseTestCase
         $repository = $this->getInstance();
         $repository->saveMany([
             $this->buildCode($this->generateUuid(), 'hashed-unused', ConsumptionStatus::Unused, null),
-            $this->buildCode($this->generateUuid(), 'hashed-consumed', ConsumptionStatus::Consumed, now()->toDateTimeImmutable()),
+            $this->buildCode(
+                $this->generateUuid(),
+                'hashed-consumed',
+                ConsumptionStatus::Consumed,
+                now()->toDateTimeImmutable(),
+            ),
         ]);
 
         $found = $repository->findUnusedByAdminUserIdForUpdate($this->adminUserId);
@@ -129,7 +140,13 @@ class RecoveryCodeRepositoryTest extends DatabaseTestCase
             $this->buildCode($targetId, 'hashed-target', ConsumptionStatus::Unused, null),
         ]);
 
-        $otherAdminUser = $this->createAdminUser($this->generateUuid(), 'other@example.com', Role::General, [], new DateTimeImmutable());
+        $otherAdminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'other@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($otherAdminUser);
 
         $found = $repository->findUnusedByIdForUpdate(
@@ -168,7 +185,12 @@ class RecoveryCodeRepositoryTest extends DatabaseTestCase
         $repository = $this->getInstance();
         $repository->saveMany([
             $this->buildCode($this->generateUuid(), 'hashed-1', ConsumptionStatus::Unused, null),
-            $this->buildCode($this->generateUuid(), 'hashed-2', ConsumptionStatus::Consumed, now()->toDateTimeImmutable()),
+            $this->buildCode(
+                $this->generateUuid(),
+                'hashed-2',
+                ConsumptionStatus::Consumed,
+                now()->toDateTimeImmutable(),
+            ),
         ]);
 
         $repository->deleteByAdminUserId($this->adminUserId);
@@ -177,8 +199,12 @@ class RecoveryCodeRepositoryTest extends DatabaseTestCase
         $this->assertSame(0, DB::table('admin_user_recovery_codes')->count());
     }
 
-    private function buildCode(string $recoveryCodeId, string $hashedCode, ConsumptionStatus $status, ?DateTimeImmutable $usedAt): RecoveryCode
-    {
+    private function buildCode(
+        string $recoveryCodeId,
+        string $hashedCode,
+        ConsumptionStatus $status,
+        ?DateTimeImmutable $usedAt,
+    ): RecoveryCode {
         return new RecoveryCode(
             new RecoveryCodeId($recoveryCodeId),
             $this->adminUserId,

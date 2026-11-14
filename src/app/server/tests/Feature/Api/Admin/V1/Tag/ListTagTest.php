@@ -39,7 +39,8 @@ class ListTagTest extends DatabaseTestCase
             ],
         ]);
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([
@@ -67,7 +68,8 @@ class ListTagTest extends DatabaseTestCase
     #[Test]
     public function showEmptyList(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([

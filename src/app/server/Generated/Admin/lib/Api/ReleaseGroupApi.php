@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseGroupApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -30,24 +35,43 @@ namespace OpenAPI\Admin\Client\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Admin\Client\ApiException;
+use OpenAPI\Admin\Client\Configuration;
+use OpenAPI\Admin\Client\HeaderSelector;
+use OpenAPI\Admin\Client\Model\ErrorResponse;
+use OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateRequest;
+use OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateResponse;
+use OpenAPI\Admin\Client\Model\ReleaseGroupCreateRequest;
+use OpenAPI\Admin\Client\Model\ReleaseGroupCreateResponse;
+use OpenAPI\Admin\Client\Model\ReleaseGroupGetResponse;
+use OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse;
+use OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue;
+use OpenAPI\Admin\Client\Model\ReleaseGroupUpdateRequest;
+use OpenAPI\Admin\Client\Model\ReleaseGroupUpdateResponse;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use OpenAPIAdminClientModelPerPage;
+use OpenAPIAdminClientModelReleaseGroupSearchSortBy;
+use OpenAPIAdminClientModelSortOrder;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Admin\Client\ApiException;
-use OpenAPI\Admin\Client\Configuration;
-use OpenAPI\Admin\Client\FormDataProcessor;
-use OpenAPI\Admin\Client\HeaderSelector;
-use OpenAPI\Admin\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * ReleaseGroupApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class ReleaseGroupApi
@@ -72,7 +96,7 @@ class ReleaseGroupApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'releaseGroupServiceBulkUpdateReleaseGroups' => [
             'application/json',
@@ -95,16 +119,13 @@ class ReleaseGroupApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -143,58 +164,72 @@ class ReleaseGroupApi
     /**
      * Operation releaseGroupServiceBulkUpdateReleaseGroups
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request release_group_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
+     * @param ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request release_group_bulk_update_request (required)
+     * @param string                        $contentType                       The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return ReleaseGroupBulkUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function releaseGroupServiceBulkUpdateReleaseGroups($release_group_bulk_update_request, string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0])
-    {
-        list($response) = $this->releaseGroupServiceBulkUpdateReleaseGroupsWithHttpInfo($release_group_bulk_update_request, $contentType);
+    public function releaseGroupServiceBulkUpdateReleaseGroups(
+        $release_group_bulk_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0],
+    ) {
+        list($response) = $this->releaseGroupServiceBulkUpdateReleaseGroupsWithHttpInfo(
+            $release_group_bulk_update_request,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation releaseGroupServiceBulkUpdateReleaseGroupsWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
+     * @param ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
+     * @param string                        $contentType                       The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function releaseGroupServiceBulkUpdateReleaseGroupsWithHttpInfo($release_group_bulk_update_request, string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0])
-    {
-        $request = $this->releaseGroupServiceBulkUpdateReleaseGroupsRequest($release_group_bulk_update_request, $contentType);
+    public function releaseGroupServiceBulkUpdateReleaseGroupsWithHttpInfo(
+        $release_group_bulk_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0],
+    ) {
+        $request = $this->releaseGroupServiceBulkUpdateReleaseGroupsRequest(
+            $release_group_bulk_update_request,
+            $contentType,
+        );
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateResponse',
@@ -239,18 +274,16 @@ class ReleaseGroupApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -265,60 +298,66 @@ class ReleaseGroupApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -327,44 +366,56 @@ class ReleaseGroupApi
     /**
      * Operation releaseGroupServiceBulkUpdateReleaseGroupsAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
+     * @param ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
+     * @param string                        $contentType                       The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceBulkUpdateReleaseGroupsAsync($release_group_bulk_update_request, string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0])
-    {
-        return $this->releaseGroupServiceBulkUpdateReleaseGroupsAsyncWithHttpInfo($release_group_bulk_update_request, $contentType)
+    public function releaseGroupServiceBulkUpdateReleaseGroupsAsync(
+        $release_group_bulk_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0],
+    ) {
+        return $this->releaseGroupServiceBulkUpdateReleaseGroupsAsyncWithHttpInfo(
+            $release_group_bulk_update_request,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation releaseGroupServiceBulkUpdateReleaseGroupsAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
+     * @param ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
+     * @param string                        $contentType                       The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceBulkUpdateReleaseGroupsAsyncWithHttpInfo($release_group_bulk_update_request, string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0])
-    {
+    public function releaseGroupServiceBulkUpdateReleaseGroupsAsyncWithHttpInfo(
+        $release_group_bulk_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateResponse';
-        $request = $this->releaseGroupServiceBulkUpdateReleaseGroupsRequest($release_group_bulk_update_request, $contentType);
+        $request = $this->releaseGroupServiceBulkUpdateReleaseGroupsRequest(
+            $release_group_bulk_update_request,
+            $contentType,
+        );
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -373,7 +424,7 @@ class ReleaseGroupApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -381,45 +432,48 @@ class ReleaseGroupApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'releaseGroupServiceBulkUpdateReleaseGroups'
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
+     * @param ReleaseGroupBulkUpdateRequest $release_group_bulk_update_request (required)
+     * @param string                        $contentType                       The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function releaseGroupServiceBulkUpdateReleaseGroupsRequest($release_group_bulk_update_request, string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0])
-    {
-
+    public function releaseGroupServiceBulkUpdateReleaseGroupsRequest(
+        $release_group_bulk_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceBulkUpdateReleaseGroups'][0],
+    ) {
         // verify the required parameter 'release_group_bulk_update_request' is set
-        if ($release_group_bulk_update_request === null || (is_array($release_group_bulk_update_request) && count($release_group_bulk_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $release_group_bulk_update_request when calling releaseGroupServiceBulkUpdateReleaseGroups'
-            );
+        if (
+            $release_group_bulk_update_request === null
+            || is_array($release_group_bulk_update_request) && count($release_group_bulk_update_request) === 0
+        ) {
+            throw new InvalidArgumentException('Missing the required parameter $release_group_bulk_update_request when calling releaseGroupServiceBulkUpdateReleaseGroups');
         }
-
 
         $resourcePath = '/release-groups/bulk-update';
         $formParams = [];
@@ -428,24 +482,23 @@ class ReleaseGroupApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($release_group_bulk_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($release_group_bulk_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($release_group_bulk_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $release_group_bulk_update_request;
@@ -458,19 +511,18 @@ class ReleaseGroupApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -479,7 +531,7 @@ class ReleaseGroupApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -491,74 +543,86 @@ class ReleaseGroupApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation releaseGroupServiceCreateReleaseGroup
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupCreateRequest $release_group_create_request release_group_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
+     * @param ReleaseGroupCreateRequest $release_group_create_request release_group_create_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\ReleaseGroupCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return ReleaseGroupCreateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function releaseGroupServiceCreateReleaseGroup($release_group_create_request, string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0])
-    {
-        list($response) = $this->releaseGroupServiceCreateReleaseGroupWithHttpInfo($release_group_create_request, $contentType);
+    public function releaseGroupServiceCreateReleaseGroup(
+        $release_group_create_request,
+        string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0],
+    ) {
+        list($response) = $this->releaseGroupServiceCreateReleaseGroupWithHttpInfo(
+            $release_group_create_request,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation releaseGroupServiceCreateReleaseGroupWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupCreateRequest $release_group_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
+     * @param ReleaseGroupCreateRequest $release_group_create_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\ReleaseGroupCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function releaseGroupServiceCreateReleaseGroupWithHttpInfo($release_group_create_request, string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0])
-    {
+    public function releaseGroupServiceCreateReleaseGroupWithHttpInfo(
+        $release_group_create_request,
+        string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0],
+    ) {
         $request = $this->releaseGroupServiceCreateReleaseGroupRequest($release_group_create_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupCreateResponse',
@@ -597,18 +661,16 @@ class ReleaseGroupApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -623,52 +685,57 @@ class ReleaseGroupApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupCreateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -677,44 +744,53 @@ class ReleaseGroupApi
     /**
      * Operation releaseGroupServiceCreateReleaseGroupAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupCreateRequest $release_group_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
+     * @param ReleaseGroupCreateRequest $release_group_create_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceCreateReleaseGroupAsync($release_group_create_request, string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0])
-    {
-        return $this->releaseGroupServiceCreateReleaseGroupAsyncWithHttpInfo($release_group_create_request, $contentType)
+    public function releaseGroupServiceCreateReleaseGroupAsync(
+        $release_group_create_request,
+        string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0],
+    ) {
+        return $this->releaseGroupServiceCreateReleaseGroupAsyncWithHttpInfo(
+            $release_group_create_request,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation releaseGroupServiceCreateReleaseGroupAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupCreateRequest $release_group_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
+     * @param ReleaseGroupCreateRequest $release_group_create_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceCreateReleaseGroupAsyncWithHttpInfo($release_group_create_request, string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0])
-    {
+    public function releaseGroupServiceCreateReleaseGroupAsyncWithHttpInfo(
+        $release_group_create_request,
+        string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\ReleaseGroupCreateResponse';
         $request = $this->releaseGroupServiceCreateReleaseGroupRequest($release_group_create_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -723,7 +799,7 @@ class ReleaseGroupApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -731,45 +807,48 @@ class ReleaseGroupApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'releaseGroupServiceCreateReleaseGroup'
      *
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupCreateRequest $release_group_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
+     * @param ReleaseGroupCreateRequest $release_group_create_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceCreateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function releaseGroupServiceCreateReleaseGroupRequest($release_group_create_request, string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0])
-    {
-
+    public function releaseGroupServiceCreateReleaseGroupRequest(
+        $release_group_create_request,
+        string $contentType = self::contentTypes['releaseGroupServiceCreateReleaseGroup'][0],
+    ) {
         // verify the required parameter 'release_group_create_request' is set
-        if ($release_group_create_request === null || (is_array($release_group_create_request) && count($release_group_create_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $release_group_create_request when calling releaseGroupServiceCreateReleaseGroup'
-            );
+        if (
+            $release_group_create_request === null
+            || is_array($release_group_create_request) && count($release_group_create_request) === 0
+        ) {
+            throw new InvalidArgumentException('Missing the required parameter $release_group_create_request when calling releaseGroupServiceCreateReleaseGroup');
         }
-
 
         $resourcePath = '/release-groups';
         $formParams = [];
@@ -778,24 +857,23 @@ class ReleaseGroupApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($release_group_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($release_group_create_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($release_group_create_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $release_group_create_request;
@@ -808,19 +886,18 @@ class ReleaseGroupApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -829,7 +906,7 @@ class ReleaseGroupApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -841,71 +918,79 @@ class ReleaseGroupApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation releaseGroupServiceDeleteReleaseGroup
      *
-     * @param  string $release_group_id release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return void
      */
-    public function releaseGroupServiceDeleteReleaseGroup($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0])
-    {
+    public function releaseGroupServiceDeleteReleaseGroup(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0],
+    ) {
         $this->releaseGroupServiceDeleteReleaseGroupWithHttpInfo($release_group_id, $contentType);
     }
 
     /**
      * Operation releaseGroupServiceDeleteReleaseGroupWithHttpInfo
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function releaseGroupServiceDeleteReleaseGroupWithHttpInfo($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0])
-    {
+    public function releaseGroupServiceDeleteReleaseGroupWithHttpInfo(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0],
+    ) {
         $request = $this->releaseGroupServiceDeleteReleaseGroupRequest($release_group_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
-
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
@@ -914,52 +999,57 @@ class ReleaseGroupApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -968,40 +1058,46 @@ class ReleaseGroupApi
     /**
      * Operation releaseGroupServiceDeleteReleaseGroupAsync
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceDeleteReleaseGroupAsync($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0])
-    {
+    public function releaseGroupServiceDeleteReleaseGroupAsync(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0],
+    ) {
         return $this->releaseGroupServiceDeleteReleaseGroupAsyncWithHttpInfo($release_group_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation releaseGroupServiceDeleteReleaseGroupAsyncWithHttpInfo
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceDeleteReleaseGroupAsyncWithHttpInfo($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0])
-    {
+    public function releaseGroupServiceDeleteReleaseGroupAsyncWithHttpInfo(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0],
+    ) {
         $returnType = '';
         $request = $this->releaseGroupServiceDeleteReleaseGroupRequest($release_group_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -1009,45 +1105,45 @@ class ReleaseGroupApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'releaseGroupServiceDeleteReleaseGroup'
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceDeleteReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function releaseGroupServiceDeleteReleaseGroupRequest($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0])
-    {
-
+    public function releaseGroupServiceDeleteReleaseGroupRequest(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceDeleteReleaseGroup'][0],
+    ) {
         // verify the required parameter 'release_group_id' is set
-        if ($release_group_id === null || (is_array($release_group_id) && count($release_group_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $release_group_id when calling releaseGroupServiceDeleteReleaseGroup'
-            );
+        if ($release_group_id === null || is_array($release_group_id) && count($release_group_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $release_group_id when calling releaseGroupServiceDeleteReleaseGroup');
         }
-
 
         $resourcePath = '/release-groups/{releaseGroupId}';
         $formParams = [];
@@ -1056,22 +1152,19 @@ class ReleaseGroupApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($release_group_id !== null) {
             $resourcePath = str_replace(
                 '{releaseGroupId}',
                 ObjectSerializer::toPathValue($release_group_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1083,19 +1176,18 @@ class ReleaseGroupApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1104,7 +1196,7 @@ class ReleaseGroupApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1116,74 +1208,83 @@ class ReleaseGroupApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'DELETE',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation releaseGroupServiceGetReleaseGroup
      *
-     * @param  string $release_group_id release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\ReleaseGroupGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return ReleaseGroupGetResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function releaseGroupServiceGetReleaseGroup($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0])
-    {
+    public function releaseGroupServiceGetReleaseGroup(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0],
+    ) {
         list($response) = $this->releaseGroupServiceGetReleaseGroupWithHttpInfo($release_group_id, $contentType);
+
         return $response;
     }
 
     /**
      * Operation releaseGroupServiceGetReleaseGroupWithHttpInfo
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\ReleaseGroupGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function releaseGroupServiceGetReleaseGroupWithHttpInfo($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0])
-    {
+    public function releaseGroupServiceGetReleaseGroupWithHttpInfo(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0],
+    ) {
         $request = $this->releaseGroupServiceGetReleaseGroupRequest($release_group_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupGetResponse',
@@ -1222,18 +1323,16 @@ class ReleaseGroupApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1248,52 +1347,57 @@ class ReleaseGroupApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupGetResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1302,44 +1406,50 @@ class ReleaseGroupApi
     /**
      * Operation releaseGroupServiceGetReleaseGroupAsync
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceGetReleaseGroupAsync($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0])
-    {
+    public function releaseGroupServiceGetReleaseGroupAsync(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0],
+    ) {
         return $this->releaseGroupServiceGetReleaseGroupAsyncWithHttpInfo($release_group_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation releaseGroupServiceGetReleaseGroupAsyncWithHttpInfo
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceGetReleaseGroupAsyncWithHttpInfo($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0])
-    {
+    public function releaseGroupServiceGetReleaseGroupAsyncWithHttpInfo(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\ReleaseGroupGetResponse';
         $request = $this->releaseGroupServiceGetReleaseGroupRequest($release_group_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1348,7 +1458,7 @@ class ReleaseGroupApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1356,45 +1466,45 @@ class ReleaseGroupApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'releaseGroupServiceGetReleaseGroup'
      *
-     * @param  string $release_group_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
+     * @param string $release_group_id (required)
+     * @param string $contentType      The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceGetReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function releaseGroupServiceGetReleaseGroupRequest($release_group_id, string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0])
-    {
-
+    public function releaseGroupServiceGetReleaseGroupRequest(
+        $release_group_id,
+        string $contentType = self::contentTypes['releaseGroupServiceGetReleaseGroup'][0],
+    ) {
         // verify the required parameter 'release_group_id' is set
-        if ($release_group_id === null || (is_array($release_group_id) && count($release_group_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $release_group_id when calling releaseGroupServiceGetReleaseGroup'
-            );
+        if ($release_group_id === null || is_array($release_group_id) && count($release_group_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $release_group_id when calling releaseGroupServiceGetReleaseGroup');
         }
-
 
         $resourcePath = '/release-groups/{releaseGroupId}';
         $formParams = [];
@@ -1403,22 +1513,19 @@ class ReleaseGroupApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($release_group_id !== null) {
             $resourcePath = str_replace(
                 '{releaseGroupId}',
                 ObjectSerializer::toPathValue($release_group_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1430,19 +1537,18 @@ class ReleaseGroupApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1451,7 +1557,7 @@ class ReleaseGroupApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1463,88 +1569,131 @@ class ReleaseGroupApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation releaseGroupServiceSearchReleaseGroups
      *
-     * @param  string|null $title title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type type (optional)
-     * @param  bool|null $is_display is_display (optional)
-     * @param  string|null $tag_id このタグが付いたリリースグループだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort sort (optional, default to 'first_released_on')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order order (optional, default to 'desc')
-     * @param  Int|null $page page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
+     * @param string|null                                          $title       title (optional)
+     * @param ReleaseGroupTypeValue|null                           $type        type (optional)
+     * @param bool|null                                            $is_display  is_display (optional)
+     * @param string|null                                          $tag_id      このタグが付いたリリースグループだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort        sort (optional, default to 'first_released_on')
+     * @param OpenAPIAdminClientModelSortOrder|null                $order       order (optional, default to 'desc')
+     * @param int|null                                             $page        page (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null                  $per_page    per_page (optional, default to 25)
+     * @param string                                               $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return ReleaseGroupSearchResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function releaseGroupServiceSearchReleaseGroups($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'first_released_on', $order = 'desc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
-    {
-        list($response) = $this->releaseGroupServiceSearchReleaseGroupsWithHttpInfo($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+    public function releaseGroupServiceSearchReleaseGroups(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'first_released_on',
+        $order = 'desc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0],
+    ) {
+        list($response) = $this->releaseGroupServiceSearchReleaseGroupsWithHttpInfo(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation releaseGroupServiceSearchReleaseGroupsWithHttpInfo
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたリリースグループだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional, default to 'first_released_on')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'desc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
+     * @param string|null                                          $title       (optional)
+     * @param ReleaseGroupTypeValue|null                           $type        (optional)
+     * @param bool|null                                            $is_display  (optional)
+     * @param string|null                                          $tag_id      このタグが付いたリリースグループだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort        (optional, default to 'first_released_on')
+     * @param OpenAPIAdminClientModelSortOrder|null                $order       (optional, default to 'desc')
+     * @param int|null                                             $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null                  $per_page    (optional, default to 25)
+     * @param string                                               $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function releaseGroupServiceSearchReleaseGroupsWithHttpInfo($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'first_released_on', $order = 'desc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
-    {
-        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+    public function releaseGroupServiceSearchReleaseGroupsWithHttpInfo(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'first_released_on',
+        $order = 'desc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0],
+    ) {
+        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse',
@@ -1571,18 +1720,16 @@ class ReleaseGroupApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1597,36 +1744,39 @@ class ReleaseGroupApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1635,58 +1785,98 @@ class ReleaseGroupApi
     /**
      * Operation releaseGroupServiceSearchReleaseGroupsAsync
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたリリースグループだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional, default to 'first_released_on')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'desc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
+     * @param string|null                                          $title       (optional)
+     * @param ReleaseGroupTypeValue|null                           $type        (optional)
+     * @param bool|null                                            $is_display  (optional)
+     * @param string|null                                          $tag_id      このタグが付いたリリースグループだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort        (optional, default to 'first_released_on')
+     * @param OpenAPIAdminClientModelSortOrder|null                $order       (optional, default to 'desc')
+     * @param int|null                                             $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null                  $per_page    (optional, default to 25)
+     * @param string                                               $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceSearchReleaseGroupsAsync($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'first_released_on', $order = 'desc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
-    {
-        return $this->releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType)
+    public function releaseGroupServiceSearchReleaseGroupsAsync(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'first_released_on',
+        $order = 'desc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0],
+    ) {
+        return $this->releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたリリースグループだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional, default to 'first_released_on')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'desc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
+     * @param string|null                                          $title       (optional)
+     * @param ReleaseGroupTypeValue|null                           $type        (optional)
+     * @param bool|null                                            $is_display  (optional)
+     * @param string|null                                          $tag_id      このタグが付いたリリースグループだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort        (optional, default to 'first_released_on')
+     * @param OpenAPIAdminClientModelSortOrder|null                $order       (optional, default to 'desc')
+     * @param int|null                                             $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null                  $per_page    (optional, default to 25)
+     * @param string                                               $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'first_released_on', $order = 'desc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
-    {
+    public function releaseGroupServiceSearchReleaseGroupsAsyncWithHttpInfo(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'first_released_on',
+        $order = 'desc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse';
-        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+        $request = $this->releaseGroupServiceSearchReleaseGroupsRequest(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1695,7 +1885,7 @@ class ReleaseGroupApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1703,54 +1893,55 @@ class ReleaseGroupApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'releaseGroupServiceSearchReleaseGroups'
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたリリースグループだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort (optional, default to 'first_released_on')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'desc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
+     * @param string|null                                          $title       (optional)
+     * @param ReleaseGroupTypeValue|null                           $type        (optional)
+     * @param bool|null                                            $is_display  (optional)
+     * @param string|null                                          $tag_id      このタグが付いたリリースグループだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelReleaseGroupSearchSortBy|null $sort        (optional, default to 'first_released_on')
+     * @param OpenAPIAdminClientModelSortOrder|null                $order       (optional, default to 'desc')
+     * @param int|null                                             $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null                  $per_page    (optional, default to 25)
+     * @param string                                               $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceSearchReleaseGroups'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function releaseGroupServiceSearchReleaseGroupsRequest($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'first_released_on', $order = 'desc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0])
-    {
-
-
-
-
-
-
-
-
-
-
+    public function releaseGroupServiceSearchReleaseGroupsRequest(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'first_released_on',
+        $order = 'desc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['releaseGroupServiceSearchReleaseGroups'][0],
+    ) {
         $resourcePath = '/release-groups/search';
         $formParams = [];
         $queryParams = [];
@@ -1765,7 +1956,7 @@ class ReleaseGroupApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1774,7 +1965,7 @@ class ReleaseGroupApi
             'ReleaseGroupTypeValue', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1783,7 +1974,7 @@ class ReleaseGroupApi
             'boolean', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1792,7 +1983,7 @@ class ReleaseGroupApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1801,7 +1992,7 @@ class ReleaseGroupApi
             'ReleaseGroupSearchSortBy', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1810,7 +2001,7 @@ class ReleaseGroupApi
             'SortOrder', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1819,7 +2010,7 @@ class ReleaseGroupApi
             'integer', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1828,16 +2019,13 @@ class ReleaseGroupApi
             'PerPage', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
 
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1849,19 +2037,18 @@ class ReleaseGroupApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1870,7 +2057,7 @@ class ReleaseGroupApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1882,76 +2069,95 @@ class ReleaseGroupApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation releaseGroupServiceUpdateReleaseGroup
      *
-     * @param  string $release_group_id release_group_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupUpdateRequest $release_group_update_request release_group_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
+     * @param string                    $release_group_id             release_group_id (required)
+     * @param ReleaseGroupUpdateRequest $release_group_update_request release_group_update_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\ReleaseGroupUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return ReleaseGroupUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function releaseGroupServiceUpdateReleaseGroup($release_group_id, $release_group_update_request, string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0])
-    {
-        list($response) = $this->releaseGroupServiceUpdateReleaseGroupWithHttpInfo($release_group_id, $release_group_update_request, $contentType);
+    public function releaseGroupServiceUpdateReleaseGroup(
+        $release_group_id,
+        $release_group_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0],
+    ) {
+        list($response) = $this->releaseGroupServiceUpdateReleaseGroupWithHttpInfo(
+            $release_group_id,
+            $release_group_update_request,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation releaseGroupServiceUpdateReleaseGroupWithHttpInfo
      *
-     * @param  string $release_group_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupUpdateRequest $release_group_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
+     * @param string                    $release_group_id             (required)
+     * @param ReleaseGroupUpdateRequest $release_group_update_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\ReleaseGroupUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function releaseGroupServiceUpdateReleaseGroupWithHttpInfo($release_group_id, $release_group_update_request, string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0])
-    {
-        $request = $this->releaseGroupServiceUpdateReleaseGroupRequest($release_group_id, $release_group_update_request, $contentType);
+    public function releaseGroupServiceUpdateReleaseGroupWithHttpInfo(
+        $release_group_id,
+        $release_group_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0],
+    ) {
+        $request = $this->releaseGroupServiceUpdateReleaseGroupRequest(
+            $release_group_id,
+            $release_group_update_request,
+            $contentType,
+        );
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupUpdateResponse',
@@ -1990,18 +2196,16 @@ class ReleaseGroupApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -2016,52 +2220,57 @@ class ReleaseGroupApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ReleaseGroupUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -2070,46 +2279,62 @@ class ReleaseGroupApi
     /**
      * Operation releaseGroupServiceUpdateReleaseGroupAsync
      *
-     * @param  string $release_group_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupUpdateRequest $release_group_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
+     * @param string                    $release_group_id             (required)
+     * @param ReleaseGroupUpdateRequest $release_group_update_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceUpdateReleaseGroupAsync($release_group_id, $release_group_update_request, string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0])
-    {
-        return $this->releaseGroupServiceUpdateReleaseGroupAsyncWithHttpInfo($release_group_id, $release_group_update_request, $contentType)
+    public function releaseGroupServiceUpdateReleaseGroupAsync(
+        $release_group_id,
+        $release_group_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0],
+    ) {
+        return $this->releaseGroupServiceUpdateReleaseGroupAsyncWithHttpInfo(
+            $release_group_id,
+            $release_group_update_request,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation releaseGroupServiceUpdateReleaseGroupAsyncWithHttpInfo
      *
-     * @param  string $release_group_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupUpdateRequest $release_group_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
+     * @param string                    $release_group_id             (required)
+     * @param ReleaseGroupUpdateRequest $release_group_update_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function releaseGroupServiceUpdateReleaseGroupAsyncWithHttpInfo($release_group_id, $release_group_update_request, string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0])
-    {
+    public function releaseGroupServiceUpdateReleaseGroupAsyncWithHttpInfo(
+        $release_group_id,
+        $release_group_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\ReleaseGroupUpdateResponse';
-        $request = $this->releaseGroupServiceUpdateReleaseGroupRequest($release_group_id, $release_group_update_request, $contentType);
+        $request = $this->releaseGroupServiceUpdateReleaseGroupRequest(
+            $release_group_id,
+            $release_group_update_request,
+            $contentType,
+        );
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -2118,7 +2343,7 @@ class ReleaseGroupApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -2126,53 +2351,55 @@ class ReleaseGroupApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'releaseGroupServiceUpdateReleaseGroup'
      *
-     * @param  string $release_group_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\ReleaseGroupUpdateRequest $release_group_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
+     * @param string                    $release_group_id             (required)
+     * @param ReleaseGroupUpdateRequest $release_group_update_request (required)
+     * @param string                    $contentType                  The value for the Content-Type header. Check self::contentTypes['releaseGroupServiceUpdateReleaseGroup'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function releaseGroupServiceUpdateReleaseGroupRequest($release_group_id, $release_group_update_request, string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0])
-    {
-
+    public function releaseGroupServiceUpdateReleaseGroupRequest(
+        $release_group_id,
+        $release_group_update_request,
+        string $contentType = self::contentTypes['releaseGroupServiceUpdateReleaseGroup'][0],
+    ) {
         // verify the required parameter 'release_group_id' is set
-        if ($release_group_id === null || (is_array($release_group_id) && count($release_group_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $release_group_id when calling releaseGroupServiceUpdateReleaseGroup'
-            );
+        if ($release_group_id === null || is_array($release_group_id) && count($release_group_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $release_group_id when calling releaseGroupServiceUpdateReleaseGroup');
         }
 
         // verify the required parameter 'release_group_update_request' is set
-        if ($release_group_update_request === null || (is_array($release_group_update_request) && count($release_group_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $release_group_update_request when calling releaseGroupServiceUpdateReleaseGroup'
-            );
+        if (
+            $release_group_update_request === null
+            || is_array($release_group_update_request) && count($release_group_update_request) === 0
+        ) {
+            throw new InvalidArgumentException('Missing the required parameter $release_group_update_request when calling releaseGroupServiceUpdateReleaseGroup');
         }
-
 
         $resourcePath = '/release-groups/{releaseGroupId}';
         $formParams = [];
@@ -2181,32 +2408,32 @@ class ReleaseGroupApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($release_group_id !== null) {
             $resourcePath = str_replace(
                 '{releaseGroupId}',
                 ObjectSerializer::toPathValue($release_group_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($release_group_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($release_group_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($release_group_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $release_group_update_request;
@@ -2219,19 +2446,18 @@ class ReleaseGroupApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -2240,7 +2466,7 @@ class ReleaseGroupApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -2252,23 +2478,25 @@ class ReleaseGroupApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -2276,8 +2504,8 @@ class ReleaseGroupApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -2297,12 +2525,8 @@ class ReleaseGroupApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -2310,24 +2534,24 @@ class ReleaseGroupApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -2336,16 +2560,16 @@ class ReleaseGroupApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

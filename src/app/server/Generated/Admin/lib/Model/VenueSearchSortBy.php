@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * VenueSearchSortBy
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * VenueSearchSortBy Class Doc Comment
  *
  * @category Class
+ *
  * @description 開催先検索のソート条件
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum VenueSearchSortBy: string
@@ -44,7 +52,4 @@ enum VenueSearchSortBy: string
      * 開催先名
      */
     case NAME = 'name';
-
 }
-
-

@@ -10,11 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Media\Application\Admin\UseCase\Delete\DeleteInputData;
 use Media\Application\Admin\UseCase\Delete\DeleteUseCase;
 
-class DeleteMediaController extends Controller
+final readonly class DeleteMediaController extends Controller
 {
     public function __construct(
-        private readonly DeleteUseCase $useCase,
-        private readonly DeletePresenter $presenter,
+        private DeleteUseCase $useCase,
+        private DeletePresenter $presenter,
     ) {
     }
 

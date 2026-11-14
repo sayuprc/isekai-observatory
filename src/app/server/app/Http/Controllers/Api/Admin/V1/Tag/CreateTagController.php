@@ -12,12 +12,12 @@ use Support\Contracts\MapperInterface;
 use Tag\Application\Admin\UseCase\Create\CreateInputData;
 use Tag\Application\Admin\UseCase\Create\CreateUseCase;
 
-class CreateTagController extends Controller
+final readonly class CreateTagController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly CreateUseCase $useCase,
-        private readonly CreatePresenter $presenter,
+        private MapperInterface $mapper,
+        private CreateUseCase $useCase,
+        private CreatePresenter $presenter,
     ) {
     }
 

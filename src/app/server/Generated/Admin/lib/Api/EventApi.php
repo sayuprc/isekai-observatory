@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * EventApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -30,24 +35,44 @@ namespace OpenAPI\Admin\Client\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Admin\Client\ApiException;
+use OpenAPI\Admin\Client\Configuration;
+use OpenAPI\Admin\Client\HeaderSelector;
+use OpenAPI\Admin\Client\Model\ErrorResponse;
+use OpenAPI\Admin\Client\Model\EventBulkUpdateRequest;
+use OpenAPI\Admin\Client\Model\EventBulkUpdateResponse;
+use OpenAPI\Admin\Client\Model\EventCreateRequest;
+use OpenAPI\Admin\Client\Model\EventCreateResponse;
+use OpenAPI\Admin\Client\Model\EventGetResponse;
+use OpenAPI\Admin\Client\Model\EventSearchResponse;
+use OpenAPI\Admin\Client\Model\EventStatusValue;
+use OpenAPI\Admin\Client\Model\EventTypeValue;
+use OpenAPI\Admin\Client\Model\EventUpdateRequest;
+use OpenAPI\Admin\Client\Model\EventUpdateResponse;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use OpenAPIAdminClientModelEventSearchSortBy;
+use OpenAPIAdminClientModelPerPage;
+use OpenAPIAdminClientModelSortOrder;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Admin\Client\ApiException;
-use OpenAPI\Admin\Client\Configuration;
-use OpenAPI\Admin\Client\FormDataProcessor;
-use OpenAPI\Admin\Client\HeaderSelector;
-use OpenAPI\Admin\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * EventApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class EventApi
@@ -72,7 +97,7 @@ class EventApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'eventServiceBulkUpdateEvents' => [
             'application/json',
@@ -95,16 +120,13 @@ class EventApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -143,58 +165,66 @@ class EventApi
     /**
      * Operation eventServiceBulkUpdateEvents
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventBulkUpdateRequest $event_bulk_update_request event_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
+     * @param EventBulkUpdateRequest $event_bulk_update_request event_bulk_update_request (required)
+     * @param string                 $contentType               The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\EventBulkUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return EventBulkUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function eventServiceBulkUpdateEvents($event_bulk_update_request, string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0])
-    {
+    public function eventServiceBulkUpdateEvents(
+        $event_bulk_update_request,
+        string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0],
+    ) {
         list($response) = $this->eventServiceBulkUpdateEventsWithHttpInfo($event_bulk_update_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation eventServiceBulkUpdateEventsWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventBulkUpdateRequest $event_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
+     * @param EventBulkUpdateRequest $event_bulk_update_request (required)
+     * @param string                 $contentType               The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\EventBulkUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function eventServiceBulkUpdateEventsWithHttpInfo($event_bulk_update_request, string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0])
-    {
+    public function eventServiceBulkUpdateEventsWithHttpInfo(
+        $event_bulk_update_request,
+        string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0],
+    ) {
         $request = $this->eventServiceBulkUpdateEventsRequest($event_bulk_update_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\EventBulkUpdateResponse',
@@ -239,18 +269,16 @@ class EventApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -265,60 +293,66 @@ class EventApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\EventBulkUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -327,44 +361,50 @@ class EventApi
     /**
      * Operation eventServiceBulkUpdateEventsAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventBulkUpdateRequest $event_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
+     * @param EventBulkUpdateRequest $event_bulk_update_request (required)
+     * @param string                 $contentType               The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceBulkUpdateEventsAsync($event_bulk_update_request, string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0])
-    {
+    public function eventServiceBulkUpdateEventsAsync(
+        $event_bulk_update_request,
+        string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0],
+    ) {
         return $this->eventServiceBulkUpdateEventsAsyncWithHttpInfo($event_bulk_update_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation eventServiceBulkUpdateEventsAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventBulkUpdateRequest $event_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
+     * @param EventBulkUpdateRequest $event_bulk_update_request (required)
+     * @param string                 $contentType               The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceBulkUpdateEventsAsyncWithHttpInfo($event_bulk_update_request, string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0])
-    {
+    public function eventServiceBulkUpdateEventsAsyncWithHttpInfo(
+        $event_bulk_update_request,
+        string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\EventBulkUpdateResponse';
         $request = $this->eventServiceBulkUpdateEventsRequest($event_bulk_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -373,7 +413,7 @@ class EventApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -381,45 +421,48 @@ class EventApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'eventServiceBulkUpdateEvents'
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventBulkUpdateRequest $event_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
+     * @param EventBulkUpdateRequest $event_bulk_update_request (required)
+     * @param string                 $contentType               The value for the Content-Type header. Check self::contentTypes['eventServiceBulkUpdateEvents'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function eventServiceBulkUpdateEventsRequest($event_bulk_update_request, string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0])
-    {
-
+    public function eventServiceBulkUpdateEventsRequest(
+        $event_bulk_update_request,
+        string $contentType = self::contentTypes['eventServiceBulkUpdateEvents'][0],
+    ) {
         // verify the required parameter 'event_bulk_update_request' is set
-        if ($event_bulk_update_request === null || (is_array($event_bulk_update_request) && count($event_bulk_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $event_bulk_update_request when calling eventServiceBulkUpdateEvents'
-            );
+        if (
+            $event_bulk_update_request === null
+            || is_array($event_bulk_update_request) && count($event_bulk_update_request) === 0
+        ) {
+            throw new InvalidArgumentException('Missing the required parameter $event_bulk_update_request when calling eventServiceBulkUpdateEvents');
         }
-
 
         $resourcePath = '/events/bulk-update';
         $formParams = [];
@@ -428,24 +471,23 @@ class EventApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($event_bulk_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($event_bulk_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($event_bulk_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $event_bulk_update_request;
@@ -458,19 +500,18 @@ class EventApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -479,7 +520,7 @@ class EventApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -491,74 +532,83 @@ class EventApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation eventServiceCreateEvent
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventCreateRequest $event_create_request event_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
+     * @param EventCreateRequest $event_create_request event_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\EventCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return EventCreateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function eventServiceCreateEvent($event_create_request, string $contentType = self::contentTypes['eventServiceCreateEvent'][0])
-    {
+    public function eventServiceCreateEvent(
+        $event_create_request,
+        string $contentType = self::contentTypes['eventServiceCreateEvent'][0],
+    ) {
         list($response) = $this->eventServiceCreateEventWithHttpInfo($event_create_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation eventServiceCreateEventWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventCreateRequest $event_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
+     * @param EventCreateRequest $event_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\EventCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function eventServiceCreateEventWithHttpInfo($event_create_request, string $contentType = self::contentTypes['eventServiceCreateEvent'][0])
-    {
+    public function eventServiceCreateEventWithHttpInfo(
+        $event_create_request,
+        string $contentType = self::contentTypes['eventServiceCreateEvent'][0],
+    ) {
         $request = $this->eventServiceCreateEventRequest($event_create_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\EventCreateResponse',
@@ -597,18 +647,16 @@ class EventApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -623,52 +671,57 @@ class EventApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\EventCreateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -677,44 +730,50 @@ class EventApi
     /**
      * Operation eventServiceCreateEventAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventCreateRequest $event_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
+     * @param EventCreateRequest $event_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceCreateEventAsync($event_create_request, string $contentType = self::contentTypes['eventServiceCreateEvent'][0])
-    {
+    public function eventServiceCreateEventAsync(
+        $event_create_request,
+        string $contentType = self::contentTypes['eventServiceCreateEvent'][0],
+    ) {
         return $this->eventServiceCreateEventAsyncWithHttpInfo($event_create_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation eventServiceCreateEventAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventCreateRequest $event_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
+     * @param EventCreateRequest $event_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceCreateEventAsyncWithHttpInfo($event_create_request, string $contentType = self::contentTypes['eventServiceCreateEvent'][0])
-    {
+    public function eventServiceCreateEventAsyncWithHttpInfo(
+        $event_create_request,
+        string $contentType = self::contentTypes['eventServiceCreateEvent'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\EventCreateResponse';
         $request = $this->eventServiceCreateEventRequest($event_create_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -723,7 +782,7 @@ class EventApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -731,45 +790,45 @@ class EventApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'eventServiceCreateEvent'
      *
-     * @param  \OpenAPI\Admin\Client\Model\EventCreateRequest $event_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
+     * @param EventCreateRequest $event_create_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceCreateEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function eventServiceCreateEventRequest($event_create_request, string $contentType = self::contentTypes['eventServiceCreateEvent'][0])
-    {
-
+    public function eventServiceCreateEventRequest(
+        $event_create_request,
+        string $contentType = self::contentTypes['eventServiceCreateEvent'][0],
+    ) {
         // verify the required parameter 'event_create_request' is set
-        if ($event_create_request === null || (is_array($event_create_request) && count($event_create_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $event_create_request when calling eventServiceCreateEvent'
-            );
+        if ($event_create_request === null || is_array($event_create_request) && count($event_create_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $event_create_request when calling eventServiceCreateEvent');
         }
-
 
         $resourcePath = '/events';
         $formParams = [];
@@ -778,24 +837,23 @@ class EventApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($event_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($event_create_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($event_create_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $event_create_request;
@@ -808,19 +866,18 @@ class EventApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -829,7 +886,7 @@ class EventApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -841,71 +898,79 @@ class EventApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation eventServiceDeleteEvent
      *
-     * @param  string $event_id event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
+     * @param string $event_id    event_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return void
      */
-    public function eventServiceDeleteEvent($event_id, string $contentType = self::contentTypes['eventServiceDeleteEvent'][0])
-    {
+    public function eventServiceDeleteEvent(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceDeleteEvent'][0],
+    ) {
         $this->eventServiceDeleteEventWithHttpInfo($event_id, $contentType);
     }
 
     /**
      * Operation eventServiceDeleteEventWithHttpInfo
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function eventServiceDeleteEventWithHttpInfo($event_id, string $contentType = self::contentTypes['eventServiceDeleteEvent'][0])
-    {
+    public function eventServiceDeleteEventWithHttpInfo(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceDeleteEvent'][0],
+    ) {
         $request = $this->eventServiceDeleteEventRequest($event_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
-
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
@@ -914,52 +979,57 @@ class EventApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -968,40 +1038,46 @@ class EventApi
     /**
      * Operation eventServiceDeleteEventAsync
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceDeleteEventAsync($event_id, string $contentType = self::contentTypes['eventServiceDeleteEvent'][0])
-    {
+    public function eventServiceDeleteEventAsync(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceDeleteEvent'][0],
+    ) {
         return $this->eventServiceDeleteEventAsyncWithHttpInfo($event_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation eventServiceDeleteEventAsyncWithHttpInfo
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceDeleteEventAsyncWithHttpInfo($event_id, string $contentType = self::contentTypes['eventServiceDeleteEvent'][0])
-    {
+    public function eventServiceDeleteEventAsyncWithHttpInfo(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceDeleteEvent'][0],
+    ) {
         $returnType = '';
         $request = $this->eventServiceDeleteEventRequest($event_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -1009,45 +1085,45 @@ class EventApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'eventServiceDeleteEvent'
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceDeleteEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function eventServiceDeleteEventRequest($event_id, string $contentType = self::contentTypes['eventServiceDeleteEvent'][0])
-    {
-
+    public function eventServiceDeleteEventRequest(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceDeleteEvent'][0],
+    ) {
         // verify the required parameter 'event_id' is set
-        if ($event_id === null || (is_array($event_id) && count($event_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $event_id when calling eventServiceDeleteEvent'
-            );
+        if ($event_id === null || is_array($event_id) && count($event_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $event_id when calling eventServiceDeleteEvent');
         }
-
 
         $resourcePath = '/events/{eventId}';
         $formParams = [];
@@ -1056,22 +1132,19 @@ class EventApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($event_id !== null) {
             $resourcePath = str_replace(
                 '{eventId}',
                 ObjectSerializer::toPathValue($event_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1083,19 +1156,18 @@ class EventApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1104,7 +1176,7 @@ class EventApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1116,74 +1188,81 @@ class EventApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'DELETE',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation eventServiceGetEvent
      *
-     * @param  string $event_id event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
+     * @param string $event_id    event_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\EventGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return EventGetResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
     public function eventServiceGetEvent($event_id, string $contentType = self::contentTypes['eventServiceGetEvent'][0])
     {
         list($response) = $this->eventServiceGetEventWithHttpInfo($event_id, $contentType);
+
         return $response;
     }
 
     /**
      * Operation eventServiceGetEventWithHttpInfo
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\EventGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function eventServiceGetEventWithHttpInfo($event_id, string $contentType = self::contentTypes['eventServiceGetEvent'][0])
-    {
+    public function eventServiceGetEventWithHttpInfo(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceGetEvent'][0],
+    ) {
         $request = $this->eventServiceGetEventRequest($event_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\EventGetResponse',
@@ -1222,18 +1301,16 @@ class EventApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1248,52 +1325,57 @@ class EventApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\EventGetResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1302,44 +1384,50 @@ class EventApi
     /**
      * Operation eventServiceGetEventAsync
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceGetEventAsync($event_id, string $contentType = self::contentTypes['eventServiceGetEvent'][0])
-    {
+    public function eventServiceGetEventAsync(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceGetEvent'][0],
+    ) {
         return $this->eventServiceGetEventAsyncWithHttpInfo($event_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation eventServiceGetEventAsyncWithHttpInfo
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceGetEventAsyncWithHttpInfo($event_id, string $contentType = self::contentTypes['eventServiceGetEvent'][0])
-    {
+    public function eventServiceGetEventAsyncWithHttpInfo(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceGetEvent'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\EventGetResponse';
         $request = $this->eventServiceGetEventRequest($event_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1348,7 +1436,7 @@ class EventApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1356,45 +1444,45 @@ class EventApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'eventServiceGetEvent'
      *
-     * @param  string $event_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
+     * @param string $event_id    (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceGetEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function eventServiceGetEventRequest($event_id, string $contentType = self::contentTypes['eventServiceGetEvent'][0])
-    {
-
+    public function eventServiceGetEventRequest(
+        $event_id,
+        string $contentType = self::contentTypes['eventServiceGetEvent'][0],
+    ) {
         // verify the required parameter 'event_id' is set
-        if ($event_id === null || (is_array($event_id) && count($event_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $event_id when calling eventServiceGetEvent'
-            );
+        if ($event_id === null || is_array($event_id) && count($event_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $event_id when calling eventServiceGetEvent');
         }
-
 
         $resourcePath = '/events/{eventId}';
         $formParams = [];
@@ -1403,22 +1491,19 @@ class EventApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($event_id !== null) {
             $resourcePath = str_replace(
                 '{eventId}',
                 ObjectSerializer::toPathValue($event_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1430,19 +1515,18 @@ class EventApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1451,7 +1535,7 @@ class EventApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1463,90 +1547,137 @@ class EventApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation eventServiceSearchEvents
      *
-     * @param  string|null $title title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type type (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status status (optional)
-     * @param  bool|null $is_display is_display (optional)
-     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort sort (optional, default to 'schedule')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order order (optional, default to 'asc')
-     * @param  Int|null $page page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
+     * @param string|null                                   $title       title (optional)
+     * @param EventTypeValue|null                           $type        type (optional)
+     * @param EventStatusValue|null                         $status      status (optional)
+     * @param bool|null                                     $is_display  is_display (optional)
+     * @param string|null                                   $tag_id      このタグが付いたイベントだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelEventSearchSortBy|null $sort        sort (optional, default to 'schedule')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       order (optional, default to 'asc')
+     * @param int|null                                      $page        page (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    per_page (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\EventSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return EventSearchResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function eventServiceSearchEvents($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
-    {
-        list($response) = $this->eventServiceSearchEventsWithHttpInfo($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+    public function eventServiceSearchEvents(
+        $title = null,
+        $type = null,
+        $status = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'schedule',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['eventServiceSearchEvents'][0],
+    ) {
+        list($response) = $this->eventServiceSearchEventsWithHttpInfo(
+            $title,
+            $type,
+            $status,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation eventServiceSearchEventsWithHttpInfo
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
+     * @param string|null                                   $title       (optional)
+     * @param EventTypeValue|null                           $type        (optional)
+     * @param EventStatusValue|null                         $status      (optional)
+     * @param bool|null                                     $is_display  (optional)
+     * @param string|null                                   $tag_id      このタグが付いたイベントだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelEventSearchSortBy|null $sort        (optional, default to 'schedule')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\EventSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function eventServiceSearchEventsWithHttpInfo($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
-    {
-        $request = $this->eventServiceSearchEventsRequest($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+    public function eventServiceSearchEventsWithHttpInfo(
+        $title = null,
+        $type = null,
+        $status = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'schedule',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['eventServiceSearchEvents'][0],
+    ) {
+        $request = $this->eventServiceSearchEventsRequest(
+            $title,
+            $type,
+            $status,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\EventSearchResponse',
@@ -1573,18 +1704,16 @@ class EventApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1599,36 +1728,39 @@ class EventApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\EventSearchResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1637,60 +1769,104 @@ class EventApi
     /**
      * Operation eventServiceSearchEventsAsync
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
+     * @param string|null                                   $title       (optional)
+     * @param EventTypeValue|null                           $type        (optional)
+     * @param EventStatusValue|null                         $status      (optional)
+     * @param bool|null                                     $is_display  (optional)
+     * @param string|null                                   $tag_id      このタグが付いたイベントだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelEventSearchSortBy|null $sort        (optional, default to 'schedule')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceSearchEventsAsync($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
-    {
-        return $this->eventServiceSearchEventsAsyncWithHttpInfo($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType)
+    public function eventServiceSearchEventsAsync(
+        $title = null,
+        $type = null,
+        $status = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'schedule',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['eventServiceSearchEvents'][0],
+    ) {
+        return $this->eventServiceSearchEventsAsyncWithHttpInfo(
+            $title,
+            $type,
+            $status,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation eventServiceSearchEventsAsyncWithHttpInfo
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
+     * @param string|null                                   $title       (optional)
+     * @param EventTypeValue|null                           $type        (optional)
+     * @param EventStatusValue|null                         $status      (optional)
+     * @param bool|null                                     $is_display  (optional)
+     * @param string|null                                   $tag_id      このタグが付いたイベントだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelEventSearchSortBy|null $sort        (optional, default to 'schedule')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceSearchEventsAsyncWithHttpInfo($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
-    {
+    public function eventServiceSearchEventsAsyncWithHttpInfo(
+        $title = null,
+        $type = null,
+        $status = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'schedule',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['eventServiceSearchEvents'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\EventSearchResponse';
-        $request = $this->eventServiceSearchEventsRequest($title, $type, $status, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+        $request = $this->eventServiceSearchEventsRequest(
+            $title,
+            $type,
+            $status,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1699,7 +1875,7 @@ class EventApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1707,56 +1883,57 @@ class EventApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'eventServiceSearchEvents'
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventTypeValue|null $type (optional)
-     * @param  \OpenAPI\Admin\Client\Model\EventStatusValue|null $status (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いたイベントだけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelEventSearchSortBy|null $sort (optional, default to 'schedule')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
+     * @param string|null                                   $title       (optional)
+     * @param EventTypeValue|null                           $type        (optional)
+     * @param EventStatusValue|null                         $status      (optional)
+     * @param bool|null                                     $is_display  (optional)
+     * @param string|null                                   $tag_id      このタグが付いたイベントだけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelEventSearchSortBy|null $sort        (optional, default to 'schedule')
+     * @param OpenAPIAdminClientModelSortOrder|null         $order       (optional, default to 'asc')
+     * @param int|null                                      $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null           $per_page    (optional, default to 25)
+     * @param string                                        $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceSearchEvents'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function eventServiceSearchEventsRequest($title = null, $type = null, $status = null, $is_display = null, $tag_id = null, $sort = 'schedule', $order = 'asc', $page = 1, $per_page = 25, string $contentType = self::contentTypes['eventServiceSearchEvents'][0])
-    {
-
-
-
-
-
-
-
-
-
-
-
+    public function eventServiceSearchEventsRequest(
+        $title = null,
+        $type = null,
+        $status = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'schedule',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 25,
+        string $contentType = self::contentTypes['eventServiceSearchEvents'][0],
+    ) {
         $resourcePath = '/events/search';
         $formParams = [];
         $queryParams = [];
@@ -1771,7 +1948,7 @@ class EventApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1780,7 +1957,7 @@ class EventApi
             'EventTypeValue', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1789,7 +1966,7 @@ class EventApi
             'EventStatusValue', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1798,7 +1975,7 @@ class EventApi
             'boolean', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1807,7 +1984,7 @@ class EventApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1816,7 +1993,7 @@ class EventApi
             'EventSearchSortBy', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1825,7 +2002,7 @@ class EventApi
             'SortOrder', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1834,7 +2011,7 @@ class EventApi
             'integer', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1843,16 +2020,13 @@ class EventApi
             'PerPage', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
 
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1864,19 +2038,18 @@ class EventApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1885,7 +2058,7 @@ class EventApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1897,76 +2070,87 @@ class EventApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation eventServiceUpdateEvent
      *
-     * @param  string $event_id event_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\EventUpdateRequest $event_update_request event_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
+     * @param string             $event_id             event_id (required)
+     * @param EventUpdateRequest $event_update_request event_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\EventUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return EventUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function eventServiceUpdateEvent($event_id, $event_update_request, string $contentType = self::contentTypes['eventServiceUpdateEvent'][0])
-    {
+    public function eventServiceUpdateEvent(
+        $event_id,
+        $event_update_request,
+        string $contentType = self::contentTypes['eventServiceUpdateEvent'][0],
+    ) {
         list($response) = $this->eventServiceUpdateEventWithHttpInfo($event_id, $event_update_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation eventServiceUpdateEventWithHttpInfo
      *
-     * @param  string $event_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\EventUpdateRequest $event_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
+     * @param string             $event_id             (required)
+     * @param EventUpdateRequest $event_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\EventUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function eventServiceUpdateEventWithHttpInfo($event_id, $event_update_request, string $contentType = self::contentTypes['eventServiceUpdateEvent'][0])
-    {
+    public function eventServiceUpdateEventWithHttpInfo(
+        $event_id,
+        $event_update_request,
+        string $contentType = self::contentTypes['eventServiceUpdateEvent'][0],
+    ) {
         $request = $this->eventServiceUpdateEventRequest($event_id, $event_update_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\EventUpdateResponse',
@@ -2011,18 +2195,16 @@ class EventApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -2037,60 +2219,66 @@ class EventApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\EventUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -2099,46 +2287,54 @@ class EventApi
     /**
      * Operation eventServiceUpdateEventAsync
      *
-     * @param  string $event_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\EventUpdateRequest $event_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
+     * @param string             $event_id             (required)
+     * @param EventUpdateRequest $event_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceUpdateEventAsync($event_id, $event_update_request, string $contentType = self::contentTypes['eventServiceUpdateEvent'][0])
-    {
+    public function eventServiceUpdateEventAsync(
+        $event_id,
+        $event_update_request,
+        string $contentType = self::contentTypes['eventServiceUpdateEvent'][0],
+    ) {
         return $this->eventServiceUpdateEventAsyncWithHttpInfo($event_id, $event_update_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation eventServiceUpdateEventAsyncWithHttpInfo
      *
-     * @param  string $event_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\EventUpdateRequest $event_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
+     * @param string             $event_id             (required)
+     * @param EventUpdateRequest $event_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function eventServiceUpdateEventAsyncWithHttpInfo($event_id, $event_update_request, string $contentType = self::contentTypes['eventServiceUpdateEvent'][0])
-    {
+    public function eventServiceUpdateEventAsyncWithHttpInfo(
+        $event_id,
+        $event_update_request,
+        string $contentType = self::contentTypes['eventServiceUpdateEvent'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\EventUpdateResponse';
         $request = $this->eventServiceUpdateEventRequest($event_id, $event_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -2147,7 +2343,7 @@ class EventApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -2155,53 +2351,52 @@ class EventApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'eventServiceUpdateEvent'
      *
-     * @param  string $event_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\EventUpdateRequest $event_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
+     * @param string             $event_id             (required)
+     * @param EventUpdateRequest $event_update_request (required)
+     * @param string             $contentType          The value for the Content-Type header. Check self::contentTypes['eventServiceUpdateEvent'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function eventServiceUpdateEventRequest($event_id, $event_update_request, string $contentType = self::contentTypes['eventServiceUpdateEvent'][0])
-    {
-
+    public function eventServiceUpdateEventRequest(
+        $event_id,
+        $event_update_request,
+        string $contentType = self::contentTypes['eventServiceUpdateEvent'][0],
+    ) {
         // verify the required parameter 'event_id' is set
-        if ($event_id === null || (is_array($event_id) && count($event_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $event_id when calling eventServiceUpdateEvent'
-            );
+        if ($event_id === null || is_array($event_id) && count($event_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $event_id when calling eventServiceUpdateEvent');
         }
 
         // verify the required parameter 'event_update_request' is set
-        if ($event_update_request === null || (is_array($event_update_request) && count($event_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $event_update_request when calling eventServiceUpdateEvent'
-            );
+        if ($event_update_request === null || is_array($event_update_request) && count($event_update_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $event_update_request when calling eventServiceUpdateEvent');
         }
-
 
         $resourcePath = '/events/{eventId}';
         $formParams = [];
@@ -2210,32 +2405,32 @@ class EventApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($event_id !== null) {
             $resourcePath = str_replace(
                 '{eventId}',
                 ObjectSerializer::toPathValue($event_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($event_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($event_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($event_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $event_update_request;
@@ -2248,19 +2443,18 @@ class EventApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -2269,7 +2463,7 @@ class EventApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -2281,23 +2475,25 @@ class EventApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -2305,8 +2501,8 @@ class EventApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -2326,12 +2522,8 @@ class EventApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -2339,24 +2531,24 @@ class EventApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -2365,16 +2557,16 @@ class EventApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

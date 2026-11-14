@@ -23,17 +23,17 @@ readonly class MediaDetailQueryService implements MediaDetailQueryServiceInterfa
     #[Override]
     public function findReferencedSongs(MediaId $mediaId): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_media_links.song_id', 'songs.title'])
-                ->select('songs.order_no', 'song_order_no')
-                ->select('song_media_links.order_no', 'media_order_no')
-                ->from('song_media_links')
-                ->join('songs', 'song_media_links.song_id = songs.song_id')
-                ->where('song_media_links.media_id', '=', $this->converter->toBin($mediaId->value))
-                ->orderBy('songs.order_no')
-                ->orderBy('song_media_links.order_no'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_media_links.song_id', 'songs.title'])
+            ->select('songs.order_no', 'song_order_no')
+            ->select('song_media_links.order_no', 'media_order_no')
+            ->from('song_media_links')
+            ->join('songs', 'song_media_links.song_id = songs.song_id')
+            ->where('song_media_links.media_id', '=', $this->converter->toBin($mediaId->value))
+            ->orderBy('songs.order_no')
+            ->orderBy('song_media_links.order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map(
             fn (array $row): MediaReferencedSong => new MediaReferencedSong(

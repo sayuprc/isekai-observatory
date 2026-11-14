@@ -41,7 +41,8 @@ readonly class Permissions extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return $this->toGeneric()
+        return $this
+            ->toGeneric()
             ->map(static fn (Permission $item): string => $item->value)
             ->toList();
     }

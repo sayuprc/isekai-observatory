@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * SongApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -30,24 +35,43 @@ namespace OpenAPI\Admin\Client\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Admin\Client\ApiException;
+use OpenAPI\Admin\Client\Configuration;
+use OpenAPI\Admin\Client\HeaderSelector;
+use OpenAPI\Admin\Client\Model\ErrorResponse;
+use OpenAPI\Admin\Client\Model\SongBulkUpdateRequest;
+use OpenAPI\Admin\Client\Model\SongBulkUpdateResponse;
+use OpenAPI\Admin\Client\Model\SongCreateRequest;
+use OpenAPI\Admin\Client\Model\SongCreateResponse;
+use OpenAPI\Admin\Client\Model\SongGetResponse;
+use OpenAPI\Admin\Client\Model\SongSearchResponse;
+use OpenAPI\Admin\Client\Model\SongSearchTypeValue;
+use OpenAPI\Admin\Client\Model\SongUpdateRequest;
+use OpenAPI\Admin\Client\Model\SongUpdateResponse;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use OpenAPIAdminClientModelPerPage;
+use OpenAPIAdminClientModelSongSearchSortBy;
+use OpenAPIAdminClientModelSortOrder;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Admin\Client\ApiException;
-use OpenAPI\Admin\Client\Configuration;
-use OpenAPI\Admin\Client\FormDataProcessor;
-use OpenAPI\Admin\Client\HeaderSelector;
-use OpenAPI\Admin\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * SongApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class SongApi
@@ -72,7 +96,7 @@ class SongApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'songServiceBulkUpdateSongs' => [
             'application/json',
@@ -95,16 +119,13 @@ class SongApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -143,58 +164,66 @@ class SongApi
     /**
      * Operation songServiceBulkUpdateSongs
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongBulkUpdateRequest $song_bulk_update_request song_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
+     * @param SongBulkUpdateRequest $song_bulk_update_request song_bulk_update_request (required)
+     * @param string                $contentType              The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\SongBulkUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return SongBulkUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function songServiceBulkUpdateSongs($song_bulk_update_request, string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0])
-    {
+    public function songServiceBulkUpdateSongs(
+        $song_bulk_update_request,
+        string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0],
+    ) {
         list($response) = $this->songServiceBulkUpdateSongsWithHttpInfo($song_bulk_update_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation songServiceBulkUpdateSongsWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongBulkUpdateRequest $song_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
+     * @param SongBulkUpdateRequest $song_bulk_update_request (required)
+     * @param string                $contentType              The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\SongBulkUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function songServiceBulkUpdateSongsWithHttpInfo($song_bulk_update_request, string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0])
-    {
+    public function songServiceBulkUpdateSongsWithHttpInfo(
+        $song_bulk_update_request,
+        string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0],
+    ) {
         $request = $this->songServiceBulkUpdateSongsRequest($song_bulk_update_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\SongBulkUpdateResponse',
@@ -239,18 +268,16 @@ class SongApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -265,60 +292,66 @@ class SongApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\SongBulkUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -327,44 +360,50 @@ class SongApi
     /**
      * Operation songServiceBulkUpdateSongsAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongBulkUpdateRequest $song_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
+     * @param SongBulkUpdateRequest $song_bulk_update_request (required)
+     * @param string                $contentType              The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceBulkUpdateSongsAsync($song_bulk_update_request, string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0])
-    {
+    public function songServiceBulkUpdateSongsAsync(
+        $song_bulk_update_request,
+        string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0],
+    ) {
         return $this->songServiceBulkUpdateSongsAsyncWithHttpInfo($song_bulk_update_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation songServiceBulkUpdateSongsAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongBulkUpdateRequest $song_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
+     * @param SongBulkUpdateRequest $song_bulk_update_request (required)
+     * @param string                $contentType              The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceBulkUpdateSongsAsyncWithHttpInfo($song_bulk_update_request, string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0])
-    {
+    public function songServiceBulkUpdateSongsAsyncWithHttpInfo(
+        $song_bulk_update_request,
+        string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\SongBulkUpdateResponse';
         $request = $this->songServiceBulkUpdateSongsRequest($song_bulk_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -373,7 +412,7 @@ class SongApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -381,45 +420,48 @@ class SongApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'songServiceBulkUpdateSongs'
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongBulkUpdateRequest $song_bulk_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
+     * @param SongBulkUpdateRequest $song_bulk_update_request (required)
+     * @param string                $contentType              The value for the Content-Type header. Check self::contentTypes['songServiceBulkUpdateSongs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function songServiceBulkUpdateSongsRequest($song_bulk_update_request, string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0])
-    {
-
+    public function songServiceBulkUpdateSongsRequest(
+        $song_bulk_update_request,
+        string $contentType = self::contentTypes['songServiceBulkUpdateSongs'][0],
+    ) {
         // verify the required parameter 'song_bulk_update_request' is set
-        if ($song_bulk_update_request === null || (is_array($song_bulk_update_request) && count($song_bulk_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $song_bulk_update_request when calling songServiceBulkUpdateSongs'
-            );
+        if (
+            $song_bulk_update_request === null
+            || is_array($song_bulk_update_request) && count($song_bulk_update_request) === 0
+        ) {
+            throw new InvalidArgumentException('Missing the required parameter $song_bulk_update_request when calling songServiceBulkUpdateSongs');
         }
-
 
         $resourcePath = '/songs/bulk-update';
         $formParams = [];
@@ -428,24 +470,23 @@ class SongApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($song_bulk_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($song_bulk_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($song_bulk_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $song_bulk_update_request;
@@ -458,19 +499,18 @@ class SongApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -479,7 +519,7 @@ class SongApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -491,74 +531,83 @@ class SongApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation songServiceCreateSong
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongCreateRequest $song_create_request song_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
+     * @param SongCreateRequest $song_create_request song_create_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\SongCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return SongCreateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function songServiceCreateSong($song_create_request, string $contentType = self::contentTypes['songServiceCreateSong'][0])
-    {
+    public function songServiceCreateSong(
+        $song_create_request,
+        string $contentType = self::contentTypes['songServiceCreateSong'][0],
+    ) {
         list($response) = $this->songServiceCreateSongWithHttpInfo($song_create_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation songServiceCreateSongWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongCreateRequest $song_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
+     * @param SongCreateRequest $song_create_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\SongCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function songServiceCreateSongWithHttpInfo($song_create_request, string $contentType = self::contentTypes['songServiceCreateSong'][0])
-    {
+    public function songServiceCreateSongWithHttpInfo(
+        $song_create_request,
+        string $contentType = self::contentTypes['songServiceCreateSong'][0],
+    ) {
         $request = $this->songServiceCreateSongRequest($song_create_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\SongCreateResponse',
@@ -597,18 +646,16 @@ class SongApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -623,52 +670,57 @@ class SongApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\SongCreateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -677,44 +729,50 @@ class SongApi
     /**
      * Operation songServiceCreateSongAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongCreateRequest $song_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
+     * @param SongCreateRequest $song_create_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceCreateSongAsync($song_create_request, string $contentType = self::contentTypes['songServiceCreateSong'][0])
-    {
+    public function songServiceCreateSongAsync(
+        $song_create_request,
+        string $contentType = self::contentTypes['songServiceCreateSong'][0],
+    ) {
         return $this->songServiceCreateSongAsyncWithHttpInfo($song_create_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation songServiceCreateSongAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongCreateRequest $song_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
+     * @param SongCreateRequest $song_create_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceCreateSongAsyncWithHttpInfo($song_create_request, string $contentType = self::contentTypes['songServiceCreateSong'][0])
-    {
+    public function songServiceCreateSongAsyncWithHttpInfo(
+        $song_create_request,
+        string $contentType = self::contentTypes['songServiceCreateSong'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\SongCreateResponse';
         $request = $this->songServiceCreateSongRequest($song_create_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -723,7 +781,7 @@ class SongApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -731,45 +789,45 @@ class SongApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'songServiceCreateSong'
      *
-     * @param  \OpenAPI\Admin\Client\Model\SongCreateRequest $song_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
+     * @param SongCreateRequest $song_create_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceCreateSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function songServiceCreateSongRequest($song_create_request, string $contentType = self::contentTypes['songServiceCreateSong'][0])
-    {
-
+    public function songServiceCreateSongRequest(
+        $song_create_request,
+        string $contentType = self::contentTypes['songServiceCreateSong'][0],
+    ) {
         // verify the required parameter 'song_create_request' is set
-        if ($song_create_request === null || (is_array($song_create_request) && count($song_create_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $song_create_request when calling songServiceCreateSong'
-            );
+        if ($song_create_request === null || is_array($song_create_request) && count($song_create_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $song_create_request when calling songServiceCreateSong');
         }
-
 
         $resourcePath = '/songs';
         $formParams = [];
@@ -778,24 +836,23 @@ class SongApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($song_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($song_create_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($song_create_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $song_create_request;
@@ -808,19 +865,18 @@ class SongApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -829,7 +885,7 @@ class SongApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -841,71 +897,79 @@ class SongApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation songServiceDeleteSong
      *
-     * @param  string $song_id song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
+     * @param string $song_id     song_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return void
      */
-    public function songServiceDeleteSong($song_id, string $contentType = self::contentTypes['songServiceDeleteSong'][0])
-    {
+    public function songServiceDeleteSong(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceDeleteSong'][0],
+    ) {
         $this->songServiceDeleteSongWithHttpInfo($song_id, $contentType);
     }
 
     /**
      * Operation songServiceDeleteSongWithHttpInfo
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function songServiceDeleteSongWithHttpInfo($song_id, string $contentType = self::contentTypes['songServiceDeleteSong'][0])
-    {
+    public function songServiceDeleteSongWithHttpInfo(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceDeleteSong'][0],
+    ) {
         $request = $this->songServiceDeleteSongRequest($song_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
-
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
@@ -914,44 +978,48 @@ class SongApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -960,40 +1028,46 @@ class SongApi
     /**
      * Operation songServiceDeleteSongAsync
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceDeleteSongAsync($song_id, string $contentType = self::contentTypes['songServiceDeleteSong'][0])
-    {
+    public function songServiceDeleteSongAsync(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceDeleteSong'][0],
+    ) {
         return $this->songServiceDeleteSongAsyncWithHttpInfo($song_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation songServiceDeleteSongAsyncWithHttpInfo
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceDeleteSongAsyncWithHttpInfo($song_id, string $contentType = self::contentTypes['songServiceDeleteSong'][0])
-    {
+    public function songServiceDeleteSongAsyncWithHttpInfo(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceDeleteSong'][0],
+    ) {
         $returnType = '';
         $request = $this->songServiceDeleteSongRequest($song_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -1001,45 +1075,45 @@ class SongApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'songServiceDeleteSong'
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceDeleteSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function songServiceDeleteSongRequest($song_id, string $contentType = self::contentTypes['songServiceDeleteSong'][0])
-    {
-
+    public function songServiceDeleteSongRequest(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceDeleteSong'][0],
+    ) {
         // verify the required parameter 'song_id' is set
-        if ($song_id === null || (is_array($song_id) && count($song_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $song_id when calling songServiceDeleteSong'
-            );
+        if ($song_id === null || is_array($song_id) && count($song_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $song_id when calling songServiceDeleteSong');
         }
-
 
         $resourcePath = '/songs/{songId}';
         $formParams = [];
@@ -1048,22 +1122,19 @@ class SongApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($song_id !== null) {
             $resourcePath = str_replace(
                 '{songId}',
                 ObjectSerializer::toPathValue($song_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1075,19 +1146,18 @@ class SongApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1096,7 +1166,7 @@ class SongApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1108,74 +1178,81 @@ class SongApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'DELETE',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation songServiceGetSong
      *
-     * @param  string $song_id song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
+     * @param string $song_id     song_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\SongGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return SongGetResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
     public function songServiceGetSong($song_id, string $contentType = self::contentTypes['songServiceGetSong'][0])
     {
         list($response) = $this->songServiceGetSongWithHttpInfo($song_id, $contentType);
+
         return $response;
     }
 
     /**
      * Operation songServiceGetSongWithHttpInfo
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\SongGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function songServiceGetSongWithHttpInfo($song_id, string $contentType = self::contentTypes['songServiceGetSong'][0])
-    {
+    public function songServiceGetSongWithHttpInfo(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceGetSong'][0],
+    ) {
         $request = $this->songServiceGetSongRequest($song_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\SongGetResponse',
@@ -1214,18 +1291,16 @@ class SongApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1240,52 +1315,57 @@ class SongApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\SongGetResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1294,44 +1374,48 @@ class SongApi
     /**
      * Operation songServiceGetSongAsync
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
     public function songServiceGetSongAsync($song_id, string $contentType = self::contentTypes['songServiceGetSong'][0])
     {
         return $this->songServiceGetSongAsyncWithHttpInfo($song_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation songServiceGetSongAsyncWithHttpInfo
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceGetSongAsyncWithHttpInfo($song_id, string $contentType = self::contentTypes['songServiceGetSong'][0])
-    {
+    public function songServiceGetSongAsyncWithHttpInfo(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceGetSong'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\SongGetResponse';
         $request = $this->songServiceGetSongRequest($song_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1340,7 +1424,7 @@ class SongApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1348,45 +1432,45 @@ class SongApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'songServiceGetSong'
      *
-     * @param  string $song_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
+     * @param string $song_id     (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceGetSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function songServiceGetSongRequest($song_id, string $contentType = self::contentTypes['songServiceGetSong'][0])
-    {
-
+    public function songServiceGetSongRequest(
+        $song_id,
+        string $contentType = self::contentTypes['songServiceGetSong'][0],
+    ) {
         // verify the required parameter 'song_id' is set
-        if ($song_id === null || (is_array($song_id) && count($song_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $song_id when calling songServiceGetSong'
-            );
+        if ($song_id === null || is_array($song_id) && count($song_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $song_id when calling songServiceGetSong');
         }
-
 
         $resourcePath = '/songs/{songId}';
         $formParams = [];
@@ -1395,22 +1479,19 @@ class SongApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($song_id !== null) {
             $resourcePath = str_replace(
                 '{songId}',
                 ObjectSerializer::toPathValue($song_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1422,19 +1503,18 @@ class SongApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1443,7 +1523,7 @@ class SongApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1455,88 +1535,131 @@ class SongApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation songServiceSearchSongs
      *
-     * @param  string|null $title title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\SongSearchTypeValue|null $type type (optional)
-     * @param  bool|null $is_display is_display (optional)
-     * @param  string|null $tag_id このタグが付いた楽曲だけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelSongSearchSortBy|null $sort sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order order (optional, default to 'asc')
-     * @param  Int|null $page page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
+     * @param string|null                                  $title       title (optional)
+     * @param SongSearchTypeValue|null                     $type        type (optional)
+     * @param bool|null                                    $is_display  is_display (optional)
+     * @param string|null                                  $tag_id      このタグが付いた楽曲だけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelSongSearchSortBy|null $sort        sort (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null        $order       order (optional, default to 'asc')
+     * @param int|null                                     $page        page (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null          $per_page    per_page (optional, default to 50)
+     * @param string                                       $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\SongSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return SongSearchResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function songServiceSearchSongs($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['songServiceSearchSongs'][0])
-    {
-        list($response) = $this->songServiceSearchSongsWithHttpInfo($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+    public function songServiceSearchSongs(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['songServiceSearchSongs'][0],
+    ) {
+        list($response) = $this->songServiceSearchSongsWithHttpInfo(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation songServiceSearchSongsWithHttpInfo
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\SongSearchTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いた楽曲だけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelSongSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
+     * @param string|null                                  $title       (optional)
+     * @param SongSearchTypeValue|null                     $type        (optional)
+     * @param bool|null                                    $is_display  (optional)
+     * @param string|null                                  $tag_id      このタグが付いた楽曲だけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelSongSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null        $order       (optional, default to 'asc')
+     * @param int|null                                     $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null          $per_page    (optional, default to 50)
+     * @param string                                       $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\SongSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function songServiceSearchSongsWithHttpInfo($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['songServiceSearchSongs'][0])
-    {
-        $request = $this->songServiceSearchSongsRequest($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+    public function songServiceSearchSongsWithHttpInfo(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['songServiceSearchSongs'][0],
+    ) {
+        $request = $this->songServiceSearchSongsRequest(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\SongSearchResponse',
@@ -1563,18 +1686,16 @@ class SongApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1589,36 +1710,39 @@ class SongApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\SongSearchResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1627,58 +1751,98 @@ class SongApi
     /**
      * Operation songServiceSearchSongsAsync
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\SongSearchTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いた楽曲だけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelSongSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
+     * @param string|null                                  $title       (optional)
+     * @param SongSearchTypeValue|null                     $type        (optional)
+     * @param bool|null                                    $is_display  (optional)
+     * @param string|null                                  $tag_id      このタグが付いた楽曲だけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelSongSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null        $order       (optional, default to 'asc')
+     * @param int|null                                     $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null          $per_page    (optional, default to 50)
+     * @param string                                       $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceSearchSongsAsync($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['songServiceSearchSongs'][0])
-    {
-        return $this->songServiceSearchSongsAsyncWithHttpInfo($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType)
+    public function songServiceSearchSongsAsync(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['songServiceSearchSongs'][0],
+    ) {
+        return $this->songServiceSearchSongsAsyncWithHttpInfo(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation songServiceSearchSongsAsyncWithHttpInfo
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\SongSearchTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いた楽曲だけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelSongSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
+     * @param string|null                                  $title       (optional)
+     * @param SongSearchTypeValue|null                     $type        (optional)
+     * @param bool|null                                    $is_display  (optional)
+     * @param string|null                                  $tag_id      このタグが付いた楽曲だけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelSongSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null        $order       (optional, default to 'asc')
+     * @param int|null                                     $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null          $per_page    (optional, default to 50)
+     * @param string                                       $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceSearchSongsAsyncWithHttpInfo($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['songServiceSearchSongs'][0])
-    {
+    public function songServiceSearchSongsAsyncWithHttpInfo(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['songServiceSearchSongs'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\SongSearchResponse';
-        $request = $this->songServiceSearchSongsRequest($title, $type, $is_display, $tag_id, $sort, $order, $page, $per_page, $contentType);
+        $request = $this->songServiceSearchSongsRequest(
+            $title,
+            $type,
+            $is_display,
+            $tag_id,
+            $sort,
+            $order,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1687,7 +1851,7 @@ class SongApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1695,54 +1859,55 @@ class SongApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'songServiceSearchSongs'
      *
-     * @param  string|null $title (optional)
-     * @param  \OpenAPI\Admin\Client\Model\SongSearchTypeValue|null $type (optional)
-     * @param  bool|null $is_display (optional)
-     * @param  string|null $tag_id このタグが付いた楽曲だけに絞り込む (optional)
-     * @param  \OpenAPIAdminClientModelSongSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
+     * @param string|null                                  $title       (optional)
+     * @param SongSearchTypeValue|null                     $type        (optional)
+     * @param bool|null                                    $is_display  (optional)
+     * @param string|null                                  $tag_id      このタグが付いた楽曲だけに絞り込む (optional)
+     * @param OpenAPIAdminClientModelSongSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null        $order       (optional, default to 'asc')
+     * @param int|null                                     $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null          $per_page    (optional, default to 50)
+     * @param string                                       $contentType The value for the Content-Type header. Check self::contentTypes['songServiceSearchSongs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function songServiceSearchSongsRequest($title = null, $type = null, $is_display = null, $tag_id = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['songServiceSearchSongs'][0])
-    {
-
-
-
-
-
-
-
-
-
-
+    public function songServiceSearchSongsRequest(
+        $title = null,
+        $type = null,
+        $is_display = null,
+        $tag_id = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['songServiceSearchSongs'][0],
+    ) {
         $resourcePath = '/songs/search';
         $formParams = [];
         $queryParams = [];
@@ -1757,7 +1922,7 @@ class SongApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1766,7 +1931,7 @@ class SongApi
             'SongSearchTypeValue', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1775,7 +1940,7 @@ class SongApi
             'boolean', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1784,7 +1949,7 @@ class SongApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1793,7 +1958,7 @@ class SongApi
             'SongSearchSortBy', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1802,7 +1967,7 @@ class SongApi
             'SortOrder', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1811,7 +1976,7 @@ class SongApi
             'integer', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1820,16 +1985,13 @@ class SongApi
             'PerPage', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
 
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1841,19 +2003,18 @@ class SongApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1862,7 +2023,7 @@ class SongApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1874,76 +2035,87 @@ class SongApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation songServiceUpdateSong
      *
-     * @param  string $song_id song_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\SongUpdateRequest $song_update_request song_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
+     * @param string            $song_id             song_id (required)
+     * @param SongUpdateRequest $song_update_request song_update_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\SongUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return SongUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function songServiceUpdateSong($song_id, $song_update_request, string $contentType = self::contentTypes['songServiceUpdateSong'][0])
-    {
+    public function songServiceUpdateSong(
+        $song_id,
+        $song_update_request,
+        string $contentType = self::contentTypes['songServiceUpdateSong'][0],
+    ) {
         list($response) = $this->songServiceUpdateSongWithHttpInfo($song_id, $song_update_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation songServiceUpdateSongWithHttpInfo
      *
-     * @param  string $song_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\SongUpdateRequest $song_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
+     * @param string            $song_id             (required)
+     * @param SongUpdateRequest $song_update_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\SongUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function songServiceUpdateSongWithHttpInfo($song_id, $song_update_request, string $contentType = self::contentTypes['songServiceUpdateSong'][0])
-    {
+    public function songServiceUpdateSongWithHttpInfo(
+        $song_id,
+        $song_update_request,
+        string $contentType = self::contentTypes['songServiceUpdateSong'][0],
+    ) {
         $request = $this->songServiceUpdateSongRequest($song_id, $song_update_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\SongUpdateResponse',
@@ -1988,18 +2160,16 @@ class SongApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -2014,60 +2184,66 @@ class SongApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\SongUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -2076,46 +2252,54 @@ class SongApi
     /**
      * Operation songServiceUpdateSongAsync
      *
-     * @param  string $song_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\SongUpdateRequest $song_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
+     * @param string            $song_id             (required)
+     * @param SongUpdateRequest $song_update_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceUpdateSongAsync($song_id, $song_update_request, string $contentType = self::contentTypes['songServiceUpdateSong'][0])
-    {
+    public function songServiceUpdateSongAsync(
+        $song_id,
+        $song_update_request,
+        string $contentType = self::contentTypes['songServiceUpdateSong'][0],
+    ) {
         return $this->songServiceUpdateSongAsyncWithHttpInfo($song_id, $song_update_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation songServiceUpdateSongAsyncWithHttpInfo
      *
-     * @param  string $song_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\SongUpdateRequest $song_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
+     * @param string            $song_id             (required)
+     * @param SongUpdateRequest $song_update_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function songServiceUpdateSongAsyncWithHttpInfo($song_id, $song_update_request, string $contentType = self::contentTypes['songServiceUpdateSong'][0])
-    {
+    public function songServiceUpdateSongAsyncWithHttpInfo(
+        $song_id,
+        $song_update_request,
+        string $contentType = self::contentTypes['songServiceUpdateSong'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\SongUpdateResponse';
         $request = $this->songServiceUpdateSongRequest($song_id, $song_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -2124,7 +2308,7 @@ class SongApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -2132,53 +2316,52 @@ class SongApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'songServiceUpdateSong'
      *
-     * @param  string $song_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\SongUpdateRequest $song_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
+     * @param string            $song_id             (required)
+     * @param SongUpdateRequest $song_update_request (required)
+     * @param string            $contentType         The value for the Content-Type header. Check self::contentTypes['songServiceUpdateSong'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function songServiceUpdateSongRequest($song_id, $song_update_request, string $contentType = self::contentTypes['songServiceUpdateSong'][0])
-    {
-
+    public function songServiceUpdateSongRequest(
+        $song_id,
+        $song_update_request,
+        string $contentType = self::contentTypes['songServiceUpdateSong'][0],
+    ) {
         // verify the required parameter 'song_id' is set
-        if ($song_id === null || (is_array($song_id) && count($song_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $song_id when calling songServiceUpdateSong'
-            );
+        if ($song_id === null || is_array($song_id) && count($song_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $song_id when calling songServiceUpdateSong');
         }
 
         // verify the required parameter 'song_update_request' is set
-        if ($song_update_request === null || (is_array($song_update_request) && count($song_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $song_update_request when calling songServiceUpdateSong'
-            );
+        if ($song_update_request === null || is_array($song_update_request) && count($song_update_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $song_update_request when calling songServiceUpdateSong');
         }
-
 
         $resourcePath = '/songs/{songId}';
         $formParams = [];
@@ -2187,32 +2370,32 @@ class SongApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($song_id !== null) {
             $resourcePath = str_replace(
                 '{songId}',
                 ObjectSerializer::toPathValue($song_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($song_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($song_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($song_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $song_update_request;
@@ -2225,19 +2408,18 @@ class SongApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -2246,7 +2428,7 @@ class SongApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -2258,23 +2440,25 @@ class SongApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -2282,8 +2466,8 @@ class SongApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -2303,12 +2487,8 @@ class SongApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -2316,24 +2496,24 @@ class SongApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -2342,16 +2522,16 @@ class SongApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

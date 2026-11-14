@@ -28,7 +28,8 @@ class DeleteMediaTest extends DatabaseTestCase
         $media = $this->createMedia($uuid, 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true);
         $repository->save($media);
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(MediaRouteMap::Delete, $uuid))
             ->assertStatus(204);
 
@@ -44,25 +45,26 @@ class DeleteMediaTest extends DatabaseTestCase
         $media = $this->createMedia($mediaId, 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true);
         $repository->save($media);
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong(
-                $this->generateUuid(),
-                '曲名',
-                '説明',
-                null,
-                SongType::Original,
-                true,
-                1,
-                [],
-                [],
-                [],
-                [
-                    ['mediaId' => $mediaId, 'orderNo' => 1],
-                ],
-            ),
-        );
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $this->generateUuid(),
+                    '曲名',
+                    '説明',
+                    null,
+                    SongType::Original,
+                    true,
+                    1,
+                    [],
+                    [],
+                    [],
+                    [['mediaId' => $mediaId, 'orderNo' => 1]],
+                ),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(MediaRouteMap::Delete, $mediaId))
             ->assertStatus(400)
             ->assertExactJson([
@@ -76,7 +78,8 @@ class DeleteMediaTest extends DatabaseTestCase
     #[Test]
     public function canDeleteEvenIfTargetDoesNotExist(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(MediaRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
             ->assertStatus(204);
     }

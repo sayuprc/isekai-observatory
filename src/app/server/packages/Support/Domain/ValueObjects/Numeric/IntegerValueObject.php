@@ -30,7 +30,6 @@ abstract readonly class IntegerValueObject
 
     public function equals(self $other): bool
     {
-        return $this::class === $other::class
-            && $this->value === $other->value;
+        return $this::class === $other::class && $this->value === $other->value;
     }
 }

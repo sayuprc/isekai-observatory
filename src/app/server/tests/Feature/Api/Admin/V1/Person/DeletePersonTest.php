@@ -25,7 +25,8 @@ class DeletePersonTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($uuid, '人物', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, $uuid))
             ->assertStatus(204);
     }
@@ -39,7 +40,8 @@ class DeletePersonTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '人物', 1));
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, $personId))
             ->assertStatus(204);
 
@@ -50,7 +52,8 @@ class DeletePersonTest extends DatabaseTestCase
     #[Test]
     public function invalidPersonId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, 'invalid-id'))
             ->assertStatus(422)
             ->assertExactJson([
@@ -82,7 +85,8 @@ class DeletePersonTest extends DatabaseTestCase
             [['personId' => $personId, 'role' => 1, 'orderNo' => 1]],
         ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, $personId))
             ->assertStatus(400)
             ->assertExactJson([

@@ -21,7 +21,11 @@ readonly class TagRepository implements TagRepositoryInterface
     private const string TABLE = 'tags';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['tag_id', 'name', 'order_no'];
+    private const array COLUMNS = [
+        'tag_id',
+        'name',
+        'order_no',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -32,12 +36,12 @@ readonly class TagRepository implements TagRepositoryInterface
     #[Override]
     public function all(): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->orderBy('order_no'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -45,17 +49,16 @@ readonly class TagRepository implements TagRepositoryInterface
     #[Override]
     public function search(TagSearchCriteria $criteria): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $this->applyNameFilter(
-                    $this->queryFactory->select()->withSelect(self::COLUMNS)->from(self::TABLE),
-                    $criteria,
-                )
-                    ->orderBy($criteria->sort->value, $criteria->order->value),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $this->applyNameFilter(
+                $this->queryFactory->select()->withSelect(self::COLUMNS)->from(self::TABLE),
+                $criteria,
+            )
+                ->orderBy($criteria->sort->value, $criteria->order->value),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -72,13 +75,13 @@ readonly class TagRepository implements TagRepositoryInterface
     #[Override]
     public function find(TagId $tagId): ?Tag
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('tag_id', '=', $this->converter->toBin($tagId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('tag_id', '=', $this->converter->toBin($tagId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -88,13 +91,13 @@ readonly class TagRepository implements TagRepositoryInterface
     #[Override]
     public function findByName(TagName $name): ?Tag
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('name', '=', $name->value)
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('name', '=', $name->value)
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -110,13 +113,13 @@ readonly class TagRepository implements TagRepositoryInterface
 
         $binIds = array_map(fn (TagId $tagId): string => $this->converter->toBin($tagId->value), $tagIds);
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('tag_id', 'IN', $binIds)
-                ->orderBy('order_no'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('tag_id', 'IN', $binIds)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -126,7 +129,8 @@ readonly class TagRepository implements TagRepositoryInterface
     {
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, ['tag_id', 'name', 'order_no', 'created_at', 'updated_at'])
             ->values([
                 $this->converter->toBin($tag->tagId->value),
@@ -148,12 +152,12 @@ readonly class TagRepository implements TagRepositoryInterface
         $binTagId = $this->converter->toBin($tagId->value);
 
         foreach (['song_taggings', 'event_taggings', 'release_group_taggings', 'media_taggings'] as $table) {
-            $count = Row::intValue(
-                $this->queryFactory->select()
-                    ->from($table)
-                    ->where('tag_id', '=', $binTagId)
-                    ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-            );
+            $count = $this->queryFactory
+                ->select()
+                ->from($table)
+                ->where('tag_id', '=', $binTagId)
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+                |> Row::intValue(...);
 
             if ($count > 0) {
                 return true;
@@ -166,7 +170,8 @@ readonly class TagRepository implements TagRepositoryInterface
     #[Override]
     public function delete(TagId $tagId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('tag_id', '=', $this->converter->toBin($tagId->value))
             ->execute($this->queryFactory->pdo());
@@ -175,7 +180,8 @@ readonly class TagRepository implements TagRepositoryInterface
     #[Override]
     public function getMaxOrderNo(): int
     {
-        $max = $this->queryFactory->select()
+        $max = $this->queryFactory
+            ->select()
             ->from(self::TABLE)
             ->aggregate($this->queryFactory->pdo(), 'MAX(order_no)');
 

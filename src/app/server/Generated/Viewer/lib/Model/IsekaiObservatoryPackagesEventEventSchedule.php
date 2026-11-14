@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * IsekaiObservatoryPackagesEventEventSchedule
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,67 +33,77 @@
 
 namespace OpenAPI\Viewer\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
+use ArrayAccess;
+use DateTime;
+use JsonSerializable;
+use OpenAPI\Viewer\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * IsekaiObservatoryPackagesEventEventSchedule Class Doc Comment
  *
  * @category Class
+ *
  * @description イベントの開催時期。両方 null は日付未定、startOn のみは単日、両方指定は期間を表す
+ *
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, ArrayAccess, \JsonSerializable
+class IsekaiObservatoryPackagesEventEventSchedule implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'IsekaiObservatory.Packages.Event.EventSchedule';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'start_on' => '\DateTime',
-        'end_on' => '\DateTime'
+        'end_on' => '\DateTime',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'start_on' => 'date',
-        'end_on' => 'date'
+        'end_on' => 'date',
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'start_on' => true,
-        'end_on' => true
+        'end_on' => true,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -113,8 +128,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -124,7 +137,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -134,7 +147,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -143,9 +156,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -154,9 +164,6 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -167,31 +174,31 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'start_on' => 'startOn',
-        'end_on' => 'endOn'
+        'end_on' => 'endOn',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'start_on' => 'setStartOn',
-        'end_on' => 'setEndOn'
+        'end_on' => 'setEndOn',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'start_on' => 'getStartOn',
-        'end_on' => 'getEndOn'
+        'end_on' => 'getEndOn',
     ];
 
     /**
@@ -235,19 +242,18 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -256,17 +262,17 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -288,6 +294,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
         if ($this->container['end_on'] === null) {
             $invalidProperties[] = "'end_on' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -302,11 +309,10 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
         return count($this->listInvalidProperties()) === 0;
     }
 
-
     /**
      * Gets start_on
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartOn()
     {
@@ -316,18 +322,18 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Sets start_on
      *
-     * @param \DateTime $start_on イベント日
+     * @param DateTime $start_on イベント日
      *
      * @return self
      */
     public function setStartOn($start_on)
     {
-        if (is_null($start_on)) {
+        if ($start_on === null) {
             array_push($this->openAPINullablesSetToNull, 'start_on');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
             $index = array_search('start_on', $nullablesSetToNull);
-            if ($index !== FALSE) {
+            if ($index !== false) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
@@ -340,7 +346,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Gets end_on
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndOn()
     {
@@ -350,18 +356,18 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Sets end_on
      *
-     * @param \DateTime $end_on イベント日
+     * @param DateTime $end_on イベント日
      *
      * @return self
      */
     public function setEndOn($end_on)
     {
-        if (is_null($end_on)) {
+        if ($end_on === null) {
             array_push($this->openAPINullablesSetToNull, 'end_on');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
             $index = array_search('end_on', $nullablesSetToNull);
-            if ($index !== FALSE) {
+            if ($index !== false) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
@@ -370,12 +376,11 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -385,11 +390,11 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -400,12 +405,10 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -415,9 +418,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -426,15 +427,16 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -446,7 +448,7 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -460,5 +462,3 @@ class IsekaiObservatoryPackagesEventEventSchedule implements ModelInterface, Arr
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

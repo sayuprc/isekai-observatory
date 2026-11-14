@@ -38,14 +38,16 @@ readonly class EventSources extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): EventSource => new EventSource(
-                new EventSourceName($item['displayName']),
-                new EventSourceUrl($item['url']),
-                new OrderNo($item['orderNo']),
+        return new self(
+            array_map(
+                static fn (array $item): EventSource => new EventSource(
+                    new EventSourceName($item['displayName']),
+                    new EventSourceUrl($item['url']),
+                    new OrderNo($item['orderNo']),
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**
@@ -53,6 +55,7 @@ readonly class EventSources extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (EventSource $source): array => $source->toArray(), $this->items));
+        return array_map(static fn (EventSource $source): array => $source->toArray(), $this->items)
+            |> array_values(...);
     }
 }

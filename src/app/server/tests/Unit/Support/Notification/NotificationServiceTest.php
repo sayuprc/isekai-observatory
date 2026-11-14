@@ -38,7 +38,8 @@ class NotificationServiceTest extends TestCase
             embeds: $embeds,
         );
 
-        $this->driver->shouldReceive('notice')
+        $this->driver
+            ->shouldReceive('notice')
             ->once()
             ->with(Mockery::on(
                 static fn (NotificationMessage $message): bool => $message->toJson() === $expected->toJson(),
@@ -56,7 +57,8 @@ class NotificationServiceTest extends TestCase
             content: '取り込みを開始しました',
         );
 
-        $this->driver->shouldReceive('notice')
+        $this->driver
+            ->shouldReceive('notice')
             ->once()
             ->with(Mockery::on(
                 static fn (NotificationMessage $message): bool => $message->toJson() === $expected->toJson(),

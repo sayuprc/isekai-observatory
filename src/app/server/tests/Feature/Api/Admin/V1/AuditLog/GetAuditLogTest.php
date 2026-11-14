@@ -26,7 +26,14 @@ class GetAuditLogTest extends DatabaseTestCase
     public function found(): void
     {
         $actorId = $this->generateUuid();
-        $this->storeAdminUsers($this->createAdminUser($actorId, 'actor@example.com', Role::Privilege, name: '監査テストユーザーA'));
+        $this->storeAdminUsers(
+            $this->createAdminUser(
+                $actorId,
+                'actor@example.com',
+                Role::Privilege,
+                name: '監査テストユーザーA',
+            ),
+        );
 
         $auditLogId = $this->generateUuid();
         $targetId = $this->generateUuid();
@@ -47,11 +54,13 @@ class GetAuditLogTest extends DatabaseTestCase
             new DateTimeImmutable('2026-04-02 10:00:00'),
         );
 
-        $response = $this->withAuth()
+        /** @var array{auditLog: array{auditLogId: string, adminUserId: string, adminUserName: string, action: string, targetType: string, targetId: string, createdAt: string, snapshot: array{title: string, tags: array<int, string>, meta: array{version: int, isDisplay: bool}}}} $response */
+        $response = $this
+            ->withAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
             ->assertStatus(200)
             ->json();
-        /** @var array{auditLog: array{auditLogId: string, adminUserId: string, adminUserName: string, action: string, targetType: string, targetId: string, createdAt: string, snapshot: array{title: string, tags: array<int, string>, meta: array{version: int, isDisplay: bool}}}} $response */
+
         $this->assertArrayHasKey('auditLog', $response);
         $this->assertSame($auditLogId, $response['auditLog']['auditLogId']);
         $this->assertSame($actorId, $response['auditLog']['adminUserId']);
@@ -70,7 +79,14 @@ class GetAuditLogTest extends DatabaseTestCase
     public function foundForRelease(): void
     {
         $actorId = $this->generateUuid();
-        $this->storeAdminUsers($this->createAdminUser($actorId, 'actor@example.com', Role::Privilege, name: '監査テストユーザーA'));
+        $this->storeAdminUsers(
+            $this->createAdminUser(
+                $actorId,
+                'actor@example.com',
+                Role::Privilege,
+                name: '監査テストユーザーA',
+            ),
+        );
 
         $auditLogId = $this->generateUuid();
         $targetId = $this->generateUuid();
@@ -85,11 +101,13 @@ class GetAuditLogTest extends DatabaseTestCase
             new DateTimeImmutable('2026-04-02 10:00:00'),
         );
 
-        $response = $this->withAuth()
+        /** @var array{auditLog: array{targetType: string, snapshot: array{title: string}}} $response */
+        $response = $this
+            ->withAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
             ->assertStatus(200)
             ->json();
-        /** @var array{auditLog: array{targetType: string, snapshot: array{title: string}}} $response */
+
         $this->assertSame('Release', $response['auditLog']['targetType']);
         $this->assertSame('観測された春', $response['auditLog']['snapshot']['title']);
     }
@@ -112,7 +130,8 @@ class GetAuditLogTest extends DatabaseTestCase
             new DateTimeImmutable('2026-04-02 10:00:00'),
         );
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
             ->assertStatus(403);
     }
@@ -122,7 +141,8 @@ class GetAuditLogTest extends DatabaseTestCase
     {
         $auditLogId = $this->generateUuid();
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(AuditLogRouteMap::Get, $auditLogId))
             ->assertStatus(404);
     }

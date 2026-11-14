@@ -10,25 +10,21 @@ use Auth\Application\Admin\UseCase\Login\LoginFinishInputData;
 use Auth\Application\Admin\UseCase\Login\LoginFinishUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Support\Contracts\MapperInterface;
 
-class LoginFinishController extends Controller
+final readonly class LoginFinishController extends Controller
 {
     public function __construct(
-        private readonly LoginFinishUseCase $loginFinishUseCase,
-        private readonly LoginFinishPresenter $presenter,
+        private MapperInterface $mapper,
+        private LoginFinishUseCase $useCase,
+        private LoginFinishPresenter $presenter,
     ) {
     }
 
     public function handle(Request $request): JsonResponse
     {
-        /** @var array<string, mixed> $credential */
-        $credential = $request->array('credential');
-
-        $inputData = new LoginFinishInputData(
-            $request->string('authCeremonyId')->toString(),
-            $credential,
-        );
-
-        return $this->presenter->present($this->loginFinishUseCase->handle($inputData));
+        return $this->mapper->map(LoginFinishInputData::class, $request->all())
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

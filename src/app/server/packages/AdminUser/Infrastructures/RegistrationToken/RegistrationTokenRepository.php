@@ -21,7 +21,14 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
     private const string PERMISSION_TABLE = 'admin_user_registration_token_permissions';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['admin_user_registration_token_id', 'token', 'email', 'role', 'expired_at', 'status'];
+    private const array COLUMNS = [
+        'admin_user_registration_token_id',
+        'token',
+        'email',
+        'role',
+        'expired_at',
+        'status',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -36,8 +43,18 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
         $id = $this->converter->toBin($data['admin_user_registration_token_id']);
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
-            ->into(self::TABLE, ['admin_user_registration_token_id', 'token', 'email', 'role', 'expired_at', 'status', 'created_at', 'updated_at'])
+        $this->queryFactory
+            ->insert()
+            ->into(self::TABLE, [
+                'admin_user_registration_token_id',
+                'token',
+                'email',
+                'role',
+                'expired_at',
+                'status',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $id,
                 $data['token'],
@@ -49,21 +66,22 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
                 $now,
             ])
             ->build()
-            ->append(
-                'ON DUPLICATE KEY UPDATE '
-                . '`token` = VALUES(`token`), '
-                . '`email` = VALUES(`email`), '
-                . '`role` = VALUES(`role`), '
-                . '`expired_at` = VALUES(`expired_at`), '
-                . '`status` = VALUES(`status`), '
-                . '`updated_at` = VALUES(`updated_at`)',
-            )
+            ->append(<<<SQL
+                ON DUPLICATE KEY UPDATE
+                `token` = VALUES(`token`),
+                `email` = VALUES(`email`),
+                `role` = VALUES(`role`),
+                `expired_at` = VALUES(`expired_at`),
+                `status` = VALUES(`status`),
+                `updated_at` = VALUES(`updated_at`)
+                SQL)
             ->execute($this->queryFactory->pdo());
 
         if ($data['permissions'] !== [] && ! $this->hasPermissions($id)) {
             $rows = array_map(static fn (string $permission): array => [$id, $permission], $data['permissions']);
 
-            $this->queryFactory->insert()
+            $this->queryFactory
+                ->insert()
                 ->into(self::PERMISSION_TABLE, ['admin_user_registration_token_id', 'permission'])
                 ->values(...$rows)
                 ->execute($this->queryFactory->pdo());
@@ -75,15 +93,15 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
     #[Override]
     public function findByEmailForUpdate(Email $email): ?RegistrationToken
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('email', '=', $email->value)
-                ->orderBy('created_at', 'desc')
-                ->limit(1)
-                ->forUpdate(),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('email', '=', $email->value)
+            ->orderBy('created_at', 'desc')
+            ->limit(1)
+            ->forUpdate()
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -102,15 +120,15 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
     #[Override]
     public function findUnusedByEmailForUpdate(Email $email): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('email', '=', $email->value)
-                ->where('status', '=', ConsumptionStatus::Unused->value)
-                ->orderBy('created_at', 'desc')
-                ->forUpdate(),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('email', '=', $email->value)
+            ->where('status', '=', ConsumptionStatus::Unused->value)
+            ->orderBy('created_at', 'desc')
+            ->forUpdate()
+            |> $this->queryFactory->fetchAll(...);
 
         $permissionsByToken = $this->loadPermissions(
             array_map(static fn (array $row): string => Row::string($row, 'admin_user_registration_token_id'), $rows),
@@ -127,12 +145,12 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
 
     private function hasPermissions(string $binTokenId): bool
     {
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from(self::PERMISSION_TABLE)
-                ->where('admin_user_registration_token_id', '=', $binTokenId)
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+        $count = $this->queryFactory
+            ->select()
+            ->from(self::PERMISSION_TABLE)
+            ->where('admin_user_registration_token_id', '=', $binTokenId)
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
 
         return $count > 0;
     }
@@ -148,12 +166,12 @@ readonly class RegistrationTokenRepository implements RegistrationTokenRepositor
             return [];
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['admin_user_registration_token_id', 'permission'])
-                ->from(self::PERMISSION_TABLE)
-                ->where('admin_user_registration_token_id', 'IN', $binTokenIds),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['admin_user_registration_token_id', 'permission'])
+            ->from(self::PERMISSION_TABLE)
+            ->where('admin_user_registration_token_id', 'IN', $binTokenIds)
+            |> $this->queryFactory->fetchAll(...);
 
         $grouped = [];
 

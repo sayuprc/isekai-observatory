@@ -61,12 +61,14 @@ class GetUseCaseTest extends TestCase
             ],
         );
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
             ->andReturn($song)
             ->once();
 
-        $this->assembler->shouldReceive('assemble')
+        $this->assembler
+            ->shouldReceive('assemble')
             ->with($song)
             ->andReturn(
                 new AssembledSong(
@@ -114,7 +116,8 @@ class GetUseCaseTest extends TestCase
     {
         $songId = 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD';
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (SongId $arg): bool => $arg->value === $songId)
             ->andReturnNull()
             ->once();

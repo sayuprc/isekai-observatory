@@ -29,13 +29,21 @@ class ListVenueTest extends DatabaseTestCase
         );
         $this->storeEvents(
             $this->createEvent($this->generateUuid(), venues: [['venueId' => $publicVenueId, 'orderNo' => 1]]),
-            $this->createEvent($this->generateUuid(), isDisplay: false, venues: [['venueId' => $privateVenueId, 'orderNo' => 1]]),
+            $this->createEvent($this->generateUuid(), isDisplay: false, venues: [[
+                'venueId' => $privateVenueId,
+                'orderNo' => 1,
+            ]]),
         );
 
-        $this->get(route(PublicVenueRouteMap::List))
+        $this
+            ->get(route(PublicVenueRouteMap::List))
             ->assertStatus(200)
             ->assertExactJson([
-                'items' => [['venueId' => $publicVenueId, 'name' => '公開イベントの会場', 'kind' => VenueKind::Physical->value]],
+                'items' => [[
+                    'venueId' => $publicVenueId,
+                    'name' => '公開イベントの会場',
+                    'kind' => VenueKind::Physical->value,
+                ]],
             ]);
     }
 
@@ -53,11 +61,13 @@ class ListVenueTest extends DatabaseTestCase
             venues: [['venueId' => $secondId, 'orderNo' => 1], ['venueId' => $firstId, 'orderNo' => 2]],
         ));
 
-        $first = $this->get(route(PublicVenueRouteMap::List, ['pageSize' => 1]))
+        $first = $this
+            ->get(route(PublicVenueRouteMap::List, ['pageSize' => 1]))
             ->assertStatus(200)
             ->assertJsonPath('items.0.venueId', $firstId);
 
-        $this->get(route(PublicVenueRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+        $this
+            ->get(route(PublicVenueRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
             ->assertStatus(200)
             ->assertJsonPath('items.0.venueId', $secondId)
             ->assertJsonMissingPath('nextPageToken');
