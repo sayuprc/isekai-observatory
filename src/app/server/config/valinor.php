@@ -27,6 +27,7 @@ return [
         \Person\Application\Admin\UseCase\Search\SearchInputData::class,
         \Person\Application\Admin\UseCase\Update\UpdateInputData::class,
         \Release\Application\Admin\UseCase\Create\CreateInputData::class,
+        \Release\Application\Admin\UseCase\Group\BulkUpdate\BulkUpdateInputData::class,
         \Release\Application\Admin\UseCase\Group\Create\CreateInputData::class,
         \Release\Application\Admin\UseCase\Group\Search\SearchInputData::class,
         \Release\Application\Admin\UseCase\Group\Update\UpdateInputData::class,

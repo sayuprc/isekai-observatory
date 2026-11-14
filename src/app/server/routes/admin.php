@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\Admin\V1\Release\CreateReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\DeleteReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\GetReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\UpdateReleaseController;
+use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\BulkUpdateReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\CreateReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\DeleteReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\GetReleaseGroupController;
@@ -162,6 +163,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('release-groups')->group(static function () {
                     Route::post('/', [CreateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::BulkUpdate);
                     Route::put('/{releaseGroupId}', [UpdateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Update);
                     Route::delete('/{releaseGroupId}', [DeleteReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Delete);
                     Route::get('/search', [SearchReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Search);

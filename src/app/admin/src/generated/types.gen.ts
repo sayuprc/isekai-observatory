@@ -698,6 +698,35 @@ export type ReleaseGroup = {
     tags: Array<AttachedTag>;
 };
 
+/**
+ * リリースグループ一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ */
+export type ReleaseGroupBulkUpdateRequest = {
+    /**
+     * 対象のリリースグループID。1 リクエストで受け付ける上限は 100 件
+     */
+    releaseGroupIds: Array<ReleaseGroupId>;
+    /**
+     * 付与するタグ。付いているものは何もしない
+     */
+    addTagIds?: Array<TagId>;
+    /**
+     * 除去するタグ。付いていないものは何もしない
+     */
+    removeTagIds?: Array<TagId>;
+    /**
+     * 表示設定の切り替え先
+     */
+    isDisplay?: boolean;
+};
+
+export type ReleaseGroupBulkUpdateResponse = {
+    /**
+     * 更新したリリースグループの件数
+     */
+    updatedCount: number;
+};
+
 export type ReleaseGroupCreateRequest = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
@@ -3139,6 +3168,59 @@ export type ReleaseGroupServiceCreateReleaseGroupResponses = {
 };
 
 export type ReleaseGroupServiceCreateReleaseGroupResponse = ReleaseGroupServiceCreateReleaseGroupResponses[keyof ReleaseGroupServiceCreateReleaseGroupResponses];
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsData = {
+    body: ReleaseGroupBulkUpdateRequest;
+    path?: never;
+    query?: never;
+    url: '/release-groups/bulk-update';
+};
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsError = ReleaseGroupServiceBulkUpdateReleaseGroupsErrors[keyof ReleaseGroupServiceBulkUpdateReleaseGroupsErrors];
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: ReleaseGroupBulkUpdateResponse;
+};
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsResponse = ReleaseGroupServiceBulkUpdateReleaseGroupsResponses[keyof ReleaseGroupServiceBulkUpdateReleaseGroupsResponses];
 
 export type ReleaseGroupServiceSearchReleaseGroupsData = {
     body?: never;
