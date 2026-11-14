@@ -43,3 +43,25 @@ model MediaUpdateResponse {
   media: Media;
   tags: AttachedTag[];
 }
+
+@doc("メディア一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する")
+model MediaBulkUpdateRequest {
+  @doc("対象のメディアID。1 リクエストで受け付ける上限は 100 件")
+  @minItems(1)
+  @maxItems(100)
+  mediaIds: mediaId[];
+
+  @doc("付与するタグ。付いているものは何もしない")
+  addTagIds?: tagId[];
+
+  @doc("除去するタグ。付いていないものは何もしない")
+  removeTagIds?: tagId[];
+
+  @doc("表示設定の切り替え先")
+  isDisplay?: boolean;
+}
+
+model MediaBulkUpdateResponse {
+  @doc("更新したメディアの件数")
+  updatedCount: int32;
+}

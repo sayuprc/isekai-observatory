@@ -62,6 +62,32 @@ readonly class Media
         ];
     }
 
+    public function withDisplay(bool $isDisplay): self
+    {
+        return new self(
+            $this->mediaId,
+            $this->title,
+            $this->url,
+            $this->publishedAt,
+            $this->type,
+            $isDisplay,
+            $this->tags,
+        );
+    }
+
+    public function withTags(TagReferences $tags): self
+    {
+        return new self(
+            $this->mediaId,
+            $this->title,
+            $this->url,
+            $this->publishedAt,
+            $this->type,
+            $this->isDisplay,
+            $tags,
+        );
+    }
+
     public function equals(self $other): bool
     {
         return $this->mediaId->equals($other->mediaId);
