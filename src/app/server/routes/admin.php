@@ -45,6 +45,7 @@ use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\DeleteReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\GetReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\SearchReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\UpdateReleaseGroupController;
+use App\Http\Controllers\Api\Admin\V1\Song\BulkUpdateSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\CreateSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\DeleteSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\GetSongController;
@@ -150,6 +151,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('songs')->group(static function () {
                     Route::post('/', [CreateSongController::class, 'handle'])->name(SongRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateSongController::class, 'handle'])->name(SongRouteMap::BulkUpdate);
                     Route::put('/{songId}', [UpdateSongController::class, 'handle'])->name(SongRouteMap::Update);
                     Route::delete('/{songId}', [DeleteSongController::class, 'handle'])->name(SongRouteMap::Delete);
                     Route::get('/search', [SearchSongController::class, 'handle'])->name(SongRouteMap::Search);

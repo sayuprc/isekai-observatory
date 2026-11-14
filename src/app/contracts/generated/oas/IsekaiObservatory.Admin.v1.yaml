@@ -2494,6 +2494,68 @@ paths:
               $ref: '#/components/schemas/SongCreateRequest'
       security:
         - BearerAuth: []
+  /songs/bulk-update:
+    post:
+      operationId: SongService_bulkUpdateSongs
+      description: 楽曲一括更新API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongBulkUpdateResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access is forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable.
+        '504':
+          description: Server error
+      tags:
+        - Song
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SongBulkUpdateRequest'
+      security:
+        - BearerAuth: []
   /songs/search:
     get:
       operationId: SongService_searchSongs
@@ -5455,6 +5517,41 @@ components:
               type: 1
               isDisplay: true
               orderNo: 1
+    SongBulkUpdateRequest:
+      type: object
+      required:
+        - songIds
+      properties:
+        songIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/songId'
+          minItems: 1
+          maxItems: 100
+          description: 対象の楽曲ID。1 リクエストで受け付ける上限は 100 件
+        addTagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: 付与するタグ。付いているものは何もしない
+        removeTagIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/tagId'
+          description: 除去するタグ。付いていないものは何もしない
+        isDisplay:
+          type: boolean
+          description: 表示設定の切り替え先
+      description: 楽曲一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+    SongBulkUpdateResponse:
+      type: object
+      required:
+        - updatedCount
+      properties:
+        updatedCount:
+          type: integer
+          format: int32
+          description: 更新した楽曲の件数
     SongCreateRequest:
       type: object
       required:
