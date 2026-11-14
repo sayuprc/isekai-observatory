@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AdminUserServiceListAdminUsersData, AdminUserServiceListAdminUsersErrors, AdminUserServiceListAdminUsersResponses, AuditLogServiceGetAuditLogData, AuditLogServiceGetAuditLogErrors, AuditLogServiceGetAuditLogResponses, AuditLogServiceSearchAuditLogsData, AuditLogServiceSearchAuditLogsErrors, AuditLogServiceSearchAuditLogsResponses, AuthenticateServiceLoginFinishData, AuthenticateServiceLoginFinishErrors, AuthenticateServiceLoginFinishResponses, AuthenticateServiceLoginStartData, AuthenticateServiceLoginStartErrors, AuthenticateServiceLoginStartResponses, AuthenticateServiceRecoveryFinishData, AuthenticateServiceRecoveryFinishErrors, AuthenticateServiceRecoveryFinishResponses, AuthenticateServiceRecoveryStartData, AuthenticateServiceRecoveryStartErrors, AuthenticateServiceRecoveryStartResponses, AuthenticateServiceRefreshData, AuthenticateServiceRefreshErrors, AuthenticateServiceRefreshResponses, AuthenticateServiceRegisterFinishData, AuthenticateServiceRegisterFinishErrors, AuthenticateServiceRegisterFinishResponses, AuthenticateServiceRegisterStartData, AuthenticateServiceRegisterStartErrors, AuthenticateServiceRegisterStartResponses, EventServiceCreateEventData, EventServiceCreateEventErrors, EventServiceCreateEventResponses, EventServiceDeleteEventData, EventServiceDeleteEventErrors, EventServiceDeleteEventResponses, EventServiceGetEventData, EventServiceGetEventErrors, EventServiceGetEventResponses, EventServiceSearchEventsData, EventServiceSearchEventsErrors, EventServiceSearchEventsResponses, EventServiceUpdateEventData, EventServiceUpdateEventErrors, EventServiceUpdateEventResponses, MediaServiceCreateMediaData, MediaServiceCreateMediaErrors, MediaServiceCreateMediaResponses, MediaServiceDeleteMediaData, MediaServiceDeleteMediaErrors, MediaServiceDeleteMediaResponses, MediaServiceGetMediaData, MediaServiceGetMediaErrors, MediaServiceGetMediaResponses, MediaServiceSearchMediaData, MediaServiceSearchMediaErrors, MediaServiceSearchMediaResponses, MediaServiceUpdateMediaData, MediaServiceUpdateMediaErrors, MediaServiceUpdateMediaResponses, PersonGroupServiceCreatePersonGroupData, PersonGroupServiceCreatePersonGroupErrors, PersonGroupServiceCreatePersonGroupResponses, PersonGroupServiceDeletePersonGroupData, PersonGroupServiceDeletePersonGroupErrors, PersonGroupServiceDeletePersonGroupResponses, PersonGroupServiceGetPersonGroupData, PersonGroupServiceGetPersonGroupErrors, PersonGroupServiceGetPersonGroupResponses, PersonGroupServiceSearchPersonGroupsData, PersonGroupServiceSearchPersonGroupsErrors, PersonGroupServiceSearchPersonGroupsResponses, PersonGroupServiceUpdatePersonGroupData, PersonGroupServiceUpdatePersonGroupErrors, PersonGroupServiceUpdatePersonGroupResponses, PersonServiceCreatePersonData, PersonServiceCreatePersonErrors, PersonServiceCreatePersonResponses, PersonServiceDeletePersonData, PersonServiceDeletePersonErrors, PersonServiceDeletePersonResponses, PersonServiceGetPersonData, PersonServiceGetPersonErrors, PersonServiceGetPersonResponses, PersonServiceListPersonsData, PersonServiceListPersonsErrors, PersonServiceListPersonsResponses, PersonServiceSearchPersonsData, PersonServiceSearchPersonsErrors, PersonServiceSearchPersonsResponses, PersonServiceUpdatePersonData, PersonServiceUpdatePersonErrors, PersonServiceUpdatePersonResponses, RecoveryCodeServiceGenerateData, RecoveryCodeServiceGenerateErrors, RecoveryCodeServiceGenerateResponses, ReleaseGroupServiceCreateReleaseGroupData, ReleaseGroupServiceCreateReleaseGroupErrors, ReleaseGroupServiceCreateReleaseGroupResponses, ReleaseGroupServiceDeleteReleaseGroupData, ReleaseGroupServiceDeleteReleaseGroupErrors, ReleaseGroupServiceDeleteReleaseGroupResponses, ReleaseGroupServiceGetReleaseGroupData, ReleaseGroupServiceGetReleaseGroupErrors, ReleaseGroupServiceGetReleaseGroupResponses, ReleaseGroupServiceSearchReleaseGroupsData, ReleaseGroupServiceSearchReleaseGroupsErrors, ReleaseGroupServiceSearchReleaseGroupsResponses, ReleaseGroupServiceUpdateReleaseGroupData, ReleaseGroupServiceUpdateReleaseGroupErrors, ReleaseGroupServiceUpdateReleaseGroupResponses, ReleaseServiceCreateReleaseData, ReleaseServiceCreateReleaseErrors, ReleaseServiceCreateReleaseResponses, ReleaseServiceDeleteReleaseData, ReleaseServiceDeleteReleaseErrors, ReleaseServiceDeleteReleaseResponses, ReleaseServiceGetReleaseData, ReleaseServiceGetReleaseErrors, ReleaseServiceGetReleaseResponses, ReleaseServiceUpdateReleaseData, ReleaseServiceUpdateReleaseErrors, ReleaseServiceUpdateReleaseResponses, SongServiceCreateSongData, SongServiceCreateSongErrors, SongServiceCreateSongResponses, SongServiceDeleteSongData, SongServiceDeleteSongErrors, SongServiceDeleteSongResponses, SongServiceGetSongData, SongServiceGetSongErrors, SongServiceGetSongResponses, SongServiceSearchSongsData, SongServiceSearchSongsErrors, SongServiceSearchSongsResponses, SongServiceUpdateSongData, SongServiceUpdateSongErrors, SongServiceUpdateSongResponses, TagServiceCreateTagData, TagServiceCreateTagErrors, TagServiceCreateTagResponses, TagServiceDeleteTagData, TagServiceDeleteTagErrors, TagServiceDeleteTagResponses, TagServiceGetTagData, TagServiceGetTagErrors, TagServiceGetTagResponses, TagServiceListTagsData, TagServiceListTagsErrors, TagServiceListTagsResponses, TagServiceSearchTagsData, TagServiceSearchTagsErrors, TagServiceSearchTagsResponses, TagServiceUpdateTagData, TagServiceUpdateTagErrors, TagServiceUpdateTagResponses, VenueServiceCreateVenueData, VenueServiceCreateVenueErrors, VenueServiceCreateVenueResponses, VenueServiceDeleteVenueData, VenueServiceDeleteVenueErrors, VenueServiceDeleteVenueResponses, VenueServiceGetVenueData, VenueServiceGetVenueErrors, VenueServiceGetVenueResponses, VenueServiceSearchVenuesData, VenueServiceSearchVenuesErrors, VenueServiceSearchVenuesResponses, VenueServiceUpdateVenueData, VenueServiceUpdateVenueErrors, VenueServiceUpdateVenueResponses } from './types.gen';
+import type { AdminUserServiceListAdminUsersData, AdminUserServiceListAdminUsersErrors, AdminUserServiceListAdminUsersResponses, AuditLogServiceGetAuditLogData, AuditLogServiceGetAuditLogErrors, AuditLogServiceGetAuditLogResponses, AuditLogServiceSearchAuditLogsData, AuditLogServiceSearchAuditLogsErrors, AuditLogServiceSearchAuditLogsResponses, AuthenticateServiceLoginFinishData, AuthenticateServiceLoginFinishErrors, AuthenticateServiceLoginFinishResponses, AuthenticateServiceLoginStartData, AuthenticateServiceLoginStartErrors, AuthenticateServiceLoginStartResponses, AuthenticateServiceRecoveryFinishData, AuthenticateServiceRecoveryFinishErrors, AuthenticateServiceRecoveryFinishResponses, AuthenticateServiceRecoveryStartData, AuthenticateServiceRecoveryStartErrors, AuthenticateServiceRecoveryStartResponses, AuthenticateServiceRefreshData, AuthenticateServiceRefreshErrors, AuthenticateServiceRefreshResponses, AuthenticateServiceRegisterFinishData, AuthenticateServiceRegisterFinishErrors, AuthenticateServiceRegisterFinishResponses, AuthenticateServiceRegisterStartData, AuthenticateServiceRegisterStartErrors, AuthenticateServiceRegisterStartResponses, EventServiceBulkUpdateEventsData, EventServiceBulkUpdateEventsErrors, EventServiceBulkUpdateEventsResponses, EventServiceCreateEventData, EventServiceCreateEventErrors, EventServiceCreateEventResponses, EventServiceDeleteEventData, EventServiceDeleteEventErrors, EventServiceDeleteEventResponses, EventServiceGetEventData, EventServiceGetEventErrors, EventServiceGetEventResponses, EventServiceSearchEventsData, EventServiceSearchEventsErrors, EventServiceSearchEventsResponses, EventServiceUpdateEventData, EventServiceUpdateEventErrors, EventServiceUpdateEventResponses, MediaServiceBulkUpdateMediaData, MediaServiceBulkUpdateMediaErrors, MediaServiceBulkUpdateMediaResponses, MediaServiceCreateMediaData, MediaServiceCreateMediaErrors, MediaServiceCreateMediaResponses, MediaServiceDeleteMediaData, MediaServiceDeleteMediaErrors, MediaServiceDeleteMediaResponses, MediaServiceGetMediaData, MediaServiceGetMediaErrors, MediaServiceGetMediaResponses, MediaServiceSearchMediaData, MediaServiceSearchMediaErrors, MediaServiceSearchMediaResponses, MediaServiceUpdateMediaData, MediaServiceUpdateMediaErrors, MediaServiceUpdateMediaResponses, PersonGroupServiceCreatePersonGroupData, PersonGroupServiceCreatePersonGroupErrors, PersonGroupServiceCreatePersonGroupResponses, PersonGroupServiceDeletePersonGroupData, PersonGroupServiceDeletePersonGroupErrors, PersonGroupServiceDeletePersonGroupResponses, PersonGroupServiceGetPersonGroupData, PersonGroupServiceGetPersonGroupErrors, PersonGroupServiceGetPersonGroupResponses, PersonGroupServiceSearchPersonGroupsData, PersonGroupServiceSearchPersonGroupsErrors, PersonGroupServiceSearchPersonGroupsResponses, PersonGroupServiceUpdatePersonGroupData, PersonGroupServiceUpdatePersonGroupErrors, PersonGroupServiceUpdatePersonGroupResponses, PersonServiceCreatePersonData, PersonServiceCreatePersonErrors, PersonServiceCreatePersonResponses, PersonServiceDeletePersonData, PersonServiceDeletePersonErrors, PersonServiceDeletePersonResponses, PersonServiceGetPersonData, PersonServiceGetPersonErrors, PersonServiceGetPersonResponses, PersonServiceListPersonsData, PersonServiceListPersonsErrors, PersonServiceListPersonsResponses, PersonServiceSearchPersonsData, PersonServiceSearchPersonsErrors, PersonServiceSearchPersonsResponses, PersonServiceUpdatePersonData, PersonServiceUpdatePersonErrors, PersonServiceUpdatePersonResponses, RecoveryCodeServiceGenerateData, RecoveryCodeServiceGenerateErrors, RecoveryCodeServiceGenerateResponses, ReleaseGroupServiceBulkUpdateReleaseGroupsData, ReleaseGroupServiceBulkUpdateReleaseGroupsErrors, ReleaseGroupServiceBulkUpdateReleaseGroupsResponses, ReleaseGroupServiceCreateReleaseGroupData, ReleaseGroupServiceCreateReleaseGroupErrors, ReleaseGroupServiceCreateReleaseGroupResponses, ReleaseGroupServiceDeleteReleaseGroupData, ReleaseGroupServiceDeleteReleaseGroupErrors, ReleaseGroupServiceDeleteReleaseGroupResponses, ReleaseGroupServiceGetReleaseGroupData, ReleaseGroupServiceGetReleaseGroupErrors, ReleaseGroupServiceGetReleaseGroupResponses, ReleaseGroupServiceSearchReleaseGroupsData, ReleaseGroupServiceSearchReleaseGroupsErrors, ReleaseGroupServiceSearchReleaseGroupsResponses, ReleaseGroupServiceUpdateReleaseGroupData, ReleaseGroupServiceUpdateReleaseGroupErrors, ReleaseGroupServiceUpdateReleaseGroupResponses, ReleaseServiceCreateReleaseData, ReleaseServiceCreateReleaseErrors, ReleaseServiceCreateReleaseResponses, ReleaseServiceDeleteReleaseData, ReleaseServiceDeleteReleaseErrors, ReleaseServiceDeleteReleaseResponses, ReleaseServiceGetReleaseData, ReleaseServiceGetReleaseErrors, ReleaseServiceGetReleaseResponses, ReleaseServiceUpdateReleaseData, ReleaseServiceUpdateReleaseErrors, ReleaseServiceUpdateReleaseResponses, SongServiceBulkUpdateSongsData, SongServiceBulkUpdateSongsErrors, SongServiceBulkUpdateSongsResponses, SongServiceCreateSongData, SongServiceCreateSongErrors, SongServiceCreateSongResponses, SongServiceDeleteSongData, SongServiceDeleteSongErrors, SongServiceDeleteSongResponses, SongServiceGetSongData, SongServiceGetSongErrors, SongServiceGetSongResponses, SongServiceSearchSongsData, SongServiceSearchSongsErrors, SongServiceSearchSongsResponses, SongServiceUpdateSongData, SongServiceUpdateSongErrors, SongServiceUpdateSongResponses, TagServiceCreateTagData, TagServiceCreateTagErrors, TagServiceCreateTagResponses, TagServiceDeleteTagData, TagServiceDeleteTagErrors, TagServiceDeleteTagResponses, TagServiceGetTagData, TagServiceGetTagErrors, TagServiceGetTagResponses, TagServiceListTagsData, TagServiceListTagsErrors, TagServiceListTagsResponses, TagServiceSearchTagsData, TagServiceSearchTagsErrors, TagServiceSearchTagsResponses, TagServiceUpdateTagData, TagServiceUpdateTagErrors, TagServiceUpdateTagResponses, VenueServiceCreateVenueData, VenueServiceCreateVenueErrors, VenueServiceCreateVenueResponses, VenueServiceDeleteVenueData, VenueServiceDeleteVenueErrors, VenueServiceDeleteVenueResponses, VenueServiceGetVenueData, VenueServiceGetVenueErrors, VenueServiceGetVenueResponses, VenueServiceSearchVenuesData, VenueServiceSearchVenuesErrors, VenueServiceSearchVenuesResponses, VenueServiceUpdateVenueData, VenueServiceUpdateVenueErrors, VenueServiceUpdateVenueResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -143,6 +143,19 @@ export const eventServiceCreateEvent = <ThrowOnError extends boolean = false>(op
 });
 
 /**
+ * イベント一括更新API
+ */
+export const eventServiceBulkUpdateEvents = <ThrowOnError extends boolean = false>(options: Options<EventServiceBulkUpdateEventsData, ThrowOnError>): RequestResult<EventServiceBulkUpdateEventsResponses, EventServiceBulkUpdateEventsErrors, ThrowOnError> => (options.client ?? client).post<EventServiceBulkUpdateEventsResponses, EventServiceBulkUpdateEventsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/events/bulk-update',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * イベント検索API
  */
 export const eventServiceSearchEvents = <ThrowOnError extends boolean = false>(options?: Options<EventServiceSearchEventsData, ThrowOnError>): RequestResult<EventServiceSearchEventsResponses, EventServiceSearchEventsErrors, ThrowOnError> => (options?.client ?? client).get<EventServiceSearchEventsResponses, EventServiceSearchEventsErrors, ThrowOnError>({
@@ -188,6 +201,19 @@ export const eventServiceUpdateEvent = <ThrowOnError extends boolean = false>(op
 export const mediaServiceCreateMedia = <ThrowOnError extends boolean = false>(options: Options<MediaServiceCreateMediaData, ThrowOnError>): RequestResult<MediaServiceCreateMediaResponses, MediaServiceCreateMediaErrors, ThrowOnError> => (options.client ?? client).post<MediaServiceCreateMediaResponses, MediaServiceCreateMediaErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/media',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * メディア一括更新API
+ */
+export const mediaServiceBulkUpdateMedia = <ThrowOnError extends boolean = false>(options: Options<MediaServiceBulkUpdateMediaData, ThrowOnError>): RequestResult<MediaServiceBulkUpdateMediaResponses, MediaServiceBulkUpdateMediaErrors, ThrowOnError> => (options.client ?? client).post<MediaServiceBulkUpdateMediaResponses, MediaServiceBulkUpdateMediaErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/media/bulk-update',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -373,6 +399,19 @@ export const releaseGroupServiceCreateReleaseGroup = <ThrowOnError extends boole
 });
 
 /**
+ * リリースグループ一括更新API
+ */
+export const releaseGroupServiceBulkUpdateReleaseGroups = <ThrowOnError extends boolean = false>(options: Options<ReleaseGroupServiceBulkUpdateReleaseGroupsData, ThrowOnError>): RequestResult<ReleaseGroupServiceBulkUpdateReleaseGroupsResponses, ReleaseGroupServiceBulkUpdateReleaseGroupsErrors, ThrowOnError> => (options.client ?? client).post<ReleaseGroupServiceBulkUpdateReleaseGroupsResponses, ReleaseGroupServiceBulkUpdateReleaseGroupsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/release-groups/bulk-update',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * リリースグループ検索API
  */
 export const releaseGroupServiceSearchReleaseGroups = <ThrowOnError extends boolean = false>(options?: Options<ReleaseGroupServiceSearchReleaseGroupsData, ThrowOnError>): RequestResult<ReleaseGroupServiceSearchReleaseGroupsResponses, ReleaseGroupServiceSearchReleaseGroupsErrors, ThrowOnError> => (options?.client ?? client).get<ReleaseGroupServiceSearchReleaseGroupsResponses, ReleaseGroupServiceSearchReleaseGroupsErrors, ThrowOnError>({
@@ -462,6 +501,19 @@ export const releaseServiceUpdateRelease = <ThrowOnError extends boolean = false
 export const songServiceCreateSong = <ThrowOnError extends boolean = false>(options: Options<SongServiceCreateSongData, ThrowOnError>): RequestResult<SongServiceCreateSongResponses, SongServiceCreateSongErrors, ThrowOnError> => (options.client ?? client).post<SongServiceCreateSongResponses, SongServiceCreateSongErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/songs',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * 楽曲一括更新API
+ */
+export const songServiceBulkUpdateSongs = <ThrowOnError extends boolean = false>(options: Options<SongServiceBulkUpdateSongsData, ThrowOnError>): RequestResult<SongServiceBulkUpdateSongsResponses, SongServiceBulkUpdateSongsErrors, ThrowOnError> => (options.client ?? client).post<SongServiceBulkUpdateSongsResponses, SongServiceBulkUpdateSongsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/songs/bulk-update',
     ...options,
     headers: {
         'Content-Type': 'application/json',

@@ -14,11 +14,13 @@ use App\Http\Controllers\Api\Admin\V1\Auth\RecoveryStartController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RefreshController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RegisterFinishController;
 use App\Http\Controllers\Api\Admin\V1\Auth\RegisterStartController;
+use App\Http\Controllers\Api\Admin\V1\Event\BulkUpdateEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\CreateEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\DeleteEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\GetEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\SearchEventController;
 use App\Http\Controllers\Api\Admin\V1\Event\UpdateEventController;
+use App\Http\Controllers\Api\Admin\V1\Media\BulkUpdateMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\CreateMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\DeleteMediaController;
 use App\Http\Controllers\Api\Admin\V1\Media\GetMediaController;
@@ -39,11 +41,13 @@ use App\Http\Controllers\Api\Admin\V1\Release\CreateReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\DeleteReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\GetReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\UpdateReleaseController;
+use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\BulkUpdateReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\CreateReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\DeleteReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\GetReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\SearchReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\UpdateReleaseGroupController;
+use App\Http\Controllers\Api\Admin\V1\Song\BulkUpdateSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\CreateSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\DeleteSongController;
 use App\Http\Controllers\Api\Admin\V1\Song\GetSongController;
@@ -124,6 +128,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('media')->group(static function () {
                     Route::post('/', [CreateMediaController::class, 'handle'])->name(MediaRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateMediaController::class, 'handle'])->name(MediaRouteMap::BulkUpdate);
                     Route::delete('/{mediaId}', [DeleteMediaController::class, 'handle'])->name(MediaRouteMap::Delete);
                     Route::put('/{mediaId}', [UpdateMediaController::class, 'handle'])->name(MediaRouteMap::Update);
                     Route::get('/search', [SearchMediaController::class, 'handle'])->name(MediaRouteMap::Search);
@@ -140,6 +145,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('events')->group(static function () {
                     Route::post('/', [CreateEventController::class, 'handle'])->name(EventRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateEventController::class, 'handle'])->name(EventRouteMap::BulkUpdate);
                     Route::put('/{eventId}', [UpdateEventController::class, 'handle'])->name(EventRouteMap::Update);
                     Route::delete('/{eventId}', [DeleteEventController::class, 'handle'])->name(EventRouteMap::Delete);
                     Route::get('/search', [SearchEventController::class, 'handle'])->name(EventRouteMap::Search);
@@ -148,6 +154,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('songs')->group(static function () {
                     Route::post('/', [CreateSongController::class, 'handle'])->name(SongRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateSongController::class, 'handle'])->name(SongRouteMap::BulkUpdate);
                     Route::put('/{songId}', [UpdateSongController::class, 'handle'])->name(SongRouteMap::Update);
                     Route::delete('/{songId}', [DeleteSongController::class, 'handle'])->name(SongRouteMap::Delete);
                     Route::get('/search', [SearchSongController::class, 'handle'])->name(SongRouteMap::Search);
@@ -156,6 +163,7 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('release-groups')->group(static function () {
                     Route::post('/', [CreateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Create);
+                    Route::post('/bulk-update', [BulkUpdateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::BulkUpdate);
                     Route::put('/{releaseGroupId}', [UpdateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Update);
                     Route::delete('/{releaseGroupId}', [DeleteReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Delete);
                     Route::get('/search', [SearchReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Search);

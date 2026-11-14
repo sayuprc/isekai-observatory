@@ -108,4 +108,14 @@ readonly class Event
             'tags' => $this->tags->toArray(),
         ];
     }
+
+    public function withDisplay(bool $isDisplay): self
+    {
+        return clone ($this, ['isDisplay' => $isDisplay]);
+    }
+
+    public function withTags(TagReferences $tags): self
+    {
+        return clone ($this, ['tags' => $tags]);
+    }
 }

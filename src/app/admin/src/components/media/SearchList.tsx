@@ -11,6 +11,9 @@ import {
   pickParam,
 } from '../../utils/search-list';
 import type { PerPageOption as PerPage } from '../../utils/search-list';
+import { createBulkSelection } from '../bulk/bulk-selection';
+import { BulkActionBar } from '../bulk/BulkActionBar';
+import { BulkSelectAllHeader, BulkSelectCell } from '../bulk/BulkCheckbox';
 import { CountCell } from '../CountCell';
 import { ListState } from '../ListState';
 import { Pagination } from '../Pagination';
@@ -77,7 +80,7 @@ const toQuery = (params: SearchParams) => ({
   per_page: params.perPage,
 });
 
-export const SearchList = () => {
+export const SearchList = (props: { bulk?: boolean }) => {
   const { params, input, updateInput, handleSearch, handleReset, handlePageChange } = createSearchState({
     defaults: DEFAULT_PARAMS,
     parse: parseParams,
@@ -97,6 +100,9 @@ export const SearchList = () => {
       },
     }),
   );
+
+  const selection = createBulkSelection();
+  const colSpan = () => 7 + (props.bulk ? 1 : 0);
 
   const detailUrl = (mediaId: string) => `/media/${mediaId}?back=${encodeURIComponent(window.location.search)}`;
   return (
@@ -219,16 +225,39 @@ export const SearchList = () => {
         </button>
       </form>
 
-      <div class="mb-4 flex justify-end">
-        <a href={`/media/create?back=${encodeURIComponent(window.location.search)}`} class="btn btn-primary btn-sm">
-          新規作成
-        </a>
+      <div class="mb-4 flex justify-end gap-2">
+        <Show
+          when={props.bulk}
+          fallback={
+            <>
+              <a href={`/media/bulk${window.location.search}`} class="btn btn-outline btn-sm">
+                一括操作
+              </a>
+              <a
+                href={`/media/create?back=${encodeURIComponent(window.location.search)}`}
+                class="btn btn-primary btn-sm"
+              >
+                新規作成
+              </a>
+            </>
+          }
+        >
+          <a href={`/media${window.location.search}`} class="btn btn-outline btn-sm">
+            一覧に戻る
+          </a>
+        </Show>
       </div>
 
+      <Show when={props.bulk}>
+        <BulkActionBar target="media" label="メディア" selection={selection} onDone={() => refetch()} />
+      </Show>
       <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
         <table class="table table-sm table-zebra md:table-md">
           <thead>
             <tr>
+              <Show when={props.bulk}>
+                <BulkSelectAllHeader selection={selection} pageIds={data()?.media.map((item) => item.mediaId) ?? []} />
+              </Show>
               <th>タイトル</th>
               <th>公開日</th>
               <th>種別</th>
@@ -241,19 +270,24 @@ export const SearchList = () => {
           <tbody>
             <Switch>
               <Match when={data.loading}>
-                <ListState state="loading" colSpan={7} />
+                <ListState state="loading" colSpan={colSpan()} />
               </Match>
               <Match when={fetchError()}>
-                {(message) => <ListState state="error" colSpan={7} message={message()} onRetry={() => refetch()} />}
+                {(message) => (
+                  <ListState state="error" colSpan={colSpan()} message={message()} onRetry={() => refetch()} />
+                )}
               </Match>
               <Match when={data() && data()!.media.length === 0}>
-                <ListState state="empty" colSpan={7} message="条件に一致するメディアはありません。" />
+                <ListState state="empty" colSpan={colSpan()} message="条件に一致するメディアはありません。" />
               </Match>
               <Match when={data()}>
                 {(result) => (
                   <For each={result().media}>
                     {(media) => (
                       <tr class="transition-colors hover:bg-primary/30 focus-within:bg-primary/30">
+                        <Show when={props.bulk}>
+                          <BulkSelectCell selection={selection} id={media.mediaId} title={media.title} />
+                        </Show>
                         <td class="max-w-72 min-w-44">
                           <a href={detailUrl(media.mediaId)} class="link link-hover block truncate font-medium">
                             {media.title}

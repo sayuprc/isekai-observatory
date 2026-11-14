@@ -6,6 +6,8 @@ import { SearchableSelect } from '../SearchableSelect';
 interface TagPickerProps {
   tags: Accessor<RequestTag[]>;
   setTags: Setter<RequestTag[]>;
+  // 欄の見出し。タグを付ける欄以外で使うときに変える
+  label?: string;
 }
 
 // 記録に付けるタグを選ぶ欄。楽曲・イベントなど、タグを付けられる記録のフォームで共通に使う
@@ -45,7 +47,7 @@ export const TagPicker = (props: TagPickerProps) => {
 
   return (
     <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
-      <legend class="px-2 text-sm font-semibold text-base-content/70">タグ</legend>
+      <legend class="px-2 text-sm font-semibold text-base-content/70">{props.label ?? 'タグ'}</legend>
       <Show when={!failed()} fallback={<p class="text-sm text-error">タグを取得できませんでした。</p>}>
         <SearchableSelect
           options={tagOptions()}

@@ -14,5 +14,7 @@ enum MediaRouteMap: string
 
     case Update = 'media.update';
 
+    case BulkUpdate = 'media.bulk-update';
+
     case Delete = 'media.delete';
 }

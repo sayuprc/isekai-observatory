@@ -119,6 +119,35 @@ export type Event = {
     tags: Array<AttachedTag>;
 };
 
+/**
+ * イベント一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ */
+export type EventBulkUpdateRequest = {
+    /**
+     * 対象のイベントID。1 リクエストで受け付ける上限は 100 件
+     */
+    eventIds: Array<EventId>;
+    /**
+     * 付与するタグ。付いているものは何もしない
+     */
+    addTagIds?: Array<TagId>;
+    /**
+     * 除去するタグ。付いていないものは何もしない
+     */
+    removeTagIds?: Array<TagId>;
+    /**
+     * 表示設定の切り替え先
+     */
+    isDisplay?: boolean;
+};
+
+export type EventBulkUpdateResponse = {
+    /**
+     * 更新したイベントの件数
+     */
+    updatedCount: number;
+};
+
 export type EventCreateRequest = {
     title: EventTitle;
     description: EventDescription;
@@ -280,6 +309,35 @@ export type Media = {
     publishedAt: MediaPublishedAt;
     type: MediaTypeValue;
     isDisplay: boolean;
+};
+
+/**
+ * メディア一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ */
+export type MediaBulkUpdateRequest = {
+    /**
+     * 対象のメディアID。1 リクエストで受け付ける上限は 100 件
+     */
+    mediaIds: Array<MediaId>;
+    /**
+     * 付与するタグ。付いているものは何もしない
+     */
+    addTagIds?: Array<TagId>;
+    /**
+     * 除去するタグ。付いていないものは何もしない
+     */
+    removeTagIds?: Array<TagId>;
+    /**
+     * 表示設定の切り替え先
+     */
+    isDisplay?: boolean;
+};
+
+export type MediaBulkUpdateResponse = {
+    /**
+     * 更新したメディアの件数
+     */
+    updatedCount: number;
 };
 
 export type MediaCreateRequest = {
@@ -640,6 +698,35 @@ export type ReleaseGroup = {
     tags: Array<AttachedTag>;
 };
 
+/**
+ * リリースグループ一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ */
+export type ReleaseGroupBulkUpdateRequest = {
+    /**
+     * 対象のリリースグループID。1 リクエストで受け付ける上限は 100 件
+     */
+    releaseGroupIds: Array<ReleaseGroupId>;
+    /**
+     * 付与するタグ。付いているものは何もしない
+     */
+    addTagIds?: Array<TagId>;
+    /**
+     * 除去するタグ。付いていないものは何もしない
+     */
+    removeTagIds?: Array<TagId>;
+    /**
+     * 表示設定の切り替え先
+     */
+    isDisplay?: boolean;
+};
+
+export type ReleaseGroupBulkUpdateResponse = {
+    /**
+     * 更新したリリースグループの件数
+     */
+    updatedCount: number;
+};
+
 export type ReleaseGroupCreateRequest = {
     title: ReleaseGroupTitle;
     type: ReleaseGroupTypeValue;
@@ -838,6 +925,35 @@ export type Song = {
     persons: Array<SongPerson>;
     tags: Array<AttachedTag>;
     media: Array<SongLinkedMedia>;
+};
+
+/**
+ * 楽曲一括更新の指定。付与・除去するタグと表示設定は、指定したものだけを反映する
+ */
+export type SongBulkUpdateRequest = {
+    /**
+     * 対象の楽曲ID。1 リクエストで受け付ける上限は 100 件
+     */
+    songIds: Array<SongId>;
+    /**
+     * 付与するタグ。付いているものは何もしない
+     */
+    addTagIds?: Array<TagId>;
+    /**
+     * 除去するタグ。付いていないものは何もしない
+     */
+    removeTagIds?: Array<TagId>;
+    /**
+     * 表示設定の切り替え先
+     */
+    isDisplay?: boolean;
+};
+
+export type SongBulkUpdateResponse = {
+    /**
+     * 更新した楽曲の件数
+     */
+    updatedCount: number;
 };
 
 export type SongCreateRequest = {
@@ -1842,6 +1958,59 @@ export type EventServiceCreateEventResponses = {
 
 export type EventServiceCreateEventResponse = EventServiceCreateEventResponses[keyof EventServiceCreateEventResponses];
 
+export type EventServiceBulkUpdateEventsData = {
+    body: EventBulkUpdateRequest;
+    path?: never;
+    query?: never;
+    url: '/events/bulk-update';
+};
+
+export type EventServiceBulkUpdateEventsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type EventServiceBulkUpdateEventsError = EventServiceBulkUpdateEventsErrors[keyof EventServiceBulkUpdateEventsErrors];
+
+export type EventServiceBulkUpdateEventsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: EventBulkUpdateResponse;
+};
+
+export type EventServiceBulkUpdateEventsResponse = EventServiceBulkUpdateEventsResponses[keyof EventServiceBulkUpdateEventsResponses];
+
 export type EventServiceSearchEventsData = {
     body?: never;
     path?: never;
@@ -2105,6 +2274,59 @@ export type MediaServiceCreateMediaResponses = {
 };
 
 export type MediaServiceCreateMediaResponse = MediaServiceCreateMediaResponses[keyof MediaServiceCreateMediaResponses];
+
+export type MediaServiceBulkUpdateMediaData = {
+    body: MediaBulkUpdateRequest;
+    path?: never;
+    query?: never;
+    url: '/media/bulk-update';
+};
+
+export type MediaServiceBulkUpdateMediaErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type MediaServiceBulkUpdateMediaError = MediaServiceBulkUpdateMediaErrors[keyof MediaServiceBulkUpdateMediaErrors];
+
+export type MediaServiceBulkUpdateMediaResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: MediaBulkUpdateResponse;
+};
+
+export type MediaServiceBulkUpdateMediaResponse = MediaServiceBulkUpdateMediaResponses[keyof MediaServiceBulkUpdateMediaResponses];
 
 export type MediaServiceSearchMediaData = {
     body?: never;
@@ -2947,6 +3169,59 @@ export type ReleaseGroupServiceCreateReleaseGroupResponses = {
 
 export type ReleaseGroupServiceCreateReleaseGroupResponse = ReleaseGroupServiceCreateReleaseGroupResponses[keyof ReleaseGroupServiceCreateReleaseGroupResponses];
 
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsData = {
+    body: ReleaseGroupBulkUpdateRequest;
+    path?: never;
+    query?: never;
+    url: '/release-groups/bulk-update';
+};
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsError = ReleaseGroupServiceBulkUpdateReleaseGroupsErrors[keyof ReleaseGroupServiceBulkUpdateReleaseGroupsErrors];
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: ReleaseGroupBulkUpdateResponse;
+};
+
+export type ReleaseGroupServiceBulkUpdateReleaseGroupsResponse = ReleaseGroupServiceBulkUpdateReleaseGroupsResponses[keyof ReleaseGroupServiceBulkUpdateReleaseGroupsResponses];
+
 export type ReleaseGroupServiceSearchReleaseGroupsData = {
     body?: never;
     path?: never;
@@ -3415,6 +3690,59 @@ export type SongServiceCreateSongResponses = {
 };
 
 export type SongServiceCreateSongResponse = SongServiceCreateSongResponses[keyof SongServiceCreateSongResponses];
+
+export type SongServiceBulkUpdateSongsData = {
+    body: SongBulkUpdateRequest;
+    path?: never;
+    query?: never;
+    url: '/songs/bulk-update';
+};
+
+export type SongServiceBulkUpdateSongsErrors = {
+    /**
+     * The server could not understand the request due to invalid syntax.
+     */
+    400: ErrorResponse;
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * The server cannot find the requested resource.
+     */
+    404: ErrorResponse;
+    /**
+     * Client error
+     */
+    422: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type SongServiceBulkUpdateSongsError = SongServiceBulkUpdateSongsErrors[keyof SongServiceBulkUpdateSongsErrors];
+
+export type SongServiceBulkUpdateSongsResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: SongBulkUpdateResponse;
+};
+
+export type SongServiceBulkUpdateSongsResponse = SongServiceBulkUpdateSongsResponses[keyof SongServiceBulkUpdateSongsResponses];
 
 export type SongServiceSearchSongsData = {
     body?: never;

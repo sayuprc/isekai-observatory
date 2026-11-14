@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import {
+  mediaServiceBulkUpdateMedia,
   mediaServiceCreateMedia,
   mediaServiceDeleteMedia,
   mediaServiceGetMedia,
@@ -124,6 +125,20 @@ export const media = new Elysia({ prefix: '/media' })
         type: MediaTypeValueSchema,
         isDisplay: t.Boolean(),
         tags: t.Array(t.Object({ tagId: t.String() })),
+      }),
+    },
+  )
+  .post(
+    '/bulk-update',
+    async ({ body, authSession }) => {
+      return requestWithAuth(authSession, (client) => mediaServiceBulkUpdateMedia({ client, body }));
+    },
+    {
+      body: t.Object({
+        mediaIds: t.Array(t.String(), { minItems: 1, maxItems: 100 }),
+        addTagIds: t.Optional(t.Array(t.String())),
+        removeTagIds: t.Optional(t.Array(t.String())),
+        isDisplay: t.Optional(t.Boolean()),
       }),
     },
   )

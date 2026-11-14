@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import {
+  songServiceBulkUpdateSongs,
   mediaServiceSearchMedia,
   songServiceCreateSong,
   songServiceDeleteSong,
@@ -171,6 +172,20 @@ export const songs = new Elysia({ prefix: '/songs' })
         persons: SongPersonRefSchema,
         tags: TagRefSchema,
         media: SongMediaRefSchema,
+      }),
+    },
+  )
+  .post(
+    '/bulk-update',
+    async ({ body, authSession }) => {
+      return requestWithAuth(authSession, (client) => songServiceBulkUpdateSongs({ client, body }));
+    },
+    {
+      body: t.Object({
+        songIds: t.Array(t.String(), { minItems: 1, maxItems: 100 }),
+        addTagIds: t.Optional(t.Array(t.String())),
+        removeTagIds: t.Optional(t.Array(t.String())),
+        isDisplay: t.Optional(t.Boolean()),
       }),
     },
   )

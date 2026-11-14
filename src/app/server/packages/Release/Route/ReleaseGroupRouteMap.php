@@ -14,5 +14,7 @@ enum ReleaseGroupRouteMap: string
 
     case Update = 'releaseGroup.update';
 
+    case BulkUpdate = 'release-group.bulk-update';
+
     case Delete = 'releaseGroup.delete';
 }

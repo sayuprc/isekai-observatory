@@ -50,6 +50,18 @@ interface ReleaseGroupService {
     | Unprocessable
     | ServerError;
 
+  @doc("リリースグループ一括更新API")
+  @route("/bulk-update")
+  @post
+  bulkUpdateReleaseGroups(@body request: ReleaseGroupBulkUpdateRequest):
+    | Ok<ReleaseGroupBulkUpdateResponse>
+    | BadRequest
+    | Unauthorized
+    | Forbidden
+    | NotFound
+    | Unprocessable
+    | ServerError;
+
   @doc("リリースグループ削除API")
   @delete
   deleteReleaseGroup(@path releaseGroupId: releaseGroupId):

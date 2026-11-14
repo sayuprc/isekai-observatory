@@ -14,5 +14,7 @@ enum SongRouteMap: string
 
     case Update = 'songs.update';
 
+    case BulkUpdate = 'song.bulk-update';
+
     case Delete = 'songs.delete';
 }

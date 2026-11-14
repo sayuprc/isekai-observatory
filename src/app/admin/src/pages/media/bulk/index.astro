@@ -1,0 +1,10 @@
+---
+import { FlashMessage } from '../../../components/Flash';
+import { SearchList } from '../../../components/media/SearchList';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout pageTitle="メディアの一括操作">
+  <FlashMessage client:only="solid-js" />
+  <SearchList bulk client:only="solid-js" />
+</Layout>
