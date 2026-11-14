@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import {
+  eventServiceBulkUpdateEvents,
   eventServiceCreateEvent,
   eventServiceDeleteEvent,
   eventServiceGetEvent,
@@ -127,6 +128,20 @@ export const events = new Elysia({ prefix: '/events' })
     {
       params: t.Object({ eventId: t.String() }),
       body: eventBodySchema,
+    },
+  )
+  .post(
+    '/bulk-update',
+    async ({ body, authSession }) => {
+      return requestWithAuth(authSession, (client) => eventServiceBulkUpdateEvents({ client, body }));
+    },
+    {
+      body: t.Object({
+        eventIds: t.Array(t.String(), { minItems: 1, maxItems: 100 }),
+        addTagIds: t.Optional(t.Array(t.String())),
+        removeTagIds: t.Optional(t.Array(t.String())),
+        isDisplay: t.Optional(t.Boolean()),
+      }),
     },
   )
   .delete(
