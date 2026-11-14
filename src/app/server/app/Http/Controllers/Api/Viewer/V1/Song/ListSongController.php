@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use Song\Application\Viewer\UseCase\List\ListInputData;
 use Song\Application\Viewer\UseCase\List\ListUseCase;
 
-class ListSongController extends Controller
+final readonly class ListSongController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 

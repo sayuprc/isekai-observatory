@@ -28,9 +28,10 @@ class SearchEventTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: '非公開のライブ', isDisplay: false),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(EventRouteMap::Search, ['status' => '1', 'is_display' => 'true', 'per_page' => '25']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $normalId)
             ->assertJsonPath('maxPage', 1);
@@ -47,9 +48,10 @@ class SearchEventTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: '配信'),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(EventRouteMap::Search, ['title' => 'ライブ', 'sort' => 'title', 'order' => 'desc']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(2, 'events')
             ->assertJsonPath('events.0.eventId', $secondId)
             ->assertJsonPath('events.1.eventId', $firstId);
@@ -68,9 +70,10 @@ class SearchEventTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: 'タグなしのライブ'),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(EventRouteMap::Search, ['tag_id' => $tagId]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $taggedEventId)
             ->assertJsonPath('maxPage', 1);

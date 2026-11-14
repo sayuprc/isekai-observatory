@@ -31,10 +31,20 @@ class EventRepositoryTest extends DatabaseTestCase
         $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
-        $this->storeMedia($this->createMedia($mediaId, '配信アーカイブ', 'https://example.com/archive', MediaType::LiveStream, true));
+        $this->storeMedia($this->createMedia(
+            $mediaId,
+            '配信アーカイブ',
+            'https://example.com/archive',
+            MediaType::LiveStream,
+            true,
+        ));
         $releaseGroupId = $this->generateUuid();
         $releaseId = $this->generateUuid();
-        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'ライブ映像作品', ReleaseGroupType::Other));
+        $this->storeReleaseGroups($this->createReleaseGroup(
+            $releaseGroupId,
+            'ライブ映像作品',
+            ReleaseGroupType::Other,
+        ));
         $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, 'Blu-ray', true));
 
         $eventId = $this->generateUuid();
@@ -46,8 +56,23 @@ class EventRepositoryTest extends DatabaseTestCase
             media: [['mediaId' => $mediaId, 'orderNo' => 1]],
             releases: [['releaseId' => $releaseId, 'orderNo' => 1]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => 'ゲスト', 'personGroupId' => null, 'orderNo' => 1]]]],
-            setlist: [['setlistItemId' => $setlistItemId, 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$performanceId]]],
+            performances: [[
+                'performanceId' => $performanceId,
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [[
+                    'personId' => $personId,
+                    'creditName' => 'ゲスト',
+                    'personGroupId' => null,
+                    'orderNo' => 1,
+                ]],
+            ]],
+            setlist: [[
+                'setlistItemId' => $setlistItemId,
+                'orderNo' => 1,
+                'label' => '本編',
+                'performanceIds' => [$performanceId],
+            ]],
         );
         $this->getInstance()->save($event);
 
@@ -70,19 +95,39 @@ class EventRepositoryTest extends DatabaseTestCase
         $event = $this->createEvent(
             $eventId,
             performances: [
-                ['performanceId' => $performance1, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                    ['personId' => $person2, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
-                    ['personId' => $person1, 'creditName' => 'ユニット', 'personGroupId' => null, 'orderNo' => 2],
-                ]],
+                [
+                    'performanceId' => $performance1,
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [
+                        ['personId' => $person2, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                        ['personId' => $person1, 'creditName' => 'ユニット', 'personGroupId' => null, 'orderNo' => 2],
+                    ],
+                ],
                 ['performanceId' => $performance2, 'songId' => $songId, 'orderNo' => 2, 'coVocalists' => []],
-                ['performanceId' => $performance3, 'songId' => $songId, 'orderNo' => 3, 'coVocalists' => [
-                    ['personId' => $person1, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
-                ]],
+                [
+                    'performanceId' => $performance3,
+                    'songId' => $songId,
+                    'orderNo' => 3,
+                    'coVocalists' => [
+                        ['personId' => $person1, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                    ],
+                ],
             ],
             setlist: [
-                ['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'メドレー', 'performanceIds' => [$performance3, $performance1]],
+                [
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 1,
+                    'label' => 'メドレー',
+                    'performanceIds' => [$performance3, $performance1],
+                ],
                 ['setlistItemId' => $this->generateUuid(), 'orderNo' => 2, 'label' => 'MC', 'performanceIds' => []],
-                ['setlistItemId' => $this->generateUuid(), 'orderNo' => 3, 'label' => null, 'performanceIds' => [$performance2]],
+                [
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 3,
+                    'label' => null,
+                    'performanceIds' => [$performance2],
+                ],
             ],
         );
         $this->getInstance()->save($event);
@@ -102,10 +147,20 @@ class EventRepositoryTest extends DatabaseTestCase
         $performanceId = $this->generateUuid();
         $this->getInstance()->save($this->createEvent(
             $eventId,
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
-            ]]],
-            setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performanceIds' => [$performanceId]]],
+            performances: [[
+                'performanceId' => $performanceId,
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    ['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                ],
+            ]],
+            setlist: [[
+                'setlistItemId' => $this->generateUuid(),
+                'orderNo' => 1,
+                'label' => null,
+                'performanceIds' => [$performanceId],
+            ]],
         ));
         $updated = $this->createEvent($eventId, title: '中止されたライブ', status: EventStatus::Cancelled);
         $this->getInstance()->save($updated);
@@ -135,8 +190,18 @@ class EventRepositoryTest extends DatabaseTestCase
         $this->getInstance()->save($this->createEvent(
             $eventId,
             sources: [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
-            setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performanceIds' => [$performanceId]]],
+            performances: [[
+                'performanceId' => $performanceId,
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [],
+            ]],
+            setlist: [[
+                'setlistItemId' => $this->generateUuid(),
+                'orderNo' => 1,
+                'label' => null,
+                'performanceIds' => [$performanceId],
+            ]],
         ));
 
         $this->getInstance()->delete(new EventId($eventId));

@@ -12,30 +12,19 @@ use Person\Application\Admin\UseCase\Group\Update\UpdateInputData;
 use Person\Application\Admin\UseCase\Group\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
-class UpdatePersonGroupController extends Controller
+final readonly class UpdatePersonGroupController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly UpdateUseCase $useCase,
-        private readonly UpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private UpdateUseCase $useCase,
+        private UpdatePresenter $presenter,
     ) {
     }
 
     public function handle(string $personGroupId, Request $request): JsonResponse
     {
-        return $this->buildInput($personGroupId, $request)
+        return $this->mapper->map(UpdateInputData::class, [...$request->all(), 'personGroupId' => $personGroupId])
             |> $this->useCase->handle(...)
             |> $this->presenter->present(...);
-    }
-
-    private function buildInput(string $personGroupId, Request $request): UpdateInputData
-    {
-        return $this->mapper->map(
-            UpdateInputData::class,
-            [
-                ...$request->all(),
-                'personGroupId' => $personGroupId,
-            ],
-        );
     }
 }

@@ -147,11 +147,16 @@ trait EntityFactory
             new PersonGroupId($personGroupId),
             new PersonGroupName($name),
             new PersonGroupDisplayName($displayName ?? $name),
-            PersonGroupMembers::reconstruct(array_map(
-                static fn (string $personId, int $index): array => ['personId' => $personId, 'orderNo' => $index + 1],
-                $memberIds,
-                array_keys($memberIds),
-            )),
+            PersonGroupMembers::reconstruct(
+                array_map(
+                    static fn (string $personId, int $index): array => [
+                        'personId' => $personId,
+                        'orderNo' => $index + 1,
+                    ],
+                    $memberIds,
+                    array_keys($memberIds),
+                ),
+            ),
         );
     }
 
@@ -252,10 +257,22 @@ trait EntityFactory
         ];
 
         return [
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Lyricist), $personsOrLyricists),
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Composer), $composersOrLegacyLyricists),
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Arranger), $arrangersOrLegacyComposers),
-            ...array_map(static fn (array $item): array => $toPerson($item, SongPersonRole::Arranger), $legacyArrangers),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Lyricist,
+            ), $personsOrLyricists),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Composer,
+            ), $composersOrLegacyLyricists),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Arranger,
+            ), $arrangersOrLegacyComposers),
+            ...array_map(static fn (array $item): array => $toPerson(
+                $item,
+                SongPersonRole::Arranger,
+            ), $legacyArrangers),
         ];
     }
 

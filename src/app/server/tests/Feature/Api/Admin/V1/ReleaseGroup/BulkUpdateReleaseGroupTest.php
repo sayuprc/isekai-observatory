@@ -33,17 +33,21 @@ class BulkUpdateReleaseGroupTest extends DatabaseTestCase
         $second = $this->generateUuid();
         $this->storeTags($this->createTag($addTagId, 'タグA', 10), $this->createTag($removeTagId, 'タグB', 20));
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($first, 'リリース', ReleaseGroupType::Album, true, tags: [['tagId' => $removeTagId]]),
+            $this->createReleaseGroup($first, 'リリース', ReleaseGroupType::Album, true, tags: [[
+                'tagId' => $removeTagId,
+            ]]),
             $this->createReleaseGroup($second, 'リリース', ReleaseGroupType::Album, true, tags: []),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::BulkUpdate), [
                 'releaseGroupIds' => [$first, $second],
                 'addTagIds' => [$addTagId],
                 'removeTagIds' => [$removeTagId],
                 'isDisplay' => false,
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(ReleaseGroupRepository::class);
@@ -63,13 +67,21 @@ class BulkUpdateReleaseGroupTest extends DatabaseTestCase
     public function nothingChangesWhenAnyRecordDoesNotExist(): void
     {
         $existing = $this->generateUuid();
-        $this->storeReleaseGroups($this->createReleaseGroup($existing, 'リリース', ReleaseGroupType::Album, true, tags: []));
+        $this->storeReleaseGroups($this->createReleaseGroup(
+            $existing,
+            'リリース',
+            ReleaseGroupType::Album,
+            true,
+            tags: [],
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::BulkUpdate), [
                 'releaseGroupIds' => [$existing, $this->generateUuid()],
                 'isDisplay' => false,
-            ])->assertStatus(404);
+            ])
+            ->assertNotFound();
 
         $record = $this->app->make(ReleaseGroupRepository::class)->find(new ReleaseGroupId($existing));
         $this->assertTrue($record?->isDisplay);
@@ -81,8 +93,9 @@ class BulkUpdateReleaseGroupTest extends DatabaseTestCase
         $id = $this->generateUuid();
         $this->storeReleaseGroups($this->createReleaseGroup($id, 'リリース', ReleaseGroupType::Album, true, tags: []));
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->postJson(route(ReleaseGroupRouteMap::BulkUpdate), ['releaseGroupIds' => [$id], 'isDisplay' => false])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

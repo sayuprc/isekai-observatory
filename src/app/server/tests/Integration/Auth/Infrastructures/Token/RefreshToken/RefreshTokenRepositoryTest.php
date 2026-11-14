@@ -27,7 +27,13 @@ class RefreshTokenRepositoryTest extends DatabaseTestCase
     {
         Carbon::setTestNow('2026-01-01 00:00:00');
 
-        $adminUser = $this->createAdminUser($this->generateUuid(), 'user@example.com', Role::General, [], new DateTimeImmutable());
+        $adminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'user@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($adminUser);
 
         $refreshToken = $this->createRefreshToken(
@@ -60,7 +66,13 @@ class RefreshTokenRepositoryTest extends DatabaseTestCase
     {
         Carbon::setTestNow('2026-01-01 00:00:00');
 
-        $adminUser = $this->createAdminUser($this->generateUuid(), 'user@example.com', Role::General, [], new DateTimeImmutable());
+        $adminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'user@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($adminUser);
 
         $refreshToken = $this->createRefreshToken(
@@ -84,7 +96,13 @@ class RefreshTokenRepositoryTest extends DatabaseTestCase
     {
         Carbon::setTestNow('2026-01-01 00:00:00');
 
-        $adminUser = $this->createAdminUser($this->generateUuid(), 'user@example.com', Role::General, [], new DateTimeImmutable());
+        $adminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'user@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($adminUser);
 
         $refreshToken = $this->createRefreshToken(
@@ -108,7 +126,13 @@ class RefreshTokenRepositoryTest extends DatabaseTestCase
     {
         Carbon::setTestNow('2026-01-01 00:00:00');
 
-        $adminUser = $this->createAdminUser($this->generateUuid(), 'user@example.com', Role::General, [], new DateTimeImmutable());
+        $adminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'user@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($adminUser);
 
         $refreshToken = $this->createRefreshToken(
@@ -133,7 +157,13 @@ class RefreshTokenRepositoryTest extends DatabaseTestCase
     {
         Carbon::setTestNow('2026-01-01 00:00:00');
 
-        $adminUser = $this->createAdminUser($this->generateUuid(), 'user@example.com', Role::General, [], new DateTimeImmutable());
+        $adminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'user@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($adminUser);
 
         $refreshToken = $this->createRefreshToken(
@@ -167,7 +197,13 @@ class RefreshTokenRepositoryTest extends DatabaseTestCase
     {
         Carbon::setTestNow('2026-01-01 00:00:00');
 
-        $adminUser = $this->createAdminUser($this->generateUuid(), 'user@example.com', Role::General, [], new DateTimeImmutable());
+        $adminUser = $this->createAdminUser(
+            $this->generateUuid(),
+            'user@example.com',
+            Role::General,
+            [],
+            new DateTimeImmutable(),
+        );
         $this->app->make(AdminUserRepository::class)->register($adminUser);
 
         $hasher = $this->app->make(TokenHasherInterface::class);

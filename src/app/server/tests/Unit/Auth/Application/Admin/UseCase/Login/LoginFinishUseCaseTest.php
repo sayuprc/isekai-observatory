@@ -70,7 +70,8 @@ class LoginFinishUseCaseTest extends TestCase
         $this->recorder = Mockery::mock(AuditLogRecorderInterface::class);
         $this->clock = Mockery::mock(ClockInterface::class);
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->andReturnUsing(static fn (callable $callback) => $callback())
             ->byDefault();
     }
@@ -84,50 +85,70 @@ class LoginFinishUseCaseTest extends TestCase
         $refreshToken = $this->refreshToken($adminUserId);
         $now = new DateTimeImmutable('2026-01-02 03:04:05');
 
-        $this->ceremonyStore->shouldReceive('pull')
+        $this->ceremonyStore
+            ->shouldReceive('pull')
             ->with($state->authCeremonyId)
             ->andReturn($state)
             ->once();
-        $this->passkeyAuthenticator->shouldReceive('credentialId')
+        $this->passkeyAuthenticator
+            ->shouldReceive('credentialId')
             ->with(['id' => 'credential-id'])
             ->andReturn('credential-id')
             ->once();
-        $this->passkeyRepository->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
+        $this->passkeyRepository
+            ->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
             ->with($adminUserId, 'credential-id')
             ->andReturn($passkey)
             ->once();
-        $this->passkeyAuthenticator->shouldReceive('finishAuthentication')
+        $this->passkeyAuthenticator
+            ->shouldReceive('finishAuthentication')
             ->with(['id' => 'credential-id'], $state->optionsJson, $passkey, $passkey->userHandle)
             ->andReturn(new PasskeyAuthenticationResult('credential-id', 456))
             ->once();
-        $this->refreshTokenIssueService->shouldReceive('issue')
+        $this->refreshTokenIssueService
+            ->shouldReceive('issue')
             ->with($adminUserId)
             ->andReturn(['token' => $refreshToken, 'plainToken' => 'plain-refresh-token'])
             ->once();
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->andReturn($now)
             ->once();
-        $this->passkeyRepository->shouldReceive('updateCounter')
-            ->withArgs(static fn (AdminUserPasskey $updated, int $expectedSignCount): bool => $updated->adminUserPasskeyId === $passkey->adminUserPasskeyId
-                && $updated->signCount === 456
-                && $updated->lastUsedAt === $now
-                && $expectedSignCount === 123)
+        $this->passkeyRepository
+            ->shouldReceive('updateCounter')
+            ->withArgs(
+                static fn (AdminUserPasskey $updated, int $expectedSignCount): bool => (
+                    $updated->adminUserPasskeyId === $passkey->adminUserPasskeyId
+                    && $updated->signCount === 456
+                    && $updated->lastUsedAt === $now
+                    && $expectedSignCount === 123
+                ),
+            )
             ->andReturnTrue()
             ->once();
-        $this->accessTokenIssueService->shouldReceive('issue')
+        $this->accessTokenIssueService
+            ->shouldReceive('issue')
             ->with($refreshToken->refreshTokenId->value)
             ->andReturn($this->createAccessToken('access-token'))
             ->once();
-        $this->refreshTokenRepository->shouldReceive('save')
+        $this->refreshTokenRepository
+            ->shouldReceive('save')
             ->with($refreshToken)
             ->andReturn($refreshToken)
             ->once();
-        $this->recorder->shouldReceive('record')
-            ->withArgs(static fn (AuditAction $action, AuditTargetType $targetType): bool => $action === AuditAction::Login
-                && $targetType === AuditTargetType::AdminUser)
+        $this->recorder
+            ->shouldReceive('record')
+            ->withArgs(
+                static fn (AuditAction $action, AuditTargetType $targetType): bool => (
+                    $action === AuditAction::Login
+                    && $targetType === AuditTargetType::AdminUser
+                ),
+            )
             ->once();
 
-        $output = $this->getInstance()->handle(new LoginFinishInputData($state->authCeremonyId, ['id' => 'credential-id']));
+        $output = $this->getInstance()->handle(new LoginFinishInputData($state->authCeremonyId, [
+            'id' => 'credential-id',
+        ]));
 
         $this->assertSame('access-token', $output->accessToken->jwt->value);
         $this->assertSame($refreshToken->refreshTokenId->value, $output->refreshTokenId);
@@ -156,7 +177,8 @@ class LoginFinishUseCaseTest extends TestCase
 
         $this->ceremonyStore->shouldReceive('pull')->andReturn($state)->once();
         $this->passkeyAuthenticator->shouldReceive('credentialId')->andReturn('credential-id')->once();
-        $this->passkeyRepository->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
+        $this->passkeyRepository
+            ->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
             ->with($adminUserId, 'credential-id')
             ->andReturnNull()
             ->once();
@@ -177,10 +199,12 @@ class LoginFinishUseCaseTest extends TestCase
 
         $this->ceremonyStore->shouldReceive('pull')->andReturn($state)->once();
         $this->passkeyAuthenticator->shouldReceive('credentialId')->andReturn('credential-id')->once();
-        $this->passkeyRepository->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
+        $this->passkeyRepository
+            ->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
             ->andReturn($passkey)
             ->once();
-        $this->passkeyAuthenticator->shouldReceive('finishAuthentication')
+        $this->passkeyAuthenticator
+            ->shouldReceive('finishAuthentication')
             ->andThrow(new RuntimeException('verification failed'))
             ->once();
         $this->passkeyRepository->shouldReceive('updateCounter')->never();
@@ -201,19 +225,24 @@ class LoginFinishUseCaseTest extends TestCase
 
         $this->ceremonyStore->shouldReceive('pull')->andReturn($state)->once();
         $this->passkeyAuthenticator->shouldReceive('credentialId')->andReturn('credential-id')->once();
-        $this->passkeyRepository->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
+        $this->passkeyRepository
+            ->shouldReceive('findByAdminUserIdAndCredentialIdForUpdate')
             ->andReturn($passkey)
             ->once();
-        $this->passkeyAuthenticator->shouldReceive('finishAuthentication')
+        $this->passkeyAuthenticator
+            ->shouldReceive('finishAuthentication')
             ->andReturn(new PasskeyAuthenticationResult('credential-id', 456))
             ->once();
-        $this->refreshTokenIssueService->shouldReceive('issue')
+        $this->refreshTokenIssueService
+            ->shouldReceive('issue')
             ->andReturn(['token' => $refreshToken, 'plainToken' => 'plain-refresh-token'])
             ->once();
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->andReturn(new DateTimeImmutable('2026-01-02 03:04:05'))
             ->once();
-        $this->passkeyRepository->shouldReceive('updateCounter')
+        $this->passkeyRepository
+            ->shouldReceive('updateCounter')
             ->andReturnFalse()
             ->once();
         $this->refreshTokenRepository->shouldReceive('save')->never();

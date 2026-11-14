@@ -52,7 +52,8 @@ class InviteCommandTest extends DatabaseTestCase
     #[Test]
     public function failureWithInvalidPermission(): void
     {
-        $this->artisan('admin:invite invitee@example.com invalid_permission')
+        $this
+            ->artisan('admin:invite invitee@example.com invalid_permission')
             ->expectsOutput('不正な権限です: invalid_permission')
             ->assertFailed();
 
@@ -62,11 +63,14 @@ class InviteCommandTest extends DatabaseTestCase
     #[Test]
     public function failureIfEmailAlreadyUsedByAdminUser(): void
     {
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($this->generateUuid(), 'taken@example.com', Role::General, []),
-        );
+        $this->app
+            ->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($this->generateUuid(), 'taken@example.com', Role::General, []),
+            );
 
-        $this->artisan('admin:invite taken@example.com')
+        $this
+            ->artisan('admin:invite taken@example.com')
             ->expectsOutput('すでに使われているメールアドレスです "taken@example.com"')
             ->assertFailed();
 

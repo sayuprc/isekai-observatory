@@ -17,7 +17,12 @@ class ListPresenter
     public function present(ListOutputData $outputData): JsonResponse
     {
         return response()->json(
-            new PersonListResponse()->setPersons(array_map($this->converter->toOpenApiPerson(...), $outputData->persons)),
+            new PersonListResponse()->setPersons(
+                array_map(
+                    $this->converter->toOpenApiPerson(...),
+                    $outputData->persons,
+                ),
+            ),
             200,
         );
     }

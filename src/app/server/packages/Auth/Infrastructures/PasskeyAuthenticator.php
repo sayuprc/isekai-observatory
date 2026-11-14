@@ -62,10 +62,8 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         // origin 設定の不備をセレモニー開始時点で fail-fast する (finish 側は例外が握り潰されるため)
         $this->host();
 
-        $excludeCredentials = array_map(
-            fn (AdminUserPasskey $passkey): PublicKeyCredentialDescriptor => $this->toDescriptor($passkey),
-            $excludePasskeys,
-        );
+        $excludeCredentials = array_map($this->toDescriptor(...), $excludePasskeys);
+
         $options = PublicKeyCredentialCreationOptions::create(
             PublicKeyCredentialRpEntity::create(
                 $this->config->rpName,
@@ -256,7 +254,12 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         $host = parse_url($this->config->origin, PHP_URL_HOST);
 
         if (! is_string($host) || $host === '') {
-            throw new RuntimeException(sprintf('auth.passkey.origin からホストを取得できません: [%s]', $this->config->origin));
+            throw new RuntimeException(
+                sprintf(
+                    'auth.passkey.origin からホストを取得できません: [%s]',
+                    $this->config->origin,
+                ),
+            );
         }
 
         return $host;

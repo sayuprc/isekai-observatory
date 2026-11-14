@@ -25,9 +25,10 @@ class DeletePersonTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($uuid, '人物', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, $uuid))
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     #[Test]
@@ -39,9 +40,10 @@ class DeletePersonTest extends DatabaseTestCase
         $this->storePersons($this->createPerson($personId, '人物', 1));
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ', [$personId]));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, $personId))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertDatabaseCount('person_groups', 1);
         $this->assertDatabaseCount('person_group_members', 0);
@@ -50,9 +52,10 @@ class DeletePersonTest extends DatabaseTestCase
     #[Test]
     public function invalidPersonId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, 'invalid-id'))
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertExactJson([
                 'code' => 'validation_failed',
                 'message' => '入力内容に誤りがあります',
@@ -82,9 +85,10 @@ class DeletePersonTest extends DatabaseTestCase
             [['personId' => $personId, 'role' => 1, 'orderNo' => 1]],
         ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(PersonRouteMap::Delete, $personId))
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'この人物は楽曲に使用されているため削除できません',

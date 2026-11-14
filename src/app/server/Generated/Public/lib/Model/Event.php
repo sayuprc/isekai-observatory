@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Event
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,35 +33,43 @@
 
 namespace OpenAPI\Public\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Public\Client\ObjectSerializer;
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Public\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * Event Class Doc Comment
  *
  * @category Class
+ *
  * @description 公開イベント
+ *
  * @package  OpenAPI\Public\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class Event implements ModelInterface, ArrayAccess, \JsonSerializable
+class Event implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'Event';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'event_id' => 'string',
         'title' => 'string',
@@ -70,16 +83,18 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'sources' => '\OpenAPI\Public\Client\Model\EventSource[]',
         'performances' => '\OpenAPI\Public\Client\Model\SongPerformance[]',
         'setlist' => '\OpenAPI\Public\Client\Model\SetlistItem[]',
-        'tag_ids' => 'string[]'
+        'tag_ids' => 'string[]',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'event_id' => 'uuid',
         'title' => null,
@@ -93,14 +108,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'sources' => null,
         'performances' => null,
         'setlist' => null,
-        'tag_ids' => 'uuid'
+        'tag_ids' => 'uuid',
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'event_id' => false,
         'title' => false,
@@ -114,14 +129,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'sources' => false,
         'performances' => false,
         'setlist' => false,
-        'tag_ids' => false
+        'tag_ids' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -146,8 +161,6 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -157,7 +170,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -167,7 +180,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -176,9 +189,6 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -187,9 +197,6 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -200,7 +207,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'event_id' => 'eventId',
@@ -215,13 +222,13 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'sources' => 'sources',
         'performances' => 'performances',
         'setlist' => 'setlist',
-        'tag_ids' => 'tagIds'
+        'tag_ids' => 'tagIds',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'event_id' => 'setEventId',
@@ -236,13 +243,13 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'sources' => 'setSources',
         'performances' => 'setPerformances',
         'setlist' => 'setSetlist',
-        'tag_ids' => 'setTagIds'
+        'tag_ids' => 'setTagIds',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'event_id' => 'getEventId',
@@ -257,7 +264,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         'sources' => 'getSources',
         'performances' => 'getPerformances',
         'setlist' => 'getSetlist',
-        'tag_ids' => 'getTagIds'
+        'tag_ids' => 'getTagIds',
     ];
 
     /**
@@ -301,19 +308,18 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -333,17 +339,17 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -365,7 +371,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
         }
-        if ((mb_strlen($this->container['title']) < 1)) {
+        if (mb_strlen($this->container['title']) < 1) {
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
@@ -402,6 +408,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['tag_ids'] === null) {
             $invalidProperties[] = "'tag_ids' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -415,7 +422,6 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets event_id
@@ -436,8 +442,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setEventId($event_id)
     {
-        if (is_null($event_id)) {
-            throw new \InvalidArgumentException('non-nullable event_id cannot be null');
+        if ($event_id === null) {
+            throw new InvalidArgumentException('non-nullable event_id cannot be null');
         }
         $this->container['event_id'] = $event_id;
 
@@ -463,12 +469,12 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setTitle($title)
     {
-        if (is_null($title)) {
-            throw new \InvalidArgumentException('non-nullable title cannot be null');
+        if ($title === null) {
+            throw new InvalidArgumentException('non-nullable title cannot be null');
         }
 
-        if ((mb_strlen($title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $title when calling Event., must be bigger than or equal to 1.');
+        if (mb_strlen($title) < 1) {
+            throw new InvalidArgumentException('invalid length for $title when calling Event., must be bigger than or equal to 1.');
         }
 
         $this->container['title'] = $title;
@@ -495,8 +501,8 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setDescription($description)
     {
-        if (is_null($description)) {
-            throw new \InvalidArgumentException('non-nullable description cannot be null');
+        if ($description === null) {
+            throw new InvalidArgumentException('non-nullable description cannot be null');
         }
         $this->container['description'] = $description;
 
@@ -506,7 +512,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets type
      *
-     * @return \OpenAPI\Public\Client\Model\EventTypeValue
+     * @return EventTypeValue
      */
     public function getType()
     {
@@ -516,14 +522,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets type
      *
-     * @param \OpenAPI\Public\Client\Model\EventTypeValue $type type
+     * @param EventTypeValue $type type
      *
      * @return self
      */
     public function setType($type)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if ($type === null) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
         $this->container['type'] = $type;
 
@@ -533,7 +539,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets schedule
      *
-     * @return \OpenAPI\Public\Client\Model\IsekaiObservatoryPackagesEventEventSchedule
+     * @return IsekaiObservatoryPackagesEventEventSchedule
      */
     public function getSchedule()
     {
@@ -543,14 +549,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets schedule
      *
-     * @param \OpenAPI\Public\Client\Model\IsekaiObservatoryPackagesEventEventSchedule $schedule schedule
+     * @param IsekaiObservatoryPackagesEventEventSchedule $schedule schedule
      *
      * @return self
      */
     public function setSchedule($schedule)
     {
-        if (is_null($schedule)) {
-            throw new \InvalidArgumentException('non-nullable schedule cannot be null');
+        if ($schedule === null) {
+            throw new InvalidArgumentException('non-nullable schedule cannot be null');
         }
         $this->container['schedule'] = $schedule;
 
@@ -560,7 +566,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets status
      *
-     * @return \OpenAPI\Public\Client\Model\EventStatusValue
+     * @return EventStatusValue
      */
     public function getStatus()
     {
@@ -570,14 +576,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets status
      *
-     * @param \OpenAPI\Public\Client\Model\EventStatusValue $status status
+     * @param EventStatusValue $status status
      *
      * @return self
      */
     public function setStatus($status)
     {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
+        if ($status === null) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
         }
         $this->container['status'] = $status;
 
@@ -587,7 +593,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets venue_ids
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getVenueIds()
     {
@@ -597,14 +603,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets venue_ids
      *
-     * @param string[] $venue_ids 開催先の ID (表示順)
+     * @param array<string> $venue_ids 開催先の ID (表示順)
      *
      * @return self
      */
     public function setVenueIds($venue_ids)
     {
-        if (is_null($venue_ids)) {
-            throw new \InvalidArgumentException('non-nullable venue_ids cannot be null');
+        if ($venue_ids === null) {
+            throw new InvalidArgumentException('non-nullable venue_ids cannot be null');
         }
         $this->container['venue_ids'] = $venue_ids;
 
@@ -614,7 +620,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets media_ids
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getMediaIds()
     {
@@ -624,14 +630,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets media_ids
      *
-     * @param string[] $media_ids 関連する公開メディアの ID (表示順)
+     * @param array<string> $media_ids 関連する公開メディアの ID (表示順)
      *
      * @return self
      */
     public function setMediaIds($media_ids)
     {
-        if (is_null($media_ids)) {
-            throw new \InvalidArgumentException('non-nullable media_ids cannot be null');
+        if ($media_ids === null) {
+            throw new InvalidArgumentException('non-nullable media_ids cannot be null');
         }
         $this->container['media_ids'] = $media_ids;
 
@@ -641,7 +647,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets release_ids
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getReleaseIds()
     {
@@ -651,14 +657,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets release_ids
      *
-     * @param string[] $release_ids 関連リリースの ID (表示順)。リリースとリリースグループがともに公開のものだけが載ります
+     * @param array<string> $release_ids 関連リリースの ID (表示順)。リリースとリリースグループがともに公開のものだけが載ります
      *
      * @return self
      */
     public function setReleaseIds($release_ids)
     {
-        if (is_null($release_ids)) {
-            throw new \InvalidArgumentException('non-nullable release_ids cannot be null');
+        if ($release_ids === null) {
+            throw new InvalidArgumentException('non-nullable release_ids cannot be null');
         }
         $this->container['release_ids'] = $release_ids;
 
@@ -668,7 +674,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets sources
      *
-     * @return \OpenAPI\Public\Client\Model\EventSource[]
+     * @return array<EventSource>
      */
     public function getSources()
     {
@@ -678,14 +684,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets sources
      *
-     * @param \OpenAPI\Public\Client\Model\EventSource[] $sources 出典 (表示順)
+     * @param array<EventSource> $sources 出典 (表示順)
      *
      * @return self
      */
     public function setSources($sources)
     {
-        if (is_null($sources)) {
-            throw new \InvalidArgumentException('non-nullable sources cannot be null');
+        if ($sources === null) {
+            throw new InvalidArgumentException('non-nullable sources cannot be null');
         }
         $this->container['sources'] = $sources;
 
@@ -695,7 +701,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets performances
      *
-     * @return \OpenAPI\Public\Client\Model\SongPerformance[]
+     * @return array<SongPerformance>
      */
     public function getPerformances()
     {
@@ -705,14 +711,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets performances
      *
-     * @param \OpenAPI\Public\Client\Model\SongPerformance[] $performances 楽曲披露。セットリスト項目に属さないものも含みます
+     * @param array<SongPerformance> $performances 楽曲披露。セットリスト項目に属さないものも含みます
      *
      * @return self
      */
     public function setPerformances($performances)
     {
-        if (is_null($performances)) {
-            throw new \InvalidArgumentException('non-nullable performances cannot be null');
+        if ($performances === null) {
+            throw new InvalidArgumentException('non-nullable performances cannot be null');
         }
         $this->container['performances'] = $performances;
 
@@ -722,7 +728,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets setlist
      *
-     * @return \OpenAPI\Public\Client\Model\SetlistItem[]
+     * @return array<SetlistItem>
      */
     public function getSetlist()
     {
@@ -732,14 +738,14 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets setlist
      *
-     * @param \OpenAPI\Public\Client\Model\SetlistItem[] $setlist セットリスト (表示順)
+     * @param array<SetlistItem> $setlist セットリスト (表示順)
      *
      * @return self
      */
     public function setSetlist($setlist)
     {
-        if (is_null($setlist)) {
-            throw new \InvalidArgumentException('non-nullable setlist cannot be null');
+        if ($setlist === null) {
+            throw new InvalidArgumentException('non-nullable setlist cannot be null');
         }
         $this->container['setlist'] = $setlist;
 
@@ -749,7 +755,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets tag_ids
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getTagIds()
     {
@@ -759,25 +765,24 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets tag_ids
      *
-     * @param string[] $tag_ids タグの ID (タグの表示順)
+     * @param array<string> $tag_ids タグの ID (タグの表示順)
      *
      * @return self
      */
     public function setTagIds($tag_ids)
     {
-        if (is_null($tag_ids)) {
-            throw new \InvalidArgumentException('non-nullable tag_ids cannot be null');
+        if ($tag_ids === null) {
+            throw new InvalidArgumentException('non-nullable tag_ids cannot be null');
         }
         $this->container['tag_ids'] = $tag_ids;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -787,11 +792,11 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -802,12 +807,10 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -817,9 +820,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -828,15 +829,16 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -848,7 +850,7 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -862,5 +864,3 @@ class Event implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

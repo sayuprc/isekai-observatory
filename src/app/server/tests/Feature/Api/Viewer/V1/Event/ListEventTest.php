@@ -52,14 +52,35 @@ class ListEventTest extends DatabaseTestCase
             media: [['mediaId' => $visibleMediaId, 'orderNo' => 1], ['mediaId' => $hiddenMediaId, 'orderNo' => 2]],
             sources: [['displayName' => '公式', 'url' => 'https://example.com/event', 'orderNo' => 1]],
             performances: [
-                ['performanceId' => $visiblePerformanceId, 'songId' => $visibleSongId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1]]],
-                ['performanceId' => $hiddenPerformanceId, 'songId' => $hiddenSongId, 'orderNo' => 2, 'coVocalists' => []],
+                [
+                    'performanceId' => $visiblePerformanceId,
+                    'songId' => $visibleSongId,
+                    'orderNo' => 1,
+                    'coVocalists' => [[
+                        'personId' => $personId,
+                        'creditName' => null,
+                        'personGroupId' => null,
+                        'orderNo' => 1,
+                    ]],
+                ],
+                [
+                    'performanceId' => $hiddenPerformanceId,
+                    'songId' => $hiddenSongId,
+                    'orderNo' => 2,
+                    'coVocalists' => [],
+                ],
             ],
-            setlist: [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => '本編', 'performanceIds' => [$visiblePerformanceId]]],
+            setlist: [[
+                'setlistItemId' => $this->generateUuid(),
+                'orderNo' => 1,
+                'label' => '本編',
+                'performanceIds' => [$visiblePerformanceId],
+            ]],
         ));
 
-        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.status', 1)
@@ -88,13 +109,19 @@ class ListEventTest extends DatabaseTestCase
         $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ (B不在)', [$personId], 'グループ'));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
-            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $personId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
-            ]]],
+            performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    ['personId' => $personId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1],
+                ],
+            ]],
         ));
 
-        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonPath('events.0.performances.0.coVocalists.0.name', 'メンバー')
             ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup.personGroupId', $personGroupId)
             ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup.name', 'グループ');
@@ -115,7 +142,10 @@ class ListEventTest extends DatabaseTestCase
             $this->createReleaseGroup($privateGroupId, '非公開の作品', ReleaseGroupType::Other, isDisplay: false),
         );
         $this->storeReleases(
-            $this->createRelease($visibleReleaseId, $publicGroupId, 'Blu-ray', true, formats: [ReleaseFormat::BluRay->value, ReleaseFormat::Dvd->value]),
+            $this->createRelease($visibleReleaseId, $publicGroupId, 'Blu-ray', true, formats: [
+                ReleaseFormat::BluRay->value,
+                ReleaseFormat::Dvd->value,
+            ]),
             $this->createRelease($privateReleaseId, $publicGroupId, '非公開の版', false, orderNo: 2),
             $this->createRelease($privateGroupReleaseId, $privateGroupId, '非公開グループの版', true),
         );
@@ -128,8 +158,9 @@ class ListEventTest extends DatabaseTestCase
             ],
         ));
 
-        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonCount(1, 'events.0.releases')
             ->assertJsonPath('events.0.releases.0.releaseId', $visibleReleaseId)
             ->assertJsonPath('events.0.releases.0.releaseGroupId', $publicGroupId)
@@ -144,10 +175,16 @@ class ListEventTest extends DatabaseTestCase
     public function formatsDateRangeScheduleForPublicContract(): void
     {
         $eventId = $this->generateUuid();
-        $this->storeEvents($this->createEvent($eventId, type: EventType::Stream, startOn: '2026-10-01', endOn: '2026-10-03'));
+        $this->storeEvents($this->createEvent(
+            $eventId,
+            type: EventType::Stream,
+            startOn: '2026-10-01',
+            endOn: '2026-10-03',
+        ));
 
-        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.schedule.startOn', '2026-10-01')
             ->assertJsonPath('events.0.schedule.endOn', '2026-10-03');
@@ -165,8 +202,9 @@ class ListEventTest extends DatabaseTestCase
         );
         $this->storeEvents($this->createEvent($eventId, tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]]));
 
-        $this->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.tags', [
                 ['tagId' => $tagIdFirst, 'name' => 'タイアップA', 'orderNo' => 10],
@@ -179,8 +217,9 @@ class ListEventTest extends DatabaseTestCase
     {
         $this->storeEvents($this->createEvent($this->generateUuid(), isDisplay: false));
 
-        $this->get(route(ViewerEventRouteMap::List))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerEventRouteMap::List))
+            ->assertOk()
             ->assertJsonCount(0, 'events');
     }
 
@@ -196,13 +235,15 @@ class ListEventTest extends DatabaseTestCase
             $this->createEvent($earlierId, startOn: '2026-10-01'),
         );
 
-        $first = $this->get(route(ViewerEventRouteMap::List, ['limit' => 2]))
-            ->assertStatus(200)
+        $first = $this
+            ->get(route(ViewerEventRouteMap::List, ['limit' => 2]))
+            ->assertOk()
             ->assertJsonPath('events.0.eventId', $undatedId)
             ->assertJsonPath('events.1.eventId', $earlierId);
 
-        $this->get(route(ViewerEventRouteMap::List, ['limit' => 2, 'cursor' => $first->json('nextCursor')]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerEventRouteMap::List, ['limit' => 2, 'cursor' => $first->json('nextCursor')]))
+            ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $laterId)
             ->assertJsonMissingPath('nextCursor');
@@ -212,8 +253,9 @@ class ListEventTest extends DatabaseTestCase
     #[DataProvider('provideInvalidCursors')]
     public function rejectsInvalidCursor(string $cursor): void
     {
-        $this->get(route(ViewerEventRouteMap::List, ['cursor' => $cursor]))
-            ->assertStatus(400)
+        $this
+            ->get(route(ViewerEventRouteMap::List, ['cursor' => $cursor]))
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'カーソルが不正です。',

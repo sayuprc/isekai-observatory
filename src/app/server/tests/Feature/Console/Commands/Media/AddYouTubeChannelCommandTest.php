@@ -20,7 +20,8 @@ class AddYouTubeChannelCommandTest extends DatabaseTestCase
     #[Test]
     public function canAddChannel(): void
     {
-        $this->artisan(sprintf('media:youtube-channel:add %s テストチャンネル', self::CHANNEL_ID))
+        $this
+            ->artisan(sprintf('media:youtube-channel:add %s テストチャンネル', self::CHANNEL_ID))
             ->expectsOutput(sprintf('チャンネルを追加しました: テストチャンネル (%s)', self::CHANNEL_ID))
             ->assertSuccessful();
 
@@ -35,7 +36,8 @@ class AddYouTubeChannelCommandTest extends DatabaseTestCase
     #[Test]
     public function failureWithInvalidChannelId(): void
     {
-        $this->artisan('media:youtube-channel:add invalid-channel-id テストチャンネル')
+        $this
+            ->artisan('media:youtube-channel:add invalid-channel-id テストチャンネル')
             ->expectsOutput('YouTube チャンネルIDの形式が不正です: invalid-channel-id')
             ->assertFailed();
 
@@ -45,7 +47,8 @@ class AddYouTubeChannelCommandTest extends DatabaseTestCase
     #[Test]
     public function failureWithEmptyName(): void
     {
-        $this->artisan('media:youtube-channel:add', ['channelId' => self::CHANNEL_ID, 'name' => ' '])
+        $this
+            ->artisan('media:youtube-channel:add', ['channelId' => self::CHANNEL_ID, 'name' => ' '])
             ->expectsOutput('チャンネル名を入力してください')
             ->assertFailed();
 
@@ -57,7 +60,8 @@ class AddYouTubeChannelCommandTest extends DatabaseTestCase
     {
         $this->storeYouTubeChannels($this->createYouTubeChannel(self::CHANNEL_ID, '登録済みチャンネル'));
 
-        $this->artisan(sprintf('media:youtube-channel:add %s テストチャンネル', self::CHANNEL_ID))
+        $this
+            ->artisan(sprintf('media:youtube-channel:add %s テストチャンネル', self::CHANNEL_ID))
             ->expectsOutput(sprintf('すでに登録されているチャンネルです "%s"', self::CHANNEL_ID))
             ->assertFailed();
 

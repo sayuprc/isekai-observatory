@@ -17,7 +17,15 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     private const string TABLE = 'release_groups';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['release_group_id', 'title', 'type', 'description', 'note', 'is_display', 'order_no'];
+    private const array COLUMNS = [
+        'release_group_id',
+        'title',
+        'type',
+        'description',
+        'note',
+        'is_display',
+        'order_no',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -28,13 +36,13 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     #[Override]
     public function find(ReleaseGroupId $releaseGroupId): ?ReleaseGroup
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->hydrateAll($rows)[0] ?? null;
     }
@@ -46,12 +54,19 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
             return [];
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('release_group_id', 'IN', array_map(fn (ReleaseGroupId $releaseGroupId): string => $this->converter->toBin($releaseGroupId->value), $releaseGroupIds)),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where(
+                'release_group_id',
+                'IN',
+                array_map(
+                    fn (ReleaseGroupId $releaseGroupId): string => $this->converter->toBin($releaseGroupId->value),
+                    $releaseGroupIds,
+                ),
+            )
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->hydrateAll($rows);
     }
@@ -65,7 +80,8 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
 
         $this->queryFactory->deleteFromTables(['release_group_taggings'], 'release_group_id', $binReleaseGroupId);
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, [
                 'release_group_id',
                 'title',
@@ -89,16 +105,16 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append(
-                'ON DUPLICATE KEY UPDATE '
-                . '`title` = VALUES(`title`), '
-                . '`type` = VALUES(`type`), '
-                . '`description` = VALUES(`description`), '
-                . '`note` = VALUES(`note`), '
-                . '`is_display` = VALUES(`is_display`), '
-                . '`order_no` = VALUES(`order_no`), '
-                . '`updated_at` = VALUES(`updated_at`)',
-            )
+            ->append(<<<SQL
+                ON DUPLICATE KEY UPDATE
+                `title` = VALUES(`title`),
+                `type` = VALUES(`type`),
+                `description` = VALUES(`description`),
+                `note` = VALUES(`note`),
+                `is_display` = VALUES(`is_display`),
+                `order_no` = VALUES(`order_no`),
+                `updated_at` = VALUES(`updated_at`)
+                SQL)
             ->execute($this->queryFactory->pdo());
 
         $this->queryFactory->insertRows(
@@ -116,7 +132,8 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
     #[Override]
     public function delete(ReleaseGroupId $releaseGroupId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
             ->execute($this->queryFactory->pdo());
@@ -134,18 +151,23 @@ readonly class ReleaseGroupRepository implements ReleaseGroupRepositoryInterface
         }
 
         // タグ付けはまとめて引き、リリースグループごとの問い合わせを避ける
-        $taggingRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_group_taggings.release_group_id', 'release_group_taggings.tag_id'])
-                ->from('release_group_taggings')
-                ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
-                ->where('release_group_taggings.release_group_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $rows))
-                ->orderBy('tags.order_no'),
-        );
+        $taggingRows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_group_taggings.release_group_id', 'release_group_taggings.tag_id'])
+            ->from('release_group_taggings')
+            ->join('tags', 'release_group_taggings.tag_id = tags.tag_id')
+            ->where('release_group_taggings.release_group_id', 'IN', array_map(
+                static fn (array $row): string => Row::string($row, 'release_group_id'),
+                $rows,
+            ))
+            ->orderBy('tags.order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         $tags = [];
         foreach ($taggingRows as $taggingRow) {
-            $tags[Row::string($taggingRow, 'release_group_id')][] = ['tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id'))];
+            $tags[Row::string($taggingRow, 'release_group_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id')),
+            ];
         }
 
         return array_map(

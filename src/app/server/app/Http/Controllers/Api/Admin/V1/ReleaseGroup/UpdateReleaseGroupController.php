@@ -12,24 +12,18 @@ use Release\Application\Admin\UseCase\Group\Update\UpdateInputData;
 use Release\Application\Admin\UseCase\Group\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
-class UpdateReleaseGroupController extends Controller
+final readonly class UpdateReleaseGroupController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly UpdateUseCase $useCase,
-        private readonly UpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private UpdateUseCase $useCase,
+        private UpdatePresenter $presenter,
     ) {
     }
 
     public function handle(string $releaseGroupId, Request $request): JsonResponse
     {
-        return $this->mapper->map(
-            UpdateInputData::class,
-            [
-                ...$request->all(),
-                'releaseGroupId' => $releaseGroupId,
-            ],
-        )
+        return $this->mapper->map(UpdateInputData::class, [...$request->all(), 'releaseGroupId' => $releaseGroupId])
             |> $this->useCase->handle(...)
             |> $this->presenter->present(...);
     }

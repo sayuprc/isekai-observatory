@@ -22,7 +22,11 @@ readonly class VenueRepository implements VenueRepositoryInterface
     private const string TABLE = 'venues';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['venue_id', 'name', 'kind'];
+    private const array COLUMNS = [
+        'venue_id',
+        'name',
+        'kind',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -33,16 +37,16 @@ readonly class VenueRepository implements VenueRepositoryInterface
     #[Override]
     public function search(VenueSearchCriteria $criteria): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $this->buildSearchQuery($criteria)
-                    ->withSelect(self::COLUMNS)
-                    ->orderBy($criteria->sort->value, $criteria->order->value)
-                    ->orderBy('venue_id'),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $this
+                ->buildSearchQuery($criteria)
+                ->withSelect(self::COLUMNS)
+                ->orderBy($criteria->sort->value, $criteria->order->value)
+                ->orderBy('venue_id'),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -56,13 +60,13 @@ readonly class VenueRepository implements VenueRepositoryInterface
     #[Override]
     public function find(VenueId $venueId): ?Venue
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('venue_id', '=', $this->converter->toBin($venueId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('venue_id', '=', $this->converter->toBin($venueId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -76,12 +80,16 @@ readonly class VenueRepository implements VenueRepositoryInterface
             return [];
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('venue_id', 'IN', array_map(fn (VenueId $venueId): string => $this->converter->toBin($venueId->value), $venueIds)),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where(
+                'venue_id',
+                'IN',
+                array_map(fn (VenueId $venueId): string => $this->converter->toBin($venueId->value), $venueIds),
+            )
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -89,12 +97,12 @@ readonly class VenueRepository implements VenueRepositoryInterface
     #[Override]
     public function isUsed(VenueId $venueId): bool
     {
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from('event_venues')
-                ->where('venue_id', '=', $this->converter->toBin($venueId->value))
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+        $count = $this->queryFactory
+            ->select()
+            ->from('event_venues')
+            ->where('venue_id', '=', $this->converter->toBin($venueId->value))
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
 
         return $count > 0;
     }
@@ -104,7 +112,8 @@ readonly class VenueRepository implements VenueRepositoryInterface
     {
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, ['venue_id', 'name', 'kind', 'created_at', 'updated_at'])
             ->values([
                 $this->converter->toBin($venue->venueId->value),
@@ -114,12 +123,7 @@ readonly class VenueRepository implements VenueRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append(
-                'ON DUPLICATE KEY UPDATE '
-                    . '`name` = VALUES(`name`), '
-                    . '`kind` = VALUES(`kind`), '
-                    . '`updated_at` = VALUES(`updated_at`)',
-            )
+            ->append('ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `kind` = VALUES(`kind`), `updated_at` = VALUES(`updated_at`)')
             ->execute($this->queryFactory->pdo());
 
         return $venue;
@@ -128,7 +132,8 @@ readonly class VenueRepository implements VenueRepositoryInterface
     #[Override]
     public function delete(VenueId $venueId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('venue_id', '=', $this->converter->toBin($venueId->value))
             ->execute($this->queryFactory->pdo());
@@ -167,10 +172,14 @@ readonly class VenueRepository implements VenueRepositoryInterface
 
     private function toVenueKindValue(string $kind): int
     {
-        return is_numeric($kind) ? (int)$kind : match ($kind) {
-            'physical' => VenueKind::Physical->value,
-            'online' => VenueKind::Online->value,
-            default => throw new UnexpectedValueException('開催先種別が不正です。'),
-        };
+        return (
+            is_numeric($kind)
+                ? (int)$kind
+                : match ($kind) {
+                    'physical' => VenueKind::Physical->value,
+                    'online' => VenueKind::Online->value,
+                    default => throw new UnexpectedValueException('開催先種別が不正です。'),
+                }
+        );
     }
 }

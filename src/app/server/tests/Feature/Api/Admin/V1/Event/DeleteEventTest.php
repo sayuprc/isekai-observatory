@@ -28,12 +28,16 @@ class DeleteEventTest extends DatabaseTestCase
         $eventId = $this->generateUuid();
         $this->storeEvents($this->createEvent($eventId, title: '削除できる活動'));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(EventRouteMap::Delete, $eventId))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertAuditLogCount(1);
-        $this->assertSame('削除できる活動', $this->findAuditLog(AuditAction::Delete, AuditTargetType::Event, $eventId)['snapshot']['title']);
+        $this->assertSame(
+            '削除できる活動',
+            $this->findAuditLog(AuditAction::Delete, AuditTargetType::Event, $eventId)['snapshot']['title'],
+        );
     }
 
     #[Test]
@@ -42,6 +46,6 @@ class DeleteEventTest extends DatabaseTestCase
         $eventId = $this->generateUuid();
         $this->storeEvents($this->createEvent($eventId, title: '延期元活動', status: EventStatus::Postponed));
 
-        $this->withAuth()->delete(route(EventRouteMap::Delete, $eventId))->assertStatus(204);
+        $this->withAuth()->delete(route(EventRouteMap::Delete, $eventId))->assertNoContent();
     }
 }

@@ -30,8 +30,10 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
     {
         [$songId] = $this->storeEventWithReferences();
 
-        $this->withAuth()->delete(route(SongRouteMap::Delete, $songId))
-            ->assertStatus(400)
+        $this
+            ->withAuth()
+            ->delete(route(SongRouteMap::Delete, $songId))
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -40,8 +42,10 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
     {
         [, $personId] = $this->storeEventWithReferences();
 
-        $this->withAuth()->delete(route(PersonRouteMap::Delete, $personId))
-            ->assertStatus(400)
+        $this
+            ->withAuth()
+            ->delete(route(PersonRouteMap::Delete, $personId))
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -50,8 +54,10 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
     {
         [, , $venueId] = $this->storeEventWithReferences();
 
-        $this->withAuth()->delete(route(VenueRouteMap::Delete, $venueId))
-            ->assertStatus(400)
+        $this
+            ->withAuth()
+            ->delete(route(VenueRouteMap::Delete, $venueId))
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -60,8 +66,10 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
     {
         [, , , $mediaId] = $this->storeEventWithReferences();
 
-        $this->withAuth()->delete(route(MediaRouteMap::Delete, $mediaId))
-            ->assertStatus(400)
+        $this
+            ->withAuth()
+            ->delete(route(MediaRouteMap::Delete, $mediaId))
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -70,8 +78,10 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
     {
         [, , , , $releaseId] = $this->storeEventWithReferences();
 
-        $this->withAuth()->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(400)
+        $this
+            ->withAuth()
+            ->delete(route(ReleaseRouteMap::Delete, $releaseId))
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 
@@ -89,15 +99,35 @@ class ReferencedEntityDeleteTest extends DatabaseTestCase
         $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
         $this->storePersons($this->createPerson($personId, '共演者', 1));
         $this->storeVenues($this->createVenue($venueId, '会場', VenueKind::Physical));
-        $this->storeMedia($this->createMedia($mediaId, '配信', 'https://example.com/stream', MediaType::LiveStream, true));
-        $this->storeReleaseGroups($this->createReleaseGroup($releaseGroupId, 'ライブ映像作品', ReleaseGroupType::Other));
+        $this->storeMedia($this->createMedia(
+            $mediaId,
+            '配信',
+            'https://example.com/stream',
+            MediaType::LiveStream,
+            true,
+        ));
+        $this->storeReleaseGroups($this->createReleaseGroup(
+            $releaseGroupId,
+            'ライブ映像作品',
+            ReleaseGroupType::Other,
+        ));
         $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, 'Blu-ray', true));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
             venues: [['venueId' => $venueId, 'orderNo' => 1]],
             media: [['mediaId' => $mediaId, 'orderNo' => 1]],
             releases: [['releaseId' => $releaseId, 'orderNo' => 1]],
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1]]]],
+            performances: [[
+                'performanceId' => $performanceId,
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [[
+                    'personId' => $personId,
+                    'creditName' => null,
+                    'personGroupId' => null,
+                    'orderNo' => 1,
+                ]],
+            ]],
         ));
 
         return [$songId, $personId, $venueId, $mediaId, $releaseId];

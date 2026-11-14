@@ -168,8 +168,9 @@ class ListSongTest extends DatabaseTestCase
             ),
         );
 
-        $response = $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $response = $this
+            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -208,8 +209,9 @@ class ListSongTest extends DatabaseTestCase
 
         $this->assertIsString($cursor);
 
-        $this->get(route(ViewerSongRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerSongRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -262,8 +264,9 @@ class ListSongTest extends DatabaseTestCase
     #[DataProvider('provideInvalidCursors')]
     public function rejectsInvalidCursor(string $cursor): void
     {
-        $this->get(route(ViewerSongRouteMap::List, ['cursor' => $cursor]))
-            ->assertStatus(400)
+        $this
+            ->get(route(ViewerSongRouteMap::List, ['cursor' => $cursor]))
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'カーソルが不正です。',

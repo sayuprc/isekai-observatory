@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PerPage
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * PerPage Class Doc Comment
  *
  * @category Class
+ *
  * @description 1ページあたりの件数
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum PerPage: int
@@ -54,7 +62,4 @@ enum PerPage: int
      * 100 件
      */
     case ONE_HUNDRED = 100;
-
 }
-
-

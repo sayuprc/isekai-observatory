@@ -24,9 +24,10 @@ class GetPersonTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($uuid, 'テスト人物', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(PersonRouteMap::Get, $uuid))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'person' => [
                     'personId' => $uuid,
@@ -39,8 +40,9 @@ class GetPersonTest extends DatabaseTestCase
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(PersonRouteMap::Get, $this->generateUuid()))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

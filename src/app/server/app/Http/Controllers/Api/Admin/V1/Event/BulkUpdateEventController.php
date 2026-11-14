@@ -12,12 +12,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
 
-class BulkUpdateEventController extends Controller
+final readonly class BulkUpdateEventController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly BulkUpdateUseCase $useCase,
-        private readonly BulkUpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private BulkUpdateUseCase $useCase,
+        private BulkUpdatePresenter $presenter,
     ) {
     }
 

@@ -10,23 +10,21 @@ use Auth\Application\Admin\UseCase\RegisterStart\RegisterStartInputData;
 use Auth\Application\Admin\UseCase\RegisterStart\RegisterStartUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Support\Contracts\MapperInterface;
 
-class RegisterStartController extends Controller
+final readonly class RegisterStartController extends Controller
 {
     public function __construct(
-        private readonly RegisterStartUseCase $registerStartUseCase,
-        private readonly RegisterStartPresenter $presenter,
+        private MapperInterface $mapper,
+        private RegisterStartUseCase $useCase,
+        private RegisterStartPresenter $presenter,
     ) {
     }
 
     public function handle(Request $request): JsonResponse
     {
-        $inputData = new RegisterStartInputData(
-            $request->string('token')->toString(),
-            $request->string('email')->toString(),
-            $request->string('name')->toString(),
-        );
-
-        return $this->presenter->present($this->registerStartUseCase->handle($inputData));
+        return $this->mapper->map(RegisterStartInputData::class, $request->all())
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

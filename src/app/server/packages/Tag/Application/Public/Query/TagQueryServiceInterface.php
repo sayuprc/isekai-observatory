@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tag\Application\Public\Query;
 
+use SensitiveParameter;
+
 interface TagQueryServiceInterface
 {
-    public function list(?string $pageToken, int $pageSize): TagListPage;
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): TagListPage;
 }

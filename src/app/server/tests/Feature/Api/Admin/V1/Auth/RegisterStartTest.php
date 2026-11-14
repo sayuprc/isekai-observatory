@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
+use SensitiveParameter;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 
@@ -39,13 +40,16 @@ class RegisterStartTest extends DatabaseTestCase
         $this->bindPasskeyAuthenticator();
         $this->saveToken('plain-token', 'invitee@example.com');
 
-        $this->postJson(route(AuthRouteMap::RegisterStart), [
-            'token' => 'plain-token',
-            'email' => 'invitee@example.com',
-            'name' => '新規ユーザー',
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::RegisterStart), [
+                'token' => 'plain-token',
+                'email' => 'invitee@example.com',
+                'name' => '新規ユーザー',
+            ])
+            ->assertOk()
             ->assertJson(
-                static fn (AssertableJson $json) => $json->whereType('authCeremonyId', 'string')
+                static fn (AssertableJson $json) => $json
+                    ->whereType('authCeremonyId', 'string')
                     ->where('publicKey.challenge', 'challenge')
                     ->etc(),
             );
@@ -66,7 +70,7 @@ class RegisterStartTest extends DatabaseTestCase
             'token' => 'wrong-token',
             'email' => 'invitee@example.com',
             'name' => '新規ユーザー',
-        ])->assertStatus(400);
+        ])->assertBadRequest();
 
         $this->assertSame(0, DB::table('admin_users')->count());
         $token = DB::table('admin_user_registration_tokens')->first();
@@ -78,16 +82,18 @@ class RegisterStartTest extends DatabaseTestCase
     public function failsWithEmailCollision(): void
     {
         $this->bindPasskeyAuthenticator();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($this->generateUuid(), 'invitee@example.com'),
-        );
+        $this->app
+            ->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($this->generateUuid(), 'invitee@example.com'),
+            );
         $this->saveToken('plain-token', 'invitee@example.com');
 
         $this->postJson(route(AuthRouteMap::RegisterStart), [
             'token' => 'plain-token',
             'email' => 'invitee@example.com',
             'name' => '新規ユーザー',
-        ])->assertStatus(400);
+        ])->assertBadRequest();
 
         $this->assertSame(1, DB::table('admin_users')->count());
         $token = DB::table('admin_user_registration_tokens')->first();
@@ -104,7 +110,7 @@ class RegisterStartTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RegisterStart), [
             'email' => 'invitee@example.com',
             'name' => '新規ユーザー',
-        ])->assertStatus(422);
+        ])->assertUnprocessable();
 
         $this->assertSame(0, DB::table('admin_users')->count());
         $token = DB::table('admin_user_registration_tokens')->first();
@@ -115,8 +121,12 @@ class RegisterStartTest extends DatabaseTestCase
     private function bindPasskeyAuthenticator(): void
     {
         $this->app->bind(PasskeyAuthenticatorInterface::class, static fn (): PasskeyAuthenticatorInterface => new class () implements PasskeyAuthenticatorInterface {
-            public function startRegistration(string $userHandle, string $userName, string $displayName, array $excludePasskeys = []): PasskeyStartResult
-            {
+            public function startRegistration(
+                string $userHandle,
+                string $userName,
+                string $displayName,
+                array $excludePasskeys = [],
+            ): PasskeyStartResult {
                 return new PasskeyStartResult('{"challenge":"challenge"}', ['challenge' => 'challenge']);
             }
 
@@ -135,25 +145,31 @@ class RegisterStartTest extends DatabaseTestCase
                 throw new RuntimeException('unused');
             }
 
-            public function finishAuthentication(array $credential, string $optionsJson, AdminUserPasskey $passkey, string $userHandle): PasskeyAuthenticationResult
-            {
+            public function finishAuthentication(
+                array $credential,
+                string $optionsJson,
+                AdminUserPasskey $passkey,
+                string $userHandle,
+            ): PasskeyAuthenticationResult {
                 throw new RuntimeException('unused');
             }
         });
     }
 
-    private function saveToken(string $plainToken, string $email): void
+    private function saveToken(#[SensitiveParameter] string $plainToken, string $email): void
     {
         $hashedToken = $this->app->make(TokenHasherInterface::class)->hash($plainToken);
 
-        $this->app->make(RegistrationTokenRepositoryInterface::class)->save(new RegistrationToken(
-            new RegistrationTokenId($this->generateUuid()),
-            new HashedTokenValue($hashedToken),
-            new Email($email),
-            Role::General,
-            Permissions::reconstruct([]),
-            new ExpiredAt(new DateTimeImmutable('+7 days')),
-            ConsumptionStatus::Unused,
-        ));
+        $this->app
+            ->make(RegistrationTokenRepositoryInterface::class)
+            ->save(new RegistrationToken(
+                new RegistrationTokenId($this->generateUuid()),
+                new HashedTokenValue($hashedToken),
+                new Email($email),
+                Role::General,
+                Permissions::reconstruct([]),
+                new ExpiredAt(new DateTimeImmutable('+7 days')),
+                ConsumptionStatus::Unused,
+            ));
     }
 }

@@ -31,7 +31,8 @@ class UpdateEventTest extends DatabaseTestCase
         $this->storeEvents($this->createEvent($eventId));
 
         $performanceId = $this->generateUuid();
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(EventRouteMap::Update, ['eventId' => $eventId]), [
                 'title' => '更新後のライブ',
                 'description' => '説明',
@@ -44,18 +45,35 @@ class UpdateEventTest extends DatabaseTestCase
                 'media' => [],
                 'releases' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
-                'setlist' => [['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => null, 'performanceIds' => [$performanceId]]],
+                'performances' => [
+                    [
+                        'performanceId' => $performanceId,
+                        'songId' => $songId,
+                        'orderNo' => 1,
+                        'coVocalists' => [],
+                    ],
+                ],
+                'setlist' => [
+                    [
+                        'setlistItemId' => $this->generateUuid(),
+                        'orderNo' => 1,
+                        'label' => null,
+                        'performanceIds' => [$performanceId],
+                    ],
+                ],
                 'tags' => [],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('event.eventId', $eventId)
             ->assertJsonPath('event.title', '更新後のライブ')
             ->assertJsonPath('event.note', '備考')
             ->assertJsonPath('event.schedule.endOn', '2026-10-02')
             ->assertJsonPath('event.setlist.0.performances.0.performanceId', $performanceId);
 
-        $this->assertSame('更新後のライブ', $this->findAuditLog(AuditAction::Update, AuditTargetType::Event, $eventId)['snapshot']['title']);
+        $this->assertSame(
+            '更新後のライブ',
+            $this->findAuditLog(AuditAction::Update, AuditTargetType::Event, $eventId)['snapshot']['title'],
+        );
     }
 
     #[Test]
@@ -66,7 +84,8 @@ class UpdateEventTest extends DatabaseTestCase
         $eventId = $this->generateUuid();
         $this->storeEvents($this->createEvent($eventId));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(EventRouteMap::Update, ['eventId' => $eventId]), [
                 'title' => '中止されたライブ',
                 'description' => '',
@@ -79,11 +98,18 @@ class UpdateEventTest extends DatabaseTestCase
                 'media' => [],
                 'releases' => [],
                 'sources' => [],
-                'performances' => [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
+                'performances' => [
+                    [
+                        'performanceId' => $this->generateUuid(),
+                        'songId' => $songId,
+                        'orderNo' => 1,
+                        'coVocalists' => [],
+                    ],
+                ],
                 'setlist' => [],
                 'tags' => [],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

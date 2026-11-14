@@ -18,6 +18,7 @@ use Mockery;
 use Mockery\MockInterface;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
+use SensitiveParameter;
 use Support\Contracts\TransactionInterface;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\Exceptions\UnauthenticatedException;
@@ -69,7 +70,7 @@ class RefreshUseCaseTest extends TestCase
                 return $this->test->getFoundRefreshToken();
             }
 
-            public function save(RefreshToken $refreshToken): RefreshToken
+            public function save(#[SensitiveParameter] RefreshToken $refreshToken): RefreshToken
             {
                 $this->test->recordSavedRefreshToken($refreshToken);
 
@@ -77,8 +78,7 @@ class RefreshUseCaseTest extends TestCase
             }
         };
 
-        $this->transaction->shouldReceive('scope')
-            ->andReturnUsing(static fn (callable $callback) => $callback());
+        $this->transaction->shouldReceive('scope')->andReturnUsing(static fn (callable $callback) => $callback());
     }
 
     #[Test]
@@ -104,7 +104,8 @@ class RefreshUseCaseTest extends TestCase
 
         $this->foundRefreshToken = $storedToken;
 
-        $this->refreshTokenIssueService->shouldReceive('issue')
+        $this->refreshTokenIssueService
+            ->shouldReceive('issue')
             ->with($adminUserId)
             ->andReturn([
                 'token' => $nextRefreshToken,
@@ -112,12 +113,14 @@ class RefreshUseCaseTest extends TestCase
             ])
             ->once();
 
-        $this->accessTokenIssueService->shouldReceive('issue')
+        $this->accessTokenIssueService
+            ->shouldReceive('issue')
             ->with($nextRefreshToken->refreshTokenId->value)
             ->andReturn($this->createAccessToken('access-token'))
             ->once();
 
-        $this->tokenHasher->shouldReceive('verify')
+        $this->tokenHasher
+            ->shouldReceive('verify')
             ->with($plainToken, $storedToken->token->value)
             ->andReturnTrue()
             ->once();
@@ -184,7 +187,7 @@ class RefreshUseCaseTest extends TestCase
         return $this->foundRefreshToken;
     }
 
-    public function recordSavedRefreshToken(RefreshToken $refreshToken): void
+    public function recordSavedRefreshToken(#[SensitiveParameter] RefreshToken $refreshToken): void
     {
         $this->savedRefreshTokens[] = $refreshToken;
     }

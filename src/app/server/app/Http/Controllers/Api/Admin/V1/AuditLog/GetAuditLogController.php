@@ -10,16 +10,18 @@ use Illuminate\Http\JsonResponse;
 use Support\UseCase\AuditLog\Get\GetInputData;
 use Support\UseCase\AuditLog\Get\GetUseCase;
 
-class GetAuditLogController extends Controller
+final readonly class GetAuditLogController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 
     public function handle(string $auditLogId): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle(new GetInputData($auditLogId)));
+        return new GetInputData($auditLogId)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

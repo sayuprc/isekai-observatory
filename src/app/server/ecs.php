@@ -10,7 +10,7 @@ return ECSConfig::configure()
         __DIR__ . '/app',
         __DIR__ . '/bootstrap',
         __DIR__ . '/config',
-        __DIR__ . '/database',
+        __DIR__ . '/Generated',
         __DIR__ . '/packages',
         __DIR__ . '/public',
         __DIR__ . '/routes',
@@ -202,17 +202,11 @@ return ECSConfig::configure()
         ],
     ])
     ->withSkip([
-        __DIR__ . '/Generated',
-
         __DIR__ . '/bootstrap/cache',
-
-        __DIR__ . '/baseline.php',
 
         \PhpCsFixer\Fixer\Import\FullyQualifiedStrictTypesFixer::class => [
             __DIR__ . '/ecs.php',
             __DIR__ . '/bootstrap/providers.php',
-            __DIR__ . '/app/Providers/EnvProviders',
-            __DIR__ . '/app/Providers/WebRequestServiceProvider.php',
             __DIR__ . '/config/valinor.php',
         ],
     ]);

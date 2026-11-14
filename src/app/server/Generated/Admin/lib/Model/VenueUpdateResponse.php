@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * VenueUpdateResponse
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,63 +33,71 @@
 
 namespace OpenAPI\Admin\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Admin\Client\ObjectSerializer;
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * VenueUpdateResponse Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class VenueUpdateResponse implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'VenueUpdateResponse';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
-        'venue' => '\OpenAPI\Admin\Client\Model\Venue'
+        'venue' => '\OpenAPI\Admin\Client\Model\Venue',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
-        'venue' => null
+        'venue' => null,
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
-        'venue' => false
+        'venue' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -109,8 +122,6 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -120,7 +131,7 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -130,7 +141,7 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -139,9 +150,6 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -150,9 +158,6 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -163,28 +168,28 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
-        'venue' => 'venue'
+        'venue' => 'venue',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
-        'venue' => 'setVenue'
+        'venue' => 'setVenue',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
-        'venue' => 'getVenue'
+        'venue' => 'getVenue',
     ];
 
     /**
@@ -228,19 +233,18 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -248,17 +252,17 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -277,6 +281,7 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
         if ($this->container['venue'] === null) {
             $invalidProperties[] = "'venue' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -291,11 +296,10 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
         return count($this->listInvalidProperties()) === 0;
     }
 
-
     /**
      * Gets venue
      *
-     * @return \OpenAPI\Admin\Client\Model\Venue
+     * @return Venue
      */
     public function getVenue()
     {
@@ -305,25 +309,24 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Sets venue
      *
-     * @param \OpenAPI\Admin\Client\Model\Venue $venue venue
+     * @param Venue $venue venue
      *
      * @return self
      */
     public function setVenue($venue)
     {
-        if (is_null($venue)) {
-            throw new \InvalidArgumentException('non-nullable venue cannot be null');
+        if ($venue === null) {
+            throw new InvalidArgumentException('non-nullable venue cannot be null');
         }
         $this->container['venue'] = $venue;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -333,11 +336,11 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -348,12 +351,10 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -363,9 +364,7 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -374,15 +373,16 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -394,7 +394,7 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -408,5 +408,3 @@ class VenueUpdateResponse implements ModelInterface, ArrayAccess, \JsonSerializa
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

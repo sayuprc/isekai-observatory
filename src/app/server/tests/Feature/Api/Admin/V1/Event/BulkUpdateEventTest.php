@@ -36,13 +36,15 @@ class BulkUpdateEventTest extends DatabaseTestCase
             $this->createEvent($second, tags: []),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(EventRouteMap::BulkUpdate), [
                 'eventIds' => [$first, $second],
                 'addTagIds' => [$addTagId],
                 'removeTagIds' => [$removeTagId],
                 'isDisplay' => false,
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(EventRepository::class);
@@ -64,11 +66,13 @@ class BulkUpdateEventTest extends DatabaseTestCase
         $existing = $this->generateUuid();
         $this->storeEvents($this->createEvent($existing, tags: []));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(EventRouteMap::BulkUpdate), [
                 'eventIds' => [$existing, $this->generateUuid()],
                 'isDisplay' => false,
-            ])->assertStatus(404);
+            ])
+            ->assertNotFound();
 
         $record = $this->app->make(EventRepository::class)->find(new EventId($existing));
         $this->assertTrue($record?->isDisplay);
@@ -80,8 +84,9 @@ class BulkUpdateEventTest extends DatabaseTestCase
         $id = $this->generateUuid();
         $this->storeEvents($this->createEvent($id, tags: []));
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->postJson(route(EventRouteMap::BulkUpdate), ['eventIds' => [$id], 'isDisplay' => false])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

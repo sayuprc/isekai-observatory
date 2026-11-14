@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * EventStatusValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * EventStatusValue Class Doc Comment
  *
  * @category Class
+ *
  * @description イベントの開催状態。通常・延期・中止を表す。予定・開催済みは開催時期から導出する
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum EventStatusValue: int
@@ -54,7 +62,4 @@ enum EventStatusValue: int
      * 中止
      */
     case CANCELLED = 3;
-
 }
-
-

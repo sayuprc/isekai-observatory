@@ -38,7 +38,8 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
             ],
         ], ['video-short-no-tag']);
 
-        $this->artisan('media:youtube:import')
+        $this
+            ->artisan('media:youtube:import')
             ->expectsOutput('テストチャンネル: 5 件取り込みました')
             ->assertSuccessful();
 
@@ -46,11 +47,31 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
         $this->assertCount(5, $rows);
 
         $expected = [
-            ['https://www.youtube.com/watch?v=video-mv', '【Official Music Video】テスト曲', MediaType::Mv, '2024-06-04 19:00:00'],
-            ['https://www.youtube.com/watch?v=video-short', 'テスト曲 #shorts', MediaType::Short, '2024-06-03 19:00:00'],
+            [
+                'https://www.youtube.com/watch?v=video-mv',
+                '【Official Music Video】テスト曲',
+                MediaType::Mv,
+                '2024-06-04 19:00:00',
+            ],
+            [
+                'https://www.youtube.com/watch?v=video-short',
+                'テスト曲 #shorts',
+                MediaType::Short,
+                '2024-06-03 19:00:00',
+            ],
             ['https://www.youtube.com/watch?v=video-short-no-tag', '縦型動画', MediaType::Short, '2024-06-03 18:00:00'],
-            ['https://www.youtube.com/watch?v=video-cover', '【歌ってみた】テストカバー', MediaType::AudioVideo, '2024-06-02 19:00:00'],
-            ['https://www.youtube.com/watch?v=video-other', '雑談配信アーカイブ', MediaType::Other, '2024-06-01 19:00:00'],
+            [
+                'https://www.youtube.com/watch?v=video-cover',
+                '【歌ってみた】テストカバー',
+                MediaType::AudioVideo,
+                '2024-06-02 19:00:00',
+            ],
+            [
+                'https://www.youtube.com/watch?v=video-other',
+                '雑談配信アーカイブ',
+                MediaType::Other,
+                '2024-06-01 19:00:00',
+            ],
         ];
 
         foreach ($expected as $i => [$url, $title, $type, $publishedAt]) {
@@ -82,15 +103,19 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
             ],
         ]);
 
-        $this->artisan('media:youtube:import')
+        $this
+            ->artisan('media:youtube:import')
             ->expectsOutput('テストチャンネル: 1 件取り込みました')
             ->assertSuccessful();
 
         $urls = DB::table('media')->pluck('url')->all();
-        $this->assertEqualsCanonicalizing([
-            'https://www.youtube.com/watch?v=video-saved',
-            'https://www.youtube.com/watch?v=video-new',
-        ], $urls);
+        $this->assertEqualsCanonicalizing(
+            [
+                'https://www.youtube.com/watch?v=video-saved',
+                'https://www.youtube.com/watch?v=video-new',
+            ],
+            $urls,
+        );
     }
 
     #[Test]
@@ -100,7 +125,8 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
 
         $this->fakeVideoQueryService([]);
 
-        $this->artisan('media:youtube:import')
+        $this
+            ->artisan('media:youtube:import')
             ->expectsOutput(sprintf('テストチャンネル: チャンネルが見つかりませんでした (%s)', self::CHANNEL_ID))
             ->assertSuccessful();
 
@@ -112,7 +138,8 @@ class ImportYouTubeCommandTest extends DatabaseTestCase
     {
         $this->fakeVideoQueryService([]);
 
-        $this->artisan('media:youtube:import')
+        $this
+            ->artisan('media:youtube:import')
             ->expectsOutput('チャンネルが登録されていません')
             ->assertSuccessful();
 

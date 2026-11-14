@@ -40,8 +40,9 @@ class ListMediaTest extends DatabaseTestCase
             $this->createMedia($this->generateUuid(), '非公開 MV', 'https://example.com/private', MediaType::Mv, false),
         );
 
-        $this->get(route(PublicMediaRouteMap::List))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicMediaRouteMap::List))
+            ->assertOk()
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.mediaId', $mediaId)
             ->assertJsonPath('items.0.title', '公開 MV')
@@ -61,12 +62,14 @@ class ListMediaTest extends DatabaseTestCase
             $this->createMedia($firstId, 'A 配信', 'https://example.com/a', MediaType::LiveStream, true),
         );
 
-        $first = $this->get(route(PublicMediaRouteMap::List, ['pageSize' => 1]))
-            ->assertStatus(200)
+        $first = $this
+            ->get(route(PublicMediaRouteMap::List, ['pageSize' => 1]))
+            ->assertOk()
             ->assertJsonPath('items.0.mediaId', $firstId);
 
-        $this->get(route(PublicMediaRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicMediaRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+            ->assertOk()
             ->assertJsonPath('items.0.mediaId', $secondId)
             ->assertJsonMissingPath('nextPageToken');
     }

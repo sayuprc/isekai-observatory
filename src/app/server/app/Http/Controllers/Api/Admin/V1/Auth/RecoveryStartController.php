@@ -10,23 +10,21 @@ use Auth\Application\Admin\UseCase\Recovery\RecoveryStartInputData;
 use Auth\Application\Admin\UseCase\Recovery\RecoveryStartUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Support\Contracts\MapperInterface;
 
-class RecoveryStartController extends Controller
+final readonly class RecoveryStartController extends Controller
 {
     public function __construct(
-        private readonly RecoveryStartUseCase $recoveryStartUseCase,
-        private readonly RecoveryStartPresenter $presenter,
+        private MapperInterface $mapper,
+        private RecoveryStartUseCase $useCase,
+        private RecoveryStartPresenter $presenter,
     ) {
     }
 
     public function handle(Request $request): JsonResponse
     {
-        $inputData = new RecoveryStartInputData(
-            $request->string('email')->toString(),
-            $request->string('recoveryCode')->toString(),
-            $request->string('name')->toString(),
-        );
-
-        return $this->presenter->present($this->recoveryStartUseCase->handle($inputData));
+        return $this->mapper->map(RecoveryStartInputData::class, $request->all())
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

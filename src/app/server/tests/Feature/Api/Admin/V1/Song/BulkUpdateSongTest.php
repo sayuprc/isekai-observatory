@@ -33,17 +33,21 @@ class BulkUpdateSongTest extends DatabaseTestCase
         $second = $this->generateUuid();
         $this->storeTags($this->createTag($addTagId, 'タグA', 10), $this->createTag($removeTagId, 'タグB', 20));
         $this->storeSongs(
-            $this->createSong($first, '曲名', '説明', 'https://example.com/l', SongType::Original, true, 1, [['tagId' => $removeTagId]]),
+            $this->createSong($first, '曲名', '説明', 'https://example.com/l', SongType::Original, true, 1, [[
+                'tagId' => $removeTagId,
+            ]]),
             $this->createSong($second, '曲名', '説明', 'https://example.com/l', SongType::Original, true, 1, []),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::BulkUpdate), [
                 'songIds' => [$first, $second],
                 'addTagIds' => [$addTagId],
                 'removeTagIds' => [$removeTagId],
                 'isDisplay' => false,
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertExactJson(['updatedCount' => 2]);
 
         $repository = $this->app->make(SongRepository::class);
@@ -63,13 +67,24 @@ class BulkUpdateSongTest extends DatabaseTestCase
     public function nothingChangesWhenAnyRecordDoesNotExist(): void
     {
         $existing = $this->generateUuid();
-        $this->storeSongs($this->createSong($existing, '曲名', '説明', 'https://example.com/l', SongType::Original, true, 1, []));
+        $this->storeSongs($this->createSong(
+            $existing,
+            '曲名',
+            '説明',
+            'https://example.com/l',
+            SongType::Original,
+            true,
+            1,
+            [],
+        ));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::BulkUpdate), [
                 'songIds' => [$existing, $this->generateUuid()],
                 'isDisplay' => false,
-            ])->assertStatus(404);
+            ])
+            ->assertNotFound();
 
         $record = $this->app->make(SongRepository::class)->find(new SongId($existing));
         $this->assertTrue($record?->isDisplay);
@@ -79,10 +94,20 @@ class BulkUpdateSongTest extends DatabaseTestCase
     public function generalUserCannotBulkUpdate(): void
     {
         $id = $this->generateUuid();
-        $this->storeSongs($this->createSong($id, '曲名', '説明', 'https://example.com/l', SongType::Original, true, 1, []));
+        $this->storeSongs($this->createSong(
+            $id,
+            '曲名',
+            '説明',
+            'https://example.com/l',
+            SongType::Original,
+            true,
+            1,
+            [],
+        ));
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->postJson(route(SongRouteMap::BulkUpdate), ['songIds' => [$id], 'isDisplay' => false])
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 }

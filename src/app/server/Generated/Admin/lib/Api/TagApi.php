@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * TagApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -30,24 +35,41 @@ namespace OpenAPI\Admin\Client\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Admin\Client\ApiException;
+use OpenAPI\Admin\Client\Configuration;
+use OpenAPI\Admin\Client\HeaderSelector;
+use OpenAPI\Admin\Client\Model\ErrorResponse;
+use OpenAPI\Admin\Client\Model\TagCreateRequest;
+use OpenAPI\Admin\Client\Model\TagCreateResponse;
+use OpenAPI\Admin\Client\Model\TagGetResponse;
+use OpenAPI\Admin\Client\Model\TagListResponse;
+use OpenAPI\Admin\Client\Model\TagSearchResponse;
+use OpenAPI\Admin\Client\Model\TagUpdateRequest;
+use OpenAPI\Admin\Client\Model\TagUpdateResponse;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use OpenAPIAdminClientModelPerPage;
+use OpenAPIAdminClientModelSortOrder;
+use OpenAPIAdminClientModelTagSearchSortBy;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Admin\Client\ApiException;
-use OpenAPI\Admin\Client\Configuration;
-use OpenAPI\Admin\Client\FormDataProcessor;
-use OpenAPI\Admin\Client\HeaderSelector;
-use OpenAPI\Admin\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * TagApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class TagApi
@@ -72,7 +94,7 @@ class TagApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'tagServiceCreateTag' => [
             'application/json',
@@ -95,16 +117,13 @@ class TagApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -143,58 +162,66 @@ class TagApi
     /**
      * Operation tagServiceCreateTag
      *
-     * @param  \OpenAPI\Admin\Client\Model\TagCreateRequest $tag_create_request tag_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
+     * @param TagCreateRequest $tag_create_request tag_create_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\TagCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return TagCreateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function tagServiceCreateTag($tag_create_request, string $contentType = self::contentTypes['tagServiceCreateTag'][0])
-    {
+    public function tagServiceCreateTag(
+        $tag_create_request,
+        string $contentType = self::contentTypes['tagServiceCreateTag'][0],
+    ) {
         list($response) = $this->tagServiceCreateTagWithHttpInfo($tag_create_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation tagServiceCreateTagWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\TagCreateRequest $tag_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
+     * @param TagCreateRequest $tag_create_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\TagCreateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function tagServiceCreateTagWithHttpInfo($tag_create_request, string $contentType = self::contentTypes['tagServiceCreateTag'][0])
-    {
+    public function tagServiceCreateTagWithHttpInfo(
+        $tag_create_request,
+        string $contentType = self::contentTypes['tagServiceCreateTag'][0],
+    ) {
         $request = $this->tagServiceCreateTagRequest($tag_create_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\TagCreateResponse',
@@ -233,18 +260,16 @@ class TagApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -259,52 +284,57 @@ class TagApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\TagCreateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -313,44 +343,50 @@ class TagApi
     /**
      * Operation tagServiceCreateTagAsync
      *
-     * @param  \OpenAPI\Admin\Client\Model\TagCreateRequest $tag_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
+     * @param TagCreateRequest $tag_create_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceCreateTagAsync($tag_create_request, string $contentType = self::contentTypes['tagServiceCreateTag'][0])
-    {
+    public function tagServiceCreateTagAsync(
+        $tag_create_request,
+        string $contentType = self::contentTypes['tagServiceCreateTag'][0],
+    ) {
         return $this->tagServiceCreateTagAsyncWithHttpInfo($tag_create_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation tagServiceCreateTagAsyncWithHttpInfo
      *
-     * @param  \OpenAPI\Admin\Client\Model\TagCreateRequest $tag_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
+     * @param TagCreateRequest $tag_create_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceCreateTagAsyncWithHttpInfo($tag_create_request, string $contentType = self::contentTypes['tagServiceCreateTag'][0])
-    {
+    public function tagServiceCreateTagAsyncWithHttpInfo(
+        $tag_create_request,
+        string $contentType = self::contentTypes['tagServiceCreateTag'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\TagCreateResponse';
         $request = $this->tagServiceCreateTagRequest($tag_create_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -359,7 +395,7 @@ class TagApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -367,45 +403,45 @@ class TagApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'tagServiceCreateTag'
      *
-     * @param  \OpenAPI\Admin\Client\Model\TagCreateRequest $tag_create_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
+     * @param TagCreateRequest $tag_create_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceCreateTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function tagServiceCreateTagRequest($tag_create_request, string $contentType = self::contentTypes['tagServiceCreateTag'][0])
-    {
-
+    public function tagServiceCreateTagRequest(
+        $tag_create_request,
+        string $contentType = self::contentTypes['tagServiceCreateTag'][0],
+    ) {
         // verify the required parameter 'tag_create_request' is set
-        if ($tag_create_request === null || (is_array($tag_create_request) && count($tag_create_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $tag_create_request when calling tagServiceCreateTag'
-            );
+        if ($tag_create_request === null || is_array($tag_create_request) && count($tag_create_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $tag_create_request when calling tagServiceCreateTag');
         }
-
 
         $resourcePath = '/tags';
         $formParams = [];
@@ -414,24 +450,23 @@ class TagApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($tag_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($tag_create_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($tag_create_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $tag_create_request;
@@ -444,19 +479,18 @@ class TagApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -465,7 +499,7 @@ class TagApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -477,27 +511,29 @@ class TagApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation tagServiceDeleteTag
      *
-     * @param  string $tag_id tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
+     * @param string $tag_id      tag_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return void
      */
     public function tagServiceDeleteTag($tag_id, string $contentType = self::contentTypes['tagServiceDeleteTag'][0])
@@ -508,40 +544,44 @@ class TagApi
     /**
      * Operation tagServiceDeleteTagWithHttpInfo
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function tagServiceDeleteTagWithHttpInfo($tag_id, string $contentType = self::contentTypes['tagServiceDeleteTag'][0])
-    {
+    public function tagServiceDeleteTagWithHttpInfo(
+        $tag_id,
+        string $contentType = self::contentTypes['tagServiceDeleteTag'][0],
+    ) {
         $request = $this->tagServiceDeleteTagRequest($tag_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
-
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
@@ -550,44 +590,48 @@ class TagApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -596,40 +640,46 @@ class TagApi
     /**
      * Operation tagServiceDeleteTagAsync
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceDeleteTagAsync($tag_id, string $contentType = self::contentTypes['tagServiceDeleteTag'][0])
-    {
+    public function tagServiceDeleteTagAsync(
+        $tag_id,
+        string $contentType = self::contentTypes['tagServiceDeleteTag'][0],
+    ) {
         return $this->tagServiceDeleteTagAsyncWithHttpInfo($tag_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation tagServiceDeleteTagAsyncWithHttpInfo
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceDeleteTagAsyncWithHttpInfo($tag_id, string $contentType = self::contentTypes['tagServiceDeleteTag'][0])
-    {
+    public function tagServiceDeleteTagAsyncWithHttpInfo(
+        $tag_id,
+        string $contentType = self::contentTypes['tagServiceDeleteTag'][0],
+    ) {
         $returnType = '';
         $request = $this->tagServiceDeleteTagRequest($tag_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -637,45 +687,45 @@ class TagApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'tagServiceDeleteTag'
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceDeleteTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function tagServiceDeleteTagRequest($tag_id, string $contentType = self::contentTypes['tagServiceDeleteTag'][0])
-    {
-
+    public function tagServiceDeleteTagRequest(
+        $tag_id,
+        string $contentType = self::contentTypes['tagServiceDeleteTag'][0],
+    ) {
         // verify the required parameter 'tag_id' is set
-        if ($tag_id === null || (is_array($tag_id) && count($tag_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $tag_id when calling tagServiceDeleteTag'
-            );
+        if ($tag_id === null || is_array($tag_id) && count($tag_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $tag_id when calling tagServiceDeleteTag');
         }
-
 
         $resourcePath = '/tags/{tagId}';
         $formParams = [];
@@ -684,22 +734,19 @@ class TagApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($tag_id !== null) {
             $resourcePath = str_replace(
                 '{tagId}',
                 ObjectSerializer::toPathValue($tag_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -711,19 +758,18 @@ class TagApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -732,7 +778,7 @@ class TagApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -744,74 +790,81 @@ class TagApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'DELETE',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation tagServiceGetTag
      *
-     * @param  string $tag_id tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
+     * @param string $tag_id      tag_id (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\TagGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return TagGetResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
     public function tagServiceGetTag($tag_id, string $contentType = self::contentTypes['tagServiceGetTag'][0])
     {
         list($response) = $this->tagServiceGetTagWithHttpInfo($tag_id, $contentType);
+
         return $response;
     }
 
     /**
      * Operation tagServiceGetTagWithHttpInfo
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\TagGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function tagServiceGetTagWithHttpInfo($tag_id, string $contentType = self::contentTypes['tagServiceGetTag'][0])
-    {
+    public function tagServiceGetTagWithHttpInfo(
+        $tag_id,
+        string $contentType = self::contentTypes['tagServiceGetTag'][0],
+    ) {
         $request = $this->tagServiceGetTagRequest($tag_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\TagGetResponse',
@@ -850,18 +903,16 @@ class TagApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -876,52 +927,57 @@ class TagApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\TagGetResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -930,44 +986,48 @@ class TagApi
     /**
      * Operation tagServiceGetTagAsync
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
     public function tagServiceGetTagAsync($tag_id, string $contentType = self::contentTypes['tagServiceGetTag'][0])
     {
         return $this->tagServiceGetTagAsyncWithHttpInfo($tag_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation tagServiceGetTagAsyncWithHttpInfo
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceGetTagAsyncWithHttpInfo($tag_id, string $contentType = self::contentTypes['tagServiceGetTag'][0])
-    {
+    public function tagServiceGetTagAsyncWithHttpInfo(
+        $tag_id,
+        string $contentType = self::contentTypes['tagServiceGetTag'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\TagGetResponse';
         $request = $this->tagServiceGetTagRequest($tag_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -976,7 +1036,7 @@ class TagApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -984,45 +1044,43 @@ class TagApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'tagServiceGetTag'
      *
-     * @param  string $tag_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
+     * @param string $tag_id      (required)
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceGetTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
     public function tagServiceGetTagRequest($tag_id, string $contentType = self::contentTypes['tagServiceGetTag'][0])
     {
-
         // verify the required parameter 'tag_id' is set
-        if ($tag_id === null || (is_array($tag_id) && count($tag_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $tag_id when calling tagServiceGetTag'
-            );
+        if ($tag_id === null || is_array($tag_id) && count($tag_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $tag_id when calling tagServiceGetTag');
         }
-
 
         $resourcePath = '/tags/{tagId}';
         $formParams = [];
@@ -1031,22 +1089,19 @@ class TagApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($tag_id !== null) {
             $resourcePath = str_replace(
                 '{tagId}',
                 ObjectSerializer::toPathValue($tag_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1058,19 +1113,18 @@ class TagApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1079,7 +1133,7 @@ class TagApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1091,41 +1145,45 @@ class TagApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation tagServiceListTags
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\TagListResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return TagListResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
     public function tagServiceListTags(string $contentType = self::contentTypes['tagServiceListTags'][0])
     {
         list($response) = $this->tagServiceListTagsWithHttpInfo($contentType);
+
         return $response;
     }
 
     /**
      * Operation tagServiceListTagsWithHttpInfo
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\TagListResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function tagServiceListTagsWithHttpInfo(string $contentType = self::contentTypes['tagServiceListTags'][0])
@@ -1134,29 +1192,30 @@ class TagApi
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\TagListResponse',
@@ -1183,18 +1242,16 @@ class TagApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1209,36 +1266,39 @@ class TagApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\TagListResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1247,28 +1307,30 @@ class TagApi
     /**
      * Operation tagServiceListTagsAsync
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
     public function tagServiceListTagsAsync(string $contentType = self::contentTypes['tagServiceListTags'][0])
     {
         return $this->tagServiceListTagsAsyncWithHttpInfo($contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation tagServiceListTagsAsyncWithHttpInfo
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
     public function tagServiceListTagsAsyncWithHttpInfo(string $contentType = self::contentTypes['tagServiceListTags'][0])
     {
@@ -1278,11 +1340,11 @@ class TagApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1291,7 +1353,7 @@ class TagApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1299,38 +1361,38 @@ class TagApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'tagServiceListTags'
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceListTags'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
     public function tagServiceListTagsRequest(string $contentType = self::contentTypes['tagServiceListTags'][0])
     {
-
-
         $resourcePath = '/tags';
         $formParams = [];
         $queryParams = [];
@@ -1338,14 +1400,10 @@ class TagApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1357,19 +1415,18 @@ class TagApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1378,7 +1435,7 @@ class TagApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1390,82 +1447,99 @@ class TagApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation tagServiceSearchTags
      *
-     * @param  string|null $name name (optional)
-     * @param  \OpenAPIAdminClientModelTagSearchSortBy|null $sort sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order order (optional, default to 'asc')
-     * @param  Int|null $page page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
+     * @param string|null                                 $name        name (optional)
+     * @param OpenAPIAdminClientModelTagSearchSortBy|null $sort        sort (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null       $order       order (optional, default to 'asc')
+     * @param int|null                                    $page        page (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null         $per_page    per_page (optional, default to 50)
+     * @param string                                      $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\TagSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return TagSearchResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function tagServiceSearchTags($name = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['tagServiceSearchTags'][0])
-    {
+    public function tagServiceSearchTags(
+        $name = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['tagServiceSearchTags'][0],
+    ) {
         list($response) = $this->tagServiceSearchTagsWithHttpInfo($name, $sort, $order, $page, $per_page, $contentType);
+
         return $response;
     }
 
     /**
      * Operation tagServiceSearchTagsWithHttpInfo
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPIAdminClientModelTagSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
+     * @param string|null                                 $name        (optional)
+     * @param OpenAPIAdminClientModelTagSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null       $order       (optional, default to 'asc')
+     * @param int|null                                    $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null         $per_page    (optional, default to 50)
+     * @param string                                      $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\TagSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function tagServiceSearchTagsWithHttpInfo($name = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['tagServiceSearchTags'][0])
-    {
+    public function tagServiceSearchTagsWithHttpInfo(
+        $name = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['tagServiceSearchTags'][0],
+    ) {
         $request = $this->tagServiceSearchTagsRequest($name, $sort, $order, $page, $per_page, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\TagSearchResponse',
@@ -1492,18 +1566,16 @@ class TagApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1518,36 +1590,39 @@ class TagApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\TagSearchResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1556,52 +1631,66 @@ class TagApi
     /**
      * Operation tagServiceSearchTagsAsync
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPIAdminClientModelTagSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
+     * @param string|null                                 $name        (optional)
+     * @param OpenAPIAdminClientModelTagSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null       $order       (optional, default to 'asc')
+     * @param int|null                                    $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null         $per_page    (optional, default to 50)
+     * @param string                                      $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceSearchTagsAsync($name = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['tagServiceSearchTags'][0])
-    {
+    public function tagServiceSearchTagsAsync(
+        $name = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['tagServiceSearchTags'][0],
+    ) {
         return $this->tagServiceSearchTagsAsyncWithHttpInfo($name, $sort, $order, $page, $per_page, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation tagServiceSearchTagsAsyncWithHttpInfo
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPIAdminClientModelTagSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
+     * @param string|null                                 $name        (optional)
+     * @param OpenAPIAdminClientModelTagSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null       $order       (optional, default to 'asc')
+     * @param int|null                                    $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null         $per_page    (optional, default to 50)
+     * @param string                                      $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceSearchTagsAsyncWithHttpInfo($name = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['tagServiceSearchTags'][0])
-    {
+    public function tagServiceSearchTagsAsyncWithHttpInfo(
+        $name = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['tagServiceSearchTags'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\TagSearchResponse';
         $request = $this->tagServiceSearchTagsRequest($name, $sort, $order, $page, $per_page, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -1610,7 +1699,7 @@ class TagApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -1618,48 +1707,49 @@ class TagApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'tagServiceSearchTags'
      *
-     * @param  string|null $name (optional)
-     * @param  \OpenAPIAdminClientModelTagSearchSortBy|null $sort (optional, default to 'order_no')
-     * @param  \OpenAPIAdminClientModelSortOrder|null $order (optional, default to 'asc')
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
+     * @param string|null                                 $name        (optional)
+     * @param OpenAPIAdminClientModelTagSearchSortBy|null $sort        (optional, default to 'order_no')
+     * @param OpenAPIAdminClientModelSortOrder|null       $order       (optional, default to 'asc')
+     * @param int|null                                    $page        (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null         $per_page    (optional, default to 50)
+     * @param string                                      $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceSearchTags'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function tagServiceSearchTagsRequest($name = null, $sort = 'order_no', $order = 'asc', $page = 1, $per_page = 50, string $contentType = self::contentTypes['tagServiceSearchTags'][0])
-    {
-
-
-
-
-
-
-
+    public function tagServiceSearchTagsRequest(
+        $name = null,
+        $sort = 'order_no',
+        $order = 'asc',
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['tagServiceSearchTags'][0],
+    ) {
         $resourcePath = '/tags/search';
         $formParams = [];
         $queryParams = [];
@@ -1674,7 +1764,7 @@ class TagApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1683,7 +1773,7 @@ class TagApi
             'TagSearchSortBy', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1692,7 +1782,7 @@ class TagApi
             'SortOrder', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1701,7 +1791,7 @@ class TagApi
             'integer', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1710,16 +1800,13 @@ class TagApi
             'PerPage', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
 
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -1731,19 +1818,18 @@ class TagApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -1752,7 +1838,7 @@ class TagApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1764,76 +1850,87 @@ class TagApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation tagServiceUpdateTag
      *
-     * @param  string $tag_id tag_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\TagUpdateRequest $tag_update_request tag_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
+     * @param string           $tag_id             tag_id (required)
+     * @param TagUpdateRequest $tag_update_request tag_update_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\TagUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return TagUpdateResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function tagServiceUpdateTag($tag_id, $tag_update_request, string $contentType = self::contentTypes['tagServiceUpdateTag'][0])
-    {
+    public function tagServiceUpdateTag(
+        $tag_id,
+        $tag_update_request,
+        string $contentType = self::contentTypes['tagServiceUpdateTag'][0],
+    ) {
         list($response) = $this->tagServiceUpdateTagWithHttpInfo($tag_id, $tag_update_request, $contentType);
+
         return $response;
     }
 
     /**
      * Operation tagServiceUpdateTagWithHttpInfo
      *
-     * @param  string $tag_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\TagUpdateRequest $tag_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
+     * @param string           $tag_id             (required)
+     * @param TagUpdateRequest $tag_update_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\TagUpdateResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function tagServiceUpdateTagWithHttpInfo($tag_id, $tag_update_request, string $contentType = self::contentTypes['tagServiceUpdateTag'][0])
-    {
+    public function tagServiceUpdateTagWithHttpInfo(
+        $tag_id,
+        $tag_update_request,
+        string $contentType = self::contentTypes['tagServiceUpdateTag'][0],
+    ) {
         $request = $this->tagServiceUpdateTagRequest($tag_id, $tag_update_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\TagUpdateResponse',
@@ -1878,18 +1975,16 @@ class TagApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -1904,60 +1999,66 @@ class TagApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\TagUpdateResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -1966,46 +2067,54 @@ class TagApi
     /**
      * Operation tagServiceUpdateTagAsync
      *
-     * @param  string $tag_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\TagUpdateRequest $tag_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
+     * @param string           $tag_id             (required)
+     * @param TagUpdateRequest $tag_update_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceUpdateTagAsync($tag_id, $tag_update_request, string $contentType = self::contentTypes['tagServiceUpdateTag'][0])
-    {
+    public function tagServiceUpdateTagAsync(
+        $tag_id,
+        $tag_update_request,
+        string $contentType = self::contentTypes['tagServiceUpdateTag'][0],
+    ) {
         return $this->tagServiceUpdateTagAsyncWithHttpInfo($tag_id, $tag_update_request, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation tagServiceUpdateTagAsyncWithHttpInfo
      *
-     * @param  string $tag_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\TagUpdateRequest $tag_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
+     * @param string           $tag_id             (required)
+     * @param TagUpdateRequest $tag_update_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function tagServiceUpdateTagAsyncWithHttpInfo($tag_id, $tag_update_request, string $contentType = self::contentTypes['tagServiceUpdateTag'][0])
-    {
+    public function tagServiceUpdateTagAsyncWithHttpInfo(
+        $tag_id,
+        $tag_update_request,
+        string $contentType = self::contentTypes['tagServiceUpdateTag'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\TagUpdateResponse';
         $request = $this->tagServiceUpdateTagRequest($tag_id, $tag_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -2014,7 +2123,7 @@ class TagApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -2022,53 +2131,52 @@ class TagApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'tagServiceUpdateTag'
      *
-     * @param  string $tag_id (required)
-     * @param  \OpenAPI\Admin\Client\Model\TagUpdateRequest $tag_update_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
+     * @param string           $tag_id             (required)
+     * @param TagUpdateRequest $tag_update_request (required)
+     * @param string           $contentType        The value for the Content-Type header. Check self::contentTypes['tagServiceUpdateTag'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function tagServiceUpdateTagRequest($tag_id, $tag_update_request, string $contentType = self::contentTypes['tagServiceUpdateTag'][0])
-    {
-
+    public function tagServiceUpdateTagRequest(
+        $tag_id,
+        $tag_update_request,
+        string $contentType = self::contentTypes['tagServiceUpdateTag'][0],
+    ) {
         // verify the required parameter 'tag_id' is set
-        if ($tag_id === null || (is_array($tag_id) && count($tag_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $tag_id when calling tagServiceUpdateTag'
-            );
+        if ($tag_id === null || is_array($tag_id) && count($tag_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $tag_id when calling tagServiceUpdateTag');
         }
 
         // verify the required parameter 'tag_update_request' is set
-        if ($tag_update_request === null || (is_array($tag_update_request) && count($tag_update_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $tag_update_request when calling tagServiceUpdateTag'
-            );
+        if ($tag_update_request === null || is_array($tag_update_request) && count($tag_update_request) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $tag_update_request when calling tagServiceUpdateTag');
         }
-
 
         $resourcePath = '/tags/{tagId}';
         $formParams = [];
@@ -2077,32 +2185,32 @@ class TagApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($tag_id !== null) {
             $resourcePath = str_replace(
                 '{tagId}',
                 ObjectSerializer::toPathValue($tag_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
         if (isset($tag_update_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
+                // if Content-Type contains "application/json", json_encode the body
                 try {
-                    $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($tag_update_request), JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                    $httpBody = json_encode(
+                        ObjectSerializer::sanitizeForSerialization($tag_update_request),
+                        JSON_THROW_ON_ERROR,
+                    );
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 $httpBody = $tag_update_request;
@@ -2115,19 +2223,18 @@ class TagApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -2136,7 +2243,7 @@ class TagApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -2148,23 +2255,25 @@ class TagApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -2172,8 +2281,8 @@ class TagApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -2193,12 +2302,8 @@ class TagApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -2206,24 +2311,24 @@ class TagApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -2232,16 +2337,16 @@ class TagApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

@@ -44,10 +44,12 @@ final class MapperSignatureCollector implements Collector
 
         $signature = $node->getArgs()[0]->value ?? null;
 
-        if (! $signature instanceof ClassConstFetch
+        if (
+            ! $signature instanceof ClassConstFetch
             || ! $signature->class instanceof Name
             || ! $signature->name instanceof Identifier
-            || $signature->name->toLowerString() !== 'class') {
+            || $signature->name->toLowerString() !== 'class'
+        ) {
             return null;
         }
 

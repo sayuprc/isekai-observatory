@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * SongSearchTypeValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * SongSearchTypeValue Class Doc Comment
  *
  * @category Class
+ *
  * @description 楽曲検索API用の楽曲種別
+ *
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum SongSearchTypeValue: string
@@ -54,7 +62,4 @@ enum SongSearchTypeValue: string
      * 参加曲
      */
     case GUEST = '3';
-
 }
-
-

@@ -24,7 +24,13 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
     private const string PERMISSION_TABLE = 'admin_user_permissions';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['admin_user_id', 'name', 'email', 'role', 'created_at'];
+    private const array COLUMNS = [
+        'admin_user_id',
+        'name',
+        'email',
+        'role',
+        'created_at',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -35,12 +41,12 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
     #[Override]
     public function all(): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->orderBy('created_at'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->orderBy('created_at')
+            |> $this->queryFactory->fetchAll(...);
 
         $permissionsByUser = $this->loadPermissions(
             array_map(static fn (array $row): string => Row::string($row, 'admin_user_id'), $rows),
@@ -58,35 +64,32 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
     #[Override]
     public function find(AdminUserId $adminUserId): ?AdminUser
     {
-        return $this->fetchOne(
-            $this->baseQuery()->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value)),
-        );
+        return $this->baseQuery()->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
+            |> $this->fetchOne(...);
     }
 
     #[Override]
     public function findByIdForUpdate(AdminUserId $adminUserId): ?AdminUser
     {
-        return $this->fetchOne(
-            $this->baseQuery()
-                ->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
-                ->forUpdate(),
-        );
+        return $this
+            ->baseQuery()
+            ->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
+            ->forUpdate()
+            |> $this->fetchOne(...);
     }
 
     #[Override]
     public function findByEmail(Email $email): ?AdminUser
     {
-        return $this->fetchOne(
-            $this->baseQuery()->where('email', '=', $email->value),
-        );
+        return $this->baseQuery()->where('email', '=', $email->value)
+            |> $this->fetchOne(...);
     }
 
     #[Override]
     public function findByEmailForUpdate(Email $email): ?AdminUser
     {
-        return $this->fetchOne(
-            $this->baseQuery()->where('email', '=', $email->value)->forUpdate(),
-        );
+        return $this->baseQuery()->where('email', '=', $email->value)->forUpdate()
+            |> $this->fetchOne(...);
     }
 
     #[Override]
@@ -96,7 +99,8 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
         $id = $this->converter->toBin($data['admin_user_id']);
 
         try {
-            $this->queryFactory->insert()
+            $this->queryFactory
+                ->insert()
                 ->into(self::TABLE, ['admin_user_id', 'name', 'email', 'role', 'created_at', 'updated_at'])
                 ->values([
                     $id,
@@ -121,7 +125,8 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
         if ($data['permissions'] !== []) {
             $rows = array_map(static fn (string $permission): array => [$id, $permission], $data['permissions']);
 
-            $this->queryFactory->insert()
+            $this->queryFactory
+                ->insert()
                 ->into(self::PERMISSION_TABLE, ['admin_user_id', 'permission'])
                 ->values(...$rows)
                 ->execute($this->queryFactory->pdo());
@@ -161,12 +166,12 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
             return [];
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['admin_user_id', 'permission'])
-                ->from(self::PERMISSION_TABLE)
-                ->where('admin_user_id', 'IN', $binAdminUserIds),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['admin_user_id', 'permission'])
+            ->from(self::PERMISSION_TABLE)
+            ->where('admin_user_id', 'IN', $binAdminUserIds)
+            |> $this->queryFactory->fetchAll(...);
 
         $grouped = [];
 
@@ -179,8 +184,10 @@ readonly class AdminUserRepository implements AdminUserRepositoryInterface
 
     private function isDuplicateEmail(PDOException $exception): bool
     {
-        return ($exception->errorInfo[0] ?? null) === '23000'
-            && str_contains($exception->getMessage(), 'admin_users_email_unique');
+        return (
+            ($exception->errorInfo[0] ?? null) === '23000'
+                && str_contains($exception->getMessage(), 'admin_users_email_unique')
+        );
     }
 
     /**

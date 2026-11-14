@@ -43,8 +43,9 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
     {
         $user = $this->authenticate();
 
-        $response = $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))
-            ->assertStatus(200)
+        $response = $this
+            ->postJson(route(AuthRouteMap::GenerateRecoveryCodes))
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json->has('recoveryCodes', 10)->etc(),
             );
@@ -62,11 +63,18 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
         }
 
         foreach ($plainCodes as $plainCode) {
-            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify($plainCode, $stored));
+            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify(
+                $plainCode,
+                $stored,
+            ));
             $this->assertCount(1, $matched);
         }
 
-        $log = $this->findAuditLog(AuditAction::RecoveryCodeIssue, AuditTargetType::AdminUser, $user->adminUserId->value);
+        $log = $this->findAuditLog(
+            AuditAction::RecoveryCodeIssue,
+            AuditTargetType::AdminUser,
+            $user->adminUserId->value,
+        );
         $snapshot = $log['snapshot'];
         $this->assertIsArray($snapshot);
         $this->assertSame(10, $snapshot['count'] ?? null);
@@ -77,11 +85,11 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
     {
         $this->authenticate();
 
-        $first = $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertStatus(200);
+        $first = $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertOk();
         /** @var list<string> $firstCodes */
         $firstCodes = $first->json('recoveryCodes');
 
-        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertStatus(200);
+        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertOk();
 
         $this->assertSame(10, DB::table('admin_user_recovery_codes')->count());
 
@@ -89,7 +97,10 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
         $storedCodes = DB::table('admin_user_recovery_codes')->pluck('code')->all();
 
         foreach ($firstCodes as $oldCode) {
-            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify($oldCode, $stored));
+            $matched = array_filter($storedCodes, static fn (string $stored): bool => $hasher->verify(
+                $oldCode,
+                $stored,
+            ));
             $this->assertCount(0, $matched);
         }
     }
@@ -97,7 +108,7 @@ class GenerateRecoveryCodesTest extends DatabaseTestCase
     #[Test]
     public function requiresAuthentication(): void
     {
-        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertStatus(401);
+        $this->postJson(route(AuthRouteMap::GenerateRecoveryCodes))->assertUnauthorized();
 
         $this->assertSame(0, DB::table('admin_user_recovery_codes')->count());
     }

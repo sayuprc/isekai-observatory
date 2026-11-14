@@ -7,12 +7,14 @@ namespace Auth\Domain\Models\Token\RefreshToken;
 use AdminUser\Domain\Models\AdminUserId;
 use DateTimeImmutable;
 use DateTimeInterface;
+use SensitiveParameter;
 
 readonly class RefreshToken
 {
     public function __construct(
         public RefreshTokenId $refreshTokenId,
         public AdminUserId $adminUserId,
+        #[SensitiveParameter]
         public HashedTokenValue $token,
         private ExpiredAt $expiredAt,
         private ConsumptionStatus $status,
@@ -22,6 +24,7 @@ readonly class RefreshToken
     public static function reconstruct(
         string $refreshTokenId,
         string $adminUserId,
+        #[SensitiveParameter]
         string $token,
         DateTimeImmutable $expiredAt,
         int $status,

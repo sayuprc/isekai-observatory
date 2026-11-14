@@ -27,9 +27,10 @@ class SearchSongTest extends DatabaseTestCase
             $this->createSong($uuid, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(SongRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -56,13 +57,25 @@ class SearchSongTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, true, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                true,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
         // 部分一致なので '比較テスト楽曲B' もヒットする
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(SongRouteMap::Search, ['title' => 'テスト楽曲']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -100,12 +113,24 @@ class SearchSongTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, true, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                true,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(SongRouteMap::Search, ['type' => SongType::Original->value]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -131,13 +156,36 @@ class SearchSongTest extends DatabaseTestCase
         $hiddenSongId = $this->generateUuid();
 
         $this->storeSongs(
-            $this->createSong($displaySongId, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($hiddenSongId, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, false, 2, [], [], [], []),
+            $this->createSong(
+                $displaySongId,
+                'テスト楽曲',
+                'テスト楽曲説明',
+                SongType::Original,
+                true,
+                1,
+                [],
+                [],
+                [],
+                [],
+            ),
+            $this->createSong(
+                $hiddenSongId,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                false,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(SongRouteMap::Search, ['is_display' => false]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -167,14 +215,19 @@ class SearchSongTest extends DatabaseTestCase
             $this->createTag($otherTagId = $this->generateUuid(), 'タグB', 20),
         );
         $this->storeSongs(
-            $this->createSong($taggedSongId, 'タグ付き楽曲', '説明', SongType::Original, true, 1, [['tagId' => $tagId]]),
-            $this->createSong($this->generateUuid(), '別タグの楽曲', '説明', SongType::Original, true, 2, [['tagId' => $otherTagId]]),
+            $this->createSong($taggedSongId, 'タグ付き楽曲', '説明', SongType::Original, true, 1, [[
+                'tagId' => $tagId,
+            ]]),
+            $this->createSong($this->generateUuid(), '別タグの楽曲', '説明', SongType::Original, true, 2, [[
+                'tagId' => $otherTagId,
+            ]]),
             $this->createSong($this->generateUuid(), 'タグなし楽曲', '説明', SongType::Original, true, 3),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(SongRouteMap::Search, ['tag_id' => $tagId]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonCount(1, 'songs')
             ->assertJsonPath('songs.0.songId', $taggedSongId)
             ->assertJsonPath('maxPage', 1);
@@ -189,9 +242,10 @@ class SearchSongTest extends DatabaseTestCase
             $this->createSong($uuid, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(SongRouteMap::Search, ['title' => '存在しないタイトル']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [],
                 'maxPage' => 0,

@@ -6,6 +6,7 @@ namespace Tag\Infrastructures\Public;
 
 use Emonkak\Orm\Sql;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -51,9 +52,10 @@ readonly class TagQueryService implements TagQueryServiceInterface
     }
 
     #[Override]
-    public function list(?string $pageToken, int $pageSize): TagListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): TagListPage
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(['tag_id', 'name', 'order_no'])
             ->from('tags')
             ->where(new Sql('tag_id IN (' . self::PUBLIC_TAG_IDS . ')'));
@@ -61,19 +63,20 @@ readonly class TagQueryService implements TagQueryServiceInterface
         if (is_string($pageToken)) {
             $decoded = TagListPageToken::decode($pageToken);
 
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(order_no > %s OR (order_no = %s AND tag_id > %s))',
                 Sql::value($decoded->orderNo),
                 Sql::value($decoded->orderNo),
                 Sql::value($this->converter->toBin($decoded->tagId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $query->orderBy('order_no')
-                ->orderBy('tag_id')
-                ->limit($pageSize + 1),
-        );
+        $rows = $query
+            ->orderBy('order_no')
+            ->orderBy('tag_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
@@ -92,7 +95,10 @@ readonly class TagQueryService implements TagQueryServiceInterface
             $tags,
             $lastRow === null
                 ? null
-                : TagListPageToken::encode(Row::int($lastRow, 'order_no'), $this->converter->toUuid(Row::string($lastRow, 'tag_id'))),
+                : TagListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'tag_id')),
+                ),
         );
     }
 }

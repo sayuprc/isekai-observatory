@@ -10,11 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Person\Application\Admin\UseCase\Get\GetInputData;
 use Person\Application\Admin\UseCase\Get\GetUseCase;
 
-class GetPersonController extends Controller
+final readonly class GetPersonController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 

@@ -93,11 +93,17 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                 Route::post('/register/start', [RegisterStartController::class, 'handle'])
                     ->middleware('throttle:passkey-register-start')
                     ->name(AuthRouteMap::RegisterStart);
-                Route::post('/register/finish', [RegisterFinishController::class, 'handle'])->name(AuthRouteMap::RegisterFinish);
+                Route::post('/register/finish', [
+                    RegisterFinishController::class,
+                    'handle',
+                ])->name(AuthRouteMap::RegisterFinish);
                 Route::post('/recovery/start', [RecoveryStartController::class, 'handle'])
                     ->middleware('throttle:passkey-recovery-start')
                     ->name(AuthRouteMap::RecoveryStart);
-                Route::post('/recovery/finish', [RecoveryFinishController::class, 'handle'])->name(AuthRouteMap::RecoveryFinish);
+                Route::post('/recovery/finish', [
+                    RecoveryFinishController::class,
+                    'handle',
+                ])->name(AuthRouteMap::RecoveryFinish);
             });
 
             Route::middleware(Authenticate::class)->group(static function () {
@@ -106,29 +112,50 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                 });
 
                 Route::prefix('recovery-codes')->group(static function () {
-                    Route::post('/', [GenerateRecoveryCodesController::class, 'handle'])->name(AuthRouteMap::GenerateRecoveryCodes);
+                    Route::post('/', [
+                        GenerateRecoveryCodesController::class,
+                        'handle',
+                    ])->name(AuthRouteMap::GenerateRecoveryCodes);
                 });
 
                 Route::prefix('persons')->group(static function () {
                     Route::post('/', [CreatePersonController::class, 'handle'])->name(PersonRouteMap::Create);
                     Route::get('/', [ListPersonController::class, 'handle'])->name(PersonRouteMap::List);
                     Route::put('/{personId}', [UpdatePersonController::class, 'handle'])->name(PersonRouteMap::Update);
-                    Route::delete('/{personId}', [DeletePersonController::class, 'handle'])->name(PersonRouteMap::Delete);
+                    Route::delete('/{personId}', [
+                        DeletePersonController::class,
+                        'handle',
+                    ])->name(PersonRouteMap::Delete);
                     Route::get('/search', [SearchPersonController::class, 'handle'])->name(PersonRouteMap::Search);
                     Route::get('/{personId}', [GetPersonController::class, 'handle'])->name(PersonRouteMap::Get);
                 });
 
                 Route::prefix('person-groups')->group(static function () {
                     Route::post('/', [CreatePersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Create);
-                    Route::put('/{personGroupId}', [UpdatePersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Update);
-                    Route::delete('/{personGroupId}', [DeletePersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Delete);
-                    Route::get('/search', [SearchPersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Search);
-                    Route::get('/{personGroupId}', [GetPersonGroupController::class, 'handle'])->name(PersonGroupRouteMap::Get);
+                    Route::put('/{personGroupId}', [
+                        UpdatePersonGroupController::class,
+                        'handle',
+                    ])->name(PersonGroupRouteMap::Update);
+                    Route::delete('/{personGroupId}', [
+                        DeletePersonGroupController::class,
+                        'handle',
+                    ])->name(PersonGroupRouteMap::Delete);
+                    Route::get('/search', [
+                        SearchPersonGroupController::class,
+                        'handle',
+                    ])->name(PersonGroupRouteMap::Search);
+                    Route::get('/{personGroupId}', [
+                        GetPersonGroupController::class,
+                        'handle',
+                    ])->name(PersonGroupRouteMap::Get);
                 });
 
                 Route::prefix('media')->group(static function () {
                     Route::post('/', [CreateMediaController::class, 'handle'])->name(MediaRouteMap::Create);
-                    Route::post('/bulk-update', [BulkUpdateMediaController::class, 'handle'])->name(MediaRouteMap::BulkUpdate);
+                    Route::post('/bulk-update', [
+                        BulkUpdateMediaController::class,
+                        'handle',
+                    ])->name(MediaRouteMap::BulkUpdate);
                     Route::delete('/{mediaId}', [DeleteMediaController::class, 'handle'])->name(MediaRouteMap::Delete);
                     Route::put('/{mediaId}', [UpdateMediaController::class, 'handle'])->name(MediaRouteMap::Update);
                     Route::get('/search', [SearchMediaController::class, 'handle'])->name(MediaRouteMap::Search);
@@ -145,7 +172,10 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('events')->group(static function () {
                     Route::post('/', [CreateEventController::class, 'handle'])->name(EventRouteMap::Create);
-                    Route::post('/bulk-update', [BulkUpdateEventController::class, 'handle'])->name(EventRouteMap::BulkUpdate);
+                    Route::post('/bulk-update', [
+                        BulkUpdateEventController::class,
+                        'handle',
+                    ])->name(EventRouteMap::BulkUpdate);
                     Route::put('/{eventId}', [UpdateEventController::class, 'handle'])->name(EventRouteMap::Update);
                     Route::delete('/{eventId}', [DeleteEventController::class, 'handle'])->name(EventRouteMap::Delete);
                     Route::get('/search', [SearchEventController::class, 'handle'])->name(EventRouteMap::Search);
@@ -154,7 +184,10 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
 
                 Route::prefix('songs')->group(static function () {
                     Route::post('/', [CreateSongController::class, 'handle'])->name(SongRouteMap::Create);
-                    Route::post('/bulk-update', [BulkUpdateSongController::class, 'handle'])->name(SongRouteMap::BulkUpdate);
+                    Route::post('/bulk-update', [
+                        BulkUpdateSongController::class,
+                        'handle',
+                    ])->name(SongRouteMap::BulkUpdate);
                     Route::put('/{songId}', [UpdateSongController::class, 'handle'])->name(SongRouteMap::Update);
                     Route::delete('/{songId}', [DeleteSongController::class, 'handle'])->name(SongRouteMap::Delete);
                     Route::get('/search', [SearchSongController::class, 'handle'])->name(SongRouteMap::Search);
@@ -162,18 +195,42 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                 });
 
                 Route::prefix('release-groups')->group(static function () {
-                    Route::post('/', [CreateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Create);
-                    Route::post('/bulk-update', [BulkUpdateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::BulkUpdate);
-                    Route::put('/{releaseGroupId}', [UpdateReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Update);
-                    Route::delete('/{releaseGroupId}', [DeleteReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Delete);
-                    Route::get('/search', [SearchReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Search);
-                    Route::get('/{releaseGroupId}', [GetReleaseGroupController::class, 'handle'])->name(ReleaseGroupRouteMap::Get);
+                    Route::post('/', [
+                        CreateReleaseGroupController::class,
+                        'handle',
+                    ])->name(ReleaseGroupRouteMap::Create);
+                    Route::post('/bulk-update', [
+                        BulkUpdateReleaseGroupController::class,
+                        'handle',
+                    ])->name(ReleaseGroupRouteMap::BulkUpdate);
+                    Route::put('/{releaseGroupId}', [
+                        UpdateReleaseGroupController::class,
+                        'handle',
+                    ])->name(ReleaseGroupRouteMap::Update);
+                    Route::delete('/{releaseGroupId}', [
+                        DeleteReleaseGroupController::class,
+                        'handle',
+                    ])->name(ReleaseGroupRouteMap::Delete);
+                    Route::get('/search', [
+                        SearchReleaseGroupController::class,
+                        'handle',
+                    ])->name(ReleaseGroupRouteMap::Search);
+                    Route::get('/{releaseGroupId}', [
+                        GetReleaseGroupController::class,
+                        'handle',
+                    ])->name(ReleaseGroupRouteMap::Get);
                 });
 
                 Route::prefix('releases')->group(static function () {
                     Route::post('/', [CreateReleaseController::class, 'handle'])->name(ReleaseRouteMap::Create);
-                    Route::put('/{releaseId}', [UpdateReleaseController::class, 'handle'])->name(ReleaseRouteMap::Update);
-                    Route::delete('/{releaseId}', [DeleteReleaseController::class, 'handle'])->name(ReleaseRouteMap::Delete);
+                    Route::put('/{releaseId}', [
+                        UpdateReleaseController::class,
+                        'handle',
+                    ])->name(ReleaseRouteMap::Update);
+                    Route::delete('/{releaseId}', [
+                        DeleteReleaseController::class,
+                        'handle',
+                    ])->name(ReleaseRouteMap::Delete);
                     Route::get('/{releaseId}', [GetReleaseController::class, 'handle'])->name(ReleaseRouteMap::Get);
                 });
 

@@ -22,7 +22,8 @@ class ListYouTubeChannelCommandTest extends DatabaseTestCase
             $this->createYouTubeChannel('UCbbbbbbbbbbbbbbbbbbbbbb', 'チャンネルB'),
         );
 
-        $this->artisan('media:youtube-channel:list')
+        $this
+            ->artisan('media:youtube-channel:list')
             ->expectsTable(
                 ['チャンネルID', 'チャンネル名'],
                 [
@@ -36,7 +37,8 @@ class ListYouTubeChannelCommandTest extends DatabaseTestCase
     #[Test]
     public function warnsWhenNoChannelsRegistered(): void
     {
-        $this->artisan('media:youtube-channel:list')
+        $this
+            ->artisan('media:youtube-channel:list')
             ->expectsOutput('チャンネルが登録されていません')
             ->assertSuccessful();
     }

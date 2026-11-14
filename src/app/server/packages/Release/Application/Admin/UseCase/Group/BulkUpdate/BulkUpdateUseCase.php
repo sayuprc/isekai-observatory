@@ -44,7 +44,11 @@ readonly class BulkUpdateUseCase
             array_values(array_unique($inputData->releaseGroupIds)),
         );
 
-        return $this->transaction->scope(function () use ($inputData, $changes, $releaseGroupIds): BulkUpdateOutputData {
+        return $this->transaction->scope(function () use (
+            $inputData,
+            $changes,
+            $releaseGroupIds,
+        ): BulkUpdateOutputData {
             $this->tagExistence->assertAddable($changes);
 
             $found = [];

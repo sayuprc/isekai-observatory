@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * SongPersonRole
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,14 +32,15 @@
  */
 
 namespace OpenAPI\Admin\Client\Model;
-use \OpenAPI\Admin\Client\ObjectSerializer;
 
 /**
  * SongPersonRole Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum SongPersonRole: int
@@ -53,7 +59,4 @@ enum SongPersonRole: int
      * 編曲
      */
     case ARRANGER = 3;
-
 }
-
-

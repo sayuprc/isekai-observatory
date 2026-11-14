@@ -57,10 +57,12 @@ class RecoveryTest extends DatabaseTestCase
 
         $authCeremonyId = $this->startRecovery('example@example.com', 'A3KP-9QXR');
 
-        $this->postJson(route(AuthRouteMap::RecoveryFinish), [
-            'authCeremonyId' => $authCeremonyId,
-            'credential' => ['id' => 'new-credential-id'],
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::RecoveryFinish), [
+                'authCeremonyId' => $authCeremonyId,
+                'credential' => ['id' => 'new-credential-id'],
+            ])
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json->whereAllType([
                     'accessToken' => 'string',
@@ -81,9 +83,16 @@ class RecoveryTest extends DatabaseTestCase
         $this->assertSame(1, DB::table('refresh_tokens')->count());
 
         // コードは消費済みになる
-        $this->assertCount(0, $this->app->make(RecoveryCodeRepositoryInterface::class)
-            ->findUnusedByAdminUserIdForUpdate(new AdminUserId($adminUserId)));
-        $this->assertSame(ConsumptionStatus::Consumed->value, (int)DB::table('admin_user_recovery_codes')->first()?->status);
+        $this->assertCount(
+            0,
+            $this->app
+                ->make(RecoveryCodeRepositoryInterface::class)
+                ->findUnusedByAdminUserIdForUpdate(new AdminUserId($adminUserId)),
+        );
+        $this->assertSame(
+            ConsumptionStatus::Consumed->value,
+            (int)DB::table('admin_user_recovery_codes')->first()?->status,
+        );
 
         $log = $this->findAuditLog(AuditAction::RecoveryCodeUse, AuditTargetType::AdminUser, $adminUserId);
         $snapshot = $log['snapshot'];
@@ -105,14 +114,18 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'new-credential-id'],
-        ])->assertStatus(200);
+        ])->assertOk();
 
         // 消費されたのは入力したコード A のみで、コード B は未使用のまま
         $this->assertSame(
             ConsumptionStatus::Consumed->value,
-            (int)DB::table('admin_user_recovery_codes')->where('admin_user_recovery_code_id', $this->toBin($codeAId))->first()?->status,
+            (int)DB::table('admin_user_recovery_codes')
+                ->where('admin_user_recovery_code_id', $this->toBin($codeAId))
+                ->first()
+                ?->status,
         );
-        $unusedCodes = $this->app->make(RecoveryCodeRepositoryInterface::class)
+        $unusedCodes = $this->app
+            ->make(RecoveryCodeRepositoryInterface::class)
             ->findUnusedByAdminUserIdForUpdate(new AdminUserId($adminUserId));
         $this->assertCount(1, $unusedCodes);
         $this->assertNotSame($codeAId, $unusedCodes[0]->recoveryCodeId->value);
@@ -122,7 +135,7 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $secondCeremonyId,
             'credential' => ['id' => 'second-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertNull(
             $this->app->make(AdminUserPasskeyRepositoryInterface::class)->findByCredentialId('second-credential-id'),
@@ -130,8 +143,12 @@ class RecoveryTest extends DatabaseTestCase
         $this->assertSame(1, DB::table('refresh_tokens')->count());
 
         // 2 回目失敗後もコード B は消費されていない
-        $this->assertCount(1, $this->app->make(RecoveryCodeRepositoryInterface::class)
-            ->findUnusedByAdminUserIdForUpdate(new AdminUserId($adminUserId)));
+        $this->assertCount(
+            1,
+            $this->app
+                ->make(RecoveryCodeRepositoryInterface::class)
+                ->findUnusedByAdminUserIdForUpdate(new AdminUserId($adminUserId)),
+        );
     }
 
     #[Test]
@@ -140,13 +157,16 @@ class RecoveryTest extends DatabaseTestCase
         // ユーザー列挙を防ぐため、未登録メールでも登録済みと同一形状の 200 を返す
         $this->bindPasskeyAuthenticator();
 
-        $this->postJson(route(AuthRouteMap::RecoveryStart), [
-            'email' => 'unknown@example.com',
-            'recoveryCode' => 'A3KP-9QXR',
-            'name' => '新しいパスキー',
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::RecoveryStart), [
+                'email' => 'unknown@example.com',
+                'recoveryCode' => 'A3KP-9QXR',
+                'name' => '新しいパスキー',
+            ])
+            ->assertOk()
             ->assertJson(
-                static fn (AssertableJson $json) => $json->whereType('authCeremonyId', 'string')
+                static fn (AssertableJson $json) => $json
+                    ->whereType('authCeremonyId', 'string')
                     ->where('publicKey.challenge', 'register-challenge')
                     ->etc(),
             );
@@ -162,13 +182,16 @@ class RecoveryTest extends DatabaseTestCase
         $adminUserId = $this->storeAdminUserWithPasskey('example@example.com');
         $this->storeRecoveryCode($adminUserId, 'A3KP-9QXR');
 
-        $this->postJson(route(AuthRouteMap::RecoveryStart), [
-            'email' => 'example@example.com',
-            'recoveryCode' => 'WRONG-CODE',
-            'name' => '新しいパスキー',
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::RecoveryStart), [
+                'email' => 'example@example.com',
+                'recoveryCode' => 'WRONG-CODE',
+                'name' => '新しいパスキー',
+            ])
+            ->assertOk()
             ->assertJson(
-                static fn (AssertableJson $json) => $json->whereType('authCeremonyId', 'string')
+                static fn (AssertableJson $json) => $json
+                    ->whereType('authCeremonyId', 'string')
                     ->where('publicKey.challenge', 'register-challenge')
                     ->etc(),
             );
@@ -185,7 +208,7 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'new-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertSame(0, DB::table('admin_user_passkeys')->count());
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -204,12 +227,15 @@ class RecoveryTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::RecoveryFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'new-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertSame(1, DB::table('admin_user_passkeys')->count());
         $this->assertSame(0, DB::table('refresh_tokens')->count());
         $this->assertAuditLogCount(0);
-        $this->assertSame(ConsumptionStatus::Unused->value, (int)DB::table('admin_user_recovery_codes')->first()?->status);
+        $this->assertSame(
+            ConsumptionStatus::Unused->value,
+            (int)DB::table('admin_user_recovery_codes')->first()?->status,
+        );
     }
 
     #[Test]
@@ -225,14 +251,14 @@ class RecoveryTest extends DatabaseTestCase
                 'email' => 'throttle@example.com',
                 'recoveryCode' => 'A3KP-9QXR',
                 'name' => '新しいパスキー',
-            ])->assertStatus(200);
+            ])->assertOk();
         }
 
         $this->postJson(route(AuthRouteMap::RecoveryStart), [
             'email' => 'throttle@example.com',
             'recoveryCode' => 'A3KP-9QXR',
             'name' => '新しいパスキー',
-        ])->assertStatus(429);
+        ])->assertTooManyRequests();
     }
 
     private function startRecovery(string $email, string $recoveryCode): string
@@ -241,7 +267,7 @@ class RecoveryTest extends DatabaseTestCase
             'email' => $email,
             'recoveryCode' => $recoveryCode,
             'name' => '新しいパスキー',
-        ])->assertStatus(200);
+        ])->assertOk();
 
         $authCeremonyId = $response->json('authCeremonyId');
         $this->assertIsString($authCeremonyId);
@@ -252,25 +278,29 @@ class RecoveryTest extends DatabaseTestCase
     private function storeAdminUserWithPasskey(string $email, string $credentialId = 'credential-id'): string
     {
         $adminUserId = $this->generateUuid();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($adminUserId, $email),
-        );
+        $this->app
+            ->make(AdminUserRepository::class)
+            ->register(
+                $this->createAdminUser($adminUserId, $email),
+            );
 
-        $this->app->make(AdminUserPasskeyRepositoryInterface::class)->save(new AdminUserPasskey(
-            $this->generateUuid(),
-            $adminUserId,
-            'user-handle-' . $credentialId,
-            'Primary passkey',
-            $credentialId,
-            'public-key',
-            '00000000-0000-0000-0000-000000000000',
-            ['internal'],
-            true,
-            false,
-            123,
-            new DateTimeImmutable('2026-01-01 00:00:00'),
-            null,
-        ));
+        $this->app
+            ->make(AdminUserPasskeyRepositoryInterface::class)
+            ->save(new AdminUserPasskey(
+                $this->generateUuid(),
+                $adminUserId,
+                'user-handle-' . $credentialId,
+                'Primary passkey',
+                $credentialId,
+                'public-key',
+                '00000000-0000-0000-0000-000000000000',
+                ['internal'],
+                true,
+                false,
+                123,
+                new DateTimeImmutable('2026-01-01 00:00:00'),
+                null,
+            ));
 
         return $adminUserId;
     }
@@ -280,15 +310,17 @@ class RecoveryTest extends DatabaseTestCase
         $hashedCode = $this->app->make(RecoveryCodeHasherInterface::class)->hash($plainCode);
         $recoveryCodeId = $this->generateUuid();
 
-        $this->app->make(RecoveryCodeRepositoryInterface::class)->saveMany([
-            new RecoveryCode(
-                new RecoveryCodeId($recoveryCodeId),
-                new AdminUserId($adminUserId),
-                new HashedCodeValue($hashedCode),
-                ConsumptionStatus::Unused,
-                null,
-            ),
-        ]);
+        $this->app
+            ->make(RecoveryCodeRepositoryInterface::class)
+            ->saveMany([
+                new RecoveryCode(
+                    new RecoveryCodeId($recoveryCodeId),
+                    new AdminUserId($adminUserId),
+                    new HashedCodeValue($hashedCode),
+                    ConsumptionStatus::Unused,
+                    null,
+                ),
+            ]);
 
         return $recoveryCodeId;
     }
@@ -305,9 +337,15 @@ class RecoveryTest extends DatabaseTestCase
             {
             }
 
-            public function startRegistration(string $userHandle, string $userName, string $displayName, array $excludePasskeys = []): PasskeyStartResult
-            {
-                return new PasskeyStartResult('{"challenge":"register-challenge"}', ['challenge' => 'register-challenge']);
+            public function startRegistration(
+                string $userHandle,
+                string $userName,
+                string $displayName,
+                array $excludePasskeys = [],
+            ): PasskeyStartResult {
+                return new PasskeyStartResult('{"challenge":"register-challenge"}', [
+                    'challenge' => 'register-challenge',
+                ]);
             }
 
             public function finishRegistration(array $credential, string $optionsJson): PasskeyRegistrationResult
@@ -319,7 +357,16 @@ class RecoveryTest extends DatabaseTestCase
                 $id = $credential['id'] ?? 'new-credential-id';
                 $credentialId = is_string($id) && $id !== '' ? $id : 'new-credential-id';
 
-                return new PasskeyRegistrationResult($credentialId, 'public-key', 'new-user-handle', '00000000-0000-0000-0000-000000000000', ['internal'], true, false, 1);
+                return new PasskeyRegistrationResult(
+                    $credentialId,
+                    'public-key',
+                    'new-user-handle',
+                    '00000000-0000-0000-0000-000000000000',
+                    ['internal'],
+                    true,
+                    false,
+                    1,
+                );
             }
 
             public function startAuthentication(): PasskeyStartResult
@@ -332,8 +379,12 @@ class RecoveryTest extends DatabaseTestCase
                 throw new RuntimeException('unused');
             }
 
-            public function finishAuthentication(array $credential, string $optionsJson, AdminUserPasskey $passkey, string $userHandle): PasskeyAuthenticationResult
-            {
+            public function finishAuthentication(
+                array $credential,
+                string $optionsJson,
+                AdminUserPasskey $passkey,
+                string $userHandle,
+            ): PasskeyAuthenticationResult {
                 throw new RuntimeException('unused');
             }
         });

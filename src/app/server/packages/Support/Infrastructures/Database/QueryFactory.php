@@ -72,9 +72,7 @@ final readonly class QueryFactory
      */
     public function paginate(SelectBuilder $query, int $page, PerPage $perPage): SelectBuilder
     {
-        return $query
-            ->limit($perPage->value)
-            ->offset(($page - 1) * $perPage->value);
+        return $query->limit($perPage->value)->offset(($page - 1) * $perPage->value);
     }
 
     /**
@@ -106,14 +104,16 @@ final readonly class QueryFactory
 
         $counted = $distinctColumn === null ? 'COUNT(*)' : "COUNT(DISTINCT {$distinctColumn})";
         $counts = [];
-        foreach ($this->fetchAll(
-            $this->select()
-                ->select($keyColumn, 'count_key')
-                ->select(new Sql($counted), 'count_value')
-                ->from($table)
-                ->where($keyColumn, 'IN', $keys)
-                ->groupBy($keyColumn),
-        ) as $row) {
+        $rows = $this
+            ->select()
+            ->select($keyColumn, 'count_key')
+            ->select(new Sql($counted), 'count_value')
+            ->from($table)
+            ->where($keyColumn, 'IN', $keys)
+            ->groupBy($keyColumn)
+            |> $this->fetchAll(...);
+
+        foreach ($rows as $row) {
             $counts[Row::string($row, 'count_key')] = Row::int($row, 'count_value');
         }
 
@@ -132,10 +132,7 @@ final readonly class QueryFactory
             return;
         }
 
-        $this->insert()
-            ->into($table, $columns)
-            ->values(...$rows)
-            ->execute($this->pdo);
+        $this->insert()->into($table, $columns)->values(...$rows)->execute($this->pdo);
     }
 
     /**
@@ -148,10 +145,7 @@ final readonly class QueryFactory
     public function deleteFromTables(array $tables, string $column, mixed $value): void
     {
         foreach ($tables as $table) {
-            $this->delete()
-                ->from($table)
-                ->where($column, '=', $value)
-                ->execute($this->pdo);
+            $this->delete()->from($table)->where($column, '=', $value)->execute($this->pdo);
         }
     }
 

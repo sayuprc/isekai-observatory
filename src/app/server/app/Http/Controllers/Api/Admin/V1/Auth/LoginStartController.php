@@ -10,21 +10,21 @@ use Auth\Application\Admin\UseCase\Login\LoginStartInputData;
 use Auth\Application\Admin\UseCase\Login\LoginStartUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Support\Contracts\MapperInterface;
 
-class LoginStartController extends Controller
+final readonly class LoginStartController extends Controller
 {
     public function __construct(
-        private readonly LoginStartUseCase $loginStartUseCase,
-        private readonly LoginStartPresenter $presenter,
+        private MapperInterface $mapper,
+        private LoginStartUseCase $useCase,
+        private LoginStartPresenter $presenter,
     ) {
     }
 
     public function handle(Request $request): JsonResponse
     {
-        $inputData = new LoginStartInputData(
-            $request->string('email')->toString(),
-        );
-
-        return $this->presenter->present($this->loginStartUseCase->handle($inputData));
+        return $this->mapper->map(LoginStartInputData::class, $request->all())
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

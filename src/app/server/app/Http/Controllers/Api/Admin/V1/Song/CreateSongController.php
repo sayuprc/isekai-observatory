@@ -12,12 +12,12 @@ use Song\Application\Admin\UseCase\Create\CreateInputData;
 use Song\Application\Admin\UseCase\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
-class CreateSongController extends Controller
+final readonly class CreateSongController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly CreateUseCase $useCase,
-        private readonly CreatePresenter $presenter,
+        private MapperInterface $mapper,
+        private CreateUseCase $useCase,
+        private CreatePresenter $presenter,
     ) {
     }
 

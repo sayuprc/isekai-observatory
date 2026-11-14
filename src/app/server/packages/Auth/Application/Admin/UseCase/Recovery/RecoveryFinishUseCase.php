@@ -71,7 +71,9 @@ readonly class RecoveryFinishUseCase
 
         $name = $state->name;
 
-        return $this->transaction->scope(fn (): RecoveryFinishOutputData => $this->persist($state, $verification, $name));
+        return $this->transaction->scope(
+            fn (): RecoveryFinishOutputData => $this->persist($state, $verification, $name),
+        );
     }
 
     private function persist(
@@ -105,21 +107,23 @@ readonly class RecoveryFinishUseCase
 
         $adminUserPasskeyId = $this->uuidGenerator->generate();
 
-        $this->passkeyRepository->save(new AdminUserPasskey(
-            $adminUserPasskeyId,
-            $adminUser->adminUserId->value,
-            $verification->userHandle,
-            $name,
-            $verification->credentialId,
-            $verification->publicKey,
-            $verification->aaguid,
-            $verification->transports,
-            $verification->backupEligible,
-            $verification->backupState,
-            $verification->signCount,
-            $this->clock->now(),
-            null,
-        ));
+        $this->passkeyRepository->save(
+            new AdminUserPasskey(
+                $adminUserPasskeyId,
+                $adminUser->adminUserId->value,
+                $verification->userHandle,
+                $name,
+                $verification->credentialId,
+                $verification->publicKey,
+                $verification->aaguid,
+                $verification->transports,
+                $verification->backupEligible,
+                $verification->backupState,
+                $verification->signCount,
+                $this->clock->now(),
+                null,
+            ),
+        );
 
         $accessToken = $this->accessTokenIssueService->issue($refreshToken->refreshTokenId->value);
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ReleaseFormatValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Viewer\Client\Model;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
 
 /**
  * ReleaseFormatValue Class Doc Comment
  *
  * @category Class
+ *
  * @description 提供形態の値
+ *
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum ReleaseFormatValue: int
@@ -64,7 +72,4 @@ enum ReleaseFormatValue: int
      * その他
      */
     case OTHER = 99;
-
 }
-
-

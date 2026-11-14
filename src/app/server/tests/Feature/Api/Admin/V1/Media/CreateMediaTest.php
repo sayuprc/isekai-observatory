@@ -23,7 +23,8 @@ class CreateMediaTest extends DatabaseTestCase
     #[Test]
     public function canCreate(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::Create), [
                 'title' => 'テストメディアMV',
                 'url' => 'https://example.com/media',
@@ -31,7 +32,8 @@ class CreateMediaTest extends DatabaseTestCase
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJson(static fn (AssertableJson $json) => $json
                 ->whereType('media.mediaId', 'string')
                 ->where('media.title', 'テストメディアMV')
@@ -56,7 +58,8 @@ class CreateMediaTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::Create), [
                 'title' => '別タイトル',
                 'url' => 'https://example.com/media',
@@ -64,7 +67,8 @@ class CreateMediaTest extends DatabaseTestCase
                 'type' => MediaType::Mv->value,
                 'isDisplay' => true,
                 'tags' => [],
-            ])->assertStatus(400)
+            ])
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -79,7 +83,8 @@ class CreateMediaTest extends DatabaseTestCase
         $secondTagId = $this->generateUuid();
         $this->storeTags($this->createTag($secondTagId, 'タグB', 20), $this->createTag($firstTagId, 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::Create), [
                 'title' => 'タグ付きのMV',
                 'url' => 'https://example.com/tagged',
@@ -88,7 +93,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [['tagId' => $secondTagId], ['tagId' => $firstTagId]],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags', [
                 ['tagId' => $firstTagId, 'name' => 'タグA'],
                 ['tagId' => $secondTagId, 'name' => 'タグB'],
@@ -101,7 +106,8 @@ class CreateMediaTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(MediaRouteMap::Create), [
                 'title' => 'タグが重複したMV',
                 'url' => 'https://example.com/duplicated',
@@ -110,7 +116,7 @@ class CreateMediaTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'tags' => [['tagId' => $tagId], ['tagId' => $tagId]],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

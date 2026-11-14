@@ -28,11 +28,22 @@ class PerformanceHistoryTest extends DatabaseTestCase
         $this->storeEvents($this->createEvent(
             $eventId,
             title: '披露ライブ',
-            performances: [['performanceId' => $performanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1]]]],
+            performances: [[
+                'performanceId' => $performanceId,
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [[
+                    'personId' => $personId,
+                    'creditName' => null,
+                    'personGroupId' => null,
+                    'orderNo' => 1,
+                ]],
+            ]],
         ));
 
-        $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonPath('songs.0.songId', $songId)
             ->assertJsonPath('songs.0.performances.0.eventId', $eventId)
             ->assertJsonPath('songs.0.performances.0.eventTitle', '披露ライブ')
@@ -53,18 +64,29 @@ class PerformanceHistoryTest extends DatabaseTestCase
             $this->createPerson($member2, 'メンバー2', 2),
             $this->createPerson($guest, 'ゲスト', 3),
         );
-        $this->storePersonGroups($this->createPersonGroup($personGroupId, 'グループ (C不在)', [$member1, $member2], 'グループ'));
+        $this->storePersonGroups($this->createPersonGroup(
+            $personGroupId,
+            'グループ (C不在)',
+            [$member1, $member2],
+            'グループ',
+        ));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
-            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => [
-                ['personId' => $guest, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
-                ['personId' => $member1, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 2],
-                ['personId' => $member2, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 3],
-            ]]],
+            performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [
+                    ['personId' => $guest, 'creditName' => null, 'personGroupId' => null, 'orderNo' => 1],
+                    ['personId' => $member1, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 2],
+                    ['personId' => $member2, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 3],
+                ],
+            ]],
         ));
 
-        $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonPath('songs.0.performances.0.coVocalistNames', ['ゲスト', 'グループ']);
     }
 
@@ -77,11 +99,17 @@ class PerformanceHistoryTest extends DatabaseTestCase
             $this->generateUuid(),
             title: '非公開ライブ',
             isDisplay: false,
-            performances: [['performanceId' => $this->generateUuid(), 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []]],
+            performances: [[
+                'performanceId' => $this->generateUuid(),
+                'songId' => $songId,
+                'orderNo' => 1,
+                'coVocalists' => [],
+            ]],
         ));
 
-        $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertJsonPath('songs.0.songId', $songId)
             ->assertJsonCount(0, 'songs.0.performances');
     }

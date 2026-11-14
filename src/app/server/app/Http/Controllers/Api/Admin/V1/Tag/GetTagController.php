@@ -10,16 +10,18 @@ use Illuminate\Http\JsonResponse;
 use Tag\Application\Admin\UseCase\Get\GetInputData;
 use Tag\Application\Admin\UseCase\Get\GetUseCase;
 
-class GetTagController extends Controller
+final readonly class GetTagController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 
     public function handle(string $tagId): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle(new GetInputData($tagId)));
+        return new GetInputData($tagId)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

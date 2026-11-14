@@ -9,6 +9,7 @@ use Auth\Domain\Models\Token\RefreshToken\RefreshTokenId;
 use Auth\Domain\Models\Token\RefreshToken\RefreshTokenRepositoryInterface;
 use DateTimeImmutable;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\ClockInterface;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
@@ -31,13 +32,13 @@ readonly class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     #[Override]
     public function findActive(RefreshTokenId $refreshTokenId): ?RefreshToken
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('refresh_token_id', '=', $this->converter->toBin($refreshTokenId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('refresh_token_id', '=', $this->converter->toBin($refreshTokenId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -51,13 +52,22 @@ readonly class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     }
 
     #[Override]
-    public function save(RefreshToken $refreshToken): RefreshToken
+    public function save(#[SensitiveParameter] RefreshToken $refreshToken): RefreshToken
     {
         $data = $refreshToken->toArray();
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
-            ->into(self::TABLE, ['refresh_token_id', 'admin_user_id', 'token', 'expired_at', 'status', 'created_at', 'updated_at'])
+        $this->queryFactory
+            ->insert()
+            ->into(self::TABLE, [
+                'refresh_token_id',
+                'admin_user_id',
+                'token',
+                'expired_at',
+                'status',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $this->converter->toBin($data['refresh_token_id']),
                 $this->converter->toBin($data['admin_user_id']),

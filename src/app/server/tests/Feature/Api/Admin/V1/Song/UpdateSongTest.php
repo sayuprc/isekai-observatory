@@ -37,34 +37,53 @@ class UpdateSongTest extends DatabaseTestCase
         $tagRepo->save($oldTag = $this->createTag($this->generateUuid(), '旧タグ', 10));
         $tagRepo->save($newTag = $this->createTag($this->generateUuid(), '新タグ', 20));
         $mediaRepo = $this->app->make(MediaRepository::class);
-        $mediaRepo->save($oldMedia = $this->createMedia($this->generateUuid(), '旧 Media', 'https://example.com/old-media', MediaType::Mv, true));
-        $mediaRepo->save($newMedia = $this->createMedia($this->generateUuid(), '新 Media', 'https://example.com/new-media', MediaType::Short, true));
-
-        $songId = $this->generateUuid();
-
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong(
-                $songId,
-                '曲名',
-                '説明',
-                'https://example.com/old-lyrics',
-                SongType::Original,
+        $mediaRepo->save(
+            $oldMedia = $this->createMedia(
+                $this->generateUuid(),
+                '旧 Media',
+                'https://example.com/old-media',
+                MediaType::Mv,
                 true,
-                1,
-                [['tagId' => $oldTag->tagId->value]],
-                [
-                    ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
-                    ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 2],
-                    ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 3],
-                ],
-                [],
-                [
-                    ['mediaId' => $oldMedia->mediaId->value, 'orderNo' => 1],
-                ],
+            ),
+        );
+        $mediaRepo->save(
+            $newMedia = $this->createMedia(
+                $this->generateUuid(),
+                '新 Media',
+                'https://example.com/new-media',
+                MediaType::Short,
+                true,
             ),
         );
 
-        $this->withAuth()
+        $songId = $this->generateUuid();
+
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $songId,
+                    '曲名',
+                    '説明',
+                    'https://example.com/old-lyrics',
+                    SongType::Original,
+                    true,
+                    1,
+                    [['tagId' => $oldTag->tagId->value]],
+                    [
+                        ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
+                        ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 2],
+                        ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 3],
+                    ],
+                    [],
+                    [
+                        ['mediaId' => $oldMedia->mediaId->value, 'orderNo' => 1],
+                    ],
+                ),
+            );
+
+        $this
+            ->withAuth()
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -79,7 +98,8 @@ class UpdateSongTest extends DatabaseTestCase
                 ],
                 'tags' => [['tagId' => $newTag->tagId->value]],
                 'media' => [['mediaId' => $newMedia->mediaId->value, 'orderNo' => 1]],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertExactJson([
                 'song' => [
                     'songId' => $songId,
@@ -130,23 +150,26 @@ class UpdateSongTest extends DatabaseTestCase
     {
         $songId = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong(
-                $songId,
-                '曲名',
-                '説明',
-                'https://example.com/lyrics',
-                SongType::Original,
-                true,
-                1,
-                [],
-                [],
-                [],
-                [],
-            ),
-        );
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $songId,
+                    '曲名',
+                    '説明',
+                    'https://example.com/lyrics',
+                    SongType::Original,
+                    true,
+                    1,
+                    [],
+                    [],
+                    [],
+                    [],
+                ),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -158,7 +181,8 @@ class UpdateSongTest extends DatabaseTestCase
                 'persons' => [],
                 'tags' => [],
                 'media' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJsonPath('song.lyricsLink', null)
             ->assertJsonPath('song.media', []);
     }
@@ -178,27 +202,30 @@ class UpdateSongTest extends DatabaseTestCase
         $routeSongId = $this->generateUuid();
         $bodySongId = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong(
-                $routeSongId,
-                '曲名',
-                '説明',
-                null,
-                SongType::Original,
-                true,
-                1,
-                [],
-                [
-                    ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
-                    ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 2],
-                    ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 3],
-                ],
-                [],
-                [],
-            ),
-        );
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong(
+                    $routeSongId,
+                    '曲名',
+                    '説明',
+                    null,
+                    SongType::Original,
+                    true,
+                    1,
+                    [],
+                    [
+                        ['personId' => $person1->personId->value, 'role' => 1, 'orderNo' => 1],
+                        ['personId' => $person2->personId->value, 'role' => 2, 'orderNo' => 2],
+                        ['personId' => $person3->personId->value, 'role' => 3, 'orderNo' => 3],
+                    ],
+                    [],
+                    [],
+                ),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(SongRouteMap::Update, $routeSongId), [
                 'songId' => $bodySongId,
                 'title' => 'テスト楽曲',
@@ -214,7 +241,8 @@ class UpdateSongTest extends DatabaseTestCase
                 ],
                 'tags' => [],
                 'media' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertExactJson([
                 'song' => [
                     'songId' => $routeSongId,
@@ -250,19 +278,18 @@ class UpdateSongTest extends DatabaseTestCase
     {
         $songId = $this->generateUuid();
 
-        $this->withAuth()
-            ->putJson(route(SongRouteMap::Update, $songId), [
-                'title' => 'テスト楽曲',
-                'description' => 'テスト楽曲説明',
-                'note' => '',
-                'lyricsLink' => null,
-                'type' => SongType::Original->value,
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'persons' => [],
-                'tags' => [],
-                'media' => [],
-            ])->assertStatus(404);
+        $this->withAuth()->putJson(route(SongRouteMap::Update, $songId), [
+            'title' => 'テスト楽曲',
+            'description' => 'テスト楽曲説明',
+            'note' => '',
+            'lyricsLink' => null,
+            'type' => SongType::Original->value,
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'persons' => [],
+            'tags' => [],
+            'media' => [],
+        ])->assertNotFound();
     }
 
     #[Test]
@@ -270,11 +297,14 @@ class UpdateSongTest extends DatabaseTestCase
     {
         $songId = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
-        );
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -286,7 +316,8 @@ class UpdateSongTest extends DatabaseTestCase
                 'persons' => [],
                 'tags' => [['tagId' => $this->generateUuid()]],
                 'media' => [],
-            ])->assertStatus(400);
+            ])
+            ->assertBadRequest();
     }
 
     #[Test]
@@ -294,14 +325,17 @@ class UpdateSongTest extends DatabaseTestCase
     {
         $songId = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
-        );
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
+            );
 
         $tagRepo = $this->app->make(TagRepository::class);
         $tagRepo->save($tag = $this->createTag($this->generateUuid(), 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -316,7 +350,8 @@ class UpdateSongTest extends DatabaseTestCase
                     ['tagId' => $tag->tagId->value],
                 ],
                 'media' => [],
-            ])->assertStatus(400)
+            ])
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -329,11 +364,14 @@ class UpdateSongTest extends DatabaseTestCase
     {
         $songId = $this->generateUuid();
 
-        $this->app->make(SongRepository::class)->save(
-            $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
-        );
+        $this->app
+            ->make(SongRepository::class)
+            ->save(
+                $this->createSong($songId, '曲名', '説明', null, SongType::Original, true, 1, [], [], [], []),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->putJson(route(SongRouteMap::Update, $songId), [
                 'title' => '',
                 'description' => '',
@@ -345,7 +383,8 @@ class UpdateSongTest extends DatabaseTestCase
                 'persons' => [],
                 'tags' => [],
                 'media' => [],
-            ])->assertStatus(422)
+            ])
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

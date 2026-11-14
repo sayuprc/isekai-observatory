@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * AdminUserApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -30,24 +35,32 @@ namespace OpenAPI\Admin\Client\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Admin\Client\ApiException;
+use OpenAPI\Admin\Client\Configuration;
+use OpenAPI\Admin\Client\HeaderSelector;
+use OpenAPI\Admin\Client\Model\AdminUserListResponse;
+use OpenAPI\Admin\Client\Model\ErrorResponse;
+use OpenAPI\Admin\Client\ObjectSerializer;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Admin\Client\ApiException;
-use OpenAPI\Admin\Client\Configuration;
-use OpenAPI\Admin\Client\FormDataProcessor;
-use OpenAPI\Admin\Client\HeaderSelector;
-use OpenAPI\Admin\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * AdminUserApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class AdminUserApi
@@ -72,7 +85,7 @@ class AdminUserApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'adminUserServiceListAdminUsers' => [
             'application/json',
@@ -80,16 +93,13 @@ class AdminUserApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -128,25 +138,28 @@ class AdminUserApi
     /**
      * Operation adminUserServiceListAdminUsers
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\AdminUserListResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return AdminUserListResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
     public function adminUserServiceListAdminUsers(string $contentType = self::contentTypes['adminUserServiceListAdminUsers'][0])
     {
         list($response) = $this->adminUserServiceListAdminUsersWithHttpInfo($contentType);
+
         return $response;
     }
 
     /**
      * Operation adminUserServiceListAdminUsersWithHttpInfo
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\AdminUserListResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function adminUserServiceListAdminUsersWithHttpInfo(string $contentType = self::contentTypes['adminUserServiceListAdminUsers'][0])
@@ -155,29 +168,30 @@ class AdminUserApi
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\AdminUserListResponse',
@@ -204,18 +218,16 @@ class AdminUserApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -230,36 +242,39 @@ class AdminUserApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\AdminUserListResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -268,28 +283,30 @@ class AdminUserApi
     /**
      * Operation adminUserServiceListAdminUsersAsync
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
     public function adminUserServiceListAdminUsersAsync(string $contentType = self::contentTypes['adminUserServiceListAdminUsers'][0])
     {
         return $this->adminUserServiceListAdminUsersAsyncWithHttpInfo($contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation adminUserServiceListAdminUsersAsyncWithHttpInfo
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
     public function adminUserServiceListAdminUsersAsyncWithHttpInfo(string $contentType = self::contentTypes['adminUserServiceListAdminUsers'][0])
     {
@@ -299,11 +316,11 @@ class AdminUserApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -312,7 +329,7 @@ class AdminUserApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -320,38 +337,38 @@ class AdminUserApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'adminUserServiceListAdminUsers'
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
+     * @param string $contentType The value for the Content-Type header. Check self::contentTypes['adminUserServiceListAdminUsers'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
     public function adminUserServiceListAdminUsersRequest(string $contentType = self::contentTypes['adminUserServiceListAdminUsers'][0])
     {
-
-
         $resourcePath = '/admin-users';
         $formParams = [];
         $queryParams = [];
@@ -359,14 +376,10 @@ class AdminUserApi
         $httpBody = '';
         $multipart = false;
 
-
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -378,19 +391,18 @@ class AdminUserApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -399,7 +411,7 @@ class AdminUserApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -411,23 +423,25 @@ class AdminUserApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -435,8 +449,8 @@ class AdminUserApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -456,12 +470,8 @@ class AdminUserApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -469,24 +479,24 @@ class AdminUserApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -495,16 +505,16 @@ class AdminUserApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

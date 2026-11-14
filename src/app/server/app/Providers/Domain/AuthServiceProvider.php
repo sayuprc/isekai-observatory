@@ -75,7 +75,7 @@ class AuthServiceProvider extends ServiceProvider
                 config()->string('auth.passkey.rp_name'),
                 config()->string('auth.passkey.rp_id'),
                 config()->string('auth.passkey.origin'),
-                config()->integer('auth.passkey.timeout_ms', 60000),
+                config()->integer('auth.passkey.timeout_ms', 60_000),
                 config()->integer('auth.passkey.ceremony_ttl_seconds', 300),
                 config()->string('auth.passkey.ceremony_cache_store'),
             ),

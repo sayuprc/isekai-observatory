@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ErrorDetail
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,67 +33,77 @@
 
 namespace OpenAPI\Viewer\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Viewer\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * ErrorDetail Class Doc Comment
  *
  * @category Class
+ *
  * @description フィールド単位のエラー詳細
+ *
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
+class ErrorDetail implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'ErrorDetail';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'field' => 'string',
-        'message' => 'string'
+        'message' => 'string',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'field' => null,
-        'message' => null
+        'message' => null,
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'field' => false,
-        'message' => false
+        'message' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -113,8 +128,6 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -124,7 +137,7 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -134,7 +147,7 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -143,9 +156,6 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -154,9 +164,6 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -167,31 +174,31 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'field' => 'field',
-        'message' => 'message'
+        'message' => 'message',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'field' => 'setField',
-        'message' => 'setMessage'
+        'message' => 'setMessage',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'field' => 'getField',
-        'message' => 'getMessage'
+        'message' => 'getMessage',
     ];
 
     /**
@@ -235,19 +242,18 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -256,17 +262,17 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -288,6 +294,7 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['message'] === null) {
             $invalidProperties[] = "'message' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -301,7 +308,6 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets field
@@ -322,8 +328,8 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setField($field)
     {
-        if (is_null($field)) {
-            throw new \InvalidArgumentException('non-nullable field cannot be null');
+        if ($field === null) {
+            throw new InvalidArgumentException('non-nullable field cannot be null');
         }
         $this->container['field'] = $field;
 
@@ -349,19 +355,18 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setMessage($message)
     {
-        if (is_null($message)) {
-            throw new \InvalidArgumentException('non-nullable message cannot be null');
+        if ($message === null) {
+            throw new InvalidArgumentException('non-nullable message cannot be null');
         }
         $this->container['message'] = $message;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -371,11 +376,11 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -386,12 +391,10 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -401,9 +404,7 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -412,15 +413,16 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -432,7 +434,7 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -446,5 +448,3 @@ class ErrorDetail implements ModelInterface, ArrayAccess, \JsonSerializable
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

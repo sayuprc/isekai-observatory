@@ -50,7 +50,8 @@ class RefreshUseCaseTest extends DatabaseTestCase
         );
         $this->storeRefreshTokens($refreshToken);
 
-        $this->app->make(RefreshUseCase::class)
+        $this->app
+            ->make(RefreshUseCase::class)
             ->handle(new RefreshInputData($refreshToken->refreshTokenId->value, $plainToken));
 
         $this->assertAuditLogCount(1);

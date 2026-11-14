@@ -26,7 +26,11 @@ readonly class SongPersons extends ImmutableCollection
         $duplicates = [];
 
         foreach ($items as $item) {
-            $person = new SongPerson(new PersonId($item['personId']), self::toRole($item['role']), new OrderNo($item['orderNo']));
+            $person = new SongPerson(
+                new PersonId($item['personId']),
+                self::toRole($item['role']),
+                new OrderNo($item['orderNo']),
+            );
             $key = $person->personId->value . ':' . $person->role->value;
 
             if (isset($duplicates[$key])) {

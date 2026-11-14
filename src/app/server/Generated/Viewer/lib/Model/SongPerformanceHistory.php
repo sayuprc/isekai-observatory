@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * SongPerformanceHistory
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -28,76 +33,86 @@
 
 namespace OpenAPI\Viewer\Client\Model;
 
-use \ArrayAccess;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+use OpenAPI\Viewer\Client\ObjectSerializer;
+use ReturnTypeWillChange;
 
 /**
  * SongPerformanceHistory Class Doc Comment
  *
  * @category Class
+ *
  * @description 楽曲が公開イベントで披露された履歴
+ *
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<string, mixed>
+ *
+ * @implements ArrayAccess<string, mixed>
  */
-class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerializable
+class SongPerformanceHistory implements ArrayAccess, JsonSerializable, ModelInterface
 {
     public const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $openAPIModelName = 'SongPerformanceHistory';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     */
     protected static $openAPITypes = [
         'event_id' => 'string',
         'event_title' => 'string',
         'type' => '\OpenAPI\Viewer\Client\Model\EventTypeValue',
         'schedule' => '\OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule',
-        'co_vocalist_names' => 'string[]'
+        'co_vocalist_names' => 'string[]',
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      * @phpstan-var array<string, string|null>
-      * @psalm-var array<string, string|null>
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string>
+     *
+     * @phpstan-var array<string, string|null>
+     *
+     * @psalm-var array<string, string|null>
+     */
     protected static $openAPIFormats = [
         'event_id' => 'uuid',
         'event_title' => null,
         'type' => null,
         'schedule' => null,
-        'co_vocalist_names' => null
+        'co_vocalist_names' => null,
     ];
 
     /**
-      * Array of nullable properties. Used for (de)serialization
-      *
-      * @var boolean[]
-      */
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<bool>
+     */
     protected static array $openAPINullables = [
         'event_id' => false,
         'event_title' => false,
         'type' => false,
         'schedule' => false,
-        'co_vocalist_names' => false
+        'co_vocalist_names' => false,
     ];
 
     /**
-      * If a nullable field gets set to null, insert it here
-      *
-      * @var boolean[]
-      */
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<bool>
+     */
     protected array $openAPINullablesSetToNull = [];
 
     /**
@@ -122,8 +137,6 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
 
     /**
      * Array of nullable properties
-     *
-     * @return array
      */
     protected static function openAPINullables(): array
     {
@@ -133,7 +146,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Array of nullable field names deliberately set to null
      *
-     * @return boolean[]
+     * @return array<bool>
      */
     private function getOpenAPINullablesSetToNull(): array
     {
@@ -143,7 +156,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Setter - Array of nullable field names deliberately set to null
      *
-     * @param boolean[] $openAPINullablesSetToNull
+     * @param array<bool> $openAPINullablesSetToNull
      */
     private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
     {
@@ -152,9 +165,6 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
 
     /**
      * Checks if a property is nullable
-     *
-     * @param string $property
-     * @return bool
      */
     public static function isNullable(string $property): bool
     {
@@ -163,9 +173,6 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
 
     /**
      * Checks if a nullable property is set to null.
-     *
-     * @param string $property
-     * @return bool
      */
     public function isNullableSetToNull(string $property): bool
     {
@@ -176,40 +183,40 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $attributeMap = [
         'event_id' => 'eventId',
         'event_title' => 'eventTitle',
         'type' => 'type',
         'schedule' => 'schedule',
-        'co_vocalist_names' => 'coVocalistNames'
+        'co_vocalist_names' => 'coVocalistNames',
     ];
 
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $setters = [
         'event_id' => 'setEventId',
         'event_title' => 'setEventTitle',
         'type' => 'setType',
         'schedule' => 'setSchedule',
-        'co_vocalist_names' => 'setCoVocalistNames'
+        'co_vocalist_names' => 'setCoVocalistNames',
     ];
 
     /**
      * Array of attributes to getter functions (for serialization of requests)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected static $getters = [
         'event_id' => 'getEventId',
         'event_title' => 'getEventTitle',
         'type' => 'getType',
         'schedule' => 'getSchedule',
-        'co_vocalist_names' => 'getCoVocalistNames'
+        'co_vocalist_names' => 'getCoVocalistNames',
     ];
 
     /**
@@ -253,19 +260,18 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
         return self::$openAPIModelName;
     }
 
-
     /**
      * Associative array for storing property values
      *
-     * @var mixed[]
+     * @var array<mixed>
      */
     protected $container = [];
 
     /**
      * Constructor
      *
-     * @param mixed[]|null $data Associated array of property values
-     *                      initializing the model
+     * @param array<mixed>|null $data Associated array of property values
+     *                                initializing the model
      */
     public function __construct(?array $data = null)
     {
@@ -277,17 +283,17 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     }
 
     /**
-    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-    * $this->openAPINullablesSetToNull array
-    *
-    * @param string $variableName
-    * @param array  $fields
-    * @param mixed  $defaultValue
-    */
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     */
     private function setIfExists(string $variableName, array $fields, $defaultValue): void
     {
-        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+        if (
+            self::isNullable($variableName)
+            && array_key_exists($variableName, $fields)
+            && $fields[$variableName] === null
+        ) {
             $this->openAPINullablesSetToNull[] = $variableName;
         }
 
@@ -309,7 +315,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
         if ($this->container['event_title'] === null) {
             $invalidProperties[] = "'event_title' can't be null";
         }
-        if ((mb_strlen($this->container['event_title']) < 1)) {
+        if (mb_strlen($this->container['event_title']) < 1) {
             $invalidProperties[] = "invalid value for 'event_title', the character length must be bigger than or equal to 1.";
         }
 
@@ -322,6 +328,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
         if ($this->container['co_vocalist_names'] === null) {
             $invalidProperties[] = "'co_vocalist_names' can't be null";
         }
+
         return $invalidProperties;
     }
 
@@ -335,7 +342,6 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
 
     /**
      * Gets event_id
@@ -356,8 +362,8 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
      */
     public function setEventId($event_id)
     {
-        if (is_null($event_id)) {
-            throw new \InvalidArgumentException('non-nullable event_id cannot be null');
+        if ($event_id === null) {
+            throw new InvalidArgumentException('non-nullable event_id cannot be null');
         }
         $this->container['event_id'] = $event_id;
 
@@ -383,12 +389,12 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
      */
     public function setEventTitle($event_title)
     {
-        if (is_null($event_title)) {
-            throw new \InvalidArgumentException('non-nullable event_title cannot be null');
+        if ($event_title === null) {
+            throw new InvalidArgumentException('non-nullable event_title cannot be null');
         }
 
-        if ((mb_strlen($event_title) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $event_title when calling SongPerformanceHistory., must be bigger than or equal to 1.');
+        if (mb_strlen($event_title) < 1) {
+            throw new InvalidArgumentException('invalid length for $event_title when calling SongPerformanceHistory., must be bigger than or equal to 1.');
         }
 
         $this->container['event_title'] = $event_title;
@@ -399,7 +405,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets type
      *
-     * @return \OpenAPI\Viewer\Client\Model\EventTypeValue
+     * @return EventTypeValue
      */
     public function getType()
     {
@@ -409,14 +415,14 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets type
      *
-     * @param \OpenAPI\Viewer\Client\Model\EventTypeValue $type type
+     * @param EventTypeValue $type type
      *
      * @return self
      */
     public function setType($type)
     {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        if ($type === null) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
         $this->container['type'] = $type;
 
@@ -426,7 +432,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets schedule
      *
-     * @return \OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule
+     * @return IsekaiObservatoryPackagesEventEventSchedule
      */
     public function getSchedule()
     {
@@ -436,14 +442,14 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets schedule
      *
-     * @param \OpenAPI\Viewer\Client\Model\IsekaiObservatoryPackagesEventEventSchedule $schedule schedule
+     * @param IsekaiObservatoryPackagesEventEventSchedule $schedule schedule
      *
      * @return self
      */
     public function setSchedule($schedule)
     {
-        if (is_null($schedule)) {
-            throw new \InvalidArgumentException('non-nullable schedule cannot be null');
+        if ($schedule === null) {
+            throw new InvalidArgumentException('non-nullable schedule cannot be null');
         }
         $this->container['schedule'] = $schedule;
 
@@ -453,7 +459,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets co_vocalist_names
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getCoVocalistNames()
     {
@@ -463,25 +469,24 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets co_vocalist_names
      *
-     * @param string[] $co_vocalist_names 共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる
+     * @param array<string> $co_vocalist_names 共演者の表示名。グループとして出演した共演者はグループ名 1 つにまとめる
      *
      * @return self
      */
     public function setCoVocalistNames($co_vocalist_names)
     {
-        if (is_null($co_vocalist_names)) {
-            throw new \InvalidArgumentException('non-nullable co_vocalist_names cannot be null');
+        if ($co_vocalist_names === null) {
+            throw new InvalidArgumentException('non-nullable co_vocalist_names cannot be null');
         }
         $this->container['co_vocalist_names'] = $co_vocalist_names;
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
      *
-     * @param integer $offset Offset
-     *
-     * @return boolean
+     * @param int $offset Offset
      */
     public function offsetExists($offset): bool
     {
@@ -491,11 +496,11 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets offset.
      *
-     * @param integer $offset Offset
+     * @param int $offset Offset
      *
      * @return mixed|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -506,12 +511,10 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
      *
      * @param int|null $offset Offset
      * @param mixed    $value  Value to be set
-     *
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -521,9 +524,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Unsets offset.
      *
-     * @param integer $offset Offset
-     *
-     * @return void
+     * @param int $offset Offset
      */
     public function offsetUnset($offset): void
     {
@@ -532,15 +533,16 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().
+     *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
-     * of any type other than a resource.
+     *               of any type other than a resource.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
@@ -552,7 +554,7 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
     {
         return json_encode(
             ObjectSerializer::sanitizeForSerialization($this),
-            JSON_PRETTY_PRINT
+            JSON_PRETTY_PRINT,
         );
     }
 
@@ -566,5 +568,3 @@ class SongPerformanceHistory implements ModelInterface, ArrayAccess, \JsonSerial
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

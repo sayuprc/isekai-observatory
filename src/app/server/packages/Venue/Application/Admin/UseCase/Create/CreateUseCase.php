@@ -30,7 +30,9 @@ readonly class CreateUseCase
 
         return $this->transaction->scope(function () use ($inputData): CreateOutputData {
             $venue = $this->service->prepareForCreate($inputData->name, $inputData->kind);
+
             $this->repository->save($venue);
+
             $this->recorder->record(
                 AuditAction::Create,
                 AuditTargetType::Venue,

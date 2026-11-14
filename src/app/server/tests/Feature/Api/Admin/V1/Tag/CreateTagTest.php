@@ -20,10 +20,12 @@ class CreateTagTest extends DatabaseTestCase
     #[Test]
     public function canCreate(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(TagRouteMap::Create), [
                 'name' => 'テストタグA',
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -39,14 +41,18 @@ class CreateTagTest extends DatabaseTestCase
     #[Test]
     public function createFailsWhenNameAlreadyExists(): void
     {
-        $this->app->make(TagRepository::class)->save(
-            $this->createTag($this->generateUuid(), 'テストタグA', 10),
-        );
+        $this->app
+            ->make(TagRepository::class)
+            ->save(
+                $this->createTag($this->generateUuid(), 'テストタグA', 10),
+            );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(TagRouteMap::Create), [
                 'name' => 'テストタグA',
-            ])->assertStatus(400)
+            ])
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'すでに使われている名前です "テストタグA"',
@@ -56,10 +62,12 @@ class CreateTagTest extends DatabaseTestCase
     #[Test]
     public function emptyParameters(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(TagRouteMap::Create), [
                 'name' => '',
-            ])->assertStatus(422)
+            ])
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

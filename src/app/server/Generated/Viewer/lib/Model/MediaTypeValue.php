@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * MediaTypeValue
  *
@@ -6,7 +9,9 @@
  *
  * @category Class
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,15 +32,18 @@
  */
 
 namespace OpenAPI\Viewer\Client\Model;
-use \OpenAPI\Viewer\Client\ObjectSerializer;
 
 /**
  * MediaTypeValue Class Doc Comment
  *
  * @category Class
+ *
  * @description メディア種別の値
+ *
  * @package  OpenAPI\Viewer\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 enum MediaTypeValue: int
@@ -69,7 +77,4 @@ enum MediaTypeValue: int
      * その他
      */
     case OTHER = 99;
-
 }
-
-

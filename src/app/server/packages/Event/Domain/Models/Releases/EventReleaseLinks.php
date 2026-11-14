@@ -37,10 +37,15 @@ readonly class EventReleaseLinks extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): EventReleaseLink => new EventReleaseLink(new ReleaseId($item['releaseId']), new OrderNo($item['orderNo'])),
-            $items,
-        ));
+        return new self(
+            array_map(
+                static fn (array $item): EventReleaseLink => new EventReleaseLink(
+                    new ReleaseId($item['releaseId']),
+                    new OrderNo($item['orderNo']),
+                ),
+                $items,
+            ),
+        );
     }
 
     /**
@@ -48,6 +53,7 @@ readonly class EventReleaseLinks extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (EventReleaseLink $link): array => $link->toArray(), $this->items));
+        return array_map(static fn (EventReleaseLink $link): array => $link->toArray(), $this->items)
+            |> array_values(...);
     }
 }

@@ -67,7 +67,8 @@ class SongAssemblerTest extends TestCase
             note: $note,
         );
 
-        $this->personRepository->shouldReceive('findByIds')
+        $this->personRepository
+            ->shouldReceive('findByIds')
             ->withArgs(static function (PersonId ...$ids) use ($lyricistId, $composerId, $arrangerId): bool {
                 $idValues = array_map(static fn (PersonId $id): string => $id->value, $ids);
                 sort($idValues);

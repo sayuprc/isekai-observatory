@@ -24,9 +24,10 @@ class ListPersonTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($uuid, 'テスト人物', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(PersonRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'persons' => [
                     [
@@ -41,9 +42,10 @@ class ListPersonTest extends DatabaseTestCase
     #[Test]
     public function showEmptyList(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(PersonRouteMap::List))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson(['persons' => []]);
     }
 }

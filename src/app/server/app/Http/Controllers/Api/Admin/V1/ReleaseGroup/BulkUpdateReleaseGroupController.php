@@ -12,12 +12,12 @@ use Release\Application\Admin\UseCase\Group\BulkUpdate\BulkUpdateInputData;
 use Release\Application\Admin\UseCase\Group\BulkUpdate\BulkUpdateUseCase;
 use Support\Contracts\MapperInterface;
 
-class BulkUpdateReleaseGroupController extends Controller
+final readonly class BulkUpdateReleaseGroupController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly BulkUpdateUseCase $useCase,
-        private readonly BulkUpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private BulkUpdateUseCase $useCase,
+        private BulkUpdatePresenter $presenter,
     ) {
     }
 

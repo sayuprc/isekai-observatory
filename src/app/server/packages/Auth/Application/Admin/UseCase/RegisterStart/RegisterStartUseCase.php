@@ -42,7 +42,12 @@ readonly class RegisterStartUseCase
         }
 
         try {
-            $adminUser = $this->integrityService->prepareForCreate($name, $token->email, $token->role, $token->permissions);
+            $adminUser = $this->integrityService->prepareForCreate(
+                $name,
+                $token->email,
+                $token->role,
+                $token->permissions,
+            );
         } catch (BusinessRuleViolationException) {
             // ユーザー列挙を防ぐため、失敗理由に依らず同一メッセージで返す
             throw new BusinessRuleViolationException(self::FAILED_MESSAGE);
@@ -55,14 +60,16 @@ readonly class RegisterStartUseCase
             $adminUser->name->value,
         );
 
-        $this->ceremonyStore->put(new PasskeyCeremonyState(
-            $authCeremonyId,
-            PasskeyCeremonyType::Register,
-            $adminUser->email->value,
-            $adminUser->name->value,
-            $adminUser->adminUserId->value,
-            $startResult->optionsJson,
-        ));
+        $this->ceremonyStore->put(
+            new PasskeyCeremonyState(
+                $authCeremonyId,
+                PasskeyCeremonyType::Register,
+                $adminUser->email->value,
+                $adminUser->name->value,
+                $adminUser->adminUserId->value,
+                $startResult->optionsJson,
+            ),
+        );
 
         return new RegisterStartOutputData($authCeremonyId, $startResult->publicKey);
     }

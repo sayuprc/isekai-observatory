@@ -50,22 +50,26 @@ class RefreshTokenIssueServiceTest extends TestCase
         $hashedToken = 'hashed-token-value';
         $now = new DateTimeImmutable('2026-02-01 00:00:00');
 
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->with()
             ->andReturn($now)
             ->once();
 
-        $this->uuidGenerator->shouldReceive('generate')
+        $this->uuidGenerator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn($generatedUuid)
             ->once();
 
-        $this->randomTokenGenerator->shouldReceive('generate')
+        $this->randomTokenGenerator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn($generatedToken)
             ->once();
 
-        $this->tokenHasher->shouldReceive('hash')
+        $this->tokenHasher
+            ->shouldReceive('hash')
             ->with($generatedToken)
             ->andReturn($hashedToken)
             ->once();

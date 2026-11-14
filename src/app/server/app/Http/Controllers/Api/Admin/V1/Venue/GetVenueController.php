@@ -10,16 +10,18 @@ use Illuminate\Http\JsonResponse;
 use Venue\Application\Admin\UseCase\Get\GetInputData;
 use Venue\Application\Admin\UseCase\Get\GetUseCase;
 
-class GetVenueController extends Controller
+final readonly class GetVenueController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 
     public function handle(string $venueId): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle(new GetInputData($venueId)));
+        return new GetInputData($venueId)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

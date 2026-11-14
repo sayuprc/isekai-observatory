@@ -34,76 +34,73 @@ trait EntityStore
     protected function storeVenues(Venue ...$items): void
     {
         $repository = $this->makeRepository(VenueRepositoryInterface::class);
-        array_map(static fn (Venue $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeEvents(Event ...$items): void
     {
         $repository = $this->makeRepository(EventRepositoryInterface::class);
-        array_map(static fn (Event $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storePersons(Person ...$items): void
     {
         $repository = $this->makeRepository(PersonRepositoryInterface::class);
-        array_map(static fn (Person $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storePersonGroups(PersonGroup ...$items): void
     {
         $repository = $this->makeRepository(PersonGroupRepositoryInterface::class);
-        array_map(static fn (PersonGroup $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeSongs(Song ...$items): void
     {
         $repository = $this->makeRepository(SongRepositoryInterface::class);
-        array_map(static fn (Song $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeMedia(Media ...$items): void
     {
         $repository = $this->makeRepository(MediaRepositoryInterface::class);
-        array_map(static fn (Media $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeYouTubeChannels(YouTubeChannel ...$items): void
     {
         $repository = $this->makeRepository(YouTubeChannelRepositoryInterface::class);
-        array_map(static fn (YouTubeChannel $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeTags(Tag ...$items): void
     {
         $repository = $this->makeRepository(TagRepositoryInterface::class);
-        array_map(static fn (Tag $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeReleaseGroups(ReleaseGroup ...$items): void
     {
         $repository = $this->makeRepository(ReleaseGroupRepositoryInterface::class);
-        array_map(static fn (ReleaseGroup $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeReleases(Release ...$items): void
     {
         $repository = $this->makeRepository(ReleaseRepositoryInterface::class);
-        array_map(static fn (Release $item) => $repository->save($item), $items);
+        array_map($repository->save(...), $items);
     }
 
     protected function storeAdminUsers(AdminUser ...$items): void
     {
         $repository = $this->makeRepository(AdminUserRepositoryInterface::class);
-        array_map(
-            static fn (AdminUser $item) => $repository->register($item),
-            $items,
-        );
+        array_map($repository->register(...), $items);
     }
 
     protected function storeRefreshTokens(RefreshToken ...$items): void
     {
         $repository = $this->makeRepository(RefreshTokenRepositoryInterface::class);
-        array_map(static fn (RefreshToken $refreshToken) => $repository->save($refreshToken), $items);
+        array_map($repository->save(...), $items);
     }
 
     /**

@@ -48,14 +48,16 @@ readonly class Media extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): Medium => Medium::reconstruct(
-                $item['position'],
-                $item['name'],
-                $item['tracks'],
+        return new self(
+            array_map(
+                static fn (array $item): Medium => Medium::reconstruct(
+                    $item['position'],
+                    $item['name'],
+                    $item['tracks'],
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**

@@ -19,8 +19,14 @@ final class SchemaErrorMessages
         return match ($keyword) {
             'minLength' => sprintf('%d 文字以上で入力してください', self::intOf($args['min'] ?? null, 1)),
             'maxLength' => sprintf('%d 文字以内で入力してください', self::intOf($args['max'] ?? null, 0)),
-            'minimum', 'exclusiveMinimum' => sprintf('%s 以上の値を指定してください', self::stringify($args['min'] ?? '')),
-            'maximum', 'exclusiveMaximum' => sprintf('%s 以下の値を指定してください', self::stringify($args['max'] ?? '')),
+            'minimum', 'exclusiveMinimum' => sprintf(
+                '%s 以上の値を指定してください',
+                self::stringify($args['min'] ?? ''),
+            ),
+            'maximum', 'exclusiveMaximum' => sprintf(
+                '%s 以下の値を指定してください',
+                self::stringify($args['max'] ?? ''),
+            ),
             'minItems' => sprintf('%d 件以上指定してください', self::intOf($args['min'] ?? null, 1)),
             'maxItems' => sprintf('%d 件以内で指定してください', self::intOf($args['max'] ?? null, 0)),
             'type' => '型が不正です',

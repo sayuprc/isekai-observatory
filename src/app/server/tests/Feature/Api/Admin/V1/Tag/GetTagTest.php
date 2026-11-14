@@ -23,9 +23,10 @@ class GetTagTest extends DatabaseTestCase
 
         $this->app->make(TagRepository::class)->save($this->createTag($uuid, 'テストタグA', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Get, $uuid))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tag' => [
                     'tagId' => $uuid,
@@ -40,8 +41,9 @@ class GetTagTest extends DatabaseTestCase
     {
         $uuid = $this->generateUuid();
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Get, $uuid))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

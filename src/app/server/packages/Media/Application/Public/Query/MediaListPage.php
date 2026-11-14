@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Media\Application\Public\Query;
 
+use SensitiveParameter;
+
 readonly class MediaListPage
 {
     /**
@@ -11,6 +13,7 @@ readonly class MediaListPage
      */
     public function __construct(
         public array $media,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

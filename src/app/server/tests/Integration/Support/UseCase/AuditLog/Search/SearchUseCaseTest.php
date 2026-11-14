@@ -32,9 +32,27 @@ class SearchUseCaseTest extends DatabaseTestCase
     {
         $actorId = $this->seedActor();
 
-        $this->insertAuditLog($actorId, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-01 10:00:00'));
-        $this->insertAuditLog($actorId, AuditAction::Update, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 10:00:00'));
-        $this->insertAuditLog($actorId, AuditAction::Delete, AuditTargetType::Person, $this->generateUuid(), new DateTimeImmutable('2026-04-03 10:00:00'));
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-01 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Update,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-02 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Delete,
+            AuditTargetType::Person,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-03 10:00:00'),
+        );
 
         $result = $this->getInstance()->handle(new SearchInputData());
 
@@ -53,9 +71,27 @@ class SearchUseCaseTest extends DatabaseTestCase
     {
         $actorId = $this->seedActor();
 
-        $this->insertAuditLog($actorId, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-01 00:00:00'));
-        $this->insertAuditLog($actorId, AuditAction::Update, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 12:00:00'));
-        $this->insertAuditLog($actorId, AuditAction::Delete, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-03 23:59:59'));
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-01 00:00:00'),
+        );
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Update,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-02 12:00:00'),
+        );
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Delete,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-03 23:59:59'),
+        );
 
         $result = $this->getInstance()->handle(new SearchInputData(
             from: new DateTimeImmutable('2026-04-02 00:00:00'),
@@ -73,9 +109,27 @@ class SearchUseCaseTest extends DatabaseTestCase
     {
         $actorId = $this->seedActor();
 
-        $this->insertAuditLog($actorId, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-01 10:00:00'));
-        $this->insertAuditLog($actorId, AuditAction::Update, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 10:00:00'));
-        $this->insertAuditLog($actorId, AuditAction::Update, AuditTargetType::Person, $this->generateUuid(), new DateTimeImmutable('2026-04-03 10:00:00'));
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-01 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Update,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-02 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Update,
+            AuditTargetType::Person,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-03 10:00:00'),
+        );
 
         $result = $this->getInstance()->handle(new SearchInputData(
             action: AuditAction::Update,
@@ -96,9 +150,27 @@ class SearchUseCaseTest extends DatabaseTestCase
         $otherActorId = $this->seedActor(email: 'other@example.com', name: '検索テストユーザーB');
         $targetId = $this->generateUuid();
 
-        $this->insertAuditLog($actorId, AuditAction::Create, AuditTargetType::Song, $targetId, new DateTimeImmutable('2026-04-01 10:00:00'));
-        $this->insertAuditLog($actorId, AuditAction::Update, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 10:00:00'));
-        $this->insertAuditLog($otherActorId, AuditAction::Update, AuditTargetType::Song, $targetId, new DateTimeImmutable('2026-04-03 10:00:00'));
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $targetId,
+            new DateTimeImmutable('2026-04-01 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Update,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-02 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $otherActorId,
+            AuditAction::Update,
+            AuditTargetType::Song,
+            $targetId,
+            new DateTimeImmutable('2026-04-03 10:00:00'),
+        );
 
         $resultByTarget = $this->getInstance()->handle(new SearchInputData(targetId: $targetId));
         $this->assertCount(2, $resultByTarget->auditLogs);
@@ -128,8 +200,20 @@ class SearchUseCaseTest extends DatabaseTestCase
         $actorId = $this->seedActor(name: 'Observer');
         $otherActorId = $this->seedActor(email: 'other@example.com', name: '別の管理者');
 
-        $this->insertAuditLog($actorId, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-01 10:00:00'));
-        $this->insertAuditLog($otherActorId, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 10:00:00'));
+        $this->insertAuditLog(
+            $actorId,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-01 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $otherActorId,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-02 10:00:00'),
+        );
 
         $result = $this->getInstance()->handle(new SearchInputData(adminUserName: 'oBSERVER'));
 
@@ -143,8 +227,20 @@ class SearchUseCaseTest extends DatabaseTestCase
         $actorWithPercent = $this->seedActor(name: '100%担当');
         $plainActor = $this->seedActor(email: 'plain@example.com', name: 'プレーン');
 
-        $this->insertAuditLog($actorWithPercent, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-01 10:00:00'));
-        $this->insertAuditLog($plainActor, AuditAction::Create, AuditTargetType::Song, $this->generateUuid(), new DateTimeImmutable('2026-04-02 10:00:00'));
+        $this->insertAuditLog(
+            $actorWithPercent,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-01 10:00:00'),
+        );
+        $this->insertAuditLog(
+            $plainActor,
+            AuditAction::Create,
+            AuditTargetType::Song,
+            $this->generateUuid(),
+            new DateTimeImmutable('2026-04-02 10:00:00'),
+        );
 
         // '%' はメタ文字ではなくリテラルとして扱われ、'%' を含む名前だけがヒットする
         $resultPercent = $this->getInstance()->handle(new SearchInputData(adminUserName: '%'));

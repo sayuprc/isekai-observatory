@@ -141,7 +141,10 @@ abstract class OpenApiValidator
         $field = implode('/', $chain);
 
         $message = match (true) {
-            $exception instanceof FormatMismatch => sprintf('The value does not match the expected format: %s.', $exception->format()),
+            $exception instanceof FormatMismatch => sprintf(
+                'The value does not match the expected format: %s.',
+                $exception->format(),
+            ),
             default => $exception->getMessage(),
         };
 

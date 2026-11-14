@@ -12,12 +12,12 @@ use Person\Application\Admin\UseCase\Create\CreateInputData;
 use Person\Application\Admin\UseCase\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
-class CreatePersonController extends Controller
+final readonly class CreatePersonController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly CreateUseCase $useCase,
-        private readonly CreatePresenter $presenter,
+        private MapperInterface $mapper,
+        private CreateUseCase $useCase,
+        private CreatePresenter $presenter,
     ) {
     }
 

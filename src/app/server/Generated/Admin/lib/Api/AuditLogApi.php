@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * AuditLogApi
  * PHP version 8.1
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 
@@ -27,27 +32,40 @@
 
 namespace OpenAPI\Admin\Client\Api;
 
+use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
+use JsonException;
+use OpenAPI\Admin\Client\ApiException;
+use OpenAPI\Admin\Client\Configuration;
+use OpenAPI\Admin\Client\HeaderSelector;
+use OpenAPI\Admin\Client\Model\AuditAction;
+use OpenAPI\Admin\Client\Model\AuditLogGetResponse;
+use OpenAPI\Admin\Client\Model\AuditLogSearchResponse;
+use OpenAPI\Admin\Client\Model\AuditTargetType;
+use OpenAPI\Admin\Client\Model\ErrorResponse;
+use OpenAPI\Admin\Client\ObjectSerializer;
+use OpenAPIAdminClientModelPerPage;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use OpenAPI\Admin\Client\ApiException;
-use OpenAPI\Admin\Client\Configuration;
-use OpenAPI\Admin\Client\FormDataProcessor;
-use OpenAPI\Admin\Client\HeaderSelector;
-use OpenAPI\Admin\Client\ObjectSerializer;
+use RuntimeException;
+use Throwable;
 
 /**
  * AuditLogApi Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Admin\Client
+ *
  * @author   OpenAPI Generator team
+ *
  * @link     https://openapi-generator.tech
  */
 class AuditLogApi
@@ -72,7 +90,7 @@ class AuditLogApi
      */
     protected $hostIndex;
 
-    /** @var string[] $contentTypes **/
+    /** @var array<string> $contentTypes */
     public const contentTypes = [
         'auditLogServiceGetAuditLog' => [
             'application/json',
@@ -83,16 +101,13 @@ class AuditLogApi
     ];
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ?ClientInterface $client = null,
         ?Configuration $config = null,
         ?HeaderSelector $selector = null,
-        int $hostIndex = 0
+        int $hostIndex = 0,
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
@@ -131,58 +146,66 @@ class AuditLogApi
     /**
      * Operation auditLogServiceGetAuditLog
      *
-     * @param  string $audit_log_id audit_log_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
+     * @param string $audit_log_id audit_log_id (required)
+     * @param string $contentType  The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\AuditLogGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return AuditLogGetResponse|ErrorResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function auditLogServiceGetAuditLog($audit_log_id, string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0])
-    {
+    public function auditLogServiceGetAuditLog(
+        $audit_log_id,
+        string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0],
+    ) {
         list($response) = $this->auditLogServiceGetAuditLogWithHttpInfo($audit_log_id, $contentType);
+
         return $response;
     }
 
     /**
      * Operation auditLogServiceGetAuditLogWithHttpInfo
      *
-     * @param  string $audit_log_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
+     * @param string $audit_log_id (required)
+     * @param string $contentType  The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\AuditLogGetResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function auditLogServiceGetAuditLogWithHttpInfo($audit_log_id, string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0])
-    {
+    public function auditLogServiceGetAuditLogWithHttpInfo(
+        $audit_log_id,
+        string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0],
+    ) {
         $request = $this->auditLogServiceGetAuditLogRequest($audit_log_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\AuditLogGetResponse',
@@ -215,18 +238,16 @@ class AuditLogApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -241,44 +262,48 @@ class AuditLogApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\AuditLogGetResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -287,44 +312,50 @@ class AuditLogApi
     /**
      * Operation auditLogServiceGetAuditLogAsync
      *
-     * @param  string $audit_log_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
+     * @param string $audit_log_id (required)
+     * @param string $contentType  The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function auditLogServiceGetAuditLogAsync($audit_log_id, string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0])
-    {
+    public function auditLogServiceGetAuditLogAsync(
+        $audit_log_id,
+        string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0],
+    ) {
         return $this->auditLogServiceGetAuditLogAsyncWithHttpInfo($audit_log_id, $contentType)
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation auditLogServiceGetAuditLogAsyncWithHttpInfo
      *
-     * @param  string $audit_log_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
+     * @param string $audit_log_id (required)
+     * @param string $contentType  The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function auditLogServiceGetAuditLogAsyncWithHttpInfo($audit_log_id, string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0])
-    {
+    public function auditLogServiceGetAuditLogAsyncWithHttpInfo(
+        $audit_log_id,
+        string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\AuditLogGetResponse';
         $request = $this->auditLogServiceGetAuditLogRequest($audit_log_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -333,7 +364,7 @@ class AuditLogApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -341,45 +372,45 @@ class AuditLogApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'auditLogServiceGetAuditLog'
      *
-     * @param  string $audit_log_id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
+     * @param string $audit_log_id (required)
+     * @param string $contentType  The value for the Content-Type header. Check self::contentTypes['auditLogServiceGetAuditLog'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function auditLogServiceGetAuditLogRequest($audit_log_id, string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0])
-    {
-
+    public function auditLogServiceGetAuditLogRequest(
+        $audit_log_id,
+        string $contentType = self::contentTypes['auditLogServiceGetAuditLog'][0],
+    ) {
         // verify the required parameter 'audit_log_id' is set
-        if ($audit_log_id === null || (is_array($audit_log_id) && count($audit_log_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $audit_log_id when calling auditLogServiceGetAuditLog'
-            );
+        if ($audit_log_id === null || is_array($audit_log_id) && count($audit_log_id) === 0) {
+            throw new InvalidArgumentException('Missing the required parameter $audit_log_id when calling auditLogServiceGetAuditLog');
         }
-
 
         $resourcePath = '/audit-logs/{auditLogId}';
         $formParams = [];
@@ -388,22 +419,19 @@ class AuditLogApi
         $httpBody = '';
         $multipart = false;
 
-
-
         // path params
         if ($audit_log_id !== null) {
             $resourcePath = str_replace(
                 '{auditLogId}',
                 ObjectSerializer::toPathValue($audit_log_id),
-                $resourcePath
+                $resourcePath,
             );
         }
 
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -415,19 +443,18 @@ class AuditLogApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -436,7 +463,7 @@ class AuditLogApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -448,88 +475,131 @@ class AuditLogApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Operation auditLogServiceSearchAuditLogs
      *
-     * @param  \DateTime|null $from from (optional)
-     * @param  \DateTime|null $to to (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditAction|null $action action (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditTargetType|null $target_type target_type (optional)
-     * @param  string|null $target_id target_id (optional)
-     * @param  string|null $admin_user_name admin_user_name (optional)
-     * @param  Int|null $page page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
+     * @param DateTime|null                       $from            from (optional)
+     * @param DateTime|null                       $to              to (optional)
+     * @param AuditAction|null                    $action          action (optional)
+     * @param AuditTargetType|null                $target_type     target_type (optional)
+     * @param string|null                         $target_id       target_id (optional)
+     * @param string|null                         $admin_user_name admin_user_name (optional)
+     * @param int|null                            $page            page (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null $per_page        per_page (optional, default to 50)
+     * @param string                              $contentType     The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Admin\Client\Model\AuditLogSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
+     * @return AuditLogSearchResponse|ErrorResponse|ErrorResponse|ErrorResponse
      */
-    public function auditLogServiceSearchAuditLogs($from = null, $to = null, $action = null, $target_type = null, $target_id = null, $admin_user_name = null, $page = 1, $per_page = 50, string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0])
-    {
-        list($response) = $this->auditLogServiceSearchAuditLogsWithHttpInfo($from, $to, $action, $target_type, $target_id, $admin_user_name, $page, $per_page, $contentType);
+    public function auditLogServiceSearchAuditLogs(
+        $from = null,
+        $to = null,
+        $action = null,
+        $target_type = null,
+        $target_id = null,
+        $admin_user_name = null,
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0],
+    ) {
+        list($response) = $this->auditLogServiceSearchAuditLogsWithHttpInfo(
+            $from,
+            $to,
+            $action,
+            $target_type,
+            $target_id,
+            $admin_user_name,
+            $page,
+            $per_page,
+            $contentType,
+        );
+
         return $response;
     }
 
     /**
      * Operation auditLogServiceSearchAuditLogsWithHttpInfo
      *
-     * @param  \DateTime|null $from (optional)
-     * @param  \DateTime|null $to (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditAction|null $action (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditTargetType|null $target_type (optional)
-     * @param  string|null $target_id (optional)
-     * @param  string|null $admin_user_name (optional)
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
+     * @param DateTime|null                       $from            (optional)
+     * @param DateTime|null                       $to              (optional)
+     * @param AuditAction|null                    $action          (optional)
+     * @param AuditTargetType|null                $target_type     (optional)
+     * @param string|null                         $target_id       (optional)
+     * @param string|null                         $admin_user_name (optional)
+     * @param int|null                            $page            (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null $per_page        (optional, default to 50)
+     * @param string                              $contentType     The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
      *
-     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException             on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     *
      * @return array of \OpenAPI\Admin\Client\Model\AuditLogSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function auditLogServiceSearchAuditLogsWithHttpInfo($from = null, $to = null, $action = null, $target_type = null, $target_id = null, $admin_user_name = null, $page = 1, $per_page = 50, string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0])
-    {
-        $request = $this->auditLogServiceSearchAuditLogsRequest($from, $to, $action, $target_type, $target_id, $admin_user_name, $page, $per_page, $contentType);
+    public function auditLogServiceSearchAuditLogsWithHttpInfo(
+        $from = null,
+        $to = null,
+        $action = null,
+        $target_type = null,
+        $target_id = null,
+        $admin_user_name = null,
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0],
+    ) {
+        $request = $this->auditLogServiceSearchAuditLogsRequest(
+            $from,
+            $to,
+            $action,
+            $target_type,
+            $target_id,
+            $admin_user_name,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         try {
             $options = $this->createHttpClientOption();
+
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
                 $eResponse = $this->getExceptionResponse($e);
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     $eResponse ? $eResponse->getHeaders() : null,
-                    $eResponse ? (string) $eResponse->getBody() : null
+                    $eResponse ? (string)$eResponse->getBody() : null,
                 );
             } catch (NetworkExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
+                    (int)$e->getCode(),
                     null,
-                    null
+                    null,
                 );
             }
 
             $statusCode = $response->getStatusCode();
 
-
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\OpenAPI\Admin\Client\Model\AuditLogSearchResponse',
@@ -556,18 +626,16 @@ class AuditLogApi
                     );
             }
 
-            
-
             if ($statusCode < 200 || $statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        (string) $request->getUri()
+                        (string)$request->getUri(),
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    (string) $response->getBody()
+                    (string)$response->getBody(),
                 );
             }
 
@@ -582,36 +650,39 @@ class AuditLogApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\AuditLogSearchResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\OpenAPI\Admin\Client\Model\ErrorResponse',
-                        $e->getResponseHeaders()
+                        $e->getResponseHeaders(),
                     );
                     $e->setResponseObject($data);
+
                     throw $e;
             }
-        
 
             throw $e;
         }
@@ -620,58 +691,98 @@ class AuditLogApi
     /**
      * Operation auditLogServiceSearchAuditLogsAsync
      *
-     * @param  \DateTime|null $from (optional)
-     * @param  \DateTime|null $to (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditAction|null $action (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditTargetType|null $target_type (optional)
-     * @param  string|null $target_id (optional)
-     * @param  string|null $admin_user_name (optional)
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
+     * @param DateTime|null                       $from            (optional)
+     * @param DateTime|null                       $to              (optional)
+     * @param AuditAction|null                    $action          (optional)
+     * @param AuditTargetType|null                $target_type     (optional)
+     * @param string|null                         $target_id       (optional)
+     * @param string|null                         $admin_user_name (optional)
+     * @param int|null                            $page            (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null $per_page        (optional, default to 50)
+     * @param string                              $contentType     The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function auditLogServiceSearchAuditLogsAsync($from = null, $to = null, $action = null, $target_type = null, $target_id = null, $admin_user_name = null, $page = 1, $per_page = 50, string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0])
-    {
-        return $this->auditLogServiceSearchAuditLogsAsyncWithHttpInfo($from, $to, $action, $target_type, $target_id, $admin_user_name, $page, $per_page, $contentType)
+    public function auditLogServiceSearchAuditLogsAsync(
+        $from = null,
+        $to = null,
+        $action = null,
+        $target_type = null,
+        $target_id = null,
+        $admin_user_name = null,
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0],
+    ) {
+        return $this->auditLogServiceSearchAuditLogsAsyncWithHttpInfo(
+            $from,
+            $to,
+            $action,
+            $target_type,
+            $target_id,
+            $admin_user_name,
+            $page,
+            $per_page,
+            $contentType,
+        )
             ->then(
-                function ($response) {
+                static function ($response) {
                     return $response[0];
-                }
+                },
             );
     }
 
     /**
      * Operation auditLogServiceSearchAuditLogsAsyncWithHttpInfo
      *
-     * @param  \DateTime|null $from (optional)
-     * @param  \DateTime|null $to (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditAction|null $action (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditTargetType|null $target_type (optional)
-     * @param  string|null $target_id (optional)
-     * @param  string|null $admin_user_name (optional)
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
+     * @param DateTime|null                       $from            (optional)
+     * @param DateTime|null                       $to              (optional)
+     * @param AuditAction|null                    $action          (optional)
+     * @param AuditTargetType|null                $target_type     (optional)
+     * @param string|null                         $target_id       (optional)
+     * @param string|null                         $admin_user_name (optional)
+     * @param int|null                            $page            (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null $per_page        (optional, default to 50)
+     * @param string                              $contentType     The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws InvalidArgumentException
+     *
+     * @return PromiseInterface
      */
-    public function auditLogServiceSearchAuditLogsAsyncWithHttpInfo($from = null, $to = null, $action = null, $target_type = null, $target_id = null, $admin_user_name = null, $page = 1, $per_page = 50, string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0])
-    {
+    public function auditLogServiceSearchAuditLogsAsyncWithHttpInfo(
+        $from = null,
+        $to = null,
+        $action = null,
+        $target_type = null,
+        $target_id = null,
+        $admin_user_name = null,
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0],
+    ) {
         $returnType = '\OpenAPI\Admin\Client\Model\AuditLogSearchResponse';
-        $request = $this->auditLogServiceSearchAuditLogsRequest($from, $to, $action, $target_type, $target_id, $admin_user_name, $page, $per_page, $contentType);
+        $request = $this->auditLogServiceSearchAuditLogsRequest(
+            $from,
+            $to,
+            $action,
+            $target_type,
+            $target_id,
+            $admin_user_name,
+            $page,
+            $per_page,
+            $contentType,
+        );
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                static function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody(); // stream goes to serializer
                     } else {
-                        $content = (string) $response->getBody();
+                        $content = (string)$response->getBody();
                         if ($returnType !== 'string') {
                             $content = json_decode($content);
                         }
@@ -680,7 +791,7 @@ class AuditLogApi
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
                         $response->getStatusCode(),
-                        $response->getHeaders()
+                        $response->getHeaders(),
                     ];
                 },
                 function ($exception) {
@@ -688,54 +799,55 @@ class AuditLogApi
                     if ($response === null) {
                         throw new ApiException(
                             "[{$exception->getCode()}] {$exception->getMessage()}",
-                            (int) $exception->getCode(),
+                            (int)$exception->getCode(),
                             null,
-                            null
+                            null,
                         );
                     }
                     $statusCode = $response->getStatusCode();
+
                     throw new ApiException(
                         sprintf(
                             '[%d] Error connecting to the API (%s)',
                             $statusCode,
-                            $exception->getRequest()->getUri()
+                            $exception->getRequest()->getUri(),
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        (string) $response->getBody()
+                        (string)$response->getBody(),
                     );
-                }
+                },
             );
     }
 
     /**
      * Create request for operation 'auditLogServiceSearchAuditLogs'
      *
-     * @param  \DateTime|null $from (optional)
-     * @param  \DateTime|null $to (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditAction|null $action (optional)
-     * @param  \OpenAPI\Admin\Client\Model\AuditTargetType|null $target_type (optional)
-     * @param  string|null $target_id (optional)
-     * @param  string|null $admin_user_name (optional)
-     * @param  Int|null $page (optional, default to 1)
-     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 50)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
+     * @param DateTime|null                       $from            (optional)
+     * @param DateTime|null                       $to              (optional)
+     * @param AuditAction|null                    $action          (optional)
+     * @param AuditTargetType|null                $target_type     (optional)
+     * @param string|null                         $target_id       (optional)
+     * @param string|null                         $admin_user_name (optional)
+     * @param int|null                            $page            (optional, default to 1)
+     * @param OpenAPIAdminClientModelPerPage|null $per_page        (optional, default to 50)
+     * @param string                              $contentType     The value for the Content-Type header. Check self::contentTypes['auditLogServiceSearchAuditLogs'] to see the possible values for this operation
      *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @throws InvalidArgumentException
+     *
+     * @return Request
      */
-    public function auditLogServiceSearchAuditLogsRequest($from = null, $to = null, $action = null, $target_type = null, $target_id = null, $admin_user_name = null, $page = 1, $per_page = 50, string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0])
-    {
-
-
-
-
-
-
-
-
-
-
+    public function auditLogServiceSearchAuditLogsRequest(
+        $from = null,
+        $to = null,
+        $action = null,
+        $target_type = null,
+        $target_id = null,
+        $admin_user_name = null,
+        $page = 1,
+        $per_page = 50,
+        string $contentType = self::contentTypes['auditLogServiceSearchAuditLogs'][0],
+    ) {
         $resourcePath = '/audit-logs/search';
         $formParams = [];
         $queryParams = [];
@@ -750,7 +862,7 @@ class AuditLogApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -759,7 +871,7 @@ class AuditLogApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -768,7 +880,7 @@ class AuditLogApi
             'AuditAction', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -777,7 +889,7 @@ class AuditLogApi
             'AuditTargetType', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -786,7 +898,7 @@ class AuditLogApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -795,7 +907,7 @@ class AuditLogApi
             'string', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -804,7 +916,7 @@ class AuditLogApi
             'integer', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -813,16 +925,13 @@ class AuditLogApi
             'PerPage', // openApiType
             'form', // style
             false, // explode
-            false // required
+            false, // required
         ) ?? []);
 
-
-
-
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json'],
             $contentType,
-            $multipart
+            $multipart,
         );
 
         // for model (json/xml)
@@ -834,19 +943,18 @@ class AuditLogApi
                     foreach ($formParamValueItems as $formParamValueItem) {
                         $multipartContents[] = [
                             'name' => $formParamName,
-                            'contents' => $formParamValueItem
+                            'contents' => $formParamValueItem,
                         ];
                     }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
+                // if Content-Type contains "application/json", json_encode the form parameters
                 try {
                     $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $e) {
-                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                } catch (JsonException $e) {
+                    throw new InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
                 }
             } else {
                 // for HTTP post (form)
@@ -855,7 +963,7 @@ class AuditLogApi
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
+        if (! empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -867,23 +975,25 @@ class AuditLogApi
         $headers = array_merge(
             $defaultHeaders,
             $headerParams,
-            $headers
+            $headers,
         );
 
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
+
         return new Request(
             'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
-            $httpBody
+            $httpBody,
         );
     }
 
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
+     *
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -891,8 +1001,8 @@ class AuditLogApi
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            if (! $options[RequestOptions::DEBUG]) {
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -912,12 +1022,8 @@ class AuditLogApi
      *
      * Guzzle 7 exposes getResponse() on RequestException, while Guzzle 8 only
      * exposes it on ResponseException and its subclasses.
-     *
-     * @param \Throwable $exception
-     *
-     * @return ResponseInterface|null
      */
-    private function getExceptionResponse(\Throwable $exception): ?ResponseInterface
+    private function getExceptionResponse(Throwable $exception): ?ResponseInterface
     {
         return method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
     }
@@ -925,24 +1031,24 @@ class AuditLogApi
     private function handleResponseWithDataType(
         string $dataType,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): array {
         if ($dataType === '\SplFileObject') {
-            $content = $response->getBody(); //stream goes to serializer
+            $content = $response->getBody(); // stream goes to serializer
         } else {
-            $content = (string) $response->getBody();
+            $content = (string)$response->getBody();
             if ($dataType !== 'string') {
                 try {
                     $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                } catch (\JsonException $exception) {
+                } catch (JsonException $exception) {
                     throw new ApiException(
                         sprintf(
                             'Error JSON decoding server response (%s)',
-                            $request->getUri()
+                            $request->getUri(),
                         ),
                         $response->getStatusCode(),
                         $response->getHeaders(),
-                        $content
+                        $content,
                     );
                 }
             }
@@ -951,16 +1057,16 @@ class AuditLogApi
         return [
             ObjectSerializer::deserialize($content, $dataType, []),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $response->getHeaders(),
         ];
     }
 
     private function responseWithinRangeCode(
         string $rangeCode,
-        int $statusCode
+        int $statusCode,
     ): bool {
-        $left = (int) ($rangeCode[0].'00');
-        $right = (int) ($rangeCode[0].'99');
+        $left = (int)($rangeCode[0] . '00');
+        $right = (int)($rangeCode[0] . '99');
 
         return $statusCode >= $left && $statusCode <= $right;
     }

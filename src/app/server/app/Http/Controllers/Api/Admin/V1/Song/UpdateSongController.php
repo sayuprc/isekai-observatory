@@ -12,30 +12,19 @@ use Song\Application\Admin\UseCase\Update\UpdateInputData;
 use Song\Application\Admin\UseCase\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
-class UpdateSongController extends Controller
+final readonly class UpdateSongController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly UpdateUseCase $useCase,
-        private readonly UpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private UpdateUseCase $useCase,
+        private UpdatePresenter $presenter,
     ) {
     }
 
     public function handle(string $songId, Request $request): JsonResponse
     {
-        return $this->buildInput($songId, $request)
+        return $this->mapper->map(UpdateInputData::class, [...$request->all(), 'songId' => $songId])
             |> $this->useCase->handle(...)
             |> $this->presenter->present(...);
-    }
-
-    private function buildInput(string $songId, Request $request): UpdateInputData
-    {
-        return $this->mapper->map(
-            UpdateInputData::class,
-            [
-                ...$request->all(),
-                'songId' => $songId,
-            ],
-        );
     }
 }
