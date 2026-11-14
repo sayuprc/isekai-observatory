@@ -29,11 +29,16 @@ class GetReleaseGroupTest extends DatabaseTestCase
         $releaseId1 = $this->generateUuid();
         $releaseId2 = $this->generateUuid();
 
-        $this->storeSongs(
-            $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 10),
-        );
+        $this->storeSongs($this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 10));
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true, '1st アルバム', orderNo: 5),
+            $this->createReleaseGroup(
+                $releaseGroupId,
+                '観測された春',
+                ReleaseGroupType::Album,
+                true,
+                '1st アルバム',
+                orderNo: 5,
+            ),
         );
         $this->storeReleases(
             $this->createRelease(
@@ -48,7 +53,9 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
@@ -64,7 +71,9 @@ class GetReleaseGroupTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => 'CD',
-                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                     [
                         'position' => 2,
@@ -75,9 +84,10 @@ class GetReleaseGroupTest extends DatabaseTestCase
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Get, $releaseGroupId))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'releaseGroup' => [
                     'releaseGroupId' => $releaseGroupId,
@@ -113,16 +123,18 @@ class GetReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function notFound(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson(route(ReleaseGroupRouteMap::Get, $this->generateUuid()))
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     #[Test]
     public function invalidId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->getJson('/api/admin/v1/release-groups/invalid-id')
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

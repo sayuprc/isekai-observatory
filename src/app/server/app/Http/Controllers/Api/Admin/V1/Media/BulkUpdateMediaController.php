@@ -12,12 +12,12 @@ use Media\Application\Admin\UseCase\BulkUpdate\BulkUpdateInputData;
 use Media\Application\Admin\UseCase\BulkUpdate\BulkUpdateUseCase;
 use Support\Contracts\MapperInterface;
 
-class BulkUpdateMediaController extends Controller
+final readonly class BulkUpdateMediaController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly BulkUpdateUseCase $useCase,
-        private readonly BulkUpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private BulkUpdateUseCase $useCase,
+        private BulkUpdatePresenter $presenter,
     ) {
     }
 

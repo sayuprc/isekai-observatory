@@ -29,10 +29,16 @@ class CreateUseCaseTest extends DatabaseTestCase
         $person2 = $this->generateUuid();
         $this->storePersons($this->createPerson($person1, '人物1', 1), $this->createPerson($person2, '人物2', 2));
 
-        $result = $this->getInstance()->handle(new CreateInputData('グループ (B不在)', 'グループ', [
-            ['personId' => $person2, 'orderNo' => 1],
-            ['personId' => $person1, 'orderNo' => 2],
-        ]));
+        $result = $this->getInstance()->handle(
+            new CreateInputData(
+                'グループ (B不在)',
+                'グループ',
+                [
+                    ['personId' => $person2, 'orderNo' => 1],
+                    ['personId' => $person1, 'orderNo' => 2],
+                ],
+            ),
+        );
 
         $this->assertSame('グループ (B不在)', $result->personGroup->name);
         $this->assertSame('グループ', $result->personGroup->displayName);
@@ -40,7 +46,11 @@ class CreateUseCaseTest extends DatabaseTestCase
         $this->assertSame(['人物2', '人物1'], array_column($result->personGroup->members, 'name'));
         $this->assertCount(2, DB::table('person_group_members')->get());
 
-        $log = $this->findAuditLog(AuditAction::Create, AuditTargetType::PersonGroup, $result->personGroup->personGroupId);
+        $log = $this->findAuditLog(
+            AuditAction::Create,
+            AuditTargetType::PersonGroup,
+            $result->personGroup->personGroupId,
+        );
         $this->assertSame('グループ (B不在)', $log['snapshot']['name']);
         $this->assertSame('グループ', $log['snapshot']['display_name']);
         $this->assertCount(2, $log['snapshot']['members']);
@@ -74,7 +84,18 @@ class CreateUseCaseTest extends DatabaseTestCase
         $this->expectException(BusinessRuleViolationException::class);
         $this->expectExceptionMessage('指定された人物の一部が存在しません');
 
-        $this->getInstance()->handle(new CreateInputData('グループ', 'グループ', [['personId' => $this->generateUuid(), 'orderNo' => 1]]));
+        $this->getInstance()->handle(
+            new CreateInputData(
+                'グループ',
+                'グループ',
+                [
+                    [
+                        'personId' => $this->generateUuid(),
+                        'orderNo' => 1,
+                    ],
+                ],
+            ),
+        );
     }
 
     private function getInstance(): CreateUseCase

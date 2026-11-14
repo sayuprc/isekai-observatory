@@ -42,12 +42,14 @@ class RecoveryCodeVerifyServiceTest extends TestCase
         $adminUserId = new AdminUserId(self::ADMIN_USER_ID);
         $code = $this->buildCode(ConsumptionStatus::Unused, null);
 
-        $this->repository->shouldReceive('findUnusedByAdminUserIdForUpdate')
+        $this->repository
+            ->shouldReceive('findUnusedByAdminUserIdForUpdate')
             ->with($adminUserId)
             ->andReturn([$code])
             ->once();
 
-        $this->hasher->shouldReceive('verify')
+        $this->hasher
+            ->shouldReceive('verify')
             ->with('A3KP-9QXR', 'hashed-code')
             ->andReturn(true)
             ->once();
@@ -61,12 +63,14 @@ class RecoveryCodeVerifyServiceTest extends TestCase
         $adminUserId = new AdminUserId(self::ADMIN_USER_ID);
         $code = $this->buildCode(ConsumptionStatus::Unused, null);
 
-        $this->repository->shouldReceive('findUnusedByAdminUserIdForUpdate')
+        $this->repository
+            ->shouldReceive('findUnusedByAdminUserIdForUpdate')
             ->with($adminUserId)
             ->andReturn([$code])
             ->once();
 
-        $this->hasher->shouldReceive('verify')
+        $this->hasher
+            ->shouldReceive('verify')
             ->with('WRONG-CODE', 'hashed-code')
             ->andReturn(false)
             ->once();
@@ -79,7 +83,8 @@ class RecoveryCodeVerifyServiceTest extends TestCase
     {
         $adminUserId = new AdminUserId(self::ADMIN_USER_ID);
 
-        $this->repository->shouldReceive('findUnusedByAdminUserIdForUpdate')
+        $this->repository
+            ->shouldReceive('findUnusedByAdminUserIdForUpdate')
             ->with($adminUserId)
             ->andReturn([])
             ->once();
@@ -93,12 +98,14 @@ class RecoveryCodeVerifyServiceTest extends TestCase
         $adminUserId = new AdminUserId(self::ADMIN_USER_ID);
         $code = $this->buildCode(ConsumptionStatus::Consumed, new DateTimeImmutable('2026-01-01 00:00:00'));
 
-        $this->repository->shouldReceive('findUnusedByAdminUserIdForUpdate')
+        $this->repository
+            ->shouldReceive('findUnusedByAdminUserIdForUpdate')
             ->with($adminUserId)
             ->andReturn([$code])
             ->once();
 
-        $this->hasher->shouldReceive('verify')
+        $this->hasher
+            ->shouldReceive('verify')
             ->with('A3KP-9QXR', 'hashed-code')
             ->andReturn(true)
             ->once();

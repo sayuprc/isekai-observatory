@@ -9,16 +9,17 @@ use App\Http\Presenters\Api\Admin\V1\Person\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Person\Application\Admin\UseCase\List\ListUseCase;
 
-class ListPersonController extends Controller
+final readonly class ListPersonController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 
     public function handle(): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle());
+        return $this->useCase->handle()
+            |> $this->presenter->present(...);
     }
 }

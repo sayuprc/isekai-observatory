@@ -24,10 +24,13 @@ class Converter
      */
     public function toOpenApiTags(array $tags): array
     {
-        return array_values(array_map(
-            static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()->setTagId($tag->tagId->value)->setName($tag->name->value),
+        return array_map(
+            static fn (Tag $tag): OpenApiAttachedTag => new OpenApiAttachedTag()
+                ->setTagId($tag->tagId->value)
+                ->setName($tag->name->value),
             $tags,
-        ));
+        )
+            |> array_values(...);
     }
 
     public function toOpenApiMedia(Media $media): OpenApiMedia

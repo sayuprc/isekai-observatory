@@ -69,12 +69,14 @@ class CreateUseCaseTest extends TestCase
             ['personId' => $arrangerId = 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'role' => 3, 'orderNo' => 3],
         ];
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->service->shouldReceive('prepareForCreate')
+        $this->service
+            ->shouldReceive('prepareForCreate')
             ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
             ->andReturn(
                 $song = $this->createSong(
@@ -92,13 +94,41 @@ class CreateUseCaseTest extends TestCase
             )
             ->once();
 
-        $this->repository->shouldReceive('save')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+        $this->repository
+            ->shouldReceive('save')
+            ->withArgs(
+                fn (Song $arg): bool => $this->assertSong(
+                    $arg,
+                    $songId,
+                    $title,
+                    $description,
+                    $note,
+                    $lyricsLink,
+                    $typeValue,
+                    $isDisplay,
+                    $orderNo,
+                    $persons,
+                ),
+            )
             ->andReturn($song)
             ->once();
 
-        $this->assembler->shouldReceive('assemble')
-            ->withArgs(fn (Song $arg): bool => $this->assertSong($arg, $songId, $title, $description, $note, $lyricsLink, $typeValue, $isDisplay, $orderNo, $persons))
+        $this->assembler
+            ->shouldReceive('assemble')
+            ->withArgs(
+                fn (Song $arg): bool => $this->assertSong(
+                    $arg,
+                    $songId,
+                    $title,
+                    $description,
+                    $note,
+                    $lyricsLink,
+                    $typeValue,
+                    $isDisplay,
+                    $orderNo,
+                    $persons,
+                ),
+            )
             ->andReturn(
                 new AssembledSong(
                     $song->songId->value,
@@ -148,12 +178,14 @@ class CreateUseCaseTest extends TestCase
             ['personId' => 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'role' => 3, 'orderNo' => 3],
         ];
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->service->shouldReceive('prepareForCreate')
+        $this->service
+            ->shouldReceive('prepareForCreate')
             ->with($title, $description, $note, $lyricsLink, $typeValue, $isDisplay, [], $persons, [])
             ->andThrow(new BusinessRuleViolationException('検証エラー'))
             ->once();

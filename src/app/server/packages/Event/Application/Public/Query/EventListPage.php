@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Event\Application\Public\Query;
 
+use SensitiveParameter;
+
 readonly class EventListPage
 {
     /**
@@ -11,6 +13,7 @@ readonly class EventListPage
      */
     public function __construct(
         public array $events,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

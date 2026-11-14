@@ -21,7 +21,11 @@ readonly class PersonRepository implements PersonRepositoryInterface
     private const string TABLE = 'persons';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['person_id', 'name', 'order_no'];
+    private const array COLUMNS = [
+        'person_id',
+        'name',
+        'order_no',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -32,12 +36,12 @@ readonly class PersonRepository implements PersonRepositoryInterface
     #[Override]
     public function all(): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->orderBy('order_no'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -50,13 +54,12 @@ readonly class PersonRepository implements PersonRepositoryInterface
             $criteria,
         );
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $query->orderBy($criteria->sort->value, $criteria->order->value),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $query->orderBy($criteria->sort->value, $criteria->order->value),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -75,13 +78,13 @@ readonly class PersonRepository implements PersonRepositoryInterface
     #[Override]
     public function find(PersonId $personId): ?Person
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('person_id', '=', $this->converter->toBin($personId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('person_id', '=', $this->converter->toBin($personId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -97,12 +100,12 @@ readonly class PersonRepository implements PersonRepositoryInterface
 
         $binIds = array_map(fn (PersonId $personId): string => $this->converter->toBin($personId->value), $personIds);
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('person_id', 'IN', $binIds),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('person_id', 'IN', $binIds)
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -110,13 +113,13 @@ readonly class PersonRepository implements PersonRepositoryInterface
     #[Override]
     public function findByName(PersonName $name): ?Person
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('name', '=', $name->value)
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('name', '=', $name->value)
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -130,7 +133,8 @@ readonly class PersonRepository implements PersonRepositoryInterface
 
         // emonkak のビルダは upsert を直接表現できないため、INSERT に
         // ON DUPLICATE KEY UPDATE を付与する。VALUES(col) で挿入値を再利用し追加バインドを避ける
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, ['person_id', 'name', 'order_no', 'created_at', 'updated_at'])
             ->values([
                 $this->converter->toBin($person->personId->value),
@@ -149,7 +153,8 @@ readonly class PersonRepository implements PersonRepositoryInterface
     #[Override]
     public function delete(PersonId $personId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('person_id', '=', $this->converter->toBin($personId->value))
             ->execute($this->queryFactory->pdo());
@@ -158,7 +163,8 @@ readonly class PersonRepository implements PersonRepositoryInterface
     #[Override]
     public function getMaxOrderNo(): int
     {
-        $max = $this->queryFactory->select()
+        $max = $this->queryFactory
+            ->select()
             ->from(self::TABLE)
             ->aggregate($this->queryFactory->pdo(), 'MAX(order_no)');
 

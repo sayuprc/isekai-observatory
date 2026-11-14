@@ -40,20 +40,28 @@ class RecoveryCodeIssueServiceTest extends TestCase
     #[Test]
     public function issueGeneratesTenCodes(): void
     {
-        $this->uuidGenerator->shouldReceive('generate')
-            ->andReturnUsing(static fn (): string => sprintf('%08d-0000-0000-0000-000000000000', mt_rand(0, 99999999)))
+        $this->uuidGenerator
+            ->shouldReceive('generate')
+            ->andReturnUsing(static fn (): string => sprintf(
+                '%08d-0000-0000-0000-000000000000',
+                mt_rand(0, 99_999_999),
+            ))
             ->times(10);
 
-        $this->randomGenerator->shouldReceive('generate')
+        $this->randomGenerator
+            ->shouldReceive('generate')
             ->andReturn('A3KP-9QXR')
             ->times(10);
 
-        $this->hasher->shouldReceive('hash')
+        $this->hasher
+            ->shouldReceive('hash')
             ->with('A3KP-9QXR')
             ->andReturn('hashed-code')
             ->times(10);
 
-        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(new AdminUserId(self::ADMIN_USER_ID));
+        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(
+            new AdminUserId(self::ADMIN_USER_ID),
+        );
 
         $this->assertCount(10, $codes);
         $this->assertCount(10, $plainCodes);
@@ -62,20 +70,28 @@ class RecoveryCodeIssueServiceTest extends TestCase
     #[Test]
     public function issueReturnsHashedCodesAndMatchingPlainCodes(): void
     {
-        $this->uuidGenerator->shouldReceive('generate')
-            ->andReturnUsing(static fn (): string => sprintf('%08d-0000-0000-0000-000000000000', mt_rand(0, 99999999)))
+        $this->uuidGenerator
+            ->shouldReceive('generate')
+            ->andReturnUsing(static fn (): string => sprintf(
+                '%08d-0000-0000-0000-000000000000',
+                mt_rand(0, 99_999_999),
+            ))
             ->times(10);
 
-        $this->randomGenerator->shouldReceive('generate')
+        $this->randomGenerator
+            ->shouldReceive('generate')
             ->andReturn('A3KP-9QXR')
             ->times(10);
 
-        $this->hasher->shouldReceive('hash')
+        $this->hasher
+            ->shouldReceive('hash')
             ->with('A3KP-9QXR')
             ->andReturn('hashed-code')
             ->times(10);
 
-        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(new AdminUserId(self::ADMIN_USER_ID));
+        ['codes' => $codes, 'plainCodes' => $plainCodes] = $this->getInstance()->issue(
+            new AdminUserId(self::ADMIN_USER_ID),
+        );
 
         foreach ($codes as $code) {
             $this->assertInstanceOf(RecoveryCode::class, $code);

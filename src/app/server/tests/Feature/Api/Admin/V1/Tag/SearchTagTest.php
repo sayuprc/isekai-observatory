@@ -23,8 +23,7 @@ class SearchTagTest extends DatabaseTestCase
     #[Test]
     public function returnUnauthorizedWhenUnauthenticated(): void
     {
-        $this->get(route(TagRouteMap::Search))
-            ->assertStatus(401);
+        $this->get(route(TagRouteMap::Search))->assertUnauthorized();
     }
 
     #[Test]
@@ -32,13 +31,12 @@ class SearchTagTest extends DatabaseTestCase
     {
         $tagId = $this->generateUuid();
 
-        $this->storeTags(
-            $this->createTag($tagId, 'テストタグA', 1),
-        );
+        $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [
                     [
@@ -66,9 +64,10 @@ class SearchTagTest extends DatabaseTestCase
             $this->createTag($otherId, 'テストタグB', 2),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search, ['name' => 'テストタグA']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [
                     [
@@ -90,13 +89,12 @@ class SearchTagTest extends DatabaseTestCase
     {
         $tagId = $this->generateUuid();
 
-        $this->storeTags(
-            $this->createTag($tagId, 'テストタグA', 1),
-        );
+        $this->storeTags($this->createTag($tagId, 'テストタグA', 1));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search, ['name' => '存在しない']))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [],
                 'maxPage' => 0,
@@ -118,14 +116,15 @@ class SearchTagTest extends DatabaseTestCase
 
         $this->storeTags(...$tags);
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search, [
                 'sort' => 'name',
                 'order' => 'desc',
                 'page' => 2,
                 'per_page' => 25,
             ]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 'tags' => [
                     [
@@ -148,13 +147,36 @@ class SearchTagTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグ', 1));
         $this->storeSongs(
-            $this->createSong($this->generateUuid(), '楽曲1', '説明', SongType::Original, true, 1, [['tagId' => $tagId]]),
-            $this->createSong($this->generateUuid(), '楽曲2', '説明', SongType::Original, true, 2, [['tagId' => $tagId]]),
+            $this->createSong(
+                $this->generateUuid(),
+                '楽曲1',
+                '説明',
+                SongType::Original,
+                true,
+                1,
+                [
+                    [
+                        'tagId' => $tagId,
+                    ],
+                ],
+            ),
+            $this->createSong(
+                $this->generateUuid(),
+                '楽曲2',
+                '説明',
+                SongType::Original,
+                true,
+                2,
+                [
+                    ['tagId' => $tagId],
+                ],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.songCount', 2);
     }
 
@@ -168,9 +190,10 @@ class SearchTagTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), tags: [['tagId' => $tagId]]),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.songCount', 0)
             ->assertJsonPath('tags.0.eventCount', 2);
     }
@@ -181,12 +204,20 @@ class SearchTagTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグ', 1));
         $this->storeReleaseGroups(
-            $this->createReleaseGroup($this->generateUuid(), '作品1', ReleaseGroupType::Album, tags: [['tagId' => $tagId]]),
+            $this->createReleaseGroup(
+                $this->generateUuid(),
+                '作品1',
+                ReleaseGroupType::Album,
+                tags: [
+                    ['tagId' => $tagId],
+                ],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.releaseGroupCount', 1);
     }
 
@@ -196,12 +227,22 @@ class SearchTagTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグ', 1));
         $this->storeMedia(
-            $this->createMedia($this->generateUuid(), 'MV', 'https://example.com/mv', MediaType::Mv, true, tags: [['tagId' => $tagId]]),
+            $this->createMedia(
+                $this->generateUuid(),
+                'MV',
+                'https://example.com/mv',
+                MediaType::Mv,
+                true,
+                tags: [
+                    ['tagId' => $tagId],
+                ],
+            ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(TagRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('tags.0.mediaCount', 1);
     }
 }

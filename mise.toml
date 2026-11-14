@@ -271,15 +271,36 @@ run = "docker compose exec php composer analyze-clear-cache"
 description = "PHPArkitect を実行する"
 run = "docker compose exec php composer architecture"
 
+# 整形は mago fmt、mago で表現できないルールは ECS が担う
+# mago はコンテナに入れず、mise で入れたホスト側のバイナリを使う
 [tasks."api:format:check"]
-description = "ECS を実行し、コードフォーマットをチェックする"
+description = "コードフォーマットをチェックする"
 usage = 'arg "[path]" var=#true help="フォーマットチェック対象パス"'
-run = "docker compose exec php composer format-check {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = [
+  "docker compose exec php composer format-check {% for p in usage.path %}{{ p | quote }} {% endfor %}",
+  "cd src/app/server && mago fmt --check {% for p in usage.path %}{{ p | quote }} {% endfor %}",
+]
 
+# ECS が書き換えた結果を mago fmt で整え直すので、mago fmt を後に実行する
 [tasks."api:format"]
-description = "ECS を実行し、フォーマットを自動修正する"
+description = "コードフォーマットを自動修正する"
 usage = 'arg "[path]" var=#true help="フォーマット自動修正対象パス"'
-run = "docker compose exec php composer format {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+run = [
+  "docker compose exec php composer format {% for p in usage.path %}{{ p | quote }} {% endfor %}",
+  "cd src/app/server && mago fmt {% for p in usage.path %}{{ p | quote }} {% endfor %}",
+]
+
+[tasks."api:lint:check"]
+description = "リンターを実行する"
+usage = 'arg "[path]" var=#true help="lint 対象パス"'
+dir = "src/app/server"
+run = "mago lint {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+
+[tasks."api:lint"]
+description = "リンターを実行し、安全に直せるものを自動修正する"
+usage = 'arg "[path]" var=#true help="lint 自動修正対象パス"'
+dir = "src/app/server"
+run = "mago lint --fix --format-after-fix {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
 [tasks."api:test"]
 description = "テストを実行する"

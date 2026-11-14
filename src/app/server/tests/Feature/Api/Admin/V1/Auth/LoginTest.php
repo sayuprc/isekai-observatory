@@ -50,11 +50,14 @@ class LoginTest extends DatabaseTestCase
         $this->bindPasskeyAuthenticator();
         $adminUserId = $this->storeAdminUserWithPasskey('example@example.com');
 
-        $this->postJson(route(AuthRouteMap::LoginStart), [
-            'email' => 'example@example.com',
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::LoginStart), [
+                'email' => 'example@example.com',
+            ])
+            ->assertOk()
             ->assertJson(
-                static fn (AssertableJson $json) => $json->whereType('authCeremonyId', 'string')
+                static fn (AssertableJson $json) => $json
+                    ->whereType('authCeremonyId', 'string')
                     ->where('publicKey.challenge', 'login-challenge')
                     ->where('publicKey.allowCredentials', [])
                     ->etc(),
@@ -70,11 +73,14 @@ class LoginTest extends DatabaseTestCase
         // ユーザー列挙を防ぐため、未登録メールでも登録済みと同一形状の 200 を返す
         $this->bindPasskeyAuthenticator();
 
-        $this->postJson(route(AuthRouteMap::LoginStart), [
-            'email' => 'unknown@example.com',
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::LoginStart), [
+                'email' => 'unknown@example.com',
+            ])
+            ->assertOk()
             ->assertJson(
-                static fn (AssertableJson $json) => $json->whereType('authCeremonyId', 'string')
+                static fn (AssertableJson $json) => $json
+                    ->whereType('authCeremonyId', 'string')
                     ->where('publicKey.challenge', 'login-challenge')
                     ->where('publicKey.allowCredentials', [])
                     ->etc(),
@@ -88,15 +94,18 @@ class LoginTest extends DatabaseTestCase
     {
         // 登録済みでもパスキー未登録なら、未登録メールと区別できない 200 を返す
         $this->bindPasskeyAuthenticator();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($this->generateUuid(), 'example@example.com'),
-        );
+        $this->app
+            ->make(AdminUserRepository::class)
+            ->register($this->createAdminUser($this->generateUuid(), 'example@example.com'));
 
-        $this->postJson(route(AuthRouteMap::LoginStart), [
-            'email' => 'example@example.com',
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::LoginStart), [
+                'email' => 'example@example.com',
+            ])
+            ->assertOk()
             ->assertJson(
-                static fn (AssertableJson $json) => $json->whereType('authCeremonyId', 'string')
+                static fn (AssertableJson $json) => $json
+                    ->whereType('authCeremonyId', 'string')
                     ->where('publicKey.challenge', 'login-challenge')
                     ->where('publicKey.allowCredentials', [])
                     ->etc(),
@@ -116,12 +125,12 @@ class LoginTest extends DatabaseTestCase
         foreach (range(1, 2) as $ignored) {
             $this->postJson(route(AuthRouteMap::LoginStart), [
                 'email' => 'throttle@example.com',
-            ])->assertStatus(200);
+            ])->assertOk();
         }
 
         $this->postJson(route(AuthRouteMap::LoginStart), [
             'email' => 'throttle@example.com',
-        ])->assertStatus(429);
+        ])->assertTooManyRequests();
 
         $this->assertSame(0, DB::table('refresh_tokens')->count());
     }
@@ -135,10 +144,12 @@ class LoginTest extends DatabaseTestCase
 
         $authCeremonyId = $this->startLogin('example@example.com');
 
-        $this->postJson(route(AuthRouteMap::LoginFinish), [
-            'authCeremonyId' => $authCeremonyId,
-            'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(200)
+        $this
+            ->postJson(route(AuthRouteMap::LoginFinish), [
+                'authCeremonyId' => $authCeremonyId,
+                'credential' => ['id' => 'credential-id'],
+            ])
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json->whereAllType([
                     'accessToken' => 'string',
@@ -172,7 +183,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertSame(0, DB::table('refresh_tokens')->count());
         $this->assertAuditLogCount(0);
@@ -187,7 +198,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $this->generateUuid(),
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -213,7 +224,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -232,7 +243,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'other-credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertPasskeyUnchanged('other-credential-id');
@@ -251,7 +262,7 @@ class LoginTest extends DatabaseTestCase
         $this->postJson(route(AuthRouteMap::LoginFinish), [
             'authCeremonyId' => $authCeremonyId,
             'credential' => ['id' => 'credential-id'],
-        ])->assertStatus(401);
+        ])->assertUnauthorized();
 
         $this->assertPasskeyUnchanged('credential-id');
         $this->assertSame(0, DB::table('refresh_tokens')->count());
@@ -262,7 +273,7 @@ class LoginTest extends DatabaseTestCase
     {
         $response = $this->postJson(route(AuthRouteMap::LoginStart), [
             'email' => $email,
-        ])->assertStatus(200);
+        ])->assertOk();
 
         $authCeremonyId = $response->json('authCeremonyId');
         $this->assertIsString($authCeremonyId);
@@ -273,25 +284,27 @@ class LoginTest extends DatabaseTestCase
     private function storeAdminUserWithPasskey(string $email, string $credentialId = 'credential-id'): string
     {
         $adminUserId = $this->generateUuid();
-        $this->app->make(AdminUserRepository::class)->register(
-            $this->createAdminUser($adminUserId, $email),
-        );
+        $this->app
+            ->make(AdminUserRepository::class)
+            ->register($this->createAdminUser($adminUserId, $email));
 
-        $this->app->make(AdminUserPasskeyRepositoryInterface::class)->save(new AdminUserPasskey(
-            $this->generateUuid(),
-            $adminUserId,
-            'user-handle-' . $credentialId,
-            'Primary passkey',
-            $credentialId,
-            'public-key',
-            '00000000-0000-0000-0000-000000000000',
-            ['internal'],
-            true,
-            false,
-            123,
-            new DateTimeImmutable('2026-01-01 00:00:00'),
-            null,
-        ));
+        $this->app
+            ->make(AdminUserPasskeyRepositoryInterface::class)
+            ->save(new AdminUserPasskey(
+                $this->generateUuid(),
+                $adminUserId,
+                'user-handle-' . $credentialId,
+                'Primary passkey',
+                $credentialId,
+                'public-key',
+                '00000000-0000-0000-0000-000000000000',
+                ['internal'],
+                true,
+                false,
+                123,
+                new DateTimeImmutable('2026-01-01 00:00:00'),
+                null,
+            ));
 
         return $adminUserId;
     }
@@ -314,44 +327,59 @@ class LoginTest extends DatabaseTestCase
 
     private function bindPasskeyAuthenticator(bool $failFinish = false): void
     {
-        $this->app->bind(PasskeyAuthenticatorInterface::class, static fn (): PasskeyAuthenticatorInterface => new class ($failFinish) implements PasskeyAuthenticatorInterface {
-            public function __construct(private readonly bool $failFinish)
-            {
-            }
-
-            public function startRegistration(string $userHandle, string $userName, string $displayName, array $excludePasskeys = []): PasskeyStartResult
-            {
-                throw new RuntimeException('unused');
-            }
-
-            public function finishRegistration(array $credential, string $optionsJson): PasskeyRegistrationResult
-            {
-                throw new RuntimeException('unused');
-            }
-
-            public function startAuthentication(): PasskeyStartResult
-            {
-                return new PasskeyStartResult('{"challenge":"login-challenge"}', [
-                    'challenge' => 'login-challenge',
-                    'allowCredentials' => [],
-                ]);
-            }
-
-            public function credentialId(array $credential): ?string
-            {
-                $id = $credential['id'] ?? null;
-
-                return is_string($id) && $id !== '' ? $id : null;
-            }
-
-            public function finishAuthentication(array $credential, string $optionsJson, AdminUserPasskey $passkey, string $userHandle): PasskeyAuthenticationResult
-            {
-                if ($this->failFinish) {
-                    throw new RuntimeException('verification failed');
+        $this->app->bind(
+            PasskeyAuthenticatorInterface::class,
+            static fn (): PasskeyAuthenticatorInterface => new class($failFinish) implements
+                PasskeyAuthenticatorInterface {
+                public function __construct(private readonly bool $failFinish)
+                {
                 }
 
-                return new PasskeyAuthenticationResult($passkey->credentialId, 456);
-            }
-        });
+                public function startRegistration(
+                    string $userHandle,
+                    string $userName,
+                    string $displayName,
+                    array $excludePasskeys = [],
+                ): PasskeyStartResult {
+                    throw new RuntimeException('unused');
+                }
+
+                public function finishRegistration(
+                    string $credentialJson,
+                    string $optionsJson,
+                ): PasskeyRegistrationResult {
+                    throw new RuntimeException('unused');
+                }
+
+                public function startAuthentication(): PasskeyStartResult
+                {
+                    return new PasskeyStartResult('{"challenge":"login-challenge"}', [
+                        'challenge' => 'login-challenge',
+                        'allowCredentials' => [],
+                    ]);
+                }
+
+                public function credentialId(string $credentialJson): ?string
+                {
+                    $credential = json_decode($credentialJson, true);
+                    $id = is_array($credential) ? $credential['id'] ?? null : null;
+
+                    return is_string($id) && $id !== '' ? $id : null;
+                }
+
+                public function finishAuthentication(
+                    string $credentialJson,
+                    string $optionsJson,
+                    AdminUserPasskey $passkey,
+                    string $userHandle,
+                ): PasskeyAuthenticationResult {
+                    if ($this->failFinish) {
+                        throw new RuntimeException('verification failed');
+                    }
+
+                    return new PasskeyAuthenticationResult($passkey->credentialId, 456);
+                }
+            },
+        );
     }
 }

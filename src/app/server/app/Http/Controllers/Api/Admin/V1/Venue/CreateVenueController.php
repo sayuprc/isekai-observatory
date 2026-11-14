@@ -12,12 +12,12 @@ use Support\Contracts\MapperInterface;
 use Venue\Application\Admin\UseCase\Create\CreateInputData;
 use Venue\Application\Admin\UseCase\Create\CreateUseCase;
 
-class CreateVenueController extends Controller
+final readonly class CreateVenueController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly CreateUseCase $useCase,
-        private readonly CreatePresenter $presenter,
+        private MapperInterface $mapper,
+        private CreateUseCase $useCase,
+        private CreatePresenter $presenter,
     ) {
     }
 

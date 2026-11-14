@@ -40,11 +40,13 @@ class MediaIntegrityServiceTest extends TestCase
         $uuid = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
         $url = 'https://example.com/media';
 
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->once()
             ->andReturn($uuid);
 
-        $this->repository->shouldReceive('findByUrl')
+        $this->repository
+            ->shouldReceive('findByUrl')
             ->once()
             ->withArgs(static fn (MediaUrl $mediaUrl): bool => $mediaUrl->value === $url)
             ->andReturn(
@@ -86,7 +88,8 @@ class MediaIntegrityServiceTest extends TestCase
             true,
         );
 
-        $this->repository->shouldReceive('findByUrl')
+        $this->repository
+            ->shouldReceive('findByUrl')
             ->once()
             ->withArgs(static fn (MediaUrl $mediaUrl): bool => $mediaUrl->value === $url)
             ->andReturn($media);
@@ -110,11 +113,13 @@ class MediaIntegrityServiceTest extends TestCase
     {
         $uuid = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
 
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->once()
             ->andReturn($uuid);
 
-        $this->repository->shouldReceive('findByUrl')
+        $this->repository
+            ->shouldReceive('findByUrl')
             ->once()
             ->andReturn(null);
 
@@ -122,7 +127,7 @@ class MediaIntegrityServiceTest extends TestCase
             '新規メディア',
             'https://example.com/media',
             '2024-03-01T12:34:56+09:00',
-            12345,
+            12_345,
             true,
             [],
         );

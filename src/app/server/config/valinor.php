@@ -10,7 +10,13 @@ return [
      * warmupCacheFor() は再帰的にプロパティ型もキャッシュする
      */
     'warmup' => [
+        \Auth\Application\Admin\UseCase\Login\LoginFinishInputData::class,
+        \Auth\Application\Admin\UseCase\Login\LoginStartInputData::class,
+        \Auth\Application\Admin\UseCase\Recovery\RecoveryFinishInputData::class,
+        \Auth\Application\Admin\UseCase\Recovery\RecoveryStartInputData::class,
         \Auth\Application\Admin\UseCase\Refresh\RefreshInputData::class,
+        \Auth\Application\Admin\UseCase\RegisterFinish\RegisterFinishInputData::class,
+        \Auth\Application\Admin\UseCase\RegisterStart\RegisterStartInputData::class,
         \Auth\Domain\Services\Token\AccessToken\AccessTokenPayload::class,
         \Event\Application\Admin\UseCase\BulkUpdate\BulkUpdateInputData::class,
         \Event\Application\Admin\UseCase\Create\CreateInputData::class,

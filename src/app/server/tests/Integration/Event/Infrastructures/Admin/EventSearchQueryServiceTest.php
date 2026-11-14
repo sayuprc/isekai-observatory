@@ -38,10 +38,30 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), isDisplay: false),
         );
 
-        $criteria = new EventSearchCriteria(new None(), new Some(EventType::Live), new Some(EventStatus::Normal), new Some(true), new None());
+        $criteria = new EventSearchCriteria(
+            new None(),
+            new Some(EventType::Live),
+            new Some(EventStatus::Normal),
+            new Some(true),
+            new None(),
+        );
 
         $this->assertEquals(
-            [new EventSummary($eventId, 'テストライブ', EventType::Live, '2026-10-01', '2026-10-02', EventStatus::Normal, true, [], 0, 0, 0)],
+            [
+                new EventSummary(
+                    $eventId,
+                    'テストライブ',
+                    EventType::Live,
+                    '2026-10-01',
+                    '2026-10-02',
+                    EventStatus::Normal,
+                    true,
+                    [],
+                    0,
+                    0,
+                    0,
+                ),
+            ],
             $this->getInstance()->search($criteria),
         );
         $this->assertSame(1, $this->getInstance()->maxPage($criteria));
@@ -58,11 +78,24 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
             $this->createEvent($this->generateUuid(), title: '配信'),
         );
 
-        $criteria = new EventSearchCriteria(new Some('ライブ'), new None(), new None(), new None(), new None(), Sort::Title, Order::Desc, 1, PerPage::TwentyFive);
+        $criteria = new EventSearchCriteria(
+            new Some('ライブ'),
+            new None(),
+            new None(),
+            new None(),
+            new None(),
+            Sort::Title,
+            Order::Desc,
+            1,
+            PerPage::TwentyFive,
+        );
 
         $this->assertSame(
             [$secondId, $firstId],
-            array_map(static fn (EventSummary $summary): string => $summary->eventId, $this->getInstance()->search($criteria)),
+            array_map(
+                static fn (EventSummary $summary): string => $summary->eventId,
+                $this->getInstance()->search($criteria),
+            ),
         );
     }
 
@@ -86,16 +119,31 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
             $this->createEvent(
                 $eventId,
                 startOn: '2026-10-01',
-                venues: [['venueId' => $secondVenueId, 'orderNo' => 1], ['venueId' => $firstVenueId, 'orderNo' => 2]],
-                sources: [['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1]],
+                venues: [
+                    ['venueId' => $secondVenueId, 'orderNo' => 1],
+                    ['venueId' => $firstVenueId, 'orderNo' => 2],
+                ],
+                sources: [
+                    ['displayName' => '公式', 'url' => 'https://example.com/live', 'orderNo' => 1],
+                ],
                 performances: [
                     ['performanceId' => $firstPerformanceId, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []],
                     ['performanceId' => $secondPerformanceId, 'songId' => $songId, 'orderNo' => 2, 'coVocalists' => []],
                 ],
                 setlist: [
                     ['setlistItemId' => $this->generateUuid(), 'orderNo' => 1, 'label' => 'MC', 'performanceIds' => []],
-                    ['setlistItemId' => $this->generateUuid(), 'orderNo' => 2, 'label' => null, 'performanceIds' => [$firstPerformanceId]],
-                    ['setlistItemId' => $this->generateUuid(), 'orderNo' => 3, 'label' => null, 'performanceIds' => [$secondPerformanceId]],
+                    [
+                        'setlistItemId' => $this->generateUuid(),
+                        'orderNo' => 2,
+                        'label' => null,
+                        'performanceIds' => [$firstPerformanceId],
+                    ],
+                    [
+                        'setlistItemId' => $this->generateUuid(),
+                        'orderNo' => 3,
+                        'label' => null,
+                        'performanceIds' => [$secondPerformanceId],
+                    ],
                 ],
             ),
             $this->createEvent($emptyEventId, startOn: '2026-10-02'),
@@ -103,10 +151,36 @@ class EventSearchQueryServiceTest extends DatabaseTestCase
 
         $this->assertEquals(
             [
-                new EventSummary($eventId, 'テストライブ', EventType::Live, '2026-10-01', null, EventStatus::Normal, true, ['配信', '会場'], 2, 3, 1),
-                new EventSummary($emptyEventId, 'テストライブ', EventType::Live, '2026-10-02', null, EventStatus::Normal, true, [], 0, 0, 0),
+                new EventSummary(
+                    $eventId,
+                    'テストライブ',
+                    EventType::Live,
+                    '2026-10-01',
+                    null,
+                    EventStatus::Normal,
+                    true,
+                    ['配信', '会場'],
+                    2,
+                    3,
+                    1,
+                ),
+                new EventSummary(
+                    $emptyEventId,
+                    'テストライブ',
+                    EventType::Live,
+                    '2026-10-02',
+                    null,
+                    EventStatus::Normal,
+                    true,
+                    [],
+                    0,
+                    0,
+                    0,
+                ),
             ],
-            $this->getInstance()->search(new EventSearchCriteria(new None(), new None(), new None(), new None(), new None())),
+            $this->getInstance()->search(
+                new EventSearchCriteria(new None(), new None(), new None(), new None(), new None()),
+            ),
         );
     }
 

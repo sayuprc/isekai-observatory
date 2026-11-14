@@ -40,15 +40,17 @@ readonly class CoVocalists extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): CoVocalist => new CoVocalist(
-                new PersonId($item['personId']),
-                $item['creditName'] === null ? null : new CreditName($item['creditName']),
-                $item['personGroupId'] === null ? null : new PersonGroupId($item['personGroupId']),
-                new OrderNo($item['orderNo']),
+        return new self(
+            array_map(
+                static fn (array $item): CoVocalist => new CoVocalist(
+                    new PersonId($item['personId']),
+                    $item['creditName'] === null ? null : new CreditName($item['creditName']),
+                    $item['personGroupId'] === null ? null : new PersonGroupId($item['personGroupId']),
+                    new OrderNo($item['orderNo']),
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**
@@ -56,6 +58,7 @@ readonly class CoVocalists extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (CoVocalist $coVocalist): array => $coVocalist->toArray(), $this->items));
+        return array_map(static fn (CoVocalist $coVocalist): array => $coVocalist->toArray(), $this->items)
+            |> array_values(...);
     }
 }

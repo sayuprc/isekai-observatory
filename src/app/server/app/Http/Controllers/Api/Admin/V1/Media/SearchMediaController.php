@@ -12,12 +12,12 @@ use Media\Application\Admin\UseCase\Search\SearchInputData;
 use Media\Application\Admin\UseCase\Search\SearchUseCase;
 use Support\Contracts\MapperInterface;
 
-class SearchMediaController extends Controller
+final readonly class SearchMediaController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly SearchUseCase $useCase,
-        private readonly SearchPresenter $presenter,
+        private MapperInterface $mapper,
+        private SearchUseCase $useCase,
+        private SearchPresenter $presenter,
     ) {
     }
 

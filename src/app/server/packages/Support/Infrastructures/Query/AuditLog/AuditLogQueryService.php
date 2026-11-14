@@ -39,15 +39,15 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
     #[Override]
     public function search(AuditLogSearchCriteria $criteria): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $this->buildQuery($criteria)
-                    ->orderBy('audit_logs.created_at', 'desc')
-                    ->orderBy('audit_logs.audit_log_id', 'desc'),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $this
+                ->buildQuery($criteria)
+                ->orderBy('audit_logs.created_at', 'desc')
+                ->orderBy('audit_logs.audit_log_id', 'desc'),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrateSummary(...), $rows);
     }
@@ -61,15 +61,15 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
     #[Override]
     public function find(string $auditLogId): ?AuditLogDetail
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect([...self::SUMMARY_COLUMNS, 'audit_logs.snapshot'])
-                ->select('admin_users.name', 'admin_user_name')
-                ->from('audit_logs')
-                ->outerJoin('admin_users', 'audit_logs.admin_user_id = admin_users.admin_user_id')
-                ->where('audit_logs.audit_log_id', '=', $this->converter->toBin($auditLogId))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect([...self::SUMMARY_COLUMNS, 'audit_logs.snapshot'])
+            ->select('admin_users.name', 'admin_user_name')
+            ->from('audit_logs')
+            ->outerJoin('admin_users', 'audit_logs.admin_user_id = admin_users.admin_user_id')
+            ->where('audit_logs.audit_log_id', '=', $this->converter->toBin($auditLogId))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -94,7 +94,8 @@ readonly class AuditLogQueryService implements AuditLogQueryServiceInterface
 
     private function buildQuery(AuditLogSearchCriteria $criteria): SelectBuilder
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(self::SUMMARY_COLUMNS)
             ->select('admin_users.name', 'admin_user_name')
             ->from('audit_logs')

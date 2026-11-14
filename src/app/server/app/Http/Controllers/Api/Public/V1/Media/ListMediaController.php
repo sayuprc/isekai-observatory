@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use Media\Application\Public\UseCase\List\ListInputData;
 use Media\Application\Public\UseCase\List\ListUseCase;
 
-class ListMediaController extends Controller
+final readonly class ListMediaController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 

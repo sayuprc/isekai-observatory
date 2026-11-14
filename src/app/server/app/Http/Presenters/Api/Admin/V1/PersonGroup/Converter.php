@@ -12,8 +12,10 @@ use Person\Application\Admin\Query\PersonGroupSummary;
 
 class Converter
 {
-    public function toOpenApiPersonGroupSummary(PersonGroupSummary $personGroup, int $performanceCount): OpenApiPersonGroupSummary
-    {
+    public function toOpenApiPersonGroupSummary(
+        PersonGroupSummary $personGroup,
+        int $performanceCount,
+    ): OpenApiPersonGroupSummary {
         return new OpenApiPersonGroupSummary()
             ->setPersonGroupId($personGroup->personGroupId)
             ->setName($personGroup->name)

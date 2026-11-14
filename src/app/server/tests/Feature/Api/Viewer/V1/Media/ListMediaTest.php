@@ -45,7 +45,10 @@ class ListMediaTest extends DatabaseTestCase
                 MediaType::Mv,
                 true,
                 new DateTimeImmutable('2024-03-01 12:00:00'),
-                [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
+                [
+                    ['tagId' => $tagIdSecond],
+                    ['tagId' => $tagIdFirst],
+                ],
             ),
             $this->createMedia(
                 $secondMediaId,
@@ -116,8 +119,9 @@ class ListMediaTest extends DatabaseTestCase
             ),
         );
 
-        $response = $this->get(route(ViewerMediaRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $response = $this
+            ->get(route(ViewerMediaRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertExactJson([
                 'media' => [
                     [
@@ -126,20 +130,10 @@ class ListMediaTest extends DatabaseTestCase
                         'url' => 'https://example.com/public/1',
                         'publishedAt' => '2024-03-01T12:00:00+09:00',
                         'type' => 1,
-                        'counts' => [
-                            'songCount' => 2,
-                        ],
+                        'counts' => ['songCount' => 2],
                         'songs' => [
-                            [
-                                'songId' => $firstSongId,
-                                'title' => '公開楽曲 1',
-                                'type' => 1,
-                            ],
-                            [
-                                'songId' => $secondSongId,
-                                'title' => '公開楽曲 2',
-                                'type' => 2,
-                            ],
+                            ['songId' => $firstSongId, 'title' => '公開楽曲 1', 'type' => 1],
+                            ['songId' => $secondSongId, 'title' => '公開楽曲 2', 'type' => 2],
                         ],
                         'tags' => [
                             ['tagId' => $tagIdFirst, 'name' => 'コラボA', 'orderNo' => 10],
@@ -157,8 +151,9 @@ class ListMediaTest extends DatabaseTestCase
 
         $this->assertIsString($cursor);
 
-        $this->get(route(ViewerMediaRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerMediaRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+            ->assertOk()
             ->assertExactJson([
                 'media' => [
                     [
@@ -167,9 +162,7 @@ class ListMediaTest extends DatabaseTestCase
                         'url' => 'https://example.com/public/2',
                         'publishedAt' => '2024-02-01T10:00:00+09:00',
                         'type' => 2,
-                        'counts' => [
-                            'songCount' => 0,
-                        ],
+                        'counts' => ['songCount' => 0],
                         'songs' => [],
                         'tags' => [],
                     ],
@@ -181,8 +174,9 @@ class ListMediaTest extends DatabaseTestCase
     #[DataProvider('provideInvalidCursors')]
     public function rejectsInvalidCursor(string $cursor): void
     {
-        $this->get(route(ViewerMediaRouteMap::List, ['cursor' => $cursor]))
-            ->assertStatus(400)
+        $this
+            ->get(route(ViewerMediaRouteMap::List, ['cursor' => $cursor]))
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'カーソルが不正です。',

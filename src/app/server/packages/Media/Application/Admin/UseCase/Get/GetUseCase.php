@@ -37,7 +37,13 @@ readonly class GetUseCase
         return new GetOutputData(
             $found,
             $this->query->findReferencedSongs($mediaId),
-            $this->tagRepository->findByIds(...$found->tags->toGeneric()->map(static fn (TagReference $tag): TagId => $tag->tagId)->toArray()),
+            $this->tagRepository->findByIds(
+                ...$found
+                    ->tags
+                    ->toGeneric()
+                    ->map(static fn (TagReference $tag): TagId => $tag->tagId)
+                    ->toArray(),
+            ),
         );
     }
 }

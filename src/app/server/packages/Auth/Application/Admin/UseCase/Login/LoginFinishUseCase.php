@@ -48,26 +48,30 @@ readonly class LoginFinishUseCase
             throw new UnauthenticatedException();
         }
 
-        $credentialId = $this->passkeyAuthenticator->credentialId($inputData->credential);
+        $credentialId = $this->passkeyAuthenticator->credentialId($inputData->credentialJson);
 
         if ($credentialId === null) {
             throw new UnauthenticatedException();
         }
 
         return $this->transaction->scope(
-            fn (): LoginFinishOutputData => $this->authenticateAndPersist($state, $credentialId, $inputData->credential),
+            fn (): LoginFinishOutputData => $this->authenticateAndPersist(
+                $state,
+                $credentialId,
+                $inputData->credentialJson,
+            ),
         );
     }
 
-    /**
-     * @param array<string, mixed> $credential
-     */
     private function authenticateAndPersist(
         PasskeyCeremonyState $state,
         string $credentialId,
-        array $credential,
+        string $credentialJson,
     ): LoginFinishOutputData {
-        $passkey = $this->passkeyRepository->findByAdminUserIdAndCredentialIdForUpdate($state->adminUserId, $credentialId);
+        $passkey = $this->passkeyRepository->findByAdminUserIdAndCredentialIdForUpdate(
+            $state->adminUserId,
+            $credentialId,
+        );
 
         if ($passkey === null) {
             throw new UnauthenticatedException();
@@ -75,7 +79,7 @@ readonly class LoginFinishUseCase
 
         try {
             $verification = $this->passkeyAuthenticator->finishAuthentication(
-                $credential,
+                $credentialJson,
                 $state->optionsJson,
                 $passkey,
                 $passkey->userHandle,
@@ -96,7 +100,10 @@ readonly class LoginFinishUseCase
         AdminUserPasskey $passkey,
         PasskeyAuthenticationResult $verification,
     ): LoginFinishOutputData {
-        ['token' => $refreshToken, 'plainToken' => $plainRefreshToken] = $this->refreshTokenIssueService->issue($state->adminUserId);
+        [
+            'token' => $refreshToken,
+            'plainToken' => $plainRefreshToken,
+        ] = $this->refreshTokenIssueService->issue($state->adminUserId);
 
         $updatedPasskey = $passkey->withCounter($verification->signCount, $this->clock->now());
 

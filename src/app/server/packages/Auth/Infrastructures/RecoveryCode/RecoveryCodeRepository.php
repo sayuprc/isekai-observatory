@@ -20,7 +20,13 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
     private const string TABLE = 'admin_user_recovery_codes';
 
     /** @var array<int, string> */
-    private const array COLUMNS = ['admin_user_recovery_code_id', 'admin_user_id', 'code', 'status', 'used_at'];
+    private const array COLUMNS = [
+        'admin_user_recovery_code_id',
+        'admin_user_id',
+        'code',
+        'status',
+        'used_at',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -54,8 +60,17 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
             ];
         }, $codes);
 
-        $this->queryFactory->insert()
-            ->into(self::TABLE, ['admin_user_recovery_code_id', 'admin_user_id', 'code', 'status', 'used_at', 'created_at', 'updated_at'])
+        $this->queryFactory
+            ->insert()
+            ->into(self::TABLE, [
+                'admin_user_recovery_code_id',
+                'admin_user_id',
+                'code',
+                'status',
+                'used_at',
+                'created_at',
+                'updated_at',
+            ])
             ->values(...$rows)
             ->execute($this->queryFactory->pdo());
     }
@@ -66,15 +81,15 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
     #[Override]
     public function findUnusedByAdminUserIdForUpdate(AdminUserId $adminUserId): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
-                ->where('status', '=', ConsumptionStatus::Unused->value)
-                ->orderBy('created_at', 'desc')
-                ->forUpdate(),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
+            ->where('status', '=', ConsumptionStatus::Unused->value)
+            ->orderBy('created_at', 'desc')
+            ->forUpdate()
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -82,16 +97,16 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
     #[Override]
     public function findUnusedByIdForUpdate(RecoveryCodeId $recoveryCodeId, AdminUserId $adminUserId): ?RecoveryCode
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('admin_user_recovery_code_id', '=', $this->converter->toBin($recoveryCodeId->value))
-                ->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
-                ->where('status', '=', ConsumptionStatus::Unused->value)
-                ->limit(1)
-                ->forUpdate(),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('admin_user_recovery_code_id', '=', $this->converter->toBin($recoveryCodeId->value))
+            ->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
+            ->where('status', '=', ConsumptionStatus::Unused->value)
+            ->limit(1)
+            ->forUpdate()
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -104,8 +119,17 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
         $data = $code->toArray();
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
-            ->into(self::TABLE, ['admin_user_recovery_code_id', 'admin_user_id', 'code', 'status', 'used_at', 'created_at', 'updated_at'])
+        $this->queryFactory
+            ->insert()
+            ->into(self::TABLE, [
+                'admin_user_recovery_code_id',
+                'admin_user_id',
+                'code',
+                'status',
+                'used_at',
+                'created_at',
+                'updated_at',
+            ])
             ->values([
                 $this->converter->toBin($data['admin_user_recovery_code_id']),
                 $this->converter->toBin($data['admin_user_id']),
@@ -116,7 +140,12 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append('ON DUPLICATE KEY UPDATE `status` = VALUES(`status`), `used_at` = VALUES(`used_at`), `updated_at` = VALUES(`updated_at`)')
+            ->append(<<<SQL
+                ON DUPLICATE KEY UPDATE
+                `status` = VALUES(`status`),
+                `used_at` = VALUES(`used_at`),
+                `updated_at` = VALUES(`updated_at`)
+                SQL)
             ->execute($this->queryFactory->pdo());
 
         return $code;
@@ -125,7 +154,8 @@ readonly class RecoveryCodeRepository implements RecoveryCodeRepositoryInterface
     #[Override]
     public function deleteByAdminUserId(AdminUserId $adminUserId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('admin_user_id', '=', $this->converter->toBin($adminUserId->value))
             ->execute($this->queryFactory->pdo());

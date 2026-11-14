@@ -53,12 +53,15 @@ class EventIntegrityServiceTest extends TestCase
     #[Test]
     public function prepareForCreateAssignsGeneratedEventId(): void
     {
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn(self::EVENT_ID)
             ->once();
 
-        $event = $this->getInstance()->prepareForCreate(...$this->input(venues: [['venueId' => self::VENUE_ID, 'orderNo' => 1]]));
+        $event = $this->getInstance()->prepareForCreate(
+            ...$this->input(venues: [['venueId' => self::VENUE_ID, 'orderNo' => 1]]),
+        );
 
         $this->assertSame(self::EVENT_ID, $event->eventId->value);
         $this->assertSame('テストライブ', $event->title->value);
@@ -94,7 +97,10 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->prepareForUpdate(type: EventType::Radio->value, setlist: [self::setlistItem(1, 'オープニングトーク', [])]);
+        $this->prepareForUpdate(
+            type: EventType::Radio->value,
+            setlist: [self::setlistItem(1, 'オープニングトーク', [])],
+        );
     }
 
     /**
@@ -102,10 +108,22 @@ class EventIntegrityServiceTest extends TestCase
      */
     public static function heldOnlyContents(): iterable
     {
-        yield '延期で楽曲披露あり' => [EventStatus::Postponed, ['performances' => [self::performance(self::PERFORMANCE_ID, 1)]]];
-        yield '中止で楽曲披露あり' => [EventStatus::Cancelled, ['performances' => [self::performance(self::PERFORMANCE_ID, 1)]]];
-        yield '延期でセットリストあり' => [EventStatus::Postponed, ['setlist' => [self::setlistItem(1, 'オープニング', [])]]];
-        yield '中止でセットリストあり' => [EventStatus::Cancelled, ['setlist' => [self::setlistItem(1, 'オープニング', [])]]];
+        yield '延期で楽曲披露あり' => [
+            EventStatus::Postponed,
+            ['performances' => [self::performance(self::PERFORMANCE_ID, 1)]],
+        ];
+        yield '中止で楽曲披露あり' => [
+            EventStatus::Cancelled,
+            ['performances' => [self::performance(self::PERFORMANCE_ID, 1)]],
+        ];
+        yield '延期でセットリストあり' => [
+            EventStatus::Postponed,
+            ['setlist' => [self::setlistItem(1, 'オープニング', [])]],
+        ];
+        yield '中止でセットリストあり' => [
+            EventStatus::Cancelled,
+            ['setlist' => [self::setlistItem(1, 'オープニング', [])]],
+        ];
     }
 
     /**
@@ -113,8 +131,10 @@ class EventIntegrityServiceTest extends TestCase
      */
     #[Test]
     #[DataProvider('heldOnlyContents')]
-    public function rejectsPerformancesAndSetlistForPostponedOrCancelledEvent(EventStatus $status, array $contents): void
-    {
+    public function rejectsPerformancesAndSetlistForPostponedOrCancelledEvent(
+        EventStatus $status,
+        array $contents,
+    ): void {
         $this->expectException(BusinessRuleViolationException::class);
 
         $this->prepareForUpdate(...[...$contents, 'status' => $status->value]);
@@ -149,7 +169,10 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->prepareForUpdate(venues: [['venueId' => self::VENUE_ID, 'orderNo' => 1], ['venueId' => self::VENUE_ID, 'orderNo' => 2]]);
+        $this->prepareForUpdate(venues: [
+            ['venueId' => self::VENUE_ID, 'orderNo' => 1],
+            ['venueId' => self::VENUE_ID, 'orderNo' => 2],
+        ]);
     }
 
     #[Test]
@@ -157,16 +180,25 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->prepareForUpdate(venues: [['venueId' => self::VENUE_ID, 'orderNo' => 1], ['venueId' => self::OTHER_VENUE_ID, 'orderNo' => 1]]);
+        $this->prepareForUpdate(venues: [
+            ['venueId' => self::VENUE_ID, 'orderNo' => 1],
+            ['venueId' => self::OTHER_VENUE_ID, 'orderNo' => 1],
+        ]);
     }
 
     #[Test]
     public function keepsReleasesInOrder(): void
     {
-        $event = $this->prepareForUpdate(releases: [['releaseId' => self::RELEASE_ID, 'orderNo' => 1], ['releaseId' => self::OTHER_RELEASE_ID, 'orderNo' => 2]]);
+        $event = $this->prepareForUpdate(releases: [
+            ['releaseId' => self::RELEASE_ID, 'orderNo' => 1],
+            ['releaseId' => self::OTHER_RELEASE_ID, 'orderNo' => 2],
+        ]);
 
         $this->assertSame(
-            [['release_id' => self::RELEASE_ID, 'order_no' => 1], ['release_id' => self::OTHER_RELEASE_ID, 'order_no' => 2]],
+            [
+                ['release_id' => self::RELEASE_ID, 'order_no' => 1],
+                ['release_id' => self::OTHER_RELEASE_ID, 'order_no' => 2],
+            ],
             $event->releases->toArray(),
         );
     }
@@ -176,7 +208,10 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->prepareForUpdate(releases: [['releaseId' => self::RELEASE_ID, 'orderNo' => 1], ['releaseId' => self::RELEASE_ID, 'orderNo' => 2]]);
+        $this->prepareForUpdate(releases: [
+            ['releaseId' => self::RELEASE_ID, 'orderNo' => 1],
+            ['releaseId' => self::RELEASE_ID, 'orderNo' => 2],
+        ]);
     }
 
     #[Test]
@@ -184,7 +219,10 @@ class EventIntegrityServiceTest extends TestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $this->prepareForUpdate(releases: [['releaseId' => self::RELEASE_ID, 'orderNo' => 1], ['releaseId' => self::OTHER_RELEASE_ID, 'orderNo' => 1]]);
+        $this->prepareForUpdate(releases: [
+            ['releaseId' => self::RELEASE_ID, 'orderNo' => 1],
+            ['releaseId' => self::OTHER_RELEASE_ID, 'orderNo' => 1],
+        ]);
     }
 
     #[Test]
@@ -236,7 +274,15 @@ class EventIntegrityServiceTest extends TestCase
         array $setlist = [],
         array $releases = [],
     ): Event {
-        return $this->getInstance()->prepareForUpdate(self::EVENT_ID, ...$this->input($type, $schedule, $status, $venues, $performances, $setlist, $releases));
+        return $this->getInstance()->prepareForUpdate(self::EVENT_ID, ...$this->input(
+            $type,
+            $schedule,
+            $status,
+            $venues,
+            $performances,
+            $setlist,
+            $releases,
+        ));
     }
 
     /**
@@ -280,7 +326,12 @@ class EventIntegrityServiceTest extends TestCase
      */
     private static function performance(string $performanceId, int $orderNo): array
     {
-        return ['performanceId' => $performanceId, 'songId' => self::SONG_ID, 'orderNo' => $orderNo, 'coVocalists' => []];
+        return [
+            'performanceId' => $performanceId,
+            'songId' => self::SONG_ID,
+            'orderNo' => $orderNo,
+            'coVocalists' => [],
+        ];
     }
 
     /**

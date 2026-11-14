@@ -12,30 +12,19 @@ use Support\Contracts\MapperInterface;
 use Tag\Application\Admin\UseCase\Update\UpdateInputData;
 use Tag\Application\Admin\UseCase\Update\UpdateUseCase;
 
-class UpdateTagController extends Controller
+final readonly class UpdateTagController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly UpdateUseCase $useCase,
-        private readonly UpdatePresenter $presenter,
+        private MapperInterface $mapper,
+        private UpdateUseCase $useCase,
+        private UpdatePresenter $presenter,
     ) {
     }
 
     public function handle(string $tagId, Request $request): JsonResponse
     {
-        return $this->buildInput($tagId, $request)
+        return $this->mapper->map(UpdateInputData::class, [...$request->all(), 'tagId' => $tagId])
             |> $this->useCase->handle(...)
             |> $this->presenter->present(...);
-    }
-
-    private function buildInput(string $tagId, Request $request): UpdateInputData
-    {
-        return $this->mapper->map(
-            UpdateInputData::class,
-            [
-                ...$request->all(),
-                'tagId' => $tagId,
-            ],
-        );
     }
 }

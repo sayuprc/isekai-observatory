@@ -41,7 +41,7 @@ readonly class BulkUpdateUseCase
 
         $eventIds = array_map(
             static fn (string $id): EventId => new EventId($id),
-            array_values(array_unique($inputData->eventIds)),
+            array_unique($inputData->eventIds) |> array_values(...),
         );
 
         return $this->transaction->scope(function () use ($inputData, $changes, $eventIds): BulkUpdateOutputData {

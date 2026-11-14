@@ -32,13 +32,12 @@ class DeleteReleaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $repository->save(
-            $this->createRelease($releaseId, $releaseGroupId, '削除対象', true),
-        );
+        $repository->save($this->createRelease($releaseId, $releaseGroupId, '削除対象', true));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertNull($repository->find(new ReleaseId($releaseId)));
     }
@@ -51,9 +50,7 @@ class DeleteReleaseTest extends DatabaseTestCase
         $releaseId = $this->generateUuid();
         $repository = $this->app->make(ReleaseRepository::class);
 
-        $this->storeSongs(
-            $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1),
-        );
+        $this->storeSongs($this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1));
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
@@ -68,15 +65,18 @@ class DeleteReleaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertNull($repository->find(new ReleaseId($releaseId)));
         $this->assertDatabaseCount('release_media', 0);
@@ -86,9 +86,10 @@ class DeleteReleaseTest extends DatabaseTestCase
     #[Test]
     public function canDeleteEvenIfTargetDoesNotExist(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete(route(ReleaseRouteMap::Delete, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     #[Test]
@@ -100,20 +101,20 @@ class DeleteReleaseTest extends DatabaseTestCase
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
-        $this->storeReleases(
-            $this->createRelease($releaseId, $releaseGroupId, '削除対象', true),
-        );
+        $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, '削除対象', true));
 
-        $this->withGeneralAuth()
+        $this
+            ->withGeneralAuth()
             ->delete(route(ReleaseRouteMap::Delete, $releaseId))
-            ->assertStatus(403);
+            ->assertForbidden();
     }
 
     #[Test]
     public function invalidId(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->delete('/api/admin/v1/releases/invalid-id')
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

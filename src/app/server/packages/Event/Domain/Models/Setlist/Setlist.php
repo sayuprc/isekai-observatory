@@ -50,15 +50,17 @@ readonly class Setlist extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): SetlistItem => new SetlistItem(
-                new SetlistItemId($item['setlistItemId']),
-                new OrderNo($item['orderNo']),
-                $item['label'] === null ? null : new SetlistLabel($item['label']),
-                array_map(static fn (string $id): PerformanceId => new PerformanceId($id), $item['performanceIds']),
+        return new self(
+            array_map(
+                static fn (array $item): SetlistItem => new SetlistItem(
+                    new SetlistItemId($item['setlistItemId']),
+                    new OrderNo($item['orderNo']),
+                    $item['label'] === null ? null : new SetlistLabel($item['label']),
+                    array_map(static fn (string $id): PerformanceId => new PerformanceId($id), $item['performanceIds']),
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**
@@ -66,7 +68,10 @@ readonly class Setlist extends ImmutableCollection
      */
     public function referencedPerformanceIds(): array
     {
-        return array_merge([], ...array_map(static fn (SetlistItem $item): array => $item->performanceIds, $this->items));
+        return array_merge(
+            [],
+            ...array_map(static fn (SetlistItem $item): array => $item->performanceIds, $this->items),
+        );
     }
 
     /**
@@ -74,6 +79,6 @@ readonly class Setlist extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (SetlistItem $item): array => $item->toArray(), $this->items));
+        return array_map(static fn (SetlistItem $item): array => $item->toArray(), $this->items) |> array_values(...);
     }
 }

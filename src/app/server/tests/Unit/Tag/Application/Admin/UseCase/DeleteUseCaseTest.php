@@ -42,7 +42,8 @@ class DeleteUseCaseTest extends TestCase
         parent::setUp();
 
         $this->transaction = Mockery::mock(TransactionInterface::class);
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->byDefault();
@@ -54,17 +55,20 @@ class DeleteUseCaseTest extends TestCase
     #[Test]
     public function deleteTag(): void
     {
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA')
             ->andReturn($this->createTag('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'タグ', 1))
             ->once();
 
-        $this->repository->shouldReceive('isUsed')
+        $this->repository
+            ->shouldReceive('isUsed')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA')
             ->andReturn(false)
             ->once();
 
-        $this->repository->shouldReceive('delete')
+        $this->repository
+            ->shouldReceive('delete')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA')
             ->once();
 
@@ -74,12 +78,14 @@ class DeleteUseCaseTest extends TestCase
     #[Test]
     public function cannotDeleteWhenUsed(): void
     {
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA')
             ->andReturn($this->createTag('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'タグ', 1))
             ->once();
 
-        $this->repository->shouldReceive('isUsed')
+        $this->repository
+            ->shouldReceive('isUsed')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA')
             ->andReturn(true)
             ->once();

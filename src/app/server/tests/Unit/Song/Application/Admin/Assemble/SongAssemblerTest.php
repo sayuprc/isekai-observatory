@@ -67,7 +67,8 @@ class SongAssemblerTest extends TestCase
             note: $note,
         );
 
-        $this->personRepository->shouldReceive('findByIds')
+        $this->personRepository
+            ->shouldReceive('findByIds')
             ->withArgs(static function (PersonId ...$ids) use ($lyricistId, $composerId, $arrangerId): bool {
                 $idValues = array_map(static fn (PersonId $id): string => $id->value, $ids);
                 sort($idValues);
@@ -82,6 +83,9 @@ class SongAssemblerTest extends TestCase
                 new Person(new PersonId($arrangerId), new PersonName('テスト編曲者'), new OrderNo(1)),
             ])
             ->once();
+        // タグとメディアを持たない楽曲でも、ID なしで問い合わせる (空なら DB にはアクセスしない)
+        $this->tagRepository->shouldReceive('findByIds')->withNoArgs()->andReturn([])->once();
+        $this->mediaRepository->shouldReceive('findByIds')->withNoArgs()->andReturn([])->once();
 
         $assembled = $this->getInstance()->assemble($song);
 
@@ -121,7 +125,10 @@ class SongAssemblerTest extends TestCase
             [],
         );
 
-        $this->personRepository->shouldReceive('findByIds')->never();
+        // 関連が空でも ID なしで問い合わせる (空なら DB にはアクセスしない)
+        $this->personRepository->shouldReceive('findByIds')->withNoArgs()->andReturn([])->once();
+        $this->tagRepository->shouldReceive('findByIds')->withNoArgs()->andReturn([])->once();
+        $this->mediaRepository->shouldReceive('findByIds')->withNoArgs()->andReturn([])->once();
 
         $assembled = $this->getInstance()->assemble($song);
 

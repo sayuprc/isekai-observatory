@@ -33,11 +33,9 @@ class DeleteUseCaseTest extends DatabaseTestCase
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
-        $this->storeReleases(
-            $this->createRelease($releaseId, $releaseGroupId, '削除対象', true),
-        );
+        $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, '削除対象', true));
 
-        $result = $this->getInstance()->handle(new DeleteInputData($releaseId));
+        $this->getInstance()->handle(new DeleteInputData($releaseId));
 
         $this->assertCount(0, DB::table('releases')->get()->all());
 
@@ -55,9 +53,7 @@ class DeleteUseCaseTest extends DatabaseTestCase
         $releaseGroupId = $this->generateUuid();
         $releaseId = $this->generateUuid();
 
-        $this->storeSongs(
-            $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1),
-        );
+        $this->storeSongs($this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1));
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
@@ -72,13 +68,15 @@ class DeleteUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
         );
 
-        $result = $this->getInstance()->handle(new DeleteInputData($releaseId));
+        $this->getInstance()->handle(new DeleteInputData($releaseId));
 
         $this->assertCount(0, DB::table('releases')->get()->all());
         $this->assertCount(0, DB::table('release_media')->get()->all());
@@ -90,7 +88,7 @@ class DeleteUseCaseTest extends DatabaseTestCase
     #[Test]
     public function canDeleteEvenIfTargetDoesNotExist(): void
     {
-        $result = $this->getInstance()->handle(new DeleteInputData($this->generateUuid()));
+        $this->getInstance()->handle(new DeleteInputData($this->generateUuid()));
 
         $this->assertAuditLogCount(0);
     }

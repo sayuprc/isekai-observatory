@@ -22,7 +22,8 @@ class UpdateYouTubeChannelCommandTest extends DatabaseTestCase
     {
         $this->storeYouTubeChannels($this->createYouTubeChannel(self::CHANNEL_ID, '旧チャンネル名'));
 
-        $this->artisan(sprintf('media:youtube-channel:update %s 新チャンネル名', self::CHANNEL_ID))
+        $this
+            ->artisan(sprintf('media:youtube-channel:update %s 新チャンネル名', self::CHANNEL_ID))
             ->expectsOutput(sprintf('チャンネルを更新しました: 新チャンネル名 (%s)', self::CHANNEL_ID))
             ->assertSuccessful();
 
@@ -34,7 +35,8 @@ class UpdateYouTubeChannelCommandTest extends DatabaseTestCase
     #[Test]
     public function failureWhenChannelNotRegistered(): void
     {
-        $this->artisan(sprintf('media:youtube-channel:update %s 新チャンネル名', self::CHANNEL_ID))
+        $this
+            ->artisan(sprintf('media:youtube-channel:update %s 新チャンネル名', self::CHANNEL_ID))
             ->expectsOutput(sprintf('登録されていないチャンネルです "%s"', self::CHANNEL_ID))
             ->assertFailed();
     }
@@ -44,7 +46,8 @@ class UpdateYouTubeChannelCommandTest extends DatabaseTestCase
     {
         $this->storeYouTubeChannels($this->createYouTubeChannel(self::CHANNEL_ID, '旧チャンネル名'));
 
-        $this->artisan('media:youtube-channel:update', ['channelId' => self::CHANNEL_ID, 'name' => ' '])
+        $this
+            ->artisan('media:youtube-channel:update', ['channelId' => self::CHANNEL_ID, 'name' => ' '])
             ->expectsOutput('チャンネル名を入力してください')
             ->assertFailed();
 

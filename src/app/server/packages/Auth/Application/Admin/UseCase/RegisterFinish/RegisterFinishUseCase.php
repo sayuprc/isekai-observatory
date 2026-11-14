@@ -22,6 +22,7 @@ use Auth\Domain\Services\PasskeyAuthenticatorInterface;
 use Auth\Domain\Services\PasskeyRegistrationResult;
 use Auth\Domain\Services\Token\AccessToken\AccessTokenIssueService;
 use Auth\Domain\Services\Token\RefreshToken\RefreshTokenIssueService;
+use SensitiveParameter;
 use Support\Contracts\ClockInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Contracts\Uuid\UuidGeneratorInterface;
@@ -67,7 +68,7 @@ readonly class RegisterFinishUseCase
 
         try {
             $verification = $this->passkeyAuthenticator->finishRegistration(
-                $inputData->credential,
+                $inputData->credentialJson,
                 $state->optionsJson,
             );
         } catch (Throwable) {
@@ -77,13 +78,14 @@ readonly class RegisterFinishUseCase
         $name = $state->name;
 
         return $this->transaction->scope(
-            fn (): RegisterFinishOutputData => $this->persist($state, $name, $inputData->plainToken, $verification),
+            fn (): RegisterFinishOutputData => $this->persist($state, $name, $inputData->token, $verification),
         );
     }
 
     private function persist(
         PasskeyCeremonyState $state,
         string $name,
+        #[SensitiveParameter]
         string $plainToken,
         PasskeyRegistrationResult $verification,
     ): RegisterFinishOutputData {

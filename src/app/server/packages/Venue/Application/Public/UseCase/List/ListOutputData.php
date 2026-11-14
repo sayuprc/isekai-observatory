@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Venue\Application\Public\UseCase\List;
 
+use SensitiveParameter;
 use Venue\Application\Public\Query\VenueListItem;
 
 readonly class ListOutputData
@@ -13,6 +14,7 @@ readonly class ListOutputData
      */
     public function __construct(
         public array $venues,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

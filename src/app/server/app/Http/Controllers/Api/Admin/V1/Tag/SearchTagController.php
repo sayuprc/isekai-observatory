@@ -12,12 +12,12 @@ use Support\Contracts\MapperInterface;
 use Tag\Application\Admin\UseCase\Search\SearchInputData;
 use Tag\Application\Admin\UseCase\Search\SearchUseCase;
 
-class SearchTagController extends Controller
+final readonly class SearchTagController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly SearchUseCase $useCase,
-        private readonly SearchPresenter $presenter,
+        private MapperInterface $mapper,
+        private SearchUseCase $useCase,
+        private SearchPresenter $presenter,
     ) {
     }
 

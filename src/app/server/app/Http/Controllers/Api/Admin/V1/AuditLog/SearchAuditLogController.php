@@ -12,12 +12,12 @@ use Support\Contracts\MapperInterface;
 use Support\UseCase\AuditLog\Search\SearchInputData;
 use Support\UseCase\AuditLog\Search\SearchUseCase;
 
-class SearchAuditLogController extends Controller
+final readonly class SearchAuditLogController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly SearchUseCase $useCase,
-        private readonly SearchPresenter $presenter,
+        private MapperInterface $mapper,
+        private SearchUseCase $useCase,
+        private SearchPresenter $presenter,
     ) {
     }
 

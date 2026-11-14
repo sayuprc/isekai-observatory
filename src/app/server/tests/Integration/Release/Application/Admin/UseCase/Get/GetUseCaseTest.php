@@ -47,12 +47,16 @@ class GetUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 2,
                         'name' => null,
-                        'tracks' => [['songIds' => [$songId2], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId2], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$songId1], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId1], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
@@ -77,7 +81,7 @@ class GetUseCaseTest extends DatabaseTestCase
     {
         $this->expectException(InvalidDomainException::class);
 
-        $result = $this->getInstance()->handle(new GetInputData('invalid-id'));
+        $this->getInstance()->handle(new GetInputData('invalid-id'));
     }
 
     #[Test]
@@ -85,7 +89,7 @@ class GetUseCaseTest extends DatabaseTestCase
     {
         $this->expectException(ResourceNotFoundException::class);
 
-        $result = $this->getInstance()->handle(new GetInputData($this->generateUuid()));
+        $this->getInstance()->handle(new GetInputData($this->generateUuid()));
     }
 
     private function getInstance(): GetUseCase

@@ -41,20 +41,24 @@ class AccessTokenIssueServiceTest extends TestCase
         $issuer = 'test-issuer';
         $now = new DateTimeImmutable('2026-02-01 00:00:00');
 
-        $this->clock->shouldReceive('now')
+        $this->clock
+            ->shouldReceive('now')
             ->with()
             ->andReturn($now)
             ->once();
 
         $expectedAccessToken = $this->createAccessToken('jwt-token');
 
-        $this->factory->shouldReceive('create')
+        $this->factory
+            ->shouldReceive('create')
             ->withArgs(
-                static fn (AccessTokenPayload $payload): bool => $payload->iss === $issuer
+                static fn (AccessTokenPayload $payload): bool => (
+                    $payload->iss === $issuer
                     && $payload->iat === $now->getTimestamp()
                     && $payload->exp === $now->modify('+1 hours')->getTimestamp()
                     && $payload->nbf === $now->getTimestamp()
-                    && $payload->jti === $id,
+                    && $payload->jti === $id
+                ),
             )
             ->andReturn($expectedAccessToken)
             ->once();

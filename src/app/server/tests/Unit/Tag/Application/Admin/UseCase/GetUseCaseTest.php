@@ -33,7 +33,8 @@ class GetUseCaseTest extends TestCase
     #[Test]
     public function getTag(): void
     {
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB')
             ->andReturn($this->createTag('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'テストタグA', 1))
             ->once();
@@ -50,7 +51,8 @@ class GetUseCaseTest extends TestCase
     #[Test]
     public function failureGetTag(): void
     {
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB')
             ->andReturnNull()
             ->once();

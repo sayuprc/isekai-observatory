@@ -19,9 +19,9 @@ interface PasskeyAuthenticatorInterface
     ): PasskeyStartResult;
 
     /**
-     * @param array<string, mixed> $credential
+     * @param string $credentialJson ブラウザが返した PublicKeyCredential の JSON
      */
-    public function finishRegistration(array $credential, string $optionsJson): PasskeyRegistrationResult;
+    public function finishRegistration(string $credentialJson, string $optionsJson): PasskeyRegistrationResult;
 
     /**
      * ユーザー列挙を防ぐため allowCredentials は空配列で返し資格情報を列挙しない
@@ -31,15 +31,15 @@ interface PasskeyAuthenticatorInterface
     public function startAuthentication(): PasskeyStartResult;
 
     /**
-     * @param array<string, mixed> $credential
+     * @param string $credentialJson ブラウザが返した PublicKeyCredential の JSON
      */
-    public function credentialId(array $credential): ?string;
+    public function credentialId(string $credentialJson): ?string;
 
     /**
-     * @param array<string, mixed> $credential
+     * @param string $credentialJson ブラウザが返した PublicKeyCredential の JSON
      */
     public function finishAuthentication(
-        array $credential,
+        string $credentialJson,
         string $optionsJson,
         AdminUserPasskey $passkey,
         string $userHandle,

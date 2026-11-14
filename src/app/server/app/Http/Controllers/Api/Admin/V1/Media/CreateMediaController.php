@@ -12,12 +12,12 @@ use Media\Application\Admin\UseCase\Create\CreateInputData;
 use Media\Application\Admin\UseCase\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
-class CreateMediaController extends Controller
+final readonly class CreateMediaController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly CreateUseCase $useCase,
-        private readonly CreatePresenter $presenter,
+        private MapperInterface $mapper,
+        private CreateUseCase $useCase,
+        private CreatePresenter $presenter,
     ) {
     }
 

@@ -113,10 +113,7 @@ class Converter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setIsDisplay($release->isDisplay)
-            ->setFormats(array_map(
-                static fn (int $formatValue): ReleaseFormatValue => ReleaseFormatValue::from($formatValue),
-                $release->formatValues,
-            ));
+            ->setFormats(array_map(ReleaseFormatValue::from(...), $release->formatValues));
     }
 
     private function toOpenApiSource(AssembledSource $source): OpenApiEventSource
@@ -137,9 +134,11 @@ class Converter
             ->setCoVocalists(array_map(
                 static fn (AssembledCoVocalist $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson([
                     'credit_name' => $coVocalist->creditName,
-                    'person_group' => $coVocalist->personGroup === null ? null : new OpenApiPerformancePersonGroup()
-                        ->setPersonGroupId($coVocalist->personGroup->personGroupId)
-                        ->setName($coVocalist->personGroup->name),
+                    'person_group' => $coVocalist->personGroup === null
+                        ? null
+                        : new OpenApiPerformancePersonGroup()
+                            ->setPersonGroupId($coVocalist->personGroup->personGroupId)
+                            ->setName($coVocalist->personGroup->name),
                 ])
                     ->setPersonId($coVocalist->personId)
                     ->setName($coVocalist->name)

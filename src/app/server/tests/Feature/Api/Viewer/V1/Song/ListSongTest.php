@@ -84,7 +84,10 @@ class ListSongTest extends DatabaseTestCase
                 SongType::Original,
                 true,
                 1,
-                [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
+                [
+                    ['tagId' => $tagIdSecond],
+                    ['tagId' => $tagIdFirst],
+                ],
                 [
                     ['personId' => $lyricistId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
                     ['personId' => $composerId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 2],
@@ -148,7 +151,9 @@ class ListSongTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
@@ -162,14 +167,17 @@ class ListSongTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
         );
 
-        $response = $this->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
-            ->assertStatus(200)
+        $response = $this
+            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -208,8 +216,9 @@ class ListSongTest extends DatabaseTestCase
 
         $this->assertIsString($cursor);
 
-        $this->get(route(ViewerSongRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
-            ->assertStatus(200)
+        $this
+            ->get(route(ViewerSongRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+            ->assertOk()
             ->assertExactJson([
                 'songs' => [
                     [
@@ -262,8 +271,9 @@ class ListSongTest extends DatabaseTestCase
     #[DataProvider('provideInvalidCursors')]
     public function rejectsInvalidCursor(string $cursor): void
     {
-        $this->get(route(ViewerSongRouteMap::List, ['cursor' => $cursor]))
-            ->assertStatus(400)
+        $this
+            ->get(route(ViewerSongRouteMap::List, ['cursor' => $cursor]))
+            ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
                 'message' => 'カーソルが不正です。',

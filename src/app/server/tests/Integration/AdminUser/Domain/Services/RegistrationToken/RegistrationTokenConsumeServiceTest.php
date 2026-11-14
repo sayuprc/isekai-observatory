@@ -18,6 +18,7 @@ use AdminUser\Domain\Services\RegistrationToken\TokenHasherInterface;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Test;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Tests\Support\DatabaseTestCase;
 
@@ -38,8 +39,12 @@ class RegistrationTokenConsumeServiceTest extends DatabaseTestCase
         $this->assertTrue($hasher->verify('plain-old-token', $result->token->value));
     }
 
-    private function saveToken(string $plainToken, string $email, DateTimeImmutable $createdAt): RegistrationToken
-    {
+    private function saveToken(
+        #[SensitiveParameter]
+        string $plainToken,
+        string $email,
+        DateTimeImmutable $createdAt,
+    ): RegistrationToken {
         $token = new RegistrationToken(
             new RegistrationTokenId($this->generateUuid()),
             new HashedTokenValue($this->app->make(TokenHasherInterface::class)->hash($plainToken)),

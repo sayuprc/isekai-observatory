@@ -22,7 +22,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
     #[Test]
     public function canCreate(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => '観測された春',
                 'type' => ReleaseGroupType::Album->value,
@@ -31,7 +32,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 1,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -65,7 +67,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
             $this->createReleaseGroup($this->generateUuid(), '既存の作品', ReleaseGroupType::Single, true, orderNo: 15),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => '観測された春',
                 'type' => ReleaseGroupType::Album->value,
@@ -74,23 +77,23 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'isDisplay' => true,
                 'orderNo' => 7,
                 'tags' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJsonPath('releaseGroup.orderNo', 7);
     }
 
     #[Test]
     public function forbidden(): void
     {
-        $this->withGeneralAuth()
-            ->postJson(route(ReleaseGroupRouteMap::Create), [
-                'title' => '観測された春',
-                'type' => ReleaseGroupType::Album->value,
-                'description' => '',
-                'note' => '',
-                'isDisplay' => true,
-                'orderNo' => 1,
-                'tags' => [],
-            ])->assertStatus(403);
+        $this->withGeneralAuth()->postJson(route(ReleaseGroupRouteMap::Create), [
+            'title' => '観測された春',
+            'type' => ReleaseGroupType::Album->value,
+            'description' => '',
+            'note' => '',
+            'isDisplay' => true,
+            'orderNo' => 1,
+            'tags' => [],
+        ])->assertForbidden();
     }
 
     #[Test]
@@ -100,7 +103,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
         $secondTagId = $this->generateUuid();
         $this->storeTags($this->createTag($secondTagId, 'タグB', 20), $this->createTag($firstTagId, 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => 'タグ付きの作品',
                 'type' => ReleaseGroupType::Album->value,
@@ -108,9 +112,12 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'tags' => [['tagId' => $secondTagId], ['tagId' => $firstTagId]],
+                'tags' => [
+                    ['tagId' => $secondTagId],
+                    ['tagId' => $firstTagId],
+                ],
             ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('releaseGroup.tags', [
                 ['tagId' => $firstTagId, 'name' => 'タグA'],
                 ['tagId' => $secondTagId, 'name' => 'タグB'],
@@ -123,7 +130,8 @@ class CreateReleaseGroupTest extends DatabaseTestCase
         $tagId = $this->generateUuid();
         $this->storeTags($this->createTag($tagId, 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(ReleaseGroupRouteMap::Create), [
                 'title' => 'タグが重複した作品',
                 'type' => ReleaseGroupType::Album->value,
@@ -131,9 +139,12 @@ class CreateReleaseGroupTest extends DatabaseTestCase
                 'note' => '',
                 'isDisplay' => true,
                 'orderNo' => 1,
-                'tags' => [['tagId' => $tagId], ['tagId' => $tagId]],
+                'tags' => [
+                    ['tagId' => $tagId],
+                    ['tagId' => $tagId],
+                ],
             ])
-            ->assertStatus(400)
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

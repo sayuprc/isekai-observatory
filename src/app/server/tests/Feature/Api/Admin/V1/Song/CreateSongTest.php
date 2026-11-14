@@ -32,9 +32,18 @@ class CreateSongTest extends DatabaseTestCase
         $tagRepo->save($tag1 = $this->createTag($this->generateUuid(), 'タグA', 10));
         $tagRepo->save($tag2 = $this->createTag($this->generateUuid(), 'タグB', 20));
         $mediaRepo = $this->app->make(MediaRepository::class);
-        $mediaRepo->save($media = $this->createMedia($this->generateUuid(), 'テストメディアMV', 'https://example.com/media', MediaType::Mv, true));
+        $mediaRepo->save(
+            $media = $this->createMedia(
+                $this->generateUuid(),
+                'テストメディアMV',
+                'https://example.com/media',
+                MediaType::Mv,
+                true,
+            ),
+        );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -54,7 +63,8 @@ class CreateSongTest extends DatabaseTestCase
                 'media' => [
                     ['mediaId' => $media->mediaId->value, 'orderNo' => 1],
                 ],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->has(
@@ -68,38 +78,47 @@ class CreateSongTest extends DatabaseTestCase
                             ->where('type', SongType::Original->value)
                             ->where('isDisplay', true)
                             ->where('orderNo', 10)
-                            ->where('persons', [[
-                                'personId' => $person1->personId->value,
-                                'name' => $person1->name->value,
-                                'role' => 1,
-                                'orderNo' => 1,
-                            ], [
-                                'personId' => $person2->personId->value,
-                                'name' => $person2->name->value,
-                                'role' => 2,
-                                'orderNo' => 2,
-                            ], [
-                                'personId' => $person3->personId->value,
-                                'name' => $person3->name->value,
-                                'role' => 3,
-                                'orderNo' => 3,
-                            ]])
-                            ->where('tags', [[
-                                'tagId' => $tag1->tagId->value,
-                                'name' => $tag1->name->value,
-                            ], [
-                                'tagId' => $tag2->tagId->value,
-                                'name' => $tag2->name->value,
-                            ]])
-                            ->where('media', [[
-                                'mediaId' => $media->mediaId->value,
-                                'title' => $media->title->value,
-                                'url' => $media->url->value,
-                                'publishedAt' => $media->publishedAt->value->format('Y-m-d\TH:i:sP'),
-                                'type' => $media->type->value,
-                                'isDisplay' => true,
-                                'orderNo' => 1,
-                            ]]),
+                            ->where('persons', [
+                                [
+                                    'personId' => $person1->personId->value,
+                                    'name' => $person1->name->value,
+                                    'role' => 1,
+                                    'orderNo' => 1,
+                                ],
+                                [
+                                    'personId' => $person2->personId->value,
+                                    'name' => $person2->name->value,
+                                    'role' => 2,
+                                    'orderNo' => 2,
+                                ],
+                                [
+                                    'personId' => $person3->personId->value,
+                                    'name' => $person3->name->value,
+                                    'role' => 3,
+                                    'orderNo' => 3,
+                                ],
+                            ])
+                            ->where('tags', [
+                                [
+                                    'tagId' => $tag1->tagId->value,
+                                    'name' => $tag1->name->value,
+                                ],
+                                [
+                                    'tagId' => $tag2->tagId->value,
+                                    'name' => $tag2->name->value,
+                                ],
+                            ])
+                            ->where('media', [
+                                [
+                                    'mediaId' => $media->mediaId->value,
+                                    'title' => $media->title->value,
+                                    'url' => $media->url->value,
+                                    'publishedAt' => $media->publishedAt->value->format('Y-m-d\TH:i:sP'),
+                                    'type' => $media->type->value,
+                                    'isDisplay' => true,
+                                    'orderNo' => 1,
+                                ],
+                            ]),
                     ),
             );
     }
@@ -107,7 +126,8 @@ class CreateSongTest extends DatabaseTestCase
     #[Test]
     public function canCreateWithNullLyricsLink(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -118,7 +138,8 @@ class CreateSongTest extends DatabaseTestCase
                 'persons' => [],
                 'tags' => [],
                 'media' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJsonPath('song.lyricsLink', null)
             ->assertJsonPath('song.media', []);
     }
@@ -126,7 +147,8 @@ class CreateSongTest extends DatabaseTestCase
     #[Test]
     public function canCreateGuestSong(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト参加曲',
                 'description' => 'テスト参加曲説明',
@@ -137,14 +159,16 @@ class CreateSongTest extends DatabaseTestCase
                 'persons' => [],
                 'tags' => [],
                 'media' => [],
-            ])->assertStatus(200)
+            ])
+            ->assertOk()
             ->assertJsonPath('song.type', SongType::Guest->value);
     }
 
     #[Test]
     public function createFailsWithNotExistsTag(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -153,9 +177,12 @@ class CreateSongTest extends DatabaseTestCase
                 'type' => SongType::Original->value,
                 'isDisplay' => true,
                 'persons' => [],
-                'tags' => [['tagId' => $this->generateUuid()]],
+                'tags' => [
+                    ['tagId' => $this->generateUuid()],
+                ],
                 'media' => [],
-            ])->assertStatus(400);
+            ])
+            ->assertBadRequest();
     }
 
     #[Test]
@@ -164,7 +191,8 @@ class CreateSongTest extends DatabaseTestCase
         $tagRepo = $this->app->make(TagRepository::class);
         $tagRepo->save($tag = $this->createTag($this->generateUuid(), 'タグA', 10));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::Create), [
                 'title' => 'テスト楽曲',
                 'description' => 'テスト楽曲説明',
@@ -178,7 +206,8 @@ class CreateSongTest extends DatabaseTestCase
                     ['tagId' => $tag->tagId->value],
                 ],
                 'media' => [],
-            ])->assertStatus(400)
+            ])
+            ->assertBadRequest()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'business_rule_violation')
@@ -189,7 +218,8 @@ class CreateSongTest extends DatabaseTestCase
     #[Test]
     public function emptyParameters(): void
     {
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->postJson(route(SongRouteMap::Create), [
                 'title' => '',
                 'description' => '',
@@ -200,7 +230,8 @@ class CreateSongTest extends DatabaseTestCase
                 'persons' => [],
                 'tags' => [],
                 'media' => [],
-            ])->assertStatus(422)
+            ])
+            ->assertUnprocessable()
             ->assertJson(
                 static fn (AssertableJson $json) => $json
                     ->where('code', 'validation_failed')

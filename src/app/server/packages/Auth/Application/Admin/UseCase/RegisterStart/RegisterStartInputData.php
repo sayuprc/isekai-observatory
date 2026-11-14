@@ -10,7 +10,7 @@ readonly class RegisterStartInputData
 {
     public function __construct(
         #[SensitiveParameter]
-        public string $plainToken,
+        public string $token,
         public string $email,
         public string $name,
     ) {

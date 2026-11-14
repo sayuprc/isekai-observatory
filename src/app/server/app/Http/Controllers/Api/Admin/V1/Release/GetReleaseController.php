@@ -10,16 +10,18 @@ use Illuminate\Http\JsonResponse;
 use Release\Application\Admin\UseCase\Get\GetInputData;
 use Release\Application\Admin\UseCase\Get\GetUseCase;
 
-class GetReleaseController extends Controller
+final readonly class GetReleaseController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 
     public function handle(string $releaseId): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle(new GetInputData($releaseId)));
+        return new GetInputData($releaseId)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

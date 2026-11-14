@@ -22,12 +22,12 @@ readonly class PersonGroupUsageChecker implements PersonGroupUsageCheckerInterfa
     #[Override]
     public function isUsed(PersonGroupId $personGroupId): bool
     {
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from('song_performance_persons')
-                ->where('person_group_id', '=', $this->converter->toBin($personGroupId->value))
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+        $count = $this->queryFactory
+            ->select()
+            ->from('song_performance_persons')
+            ->where('person_group_id', '=', $this->converter->toBin($personGroupId->value))
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
 
         return $count > 0;
     }

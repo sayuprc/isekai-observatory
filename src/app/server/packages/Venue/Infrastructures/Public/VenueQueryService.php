@@ -6,6 +6,7 @@ namespace Venue\Infrastructures\Public;
 
 use Emonkak\Orm\Sql;
 use Override;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -27,32 +28,37 @@ readonly class VenueQueryService implements VenueQueryServiceInterface
      * 公開イベントから参照されている開催先だけを返す
      */
     #[Override]
-    public function list(?string $pageToken, int $pageSize): VenueListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): VenueListPage
     {
-        $query = $this->queryFactory->select()
-            ->withSelect(['venue_id', 'name', 'kind'])
+        $query = $this->queryFactory
+            ->select()
+            ->withSelect([
+                'venue_id',
+                'name',
+                'kind',
+            ])
             ->from('venues')
-            ->where(new Sql(
-                'venue_id IN (SELECT event_venues.venue_id FROM event_venues'
-                . ' INNER JOIN events ON events.event_id = event_venues.event_id WHERE events.is_display = TRUE)',
-            ));
+            ->where(
+                new Sql('venue_id IN (SELECT event_venues.venue_id FROM event_venues INNER JOIN events ON events.event_id = event_venues.event_id WHERE events.is_display = TRUE)'),
+            );
 
         if (is_string($pageToken)) {
             $decoded = VenueListPageToken::decode($pageToken);
 
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(name > %s OR (name = %s AND venue_id > %s))',
                 Sql::value($decoded->name),
                 Sql::value($decoded->name),
                 Sql::value($this->converter->toBin($decoded->venueId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $query->orderBy('name')
-                ->orderBy('venue_id')
-                ->limit($pageSize + 1),
-        );
+        $rows = $query
+            ->orderBy('name')
+            ->orderBy('venue_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
@@ -72,7 +78,10 @@ readonly class VenueQueryService implements VenueQueryServiceInterface
             $venues,
             $lastRow === null
                 ? null
-                : VenueListPageToken::encode(Row::string($lastRow, 'name'), $this->converter->toUuid(Row::string($lastRow, 'venue_id'))),
+                : VenueListPageToken::encode(
+                    Row::string($lastRow, 'name'),
+                    $this->converter->toUuid(Row::string($lastRow, 'venue_id')),
+                ),
         );
     }
 }

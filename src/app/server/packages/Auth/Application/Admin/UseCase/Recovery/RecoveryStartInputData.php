@@ -11,7 +11,7 @@ readonly class RecoveryStartInputData
     public function __construct(
         public string $email,
         #[SensitiveParameter]
-        public string $plainCode,
+        public string $recoveryCode,
         public string $name,
     ) {
     }

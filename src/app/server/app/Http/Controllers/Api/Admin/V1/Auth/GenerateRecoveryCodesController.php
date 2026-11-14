@@ -9,16 +9,17 @@ use App\Http\Presenters\Api\Admin\V1\Auth\GenerateRecoveryCodesPresenter;
 use Auth\Application\Admin\UseCase\RecoveryCode\Generate\GenerateRecoveryCodesUseCase;
 use Illuminate\Http\JsonResponse;
 
-class GenerateRecoveryCodesController extends Controller
+final readonly class GenerateRecoveryCodesController extends Controller
 {
     public function __construct(
-        private readonly GenerateRecoveryCodesUseCase $generateRecoveryCodesUseCase,
-        private readonly GenerateRecoveryCodesPresenter $presenter,
+        private GenerateRecoveryCodesUseCase $useCase,
+        private GenerateRecoveryCodesPresenter $presenter,
     ) {
     }
 
     public function handle(): JsonResponse
     {
-        return $this->presenter->present($this->generateRecoveryCodesUseCase->handle());
+        return $this->useCase->handle()
+            |> $this->presenter->present(...);
     }
 }

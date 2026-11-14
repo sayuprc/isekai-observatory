@@ -62,10 +62,8 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         // origin 設定の不備をセレモニー開始時点で fail-fast する (finish 側は例外が握り潰されるため)
         $this->host();
 
-        $excludeCredentials = array_map(
-            fn (AdminUserPasskey $passkey): PublicKeyCredentialDescriptor => $this->toDescriptor($passkey),
-            $excludePasskeys,
-        );
+        $excludeCredentials = array_map($this->toDescriptor(...), $excludePasskeys);
+
         $options = PublicKeyCredentialCreationOptions::create(
             PublicKeyCredentialRpEntity::create(
                 $this->config->rpName,
@@ -95,13 +93,10 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         );
     }
 
-    /**
-     * @param array<string, mixed> $credential
-     */
     #[Override]
-    public function finishRegistration(array $credential, string $optionsJson): PasskeyRegistrationResult
+    public function finishRegistration(string $credentialJson, string $optionsJson): PasskeyRegistrationResult
     {
-        $publicKeyCredential = $this->deserializeCredential($credential);
+        $publicKeyCredential = $this->deserializeCredential($credentialJson);
         $response = $publicKeyCredential->response;
 
         if (! $response instanceof AuthenticatorAttestationResponse) {
@@ -162,12 +157,15 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         );
     }
 
-    /**
-     * @param array<string, mixed> $credential
-     */
     #[Override]
-    public function credentialId(array $credential): ?string
+    public function credentialId(string $credentialJson): ?string
     {
+        $credential = json_decode($credentialJson, true);
+
+        if (! is_array($credential)) {
+            return null;
+        }
+
         $rawId = $credential['rawId'] ?? null;
 
         if (is_string($rawId) && $rawId !== '') {
@@ -187,17 +185,14 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         return $id;
     }
 
-    /**
-     * @param array<string, mixed> $credential
-     */
     #[Override]
     public function finishAuthentication(
-        array $credential,
+        string $credentialJson,
         string $optionsJson,
         AdminUserPasskey $passkey,
         string $userHandle,
     ): PasskeyAuthenticationResult {
-        $publicKeyCredential = $this->deserializeCredential($credential);
+        $publicKeyCredential = $this->deserializeCredential($credentialJson);
         $response = $publicKeyCredential->response;
 
         if (! $response instanceof AuthenticatorAssertionResponse) {
@@ -229,14 +224,11 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         );
     }
 
-    /**
-     * @param array<string, mixed> $credential
-     */
-    private function deserializeCredential(array $credential): PublicKeyCredential
+    private function deserializeCredential(string $credentialJson): PublicKeyCredential
     {
         /** @var PublicKeyCredential */
-        return $this->serializer->denormalize(
-            $credential,
+        return $this->serializer->deserialize(
+            $credentialJson,
             PublicKeyCredential::class,
             JsonEncoder::FORMAT,
         );
@@ -256,7 +248,9 @@ readonly class PasskeyAuthenticator implements PasskeyAuthenticatorInterface
         $host = parse_url($this->config->origin, PHP_URL_HOST);
 
         if (! is_string($host) || $host === '') {
-            throw new RuntimeException(sprintf('auth.passkey.origin からホストを取得できません: [%s]', $this->config->origin));
+            throw new RuntimeException(
+                sprintf('auth.passkey.origin からホストを取得できません: [%s]', $this->config->origin),
+            );
         }
 
         return $host;

@@ -75,15 +75,18 @@ class SongIntegrityServiceTest extends TestCase
             note: $note,
         );
 
-        $this->personRepository->shouldReceive('findByIds')
+        $this->personRepository
+            ->shouldReceive('findByIds')
             ->withArgs(
                 static fn (
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === $lyricistId
+                ): bool => (
+                    $arg1->value === $lyricistId
                     && $arg2->value === $composerId
-                    && $arg3->value === $arrangerId,
+                    && $arg3->value === $arrangerId
+                ),
             )
             ->andReturn([
                 $this->createPerson($lyricistId, '', 1),
@@ -92,12 +95,14 @@ class SongIntegrityServiceTest extends TestCase
             ])
             ->once();
 
-        $this->generator->shouldReceive('generate')
+        $this->generator
+            ->shouldReceive('generate')
             ->with()
             ->andReturn($uuid)
             ->once();
 
-        $this->songRepository->shouldReceive('getMaxOrderNo')
+        $this->songRepository
+            ->shouldReceive('getMaxOrderNo')
             ->with()
             ->andReturn($currentMaxOrderNo)
             ->once();
@@ -131,15 +136,18 @@ class SongIntegrityServiceTest extends TestCase
             ['personId' => 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'role' => 3, 'orderNo' => 3],
         ];
 
-        $this->personRepository->shouldReceive('findByIds')
+        $this->personRepository
+            ->shouldReceive('findByIds')
             ->withArgs(
                 static fn (
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
+                ): bool => (
+                    $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
                     && $arg2->value === 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC'
-                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD',
+                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD'
+                ),
             )
             ->andReturn([
                 $this->createPerson('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', '', 1),
@@ -190,15 +198,18 @@ class SongIntegrityServiceTest extends TestCase
             note: $note,
         );
 
-        $this->personRepository->shouldReceive('findByIds')
+        $this->personRepository
+            ->shouldReceive('findByIds')
             ->withArgs(
                 static fn (
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === $lyricistId
+                ): bool => (
+                    $arg1->value === $lyricistId
                     && $arg2->value === $composerId
-                    && $arg3->value === $arrangerId,
+                    && $arg3->value === $arrangerId
+                ),
             )
             ->andReturn([
                 $this->createPerson($lyricistId, '', 1),
@@ -240,15 +251,18 @@ class SongIntegrityServiceTest extends TestCase
             ['personId' => 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'role' => 3, 'orderNo' => 3],
         ];
 
-        $this->personRepository->shouldReceive('findByIds')
+        $this->personRepository
+            ->shouldReceive('findByIds')
             ->withArgs(
                 static fn (
                     PersonId $arg1,
                     PersonId $arg2,
                     PersonId $arg3,
-                ): bool => $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
+                ): bool => (
+                    $arg1->value === 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'
                     && $arg2->value === 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC'
-                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD',
+                    && $arg3->value === 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD'
+                ),
             )
             ->andReturn([
                 $this->createPerson('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', '', 1),

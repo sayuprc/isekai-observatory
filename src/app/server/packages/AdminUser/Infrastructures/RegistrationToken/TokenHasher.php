@@ -17,7 +17,7 @@ readonly class TokenHasher implements TokenHasherInterface
     }
 
     #[Override]
-    public function verify(#[SensitiveParameter] string $plainToken, string $hashedToken): bool
+    public function verify(#[SensitiveParameter] string $plainToken, #[SensitiveParameter] string $hashedToken): bool
     {
         return hash_equals($this->hash($plainToken), $hashedToken);
     }

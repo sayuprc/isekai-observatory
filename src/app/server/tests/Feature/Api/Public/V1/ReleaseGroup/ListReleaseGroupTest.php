@@ -42,7 +42,10 @@ class ListReleaseGroupTest extends DatabaseTestCase
             'アルバム',
             ReleaseGroupType::Album,
             description: '説明',
-            tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
+            tags: [
+                ['tagId' => $tagIdSecond],
+                ['tagId' => $tagIdFirst],
+            ],
         ));
         $this->storeReleases(
             $this->createRelease(
@@ -53,50 +56,75 @@ class ListReleaseGroupTest extends DatabaseTestCase
                 new ImmutableDate('2026-05-01'),
                 description: 'CD',
                 formats: [ReleaseFormat::Cd->value],
-                media: [[
-                    'position' => 1,
-                    'name' => 'Disc 1',
-                    'tracks' => [
-                        ['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1],
-                        ['songIds' => [$hiddenSongId], 'title' => null, 'trackNo' => 2],
-                        ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 3],
-                        ['songIds' => [$hiddenSongId, $visibleSongId], 'title' => 'メドレー', 'trackNo' => 4],
+                media: [
+                    [
+                        'position' => 1,
+                        'name' => 'Disc 1',
+                        'tracks' => [
+                            ['songIds' => [$visibleSongId], 'title' => null, 'trackNo' => 1],
+                            ['songIds' => [$hiddenSongId], 'title' => null, 'trackNo' => 2],
+                            ['songIds' => [], 'title' => '管理対象外の楽曲', 'trackNo' => 3],
+                            ['songIds' => [$hiddenSongId, $visibleSongId], 'title' => 'メドレー', 'trackNo' => 4],
+                        ],
                     ],
-                ]],
+                ],
             ),
             $this->createRelease($this->generateUuid(), $releaseGroupId, '非公開盤', false, orderNo: 2),
         );
 
-        $this->get(route(PublicReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicReleaseGroupRouteMap::List))
+            ->assertOk()
             ->assertExactJson([
-                'items' => [[
-                    'releaseGroupId' => $releaseGroupId,
-                    'title' => 'アルバム',
-                    'type' => ReleaseGroupType::Album->value,
-                    'description' => '説明',
-                    'releases' => [[
-                        'releaseId' => $releaseId,
-                        'name' => '通常盤',
-                        'releasedOn' => '2026-05-01',
-                        'description' => 'CD',
-                        'formats' => [ReleaseFormat::Cd->value],
-                        'media' => [[
-                            'position' => 1,
-                            'name' => 'Disc 1',
-                            'tracks' => [
-                                ['trackNo' => 1, 'title' => null, 'songs' => [['songId' => $visibleSongId, 'title' => '公開楽曲']]],
-                                ['trackNo' => 2, 'title' => null, 'songs' => [['songId' => null, 'title' => '非公開楽曲']]],
-                                ['trackNo' => 3, 'title' => '管理対象外の楽曲', 'songs' => []],
-                                ['trackNo' => 4, 'title' => 'メドレー', 'songs' => [
-                                    ['songId' => null, 'title' => '非公開楽曲'],
-                                    ['songId' => $visibleSongId, 'title' => '公開楽曲'],
-                                ]],
+                'items' => [
+                    [
+                        'releaseGroupId' => $releaseGroupId,
+                        'title' => 'アルバム',
+                        'type' => ReleaseGroupType::Album->value,
+                        'description' => '説明',
+                        'releases' => [
+                            [
+                                'releaseId' => $releaseId,
+                                'name' => '通常盤',
+                                'releasedOn' => '2026-05-01',
+                                'description' => 'CD',
+                                'formats' => [ReleaseFormat::Cd->value],
+                                'media' => [
+                                    [
+                                        'position' => 1,
+                                        'name' => 'Disc 1',
+                                        'tracks' => [
+                                            [
+                                                'trackNo' => 1,
+                                                'title' => null,
+                                                'songs' => [
+                                                    ['songId' => $visibleSongId, 'title' => '公開楽曲'],
+                                                ],
+                                            ],
+                                            [
+                                                'trackNo' => 2,
+                                                'title' => null,
+                                                'songs' => [
+                                                    ['songId' => null, 'title' => '非公開楽曲'],
+                                                ],
+                                            ],
+                                            ['trackNo' => 3, 'title' => '管理対象外の楽曲', 'songs' => []],
+                                            [
+                                                'trackNo' => 4,
+                                                'title' => 'メドレー',
+                                                'songs' => [
+                                                    ['songId' => null, 'title' => '非公開楽曲'],
+                                                    ['songId' => $visibleSongId, 'title' => '公開楽曲'],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ],
-                        ]],
-                    ]],
-                    'tagIds' => [$tagIdFirst, $tagIdSecond],
-                ]],
+                        ],
+                        'tagIds' => [$tagIdFirst, $tagIdSecond],
+                    ],
+                ],
             ]);
     }
 
@@ -114,8 +142,9 @@ class ListReleaseGroupTest extends DatabaseTestCase
             $this->createRelease($this->generateUuid(), $emptyGroupId, '非公開盤', false),
         );
 
-        $this->get(route(PublicReleaseGroupRouteMap::List))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicReleaseGroupRouteMap::List))
+            ->assertOk()
             ->assertExactJson(['items' => []]);
     }
 
@@ -133,12 +162,17 @@ class ListReleaseGroupTest extends DatabaseTestCase
             $this->createRelease($this->generateUuid(), $secondId, '通常盤', true),
         );
 
-        $first = $this->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1]))
-            ->assertStatus(200)
+        $first = $this
+            ->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1]))
+            ->assertOk()
             ->assertJsonPath('items.0.releaseGroupId', $firstId);
 
-        $this->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicReleaseGroupRouteMap::List, [
+                'pageSize' => 1,
+                'pageToken' => $first->json('nextPageToken'),
+            ]))
+            ->assertOk()
             ->assertJsonPath('items.0.releaseGroupId', $secondId)
             ->assertJsonMissingPath('nextPageToken');
     }

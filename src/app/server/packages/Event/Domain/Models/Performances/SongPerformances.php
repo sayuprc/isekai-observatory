@@ -32,15 +32,17 @@ readonly class SongPerformances extends ImmutableCollection
         }
 
         // 共演者も fromArray で検証するため、reconstruct には委ねない
-        return new self(array_map(
-            static fn (array $item): SongPerformance => new SongPerformance(
-                new PerformanceId($item['performanceId']),
-                new SongId($item['songId']),
-                new OrderNo($item['orderNo']),
-                CoVocalists::fromArray($item['coVocalists']),
+        return new self(
+            array_map(
+                static fn (array $item): SongPerformance => new SongPerformance(
+                    new PerformanceId($item['performanceId']),
+                    new SongId($item['songId']),
+                    new OrderNo($item['orderNo']),
+                    CoVocalists::fromArray($item['coVocalists']),
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**
@@ -48,15 +50,17 @@ readonly class SongPerformances extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): SongPerformance => new SongPerformance(
-                new PerformanceId($item['performanceId']),
-                new SongId($item['songId']),
-                new OrderNo($item['orderNo']),
-                CoVocalists::reconstruct($item['coVocalists']),
+        return new self(
+            array_map(
+                static fn (array $item): SongPerformance => new SongPerformance(
+                    new PerformanceId($item['performanceId']),
+                    new SongId($item['songId']),
+                    new OrderNo($item['orderNo']),
+                    CoVocalists::reconstruct($item['coVocalists']),
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     public function contains(PerformanceId $performanceId): bool
@@ -75,6 +79,7 @@ readonly class SongPerformances extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (SongPerformance $performance): array => $performance->toArray(), $this->items));
+        return array_map(static fn (SongPerformance $performance): array => $performance->toArray(), $this->items)
+            |> array_values(...);
     }
 }

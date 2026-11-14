@@ -33,7 +33,9 @@ class TagExistenceService
 
         foreach ($changes->addTagIds as $tagId) {
             if (! in_array($tagId->value, $existing, true)) {
-                throw new BusinessRuleViolationException(sprintf('存在しないタグが指定されています "%s"', $tagId->value));
+                throw new BusinessRuleViolationException(
+                    sprintf('存在しないタグが指定されています "%s"', $tagId->value),
+                );
             }
         }
     }

@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use Person\Application\Public\UseCase\Group\List\ListInputData;
 use Person\Application\Public\UseCase\Group\List\ListUseCase;
 
-class ListPersonGroupController extends Controller
+final readonly class ListPersonGroupController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 

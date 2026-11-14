@@ -28,8 +28,11 @@ class ImmutableDateTimeValueObjectTest extends TestCase
 
     #[Test]
     #[DataProvider('equalsEvaluatesEquivalenceProvider')]
-    public function equalsEvaluatesEquivalence(ImmutableDateTime $object, ImmutableDateTimeValueObject $other, bool $expected): void
-    {
+    public function equalsEvaluatesEquivalence(
+        ImmutableDateTime $object,
+        ImmutableDateTimeValueObject $other,
+        bool $expected,
+    ): void {
         $this->assertSame($expected, $object->equals($other));
     }
 

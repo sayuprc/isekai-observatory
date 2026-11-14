@@ -37,10 +37,15 @@ readonly class EventMediaLinks extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): EventMediaLink => new EventMediaLink(new MediaId($item['mediaId']), new OrderNo($item['orderNo'])),
-            $items,
-        ));
+        return new self(
+            array_map(
+                static fn (array $item): EventMediaLink => new EventMediaLink(
+                    new MediaId($item['mediaId']),
+                    new OrderNo($item['orderNo']),
+                ),
+                $items,
+            ),
+        );
     }
 
     /**
@@ -48,6 +53,7 @@ readonly class EventMediaLinks extends ImmutableCollection
      */
     public function toArray(): array
     {
-        return array_values(array_map(static fn (EventMediaLink $link): array => $link->toArray(), $this->items));
+        return array_map(static fn (EventMediaLink $link): array => $link->toArray(), $this->items)
+            |> array_values(...);
     }
 }
