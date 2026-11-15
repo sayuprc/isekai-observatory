@@ -331,13 +331,13 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Cli/UseCase/ImportYouTube/ImportYouTubeNotifier.php"
+file = "packages/Media/Application/Admin/UseCase/ImportYouTube/ImportYouTubeNotifier.php"
 code = "no-else-clause"
 message = "Avoid `elseif` clauses."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Cli/UseCase/ImportYouTube/ImportYouTubeUseCase.php"
+file = "packages/Media/Application/Admin/UseCase/ImportYouTube/ImportYouTubeUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -373,7 +373,7 @@ message = "Parameter list is too long."
 count = 3
 
 [[issues]]
-file = "packages/Media/Infrastructures/Cli/YouTubeVideoQueryService.php"
+file = "packages/Media/Infrastructures/Admin/YouTubeVideoQueryService.php"
 code = "assert-description"
 message = "Missing description in assert function."
 count = 2
@@ -991,7 +991,7 @@ message = "Trait has too many methods."
 count = 1
 
 [[issues]]
-file = "tests/Unit/AdminUser/Application/Cli/UseCase/IssueRegistrationTokenUseCaseTest.php"
+file = "tests/Unit/AdminUser/Application/Admin/UseCase/IssueRegistrationTokenUseCaseTest.php"
 code = "no-literal-password"
 message = "Literal passwords or sensitive data should not be stored in code."
 count = 1
