@@ -54,8 +54,7 @@ class Converter
             ->setIsDisplay($summary->isDisplay)
             ->setOrderNo($summary->orderNo)
             ->setReleaseCount($summary->releaseCount)
-            ->setSongCount($summary->songCount)
-            ->setReleases(array_map($this->toOpenApiReferencedRelease(...), $summary->releases));
+            ->setSongCount($summary->songCount);
     }
 
     public function toOpenApiReferencedRelease(ReleaseGroupReferencedRelease $release): OpenApiReleaseGroupReferencedRelease

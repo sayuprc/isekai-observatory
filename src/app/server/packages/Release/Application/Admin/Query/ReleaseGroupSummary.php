@@ -6,9 +6,6 @@ namespace Release\Application\Admin\Query;
 
 readonly class ReleaseGroupSummary
 {
-    /**
-     * @param array<int, ReleaseGroupReferencedRelease> $releases
-     */
     public function __construct(
         public string $releaseGroupId,
         public string $title,
@@ -19,7 +16,6 @@ readonly class ReleaseGroupSummary
         public ?string $firstReleasedOn,
         public int $releaseCount,
         public int $songCount,
-        public array $releases,
     ) {
     }
 }

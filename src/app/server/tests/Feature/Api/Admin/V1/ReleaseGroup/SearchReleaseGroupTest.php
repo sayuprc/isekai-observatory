@@ -25,9 +25,6 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $releaseGroupId1 = $this->generateUuid();
         $releaseGroupId2 = $this->generateUuid();
         $releaseGroupId3 = $this->generateUuid();
-        $releaseId1 = $this->generateUuid();
-        $releaseId2 = $this->generateUuid();
-        $releaseId3 = $this->generateUuid();
 
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId1, '古い作品', ReleaseGroupType::Single, true),
@@ -37,7 +34,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
         $this->storeReleases(
             // 古い作品: 配信が先行、CD が後発。最古 2026-01-01 がグループの代表日になる
             $this->createRelease(
-                $releaseId1,
+                $this->generateUuid(),
                 $releaseGroupId1,
                 '配信',
                 true,
@@ -47,7 +44,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                 ],
             ),
             $this->createRelease(
-                $releaseId2,
+                $this->generateUuid(),
                 $releaseGroupId1,
                 'CD',
                 true,
@@ -57,7 +54,7 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                 ],
             ),
             $this->createRelease(
-                $releaseId3,
+                $this->generateUuid(),
                 $releaseGroupId2,
                 '配信',
                 true,
@@ -84,16 +81,6 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                         'firstReleasedOn' => '2026-02-01',
                         'releaseCount' => 1,
                         'songCount' => 0,
-                        'releases' => [
-                            [
-                                'releaseId' => $releaseId3,
-                                'name' => '配信',
-                                'releasedOn' => '2026-02-01',
-                                'isDisplay' => true,
-                                'orderNo' => 1,
-                                'formats' => [2],
-                            ],
-                        ],
                     ],
                     [
                         'releaseGroupId' => $releaseGroupId1,
@@ -105,24 +92,6 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                         'firstReleasedOn' => '2026-01-01',
                         'releaseCount' => 2,
                         'songCount' => 0,
-                        'releases' => [
-                            [
-                                'releaseId' => $releaseId1,
-                                'name' => '配信',
-                                'releasedOn' => '2026-01-01',
-                                'isDisplay' => true,
-                                'orderNo' => 1,
-                                'formats' => [2],
-                            ],
-                            [
-                                'releaseId' => $releaseId2,
-                                'name' => 'CD',
-                                'releasedOn' => '2026-03-01',
-                                'isDisplay' => true,
-                                'orderNo' => 1,
-                                'formats' => [2],
-                            ],
-                        ],
                     ],
                     [
                         'releaseGroupId' => $releaseGroupId3,
@@ -134,7 +103,6 @@ class SearchReleaseGroupTest extends DatabaseTestCase
                         'firstReleasedOn' => null,
                         'releaseCount' => 0,
                         'songCount' => 0,
-                        'releases' => [],
                     ],
                 ],
                 'maxPage' => 1,

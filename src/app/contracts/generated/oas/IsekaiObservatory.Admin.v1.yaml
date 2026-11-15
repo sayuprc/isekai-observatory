@@ -5331,7 +5331,6 @@ components:
         - firstReleasedOn
         - releaseCount
         - songCount
-        - releases
       properties:
         releaseGroupId:
           $ref: '#/components/schemas/releaseGroupId'
@@ -5357,11 +5356,6 @@ components:
           type: integer
           format: int32
           description: 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
-        releases:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReleaseGroupReferencedRelease'
-          description: 傘下のリリース (版)。一覧から版を選ぶ画面が、グループごとに詳細を引き直さずに済むよう含める
       description: リリースグループ一覧の 1 行分。firstReleasedOn は傘下リリースの最古発売日(リリース未登録なら null)
     ReleaseGroupTypeValue:
       type: integer

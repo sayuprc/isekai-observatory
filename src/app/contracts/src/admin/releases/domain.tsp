@@ -95,9 +95,6 @@ model ReleaseGroupSummary {
 
   @doc("傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える")
   songCount: int32;
-
-  @doc("傘下のリリース (版)。一覧から版を選ぶ画面が、グループごとに詳細を引き直さずに済むよう含める")
-  releases: ReleaseGroupReferencedRelease[];
 }
 
 @doc("リリースグループ傘下のリリース 1 件分の概要")
