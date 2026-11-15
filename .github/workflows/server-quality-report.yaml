@@ -1,0 +1,166 @@
+name: Server Quality Report
+
+on:
+  schedule:
+    # 毎週月曜 09:00 JST
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+env:
+  MISE_ENV: ci
+  VENDOR_PATH: ./src/app/server/vendor
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: read
+  packages: read
+  issues: write
+
+jobs:
+  metrics:
+    name: PHP Metrics
+    runs-on: ubuntu-latest
+    env:
+      ISSUE_TITLE: "[定期レポート] PHP メトリクス (phpmetrics)"
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup mise
+        uses: $/.github/actions/setup-mise
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Container
+        run: mise run up
+
+      - name: Cache composer
+        id: cache-composer
+        uses: actions/cache@v6.1.0
+        with:
+          path: ${{ env.VENDOR_PATH }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
+
+      - name: Composer install
+        if: steps.cache-composer.outputs.cache-hit != 'true'
+        run: mise run api:install
+
+      - name: Run phpmetrics
+        run: |
+          mkdir -p src/app/server/reports
+          docker compose exec -T php composer metrics -- --report-summary-json=reports/metrics-summary.json
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: phpmetrics-report
+          path: src/app/server/reports/metrics
+          retention-days: 90
+
+      - name: Build report
+        run: |
+          {
+            echo "## $(TZ=Asia/Tokyo date +%Y-%m-%d) のメトリクス"
+            echo
+            echo "- コミット: ${GITHUB_SHA}"
+            echo "- 実行: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} (HTML レポートは Artifacts から取得できます)"
+            echo
+            echo "| 区分 | 指標 | 値 |"
+            echo "| --- | --- | ---: |"
+            jq -r 'to_entries[] | .key as $group | .value | to_entries[] | "| \($group) | \(.key) | \(.value) |"' \
+              src/app/server/reports/metrics-summary.json
+          } > "${RUNNER_TEMP}/report.md"
+
+      - name: Post report
+        run: .github/scripts/post-issue-report.sh "${ISSUE_TITLE}" "${RUNNER_TEMP}/report.md"
+
+  mutation:
+    name: Mutation Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      ISSUE_TITLE: "[定期レポート] ミューテーションテスト (infection)"
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup mise
+        uses: $/.github/actions/setup-mise
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Container with DB
+        run: mise run up:test
+
+      - name: Wait for MySQL
+        run: |
+          for i in $(seq 1 30); do
+            if docker compose exec -T mysql mysqladmin ping -h 127.0.0.1 --silent 2>/dev/null; then
+              echo "MySQL is ready"
+              exit 0
+            fi
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 2
+          done
+          echo "MySQL did not become ready in time"
+          exit 1
+
+      - name: Cache composer
+        id: cache-composer
+        uses: actions/cache@v6.1.0
+        with:
+          path: ${{ env.VENDOR_PATH }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
+
+      - name: Composer install
+        if: steps.cache-composer.outputs.cache-hit != 'true'
+        run: mise run api:install
+
+      - name: Setup env
+        run: mise run setup:env
+
+      - name: Run migration
+        run: mise run migrate:local --auto-approve
+
+      - name: Run infection
+        # php.ini の xdebug.mode は debug を含み、テストごとに接続待ちが発生するため coverage のみに絞る
+        # 結果の注釈を PR 以外で大量に出しても読まれないため github ロガーは無効にする
+        run: |
+          docker compose exec -T -e XDEBUG_MODE=coverage php \
+            composer mutation -- --no-progress --logger-github=false
+
+      - name: Upload HTML report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: infection-report
+          path: |
+            src/app/server/reports/infection.html
+            src/app/server/reports/infection.log
+          retention-days: 90
+
+      - name: Build report
+        run: |
+          {
+            echo "## $(TZ=Asia/Tokyo date +%Y-%m-%d) のミューテーションテスト"
+            echo
+            echo "- コミット: ${GITHUB_SHA}"
+            echo "- 実行: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} (HTML レポートは Artifacts から取得できます)"
+            echo
+            echo "| 指標 | 値 |"
+            echo "| --- | ---: |"
+            jq -r '.stats | to_entries[] | "| \(.key) | \(.value) |"' src/app/server/reports/infection-summary.json
+          } > "${RUNNER_TEMP}/report.md"
+
+      - name: Post report
+        run: .github/scripts/post-issue-report.sh "${ISSUE_TITLE}" "${RUNNER_TEMP}/report.md"
