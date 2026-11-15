@@ -253,18 +253,6 @@ message = "Method has a high halstead volume"
 count = 1
 
 [[issues]]
-file = "packages/Event/Infrastructures/EventRepository.php"
-code = "kan-defect"
-message = "Class has a high kan defect score."
-count = 1
-
-[[issues]]
-file = "packages/Event/Infrastructures/EventRepository.php"
-code = "too-many-methods"
-message = "Class has too many methods."
-count = 1
-
-[[issues]]
 file = "packages/Event/Infrastructures/Public/EventQueryService.php"
 code = "cyclomatic-complexity"
 message = "Class has high complexity."

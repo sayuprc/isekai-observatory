@@ -12,11 +12,6 @@ use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
 
-/**
- * @phpstan-import-type _songPerformanceInput from \Event\Domain\Models\Performances\SongPerformances
- * @phpstan-import-type _setlistItemInput from \Event\Domain\Models\Setlist\Setlist
- * @phpstan-import-type _eventSourceInput from \Event\Domain\Models\Sources\EventSources
- */
 readonly class EventRepository implements EventRepositoryInterface
 {
     private const string TABLE = 'events';
@@ -37,37 +32,73 @@ readonly class EventRepository implements EventRepositoryInterface
     public function __construct(
         private QueryFactory $queryFactory,
         private UuidConverterInterface $converter,
+        private EventChildrenLoader $children,
     ) {
     }
 
     #[Override]
     public function find(EventId $eventId): ?Event
     {
-        $rows = $this->queryFactory
-            ->select()
-            ->withSelect(self::COLUMNS)
-            ->from(self::TABLE)
-            ->where('event_id', '=', $this->converter->toBin($eventId->value))
-            ->limit(1)
-            |> $this->queryFactory->fetchAll(...);
-
-        return $rows === [] ? null : $this->hydrate($rows[0]);
+        return $this->findByIds($eventId)[0] ?? null;
     }
 
     #[Override]
     public function findByIds(EventId ...$eventIds): array
     {
-        $events = [];
-
-        foreach ($eventIds as $eventId) {
-            $event = $this->find($eventId);
-
-            if ($event !== null) {
-                $events[] = $event;
-            }
+        if ($eventIds === []) {
+            return [];
         }
 
-        return $events;
+        $binEventIds = array_map(
+            fn (EventId $eventId): string => $this->converter->toBin($eventId->value),
+            array_values($eventIds),
+        );
+
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('event_id', 'IN', $binEventIds)
+            |> $this->queryFactory->fetchAll(...);
+
+        if ($rows === []) {
+            return [];
+        }
+
+        // 子テーブルはイベント ID でまとめて引き、イベントごとの問い合わせを避ける
+        $venues = $this->children->loadVenues($binEventIds);
+        $media = $this->children->loadMedia($binEventIds);
+        $releases = $this->children->loadReleases($binEventIds);
+        $sources = $this->children->loadSources($binEventIds);
+        $performances = $this->children->loadPerformances($binEventIds);
+        $setlist = $this->children->loadSetlist($binEventIds);
+        $tags = $this->children->loadTags($binEventIds);
+
+        return array_map(
+            function (array $row) use ($venues, $media, $releases, $sources, $performances, $setlist, $tags): Event {
+                $binEventId = Row::string($row, 'event_id');
+
+                return Event::reconstruct(
+                    $this->converter->toUuid($binEventId),
+                    Row::string($row, 'title'),
+                    Row::string($row, 'description'),
+                    Row::string($row, 'note'),
+                    Row::int($row, 'type'),
+                    Row::nullableString($row, 'start_on'),
+                    Row::nullableString($row, 'end_on'),
+                    Row::int($row, 'status'),
+                    Row::bool($row, 'is_display'),
+                    $venues[$binEventId] ?? [],
+                    $media[$binEventId] ?? [],
+                    $releases[$binEventId] ?? [],
+                    $sources[$binEventId] ?? [],
+                    $performances[$binEventId] ?? [],
+                    $setlist[$binEventId] ?? [],
+                    $tags[$binEventId] ?? [],
+                );
+            },
+            $rows,
+        );
     }
 
     #[Override]
@@ -260,224 +291,5 @@ readonly class EventRepository implements EventRepositoryInterface
             ->from(self::TABLE)
             ->where('event_id', '=', $this->converter->toBin($eventId->value))
             ->execute($this->queryFactory->pdo());
-    }
-
-    /** @param array<string, mixed> $row */
-    private function hydrate(array $row): Event
-    {
-        $binEventId = Row::string($row, 'event_id');
-
-        return Event::reconstruct(
-            $this->converter->toUuid($binEventId),
-            Row::string($row, 'title'),
-            Row::string($row, 'description'),
-            Row::string($row, 'note'),
-            Row::int($row, 'type'),
-            Row::nullableString($row, 'start_on'),
-            Row::nullableString($row, 'end_on'),
-            Row::int($row, 'status'),
-            Row::bool($row, 'is_display'),
-            $this->loadVenues($binEventId),
-            $this->loadMedia($binEventId),
-            $this->loadReleases($binEventId),
-            $this->loadSources($binEventId),
-            $this->loadPerformances($binEventId),
-            $this->loadSetlist($binEventId),
-            $this->loadTags($binEventId),
-        );
-    }
-
-    /** @return array<int, array{venueId: string, orderNo: int}> */
-    private function loadVenues(string $binEventId): array
-    {
-        $rows = $this->queryFactory
-            ->select()
-            ->withSelect(['venue_id', 'order_no'])
-            ->from('event_venues')
-            ->where('event_id', '=', $binEventId)
-            ->orderBy('order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        return array_map(
-            fn (array $row): array => [
-                'venueId' => $this->converter->toUuid(Row::string($row, 'venue_id')),
-                'orderNo' => Row::int($row, 'order_no'),
-            ],
-            $rows,
-        );
-    }
-
-    /** @return array<int, array{tagId: string}> */
-    private function loadTags(string $binEventId): array
-    {
-        $rows = $this->queryFactory
-            ->select()
-            ->withSelect(['event_taggings.tag_id'])
-            ->from('event_taggings')
-            ->join('tags', 'event_taggings.tag_id = tags.tag_id')
-            ->where('event_taggings.event_id', '=', $binEventId)
-            ->orderBy('tags.order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        return array_map(
-            fn (array $row): array => ['tagId' => $this->converter->toUuid(Row::string($row, 'tag_id'))],
-            $rows,
-        );
-    }
-
-    /** @return array<int, array{mediaId: string, orderNo: int}> */
-    private function loadMedia(string $binEventId): array
-    {
-        $rows = $this->queryFactory
-            ->select()
-            ->withSelect(['media_id', 'order_no'])
-            ->from('event_media')
-            ->where('event_id', '=', $binEventId)
-            ->orderBy('order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        return array_map(
-            fn (array $row): array => [
-                'mediaId' => $this->converter->toUuid(Row::string($row, 'media_id')),
-                'orderNo' => Row::int($row, 'order_no'),
-            ],
-            $rows,
-        );
-    }
-
-    /** @return array<int, array{releaseId: string, orderNo: int}> */
-    private function loadReleases(string $binEventId): array
-    {
-        $rows = $this->queryFactory
-            ->select()
-            ->withSelect(['release_id', 'order_no'])
-            ->from('event_releases')
-            ->where('event_id', '=', $binEventId)
-            ->orderBy('order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        return array_map(
-            fn (array $row): array => [
-                'releaseId' => $this->converter->toUuid(Row::string($row, 'release_id')),
-                'orderNo' => Row::int($row, 'order_no'),
-            ],
-            $rows,
-        );
-    }
-
-    /** @return array<int, _eventSourceInput> */
-    private function loadSources(string $binEventId): array
-    {
-        $rows = $this->queryFactory
-            ->select()
-            ->withSelect(['name', 'url', 'order_no'])
-            ->from('event_sources')
-            ->where('event_id', '=', $binEventId)
-            ->orderBy('order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        return array_map(
-            static fn (array $row): array => [
-                'displayName' => Row::string($row, 'name'),
-                'url' => Row::string($row, 'url'),
-                'orderNo' => Row::int($row, 'order_no'),
-            ],
-            $rows,
-        );
-    }
-
-    /** @return array<int, _songPerformanceInput> */
-    private function loadPerformances(string $binEventId): array
-    {
-        $performanceRows = $this->queryFactory
-            ->select()
-            ->withSelect(['performance_id', 'song_id', 'order_no'])
-            ->from('song_performances')
-            ->where('event_id', '=', $binEventId)
-            ->orderBy('order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        $personRows = $this->queryFactory
-            ->select()
-            ->withSelect([
-                'song_performance_persons.performance_id',
-                'song_performance_persons.person_id',
-                'song_performance_persons.order_no',
-                'song_performance_persons.credit_name',
-                'song_performance_persons.person_group_id',
-            ])
-            ->from('song_performance_persons')
-            ->join(
-                'song_performances',
-                'song_performances.performance_id = song_performance_persons.performance_id',
-            )
-            ->where('song_performances.event_id', '=', $binEventId)
-            ->orderBy('song_performance_persons.order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        $coVocalistsByPerformance = [];
-        foreach ($personRows as $row) {
-            $coVocalistsByPerformance[Row::string($row, 'performance_id')][] = [
-                'personId' => $this->converter->toUuid(Row::string($row, 'person_id')),
-                'creditName' => Row::nullableString($row, 'credit_name'),
-                'personGroupId' => ($binGroupId = Row::nullableString($row, 'person_group_id')) === null
-                    ? null
-                    : $this->converter->toUuid($binGroupId),
-                'orderNo' => Row::int($row, 'order_no'),
-            ];
-        }
-
-        return array_map(
-            fn (array $row): array => [
-                'performanceId' => $this->converter->toUuid(Row::string($row, 'performance_id')),
-                'songId' => $this->converter->toUuid(Row::string($row, 'song_id')),
-                'orderNo' => Row::int($row, 'order_no'),
-                'coVocalists' => $coVocalistsByPerformance[Row::string($row, 'performance_id')] ?? [],
-            ],
-            $performanceRows,
-        );
-    }
-
-    /** @return list<_setlistItemInput> */
-    private function loadSetlist(string $binEventId): array
-    {
-        $itemRows = $this->queryFactory
-            ->select()
-            ->withSelect(['setlist_item_id', 'order_no', 'label'])
-            ->from('event_setlist_items')
-            ->where('event_id', '=', $binEventId)
-            ->orderBy('order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        $linkRows = $this->queryFactory
-            ->select()
-            ->withSelect([
-                'event_setlist_item_performances.setlist_item_id',
-                'event_setlist_item_performances.performance_id',
-            ])
-            ->from('event_setlist_item_performances')
-            ->join(
-                'event_setlist_items',
-                'event_setlist_items.setlist_item_id = event_setlist_item_performances.setlist_item_id',
-            )
-            ->where('event_setlist_items.event_id', '=', $binEventId)
-            ->orderBy('event_setlist_item_performances.order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        $performanceIdsByItem = [];
-        foreach ($linkRows as $row) {
-            $setlistItemId = Row::string($row, 'setlist_item_id');
-            $performanceIdsByItem[$setlistItemId][] = $this->converter->toUuid(Row::string($row, 'performance_id'));
-        }
-
-        return array_map(
-            fn (array $row): array => [
-                'setlistItemId' => $this->converter->toUuid(Row::string($row, 'setlist_item_id')),
-                'orderNo' => Row::int($row, 'order_no'),
-                'label' => Row::nullableString($row, 'label'),
-                'performanceIds' => $performanceIdsByItem[Row::string($row, 'setlist_item_id')] ?? [],
-            ],
-            $itemRows,
-        );
     }
 }

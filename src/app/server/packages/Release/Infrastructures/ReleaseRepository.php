@@ -42,29 +42,14 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     public function __construct(
         private QueryFactory $queryFactory,
         private UuidConverterInterface $converter,
+        private ReleaseChildrenLoader $children,
     ) {
     }
 
     #[Override]
     public function find(ReleaseId $releaseId): ?Release
     {
-        $binReleaseId = $this->converter->toBin($releaseId->value);
-
-        $releaseRows = $this->queryFactory
-            ->select()
-            ->withSelect(self::COLUMNS)
-            ->from(self::TABLE)
-            ->where('release_id', '=', $binReleaseId)
-            ->limit(1)
-            |> $this->queryFactory->fetchAll(...);
-
-        $releaseRow = $releaseRows[0] ?? null;
-
-        if ($releaseRow === null) {
-            return null;
-        }
-
-        return $this->hydrate($releaseRow, $this->loadFormats($binReleaseId), $this->loadMedia($binReleaseId));
+        return $this->findByIds($releaseId)[0] ?? null;
     }
 
     #[Override]
@@ -74,22 +59,31 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             return [];
         }
 
+        $binReleaseIds = array_map(
+            fn (ReleaseId $releaseId): string => $this->converter->toBin($releaseId->value),
+            array_values($releaseIds),
+        );
+
         $releaseRows = $this->queryFactory
             ->select()
             ->withSelect(self::COLUMNS)
             ->from(self::TABLE)
-            ->where(
-                'release_id',
-                'IN',
-                array_map(fn (ReleaseId $releaseId): string => $this->converter->toBin($releaseId->value), $releaseIds),
-            )
+            ->where('release_id', 'IN', $binReleaseIds)
             |> $this->queryFactory->fetchAll(...);
 
+        if ($releaseRows === []) {
+            return [];
+        }
+
+        // 子テーブルはリリース ID でまとめて引き、リリースごとの問い合わせを避ける
+        $formats = $this->children->loadFormats($binReleaseIds);
+        $media = $this->children->loadMedia($binReleaseIds);
+
         return array_map(
-            function (array $releaseRow): Release {
+            function (array $releaseRow) use ($formats, $media): Release {
                 $binReleaseId = Row::string($releaseRow, 'release_id');
 
-                return $this->hydrate($releaseRow, $this->loadFormats($binReleaseId), $this->loadMedia($binReleaseId));
+                return $this->hydrate($releaseRow, $formats[$binReleaseId] ?? [], $media[$binReleaseId] ?? []);
             },
             $releaseRows,
         );
@@ -219,86 +213,6 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             |> Row::intValue(...);
 
         return $count > 0;
-    }
-
-    /**
-     * @return array<int, int>
-     */
-    private function loadFormats(string $binReleaseId): array
-    {
-        $formatRows = $this->queryFactory
-            ->select()
-            ->withSelect(['format'])
-            ->from(self::FORMAT_TABLE)
-            ->where('release_id', '=', $binReleaseId)
-            ->orderBy('format')
-            |> $this->queryFactory->fetchAll(...);
-
-        return array_map(
-            static fn (array $row): int => Row::int($row, 'format'),
-            $formatRows,
-        );
-    }
-
-    /**
-     * @return list<array{position: int, name: ?string, tracks: list<array{songIds: list<string>, title: ?string, trackNo: int}>}>
-     */
-    private function loadMedia(string $binReleaseId): array
-    {
-        $mediumRows = $this->queryFactory
-            ->select()
-            ->withSelect(['position', 'name'])
-            ->from(self::MEDIA_TABLE)
-            ->where('release_id', '=', $binReleaseId)
-            ->orderBy('position')
-            |> $this->queryFactory->fetchAll(...);
-
-        $trackRows = $this->queryFactory
-            ->select()
-            ->withSelect(['position', 'track_no', 'title'])
-            ->from(self::TRACK_TABLE)
-            ->where('release_id', '=', $binReleaseId)
-            ->orderBy('position')
-            ->orderBy('track_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        $trackSongRows = $this->queryFactory
-            ->select()
-            ->withSelect(['position', 'track_no', 'song_id'])
-            ->from(self::TRACK_SONG_TABLE)
-            ->where('release_id', '=', $binReleaseId)
-            ->orderBy('order_no')
-            |> $this->queryFactory->fetchAll(...);
-
-        $songIdsByTrack = [];
-
-        foreach ($trackSongRows as $trackSongRow) {
-            $position = Row::int($trackSongRow, 'position');
-            $trackNo = Row::int($trackSongRow, 'track_no');
-            $songIdsByTrack[$position][$trackNo][] = $this->converter->toUuid(Row::string($trackSongRow, 'song_id'));
-        }
-
-        $tracksByPosition = [];
-
-        foreach ($trackRows as $trackRow) {
-            $position = Row::int($trackRow, 'position');
-            $trackNo = Row::int($trackRow, 'track_no');
-
-            $tracksByPosition[$position][] = [
-                'songIds' => $songIdsByTrack[$position][$trackNo] ?? [],
-                'title' => Row::nullableString($trackRow, 'title'),
-                'trackNo' => $trackNo,
-            ];
-        }
-
-        return array_map(
-            static fn (array $mediumRow): array => [
-                'position' => Row::int($mediumRow, 'position'),
-                'name' => Row::nullableString($mediumRow, 'name'),
-                'tracks' => $tracksByPosition[Row::int($mediumRow, 'position')] ?? [],
-            ],
-            $mediumRows,
-        );
     }
 
     /**
