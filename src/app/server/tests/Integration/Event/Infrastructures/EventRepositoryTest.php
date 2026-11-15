@@ -225,6 +225,66 @@ class EventRepositoryTest extends DatabaseTestCase
         $this->assertDatabaseCount('event_setlist_items', 0);
     }
 
+    #[Test]
+    public function findByIdsReturnsEachEventWithItsOwnChildren(): void
+    {
+        $songId = $this->generateUuid();
+        $this->storeSongs($this->createSong($songId, '披露曲', '説明', SongType::Original, true, 1));
+
+        $performance1 = $this->generateUuid();
+        $performance2 = $this->generateUuid();
+        $event1 = $this->createEvent(
+            $this->generateUuid(),
+            title: '1 日目',
+            sources: [
+                ['displayName' => '公式', 'url' => 'https://example.com/day1', 'orderNo' => 1],
+            ],
+            performances: [
+                ['performanceId' => $performance1, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []],
+            ],
+            setlist: [
+                [
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 1,
+                    'label' => '本編',
+                    'performanceIds' => [$performance1],
+                ],
+            ],
+        );
+        $event2 = $this->createEvent(
+            $this->generateUuid(),
+            title: '2 日目',
+            sources: [
+                ['displayName' => '公式', 'url' => 'https://example.com/day2', 'orderNo' => 1],
+                ['displayName' => 'レポート', 'url' => 'https://example.com/report', 'orderNo' => 2],
+            ],
+            performances: [
+                ['performanceId' => $performance2, 'songId' => $songId, 'orderNo' => 1, 'coVocalists' => []],
+            ],
+            setlist: [
+                [
+                    'setlistItemId' => $this->generateUuid(),
+                    'orderNo' => 1,
+                    'label' => 'アンコール',
+                    'performanceIds' => [$performance2],
+                ],
+            ],
+        );
+        $childless = $this->createEvent($this->generateUuid(), title: '子を持たないイベント');
+        $this->getInstance()->save($event1);
+        $this->getInstance()->save($event2);
+        $this->getInstance()->save($childless);
+
+        $found = $this->getInstance()->findByIds(
+            $event1->eventId,
+            $event2->eventId,
+            $childless->eventId,
+            new EventId($this->generateUuid()),
+        );
+
+        $this->assertEqualsCanonicalizing([$event1, $event2, $childless], $found);
+    }
+
     private function getInstance(): EventRepository
     {
         return $this->app->make(EventRepository::class);
