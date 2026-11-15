@@ -125,9 +125,7 @@ class MediaIntegrityService
         }
 
         try {
-            return new MediaPublishedAt(
-                new DateTimeImmutable($normalized)->setTimezone(new DateTimeZone(date_default_timezone_get())),
-            );
+            return new MediaPublishedAt(new DateTimeImmutable($normalized));
         } catch (DateMalformedStringException) {
             throw new InvalidDomainException('公開日が不正です');
         }

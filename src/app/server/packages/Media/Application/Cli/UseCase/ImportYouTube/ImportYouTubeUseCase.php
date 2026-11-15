@@ -86,7 +86,7 @@ readonly class ImportYouTubeUseCase
                 $this->generator->generate(),
                 $video->title,
                 $url->value,
-                new DateTimeImmutable($video->publishedAt)->setTimezone(new DateTimeZone(date_default_timezone_get())),
+                new DateTimeImmutable($video->publishedAt),
                 $this->resolveType($video->title, $isShort)->value,
                 false,
                 // 取り込むのは未登録のメディアだけなので、付いているタグはない
