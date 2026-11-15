@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\Admin\V1\PersonGroup\UpdatePersonGroupController;
 use App\Http\Controllers\Api\Admin\V1\Release\CreateReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\DeleteReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\GetReleaseController;
+use App\Http\Controllers\Api\Admin\V1\Release\SearchReleaseController;
 use App\Http\Controllers\Api\Admin\V1\Release\UpdateReleaseController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\BulkUpdateReleaseGroupController;
 use App\Http\Controllers\Api\Admin\V1\ReleaseGroup\CreateReleaseGroupController;
@@ -231,6 +232,10 @@ Route::middleware(AdminOpenApiValidator::class)->group(static function () {
                         DeleteReleaseController::class,
                         'handle',
                     ])->name(ReleaseRouteMap::Delete);
+                    Route::get('/search', [
+                        SearchReleaseController::class,
+                        'handle',
+                    ])->name(ReleaseRouteMap::Search);
                     Route::get('/{releaseId}', [GetReleaseController::class, 'handle'])->name(ReleaseRouteMap::Get);
                 });
 

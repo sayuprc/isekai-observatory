@@ -403,6 +403,12 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
+file = "packages/Release/Application/Admin/Query/ReleaseSummary.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
 file = "packages/Release/Application/Admin/UseCase/Create/CreateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."

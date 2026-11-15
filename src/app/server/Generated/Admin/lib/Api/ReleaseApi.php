@@ -83,6 +83,9 @@ class ReleaseApi
         'releaseServiceGetRelease' => [
             'application/json',
         ],
+        'releaseServiceSearchReleases' => [
+            'application/json',
+        ],
         'releaseServiceUpdateRelease' => [
             'application/json',
         ],
@@ -1043,6 +1046,350 @@ class ReleaseApi
                 $resourcePath
             );
         }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                try {
+                    $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
+                } catch (\JsonException $e) {
+                    throw new \InvalidArgumentException('json_encode error: ' . $e->getMessage(), 0, $e);
+                }
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation releaseServiceSearchReleases
+     *
+     * @param  string|null $title リリースグループのタイトル (部分一致) (optional)
+     * @param  Int|null $page page (optional, default to 1)
+     * @param  \OpenAPIAdminClientModelPerPage|null $per_page per_page (optional, default to 25)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseServiceSearchReleases'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Admin\Client\Model\ReleaseSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse
+     */
+    public function releaseServiceSearchReleases($title = null, $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseServiceSearchReleases'][0])
+    {
+        list($response) = $this->releaseServiceSearchReleasesWithHttpInfo($title, $page, $per_page, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation releaseServiceSearchReleasesWithHttpInfo
+     *
+     * @param  string|null $title リリースグループのタイトル (部分一致) (optional)
+     * @param  Int|null $page (optional, default to 1)
+     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseServiceSearchReleases'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Admin\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Admin\Client\Model\ReleaseSearchResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse|\OpenAPI\Admin\Client\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function releaseServiceSearchReleasesWithHttpInfo($title = null, $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseServiceSearchReleases'][0])
+    {
+        $request = $this->releaseServiceSearchReleasesRequest($title, $page, $per_page, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                $eResponse = $this->getExceptionResponse($e);
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $eResponse ? $eResponse->getHeaders() : null,
+                    $eResponse ? (string) $eResponse->getBody() : null
+                );
+            } catch (NetworkExceptionInterface $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\OpenAPI\Admin\Client\Model\ReleaseSearchResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\OpenAPI\Admin\Client\Model\ErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\OpenAPI\Admin\Client\Model\ErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\OpenAPI\Admin\Client\Model\ErrorResponse',
+                        $request,
+                        $response,
+                    );
+            }
+
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\OpenAPI\Admin\Client\Model\ReleaseSearchResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Admin\Client\Model\ReleaseSearchResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Admin\Client\Model\ErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Admin\Client\Model\ErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Admin\Client\Model\ErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation releaseServiceSearchReleasesAsync
+     *
+     * @param  string|null $title リリースグループのタイトル (部分一致) (optional)
+     * @param  Int|null $page (optional, default to 1)
+     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseServiceSearchReleases'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function releaseServiceSearchReleasesAsync($title = null, $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseServiceSearchReleases'][0])
+    {
+        return $this->releaseServiceSearchReleasesAsyncWithHttpInfo($title, $page, $per_page, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation releaseServiceSearchReleasesAsyncWithHttpInfo
+     *
+     * @param  string|null $title リリースグループのタイトル (部分一致) (optional)
+     * @param  Int|null $page (optional, default to 1)
+     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseServiceSearchReleases'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function releaseServiceSearchReleasesAsyncWithHttpInfo($title = null, $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseServiceSearchReleases'][0])
+    {
+        $returnType = '\OpenAPI\Admin\Client\Model\ReleaseSearchResponse';
+        $request = $this->releaseServiceSearchReleasesRequest($title, $page, $per_page, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $this->getExceptionResponse($exception);
+                    if ($response === null) {
+                        throw new ApiException(
+                            "[{$exception->getCode()}] {$exception->getMessage()}",
+                            (int) $exception->getCode(),
+                            null,
+                            null
+                        );
+                    }
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'releaseServiceSearchReleases'
+     *
+     * @param  string|null $title リリースグループのタイトル (部分一致) (optional)
+     * @param  Int|null $page (optional, default to 1)
+     * @param  \OpenAPIAdminClientModelPerPage|null $per_page (optional, default to 25)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['releaseServiceSearchReleases'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function releaseServiceSearchReleasesRequest($title = null, $page = 1, $per_page = 25, string $contentType = self::contentTypes['releaseServiceSearchReleases'][0])
+    {
+
+
+
+
+
+        $resourcePath = '/releases/search';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $title,
+            'title', // param base name
+            'string', // openApiType
+            'form', // style
+            false, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page,
+            'page', // param base name
+            'integer', // openApiType
+            'form', // style
+            false, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $per_page,
+            'per_page', // param base name
+            'PerPage', // openApiType
+            'form', // style
+            false, // explode
+            false // required
+        ) ?? []);
+
+
 
 
         $headers = $this->headerSelector->selectHeaders(

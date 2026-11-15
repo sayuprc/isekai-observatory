@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import type { EventRelease, ReleaseGroupReferencedRelease, Venue } from '../../generated';
-import { addRelease, addVenue, releaseLabel, toEventReleases, toSourcesPayload, validateSources } from './event-links';
+import type { EventRelease, Venue } from '../../generated';
+import { addRelease, addVenue, releaseLabel, toSourcesPayload, validateSources } from './event-links';
 
 const venue = (venueId: string): Venue => ({ venueId, name: `会場${venueId}`, kind: 1 });
 const release = (releaseId: string): EventRelease => ({
@@ -26,53 +26,6 @@ describe('イベントの開催先と出典', () => {
 
     expect(addRelease(entries, release('2')).map((entry) => entry.releaseId)).toEqual(['1', '2']);
     expect(addRelease(entries, release('1'))).toBe(entries);
-  });
-
-  it('リリースグループの版を候補にし、グループと版がともに公開のときだけ公開扱いにする', () => {
-    const releases: ReleaseGroupReferencedRelease[] = [
-      {
-        releaseId: 'a',
-        name: '通常盤',
-        releasedOn: '2026-03-01',
-        isDisplay: true,
-        orderNo: 1,
-        formats: [4],
-      },
-      {
-        releaseId: 'b',
-        name: '限定盤',
-        releasedOn: '2026-03-01',
-        isDisplay: false,
-        orderNo: 2,
-        formats: [3],
-      },
-    ];
-
-    expect(toEventReleases({ releaseGroupId: 'g', title: 'ライブ', isDisplay: true }, releases)).toEqual([
-      {
-        releaseId: 'a',
-        releaseGroupId: 'g',
-        releaseGroupTitle: 'ライブ',
-        name: '通常盤',
-        releasedOn: '2026-03-01',
-        isDisplay: true,
-        formats: [4],
-      },
-      {
-        releaseId: 'b',
-        releaseGroupId: 'g',
-        releaseGroupTitle: 'ライブ',
-        name: '限定盤',
-        releasedOn: '2026-03-01',
-        isDisplay: false,
-        formats: [3],
-      },
-    ]);
-    expect(
-      toEventReleases({ releaseGroupId: 'g', title: 'ライブ', isDisplay: false }, releases).map(
-        (entry) => entry.isDisplay,
-      ),
-    ).toEqual([false, false]);
   });
 
   it('リリースをグループ名・版名・発売日・提供形態で表示する', () => {

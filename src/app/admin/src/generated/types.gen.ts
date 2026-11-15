@@ -818,6 +818,24 @@ export type ReleaseReferencedSong = {
     title: Title;
 };
 
+export type ReleaseSearchResponse = {
+    releases: Array<ReleaseSummary>;
+    maxPage: number;
+};
+
+/**
+ * リリース検索の 1 行分。版を選ぶ画面がグループごとに詳細を引き直さずに済むよう、所属グループの情報も載せる。isDisplay はリリースとリリースグループがともに公開のとき true
+ */
+export type ReleaseSummary = {
+    releaseId: ReleaseId;
+    releaseGroupId: ReleaseGroupId;
+    releaseGroupTitle: ReleaseGroupTitle;
+    name: ReleaseName;
+    releasedOn: ReleasedOn;
+    isDisplay: boolean;
+    formats: Array<ReleaseFormatValue>;
+};
+
 export type ReleaseUpdateRequest = {
     name: ReleaseName;
     releasedOn: ReleasedOn;
@@ -3480,6 +3498,54 @@ export type ReleaseServiceCreateReleaseResponses = {
 };
 
 export type ReleaseServiceCreateReleaseResponse = ReleaseServiceCreateReleaseResponses[keyof ReleaseServiceCreateReleaseResponses];
+
+export type ReleaseServiceSearchReleasesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * リリースグループのタイトル (部分一致)
+         */
+        title?: string;
+        page?: Page;
+        per_page?: PerPage;
+    };
+    url: '/releases/search';
+};
+
+export type ReleaseServiceSearchReleasesErrors = {
+    /**
+     * Access is unauthorized.
+     */
+    401: ErrorResponse;
+    /**
+     * Access is forbidden.
+     */
+    403: ErrorResponse;
+    /**
+     * Server error
+     */
+    500: ErrorResponse;
+    /**
+     * Service unavailable.
+     */
+    503: unknown;
+    /**
+     * Server error
+     */
+    504: unknown;
+};
+
+export type ReleaseServiceSearchReleasesError = ReleaseServiceSearchReleasesErrors[keyof ReleaseServiceSearchReleasesErrors];
+
+export type ReleaseServiceSearchReleasesResponses = {
+    /**
+     * The request has succeeded.
+     */
+    200: ReleaseSearchResponse;
+};
+
+export type ReleaseServiceSearchReleasesResponse = ReleaseServiceSearchReleasesResponses[keyof ReleaseServiceSearchReleasesResponses];
 
 export type ReleaseServiceDeleteReleaseData = {
     body?: never;
