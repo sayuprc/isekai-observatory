@@ -3,8 +3,10 @@ import {
   releaseServiceCreateRelease,
   releaseServiceDeleteRelease,
   releaseServiceGetRelease,
+  releaseServiceSearchReleases,
   releaseServiceUpdateRelease,
 } from '../../generated';
+import type { PerPage } from '../../generated';
 import { requestWithAuth } from '../client';
 import { authGuard } from '../middleware';
 
@@ -44,6 +46,28 @@ export const releases = new Elysia({ prefix: '/releases' })
         orderNo: t.Number(),
         formats: formatsSchema,
         media: mediaSchema,
+      }),
+    },
+  )
+  .get(
+    '/search',
+    async ({ query, authSession }) => {
+      return requestWithAuth(authSession, (client) =>
+        releaseServiceSearchReleases({
+          client,
+          query: {
+            title: query.title || undefined,
+            page: query.page ?? 1,
+            per_page: (query.per_page ?? 25) as PerPage,
+          },
+        }),
+      );
+    },
+    {
+      query: t.Object({
+        title: t.Optional(t.String()),
+        page: t.Optional(t.Number()),
+        per_page: t.Optional(t.Number()),
       }),
     },
   )

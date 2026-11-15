@@ -1,11 +1,4 @@
-import type {
-  EventRelease,
-  EventSource,
-  ReleaseGroupReferencedRelease,
-  ReleaseGroupSummary,
-  Venue,
-  VenueKindValue,
-} from '../../generated';
+import type { EventRelease, EventSource, Venue, VenueKindValue } from '../../generated';
 import { normalizeDateValue } from '../../utils/date';
 import { RELEASE_FORMAT_NAMES } from '../../utils/enum-names';
 
@@ -33,21 +26,6 @@ export const addVenue = (entries: VenueEntry[], venue: Venue): VenueEntry[] =>
 // 同じリリースは Event 内で重複できないので、追加済みなら何もしない
 export const addRelease = (entries: EventRelease[], release: EventRelease): EventRelease[] =>
   entries.some((entry) => entry.releaseId === release.releaseId) ? entries : [...entries, release];
-
-// リリースグループと傘下の版から、イベントに関連づける候補を組み立てる
-export const toEventReleases = (
-  releaseGroup: Pick<ReleaseGroupSummary, 'releaseGroupId' | 'title' | 'isDisplay'>,
-  releases: ReleaseGroupReferencedRelease[],
-): EventRelease[] =>
-  releases.map((release) => ({
-    releaseId: release.releaseId,
-    releaseGroupId: releaseGroup.releaseGroupId,
-    releaseGroupTitle: releaseGroup.title,
-    name: release.name,
-    releasedOn: release.releasedOn,
-    isDisplay: releaseGroup.isDisplay && release.isDisplay,
-    formats: release.formats,
-  }));
 
 export const releaseLabel = (release: EventRelease): string => {
   const formats = release.formats.map((value) => RELEASE_FORMAT_NAMES[value]).join('・');

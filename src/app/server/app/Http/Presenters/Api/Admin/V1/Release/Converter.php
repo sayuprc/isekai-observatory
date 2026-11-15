@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Release;
 
+use DateTime;
 use OpenAPI\Admin\Client\Model\Medium as OpenApiMedium;
 use OpenAPI\Admin\Client\Model\Release as OpenApiRelease;
 use OpenAPI\Admin\Client\Model\ReleaseFormatValue;
 use OpenAPI\Admin\Client\Model\ReleaseReferencedSong as OpenApiReleaseReferencedSong;
+use OpenAPI\Admin\Client\Model\ReleaseSummary as OpenApiReleaseSummary;
 use OpenAPI\Admin\Client\Model\Track as OpenApiTrack;
 use Release\Application\Admin\Query\ReleaseReferencedSong;
+use Release\Application\Admin\Query\ReleaseSummary;
 use Release\Domain\Models\Medium;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleaseFormat;
@@ -45,6 +48,18 @@ class Converter
                     ->map($this->toOpenApiMedium(...))
                     ->toArray(),
             );
+    }
+
+    public function toOpenApiSummary(ReleaseSummary $summary): OpenApiReleaseSummary
+    {
+        return new OpenApiReleaseSummary()
+            ->setReleaseId($summary->releaseId)
+            ->setReleaseGroupId($summary->releaseGroupId)
+            ->setReleaseGroupTitle($summary->releaseGroupTitle)
+            ->setName($summary->name)
+            ->setReleasedOn(new DateTime($summary->releasedOn))
+            ->setIsDisplay($summary->isDisplay)
+            ->setFormats(array_map(ReleaseFormatValue::from(...), $summary->formatValues));
     }
 
     public function toOpenApiMedium(Medium $medium): OpenApiMedium

@@ -43,6 +43,11 @@ model ReleaseGroupSearchResponse {
   maxPage: int32;
 }
 
+model ReleaseSearchResponse {
+  releases: ReleaseSummary[];
+  maxPage: int32;
+}
+
 model ReleaseCreateRequest {
   releaseGroupId: releaseGroupId;
   name: releaseName;

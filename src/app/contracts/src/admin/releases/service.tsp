@@ -104,6 +104,17 @@ interface ReleaseService {
     | Unprocessable
     | ServerError;
 
+  @doc("リリース検索API。所属するリリースグループのタイトルで絞り込み、発売日の新しい順に返す")
+  @route("/search")
+  searchReleases(
+    @doc("リリースグループのタイトル (部分一致)")
+    @query
+    title?: string,
+
+    @query page?: page = 1,
+    @query("per_page") perPage?: PerPage = PerPage.twentyFive,
+  ): Ok<ReleaseSearchResponse> | Unauthorized | Forbidden | ServerError;
+
   @doc("リリース取得API")
   getRelease(@path releaseId: releaseId):
     | Ok<ReleaseGetResponse>
