@@ -8,9 +8,9 @@ use Media\Application\Viewer\Query\MediaQueryServiceInterface;
 
 readonly class ListUseCase
 {
-    private const DEFAULT_LIMIT = 50;
+    private const int DEFAULT_LIMIT = 50;
 
-    private const MAX_LIMIT = 50;
+    private const int MAX_LIMIT = 50;
 
     public function __construct(private MediaQueryServiceInterface $query)
     {
