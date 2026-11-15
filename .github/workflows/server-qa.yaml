@@ -254,6 +254,110 @@ jobs:
       - name: Run Static Analysis
         run: mise run api:analyze
 
+  complexity:
+    needs: setup
+    # release-qa 経由の main, stg 向け PR は差分が大きくレポートの意味が薄いため対象外にする
+    if: github.event_name == 'pull_request' && github.workflow == 'Server QA'
+    name: Cognitive Complexity Report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      COMMENT_MARKER: "<!-- server-complexity-report -->"
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Collect changed PHP files
+        id: changed
+        run: |
+          gh pr diff "${PR_NUMBER}" --name-only \
+            | grep -E '^src/app/server/(app|packages)/.+\.php$' \
+            | while read -r f; do [ -f "$f" ] && echo "${f#src/app/server/}"; done \
+            > "${RUNNER_TEMP}/changed.txt" || true
+          echo "count=$(wc -l < "${RUNNER_TEMP}/changed.txt")" >> "$GITHUB_OUTPUT"
+
+      - name: Setup mise
+        if: steps.changed.outputs.count != '0'
+        uses: $/.github/actions/setup-mise
+
+      - name: Login to GHCR
+        if: steps.changed.outputs.count != '0'
+        uses: docker/login-action@v4.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Container
+        if: steps.changed.outputs.count != '0'
+        run: mise run up
+
+      - name: Cache composer
+        if: steps.changed.outputs.count != '0'
+        uses: actions/cache@v6.1.0
+        with:
+          path: ${{ env.VENDOR_PATH }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
+
+      - name: Measure cognitive complexity
+        if: steps.changed.outputs.count != '0'
+        run: |
+          # 違反があると phpstan は exit 1 を返すが、レポートのみが目的なので失敗扱いにしない
+          mapfile -t files < "${RUNNER_TEMP}/changed.txt"
+          mise exec -- docker compose exec -T php composer complexity -- --error-format=json "${files[@]}" \
+            > "${RUNNER_TEMP}/complexity.json" || true
+          jq -e '.files' "${RUNNER_TEMP}/complexity.json" > /dev/null
+
+      - name: Build report
+        id: report
+        run: |
+          json="${RUNNER_TEMP}/complexity.json"
+          [ -s "$json" ] || echo '{"files":{}}' > "$json"
+
+          rows=$(jq -r --arg base "https://github.com/${GITHUB_REPOSITORY}/blob/${HEAD_SHA}/src/app/server/" '
+            .files | to_entries[] | (.key | sub("^/var/www/html/"; "")) as $path
+            | .value.messages[] | select(.identifier | startswith("complexity."))
+            | "| [\($path):\(.line)](\($base)\($path)#L\(.line)) | \(.message | gsub("\\|"; "\\|")) |"
+          ' "$json")
+
+          {
+            echo "${COMMENT_MARKER}"
+            echo "## 認知的複雑度レポート"
+            echo
+            if [ -z "$rows" ]; then
+              echo "変更されたファイルに閾値を超える箇所はありません"
+              echo "violations=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "変更されたファイルで閾値を超えた箇所です。設定は \`src/app/server/phpstan-complexity.neon\` を参照してください"
+              echo
+              echo "| 場所 | 内容 |"
+              echo "| --- | --- |"
+              echo "$rows"
+              echo "violations=true" >> "$GITHUB_OUTPUT"
+            fi
+          } > "${RUNNER_TEMP}/report.md"
+
+      - name: Post report
+        run: |
+          comment_id=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --paginate \
+            --jq "map(select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"${COMMENT_MARKER}\")))) | .[0].id // empty" \
+            | head -n 1)
+
+          if [ -n "$comment_id" ]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${comment_id}" -F body=@"${RUNNER_TEMP}/report.md" > /dev/null
+          elif [ "${{ steps.report.outputs.violations }}" = "true" ]; then
+            # 違反がない PR にはコメントを増やさない
+            gh pr comment "${PR_NUMBER}" --body-file "${RUNNER_TEMP}/report.md"
+          fi
+
   test:
     needs: setup
     name: Test (${{ matrix.suite }})

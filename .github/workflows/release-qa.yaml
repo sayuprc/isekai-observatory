@@ -19,6 +19,11 @@ jobs:
   server:
     name: Server QA
     uses: ./.github/workflows/server-qa.yaml
+    # 呼び出し先の複雑度レポートジョブが要求する権限を許可する。ジョブ自体は release-qa 経由では実行されない
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
 
   viewer:
     name: Viewer QA

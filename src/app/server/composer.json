@@ -84,6 +84,7 @@
     ],
     "analyze": "phpstan analyse --memory-limit=-1 --no-progress",
     "analyze-clear-cache": "phpstan clear-result-cache",
+    "complexity": "phpstan analyse -c phpstan-complexity.neon --memory-limit=-1 --no-progress",
     "architecture": "phparkitect check",
     "format-check": "vendor/bin/ecs check --ansi --no-progress-bar",
     "format": "vendor/bin/ecs check --fix --ansi --no-progress-bar",
