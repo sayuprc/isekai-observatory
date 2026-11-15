@@ -263,6 +263,11 @@ description = "PHPStan を実行する"
 usage = 'arg "[path]" var=#true help="静的解析対象パス"'
 run = "docker compose exec php composer analyze {% for p in usage.path %}{{ p | quote }} {% endfor %}"
 
+[tasks."api:complexity"]
+description = "認知的複雑度を計測する"
+usage = 'arg "[path]" var=#true help="計測対象パス"'
+run = "docker compose exec php composer complexity {% for p in usage.path %}{{ p | quote }} {% endfor %}"
+
 [tasks."api:analyze:clear-cache"]
 description = "PHPStan のキャッシュを削除する"
 run = "docker compose exec php composer analyze-clear-cache"

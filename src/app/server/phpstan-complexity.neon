@@ -1,0 +1,12 @@
+# 認知的複雑度のレポート専用設定
+# 通常の型検査は phpstan.neon が担うため level 0 にして複雑度ルールの結果だけを得る
+includes:
+  - vendor/larastan/larastan/extension.neon
+  - vendor/tomasvotruba/cognitive-complexity/config/extension.neon
+
+parameters:
+  paths:
+    - app
+    - packages
+
+  level: 0

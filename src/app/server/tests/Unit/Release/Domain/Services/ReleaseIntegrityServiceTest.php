@@ -65,9 +65,13 @@ class ReleaseIntegrityServiceTest extends TestCase
 
         // 参照トラックの 1 曲だけ存在確認される(タイトルのみトラックはスキップ)
         $this->songRepository
-            ->shouldReceive('find')
-            ->withArgs(static fn (SongId $arg): bool => $arg->value === self::SONG_ID)
-            ->andReturn($this->createSong(self::SONG_ID, 'テスト楽曲', '説明', SongType::Original, true, 10))
+            ->shouldReceive('findByIds')
+            ->withArgs(
+                static fn (SongId ...$args): bool => (
+                    array_map(static fn (SongId $arg): string => $arg->value, $args) === [self::SONG_ID]
+                ),
+            )
+            ->andReturn([$this->createSong(self::SONG_ID, 'テスト楽曲', '説明', SongType::Original, true, 10)])
             ->once();
 
         $result = $this->getInstance()->prepareForCreate(
@@ -116,9 +120,13 @@ class ReleaseIntegrityServiceTest extends TestCase
             ->once();
 
         $this->songRepository
-            ->shouldReceive('find')
-            ->withArgs(static fn (SongId $arg): bool => $arg->value === self::SONG_ID)
-            ->andReturn(null)
+            ->shouldReceive('findByIds')
+            ->withArgs(
+                static fn (SongId ...$args): bool => (
+                    array_map(static fn (SongId $arg): string => $arg->value, $args) === [self::SONG_ID]
+                ),
+            )
+            ->andReturn([])
             ->once();
 
         $this->expectException(BusinessRuleViolationException::class);
