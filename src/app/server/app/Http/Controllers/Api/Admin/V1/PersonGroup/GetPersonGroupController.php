@@ -10,16 +10,18 @@ use Illuminate\Http\JsonResponse;
 use Person\Application\Admin\UseCase\Group\Get\GetInputData;
 use Person\Application\Admin\UseCase\Group\Get\GetUseCase;
 
-class GetPersonGroupController extends Controller
+final readonly class GetPersonGroupController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 
     public function handle(string $personGroupId): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle(new GetInputData($personGroupId)));
+        return new GetInputData($personGroupId)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

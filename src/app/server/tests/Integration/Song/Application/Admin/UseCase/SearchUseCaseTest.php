@@ -44,7 +44,18 @@ class SearchUseCaseTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, true, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                true,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
         $result = $this->getInstance()->handle(new SearchInputData(title: 'テスト楽曲'));
@@ -67,7 +78,18 @@ class SearchUseCaseTest extends DatabaseTestCase
 
         $this->storeSongs(
             $this->createSong($uuid1, 'テスト楽曲', 'テスト楽曲説明', SongType::Original, true, 1, [], [], [], []),
-            $this->createSong($uuid2, '比較テスト楽曲B', '比較テスト楽曲B説明', SongType::Cover, true, 2, [], [], [], []),
+            $this->createSong(
+                $uuid2,
+                '比較テスト楽曲B',
+                '比較テスト楽曲B説明',
+                SongType::Cover,
+                true,
+                2,
+                [],
+                [],
+                [],
+                [],
+            ),
         );
 
         $result = $this->getInstance()->handle(new SearchInputData(type: SongType::Original->value));

@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Auth\Application\Admin\UseCase\RegisterFinish;
 
+use SensitiveParameter;
+
 readonly class RegisterFinishInputData
 {
     /**
-     * @param array<string, mixed> $credential
+     * @param string $credentialJson ブラウザが返した PublicKeyCredential の JSON
      */
     public function __construct(
         public string $authCeremonyId,
-        public string $plainToken,
-        public array $credential,
+        #[SensitiveParameter]
+        public string $token,
+        public string $credentialJson,
     ) {
     }
 }

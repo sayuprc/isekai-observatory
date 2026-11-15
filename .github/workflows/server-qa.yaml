@@ -196,6 +196,31 @@ jobs:
       - name: Run Format Check
         run: mise run api:format:check
 
+  lint:
+    needs: setup
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup mise
+        uses: $/.github/actions/setup-mise
+
+      # mago はホスト側で動くのでコンテナは起動しない
+      # vendor は mago.toml の includes でシンボル解決に使うため復元する
+      - name: Cache composer
+        id: cache-composer
+        uses: actions/cache@v6.1.0
+        with:
+          path: ${{ env.VENDOR_PATH }}
+          key: composer-${{ hashFiles('./src/app/server/composer.*') }}
+
+      - name: Run Lint
+        run: mise run api:lint:check
+
   analyze:
     needs: setup
     name: Static Analysis

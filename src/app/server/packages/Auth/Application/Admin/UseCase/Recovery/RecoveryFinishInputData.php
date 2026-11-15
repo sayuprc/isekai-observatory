@@ -7,11 +7,11 @@ namespace Auth\Application\Admin\UseCase\Recovery;
 readonly class RecoveryFinishInputData
 {
     /**
-     * @param array<string, mixed> $credential
+     * @param string $credentialJson ブラウザが返した PublicKeyCredential の JSON
      */
     public function __construct(
         public string $authCeremonyId,
-        public array $credential,
+        public string $credentialJson,
     ) {
     }
 }

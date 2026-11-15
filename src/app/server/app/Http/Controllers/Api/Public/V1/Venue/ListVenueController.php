@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use Venue\Application\Public\UseCase\List\ListInputData;
 use Venue\Application\Public\UseCase\List\ListUseCase;
 
-class ListVenueController extends Controller
+final readonly class ListVenueController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 

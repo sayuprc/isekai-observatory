@@ -41,7 +41,7 @@ readonly class RecoveryStartUseCase
         $recoveryCodeId = null;
 
         if ($adminUser !== null) {
-            $recoveryCode = $this->verifyService->verify($inputData->plainCode, $adminUser->adminUserId);
+            $recoveryCode = $this->verifyService->verify($inputData->recoveryCode, $adminUser->adminUserId);
 
             if ($recoveryCode !== null) {
                 $adminUserId = $adminUser->adminUserId->value;
@@ -56,15 +56,17 @@ readonly class RecoveryStartUseCase
             $inputData->name,
         );
 
-        $this->ceremonyStore->put(new PasskeyCeremonyState(
-            $authCeremonyId,
-            PasskeyCeremonyType::Recovery,
-            $email->value,
-            $inputData->name,
-            $adminUserId,
-            $startResult->optionsJson,
-            $recoveryCodeId,
-        ));
+        $this->ceremonyStore->put(
+            new PasskeyCeremonyState(
+                $authCeremonyId,
+                PasskeyCeremonyType::Recovery,
+                $email->value,
+                $inputData->name,
+                $adminUserId,
+                $startResult->optionsJson,
+                $recoveryCodeId,
+            ),
+        );
 
         return new RecoveryStartOutputData($authCeremonyId, $startResult->publicKey);
     }

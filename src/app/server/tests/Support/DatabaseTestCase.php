@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Override;
 use RuntimeException;
+use SensitiveParameter;
 use Tests\TestCase;
 
 abstract class DatabaseTestCase extends TestCase
@@ -46,7 +47,7 @@ abstract class DatabaseTestCase extends TestCase
         return $app;
     }
 
-    private function createTestDatabase(Application $app, string $token): string
+    private function createTestDatabase(Application $app, #[SensitiveParameter] string $token): string
     {
         $config = $app->make('config');
         $baseDb = $config->get('database.connections.mysql.database');
@@ -56,12 +57,17 @@ abstract class DatabaseTestCase extends TestCase
         $rootMysql = $this->buildMysqlCommand($config);
         $rootMysqldump = $this->buildMysqldumpCommand($config, $baseDb);
 
-        $result = exec("{$rootMysql} -e " . escapeshellarg("CREATE DATABASE IF NOT EXISTS `{$testDb}` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin"));
+        $result = exec(
+            "{$rootMysql} -e "
+                . escapeshellarg("CREATE DATABASE IF NOT EXISTS `{$testDb}` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin"),
+        );
         if ($result === false) {
             throw new RuntimeException('DB の生成に失敗した: ' . $testDb);
         }
 
-        $result = exec("{$rootMysql} -e " . escapeshellarg("GRANT ALL PRIVILEGES ON `{$testDb}`.* TO '{$appUser}'@'%'"));
+        $result = exec(
+            "{$rootMysql} -e " . escapeshellarg("GRANT ALL PRIVILEGES ON `{$testDb}`.* TO '{$appUser}'@'%'"),
+        );
         if ($result === false) {
             throw new RuntimeException('権限の付与に失敗した: ' . $testDb);
         }

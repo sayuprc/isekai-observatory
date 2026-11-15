@@ -12,12 +12,12 @@ use Person\Application\Admin\UseCase\Group\Search\SearchInputData;
 use Person\Application\Admin\UseCase\Group\Search\SearchUseCase;
 use Support\Contracts\MapperInterface;
 
-class SearchPersonGroupController extends Controller
+final readonly class SearchPersonGroupController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly SearchUseCase $useCase,
-        private readonly SearchPresenter $presenter,
+        private MapperInterface $mapper,
+        private SearchUseCase $useCase,
+        private SearchPresenter $presenter,
     ) {
     }
 

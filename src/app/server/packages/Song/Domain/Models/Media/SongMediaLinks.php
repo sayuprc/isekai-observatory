@@ -43,13 +43,15 @@ readonly class SongMediaLinks extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): SongMediaLink => SongMediaLink::reconstruct(
-                $item['mediaId'],
-                $item['orderNo'],
+        return new self(
+            array_map(
+                static fn (array $item): SongMediaLink => SongMediaLink::reconstruct(
+                    $item['mediaId'],
+                    $item['orderNo'],
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**

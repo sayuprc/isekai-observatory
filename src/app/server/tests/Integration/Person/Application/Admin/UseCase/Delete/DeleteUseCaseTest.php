@@ -30,7 +30,7 @@ class DeleteUseCaseTest extends DatabaseTestCase
 
         $this->storePersons($this->createPerson($uuid, '人物', 1));
 
-        $result = $this->getInstance()->handle(new DeleteInputData($uuid));
+        $this->getInstance()->handle(new DeleteInputData($uuid));
 
         $this->assertCount(0, DB::table('persons')->get()->all());
 
@@ -53,7 +53,9 @@ class DeleteUseCaseTest extends DatabaseTestCase
             true,
             1,
             [],
-            [['personId' => $personId, 'role' => 1, 'orderNo' => 1]],
+            [
+                ['personId' => $personId, 'role' => 1, 'orderNo' => 1],
+            ],
         ));
 
         try {

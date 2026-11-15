@@ -43,7 +43,8 @@ readonly class SearchUseCase
         return new SearchOutputData(
             $venues,
             $this->repository->maxPage($criteria),
-            $this->usageCountQueryService->countEvents(array_map(static fn (Venue $venue): VenueId => $venue->venueId, $venues)),
+            array_map(static fn (Venue $venue): VenueId => $venue->venueId, $venues)
+                |> $this->usageCountQueryService->countEvents(...),
         );
     }
 }

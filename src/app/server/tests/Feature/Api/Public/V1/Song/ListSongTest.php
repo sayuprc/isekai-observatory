@@ -44,29 +44,38 @@ class ListSongTest extends DatabaseTestCase
             SongType::Cover,
             true,
             1,
-            [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]],
+            [
+                ['tagId' => $tagIdSecond],
+                ['tagId' => $tagIdFirst],
+            ],
             [
                 ['personId' => $personId, 'role' => SongPersonRole::Lyricist->value, 'orderNo' => 1],
                 ['personId' => $personId, 'role' => SongPersonRole::Composer->value, 'orderNo' => 2],
             ],
-            media: [['mediaId' => $hiddenMediaId, 'orderNo' => 1], ['mediaId' => $visibleMediaId, 'orderNo' => 2]],
+            media: [
+                ['mediaId' => $hiddenMediaId, 'orderNo' => 1],
+                ['mediaId' => $visibleMediaId, 'orderNo' => 2],
+            ],
         ));
 
-        $this->get(route(PublicSongRouteMap::List))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicSongRouteMap::List))
+            ->assertOk()
             ->assertExactJson([
-                'items' => [[
-                    'songId' => $songId,
-                    'title' => '公開楽曲',
-                    'description' => '説明',
-                    'type' => SongType::Cover->value,
-                    'credits' => [
-                        ['personId' => $personId, 'role' => SongPersonRole::Lyricist->value],
-                        ['personId' => $personId, 'role' => SongPersonRole::Composer->value],
+                'items' => [
+                    [
+                        'songId' => $songId,
+                        'title' => '公開楽曲',
+                        'description' => '説明',
+                        'type' => SongType::Cover->value,
+                        'credits' => [
+                            ['personId' => $personId, 'role' => SongPersonRole::Lyricist->value],
+                            ['personId' => $personId, 'role' => SongPersonRole::Composer->value],
+                        ],
+                        'mediaIds' => [$visibleMediaId],
+                        'tagIds' => [$tagIdFirst, $tagIdSecond],
                     ],
-                    'mediaIds' => [$visibleMediaId],
-                    'tagIds' => [$tagIdFirst, $tagIdSecond],
-                ]],
+                ],
             ]);
     }
 
@@ -75,8 +84,9 @@ class ListSongTest extends DatabaseTestCase
     {
         $this->storeSongs($this->createSong($this->generateUuid(), '非公開楽曲', '説明', SongType::Original, false, 1));
 
-        $this->get(route(PublicSongRouteMap::List))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicSongRouteMap::List))
+            ->assertOk()
             ->assertExactJson(['items' => []]);
     }
 
@@ -92,13 +102,15 @@ class ListSongTest extends DatabaseTestCase
             $this->createSong($secondId, '楽曲 B', '説明', SongType::Original, true, 2),
         );
 
-        $first = $this->get(route(PublicSongRouteMap::List, ['pageSize' => 2]))
-            ->assertStatus(200)
+        $first = $this
+            ->get(route(PublicSongRouteMap::List, ['pageSize' => 2]))
+            ->assertOk()
             ->assertJsonPath('items.0.songId', $firstId)
             ->assertJsonPath('items.1.songId', $secondId);
 
-        $this->get(route(PublicSongRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
-            ->assertStatus(200)
+        $this
+            ->get(route(PublicSongRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
+            ->assertOk()
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.songId', $thirdId)
             ->assertJsonMissingPath('nextPageToken');
@@ -107,8 +119,9 @@ class ListSongTest extends DatabaseTestCase
     #[Test]
     public function rejectsInvalidPageToken(): void
     {
-        $this->get(route(PublicSongRouteMap::List, ['pageToken' => '***']))
-            ->assertStatus(400)
+        $this
+            ->get(route(PublicSongRouteMap::List, ['pageToken' => '***']))
+            ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }
 }

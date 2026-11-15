@@ -28,13 +28,13 @@ readonly class YouTubeChannelRepository implements YouTubeChannelRepositoryInter
     #[Override]
     public function find(YouTubeChannelId $channelId): ?YouTubeChannel
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('channel_id', '=', $channelId->value)
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('channel_id', '=', $channelId->value)
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -44,13 +44,13 @@ readonly class YouTubeChannelRepository implements YouTubeChannelRepositoryInter
     #[Override]
     public function findAll(): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->orderBy('created_at')
-                ->orderBy('channel_id'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->orderBy('created_at')
+            ->orderBy('channel_id')
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -61,7 +61,8 @@ readonly class YouTubeChannelRepository implements YouTubeChannelRepositoryInter
         $data = $channel->toArray();
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, [
                 'channel_id',
                 'name',
@@ -75,11 +76,7 @@ readonly class YouTubeChannelRepository implements YouTubeChannelRepositoryInter
                 $now,
             ])
             ->build()
-            ->append(
-                'ON DUPLICATE KEY UPDATE '
-                    . '`name` = VALUES(`name`), '
-                    . '`updated_at` = VALUES(`updated_at`)',
-            )
+            ->append('ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `updated_at` = VALUES(`updated_at`)')
             ->execute($this->queryFactory->pdo());
 
         return $channel;
@@ -88,7 +85,8 @@ readonly class YouTubeChannelRepository implements YouTubeChannelRepositoryInter
     #[Override]
     public function delete(YouTubeChannelId $channelId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('channel_id', '=', $channelId->value)
             ->execute($this->queryFactory->pdo());

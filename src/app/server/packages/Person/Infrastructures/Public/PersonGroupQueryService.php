@@ -10,6 +10,7 @@ use Person\Application\Public\Query\PersonGroupListItem;
 use Person\Application\Public\Query\PersonGroupListPage;
 use Person\Application\Public\Query\PersonGroupListPageToken;
 use Person\Application\Public\Query\PersonGroupQueryServiceInterface;
+use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
@@ -23,9 +24,10 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
     }
 
     #[Override]
-    public function list(?string $pageToken, int $pageSize): PersonGroupListPage
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): PersonGroupListPage
     {
-        $query = $this->queryFactory->select()
+        $query = $this->queryFactory
+            ->select()
             ->withSelect(['person_group_id', 'display_name'])
             ->from('person_groups')
             ->where(new Sql('person_group_id IN (' . PublicReferenceSql::PERSON_GROUP_IDS . ')'));
@@ -33,23 +35,25 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
         if (is_string($pageToken)) {
             $decoded = PersonGroupListPageToken::decode($pageToken);
 
-            $query = $query->where(Sql::format(
+            $query = Sql::format(
                 '(display_name > %s OR (display_name = %s AND person_group_id > %s))',
                 Sql::value($decoded->name),
                 Sql::value($decoded->name),
                 Sql::value($this->converter->toBin($decoded->personGroupId)),
-            ));
+            )
+                |> $query->where(...);
         }
 
-        $rows = $this->queryFactory->fetchAll(
-            $query->orderBy('display_name')
-                ->orderBy('person_group_id')
-                ->limit($pageSize + 1),
-        );
+        $rows = $query
+            ->orderBy('display_name')
+            ->orderBy('person_group_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
 
         $hasNextPage = count($rows) > $pageSize;
         $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
-        $memberIdsByGroup = $this->loadMemberIds(array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $pageRows));
+        $memberIdsByGroup = array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $pageRows)
+            |> $this->loadMemberIds(...);
 
         $personGroups = array_map(
             fn (array $row): PersonGroupListItem => new PersonGroupListItem(
@@ -66,7 +70,10 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
             $personGroups,
             $lastRow === null
                 ? null
-                : PersonGroupListPageToken::encode(Row::string($lastRow, 'display_name'), $this->converter->toUuid(Row::string($lastRow, 'person_group_id'))),
+                : PersonGroupListPageToken::encode(
+                    Row::string($lastRow, 'display_name'),
+                    $this->converter->toUuid(Row::string($lastRow, 'person_group_id')),
+                ),
         );
     }
 
@@ -81,14 +88,16 @@ readonly class PersonGroupQueryService implements PersonGroupQueryServiceInterfa
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['person_group_id', 'person_id'])
+            ->from('person_group_members')
+            ->where('person_group_id', 'IN', $binGroupIds)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['person_group_id', 'person_id'])
-                ->from('person_group_members')
-                ->where('person_group_id', 'IN', $binGroupIds)
-                ->orderBy('order_no'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'person_group_id')][] = $this->converter->toUuid(Row::string($row, 'person_id'));
         }
 

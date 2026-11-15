@@ -50,7 +50,10 @@ class TrackTest extends TestCase
             new TrackTitle('楽曲A -instrumental-'),
             new OrderNo(1),
         );
-        $this->assertSame(['song_ids' => [self::SONG_ID], 'title' => '楽曲A -instrumental-', 'track_no' => 1], $track->toArray());
+        $this->assertSame(
+            ['song_ids' => [self::SONG_ID], 'title' => '楽曲A -instrumental-', 'track_no' => 1],
+            $track->toArray(),
+        );
     }
 
     #[Test]
@@ -94,7 +97,11 @@ class TrackTest extends TestCase
         $this->expectException(BusinessRuleViolationException::class);
         $this->expectExceptionMessage('1 つの収録曲に同じ楽曲を複数指定することはできません。');
 
-        Track::create([new SongId(self::SONG_ID), new SongId(self::SONG_ID)], new TrackTitle('メドレー'), new OrderNo(1));
+        Track::create(
+            [new SongId(self::SONG_ID), new SongId(self::SONG_ID)],
+            new TrackTitle('メドレー'),
+            new OrderNo(1),
+        );
     }
 
     #[Test]
@@ -102,7 +109,10 @@ class TrackTest extends TestCase
     {
         $track = Track::reconstruct([self::SONG_ID], null, 1);
 
-        $this->assertSame([self::SONG_ID], array_map(static fn (SongId $songId): string => $songId->value, $track->songIds));
+        $this->assertSame(
+            [self::SONG_ID],
+            array_map(static fn (SongId $songId): string => $songId->value, $track->songIds),
+        );
         $this->assertNull($track->title);
         $this->assertSame(1, $track->trackNo->value);
     }

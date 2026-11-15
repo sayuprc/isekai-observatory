@@ -53,26 +53,32 @@ class UpdateUseCaseTest extends TestCase
         $name = 'テストタグA';
         $orderNo = 1;
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === $tagId)
             ->andReturn($this->createTag($tagId, '旧タグ', 10))
             ->once();
 
-        $this->service->shouldReceive('prepareForUpdate')
+        $this->service
+            ->shouldReceive('prepareForUpdate')
             ->with($tagId, $name, $orderNo)
             ->andReturn($tag = $this->createTag($tagId, $name, $orderNo))
             ->once();
 
-        $this->repository->shouldReceive('save')
+        $this->repository
+            ->shouldReceive('save')
             ->withArgs(
-                static fn (Tag $arg): bool => $arg->tagId->value === $tagId
+                static fn (Tag $arg): bool => (
+                    $arg->tagId->value === $tagId
                     && $arg->name->value === $name
-                    && $arg->orderNo->value === $orderNo,
+                    && $arg->orderNo->value === $orderNo
+                ),
             )
             ->andReturn($tag)
             ->once();
@@ -87,17 +93,20 @@ class UpdateUseCaseTest extends TestCase
         $name = 'テストタグA';
         $orderNo = 1;
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === $tagId)
             ->andReturn($this->createTag($tagId, '旧タグ', 10))
             ->once();
 
-        $this->service->shouldReceive('prepareForUpdate')
+        $this->service
+            ->shouldReceive('prepareForUpdate')
             ->with($tagId, $name, $orderNo)
             ->andThrow(new BusinessRuleViolationException('検証エラー'))
             ->once();
@@ -112,12 +121,14 @@ class UpdateUseCaseTest extends TestCase
     {
         $tagId = 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA';
 
-        $this->transaction->shouldReceive('scope')
+        $this->transaction
+            ->shouldReceive('scope')
             ->withArgs(static fn (Closure $_) => true)
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->once();
 
-        $this->repository->shouldReceive('find')
+        $this->repository
+            ->shouldReceive('find')
             ->withArgs(static fn (TagId $arg): bool => $arg->value === $tagId)
             ->andReturnNull()
             ->once();

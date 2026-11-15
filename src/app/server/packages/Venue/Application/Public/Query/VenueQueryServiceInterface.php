@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Venue\Application\Public\Query;
 
+use SensitiveParameter;
+
 interface VenueQueryServiceInterface
 {
-    public function list(?string $pageToken, int $pageSize): VenueListPage;
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): VenueListPage;
 }

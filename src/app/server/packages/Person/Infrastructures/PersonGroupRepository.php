@@ -42,7 +42,10 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
 
         return $this->findBy(
             'person_group_id',
-            array_map(fn (PersonGroupId $personGroupId): string => $this->converter->toBin($personGroupId->value), $personGroupIds),
+            array_map(
+                fn (PersonGroupId $personGroupId): string => $this->converter->toBin($personGroupId->value),
+                $personGroupIds,
+            ),
         );
     }
 
@@ -60,7 +63,8 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
 
         $this->queryFactory->deleteFromTables([self::MEMBER_TABLE], 'person_group_id', $id);
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, ['person_group_id', 'name', 'display_name', 'created_at', 'updated_at'])
             ->values([$id, $personGroup->name->value, $personGroup->displayName->value, $now, $now])
             ->build()
@@ -82,7 +86,8 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
     #[Override]
     public function delete(PersonGroupId $personGroupId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('person_group_id', '=', $this->converter->toBin($personGroupId->value))
             ->execute($this->queryFactory->pdo());
@@ -95,24 +100,28 @@ readonly class PersonGroupRepository implements PersonGroupRepositoryInterface
      */
     private function findBy(string $column, array $values): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['person_group_id', 'name', 'display_name'])
-                ->from(self::TABLE)
-                ->where($column, 'IN', $values),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['person_group_id', 'name', 'display_name'])
+            ->from(self::TABLE)
+            ->where($column, 'IN', $values)
+            |> $this->queryFactory->fetchAll(...);
 
         if ($rows === []) {
             return [];
         }
 
-        $memberRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['person_group_id', 'person_id', 'order_no'])
-                ->from(self::MEMBER_TABLE)
-                ->where('person_group_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $rows))
-                ->orderBy('order_no'),
-        );
+        $memberRows = $this->queryFactory
+            ->select()
+            ->withSelect(['person_group_id', 'person_id', 'order_no'])
+            ->from(self::MEMBER_TABLE)
+            ->where(
+                'person_group_id',
+                'IN',
+                array_map(static fn (array $row): string => Row::string($row, 'person_group_id'), $rows),
+            )
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         $membersByGroup = [];
         foreach ($memberRows as $memberRow) {

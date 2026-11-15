@@ -87,7 +87,9 @@ class SongRepositoryTest extends DatabaseTestCase
             true,
             1,
             [],
-            [['personId' => $person->personId->value, 'role' => 1, 'orderNo' => 1]],
+            [
+                ['personId' => $person->personId->value, 'role' => 1, 'orderNo' => 1],
+            ],
         );
         $withoutPerson = $this->createSong($this->generateUuid(), '曲名2', '説明', SongType::Original, true, 2, [], []);
         $notTarget = $this->createSong($this->generateUuid(), '曲名3', '説明', SongType::Original, true, 3, [], []);
@@ -124,7 +126,9 @@ class SongRepositoryTest extends DatabaseTestCase
             true,
             1,
             [],
-            [['personId' => $person->personId->value, 'role' => 1, 'orderNo' => 1]],
+            [
+                ['personId' => $person->personId->value, 'role' => 1, 'orderNo' => 1],
+            ],
         );
 
         $repository->save($song);

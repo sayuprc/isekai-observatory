@@ -1,0 +1,109 @@
+#:schema https://mago.carthage.software/1.59.0/schema.json
+# Welcome to Mago!
+# For full documentation, see https://mago.carthage.software/1.59.0/en/tools/overview/
+
+version = "1"
+php-version = "8.5.0"
+
+[source]
+workspace = "."
+paths = [
+  "Generated/Admin/lib/",
+  "Generated/Public/lib/",
+  "Generated/Viewer/lib/",
+  "app/",
+  "bootstrap/",
+  "config/",
+  "packages/AdminUser/",
+  "packages/Auth/",
+  "packages/Event/",
+  "packages/Media/",
+  "packages/Person/",
+  "packages/Release/",
+  "packages/Song/",
+  "packages/Support/",
+  "packages/Tag/",
+  "packages/Venue/",
+  "public/",
+  "routes/",
+  "tests/",
+  "tools/",
+  "artisan",
+]
+includes = ["vendor"]
+excludes = []
+
+[source.glob]
+literal-separator = true
+
+[formatter]
+# 自動生成コードは生成器の出力のままコミットし、CI の生成漏れチェックで再生成結果と比較する
+excludes = ["Generated/"]
+array-table-style-alignment = false
+break-promoted-properties-list = false
+empty-line-after-class-like-constant = true
+empty-line-after-enum-case = true
+empty-line-after-property = true
+inline-empty-anonymous-class-braces = false
+inline-empty-classlike-braces = false
+inline-empty-closure-braces = false
+inline-empty-constructor-braces = false
+inline-empty-function-braces = false
+inline-empty-method-braces = false
+inline-single-breaking-value-argument = true
+preserve-breaking-argument-list = true
+preserve-breaking-binary-expression = true
+preserve-breaking-conditional-expression = true
+preserve-breaking-member-access-chain = true
+preserve-breaking-parameter-list = true
+preserve-breaking-pipe-expression = true
+print-width = 120
+space-after-cast-unary-prefix-operators = false
+space-after-logical-not-unary-prefix-operator = true
+space-before-arrow-function-parameter-list-parenthesis = true
+tab-width = 4
+use-tabs = false
+
+[linter]
+baseline = "lint-baseline.toml"
+excludes = [
+  "Generated/",
+  "bootstrap/",
+  "config/",
+  "public/",
+  "routes/",
+]
+integrations = ["symfony", "laravel"]
+
+[linter.rules]
+ambiguous-function-call = { enabled = false }
+halstead = { effort-threshold = 7000 }
+literal-named-argument = { enabled = false }
+prefer-early-continue = { enabled = false }
+
+[analyzer]
+excludes = [
+  "Generated/",
+  "bootstrap/",
+  "config/",
+  "public/",
+  "routes/",
+]
+plugins = []
+find-unused-definitions = true
+find-unused-expressions = true
+analyze-dead-code = true
+memoize-properties = true
+check-throws = true
+check-dead-catch = false
+unchecked-exceptions = ["Error", "LogicException"]
+unchecked-exception-classes = []
+check-missing-override = true
+find-unused-parameters = true
+strict-list-index-checks = true
+strict-array-index-existence = true
+allow-array-truthy-operand = false
+allow-operator-overloading = false
+no-boolean-literal-comparison = true
+check-missing-type-hints = true
+register-super-globals = true

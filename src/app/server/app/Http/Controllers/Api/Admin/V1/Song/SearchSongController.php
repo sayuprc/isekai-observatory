@@ -12,12 +12,12 @@ use Song\Application\Admin\UseCase\Search\SearchInputData;
 use Song\Application\Admin\UseCase\Search\SearchUseCase;
 use Support\Contracts\MapperInterface;
 
-class SearchSongController extends Controller
+final readonly class SearchSongController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly SearchUseCase $useCase,
-        private readonly SearchPresenter $presenter,
+        private MapperInterface $mapper,
+        private SearchUseCase $useCase,
+        private SearchPresenter $presenter,
     ) {
     }
 

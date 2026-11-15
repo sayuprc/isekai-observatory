@@ -65,19 +65,14 @@ readonly class ImportYouTubeNotifier
     private function buildSucceededEmbeds(array $results): array
     {
         if (count($results) <= self::MAX_EMBEDS) {
-            return array_map(
-                fn (ChannelImportResult $result): NotificationEmbed => $this->buildEmbed($result),
-                $results,
-            );
+            return array_map($this->buildEmbed(...), $results);
         }
 
         $visibleResults = array_slice($results, 0, self::MAX_EMBEDS - 1);
         $omittedCount = count($results) - count($visibleResults);
 
-        $embeds = array_map(
-            fn (ChannelImportResult $result): NotificationEmbed => $this->buildEmbed($result),
-            $visibleResults,
-        );
+        $embeds = array_map($this->buildEmbed(...), $visibleResults);
+
         $embeds[] = new NotificationEmbed(
             title: '一部の結果を省略しました',
             description: sprintf(

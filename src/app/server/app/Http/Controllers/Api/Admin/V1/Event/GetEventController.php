@@ -10,11 +10,11 @@ use Event\Application\Admin\UseCase\Get\GetInputData;
 use Event\Application\Admin\UseCase\Get\GetUseCase;
 use Illuminate\Http\JsonResponse;
 
-class GetEventController extends Controller
+final readonly class GetEventController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 

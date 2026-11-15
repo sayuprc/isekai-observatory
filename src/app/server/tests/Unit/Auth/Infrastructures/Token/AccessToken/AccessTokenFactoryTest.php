@@ -41,15 +41,18 @@ class AccessTokenFactoryTest extends TestCase
             jti: 'id',
         );
 
-        $this->jwt->shouldReceive('generate')
+        $this->jwt
+            ->shouldReceive('generate')
             ->withArgs(static function (AccessTokenPayload $arg) use ($now): bool {
                 $payload = $arg->toArray();
 
-                return $payload['iss'] === 'issuer'
-                    && $payload['iat'] === $now->getTimestamp()
-                    && $payload['exp'] === $now->modify('+1 hours')->getTimestamp()
-                    && $payload['nbf'] === $now->getTimestamp()
-                    && $payload['jti'] === 'id';
+                return (
+                    $payload['iss'] === 'issuer'
+                        && $payload['iat'] === $now->getTimestamp()
+                        && $payload['exp'] === $now->modify('+1 hours')->getTimestamp()
+                        && $payload['nbf'] === $now->getTimestamp()
+                        && $payload['jti'] === 'id'
+                );
             })
             ->andReturn('jwt')
             ->once();

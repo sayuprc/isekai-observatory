@@ -6,7 +6,7 @@ namespace Auth\Domain\Services;
 
 class PasskeyConfig
 {
-    private const int DEFAULT_TIMEOUT_MS = 60000;
+    private const int DEFAULT_TIMEOUT_MS = 60_000;
 
     public function __construct(
         public readonly string $rpName,

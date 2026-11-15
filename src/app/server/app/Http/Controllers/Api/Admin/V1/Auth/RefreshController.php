@@ -12,12 +12,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
 
-class RefreshController extends Controller
+final readonly class RefreshController extends Controller
 {
     public function __construct(
-        private readonly MapperInterface $mapper,
-        private readonly RefreshUseCase $useCase,
-        private readonly RefreshPresenter $presenter,
+        private MapperInterface $mapper,
+        private RefreshUseCase $useCase,
+        private RefreshPresenter $presenter,
     ) {
     }
 

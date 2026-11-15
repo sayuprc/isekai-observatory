@@ -50,12 +50,21 @@ class DeleteUseCaseTest extends DatabaseTestCase
         $this->storeSongs($this->createSong($songId, '曲', '', SongType::Original, true, 1));
         $this->storeEvents($this->createEvent(
             $this->generateUuid(),
-            performances: [[
-                'performanceId' => $this->generateUuid(),
-                'songId' => $songId,
-                'orderNo' => 1,
-                'coVocalists' => [['personId' => $personId, 'creditName' => null, 'personGroupId' => $personGroupId, 'orderNo' => 1]],
-            ]],
+            performances: [
+                [
+                    'performanceId' => $this->generateUuid(),
+                    'songId' => $songId,
+                    'orderNo' => 1,
+                    'coVocalists' => [
+                        [
+                            'personId' => $personId,
+                            'creditName' => null,
+                            'personGroupId' => $personGroupId,
+                            'orderNo' => 1,
+                        ],
+                    ],
+                ],
+            ],
         ));
 
         $this->expectException(BusinessRuleViolationException::class);

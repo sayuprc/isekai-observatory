@@ -12,7 +12,11 @@ use Support\UseCase\Exceptions\UseCaseException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        api: [__DIR__ . '/../routes/admin.php', __DIR__ . '/../routes/viewer.php', __DIR__ . '/../routes/public.php'],
+        api: [
+            __DIR__ . '/../routes/admin.php',
+            __DIR__ . '/../routes/viewer.php',
+            __DIR__ . '/../routes/public.php',
+        ],
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
         apiPrefix: '',
@@ -32,4 +36,5 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // 例外 → {code, status} の対応表は ApiExceptionRenderer に集約する
         $exceptions->render(ApiExceptionRenderer::render(...));
-    })->create();
+    })
+    ->create();

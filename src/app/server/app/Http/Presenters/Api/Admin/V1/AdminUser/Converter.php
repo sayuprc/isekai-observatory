@@ -23,7 +23,13 @@ class Converter
             ->setEmail($adminUser->email->value)
             ->setCreatedAt($this->toDateTime($adminUser->createdAt->value))
             ->setRole(RoleValue::from($adminUser->role->value))
-            ->setPermissions($adminUser->permissions->toGeneric()->map(static fn (Permission $permission): PermissionValue => PermissionValue::from($permission->value))->toArray());
+            ->setPermissions(
+                $adminUser
+                    ->permissions
+                    ->toGeneric()
+                    ->map(static fn (Permission $permission): PermissionValue => PermissionValue::from($permission->value))
+                    ->toArray(),
+            );
     }
 
     private function toDateTime(DateTimeImmutable $dateTime): DateTime

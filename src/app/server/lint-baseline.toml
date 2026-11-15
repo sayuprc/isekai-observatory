@@ -1,0 +1,1237 @@
+variant = "loose"
+
+[[issues]]
+file = "app/Console/Commands/AdminUser/InviteCommand.php"
+code = "assert-description"
+message = "Missing description in assert function."
+count = 1
+
+[[issues]]
+file = "packages/AdminUser/Domain/Models/AdminUser.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "packages/AdminUser/Domain/Models/RegistrationToken/RegistrationToken.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "packages/AdminUser/Infrastructures/AdminUserRepository.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Application/Admin/UseCase/Login/LoginFinishUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Application/Admin/UseCase/Recovery/RecoveryFinishUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Application/Admin/UseCase/Recovery/RecoveryStartUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Application/Admin/UseCase/RecoveryCode/Generate/GenerateRecoveryCodesUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Application/Admin/UseCase/Refresh/RefreshUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Application/Admin/UseCase/RegisterStart/RegisterStartUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Domain/Models/AdminUserPasskey.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Domain/Models/PasskeyCeremonyState.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Domain/Services/PasskeyConfig.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Domain/Services/PasskeyRegistrationResult.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Infrastructures/PasskeyAuthenticator.php"
+code = "assert-description"
+message = "Missing description in assert function."
+count = 1
+
+[[issues]]
+file = "packages/Auth/Infrastructures/PasskeyAuthenticator.php"
+code = "prefer-interface"
+message = 'Use the interface `Symfony\Component\Serializer\SerializerInterface` instead of the implementation `Symfony\Component\Serializer\Serializer`.'
+count = 1
+
+[[issues]]
+file = "packages/Auth/Infrastructures/PasskeyCeremonyStore.php"
+code = "assert-description"
+message = "Missing description in assert function."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/AssembledEvent.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/AssembledMedia.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/AssembledRelease.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/EventAssembler.php"
+code = "assert-description"
+message = "Missing description in assert function."
+count = 7
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/EventAssembler.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/EventAssembler.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/EventAssembler.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Assemble/EventAssembler.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/Query/EventSummary.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/BulkUpdate/BulkUpdateUseCase.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/Create/CreateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/Create/CreateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/Search/SearchInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/Update/UpdateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/Update/UpdateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/Update/UpdateUseCase.php"
+code = "halstead"
+message = "Closure has a high halstead difficulty"
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Admin/UseCase/Update/UpdateUseCase.php"
+code = "halstead"
+message = "Method has a high halstead difficulty"
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Public/Query/EventListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Viewer/Query/EventListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Application/Viewer/Query/EventReleaseSummary.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Domain/Criteria/EventSearchCriteria.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Event/Domain/Models/Event.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "packages/Event/Domain/Services/EventIntegrityService.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 3
+
+[[issues]]
+file = "packages/Event/Infrastructures/EventRepository.php"
+code = "halstead"
+message = "Method has a high halstead volume"
+count = 1
+
+[[issues]]
+file = "packages/Event/Infrastructures/EventRepository.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "packages/Event/Infrastructures/EventRepository.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Event/Infrastructures/Public/EventQueryService.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "packages/Event/Infrastructures/Public/EventQueryService.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "packages/Event/Infrastructures/Viewer/EventQueryService.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "packages/Event/Infrastructures/Viewer/EventQueryService.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "packages/Event/Infrastructures/Viewer/EventQueryService.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Admin/UseCase/BulkUpdate/BulkUpdateUseCase.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Admin/UseCase/Create/CreateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Admin/UseCase/Create/CreateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Admin/UseCase/Search/SearchInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Admin/UseCase/Update/UpdateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Admin/UseCase/Update/UpdateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Cli/UseCase/ImportYouTube/ImportYouTubeNotifier.php"
+code = "no-else-clause"
+message = "Avoid `elseif` clauses."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Cli/UseCase/ImportYouTube/ImportYouTubeUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Public/Query/MediaListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Application/Viewer/Query/MediaListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Domain/Criteria/MediaSearchCriteria.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Media/Domain/Models/Media.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "packages/Media/Domain/Services/MediaIntegrityService.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 3
+
+[[issues]]
+file = "packages/Media/Infrastructures/Cli/YouTubeVideoQueryService.php"
+code = "assert-description"
+message = "Missing description in assert function."
+count = 2
+
+[[issues]]
+file = "packages/Media/Infrastructures/MediaRepository.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Person/Application/Admin/UseCase/Group/Create/CreateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Person/Application/Admin/UseCase/Group/Update/UpdateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Person/Infrastructures/PersonRepository.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/Query/ReleaseGroupReferencedRelease.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/Query/ReleaseGroupSummary.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Create/CreateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Group/BulkUpdate/BulkUpdateUseCase.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Group/Create/CreateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Group/Create/CreateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Group/Search/SearchInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Group/Update/UpdateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Group/Update/UpdateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Admin/UseCase/Update/UpdateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Public/Query/ReleaseGroupListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Public/Query/ReleaseItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Viewer/Query/ReleaseGroupListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Application/Viewer/Query/ReleaseListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Domain/Criteria/ReleaseGroupSearchCriteria.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Release/Domain/Models/Media.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Release/Domain/Models/Release.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "packages/Release/Domain/Models/ReleaseFormats.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Release/Domain/Models/ReleaseGroup.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "packages/Release/Domain/Models/Tracks.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Release/Domain/Services/ReleaseGroupIntegrityService.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 3
+
+[[issues]]
+file = "packages/Release/Domain/Services/ReleaseIntegrityService.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 4
+
+[[issues]]
+file = "packages/Release/Infrastructures/Public/ReleaseGroupQueryService.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "packages/Release/Infrastructures/Public/ReleaseGroupQueryService.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "packages/Release/Infrastructures/Viewer/ReleaseGroupQueryService.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "packages/Release/Infrastructures/Viewer/ReleaseGroupQueryService.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/Assemble/AssembledMedia.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/Assemble/AssembledSong.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/Assemble/SongAssembler.php"
+code = "assert-description"
+message = "Missing description in assert function."
+count = 3
+
+[[issues]]
+file = "packages/Song/Application/Admin/Query/SongSummary.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/BulkUpdate/BulkUpdateUseCase.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/Create/CreateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/Create/CreateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/Search/SearchInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/Search/SearchUseCase.php"
+code = "halstead"
+message = "Method has a high halstead difficulty"
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/Update/UpdateInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/Update/UpdateUseCase.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Admin/UseCase/Update/UpdateUseCase.php"
+code = "halstead"
+message = "Method has a high halstead difficulty"
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Public/Query/SongListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Application/Viewer/Query/SongListItem.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Domain/Criteria/SongSearchCriteria.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Song/Domain/Models/Media/SongMediaLinks.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Song/Domain/Models/Persons/SongPersons.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Song/Domain/Models/Song.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "packages/Song/Domain/Services/SongIntegrityService.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 3
+
+[[issues]]
+file = "packages/Song/Domain/Services/SongIntegrityService.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 3
+
+[[issues]]
+file = "packages/Song/Domain/Services/SongIntegrityService.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Support/Collection/ImmutableCollection.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Support/Infrastructures/Database/QueryFactory.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Support/Notification/Contracts/Embed/NotificationEmbed.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Support/UseCase/AuditLog/Query/AuditLogDetail.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Support/UseCase/AuditLog/Query/AuditLogSearchCriteria.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Support/UseCase/AuditLog/Query/AuditLogSummary.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Support/UseCase/AuditLog/Search/SearchInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Tag/Domain/Models/TagReferences.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "packages/Tag/Infrastructures/TagRepository.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "packages/Venue/Application/Admin/UseCase/Search/SearchInputData.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Venue/Domain/Criteria/VenueSearchCriteria.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "packages/Venue/Infrastructures/VenueRepository.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/AuditLog/SeedsAuditLog.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Auth/LoginTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 2
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Auth/LoginTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Auth/RecoveryTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 2
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Auth/RecoveryTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Auth/RefreshTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 5
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Auth/RegisterFinishTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 5
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Auth/RegisterStartTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 3
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Event/CreateEventTest.php"
+code = "halstead"
+message = "Method has a high halstead volume"
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Event/CreateEventTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Release/CreateReleaseTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Admin/V1/Song/UpdateSongTest.php"
+code = "halstead"
+message = "Method has a high halstead volume"
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Public/V1/Song/ListSongTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Viewer/V1/Release/ListReleaseGroupTest.php"
+code = "halstead"
+message = "Method has a high halstead volume"
+count = 1
+
+[[issues]]
+file = "tests/Feature/Api/Viewer/V1/Song/ListSongTest.php"
+code = "halstead"
+message = "Method has a high halstead volume"
+count = 1
+
+[[issues]]
+file = "tests/Feature/Console/Commands/Media/ImportYouTubeCommandTest.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "tests/Integration/AdminUser/Infrastructures/RegistrationToken/RegistrationTokenRepositoryTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Auth/Application/Admin/UseCase/RefreshUseCaseTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Auth/Infrastructures/RecoveryCode/RecoveryCodeRepositoryTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Auth/Infrastructures/Token/RefreshToken/RefreshTokenRepositoryTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Media/Application/Admin/UseCase/UpdateUseCaseTest.php"
+code = "no-empty-catch-clause"
+message = "Do not use empty `catch` blocks."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Person/Application/Admin/UseCase/Update/UpdateUseCaseTest.php"
+code = "no-empty-catch-clause"
+message = "Do not use empty `catch` blocks."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Person/Infrastructures/PersonRepositoryTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Release/Application/Admin/UseCase/Group/Delete/DeleteUseCaseTest.php"
+code = "no-empty-catch-clause"
+message = "Do not use empty `catch` blocks."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Song/Application/Admin/UseCase/UpdateUseCaseTest.php"
+code = "no-empty-catch-clause"
+message = "Do not use empty `catch` blocks."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Song/Infrastructures/SongRepositoryTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Support/UseCase/AuditLog/Get/GetUseCaseTest.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Support/UseCase/AuditLog/Search/SearchUseCaseTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Integration/Tag/Infrastructures/TagRepositoryTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Support/Domain/EntityFactory.php"
+code = "assert-description"
+message = "Missing description in assert function."
+count = 1
+
+[[issues]]
+file = "tests/Support/Domain/EntityFactory.php"
+code = "cyclomatic-complexity"
+message = "Trait has high complexity."
+count = 1
+
+[[issues]]
+file = "tests/Support/Domain/EntityFactory.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 6
+
+[[issues]]
+file = "tests/Support/Domain/EntityFactory.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "tests/Support/Domain/EntityFactory.php"
+code = "too-many-methods"
+message = "Trait has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Support/Domain/EntityStore.php"
+code = "too-many-methods"
+message = "Trait has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Unit/AdminUser/Application/Cli/UseCase/IssueRegistrationTokenUseCaseTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/Login/LoginFinishUseCaseTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 2
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RefreshUseCaseTest.php"
+code = "no-empty-catch-clause"
+message = "Do not use empty `catch` blocks."
+count = 2
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RefreshUseCaseTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 2
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+code = "halstead"
+message = "Method has a high halstead volume"
+count = 1
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+code = "no-insecure-comparison"
+message = "Insecure comparison of sensitive data."
+count = 2
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+code = "too-many-properties"
+message = "Class has too many properties."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterStart/RegisterStartUseCaseTest.php"
+code = "no-insecure-comparison"
+message = "Insecure comparison of sensitive data."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Auth/Domain/Services/Token/RefreshToken/RefreshTokenIssueServiceTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 2
+
+[[issues]]
+file = "tests/Unit/Auth/Infrastructures/Token/RefreshToken/TokenHasherTest.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 5
+
+[[issues]]
+file = "tests/Unit/Event/Domain/Services/EventIntegrityServiceTest.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "tests/Unit/Event/Domain/Services/EventIntegrityServiceTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Song/Application/Admin/UseCase/CreateUseCaseTest.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Song/Application/Admin/UseCase/CreateUseCaseTest.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Song/Application/Admin/UseCase/UpdateUseCaseTest.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Song/Application/Admin/UseCase/UpdateUseCaseTest.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Song/Domain/Models/SongTest.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Collection/ImmutableCollectionTest.php"
+code = "no-else-clause"
+message = "Avoid `elseif` clauses."
+count = 2
+
+[[issues]]
+file = "tests/Unit/Support/Collection/ImmutableCollectionTest.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 4
+
+[[issues]]
+file = "tests/Unit/Support/Collection/ImmutableCollectionTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `IntCollection` but class `ImmutableCollectionTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Date/ImmutableDateTimeValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `ImmutableDateTime` but class `ImmutableDateTimeValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Date/ImmutableDateTimeValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `OtherImmutableDateTime` but class `ImmutableDateTimeValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Date/ImmutableDateValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `Date` but class `ImmutableDateValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Date/ImmutableDateValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `OtherDate` but class `ImmutableDateValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Numeric/IntegerValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `IntegerObject` but class `IntegerValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Numeric/IntegerValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `OtherIntegerObject` but class `IntegerValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Numeric/PositiveIntegerValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `OtherPositiveIntegerObject` but class `PositiveIntegerValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/Numeric/PositiveIntegerValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `PositiveIntegerObject` but class `PositiveIntegerValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/String/StringValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `OtherStringObject` but class `StringValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/String/StringValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `StringObject` but class `StringValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/String/UuidValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `OtherUuid` but class `UuidValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Domain/ValueObjects/String/UuidValueObjectTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `Uuid` but class `UuidValueObjectTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Infrastructures/MapperTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `Item` but class `MapperTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Support/Infrastructures/MapperTest.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `Sample` but class `MapperTest` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Tools/PHPStan/Rules/data/type-alias-naming.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `TypeAliasImports` but class `TypeAliasDefinitions` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Tools/PHPStan/Rules/data/valinor-warmup/calls.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `Calls` but class `Registered` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Tools/PHPStan/Rules/data/valinor-warmup/calls.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `Other` but class `Registered` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Tools/PHPStan/Rules/data/valinor-warmup/calls.php"
+code = "single-class-per-file"
+message = "File contains multiple class-like definitions; found class `Unregistered` but class `Registered` is already defined in this file."
+count = 1
+
+[[issues]]
+file = "tools/PHPStan/Rules/ValinorWarmupRule.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1

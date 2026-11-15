@@ -40,13 +40,13 @@ readonly class MediaRepository implements MediaRepositoryInterface
     #[Override]
     public function find(MediaId $mediaId): ?Media
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('media_id', '=', $this->converter->toBin($mediaId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('media_id', '=', $this->converter->toBin($mediaId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->hydrateAll($rows)[0] ?? null;
     }
@@ -54,13 +54,13 @@ readonly class MediaRepository implements MediaRepositoryInterface
     #[Override]
     public function findByUrl(MediaUrl $url): ?Media
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('url', '=', $url->value)
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('url', '=', $url->value)
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->hydrateAll($rows)[0] ?? null;
     }
@@ -69,18 +69,18 @@ readonly class MediaRepository implements MediaRepositoryInterface
     public function isUsed(MediaId $mediaId): bool
     {
         $binMediaId = $this->converter->toBin($mediaId->value);
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from('song_media_links')
-                ->where('media_id', '=', $binMediaId)
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
-        $eventCount = Row::intValue(
-            $this->queryFactory->select()
-                ->from('event_media')
-                ->where('media_id', '=', $binMediaId)
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+        $count = $this->queryFactory
+            ->select()
+            ->from('song_media_links')
+            ->where('media_id', '=', $binMediaId)
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
+        $eventCount = $this->queryFactory
+            ->select()
+            ->from('event_media')
+            ->where('media_id', '=', $binMediaId)
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
 
         return $count > 0 || $eventCount > 0;
     }
@@ -88,15 +88,15 @@ readonly class MediaRepository implements MediaRepositoryInterface
     #[Override]
     public function search(MediaSearchCriteria $criteria): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $this->buildSearchQuery($criteria)
-                    ->withSelect(self::COLUMNS)
-                    ->orderBy($criteria->sort->value, $criteria->order->value),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $this
+                ->buildSearchQuery($criteria)
+                ->withSelect(self::COLUMNS)
+                ->orderBy($criteria->sort->value, $criteria->order->value),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->hydrateAll($rows);
     }
@@ -116,12 +116,12 @@ readonly class MediaRepository implements MediaRepositoryInterface
 
         $binIds = array_map(fn (MediaId $mediaId): string => $this->converter->toBin($mediaId->value), $mediaIds);
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('media_id', 'IN', $binIds),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('media_id', 'IN', $binIds)
+            |> $this->queryFactory->fetchAll(...);
 
         return $this->hydrateAll($rows);
     }
@@ -135,7 +135,8 @@ readonly class MediaRepository implements MediaRepositoryInterface
 
         $this->queryFactory->deleteFromTables(['media_taggings'], 'media_id', $binMediaId);
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, [
                 'media_id',
                 'title',
@@ -157,24 +158,21 @@ readonly class MediaRepository implements MediaRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append(
-                'ON DUPLICATE KEY UPDATE '
-                    . '`title` = VALUES(`title`), '
-                    . '`url` = VALUES(`url`), '
-                    . '`published_at` = VALUES(`published_at`), '
-                    . '`type` = VALUES(`type`), '
-                    . '`is_display` = VALUES(`is_display`), '
-                    . '`updated_at` = VALUES(`updated_at`)',
-            )
+            ->append(<<<SQL
+                ON DUPLICATE KEY UPDATE
+                `title` = VALUES(`title`),
+                `url` = VALUES(`url`),
+                `published_at` = VALUES(`published_at`),
+                `type` = VALUES(`type`),
+                `is_display` = VALUES(`is_display`),
+                `updated_at` = VALUES(`updated_at`)
+                SQL)
             ->execute($this->queryFactory->pdo());
 
         $this->queryFactory->insertRows(
             'media_taggings',
             ['media_id', 'tag_id'],
-            array_map(
-                fn (array $tag): array => [$binMediaId, $this->converter->toBin($tag['tag_id'])],
-                $data['tags'],
-            ),
+            array_map(fn (array $tag): array => [$binMediaId, $this->converter->toBin($tag['tag_id'])], $data['tags']),
         );
 
         return $media;
@@ -183,7 +181,8 @@ readonly class MediaRepository implements MediaRepositoryInterface
     #[Override]
     public function delete(MediaId $mediaId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('media_id', '=', $this->converter->toBin($mediaId->value))
             ->execute($this->queryFactory->pdo());
@@ -213,7 +212,8 @@ readonly class MediaRepository implements MediaRepositoryInterface
             $query = $query->where(
                 'media_id',
                 'IN',
-                $this->queryFactory->select()
+                $this->queryFactory
+                    ->select()
                     ->withSelect(['media_id'])
                     ->from('media_taggings')
                     ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
@@ -235,18 +235,23 @@ readonly class MediaRepository implements MediaRepositoryInterface
         }
 
         // タグ付けはまとめて引き、メディアごとの問い合わせを避ける
-        $taggingRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['media_taggings.media_id', 'media_taggings.tag_id'])
-                ->from('media_taggings')
-                ->join('tags', 'media_taggings.tag_id = tags.tag_id')
-                ->where('media_taggings.media_id', 'IN', array_map(static fn (array $row): string => Row::string($row, 'media_id'), $rows))
-                ->orderBy('tags.order_no'),
-        );
+        $taggingRows = $this->queryFactory
+            ->select()
+            ->withSelect(['media_taggings.media_id', 'media_taggings.tag_id'])
+            ->from('media_taggings')
+            ->join('tags', 'media_taggings.tag_id = tags.tag_id')
+            ->where(
+                'media_taggings.media_id',
+                'IN',
+                array_map(static fn (array $row): string => Row::string($row, 'media_id'), $rows),
+            )
+            ->orderBy('tags.order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         $tags = [];
         foreach ($taggingRows as $taggingRow) {
-            $tags[Row::string($taggingRow, 'media_id')][] = ['tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id'))];
+            $mediaId = Row::string($taggingRow, 'media_id');
+            $tags[$mediaId][] = ['tagId' => $this->converter->toUuid(Row::string($taggingRow, 'tag_id'))];
         }
 
         return array_map(

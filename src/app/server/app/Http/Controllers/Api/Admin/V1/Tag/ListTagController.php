@@ -9,16 +9,16 @@ use App\Http\Presenters\Api\Admin\V1\Tag\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Tag\Application\Admin\UseCase\List\ListUseCase;
 
-class ListTagController extends Controller
+final readonly class ListTagController extends Controller
 {
     public function __construct(
-        private readonly ListUseCase $useCase,
-        private readonly ListPresenter $presenter,
+        private ListUseCase $useCase,
+        private ListPresenter $presenter,
     ) {
     }
 
     public function handle(): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle());
+        return $this->useCase->handle() |> $this->presenter->present(...);
     }
 }

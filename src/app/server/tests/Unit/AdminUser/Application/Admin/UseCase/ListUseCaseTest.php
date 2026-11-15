@@ -30,7 +30,8 @@ class ListUseCaseTest extends TestCase
     #[Test]
     public function emptyAdminUsers(): void
     {
-        $this->repository->shouldReceive('all')
+        $this->repository
+            ->shouldReceive('all')
             ->andReturn([])
             ->once();
 
@@ -42,7 +43,8 @@ class ListUseCaseTest extends TestCase
     #[Test]
     public function nonEmptyAdminUsers(): void
     {
-        $this->repository->shouldReceive('all')
+        $this->repository
+            ->shouldReceive('all')
             ->andReturn([
                 $this->createAdminUser('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'admin-a@example.com'),
                 $this->createAdminUser('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'admin-b@example.com'),

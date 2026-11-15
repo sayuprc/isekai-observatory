@@ -18,7 +18,13 @@ use Support\Infrastructures\Database\SqlHelper;
 readonly class SongQueryService implements SongQueryServiceInterface
 {
     /** @var array<int, string> */
-    private const array COLUMNS = ['song_id', 'title', 'type', 'is_display', 'order_no'];
+    private const array COLUMNS = [
+        'song_id',
+        'title',
+        'type',
+        'is_display',
+        'order_no',
+    ];
 
     public function __construct(
         private QueryFactory $queryFactory,
@@ -29,15 +35,15 @@ readonly class SongQueryService implements SongQueryServiceInterface
     #[Override]
     public function search(SongSearchCriteria $criteria): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $this->buildQuery($criteria)
-                    ->withSelect(self::COLUMNS)
-                    ->orderBy($criteria->sort->value, $criteria->order->value),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $this
+                ->buildQuery($criteria)
+                ->withSelect(self::COLUMNS)
+                ->orderBy($criteria->sort->value, $criteria->order->value),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         // 件数は 1 ページ分の楽曲 ID でまとめて引き、行ごとの問い合わせを避ける
         $binSongIds = array_map(static fn (array $row): string => Row::string($row, 'song_id'), $rows);
@@ -88,7 +94,8 @@ readonly class SongQueryService implements SongQueryServiceInterface
             $query = $query->where(
                 'song_id',
                 'IN',
-                $this->queryFactory->select()
+                $this->queryFactory
+                    ->select()
                     ->withSelect(['song_id'])
                     ->from('song_taggings')
                     ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),
@@ -101,8 +108,13 @@ readonly class SongQueryService implements SongQueryServiceInterface
     /**
      * @param array<string, mixed> $row
      */
-    private function hydrate(array $row, int $performanceCount, int $mediaCount, int $personCount, int $releaseCount): SongSummary
-    {
+    private function hydrate(
+        array $row,
+        int $performanceCount,
+        int $mediaCount,
+        int $personCount,
+        int $releaseCount,
+    ): SongSummary {
         return new SongSummary(
             $this->converter->toUuid(Row::string($row, 'song_id')),
             Row::string($row, 'title'),

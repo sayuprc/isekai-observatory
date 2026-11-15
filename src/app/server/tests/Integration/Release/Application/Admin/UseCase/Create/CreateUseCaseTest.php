@@ -27,9 +27,7 @@ class CreateUseCaseTest extends DatabaseTestCase
         $songId = $this->generateUuid();
         $releaseGroupId = $this->generateUuid();
 
-        $this->storeSongs(
-            $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1),
-        );
+        $this->storeSongs($this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1));
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
@@ -47,7 +45,9 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
+                    'tracks' => [
+                        ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                    ],
                 ],
                 [
                     'position' => 2,
@@ -115,7 +115,7 @@ class CreateUseCaseTest extends DatabaseTestCase
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
 
-        $result = $this->getInstance()->handle(new CreateInputData(
+        $this->getInstance()->handle(new CreateInputData(
             releaseGroupId: $releaseGroupId,
             name: '初回限定盤',
             releasedOn: '2026-05-09',
@@ -149,9 +149,7 @@ class CreateUseCaseTest extends DatabaseTestCase
         $songId = $this->generateUuid();
         $releaseGroupId = $this->generateUuid();
 
-        $this->storeSongs(
-            $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1),
-        );
+        $this->storeSongs($this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 1));
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
@@ -170,7 +168,9 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songIds' => [$songId], 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1]],
+                    'tracks' => [
+                        ['songIds' => [$songId], 'title' => 'テスト楽曲1 -instrumental-', 'trackNo' => 1],
+                    ],
                 ],
             ],
         ));
@@ -192,7 +192,7 @@ class CreateUseCaseTest extends DatabaseTestCase
 
         $this->expectException(BusinessRuleViolationException::class);
 
-        $result = $this->getInstance()->handle(new CreateInputData(
+        $this->getInstance()->handle(new CreateInputData(
             releaseGroupId: $releaseGroupId,
             name: '初回限定盤',
             releasedOn: '2026-05-09',
@@ -205,7 +205,9 @@ class CreateUseCaseTest extends DatabaseTestCase
                 [
                     'position' => 1,
                     'name' => null,
-                    'tracks' => [['songIds' => [], 'title' => null, 'trackNo' => 1]],
+                    'tracks' => [
+                        ['songIds' => [], 'title' => null, 'trackNo' => 1],
+                    ],
                 ],
             ],
         ));
@@ -216,7 +218,7 @@ class CreateUseCaseTest extends DatabaseTestCase
     {
         $this->expectException(BusinessRuleViolationException::class);
 
-        $result = $this->getInstance()->handle(new CreateInputData(
+        $this->getInstance()->handle(new CreateInputData(
             releaseGroupId: $this->generateUuid(),
             name: '通常盤',
             releasedOn: '2026-05-09',
@@ -240,7 +242,7 @@ class CreateUseCaseTest extends DatabaseTestCase
 
         $this->expectException(InvalidDomainException::class);
 
-        $result = $this->getInstance()->handle(new CreateInputData(
+        $this->getInstance()->handle(new CreateInputData(
             releaseGroupId: $releaseGroupId,
             name: '通常盤',
             releasedOn: 'invalid-date',

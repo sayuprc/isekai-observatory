@@ -10,16 +10,18 @@ use Illuminate\Http\JsonResponse;
 use Song\Application\Admin\UseCase\Get\GetInputData;
 use Song\Application\Admin\UseCase\Get\GetUseCase;
 
-class GetSongController extends Controller
+final readonly class GetSongController extends Controller
 {
     public function __construct(
-        private readonly GetUseCase $useCase,
-        private readonly GetPresenter $presenter,
+        private GetUseCase $useCase,
+        private GetPresenter $presenter,
     ) {
     }
 
     public function handle(string $songId): JsonResponse
     {
-        return $this->presenter->present($this->useCase->handle(new GetInputData($songId)));
+        return new GetInputData($songId)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

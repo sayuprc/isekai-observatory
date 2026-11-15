@@ -23,15 +23,15 @@ readonly class ReleaseGroupDetailQueryService implements ReleaseGroupDetailQuery
     #[Override]
     public function findReferencedReleases(ReleaseGroupId $releaseGroupId): array
     {
-        $releaseRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_id', 'name', 'released_on', 'is_display', 'order_no'])
-                ->from('releases')
-                ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
-                ->orderBy('released_on')
-                ->orderBy('order_no')
-                ->orderBy('name'),
-        );
+        $releaseRows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_id', 'name', 'released_on', 'is_display', 'order_no'])
+            ->from('releases')
+            ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
+            ->orderBy('released_on')
+            ->orderBy('order_no')
+            ->orderBy('name')
+            |> $this->queryFactory->fetchAll(...);
 
         if ($releaseRows === []) {
             return [];
@@ -39,13 +39,13 @@ readonly class ReleaseGroupDetailQueryService implements ReleaseGroupDetailQuery
 
         $binReleaseIds = array_map(static fn (array $row): string => Row::string($row, 'release_id'), $releaseRows);
 
-        $formatRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_id', 'format'])
-                ->from('release_formats')
-                ->where('release_id', 'IN', $binReleaseIds)
-                ->orderBy('format'),
-        );
+        $formatRows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_id', 'format'])
+            ->from('release_formats')
+            ->where('release_id', 'IN', $binReleaseIds)
+            ->orderBy('format')
+            |> $this->queryFactory->fetchAll(...);
 
         $formatsByRelease = [];
 

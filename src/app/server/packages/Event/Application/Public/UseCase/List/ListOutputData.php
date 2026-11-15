@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Event\Application\Public\UseCase\List;
 
 use Event\Application\Public\Query\EventListItem;
+use SensitiveParameter;
 
 readonly class ListOutputData
 {
@@ -13,6 +14,7 @@ readonly class ListOutputData
      */
     public function __construct(
         public array $events,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

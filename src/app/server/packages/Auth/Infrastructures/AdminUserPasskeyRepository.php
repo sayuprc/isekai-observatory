@@ -45,13 +45,13 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     #[Override]
     public function findByAdminUserId(string $adminUserId): array
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('admin_user_id', '=', $this->converter->toBin($adminUserId))
-                ->orderBy('created_at'),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('admin_user_id', '=', $this->converter->toBin($adminUserId))
+            ->orderBy('created_at')
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map($this->hydrate(...), $rows);
     }
@@ -59,13 +59,13 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     #[Override]
     public function findByCredentialId(string $credentialId): ?AdminUserPasskey
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('credential_id', '=', $credentialId)
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('credential_id', '=', $credentialId)
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -75,14 +75,14 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     #[Override]
     public function findByUserHandle(string $userHandle): ?AdminUserPasskey
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('user_handle', '=', $userHandle)
-                ->orderBy('created_at')
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('user_handle', '=', $userHandle)
+            ->orderBy('created_at')
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -90,17 +90,19 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     }
 
     #[Override]
-    public function findByAdminUserIdAndCredentialIdForUpdate(string $adminUserId, string $credentialId): ?AdminUserPasskey
-    {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('admin_user_id', '=', $this->converter->toBin($adminUserId))
-                ->where('credential_id', '=', $credentialId)
-                ->limit(1)
-                ->forUpdate(),
-        );
+    public function findByAdminUserIdAndCredentialIdForUpdate(
+        string $adminUserId,
+        string $credentialId,
+    ): ?AdminUserPasskey {
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('admin_user_id', '=', $this->converter->toBin($adminUserId))
+            ->where('credential_id', '=', $credentialId)
+            ->limit(1)
+            ->forUpdate()
+            |> $this->queryFactory->fetchAll(...);
 
         $row = $rows[0] ?? null;
 
@@ -112,7 +114,8 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     {
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, [
                 'admin_user_passkey_id',
                 'admin_user_id',
@@ -153,7 +156,8 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     #[Override]
     public function update(AdminUserPasskey $passkey): AdminUserPasskey
     {
-        $this->queryFactory->update()
+        $this->queryFactory
+            ->update()
             ->table(self::TABLE)
             ->withSet([
                 'sign_count' => $passkey->signCount,
@@ -169,7 +173,8 @@ readonly class AdminUserPasskeyRepository implements AdminUserPasskeyRepositoryI
     #[Override]
     public function updateCounter(AdminUserPasskey $passkey, int $expectedSignCount): bool
     {
-        $statement = $this->queryFactory->update()
+        $statement = $this->queryFactory
+            ->update()
             ->table(self::TABLE)
             ->withSet([
                 'sign_count' => $passkey->signCount,

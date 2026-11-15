@@ -47,7 +47,9 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$songId1], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId1], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
@@ -97,9 +99,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $releaseGroupId = $this->generateUuid();
         $releaseId = $this->generateUuid();
 
-        $this->storeSongs(
-            $this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 10),
-        );
+        $this->storeSongs($this->createSong($songId, 'テスト楽曲1', '説明', SongType::Original, true, 10));
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
@@ -114,13 +114,15 @@ class UpdateUseCaseTest extends DatabaseTestCase
                     [
                         'position' => 1,
                         'name' => null,
-                        'tracks' => [['songIds' => [$songId], 'title' => null, 'trackNo' => 1]],
+                        'tracks' => [
+                            ['songIds' => [$songId], 'title' => null, 'trackNo' => 1],
+                        ],
                     ],
                 ],
             ),
         );
 
-        $result = $this->getInstance()->handle(new UpdateInputData(
+        $this->getInstance()->handle(new UpdateInputData(
             releaseId: $releaseId,
             name: '新版名',
             releasedOn: '2026-05-09',
@@ -153,7 +155,7 @@ class UpdateUseCaseTest extends DatabaseTestCase
     {
         $this->expectException(ResourceNotFoundException::class);
 
-        $result = $this->getInstance()->handle(new UpdateInputData(
+        $this->getInstance()->handle(new UpdateInputData(
             releaseId: $this->generateUuid(),
             name: '新版名',
             releasedOn: '2026-05-09',
@@ -181,13 +183,11 @@ class UpdateUseCaseTest extends DatabaseTestCase
         $this->storeReleaseGroups(
             $this->createReleaseGroup($releaseGroupId, '観測された春', ReleaseGroupType::Album, true),
         );
-        $this->storeReleases(
-            $this->createRelease($releaseId, $releaseGroupId, '旧版名', true),
-        );
+        $this->storeReleases($this->createRelease($releaseId, $releaseGroupId, '旧版名', true));
 
         $this->expectException(BusinessRuleViolationException::class);
 
-        $result = $this->getInstance()->handle(new UpdateInputData(
+        $this->getInstance()->handle(new UpdateInputData(
             releaseId: $releaseId,
             name: '新版名',
             releasedOn: '2026-05-09',

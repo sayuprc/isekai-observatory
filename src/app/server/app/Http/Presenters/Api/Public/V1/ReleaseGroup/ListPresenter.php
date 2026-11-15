@@ -51,7 +51,10 @@ class ListPresenter
             ->setName($release->name)
             ->setReleasedOn(new DateTime($release->releasedOn))
             ->setDescription($release->description)
-            ->setFormats(array_map(static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value), $release->formats))
+            ->setFormats(array_map(
+                static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
+                $release->formats,
+            ))
             ->setMedia(array_map($this->toOpenApiMedium(...), $release->media));
     }
 

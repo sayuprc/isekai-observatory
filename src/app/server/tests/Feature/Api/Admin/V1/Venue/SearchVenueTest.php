@@ -29,21 +29,19 @@ class SearchVenueTest extends DatabaseTestCase
             $this->createVenue($onlineId, '配信先サンプルB', VenueKind::Online),
         );
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(VenueRouteMap::Search, [
                 'name' => '配信',
                 'kind' => 2,
                 'sort' => 'name',
                 'order' => 'desc',
             ]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
-                'venues' => [[
-                    'venueId' => $onlineId,
-                    'name' => '配信先サンプルB',
-                    'kind' => 2,
-                    'eventCount' => 0,
-                ]],
+                'venues' => [
+                    ['venueId' => $onlineId, 'name' => '配信先サンプルB', 'kind' => 2, 'eventCount' => 0],
+                ],
                 'maxPage' => 1,
             ]);
     }
@@ -51,7 +49,7 @@ class SearchVenueTest extends DatabaseTestCase
     #[Test]
     public function generalUserWithoutPermissionIsForbidden(): void
     {
-        $this->withGeneralAuth()->get(route(VenueRouteMap::Search))->assertStatus(403);
+        $this->withGeneralAuth()->get(route(VenueRouteMap::Search))->assertForbidden();
     }
 
     #[Test]
@@ -63,9 +61,10 @@ class SearchVenueTest extends DatabaseTestCase
         $repository->save($this->createEvent($this->generateUuid(), venues: [['venueId' => $venueId, 'orderNo' => 1]]));
         $repository->save($this->createEvent($this->generateUuid(), venues: [['venueId' => $venueId, 'orderNo' => 1]]));
 
-        $this->withAuth()
+        $this
+            ->withAuth()
             ->get(route(VenueRouteMap::Search))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonPath('venues.0.eventCount', 2);
     }
 }

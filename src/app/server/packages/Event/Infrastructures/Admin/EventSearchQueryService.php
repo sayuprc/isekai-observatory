@@ -33,16 +33,16 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
             Sort::Title => 'title_lower',
         };
 
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->paginate(
-                $this->buildSearchQuery($criteria)
-                    ->withSelect(['event_id', 'title', 'type', 'start_on', 'end_on', 'status', 'is_display'])
-                    ->orderBy($sort, $criteria->order->value)
-                    ->orderBy('event_id'),
-                $criteria->page,
-                $criteria->perPage,
-            ),
-        );
+        $rows = $this->queryFactory->paginate(
+            $this
+                ->buildSearchQuery($criteria)
+                ->withSelect(['event_id', 'title', 'type', 'start_on', 'end_on', 'status', 'is_display'])
+                ->orderBy($sort, $criteria->order->value)
+                ->orderBy('event_id'),
+            $criteria->page,
+            $criteria->perPage,
+        )
+            |> $this->queryFactory->fetchAll(...);
 
         $binEventIds = array_map(static fn (array $row): string => Row::string($row, 'event_id'), $rows);
         $venueNames = $this->loadVenueNames($binEventIds);
@@ -87,15 +87,17 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
             return [];
         }
 
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['event_venues.event_id', 'venues.name'])
+            ->from('event_venues')
+            ->join('venues', 'event_venues.venue_id = venues.venue_id')
+            ->where('event_venues.event_id', 'IN', $binEventIds)
+            ->orderBy('event_venues.order_no')
+            |> $this->queryFactory->fetchAll(...);
+
         $grouped = [];
-        foreach ($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['event_venues.event_id', 'venues.name'])
-                ->from('event_venues')
-                ->join('venues', 'event_venues.venue_id = venues.venue_id')
-                ->where('event_venues.event_id', 'IN', $binEventIds)
-                ->orderBy('event_venues.order_no'),
-        ) as $row) {
+        foreach ($rows as $row) {
             $grouped[Row::string($row, 'event_id')][] = Row::string($row, 'name');
         }
 
@@ -130,7 +132,8 @@ readonly class EventSearchQueryService implements EventSearchQueryServiceInterfa
             $query = $query->where(
                 'event_id',
                 'IN',
-                $this->queryFactory->select()
+                $this->queryFactory
+                    ->select()
                     ->withSelect(['event_id'])
                     ->from('event_taggings')
                     ->where('tag_id', '=', $this->converter->toBin($criteria->tagId->get()->value)),

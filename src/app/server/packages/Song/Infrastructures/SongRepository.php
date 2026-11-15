@@ -48,41 +48,44 @@ readonly class SongRepository implements SongRepositoryInterface
 
         $binSongIds = array_map(fn (SongId $songId): string => $this->converter->toBin($songId->value), $songIds);
 
-        $songRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::SONG_COLUMNS)
-                ->from('songs')
-                ->where('song_id', 'IN', $binSongIds),
-        );
+        $songRows = $this->queryFactory
+            ->select()
+            ->withSelect(self::SONG_COLUMNS)
+            ->from('songs')
+            ->where('song_id', 'IN', $binSongIds)
+            |> $this->queryFactory->fetchAll(...);
 
         if ($songRows === []) {
             return [];
         }
 
-        $personRows = $this->groupBySongId($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_id', 'person_id', 'role', 'order_no'])
-                ->from('song_persons')
-                ->where('song_id', 'IN', $binSongIds)
-                ->orderBy('order_no'),
-        ));
+        $personRows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_id', 'person_id', 'role', 'order_no'])
+            ->from('song_persons')
+            ->where('song_id', 'IN', $binSongIds)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...)
+            |> $this->groupBySongId(...);
 
-        $taggingRows = $this->groupBySongId($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_taggings.song_id', 'song_taggings.tag_id'])
-                ->from('song_taggings')
-                ->join('tags', 'song_taggings.tag_id = tags.tag_id')
-                ->where('song_taggings.song_id', 'IN', $binSongIds)
-                ->orderBy('tags.order_no'),
-        ));
+        $taggingRows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_taggings.song_id', 'song_taggings.tag_id'])
+            ->from('song_taggings')
+            ->join('tags', 'song_taggings.tag_id = tags.tag_id')
+            ->where('song_taggings.song_id', 'IN', $binSongIds)
+            ->orderBy('tags.order_no')
+            |> $this->queryFactory->fetchAll(...)
+            |> $this->groupBySongId(...);
 
-        $mediaRows = $this->groupBySongId($this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['song_id', 'media_id', 'order_no'])
-                ->from('song_media_links')
-                ->where('song_id', 'IN', $binSongIds)
-                ->orderBy('order_no'),
-        ));
+        $mediaRows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_id', 'media_id', 'order_no'])
+            ->from('song_media_links')
+            ->where('song_id', 'IN', $binSongIds)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...)
+            |> $this->groupBySongId(...);
 
         return array_map(
             function (array $songRow) use ($personRows, $taggingRows, $mediaRows): Song {
@@ -103,18 +106,20 @@ readonly class SongRepository implements SongRepositoryInterface
     public function isPersonUsed(PersonId $personId): bool
     {
         $personBinId = $this->converter->toBin($personId->value);
-        $songPersonCount = Row::intValue(
-            $this->queryFactory->select()
-                ->from('song_persons')
-                ->where('person_id', '=', $personBinId)
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
-        $performancePersonCount = Row::intValue(
-            $this->queryFactory->select()
-                ->from('song_performance_persons')
-                ->where('person_id', '=', $personBinId)
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+
+        $songPersonCount = $this->queryFactory
+            ->select()
+            ->from('song_persons')
+            ->where('person_id', '=', $personBinId)
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
+
+        $performancePersonCount = $this->queryFactory
+            ->select()
+            ->from('song_performance_persons')
+            ->where('person_id', '=', $personBinId)
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
 
         return $songPersonCount > 0 || $performancePersonCount > 0;
     }
@@ -122,12 +127,12 @@ readonly class SongRepository implements SongRepositoryInterface
     #[Override]
     public function isUsed(SongId $songId): bool
     {
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from('song_performances')
-                ->where('song_id', '=', $this->converter->toBin($songId->value))
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+        $count = $this->queryFactory
+            ->select()
+            ->from('song_performances')
+            ->where('song_id', '=', $this->converter->toBin($songId->value))
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
 
         return $count > 0;
     }
@@ -142,7 +147,8 @@ readonly class SongRepository implements SongRepositoryInterface
 
         $now = now()->toDateTimeString();
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into('songs', [
                 'song_id',
                 'title',
@@ -168,17 +174,17 @@ readonly class SongRepository implements SongRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append(
-                'ON DUPLICATE KEY UPDATE '
-                . '`title` = VALUES(`title`), '
-                . '`description` = VALUES(`description`), '
-                . '`note` = VALUES(`note`), '
-                . '`lyrics_link` = VALUES(`lyrics_link`), '
-                . '`type` = VALUES(`type`), '
-                . '`is_display` = VALUES(`is_display`), '
-                . '`order_no` = VALUES(`order_no`), '
-                . '`updated_at` = VALUES(`updated_at`)',
-            )
+            ->append(<<<SQL
+                ON DUPLICATE KEY UPDATE
+                `title` = VALUES(`title`),
+                `description` = VALUES(`description`),
+                `note` = VALUES(`note`),
+                `lyrics_link` = VALUES(`lyrics_link`),
+                `type` = VALUES(`type`),
+                `is_display` = VALUES(`is_display`),
+                `order_no` = VALUES(`order_no`),
+                `updated_at` = VALUES(`updated_at`)
+                SQL)
             ->execute($this->queryFactory->pdo());
 
         $this->queryFactory->insertRows(
@@ -219,7 +225,8 @@ readonly class SongRepository implements SongRepositoryInterface
     #[Override]
     public function delete(SongId $songId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from('songs')
             ->where('song_id', '=', $this->converter->toBin($songId->value))
             ->execute($this->queryFactory->pdo());
@@ -228,7 +235,8 @@ readonly class SongRepository implements SongRepositoryInterface
     #[Override]
     public function getMaxOrderNo(): int
     {
-        $max = $this->queryFactory->select()
+        $max = $this->queryFactory
+            ->select()
             ->from('songs')
             ->aggregate($this->queryFactory->pdo(), 'MAX(order_no)');
 

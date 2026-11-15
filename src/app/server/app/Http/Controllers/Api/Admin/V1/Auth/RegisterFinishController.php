@@ -10,26 +10,27 @@ use Auth\Application\Admin\UseCase\RegisterFinish\RegisterFinishInputData;
 use Auth\Application\Admin\UseCase\RegisterFinish\RegisterFinishUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Support\Contracts\MapperInterface;
 
-class RegisterFinishController extends Controller
+final readonly class RegisterFinishController extends Controller
 {
     public function __construct(
-        private readonly RegisterFinishUseCase $registerFinishUseCase,
-        private readonly RegisterFinishPresenter $presenter,
+        private MapperInterface $mapper,
+        private RegisterFinishUseCase $useCase,
+        private RegisterFinishPresenter $presenter,
     ) {
     }
 
     public function handle(Request $request): JsonResponse
     {
-        /** @var array<string, mixed> $credential */
-        $credential = $request->array('credential');
+        // credential は中身を解釈せず PasskeyAuthenticator まで運ぶので、JSON 文字列に戻して渡す
+        $source = [
+            ...$request->except('credential'),
+            'credentialJson' => json_encode($request->input('credential'), JSON_THROW_ON_ERROR),
+        ];
 
-        $inputData = new RegisterFinishInputData(
-            $request->string('authCeremonyId')->toString(),
-            $request->string('token')->toString(),
-            $credential,
-        );
-
-        return $this->presenter->present($this->registerFinishUseCase->handle($inputData));
+        return $this->mapper->map(RegisterFinishInputData::class, $source)
+            |> $this->useCase->handle(...)
+            |> $this->presenter->present(...);
     }
 }

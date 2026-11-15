@@ -50,13 +50,13 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     {
         $binReleaseId = $this->converter->toBin($releaseId->value);
 
-        $releaseRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('release_id', '=', $binReleaseId)
-                ->limit(1),
-        );
+        $releaseRows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where('release_id', '=', $binReleaseId)
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         $releaseRow = $releaseRows[0] ?? null;
 
@@ -74,12 +74,16 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
             return [];
         }
 
-        $releaseRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(self::COLUMNS)
-                ->from(self::TABLE)
-                ->where('release_id', 'IN', array_map(fn (ReleaseId $releaseId): string => $this->converter->toBin($releaseId->value), $releaseIds)),
-        );
+        $releaseRows = $this->queryFactory
+            ->select()
+            ->withSelect(self::COLUMNS)
+            ->from(self::TABLE)
+            ->where(
+                'release_id',
+                'IN',
+                array_map(fn (ReleaseId $releaseId): string => $this->converter->toBin($releaseId->value), $releaseIds),
+            )
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map(
             function (array $releaseRow): Release {
@@ -94,13 +98,13 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     #[Override]
     public function existsByReleaseGroupId(ReleaseGroupId $releaseGroupId): bool
     {
-        $rows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['release_id'])
-                ->from(self::TABLE)
-                ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
-                ->limit(1),
-        );
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['release_id'])
+            ->from(self::TABLE)
+            ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
+            ->limit(1)
+            |> $this->queryFactory->fetchAll(...);
 
         return $rows !== [];
     }
@@ -115,7 +119,8 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
         // 収録曲とその楽曲は FK CASCADE で媒体と一緒に消えるため、削除対象に含めない
         $this->queryFactory->deleteFromTables([self::FORMAT_TABLE, self::MEDIA_TABLE], 'release_id', $binReleaseId);
 
-        $this->queryFactory->insert()
+        $this->queryFactory
+            ->insert()
             ->into(self::TABLE, [
                 'release_id',
                 'release_group_id',
@@ -141,17 +146,17 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
                 $now,
             ])
             ->build()
-            ->append(
-                'ON DUPLICATE KEY UPDATE '
-                . '`release_group_id` = VALUES(`release_group_id`), '
-                . '`name` = VALUES(`name`), '
-                . '`released_on` = VALUES(`released_on`), '
-                . '`description` = VALUES(`description`), '
-                . '`note` = VALUES(`note`), '
-                . '`is_display` = VALUES(`is_display`), '
-                . '`order_no` = VALUES(`order_no`), '
-                . '`updated_at` = VALUES(`updated_at`)',
-            )
+            ->append(<<<SQL
+                ON DUPLICATE KEY UPDATE
+                `release_group_id` = VALUES(`release_group_id`),
+                `name` = VALUES(`name`),
+                `released_on` = VALUES(`released_on`),
+                `description` = VALUES(`description`),
+                `note` = VALUES(`note`),
+                `is_display` = VALUES(`is_display`),
+                `order_no` = VALUES(`order_no`),
+                `updated_at` = VALUES(`updated_at`)
+                SQL)
             ->execute($this->queryFactory->pdo());
 
         $this->queryFactory->insertRows(
@@ -196,7 +201,8 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     #[Override]
     public function delete(ReleaseId $releaseId): void
     {
-        $this->queryFactory->delete()
+        $this->queryFactory
+            ->delete()
             ->from(self::TABLE)
             ->where('release_id', '=', $this->converter->toBin($releaseId->value))
             ->execute($this->queryFactory->pdo());
@@ -205,12 +211,12 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
     #[Override]
     public function isUsed(ReleaseId $releaseId): bool
     {
-        $count = Row::intValue(
-            $this->queryFactory->select()
-                ->from('event_releases')
-                ->where('release_id', '=', $this->converter->toBin($releaseId->value))
-                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)'),
-        );
+        $count = $this->queryFactory
+            ->select()
+            ->from('event_releases')
+            ->where('release_id', '=', $this->converter->toBin($releaseId->value))
+            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+            |> Row::intValue(...);
 
         return $count > 0;
     }
@@ -220,13 +226,13 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
      */
     private function loadFormats(string $binReleaseId): array
     {
-        $formatRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['format'])
-                ->from(self::FORMAT_TABLE)
-                ->where('release_id', '=', $binReleaseId)
-                ->orderBy('format'),
-        );
+        $formatRows = $this->queryFactory
+            ->select()
+            ->withSelect(['format'])
+            ->from(self::FORMAT_TABLE)
+            ->where('release_id', '=', $binReleaseId)
+            ->orderBy('format')
+            |> $this->queryFactory->fetchAll(...);
 
         return array_map(
             static fn (array $row): int => Row::int($row, 'format'),
@@ -239,36 +245,37 @@ readonly class ReleaseRepository implements ReleaseRepositoryInterface
      */
     private function loadMedia(string $binReleaseId): array
     {
-        $mediumRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['position', 'name'])
-                ->from(self::MEDIA_TABLE)
-                ->where('release_id', '=', $binReleaseId)
-                ->orderBy('position'),
-        );
+        $mediumRows = $this->queryFactory
+            ->select()
+            ->withSelect(['position', 'name'])
+            ->from(self::MEDIA_TABLE)
+            ->where('release_id', '=', $binReleaseId)
+            ->orderBy('position')
+            |> $this->queryFactory->fetchAll(...);
 
-        $trackRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['position', 'track_no', 'title'])
-                ->from(self::TRACK_TABLE)
-                ->where('release_id', '=', $binReleaseId)
-                ->orderBy('position')
-                ->orderBy('track_no'),
-        );
+        $trackRows = $this->queryFactory
+            ->select()
+            ->withSelect(['position', 'track_no', 'title'])
+            ->from(self::TRACK_TABLE)
+            ->where('release_id', '=', $binReleaseId)
+            ->orderBy('position')
+            ->orderBy('track_no')
+            |> $this->queryFactory->fetchAll(...);
 
-        $trackSongRows = $this->queryFactory->fetchAll(
-            $this->queryFactory->select()
-                ->withSelect(['position', 'track_no', 'song_id'])
-                ->from(self::TRACK_SONG_TABLE)
-                ->where('release_id', '=', $binReleaseId)
-                ->orderBy('order_no'),
-        );
+        $trackSongRows = $this->queryFactory
+            ->select()
+            ->withSelect(['position', 'track_no', 'song_id'])
+            ->from(self::TRACK_SONG_TABLE)
+            ->where('release_id', '=', $binReleaseId)
+            ->orderBy('order_no')
+            |> $this->queryFactory->fetchAll(...);
 
         $songIdsByTrack = [];
 
         foreach ($trackSongRows as $trackSongRow) {
-            $songIdsByTrack[Row::int($trackSongRow, 'position')][Row::int($trackSongRow, 'track_no')][]
-                = $this->converter->toUuid(Row::string($trackSongRow, 'song_id'));
+            $position = Row::int($trackSongRow, 'position');
+            $trackNo = Row::int($trackSongRow, 'track_no');
+            $songIdsByTrack[$position][$trackNo][] = $this->converter->toUuid(Row::string($trackSongRow, 'song_id'));
         }
 
         $tracksByPosition = [];

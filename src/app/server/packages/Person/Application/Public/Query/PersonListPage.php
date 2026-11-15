@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Person\Application\Public\Query;
 
+use SensitiveParameter;
+
 readonly class PersonListPage
 {
     /**
@@ -11,6 +13,7 @@ readonly class PersonListPage
      */
     public function __construct(
         public array $persons,
+        #[SensitiveParameter]
         public ?string $nextPageToken,
     ) {
     }

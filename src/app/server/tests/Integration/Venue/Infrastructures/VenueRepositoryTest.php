@@ -25,7 +25,10 @@ class VenueRepositoryTest extends DatabaseTestCase
         $repository->save($venue2);
         $repository->save($venue3);
 
-        $this->assertEqualsCanonicalizing([$venue1, $venue3], $repository->findByIds($venue1->venueId, $venue3->venueId));
+        $this->assertEqualsCanonicalizing(
+            [$venue1, $venue3],
+            $repository->findByIds($venue1->venueId, $venue3->venueId),
+        );
     }
 
     #[Test]

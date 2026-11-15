@@ -47,14 +47,16 @@ readonly class Tracks extends ImmutableCollection
      */
     public static function reconstruct(array $items): self
     {
-        return new self(array_map(
-            static fn (array $item): Track => Track::reconstruct(
-                $item['songIds'],
-                $item['title'],
-                $item['trackNo'],
+        return new self(
+            array_map(
+                static fn (array $item): Track => Track::reconstruct(
+                    $item['songIds'],
+                    $item['title'],
+                    $item['trackNo'],
+                ),
+                $items,
             ),
-            $items,
-        ));
+        );
     }
 
     /**

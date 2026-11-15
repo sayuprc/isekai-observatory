@@ -32,7 +32,8 @@ class ListPresenter
     {
         $songs = array_map($this->toOpenApiMediaSongSummary(...), $media->songs);
 
-        return new OpenApiMediaListItem()->setMediaId($media->mediaId)
+        return new OpenApiMediaListItem()
+            ->setMediaId($media->mediaId)
             ->setTitle($media->title)
             ->setUrl($media->url)
             ->setPublishedAt(DateTime::createFromImmutable($media->publishedAt))
@@ -55,7 +56,8 @@ class ListPresenter
 
     private function toOpenApiMediaSongSummary(MediaSongSummary $song): OpenApiMediaSongSummary
     {
-        return new OpenApiMediaSongSummary()->setSongId($song->songId)
+        return new OpenApiMediaSongSummary()
+            ->setSongId($song->songId)
             ->setTitle($song->title)
             ->setType(SongTypeValue::from($song->type->value));
     }
