@@ -787,6 +787,10 @@ export type ReleaseGroupSummary = {
      * 傘下のリリースに収録されている楽曲の数。管理対象の楽曲だけを重複なく数える
      */
     songCount: number;
+    /**
+     * 傘下のリリース (版)。一覧から版を選ぶ画面が、グループごとに詳細を引き直さずに済むよう含める
+     */
+    releases: Array<ReleaseGroupReferencedRelease>;
 };
 
 /**

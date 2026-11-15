@@ -66,7 +66,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'int',
         'first_released_on' => '\DateTime',
         'release_count' => 'int',
-        'song_count' => 'int'
+        'song_count' => 'int',
+        'releases' => '\OpenAPI\Admin\Client\Model\ReleaseGroupReferencedRelease[]'
     ];
 
     /**
@@ -85,7 +86,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'int32',
         'first_released_on' => 'date',
         'release_count' => 'int32',
-        'song_count' => 'int32'
+        'song_count' => 'int32',
+        'releases' => null
     ];
 
     /**
@@ -102,7 +104,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => false,
         'first_released_on' => true,
         'release_count' => false,
-        'song_count' => false
+        'song_count' => false,
+        'releases' => false
     ];
 
     /**
@@ -199,7 +202,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'orderNo',
         'first_released_on' => 'firstReleasedOn',
         'release_count' => 'releaseCount',
-        'song_count' => 'songCount'
+        'song_count' => 'songCount',
+        'releases' => 'releases'
     ];
 
     /**
@@ -216,7 +220,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'setOrderNo',
         'first_released_on' => 'setFirstReleasedOn',
         'release_count' => 'setReleaseCount',
-        'song_count' => 'setSongCount'
+        'song_count' => 'setSongCount',
+        'releases' => 'setReleases'
     ];
 
     /**
@@ -233,7 +238,8 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         'order_no' => 'getOrderNo',
         'first_released_on' => 'getFirstReleasedOn',
         'release_count' => 'getReleaseCount',
-        'song_count' => 'getSongCount'
+        'song_count' => 'getSongCount',
+        'releases' => 'getReleases'
     ];
 
     /**
@@ -302,6 +308,7 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         $this->setIfExists('first_released_on', $data ?? [], null);
         $this->setIfExists('release_count', $data ?? [], null);
         $this->setIfExists('song_count', $data ?? [], null);
+        $this->setIfExists('releases', $data ?? [], null);
     }
 
     /**
@@ -365,6 +372,9 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
         }
         if ($this->container['song_count'] === null) {
             $invalidProperties[] = "'song_count' can't be null";
+        }
+        if ($this->container['releases'] === null) {
+            $invalidProperties[] = "'releases' can't be null";
         }
         return $invalidProperties;
     }
@@ -637,6 +647,33 @@ class ReleaseGroupSummary implements ModelInterface, ArrayAccess, \JsonSerializa
             throw new \InvalidArgumentException('non-nullable song_count cannot be null');
         }
         $this->container['song_count'] = $song_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets releases
+     *
+     * @return \OpenAPI\Admin\Client\Model\ReleaseGroupReferencedRelease[]
+     */
+    public function getReleases()
+    {
+        return $this->container['releases'];
+    }
+
+    /**
+     * Sets releases
+     *
+     * @param \OpenAPI\Admin\Client\Model\ReleaseGroupReferencedRelease[] $releases 傘下のリリース (版)。一覧から版を選ぶ画面が、グループごとに詳細を引き直さずに済むよう含める
+     *
+     * @return self
+     */
+    public function setReleases($releases)
+    {
+        if (is_null($releases)) {
+            throw new \InvalidArgumentException('non-nullable releases cannot be null');
+        }
+        $this->container['releases'] = $releases;
 
         return $this;
     }

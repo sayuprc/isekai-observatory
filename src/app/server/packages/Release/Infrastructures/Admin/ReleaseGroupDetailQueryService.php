@@ -23,11 +23,29 @@ readonly class ReleaseGroupDetailQueryService implements ReleaseGroupDetailQuery
     #[Override]
     public function findReferencedReleases(ReleaseGroupId $releaseGroupId): array
     {
+        $binGroupId = $this->converter->toBin($releaseGroupId->value);
+
+        return $this->findReferencedReleasesByGroup([$binGroupId])[$binGroupId] ?? [];
+    }
+
+    /**
+     * 複数グループの傘下リリースをまとめて引く。リリースのないグループは結果に含まれない
+     *
+     * @param array<int, string> $binGroupIds
+     *
+     * @return array<string, list<ReleaseGroupReferencedRelease>>
+     */
+    public function findReferencedReleasesByGroup(array $binGroupIds): array
+    {
+        if ($binGroupIds === []) {
+            return [];
+        }
+
         $releaseRows = $this->queryFactory
             ->select()
-            ->withSelect(['release_id', 'name', 'released_on', 'is_display', 'order_no'])
+            ->withSelect(['release_id', 'release_group_id', 'name', 'released_on', 'is_display', 'order_no'])
             ->from('releases')
-            ->where('release_group_id', '=', $this->converter->toBin($releaseGroupId->value))
+            ->where('release_group_id', 'IN', $binGroupIds)
             ->orderBy('released_on')
             ->orderBy('order_no')
             ->orderBy('name')
@@ -53,16 +71,19 @@ readonly class ReleaseGroupDetailQueryService implements ReleaseGroupDetailQuery
             $formatsByRelease[Row::string($formatRow, 'release_id')][] = Row::int($formatRow, 'format');
         }
 
-        return array_map(
-            fn (array $row): ReleaseGroupReferencedRelease => new ReleaseGroupReferencedRelease(
+        $releasesByGroup = [];
+
+        foreach ($releaseRows as $row) {
+            $releasesByGroup[Row::string($row, 'release_group_id')][] = new ReleaseGroupReferencedRelease(
                 $this->converter->toUuid(Row::string($row, 'release_id')),
                 Row::string($row, 'name'),
                 Row::string($row, 'released_on'),
                 Row::bool($row, 'is_display'),
                 Row::int($row, 'order_no'),
                 $formatsByRelease[Row::string($row, 'release_id')] ?? [],
-            ),
-            $releaseRows,
-        );
+            );
+        }
+
+        return $releasesByGroup;
     }
 }

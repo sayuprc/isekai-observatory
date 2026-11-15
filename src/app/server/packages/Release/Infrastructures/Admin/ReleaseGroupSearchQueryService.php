@@ -21,6 +21,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
     public function __construct(
         private QueryFactory $queryFactory,
         private UuidConverterInterface $converter,
+        private ReleaseGroupDetailQueryService $detailQuery,
     ) {
     }
 
@@ -56,6 +57,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
         $binGroupIds = array_map(static fn (array $row): string => Row::string($row, 'release_group_id'), $rows);
         $releaseCounts = $this->queryFactory->countBy('releases', 'release_group_id', $binGroupIds);
         $songCounts = $this->countSongs($binGroupIds);
+        $releasesByGroup = $this->detailQuery->findReferencedReleasesByGroup($binGroupIds);
 
         return array_map(
             fn (array $row): ReleaseGroupSummary => new ReleaseGroupSummary(
@@ -68,6 +70,7 @@ readonly class ReleaseGroupSearchQueryService implements ReleaseGroupSearchQuery
                 Row::nullableString($row, 'first_released_on'),
                 $releaseCounts[Row::string($row, 'release_group_id')] ?? 0,
                 $songCounts[Row::string($row, 'release_group_id')] ?? 0,
+                $releasesByGroup[Row::string($row, 'release_group_id')] ?? [],
             ),
             $rows,
         );

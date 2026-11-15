@@ -13,19 +13,8 @@ export const searchEventReleases = async (
     return { items: undefined, status };
   }
 
-  const details = await Promise.all(
-    data.releaseGroups.map(async (releaseGroup) => {
-      const detail = await client.api['release-groups']({ releaseGroupId: releaseGroup.releaseGroupId }).get();
-      return { releaseGroup, detail };
-    }),
-  );
-  const failed = details.find(({ detail }) => !detail.data);
-  if (failed) {
-    return { items: undefined, status: failed.detail.status };
-  }
-
   return {
-    items: details.flatMap(({ releaseGroup, detail }) => toEventReleases(releaseGroup, detail.data?.releases ?? [])),
+    items: data.releaseGroups.flatMap((releaseGroup) => toEventReleases(releaseGroup, releaseGroup.releases)),
     status,
   };
 };
