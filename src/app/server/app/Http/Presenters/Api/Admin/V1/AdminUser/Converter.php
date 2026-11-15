@@ -27,7 +27,9 @@ class Converter
                 $adminUser
                     ->permissions
                     ->toGeneric()
-                    ->map(static fn (Permission $permission): PermissionValue => PermissionValue::from($permission->value))
+                    ->map(static fn (
+                        Permission $permission,
+                    ): PermissionValue => PermissionValue::from($permission->value))
                     ->toArray(),
             );
     }

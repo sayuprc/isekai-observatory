@@ -57,8 +57,9 @@ class Converter
             ->setSongCount($summary->songCount);
     }
 
-    public function toOpenApiReferencedRelease(ReleaseGroupReferencedRelease $release): OpenApiReleaseGroupReferencedRelease
-    {
+    public function toOpenApiReferencedRelease(
+        ReleaseGroupReferencedRelease $release,
+    ): OpenApiReleaseGroupReferencedRelease {
         return new OpenApiReleaseGroupReferencedRelease()
             ->setReleaseId($release->releaseId)
             ->setName($release->name)

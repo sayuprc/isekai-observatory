@@ -21,7 +21,9 @@ class SearchPresenter
         return response()->json(
             new PersonGroupSearchResponse()
                 ->setPersonGroups(array_map(
-                    fn (PersonGroupSummary $personGroup): OpenApiPersonGroupSummary => $this->converter->toOpenApiPersonGroupSummary(
+                    fn (
+                        PersonGroupSummary $personGroup,
+                    ): OpenApiPersonGroupSummary => $this->converter->toOpenApiPersonGroupSummary(
                         $personGroup,
                         $outputData->usageCounts[$personGroup->personGroupId] ?? 0,
                     ),

@@ -15,8 +15,9 @@ use Support\UseCase\Exceptions\UseCaseException;
  */
 trait ResolvesUseCaseExceptionMessage
 {
-    private function resolveExceptionMessage(BusinessRuleViolationException|InvalidDomainException|UseCaseException $e): string
-    {
+    private function resolveExceptionMessage(
+        BusinessRuleViolationException|InvalidDomainException|UseCaseException $e,
+    ): string {
         return $e->getMessage();
     }
 }

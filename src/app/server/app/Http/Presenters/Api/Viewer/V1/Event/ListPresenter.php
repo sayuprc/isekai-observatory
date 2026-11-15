@@ -123,7 +123,9 @@ class ListPresenter
             ->setPerformanceId($performance->performanceId)
             ->setSongTitle($performance->songTitle)
             ->setCoVocalists(array_map(
-                static fn (EventCoVocalistSummary $coVocalist): OpenApiPerformancePerson => new OpenApiPerformancePerson([
+                static fn (
+                    EventCoVocalistSummary $coVocalist,
+                ): OpenApiPerformancePerson => new OpenApiPerformancePerson([
                     'credit_name' => $coVocalist->creditName,
                     'person_group' => $coVocalist->personGroup === null
                         ? null
