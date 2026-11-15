@@ -11,7 +11,7 @@ packages:
 catalog:
   typescript: 6.0.3
   "@types/bun": 1.4.4
-  wrangler: 4.156.0
+  wrangler: 4.158.0
 
 catalogs:
   fonts:
@@ -27,23 +27,23 @@ catalogs:
     "@astrojs/solid-js": 7.1.2
     solid-js: 1.9.18
   ui:
-    "@tailwindcss/vite": 4.3.3
+    "@tailwindcss/vite": 4.3.5
     daisyui: 5.7.50
-    tailwindcss: 4.3.3
+    tailwindcss: 4.3.5
   lint:
     "@eslint/js": 10.0.1
     "@typescript-eslint/parser": 8.72.1
     eslint: 10.14.0
     eslint-plugin-astro: 3.2.1
     eslint-config-prettier: 10.1.8
-    eslint-plugin-import-x: 4.17.1
+    eslint-plugin-import-x: 4.18.0
     prettier: 3.9.10
     prettier-plugin-astro: 1.1.2
     stylelint: 17.16.0
     stylelint-config-html: 2.0.0
-    stylelint-config-recess-order: 7.9.0
+    stylelint-config-recess-order: 7.10.0
     stylelint-config-standard: 40.0.0
-    stylelint-order: 8.1.2
+    stylelint-order: 8.1.3
     typescript-eslint: 8.72.1
     postcss-html: 2.0.0
   gen:
@@ -60,6 +60,6 @@ allowBuilds:
 overrides:
   fast-uri@>=3.0.0 <3.1.9: 3.1.9
   js-yaml@>=4.0.0 <4.3.2: 4.3.2
-  undici@>=7.0.0 <7.30.1: 7.30.1
+  undici@>=7.0.0 <7.30.1: 7.30.2
 minimumReleaseAgeExclude:
   - fast-uri@3.1.9
