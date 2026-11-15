@@ -70,8 +70,9 @@ class ListPresenter
             ->setOrderNo($tag['orderNo']);
     }
 
-    private function toOpenApiSongReleaseGroupSummary(SongReleaseGroupSummary $releaseGroup): OpenApiSongReleaseGroupSummary
-    {
+    private function toOpenApiSongReleaseGroupSummary(
+        SongReleaseGroupSummary $releaseGroup,
+    ): OpenApiSongReleaseGroupSummary {
         return new OpenApiSongReleaseGroupSummary()
             ->setReleaseGroupId($releaseGroup->releaseGroupId)
             ->setTitle($releaseGroup->title)

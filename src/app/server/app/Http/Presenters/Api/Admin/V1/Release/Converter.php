@@ -37,7 +37,9 @@ class Converter
                     ->formats
                     ->toGeneric()
                     ->map(
-                        static fn (ReleaseFormat $format): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
+                        static fn (
+                            ReleaseFormat $format,
+                        ): ReleaseFormatValue => ReleaseFormatValue::from($format->value),
                     )
                     ->toArray(),
             )
