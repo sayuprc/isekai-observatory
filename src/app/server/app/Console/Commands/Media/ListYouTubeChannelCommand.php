@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\Media;
 
 use Illuminate\Console\Command;
-use Media\Application\Cli\UseCase\ListYouTubeChannel\ListYouTubeChannelInputData;
-use Media\Application\Cli\UseCase\ListYouTubeChannel\ListYouTubeChannelUseCase;
+use Media\Application\Admin\UseCase\ListYouTubeChannel\ListYouTubeChannelInputData;
+use Media\Application\Admin\UseCase\ListYouTubeChannel\ListYouTubeChannelUseCase;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
 use Override;
 

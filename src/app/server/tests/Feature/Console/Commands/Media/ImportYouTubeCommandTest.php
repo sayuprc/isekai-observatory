@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Feature\Console\Commands\Media;
 
 use Illuminate\Support\Facades\DB;
-use Media\Application\Cli\Query\YouTubeShortVideoQueryServiceInterface;
-use Media\Application\Cli\Query\YouTubeUploadedVideo;
-use Media\Application\Cli\Query\YouTubeVideoQueryServiceInterface;
+use Media\Application\Admin\Query\YouTubeShortVideoQueryServiceInterface;
+use Media\Application\Admin\Query\YouTubeUploadedVideo;
+use Media\Application\Admin\Query\YouTubeVideoQueryServiceInterface;
 use Media\Domain\Models\MediaType;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannelId;
 use Override;
