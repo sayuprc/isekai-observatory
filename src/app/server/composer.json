@@ -93,7 +93,7 @@
     "test-integration": "paratest tests/Integration",
     "test-feature": "paratest tests/Feature",
     "coverage": "php artisan test --env=testing --coverage-html=\"reports/coverage\"",
-    "mutation": "infection --threads=4",
+    "mutation": "@php -d memory_limit=-1 vendor/bin/infection --threads=4",
     "metrics": "phpmetrics --config=phpmetrics.json"
   },
   "extra": {

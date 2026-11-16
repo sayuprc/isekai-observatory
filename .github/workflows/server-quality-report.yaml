@@ -136,6 +136,7 @@ jobs:
         # php.ini の xdebug.mode は debug を含み、テストごとに接続待ちが発生するため coverage のみに絞る
         # 結果の注釈を PR 以外で大量に出しても読まれないため github ロガーは無効にする
         # composer の process-timeout (既定 300 秒) で infection が途中で kill されるため無効にする
+        # infection 本体は全ミュータントの結果を保持し php.ini の memory_limit (128M) を超えるため、composer.json 側で上限を外している
         run: |
           docker compose exec -T -e XDEBUG_MODE=coverage -e COMPOSER_PROCESS_TIMEOUT=0 php \
             composer mutation -- --no-progress --logger-github=false
