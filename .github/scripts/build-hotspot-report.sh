@@ -14,17 +14,7 @@ days="${HOTSPOT_DAYS:-90}"
 top="${HOTSPOT_TOP:-15}"
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 
-if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
-  echo "shallow clone では変更回数を正しく数えられません (actions/checkout の fetch-depth: 0 が必要です)" >&2
-  exit 1
-fi
-
-# main へは squash マージなので、コミット数はおおむねそのファイルを変更した PR の数になる
-churn=$(git log --since="${days} days ago" --no-merges --format= --name-only -- "${server_dir}" \
-  | { grep -F '.php' || true; } | sort | uniq -c \
-  | jq -R -s --arg prefix "${server_dir}/" '
-      split("\n") | map(select(length > 0) | capture("^\\s*(?<count>\\d+)\\s+(?<path>.+)$"))
-      | map({key: (.path | ltrimstr($prefix)), value: (.count | tonumber)}) | from_entries')
+churn=$("${script_dir}/git-churn.sh" "${server_dir}" "${days}")
 
 jq -r \
   --argjson churn "${churn}" \
