@@ -25,6 +25,9 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v7.0.1
+        with:
+          # ホットスポットの変更回数を数えるために全履歴を取得する
+          fetch-depth: 0
 
       - name: Setup mise
         uses: $/.github/actions/setup-mise
@@ -53,7 +56,9 @@ jobs:
       - name: Run phpmetrics
         run: |
           mkdir -p src/app/server/reports
-          docker compose exec -T php composer metrics -- --report-summary-json=reports/metrics-summary.json
+          docker compose exec -T php composer metrics -- \
+            --report-summary-json=reports/metrics-summary.json \
+            --report-json=reports/metrics.json
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v7.0.2
@@ -70,11 +75,18 @@ jobs:
             echo "- コミット: ${GITHUB_SHA}"
             echo "- 実行: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} (HTML レポートは Artifacts から取得できます)"
             echo
+            .github/scripts/build-hotspot-report.sh src/app/server/reports/metrics.json src/app/server
+            echo
+            echo "<details><summary>全体のサマリ</summary>"
+            echo
             echo "| 区分 | 指標 | 値 |"
             echo "| --- | --- | ---: |"
             jq -r 'to_entries[] | .key as $group | .value | to_entries[] | "| \($group) | \(.key) | \(.value) |"' \
               src/app/server/reports/metrics-summary.json
+            echo
+            echo "</details>"
           } > "${RUNNER_TEMP}/report.md"
+          cat "${RUNNER_TEMP}/report.md" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Post report
         run: .github/scripts/post-issue-report.sh "${ISSUE_TITLE}" "${RUNNER_TEMP}/report.md"
@@ -88,6 +100,9 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v7.0.1
+        with:
+          # テストを足す候補の変更回数を数えるために全履歴を取得する
+          fetch-depth: 0
 
       - name: Setup mise
         uses: $/.github/actions/setup-mise
@@ -159,10 +174,17 @@ jobs:
             echo "- コミット: ${GITHUB_SHA}"
             echo "- 実行: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} (HTML レポートは Artifacts から取得できます)"
             echo
+            .github/scripts/build-mutation-report.sh src/app/server/reports/infection.log src/app/server
+            echo
+            echo "<details><summary>全体のサマリ</summary>"
+            echo
             echo "| 指標 | 値 |"
             echo "| --- | ---: |"
             jq -r '.stats | to_entries[] | "| \(.key) | \(.value) |"' src/app/server/reports/infection-summary.json
+            echo
+            echo "</details>"
           } > "${RUNNER_TEMP}/report.md"
+          cat "${RUNNER_TEMP}/report.md" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Post report
         run: .github/scripts/post-issue-report.sh "${ISSUE_TITLE}" "${RUNNER_TEMP}/report.md"
