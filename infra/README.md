@@ -33,7 +33,7 @@
 
 - API / CLI / DB migrate / Admin / Viewer / admin-proxy / Discord Notifier のコンテナを build / push する
 - Cloud Run service / job を deploy する
-- build command は YAML に直接定義する
+- build は `docker-bake.hcl` を `docker buildx bake` で呼び、環境ごとの差は step の `env` で渡す
 
 `ci.yaml` が受け取る主な substitution:
 
@@ -53,11 +53,11 @@
 
 コンテナイメージの base / インストーラ版は各 Dockerfile に直接書く。Renovate の dockerfile manager が検知できるようにする
 
-MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を Source of Truth にし、build 時に `--build-arg MOONBIT_VERSION` で渡す
+MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を Source of Truth にし、build 時に環境変数 `MOONBIT_VERSION` で Bake へ渡す
 
 ## Dockerfiles (共通)
 
-`docker/` の Dockerfile を全環境で使う。環境名は各環境の `ci.yaml` から `--build-arg DEPLOY_ENV=<env>` で渡す
+`docker/` の Dockerfile を全環境で使う。環境名は各環境の `ci.yaml` から環境変数 `DEPLOY_ENV=<env>` で Bake へ渡す
 
 - `DEPLOY_ENV` は admin / admin-proxy / db-migrate / viewer が受け取る。値は `development` / `staging` / `production`
 - admin は `APP_ENV`、db-migrate は atlas の `--env`、viewer は `SITE_NOINDEX` と deploy 通知の `env` にこの値を使う
@@ -71,6 +71,29 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 | `docker/viewer/Dockerfile` | Viewer deploy job 用。`viewer-deploy` を entrypoint にし、`notify-publish` を同梱する |
 | `docker/admin-proxy/Dockerfile` | admin-proxy deploy job 用。`admin-proxy-deploy` を entrypoint にする |
 | `docker/discord-notifier/Dockerfile` | MoonBit 製 Discord Notifier を native ビルドして載せる |
+
+## イメージのビルド (Bake)
+
+`docker/` の 7 イメージのビルド定義はリポジトリ直下の `docker-bake.hcl` に置く (ADR-0042)
+
+手元では次で全イメージをビルドする。ターゲット名を付けると 1 つだけビルドする
+
+```bash
+DEPLOY_ENV=development PUBLIC_APP_URL=https://example.invalid MOONBIT_VERSION="$(./tools/read-mise-value.sh moonbit_version)" docker buildx bake -f docker-bake.hcl
+```
+
+| 環境変数 | 用途 |
+|---|---|
+| `DEPLOY_ENV` | admin / admin-proxy / db-migrate / viewer の build arg。既定値なし |
+| `PUBLIC_APP_URL` | admin の build arg。既定値なし |
+| `MOONBIT_VERSION` | discord-notifier / viewer の build arg |
+| `REGISTRY` | 空ならローカル用の `isekai-observatory-<name>:<TAG>` タグだけを付ける。指定すると `<REGISTRY>/<name>:<TAG>` と `:latest` を付け、`:latest` を registry cache として読む |
+| `TAG` | イメージのタグ。既定値は `local` |
+| `API_IMAGE` などの `*_IMAGE` | image 名。Cloud Build では substitution の値を渡す |
+
+ベースイメージは通常 Docker Hub から取得する。緊急時に docker library のソースから作り直す手順は `docs/operations/base-image-override.md` を見る
+
+`-f docker-bake.hcl` を省くと `compose.yaml` も読み込まれるため、常に付ける
 
 ## 初回構築前提 (共通)
 
@@ -91,7 +114,7 @@ MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を So
 - Viewer deploy job は Viewer、Public API、Public API のリファレンス (ADR-0039) の 3 つの Worker を順に deploy する。`PUBLIC_API_URL` はリファレンスから叩く Public API の URL
 - 3 つの Worker の deploy がすべて成功したら、`notify-publish` で通知 JSON (`viewer.deploy`) を 1 通だけ publish する。`NOTIFICATION_TOPIC` / `GOOGLE_CLOUD_PROJECT` は infra 側で Job に設定し、Job SA に topic publish 権限を付ける
 - admin-proxy deploy job は Cloud Build が `gcloud run jobs deploy --wait` で image 差し替えと実行完了まで行い、Cloudflare Workers へ deploy する
-- Admin の `PUBLIC_APP_URL` は Cloud Build substitution の `_PUBLIC_APP_URL` を build arg として渡す
+- Admin の `PUBLIC_APP_URL` は Cloud Build substitution の `_PUBLIC_APP_URL` を Bake 経由で build arg として渡す
 
 ## 関連文書
 
