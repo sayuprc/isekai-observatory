@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS notify-publish-builder
+FROM base-debian AS notify-publish-builder
 
 # moonc の version 文字列は mise.toml の moonbit_version から --build-arg で渡す
 ARG MOONBIT_VERSION
@@ -31,7 +31,7 @@ WORKDIR /workspace/publish
 RUN moon update \
   && moon build --target native --release
 
-FROM node:26.13.1-slim
+FROM base-node
 
 ENV TZ=Asia/Tokyo
 ENV PNPM_HOME=/pnpm

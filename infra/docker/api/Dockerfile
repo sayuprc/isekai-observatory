@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:php8.5.12-alpine
+FROM base-frankenphp
 
 ENV TZ=Asia/Tokyo
 
@@ -15,7 +15,7 @@ RUN apk add --no-cache \
     pdo_mysql \
     redis
 
-COPY --from=composer:2.11.2 /usr/bin/composer /usr/bin/composer
+COPY --from=base-composer /usr/bin/composer /usr/bin/composer
 COPY src/app/server/composer.json src/app/server/composer.lock ./
 
 RUN composer install \

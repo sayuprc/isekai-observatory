@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS builder
+FROM base-debian AS builder
 
 # moonc の version 文字列は mise.toml の moonbit_version から --build-arg で渡す
 ARG MOONBIT_VERSION
@@ -31,7 +31,7 @@ WORKDIR /workspace/discord-notifier
 RUN moon update \
   && moon build --target native --release
 
-FROM debian:bookworm-slim
+FROM base-debian
 
 ENV TZ=Asia/Tokyo \
   PORT=8080

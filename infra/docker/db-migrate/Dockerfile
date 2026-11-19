@@ -1,4 +1,4 @@
-FROM jdxcode/mise:2026.11.8-debian AS atlas
+FROM base-mise AS atlas
 
 ENV MISE_AUTO_INSTALL=false
 
@@ -10,7 +10,7 @@ RUN mise trust \
   && mise install atlas \
   && install -Dm755 "$(mise which atlas)" /out/atlas
 
-FROM alpine:3.24
+FROM base-alpine
 
 ENV TZ=Asia/Tokyo
 # 環境名は各環境の ci.yaml から --build-arg で渡す

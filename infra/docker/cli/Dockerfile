@@ -1,10 +1,10 @@
-FROM php:8.5.12-cli-alpine
+FROM base-php-cli
 
 ENV TZ=Asia/Tokyo
 
 WORKDIR /var/www/html
 
-RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin,source=/pie,target=/usr/local/bin/pie \
+RUN --mount=type=bind,from=base-pie,source=/pie,target=/usr/local/bin/pie \
     apk add --no-cache \
     icu-libs \
     unzip \
@@ -13,7 +13,7 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin,source=/pie,target=/usr/loc
   && docker-php-ext-install intl pdo_mysql \
   && apk del .build-deps
 
-COPY --from=composer:2.11.2 /usr/bin/composer /usr/bin/composer
+COPY --from=base-composer /usr/bin/composer /usr/bin/composer
 COPY src/app/server/composer.json src/app/server/composer.lock ./
 
 RUN composer install \

@@ -54,16 +54,28 @@ variable "ADMIN_PROXY_IMAGE" {
   default = "admin-proxy"
 }
 
-# 緊急時だけ使う。Dockerfile の FROM / COPY --from に書いたイメージ名 => infra/docker/base 配下のビルドコンテキスト
-# 通常は空にして Docker Hub のイメージを使う
-# 例: "php:8.5.12-cli-alpine" = "infra/docker/base/php-8.5.12-cli-alpine"
-variable "BASE_OVERRIDES" {
-  default = {}
-}
+# Dockerfile の FROM / COPY --from / RUN --mount from= は base-<キー> で参照し、ここで実体を決める
+# source = "dockerhub": image を registry から取得する
+# source = "src": infra/docker/base/<キー>/ をビルドして使う。緊急時だけ切り替える
+# Renovate が image を更新できるよう、1 エントリ 1 行の書式を崩さない
+variable "BASE_IMAGES" {
+  default = {
+    alpine     = { image = "alpine:3.24", source = "dockerhub" }
+    bun        = { image = "oven/bun:1.4.4", source = "dockerhub" }
+    bun-slim   = { image = "oven/bun:1.4.4-slim", source = "dockerhub" }
+    composer   = { image = "composer:2.11.2", source = "dockerhub" }
+    debian     = { image = "debian:bookworm-slim", source = "dockerhub" }
+    frankenphp = { image = "dunglas/frankenphp:php8.5.12-alpine", source = "dockerhub" }
+    mise       = { image = "jdxcode/mise:2026.11.8-debian", source = "dockerhub" }
+    node       = { image = "node:26.13.1-slim", source = "dockerhub" }
+    php-cli    = { image = "php:8.5.12-cli-alpine", source = "dockerhub" }
+    pie        = { image = "ghcr.io/php/pie:1.5.5-bin", source = "dockerhub" }
+  }
 
-function "base_target_name" {
-  params = [image]
-  result = "base-${regex_replace(image, "[^a-zA-Z0-9_-]", "-")}"
+  validation {
+    condition     = length([for k, v in BASE_IMAGES : k if !contains(["dockerhub", "src"], v.source)]) == 0
+    error_message = "BASE_IMAGES の source は dockerhub か src にする"
+  }
 }
 
 function "image_tags" {
@@ -88,15 +100,15 @@ group "default" {
   ]
 }
 
-target "base" {
-  name    = base_target_name(image)
-  matrix  = { image = keys(BASE_OVERRIDES) }
-  context = BASE_OVERRIDES[image]
+target "src" {
+  name    = "src-${key}"
+  matrix  = { key = [for k, v in BASE_IMAGES : k if v.source == "src"] }
+  context = "infra/docker/base/${key}"
 }
 
 target "_common" {
   context  = "."
-  contexts = { for image, dir in BASE_OVERRIDES : image => "target:${base_target_name(image)}" }
+  contexts = { for k, v in BASE_IMAGES : "base-${k}" => v.source == "src" ? "target:src-${k}" : "docker-image://${v.image}" }
   # 次回ビルドの --cache-from に使えるよう、push するイメージに cache metadata を埋め込む
   cache-to = ["type=inline"]
 }

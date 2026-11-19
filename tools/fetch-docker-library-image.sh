@@ -1,29 +1,44 @@
 #!/usr/bin/env bash
-# Fetch the build context of a Docker Official Image tag into infra/docker/base/.
-# The source is resolved from docker-library/official-images, so the result matches what Docker Hub built.
-# Usage: tools/fetch-docker-library-image.sh <image>:<tag> [arch]
+# Fetch the build context of a Docker Official Image into infra/docker/base/<key>/.
+# The image is read from BASE_IMAGES in docker-bake.hcl, and the source is resolved from docker-library/official-images,
+# so the result matches what Docker Hub built.
+# Usage: tools/fetch-docker-library-image.sh <BASE_IMAGES key> [arch]
 #   arch: official-images architecture name (default: amd64)
 #   OFFICIAL_IMAGES_REF: official-images commit or branch to read (default: master)
 set -euo pipefail
 
 if [[ $# -lt 1 || $# -gt 2 ]]; then
-  echo "usage: $0 <image>:<tag> [arch]" >&2
+  echo "usage: $0 <BASE_IMAGES key> [arch]" >&2
   exit 2
 fi
 
-ref=$1
+key=$1
 arch=${2:-amd64}
 official_images_ref=${OFFICIAL_IMAGES_REF:-master}
+repo_root=$(cd "$(dirname "$0")/.." && pwd)
+bake_file="${repo_root}/docker-bake.hcl"
+
+if [[ ! "$key" =~ ^[a-z0-9-]+$ ]]; then
+  echo "invalid key: $key" >&2
+  exit 1
+fi
+
+ref=$(sed -n "s/^[[:space:]]*${key}[[:space:]]*=[[:space:]]*{[[:space:]]*image[[:space:]]*=[[:space:]]*\"\([^\"]*\)\".*/\1/p" "$bake_file" | head -n1)
+
+if [[ -z "$ref" ]]; then
+  echo "key not found in BASE_IMAGES of docker-bake.hcl: $key" >&2
+  exit 1
+fi
 
 if [[ ! "$ref" =~ ^([a-z0-9._-]+):([A-Za-z0-9._-]+)$ ]]; then
-  echo "invalid image reference (expected <library image>:<tag>): $ref" >&2
+  echo "not a Docker Official Image (expected <library image>:<tag>): $ref" >&2
+  echo "prepare infra/docker/base/${key}/Dockerfile by hand instead" >&2
   exit 1
 fi
 
 image=${BASH_REMATCH[1]}
 tag=${BASH_REMATCH[2]}
-repo_root=$(cd "$(dirname "$0")/.." && pwd)
-dest="${repo_root}/infra/docker/base/${image}-${tag}"
+dest="${repo_root}/infra/docker/base/${key}"
 
 if [[ -e "$dest" ]]; then
   echo "already exists: $dest" >&2
