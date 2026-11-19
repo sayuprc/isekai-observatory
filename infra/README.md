@@ -51,7 +51,9 @@
 | `_JOB_SERVICE_ACCOUNT` | Cloud Run jobs の service account |
 | `_NOTIFY_SERVICE_ACCOUNT` | Discord Notifier の runtime service account |
 
-コンテナイメージの base / インストーラ版は各 Dockerfile に直接書く。Renovate の dockerfile manager が検知できるようにする
+`docker/` のベースイメージは `docker-bake.hcl` の `BASE_IMAGES` に書き、Dockerfile からは `base-<キー>` で参照する (ADR-0042)。Renovate は regex manager で更新する
+
+インストーラ版は各 Dockerfile に直接書く。Renovate の dockerfile manager が検知できるようにする
 
 MoonBit の install script 版だけは `mise.toml` の `moonbit_version` を Source of Truth にし、build 時に環境変数 `MOONBIT_VERSION` で Bake へ渡す
 
@@ -91,7 +93,9 @@ DEPLOY_ENV=development PUBLIC_APP_URL=https://example.invalid MOONBIT_VERSION="$
 | `TAG` | イメージのタグ。既定値は `local` |
 | `API_IMAGE` などの `*_IMAGE` | image 名。Cloud Build では substitution の値を渡す |
 
-ベースイメージは通常 Docker Hub から取得する。緊急時に docker library のソースから作り直す手順は `docs/operations/base-image-override.md` を見る
+ベースイメージは `BASE_IMAGES` の `source` で取得元を決める。通常は `dockerhub` で、緊急時に `src` にして `infra/docker/base/<キー>/` から作り直す手順は `docs/operations/base-image-override.md` を見る
+
+Dockerfile は `base-*` を参照するため、Bake を通さない `docker build` では失敗する
 
 `-f docker-bake.hcl` を省くと `compose.yaml` も読み込まれるため、常に付ける
 

@@ -5,7 +5,7 @@ superseded_by: null
 applies_to: [api, admin, viewer]
 ---
 
-# アプリケーションイメージは Docker Buildx Bake でビルドし、緊急時はベースイメージを差し替える
+# アプリケーションイメージは Docker Buildx Bake でビルドし、ベースイメージの取得元を切り替えられるようにする
 
 ## Context
 
@@ -13,9 +13,11 @@ applies_to: [api, admin, viewer]
 
 同じビルド定義が 4 箇所に複写され、手元で同じビルドを再現する入口も無かった
 
-ベースイメージは Docker Hub から取得している
+ベースイメージは Docker Hub などの registry から取得している
 
-上流の修正を待てない脆弱性や Docker Hub 側の不具合が起きたとき、手元でベースイメージを作り直す手段が無かった
+上流の修正を待てない脆弱性や registry 側の不具合が起きたとき、手元でベースイメージを作り直す手段が無かった
+
+緊急対応では、触るファイルを最小にして手順を単純にしたい
 
 ## Decision
 
@@ -23,26 +25,36 @@ applies_to: [api, admin, viewer]
 
 - Cloud Build / GitHub Actions / 手元は `docker buildx bake -f docker-bake.hcl` を呼び、差分は環境変数で渡す
 - `DEPLOY_ENV` と `PUBLIC_APP_URL` は既定値を持たせず、呼び出し側で必ず渡す
-- ベースイメージの版は ADR-0024 どおり Dockerfile の `FROM` / `COPY --from` に直接書き、通常は Docker Hub のイメージを使う
 
-緊急時は、Docker Official Image のビルドコンテキストを `infra/docker/base/` にコミットし、Bake の named context で差し替える
+ベースイメージは `docker-bake.hcl` の `BASE_IMAGES` に定義し、Dockerfile からは `base-<キー>` の named context で参照する
 
-- `tools/fetch-docker-library-image.sh` が docker-library/official-images から取得元 commit を引き、Docker Hub と同じソースを取得する
-- `docker-bake.hcl` の `BASE_OVERRIDES` に「Dockerfile に書いたイメージ名 => ディレクトリ」を書くと、全ターゲットでそのイメージ名がローカルビルドに置き換わる
-- Dockerfile の `FROM` は書き換えない
-- 上流で修正版が出たら、`BASE_OVERRIDES` と `infra/docker/base/` 配下を削除して Docker Hub に戻す
+- `FROM` / `COPY --from` / `RUN --mount from=` に registry のイメージ名を直接書かない
+- 各エントリは `image` と `source` を持つ
+- `source = "dockerhub"` は `image` を registry から取得する。通常はこれを使う
+- `source = "src"` は `infra/docker/base/<キー>/` をビルドして使う。緊急時だけ切り替える
+- 緊急時に変更するのは `docker-bake.hcl` の `source` と `infra/docker/base/` だけにする
+- `tools/fetch-docker-library-image.sh <キー>` は `BASE_IMAGES` の `image` を読み、docker-library/official-images から Docker Hub と同じビルドコンテキストを取得する
+
+infra/docker のベースイメージの版は、ADR-0024 の「Dockerfile に直接書く」ではなく `BASE_IMAGES` に書く
+
+- Renovate は `renovate.json` の regex manager で `BASE_IMAGES` の `image` を更新する
+- Dockerfile manager は `base-*` を registry のイメージとして扱わないよう無効にする
 
 ## Consequences
 
 ### Positive
 
 - ビルド定義が 1 箇所になり、手元と Cloud Build で同じビルドを再現できる
-- 緊急時もアプリの Dockerfile を触らずにベースイメージだけを差し替えられる
+- 緊急時は Dockerfile を触らず、`source` の切り替えとソースの追加だけでベースイメージを差し替えられる
+- イメージ名が `BASE_IMAGES` にしか無いため、Renovate の更新で差し替えが外れることが無い
+- `source = "src"` の間も Renovate が `image` を更新するので、上流の修正版が出たことに気づける
 - 差し替えたソースと書き換え内容がコミット履歴に残る
 - registry cache を Bake が直接読むため、Cloud Build の事前 pull step が不要になる
 
 ### Negative
 
+- Dockerfile 単体の `docker build` は `base-*` を解決できず失敗し、必ず Bake を通す必要がある
+- Renovate のベースイメージ更新は regex manager 頼みになり、`BASE_IMAGES` の 1 エントリ 1 行の書式を崩すと検知できない
 - Cloud Build では 7 イメージのビルドが 1 step にまとまり、どれか 1 つの失敗で全 push が止まる
-- `BASE_OVERRIDES` のキーは `FROM` の文字列と完全一致が必要で、Renovate が `FROM` を更新すると差し替えが黙って外れる
+- `src` のベースの Dockerfile 自体の `FROM` は `BASE_IMAGES` を通らず、registry から取得する
 - debian のように Dockerfile を持たない (oci-import) Official Image や、Official Image 以外のイメージは取得スクリプトの対象外で、ビルドコンテキストを手で用意する

@@ -18,6 +18,8 @@ MoonBit の install script 版は `FROM` ではなく、公開 datasource も無
 
 コンテナイメージの base 版と、Renovate が検知できるインストーラ版は Dockerfile に直接書く
 
+`infra/docker` のベースイメージだけは ADR-0042 で `docker-bake.hcl` の `BASE_IMAGES` に移した
+
 - Cloud Build / mise task / GitHub Actions から、それらの版の `--build-arg` は渡さない
 - ホストの開発ツール版は引き続き `mise.toml` の `[tools]` で管理する
 - GitHub Actions の mise 本体の版は `.github/actions/setup-mise/action.yml` の `jdx/mise-action` の `version` に書く
