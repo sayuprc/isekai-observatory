@@ -8,6 +8,7 @@
 .vs/
 
 docs/
+infra/docker/base/
 infra/local/
 tools/
 

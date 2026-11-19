@@ -35,6 +35,13 @@
       "groupName": "{{manager}} non-major dependencies",
       "groupSlug": "{{manager}}-non-major",
       "groupSingleUpdates": true
+    },
+    {
+      "description": "infra/docker/base は緊急時に docker library から取得したソースなので、取得元の版から動かさない",
+      "matchFileNames": [
+        "infra/docker/base/**"
+      ],
+      "enabled": false
     }
   ]
 }
