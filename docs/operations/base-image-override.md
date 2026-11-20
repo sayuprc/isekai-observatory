@@ -24,8 +24,6 @@ php-cli    = { image = "php:8.5.12-cli-alpine", source = "src" }
 
 ディレクトリが既にあるものは、書き換え済みのソースを上書きしないよう飛ばす
 
-1 つだけ取得したいときは `./tools/fetch-docker-library-image.sh php-cli` のようにキーを渡す
-
 取得元は各ディレクトリの `.docker-library-source` に記録される
 
 タグが official-images から消えている場合は `OFFICIAL_IMAGES_REF=<official-images の commit>` を付けて実行する

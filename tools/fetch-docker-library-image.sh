@@ -1,37 +1,30 @@
 #!/usr/bin/env bash
+# docker-bake.hcl の BASE_IMAGES で source = "src" のエントリについて、
 # Docker Official Image のビルドコンテキストを infra/docker/base/<キー>/ に取得する
-# イメージは docker-bake.hcl の BASE_IMAGES から読み、取得元は docker-library/official-images から引く
-# そのため Docker Hub がビルドしたものと同じソースになる
-# 使い方: tools/fetch-docker-library-image.sh [BASE_IMAGES のキー]
-#   キーを省くと source = "src" のエントリのうち、infra/docker/base/<キー>/ がまだ無いものをすべて取得する
-#   ARCH: official-images のアーキテクチャ名 (既定値: amd64)
+# 取得元は docker-library/official-images から引くため、Docker Hub がビルドしたものと同じソースになる
+# infra/docker/base/<キー>/ が既にあるエントリは、書き換え済みのソースを上書きしないよう飛ばす
+# 使い方: tools/fetch-docker-library-image.sh
 #   OFFICIAL_IMAGES_REF: 読み込む official-images の commit かブランチ (既定値: master)
 set -euo pipefail
 
-if [[ $# -gt 1 ]]; then
-  echo "usage: $0 [BASE_IMAGES key]" >&2
+if [[ $# -gt 0 ]]; then
+  echo "usage: $0" >&2
   exit 2
 fi
 
-arch=${ARCH:-amd64}
+# Cloud Build は amd64 でしかビルドしないため固定する
+arch=amd64
 official_images_ref=${OFFICIAL_IMAGES_REF:-master}
 repo_root=$(cd "$(dirname "$0")/.." && pwd)
 bake_file="${repo_root}/docker-bake.hcl"
 
 # BASE_IMAGES は 1 エントリ 1 行で書く前提で読む
-entry_pattern='^[[:space:]]*\([a-z0-9-]*\)[[:space:]]*=[[:space:]]*{[[:space:]]*image[[:space:]]*=[[:space:]]*"\([^"]*\)"[[:space:]]*,[[:space:]]*source[[:space:]]*=[[:space:]]*"\([^"]*\)".*'
+entry_pattern='^[[:space:]]*\([a-z0-9-]*\)[[:space:]]*=[[:space:]]*{[[:space:]]*image[[:space:]]*=[[:space:]]*"\([^"]*\)"[[:space:]]*,[[:space:]]*source[[:space:]]*=[[:space:]]*"src".*'
 
 fetch() {
   local key=$1
+  local ref=$2
   local dest="${repo_root}/infra/docker/base/${key}"
-  local ref
-
-  ref=$(sed -n "s/${entry_pattern}/\1 \2/p" "$bake_file" | awk -v key="$key" '$1 == key { print $2; exit }')
-
-  if [[ -z "$ref" ]]; then
-    echo "key not found in BASE_IMAGES of docker-bake.hcl: $key" >&2
-    return 1
-  fi
 
   if [[ ! "$ref" =~ ^([a-z0-9._-]+):([A-Za-z0-9._-]+)$ ]]; then
     echo "not a Docker Official Image (expected <library image>:<tag>): $ref" >&2
@@ -41,11 +34,6 @@ fetch() {
 
   local image=${BASH_REMATCH[1]}
   local tag=${BASH_REMATCH[2]}
-
-  if [[ -e "$dest" ]]; then
-    echo "already exists: $dest" >&2
-    return 1
-  fi
 
   # `( fetch ) || ...` の中では set -e が効かないため、失敗は明示的に return する
   library=$(curl -fsSL "https://raw.githubusercontent.com/docker-library/official-images/${official_images_ref}/library/${image}") || return 1
@@ -130,28 +118,25 @@ EOF
   echo "  -> ${dest#"${repo_root}/"}"
 }
 
-if [[ $# -eq 1 ]]; then
-  fetch "$1"
-  exit
-fi
+mapfile -t entries < <(sed -n "s/${entry_pattern}/\1 \2/p" "$bake_file")
 
-mapfile -t keys < <(sed -n "s/${entry_pattern}/\1 \3/p" "$bake_file" | awk '$2 == "src" { print $1 }')
-
-if [[ ${#keys[@]} -eq 0 ]]; then
+if [[ ${#entries[@]} -eq 0 ]]; then
   echo "no BASE_IMAGES entry has source = \"src\""
   exit 0
 fi
 
 failed=0
 
-for key in "${keys[@]}"; do
+for entry in "${entries[@]}"; do
+  read -r key ref <<<"$entry"
+
   if [[ -e "${repo_root}/infra/docker/base/${key}" ]]; then
     echo "skip ${key}: infra/docker/base/${key} already exists"
     continue
   fi
 
-  # 1 つ失敗しても残りのキーの取得は続ける
-  ( fetch "$key" ) || failed=1
+  # 1 つ失敗しても残りのエントリの取得は続ける
+  ( fetch "$key" "$ref" ) || failed=1
 done
 
 exit "$failed"

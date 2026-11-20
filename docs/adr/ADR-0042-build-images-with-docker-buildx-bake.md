@@ -34,7 +34,7 @@ applies_to: [api, admin, viewer]
 - `source = "dockerhub"` は `image` を registry から取得する。通常はこれを使う
 - `source = "src"` は `infra/docker/base/<キー>/` をビルドして使う。緊急時だけ切り替える
 - 緊急時に変更するのは `docker-bake.hcl` の `source` と `infra/docker/base/` だけにする
-- `tools/fetch-docker-library-image.sh <キー>` は `BASE_IMAGES` の `image` を読み、docker-library/official-images から Docker Hub と同じビルドコンテキストを取得する
+- `tools/fetch-docker-library-image.sh` は `source = "src"` のエントリの `image` を読み、docker-library/official-images から Docker Hub と同じビルドコンテキストを取得する
 
 infra/docker のベースイメージの版は、ADR-0024 の「Dockerfile に直接書く」ではなく `BASE_IMAGES` に書く
 
@@ -50,12 +50,13 @@ infra/docker のベースイメージの版は、ADR-0024 の「Dockerfile に�
 - イメージ名が `BASE_IMAGES` にしか無いため、Renovate の更新で差し替えが外れることが無い
 - `source = "src"` の間も Renovate が `image` を更新するので、上流の修正版が出たことに気づける
 - 差し替えたソースと書き換え内容がコミット履歴に残る
-- registry cache を Bake が直接読むため、Cloud Build の事前 pull step が不要になる
+- registry cache の読み込みと push を Bake が行うため、Cloud Build の pull / push step が不要になる
 
 ### Negative
 
 - Dockerfile 単体の `docker build` は `base-*` を解決できず失敗し、必ず Bake を通す必要がある
 - Renovate のベースイメージ更新は regex manager 頼みになり、`BASE_IMAGES` の 1 エントリ 1 行の書式を崩すと検知できない
-- Cloud Build では 7 イメージのビルドが 1 step にまとまり、どれか 1 つの失敗で全 push が止まる
+- Cloud Build と Infra Docker QA では 7 イメージのビルドが 1 step にまとまり、どのイメージが失敗したかはログを見ないと分からない
+- Cloud Build では全イメージのビルドが終わるまで、どの deploy も始まらない
 - `src` のベースの Dockerfile 自体の `FROM` は `BASE_IMAGES` を通らず、registry から取得する
 - debian のように Dockerfile を持たない (oci-import) Official Image や、Official Image 以外のイメージは取得スクリプトの対象外で、ビルドコンテキストを手で用意する
