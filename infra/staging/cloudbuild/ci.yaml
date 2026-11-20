@@ -20,77 +20,14 @@ steps:
       - -c
       - |
         MOONBIT_VERSION="$$(./tools/read-mise-value.sh moonbit_version)" \
-          docker buildx bake -f docker-bake.hcl
-
-  - id: push-api-image
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      - build-images
-    args:
-      - push
-      - --all-tags
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_API_IMAGE}
-
-  - id: push-cli-image
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      - build-images
-    args:
-      - push
-      - --all-tags
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_CLI_IMAGE}
-
-  - id: push-db-migrate-image
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      - build-images
-    args:
-      - push
-      - --all-tags
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DB_MIGRATE_IMAGE}
-
-  - id: push-admin-image
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      - build-images
-    args:
-      - push
-      - --all-tags
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_IMAGE}
-
-  - id: push-viewer-image
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      - build-images
-    args:
-      - push
-      - --all-tags
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_VIEWER_IMAGE}
-
-  - id: push-admin-proxy-image
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      - build-images
-    args:
-      - push
-      - --all-tags
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_ADMIN_PROXY_IMAGE}
-
-  - id: push-discord-notifier-image
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      - build-images
-    args:
-      - push
-      - --all-tags
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/${_DISCORD_NOTIFIER_IMAGE}
+          docker buildx bake -f docker-bake.hcl --push
 
   # TODO マイグレーションを別で行う
   - id: deploy-db-migrate-job
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-db-migrate-image
+      - build-images
     args:
       - run
       - jobs
@@ -109,7 +46,7 @@ steps:
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-cli-image
+      - build-images
     args:
       - run
       - jobs
@@ -127,7 +64,7 @@ steps:
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-cli-image
+      - build-images
     args:
       - run
       - jobs
@@ -147,7 +84,7 @@ steps:
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-api-image
+      - build-images
     args:
       - run
       - deploy
@@ -168,7 +105,7 @@ steps:
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-discord-notifier-image
+      - build-images
     args:
       - run
       - deploy
@@ -185,7 +122,7 @@ steps:
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-admin-image
+      - build-images
     args:
       - run
       - deploy
@@ -207,7 +144,7 @@ steps:
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-viewer-image
+      - build-images
     args:
       - run
       - jobs
@@ -226,7 +163,7 @@ steps:
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     waitFor:
-      - push-admin-proxy-image
+      - build-images
     args:
       - run
       - jobs
