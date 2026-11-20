@@ -8,23 +8,29 @@
 
 ## 差し替える
 
-1. `BASE_IMAGES` のキーを指定して、ソースを取得する
-
-```bash
-./tools/fetch-docker-library-image.sh php-cli
-```
-
-`BASE_IMAGES` の `image` に書いた版のソースが `infra/docker/base/php-cli/` にでき、取得元は `.docker-library-source` に記録される
-
-タグが official-images から消えている場合は `OFFICIAL_IMAGES_REF=<official-images の commit>` を付けて実行する
-
-2. 取得したら一度そのままコミットし、続けて書き換えを別コミットにする。上流との差分を追えるようにするため
-
-3. `docker-bake.hcl` の該当エントリの `source` を `src` にする
+1. `docker-bake.hcl` の該当エントリの `source` を `src` にする
 
 ```hcl
 php-cli    = { image = "php:8.5.12-cli-alpine", source = "src" }
 ```
+
+2. ソースを取得する
+
+```bash
+./tools/fetch-docker-library-image.sh
+```
+
+`source = "src"` のエントリのうち、`infra/docker/base/<キー>/` がまだ無いものをすべて取得する
+
+ディレクトリが既にあるものは、書き換え済みのソースを上書きしないよう飛ばす
+
+1 つだけ取得したいときは `./tools/fetch-docker-library-image.sh php-cli` のようにキーを渡す
+
+取得元は各ディレクトリの `.docker-library-source` に記録される
+
+タグが official-images から消えている場合は `OFFICIAL_IMAGES_REF=<official-images の commit>` を付けて実行する
+
+3. 取得したら一度そのままコミットし、続けて書き換えを別コミットにする。上流との差分を追えるようにするため
 
 4. 差し替わることを確認する
 
