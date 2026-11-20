@@ -1,4 +1,4 @@
-FROM oven/bun:1.4.4 AS build
+FROM base-bun AS build
 
 ENV MISE_AUTO_INSTALL=false
 
@@ -40,7 +40,7 @@ ENV ADMIN_SSR_NO_EXTERNAL=true
 RUN test -n "${APP_ENV}" \
   && bun --filter admin build
 
-FROM oven/bun:1.4.4-slim AS runtime
+FROM base-bun-slim AS runtime
 
 ENV TZ=Asia/Tokyo
 

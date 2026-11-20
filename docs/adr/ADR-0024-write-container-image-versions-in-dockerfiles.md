@@ -18,11 +18,13 @@ MoonBit の install script 版は `FROM` ではなく、公開 datasource も無
 
 コンテナイメージの base 版と、Renovate が検知できるインストーラ版は Dockerfile に直接書く
 
+`infra/docker` のベースイメージだけは ADR-0042 で `docker-bake.hcl` の `BASE_IMAGES` に移した
+
 - Cloud Build / mise task / GitHub Actions から、それらの版の `--build-arg` は渡さない
 - ホストの開発ツール版は引き続き `mise.toml` の `[tools]` で管理する
 - GitHub Actions の mise 本体の版は `.github/actions/setup-mise/action.yml` の `jdx/mise-action` の `version` に書く
 - MoonBit の install script 版は `mise.toml` の `[vars].moonbit_version` を Source of Truth にする
-- イメージ build と GitHub Actions は `tools/read-mise-value.sh` で読み、`--build-arg MOONBIT_VERSION` または install 引数へ渡す
+- イメージ build と GitHub Actions は `tools/read-mise-value.sh` で読み、Bake の `MOONBIT_VERSION` 変数 (ADR-0042) または install 引数へ渡す
 - Dockerfile が `mise.toml` を COPY して `pnpm` / `atlas` を入れる経路は、mise manager で検知できるため残す
 
 ## Consequences

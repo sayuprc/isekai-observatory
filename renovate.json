@@ -35,6 +35,36 @@
       "groupName": "{{manager}} non-major dependencies",
       "groupSlug": "{{manager}}-non-major",
       "groupSingleUpdates": true
+    },
+    {
+      "description": "infra/docker/base は緊急時に docker library から取得したソースなので、取得元の版から動かさない",
+      "matchFileNames": [
+        "infra/docker/base/**"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "base-* は docker-bake.hcl の named context を指す別名で、registry のイメージではない",
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchPackageNames": [
+        "/^base-/"
+      ],
+      "enabled": false
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "infra/docker のベースイメージは docker-bake.hcl の BASE_IMAGES に書く (ADR-0042)",
+      "managerFilePatterns": [
+        "/^docker-bake\\.hcl$/"
+      ],
+      "matchStrings": [
+        "image\\s*=\\s*\"(?<depName>[^:\"]+):(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "docker"
     }
   ]
 }

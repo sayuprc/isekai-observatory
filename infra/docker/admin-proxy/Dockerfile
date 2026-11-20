@@ -1,4 +1,4 @@
-FROM node:26.13.1-slim
+FROM base-node
 
 ENV TZ=Asia/Tokyo
 ENV PNPM_HOME=/pnpm
