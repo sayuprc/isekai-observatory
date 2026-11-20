@@ -30,28 +30,16 @@ permissions:
 
 jobs:
   docker-build:
-    name: ${{ matrix.image }}
+    name: docker build
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        image:
-          - api
-          - cli
-          - db-migrate
-          - discord-notifier
-          - admin
-          - viewer
-          - admin-proxy
     steps:
       - name: Checkout the code
         uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref }}
 
-      - name: Build image
+      - name: Build images
         env:
-          IMAGE: ${{ matrix.image }}
           # 環境ごとの差は DEPLOY_ENV だけなので、QA ではどれか 1 つの値でビルドできれば十分
           DEPLOY_ENV: development
           PUBLIC_APP_URL: https://example.invalid
@@ -59,4 +47,4 @@ jobs:
           set -euo pipefail
 
           MOONBIT_VERSION="$(./tools/read-mise-value.sh moonbit_version)" \
-            docker buildx bake -f docker-bake.hcl "${IMAGE}"
+            docker buildx bake -f docker-bake.hcl
