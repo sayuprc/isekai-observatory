@@ -144,20 +144,20 @@
         },
         {
             "name": "cuyz/valinor",
-            "version": "2.7.0",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CuyZ/Valinor.git",
-                "reference": "6e89ca1afaa8543619fd9512e4665722f225fb38"
+                "reference": "473ba512c859a4441e382ca279778a67a302971d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CuyZ/Valinor/zipball/6e89ca1afaa8543619fd9512e4665722f225fb38",
-                "reference": "6e89ca1afaa8543619fd9512e4665722f225fb38",
+                "url": "https://api.github.com/repos/CuyZ/Valinor/zipball/473ba512c859a4441e382ca279778a67a302971d",
+                "reference": "473ba512c859a4441e382ca279778a67a302971d",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0 || ~8.6.0"
             },
             "conflict": {
                 "phpstan/phpstan": "<1.0 || >= 3.0",
@@ -214,7 +214,7 @@
             ],
             "support": {
                 "issues": "https://github.com/CuyZ/Valinor/issues",
-                "source": "https://github.com/CuyZ/Valinor/tree/2.7.0"
+                "source": "https://github.com/CuyZ/Valinor/tree/2.8.0"
             },
             "funding": [
                 {
@@ -222,8 +222,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-12T10:33:19+00:00",
-            "published-time": "2026-11-12T10:33:37+00:00"
+            "time": "2026-11-19T15:08:51+00:00",
+            "published-time": "2026-11-19T15:22:15+00:00"
         },
         {
             "name": "devizzent/cebe-php-openapi",
@@ -867,16 +867,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v7.2.1",
+            "version": "v7.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/php-jwt.git",
-                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e"
+                "reference": "99efeb17d6def8c0295777f2d45b07ff4fdb4e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/0501f5729b9e2448516674aff07c7d1727869b8e",
-                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e",
+                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/99efeb17d6def8c0295777f2d45b07ff4fdb4e40",
+                "reference": "99efeb17d6def8c0295777f2d45b07ff4fdb4e40",
                 "shasum": ""
             },
             "require": {
@@ -935,9 +935,10 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/php-jwt/issues",
-                "source": "https://github.com/googleapis/php-jwt/tree/v7.2.1"
+                "source": "https://github.com/googleapis/php-jwt/tree/v7.2.2"
             },
-            "time": "2026-09-28T17:51:46+00:00"
+            "time": "2026-11-17T00:25:19+00:00",
+            "published-time": "2026-11-17T19:16:00+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -1692,16 +1693,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "8.5.0",
+            "version": "8.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "f8aca40edffeae0ec508b92f4594766083c6e203"
+                "reference": "8e893188e1ac92b457eca35ddf2b574024b66280"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f8aca40edffeae0ec508b92f4594766083c6e203",
-                "reference": "f8aca40edffeae0ec508b92f4594766083c6e203",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/8e893188e1ac92b457eca35ddf2b574024b66280",
+                "reference": "8e893188e1ac92b457eca35ddf2b574024b66280",
                 "shasum": ""
             },
             "require": {
@@ -1799,7 +1800,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/8.5.0"
+                "source": "https://github.com/guzzle/guzzle/tree/8.5.2"
             },
             "funding": [
                 {
@@ -1815,8 +1816,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-13T03:12:32+00:00",
-            "published-time": "2026-11-13T03:13:04+00:00"
+            "time": "2026-11-17T16:24:00+00:00",
+            "published-time": "2026-11-17T16:24:22+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -2179,16 +2180,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v13.42.0",
+            "version": "v13.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "f5c01f6b63803f16f38ebb31622c4fea412bd022"
+                "reference": "72aa7e151062e218704d8660f407e6070040d8bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/f5c01f6b63803f16f38ebb31622c4fea412bd022",
-                "reference": "f5c01f6b63803f16f38ebb31622c4fea412bd022",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/72aa7e151062e218704d8660f407e6070040d8bc",
+                "reference": "72aa7e151062e218704d8660f407e6070040d8bc",
                 "shasum": ""
             },
             "require": {
@@ -2243,6 +2244,7 @@
                 "voku/portable-ascii": "^2.0.2"
             },
             "conflict": {
+                "laravel/horizon": "<5.47.0",
                 "tightenco/collect": "<5.5.33"
             },
             "provide": {
@@ -2407,8 +2409,8 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-11-10T15:54:30+00:00",
-            "published-time": "2026-11-10T15:55:04+00:00"
+            "time": "2026-11-17T14:58:33+00:00",
+            "published-time": "2026-11-17T14:58:44+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -9479,16 +9481,16 @@
         },
         {
             "name": "web-auth/webauthn-lib",
-            "version": "5.3.12",
+            "version": "5.3.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/webauthn-lib.git",
-                "reference": "c7aeeb1d35e39b7d32ab5146cce4b668f271a68e"
+                "reference": "768fb8cf7bebaad8a08b3015e206dda95e3320fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/c7aeeb1d35e39b7d32ab5146cce4b668f271a68e",
-                "reference": "c7aeeb1d35e39b7d32ab5146cce4b668f271a68e",
+                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/768fb8cf7bebaad8a08b3015e206dda95e3320fa",
+                "reference": "768fb8cf7bebaad8a08b3015e206dda95e3320fa",
                 "shasum": ""
             },
             "require": {
@@ -9549,7 +9551,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/webauthn-lib/tree/5.3.12"
+                "source": "https://github.com/web-auth/webauthn-lib/tree/5.3.15"
             },
             "funding": [
                 {
@@ -9561,8 +9563,8 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-11-03T09:21:08+00:00",
-            "published-time": "2026-11-03T09:27:24+00:00"
+            "time": "2026-11-18T16:46:55+00:00",
+            "published-time": "2026-11-19T11:40:19+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10428,16 +10430,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.35.11",
+            "version": "0.35.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "33fee9ed23977d42071cd796d6e369398f87e22a"
+                "reference": "7f572fb52bdf5b73f7f058c1f28b548b9cb6a295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/33fee9ed23977d42071cd796d6e369398f87e22a",
-                "reference": "33fee9ed23977d42071cd796d6e369398f87e22a",
+                "url": "https://api.github.com/repos/infection/infection/zipball/7f572fb52bdf5b73f7f058c1f28b548b9cb6a295",
+                "reference": "7f572fb52bdf5b73f7f058c1f28b548b9cb6a295",
                 "shasum": ""
             },
             "require": {
@@ -10552,7 +10554,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.35.11"
+                "source": "https://github.com/infection/infection/tree/0.35.12"
             },
             "funding": [
                 {
@@ -10564,8 +10566,8 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-11-15T09:56:15+00:00",
-            "published-time": "2026-11-15T09:59:19+00:00"
+            "time": "2026-11-17T08:40:57+00:00",
+            "published-time": "2026-11-17T08:52:15+00:00"
         },
         {
             "name": "infection/mutator",
@@ -10774,32 +10776,32 @@
         },
         {
             "name": "laravel/tinker",
-            "version": "v3.1.0",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/tinker.git",
-                "reference": "5fab2518167975b302e10d1fdf9a8c8113849201"
+                "reference": "0630f3d4dc64d7800e7f5dded22ea3362ed52adb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/tinker/zipball/5fab2518167975b302e10d1fdf9a8c8113849201",
-                "reference": "5fab2518167975b302e10d1fdf9a8c8113849201",
+                "url": "https://api.github.com/repos/laravel/tinker/zipball/0630f3d4dc64d7800e7f5dded22ea3362ed52adb",
+                "reference": "0630f3d4dc64d7800e7f5dded22ea3362ed52adb",
                 "shasum": ""
             },
             "require": {
-                "illuminate/console": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "illuminate/contracts": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "php": "^8.1",
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.2",
                 "psy/psysh": "^0.12.19",
-                "symfony/var-dumper": "^5.4|^6.0|^7.0|^8.0"
+                "symfony/var-dumper": "^7.0|^8.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.5|^11.5|^12.5|^13.4"
             },
             "suggest": {
-                "illuminate/database": "The Illuminate Database package (^8.0|^9.0|^10.0|^11.0|^12.0|^13.0)."
+                "illuminate/database": "The Illuminate Database package (^12.0|^13.0)."
             },
             "type": "library",
             "extra": {
@@ -10836,10 +10838,10 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/tinker/issues",
-                "source": "https://github.com/laravel/tinker/tree/v3.1.0"
+                "source": "https://github.com/laravel/tinker/tree/v3.2.0"
             },
-            "time": "2026-10-16T11:13:33+00:00",
-            "published-time": "2026-11-10T16:12:15+00:00"
+            "time": "2026-11-11T14:11:46+00:00",
+            "published-time": "2026-11-17T15:22:49+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -13691,16 +13693,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "13.3.17",
+            "version": "13.3.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ecsphp/ecs.git",
-                "reference": "d40557d3d0992de7b4e50625989478900ab282d3"
+                "reference": "cb9a9bba3d1cbd82338b9a31cdf2bcdf780f02e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ecsphp/ecs/zipball/d40557d3d0992de7b4e50625989478900ab282d3",
-                "reference": "d40557d3d0992de7b4e50625989478900ab282d3",
+                "url": "https://api.github.com/repos/ecsphp/ecs/zipball/cb9a9bba3d1cbd82338b9a31cdf2bcdf780f02e9",
+                "reference": "cb9a9bba3d1cbd82338b9a31cdf2bcdf780f02e9",
                 "shasum": ""
             },
             "require": {
@@ -13733,10 +13735,10 @@
             ],
             "support": {
                 "issues": "https://github.com/ecsphp/ecs/issues",
-                "source": "https://github.com/ecsphp/ecs/tree/13.3.17"
+                "source": "https://github.com/ecsphp/ecs/tree/13.3.23"
             },
-            "time": "2026-11-12T18:43:17+00:00",
-            "published-time": "2026-11-12T18:43:25+00:00"
+            "time": "2026-11-19T10:01:21+00:00",
+            "published-time": "2026-11-19T10:01:28+00:00"
         },
         {
             "name": "thecodingmachine/safe",
