@@ -51,31 +51,27 @@ depends = "build:*"
 
 [tasks."build:proxy"]
 description = "Nginx のイメージをビルドする"
-run = "docker build -t ${PROXY_IMAGE} ./infra/local/docker/nginx"
+run = "docker buildx bake -f docker-bake.hcl local-proxy"
 
 [tasks."build:php"]
 description = "PHP のイメージをビルドする"
 run = '''
-docker build -t ${SERVER_IMAGE} ./infra/local/docker/php \
-  --build-arg UID={{vars.uid}} \
-  --build-arg GID={{vars.gid}} \
-  --build-arg USERNAME={{vars.user_name}} \
-  --build-arg GROUPNAME={{vars.group_name}}
+HOST_UID={{vars.uid}} \
+HOST_GID={{vars.gid}} \
+HOST_USERNAME={{vars.user_name}} \
+HOST_GROUPNAME={{vars.group_name}} \
+  docker buildx bake -f docker-bake.hcl local-php
 '''
 
 [tasks."build:openapi-generator"]
 description = "OpenAPI Generator のイメージをビルドする"
 run = '''
-docker build -t ${OPENAPI_IMAGE} ./infra/local/docker/openapi-generator \
-  --build-arg UID={{vars.uid}} \
-  --build-arg GID={{vars.gid}} \
-  --build-arg USERNAME={{vars.user_name}} \
-  --build-arg GROUPNAME={{vars.group_name}}
+docker buildx bake -f docker-bake.hcl local-openapi-generator
 '''
 
 [tasks."build:mysql"]
 description = "MySQL のイメージをビルドする"
-run = "docker build -t ${MYSQL_IMAGE} ./infra/local/docker/mysql"
+run = "docker buildx bake -f docker-bake.hcl local-mysql"
 
 [tasks.up]
 description = "コンテナを起動する"

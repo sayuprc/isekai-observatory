@@ -178,3 +178,75 @@ target "admin-proxy" {
     DEPLOY_ENV = DEPLOY_ENV
   }
 }
+
+# -- ローカル開発 / server-qa 用イメージ (infra/local/docker) --
+# image 名は mise.toml / mise.ci.toml の [env] から渡す
+# ベースイメージは BASE_IMAGES を通さない。mise.toml がタグを Dockerfile の FROM から読むため
+
+variable "PROXY_IMAGE" {
+  default = "isekai-observatory-proxy:local"
+}
+
+variable "SERVER_IMAGE" {
+  default = "isekai-observatory-api:local"
+}
+
+variable "OPENAPI_IMAGE" {
+  default = "openapi-generator:local"
+}
+
+variable "MYSQL_IMAGE" {
+  default = "isekai-observatory-mysql:local"
+}
+
+# bash の UID は readonly で `UID=... docker buildx bake` と渡せないため HOST_ を付ける
+variable "HOST_UID" {
+  default = "1000"
+}
+
+variable "HOST_GID" {
+  default = "1000"
+}
+
+variable "HOST_USERNAME" {
+  default = "user"
+}
+
+variable "HOST_GROUPNAME" {
+  default = "user"
+}
+
+group "local" {
+  targets = [
+    "local-proxy",
+    "local-php",
+    "local-openapi-generator",
+    "local-mysql",
+  ]
+}
+
+target "local-proxy" {
+  context = "infra/local/docker/nginx"
+  tags    = [PROXY_IMAGE]
+}
+
+target "local-php" {
+  context = "infra/local/docker/php"
+  tags    = [SERVER_IMAGE]
+  args = {
+    UID       = HOST_UID
+    GID       = HOST_GID
+    USERNAME  = HOST_USERNAME
+    GROUPNAME = HOST_GROUPNAME
+  }
+}
+
+target "local-openapi-generator" {
+  context = "infra/local/docker/openapi-generator"
+  tags    = [OPENAPI_IMAGE]
+}
+
+target "local-mysql" {
+  context = "infra/local/docker/mysql"
+  tags    = [MYSQL_IMAGE]
+}
