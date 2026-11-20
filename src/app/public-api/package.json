@@ -17,7 +17,7 @@
     "lint:check": "eslint"
   },
   "dependencies": {
-    "@scalar/api-reference": "1.77.0",
+    "@scalar/api-reference": "1.78.1",
     "minisearch": "7.2.0",
     "wrangler": "catalog:"
   },

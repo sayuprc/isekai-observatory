@@ -20,14 +20,14 @@
     "redis": "redis-commander"
   },
   "dependencies": {
-    "@astrojs/node": "11.1.11",
+    "@astrojs/node": "11.1.12",
     "@astrojs/solid-js": "catalog:astro",
     "@elysiajs/eden": "1.4.9",
     "@tailwindcss/vite": "catalog:ui",
     "@upstash/redis": "1.41.0",
     "astro": "catalog:astro",
     "daisyui": "catalog:ui",
-    "elysia": "1.4.31",
+    "elysia": "1.4.32",
     "pino": "10.4.0",
     "solid-js": "catalog:astro",
     "tailwindcss": "catalog:ui"
