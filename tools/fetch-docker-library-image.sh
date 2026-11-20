@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Fetch the build context of a Docker Official Image into infra/docker/base/<key>/.
-# The image is read from BASE_IMAGES in docker-bake.hcl, and the source is resolved from docker-library/official-images,
-# so the result matches what Docker Hub built.
-# Usage: tools/fetch-docker-library-image.sh <BASE_IMAGES key> [arch]
-#   arch: official-images architecture name (default: amd64)
-#   OFFICIAL_IMAGES_REF: official-images commit or branch to read (default: master)
+# Docker Official Image のビルドコンテキストを infra/docker/base/<キー>/ に取得する
+# イメージは docker-bake.hcl の BASE_IMAGES から読み、取得元は docker-library/official-images から引く
+# そのため Docker Hub がビルドしたものと同じソースになる
+# 使い方: tools/fetch-docker-library-image.sh <BASE_IMAGES のキー> [arch]
+#   arch: official-images のアーキテクチャ名 (既定値: amd64)
+#   OFFICIAL_IMAGES_REF: 読み込む official-images の commit かブランチ (既定値: master)
 set -euo pipefail
 
 if [[ $# -lt 1 || $# -gt 2 ]]; then
@@ -47,8 +47,8 @@ fi
 
 library=$(curl -fsSL "https://raw.githubusercontent.com/docker-library/official-images/${official_images_ref}/library/${image}")
 
-# Each entry is a blank-line separated paragraph after the global one
-# Field lookup order: entry arch-prefixed, entry, global arch-prefixed, global
+# 先頭の全体設定の後に、空行区切りでエントリが並ぶ
+# フィールドは エントリのアーキテクチャ別 > エントリ > 全体のアーキテクチャ別 > 全体 の順に探す
 read -r git_repo git_commit directory builder < <(
   printf '%s\n' "$library" | awk -v tag="$tag" -v arch="$arch" '
     function field(name, fallback) {
