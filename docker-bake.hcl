@@ -180,23 +180,23 @@ target "admin-proxy" {
 }
 
 # -- ローカル開発 / server-qa 用イメージ (infra/local/docker) --
-# image 名は mise.toml / mise.ci.toml の [env] から渡す
+# image 名は mise.toml / mise.ci.toml の [env] から渡す。mise を通さずに叩くとタグ無しのイメージになる
 # ベースイメージは BASE_IMAGES を通さない。mise.toml がタグを Dockerfile の FROM から読むため
 
 variable "PROXY_IMAGE" {
-  default = "isekai-observatory-proxy:local"
+  default = ""
 }
 
 variable "SERVER_IMAGE" {
-  default = "isekai-observatory-api:local"
+  default = ""
 }
 
 variable "OPENAPI_IMAGE" {
-  default = "openapi-generator:local"
+  default = ""
 }
 
 variable "MYSQL_IMAGE" {
-  default = "isekai-observatory-mysql:local"
+  default = ""
 }
 
 # bash の UID は readonly で `UID=... docker buildx bake` と渡せないため HOST_ を付ける
