@@ -3,6 +3,8 @@
 # Docs: https://gh.io/actions-lockfile
 version: 'v0.0.3'
 workflows:
+    '.github/workflows/actions-lock.yaml':
+        - 'actions/checkout@v7.0.1'
     '.github/workflows/admin-proxy-qa.yaml':
         - 'actions/cache@v6.1.0'
         - 'actions/checkout@v7.0.1'
