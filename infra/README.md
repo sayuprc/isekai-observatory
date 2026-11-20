@@ -99,6 +99,10 @@ Dockerfile は `base-*` を参照するため、Bake を通さない `docker bui
 
 `-f docker-bake.hcl` を省くと `compose.yaml` も読み込まれるため、常に付ける
 
+ローカル開発 / server-qa 用の `local/docker/` のイメージも同じ `docker-bake.hcl` の `local` グループ (`local-proxy` / `local-php` / `local-openapi-generator` / `local-mysql`) で定義する
+
+これらは `mise run build` / `mise run build:<名前>` から呼び、image 名は `mise.toml` / `mise.ci.toml` の `[env]` で渡す。ベースイメージは `BASE_IMAGES` を通さない
+
 ## 初回構築前提 (共通)
 
 | 対象 | 設定内容 |

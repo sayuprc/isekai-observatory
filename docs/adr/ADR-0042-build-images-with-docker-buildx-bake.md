@@ -25,6 +25,7 @@ applies_to: [api, admin, viewer]
 
 - Cloud Build / GitHub Actions / 手元は `docker buildx bake -f docker-bake.hcl` を呼び、差分は環境変数で渡す
 - `DEPLOY_ENV` と `PUBLIC_APP_URL` は既定値を持たせず、呼び出し側で必ず渡す
+- `infra/local/docker` のローカル開発 / server-qa 用イメージも同じファイルの `local` グループで定義し、mise タスクから呼ぶ
 
 ベースイメージは `docker-bake.hcl` の `BASE_IMAGES` に定義し、Dockerfile からは `base-<キー>` の named context で参照する
 
