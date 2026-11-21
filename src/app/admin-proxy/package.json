@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "deploy": "wrangler deploy",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "bun check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --fix",

@@ -13,7 +13,7 @@
     "compile:public:watch": "tsp compile ./src/public/main.tsp --watch",
     "format": "tsp format \"**/*.tsp\"",
     "format:check": "tsp format --check \"**/*.tsp\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "bun check"
   },
   "peerDependencies": {
     "@typespec/compiler": "1.18.0",

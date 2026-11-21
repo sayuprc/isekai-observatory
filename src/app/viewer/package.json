@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "deploy": "wrangler deploy",
     "astro": "astro",
-    "typecheck": "SKIP_CONTENT_FETCH=true astro check && tsc --noEmit",
+    "typecheck": "SKIP_CONTENT_FETCH=true astro check && bun check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --fix",

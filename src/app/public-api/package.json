@@ -10,7 +10,7 @@
     "deploy": "wrangler deploy",
     "deploy:docs": "wrangler deploy --config wrangler.docs.jsonc",
     "test": "bun test",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "bun check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --fix",
