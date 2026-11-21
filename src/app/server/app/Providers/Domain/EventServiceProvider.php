@@ -6,12 +6,10 @@ namespace App\Providers\Domain;
 
 use Event\Application\Admin\UseCase\Search\Query\EventSearchQueryServiceInterface;
 use Event\Application\Public\UseCase\List\Query\EventQueryServiceInterface as PublicEventQueryServiceInterface;
-use Event\Application\Viewer\UseCase\List\Query\EventQueryServiceInterface as ViewerEventQueryServiceInterface;
 use Event\Domain\Models\EventRepositoryInterface;
 use Event\Infrastructures\Admin\EventSearchQueryService;
 use Event\Infrastructures\EventRepository;
 use Event\Infrastructures\Public\EventQueryService as PublicEventQueryService;
-use Event\Infrastructures\Viewer\EventQueryService as ViewerEventQueryService;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -22,7 +20,6 @@ class EventServiceProvider extends ServiceProvider
     {
         $this->app->bind(EventRepositoryInterface::class, EventRepository::class);
         $this->app->bind(EventSearchQueryServiceInterface::class, EventSearchQueryService::class);
-        $this->app->bind(ViewerEventQueryServiceInterface::class, ViewerEventQueryService::class);
         $this->app->bind(PublicEventQueryServiceInterface::class, PublicEventQueryService::class);
     }
 }

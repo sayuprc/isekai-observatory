@@ -10,12 +10,10 @@ use Media\Infrastructures\MediaRepository;
 use Override;
 use Song\Application\Admin\UseCase\Search\Query\SongQueryServiceInterface;
 use Song\Application\Public\UseCase\List\Query\SongQueryServiceInterface as PublicSongQueryServiceInterface;
-use Song\Application\Viewer\UseCase\List\Query\SongQueryServiceInterface as ViewerSongQueryServiceInterface;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Infrastructures\Admin\SongQueryService;
 use Song\Infrastructures\Public\SongQueryService as PublicSongQueryService;
 use Song\Infrastructures\SongRepository;
-use Song\Infrastructures\Viewer\SongQueryService as ViewerSongQueryService;
 
 class SongServiceProvider extends ServiceProvider
 {
@@ -26,7 +24,6 @@ class SongServiceProvider extends ServiceProvider
         $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
 
         $this->app->bind(SongQueryServiceInterface::class, SongQueryService::class);
-        $this->app->bind(ViewerSongQueryServiceInterface::class, ViewerSongQueryService::class);
         $this->app->bind(PublicSongQueryServiceInterface::class, PublicSongQueryService::class);
     }
 }

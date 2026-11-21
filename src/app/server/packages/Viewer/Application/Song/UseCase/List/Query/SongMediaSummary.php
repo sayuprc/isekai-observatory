@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Viewer\Application\Song\UseCase\List\Query;
+
+use DateTimeImmutable;
+use Media\Domain\Models\MediaType;
+
+readonly class SongMediaSummary
+{
+    public function __construct(
+        public string $mediaId,
+        public string $title,
+        public MediaType $type,
+        public string $url,
+        public DateTimeImmutable $publishedAt,
+    ) {
+    }
+}

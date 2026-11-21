@@ -1,0 +1,167 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Viewer\Infrastructures;
+
+use DateTimeImmutable;
+use Emonkak\Orm\Sql;
+use Media\Domain\Models\MediaType;
+use Override;
+use Song\Domain\Models\SongType;
+use Support\Contracts\Uuid\UuidConverterInterface;
+use Support\Infrastructures\Database\QueryFactory;
+use Support\Infrastructures\Database\Row;
+use Viewer\Application\Media\UseCase\List\Query\MediaListCursor;
+use Viewer\Application\Media\UseCase\List\Query\MediaListItem;
+use Viewer\Application\Media\UseCase\List\Query\MediaListPage;
+use Viewer\Application\Media\UseCase\List\Query\MediaQueryServiceInterface;
+use Viewer\Application\Media\UseCase\List\Query\MediaSongSummary;
+
+readonly class MediaQueryService implements MediaQueryServiceInterface
+{
+    public function __construct(
+        private QueryFactory $queryFactory,
+        private UuidConverterInterface $converter,
+    ) {
+    }
+
+    #[Override]
+    public function list(?string $cursor, int $limit): MediaListPage
+    {
+        $query = $this->queryFactory
+            ->select()
+            ->withSelect(['media_id', 'title', 'url', 'published_at', 'type'])
+            ->from('media')
+            ->where('is_display', '=', true);
+
+        if (is_string($cursor)) {
+            $decoded = MediaListCursor::decode($cursor);
+
+            // 降順と昇順が混在し行値比較では表せないため、条件を展開して書く
+            $query = Sql::format(
+                '(published_at < %s OR (published_at = %s AND media_id > %s))',
+                Sql::value($decoded->publishedAt),
+                Sql::value($decoded->publishedAt),
+                Sql::value($this->converter->toBin($decoded->mediaId)),
+            )
+                |> $query->where(...);
+        }
+
+        $mediaRows = $query
+            ->orderBy('published_at', 'desc')
+            ->orderBy('media_id')
+            ->limit($limit + 1)
+            |> $this->queryFactory->fetchAll(...);
+
+        $hasNextPage = count($mediaRows) > $limit;
+        $pageRows = $hasNextPage ? array_slice($mediaRows, 0, $limit) : $mediaRows;
+
+        $binMediaIds = array_map(static fn (array $row): string => Row::string($row, 'media_id'), $pageRows);
+
+        $songsByMedia = $this->loadSongs($binMediaIds);
+        $tagsByMedia = $this->loadTags($binMediaIds);
+
+        $media = array_map(
+            function (array $mediaRow) use ($songsByMedia, $tagsByMedia): MediaListItem {
+                $binMediaId = Row::string($mediaRow, 'media_id');
+                $songRows = $songsByMedia[$binMediaId] ?? [];
+
+                return new MediaListItem(
+                    $this->converter->toUuid($binMediaId),
+                    Row::string($mediaRow, 'title'),
+                    Row::string($mediaRow, 'url'),
+                    new DateTimeImmutable(Row::string($mediaRow, 'published_at')),
+                    MediaType::from(Row::int($mediaRow, 'type')),
+                    array_map($this->toSongSummary(...), $songRows),
+                    $tagsByMedia[$binMediaId] ?? [],
+                );
+            },
+            $pageRows,
+        );
+
+        $lastMedia = $hasNextPage && $media !== [] ? $media[count($media) - 1] : null;
+
+        $nextCursor = $lastMedia === null
+            ? null
+            : MediaListCursor::encode($lastMedia->publishedAt->format('Y-m-d H:i:s'), $lastMedia->mediaId);
+
+        return new MediaListPage($media, $nextCursor);
+    }
+
+    /**
+     * @param array<int, string> $binMediaIds
+     *
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    private function loadSongs(array $binMediaIds): array
+    {
+        if ($binMediaIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['song_media_links.media_id', 'songs.song_id', 'songs.title', 'songs.type'])
+            ->from('song_media_links')
+            ->join('songs', 'song_media_links.song_id = songs.song_id')
+            ->where('song_media_links.media_id', 'IN', $binMediaIds)
+            ->where('songs.is_display', '=', true)
+            ->orderBy('song_media_links.order_no')
+            |> $this->queryFactory->fetchAll(...);
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'media_id')][] = $row;
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param array<int, string> $binMediaIds
+     *
+     * @return array<string, array<int, array{tagId: string, name: string, orderNo: int}>>
+     */
+    private function loadTags(array $binMediaIds): array
+    {
+        if ($binMediaIds === []) {
+            return [];
+        }
+
+        $rows = $this->queryFactory
+            ->select()
+            ->withSelect(['media_taggings.media_id', 'tags.tag_id', 'tags.name', 'tags.order_no'])
+            ->from('media_taggings')
+            ->join('tags', 'media_taggings.tag_id = tags.tag_id')
+            ->where('media_taggings.media_id', 'IN', $binMediaIds)
+            ->orderBy('tags.order_no')
+            ->orderBy('tags.tag_id')
+            |> $this->queryFactory->fetchAll(...);
+
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $grouped[Row::string($row, 'media_id')][] = [
+                'tagId' => $this->converter->toUuid(Row::string($row, 'tag_id')),
+                'name' => Row::string($row, 'name'),
+                'orderNo' => Row::int($row, 'order_no'),
+            ];
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * @param array<string, mixed> $songRow
+     */
+    private function toSongSummary(array $songRow): MediaSongSummary
+    {
+        return new MediaSongSummary(
+            $this->converter->toUuid(Row::string($songRow, 'song_id')),
+            Row::string($songRow, 'title'),
+            SongType::from(Row::int($songRow, 'type')),
+        );
+    }
+}

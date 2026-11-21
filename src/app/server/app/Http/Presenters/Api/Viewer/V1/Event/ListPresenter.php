@@ -5,15 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Viewer\V1\Event;
 
 use DateTime;
-use Event\Application\Viewer\UseCase\List\ListOutputData;
-use Event\Application\Viewer\UseCase\List\Query\EventCoVocalistSummary;
-use Event\Application\Viewer\UseCase\List\Query\EventListItem;
-use Event\Application\Viewer\UseCase\List\Query\EventMediaSummary;
-use Event\Application\Viewer\UseCase\List\Query\EventPerformanceSummary;
-use Event\Application\Viewer\UseCase\List\Query\EventReleaseSummary;
-use Event\Application\Viewer\UseCase\List\Query\EventSetlistItemSummary;
-use Event\Application\Viewer\UseCase\List\Query\EventSourceSummary;
-use Event\Application\Viewer\UseCase\List\Query\EventVenueSummary;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\Event as OpenApiEvent;
@@ -33,6 +24,15 @@ use OpenAPI\Viewer\Client\Model\SetlistItem as OpenApiSetlistItem;
 use OpenAPI\Viewer\Client\Model\SongPerformance as OpenApiSongPerformance;
 use OpenAPI\Viewer\Client\Model\VenueKindValue;
 use Release\Domain\Models\ReleaseFormat;
+use Viewer\Application\Event\UseCase\List\ListOutputData;
+use Viewer\Application\Event\UseCase\List\Query\EventCoVocalistSummary;
+use Viewer\Application\Event\UseCase\List\Query\EventListItem;
+use Viewer\Application\Event\UseCase\List\Query\EventMediaSummary;
+use Viewer\Application\Event\UseCase\List\Query\EventPerformanceSummary;
+use Viewer\Application\Event\UseCase\List\Query\EventReleaseSummary;
+use Viewer\Application\Event\UseCase\List\Query\EventSetlistItemSummary;
+use Viewer\Application\Event\UseCase\List\Query\EventSourceSummary;
+use Viewer\Application\Event\UseCase\List\Query\EventVenueSummary;
 
 class ListPresenter
 {
