@@ -33,5 +33,7 @@ interface PersonRepositoryInterface
 
     public function delete(PersonId $personId): void;
 
+    public function isUsed(PersonId $personId): bool;
+
     public function getMaxOrderNo(): int;
 }

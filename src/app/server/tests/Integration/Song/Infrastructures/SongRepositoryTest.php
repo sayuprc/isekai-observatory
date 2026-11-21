@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Song\Infrastructures;
 
-use Person\Domain\Models\PersonId;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongType;
@@ -108,38 +107,6 @@ class SongRepositoryTest extends DatabaseTestCase
     public function findByIdsReturnsEmptyWhenNoIdsGiven(): void
     {
         $this->assertSame([], $this->getInstance()->findByIds());
-    }
-
-    #[Test]
-    public function isPersonUsed(): void
-    {
-        $person = $this->createPerson($this->generateUuid(), '人物', 1);
-        $this->storePersons($person);
-
-        $repository = $this->getInstance();
-
-        $song = $this->createSong(
-            $this->generateUuid(),
-            '曲名',
-            '説明',
-            SongType::Original,
-            true,
-            1,
-            [],
-            [
-                ['personId' => $person->personId->value, 'role' => 1, 'orderNo' => 1],
-            ],
-        );
-
-        $repository->save($song);
-
-        $this->assertTrue($repository->isPersonUsed($person->personId));
-    }
-
-    #[Test]
-    public function isPersonNotUsed(): void
-    {
-        $this->assertFalse($this->getInstance()->isPersonUsed(new PersonId($this->generateUuid())));
     }
 
     #[Test]

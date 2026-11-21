@@ -6,7 +6,6 @@ namespace Person\Application\Admin\UseCase\Delete;
 
 use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonRepositoryInterface;
-use Person\Domain\Services\PersonUsageCheckerInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Permission;
@@ -22,7 +21,6 @@ readonly class DeleteUseCase
         private UseCaseAuthorizer $authorizer,
         private TransactionInterface $transaction,
         private PersonRepositoryInterface $repository,
-        private PersonUsageCheckerInterface $usageChecker,
         private AuditLogRecorderInterface $recorder,
     ) {
     }
@@ -40,7 +38,7 @@ readonly class DeleteUseCase
                 throw new ResourceNotFoundException('Person', $personId->value);
             }
 
-            if ($this->usageChecker->isUsed($personId)) {
+            if ($this->repository->isUsed($personId)) {
                 throw new BusinessRuleViolationException('この人物は楽曲に使用されているため削除できません');
             }
 

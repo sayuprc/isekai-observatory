@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Song\Infrastructures;
 
 use Override;
-use Person\Domain\Models\PersonId;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
@@ -100,28 +99,6 @@ readonly class SongRepository implements SongRepositoryInterface
             },
             $songRows,
         );
-    }
-
-    #[Override]
-    public function isPersonUsed(PersonId $personId): bool
-    {
-        $personBinId = $this->converter->toBin($personId->value);
-
-        $songPersonCount = $this->queryFactory
-            ->select()
-            ->from('song_persons')
-            ->where('person_id', '=', $personBinId)
-            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
-            |> Row::intValue(...);
-
-        $performancePersonCount = $this->queryFactory
-            ->select()
-            ->from('song_performance_persons')
-            ->where('person_id', '=', $personBinId)
-            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
-            |> Row::intValue(...);
-
-        return $songPersonCount > 0 || $performancePersonCount > 0;
     }
 
     #[Override]

@@ -161,6 +161,27 @@ readonly class PersonRepository implements PersonRepositoryInterface
     }
 
     #[Override]
+    public function isUsed(PersonId $personId): bool
+    {
+        $binPersonId = $this->converter->toBin($personId->value);
+
+        foreach (['song_persons', 'song_performance_persons'] as $table) {
+            $count = $this->queryFactory
+                ->select()
+                ->from($table)
+                ->where('person_id', '=', $binPersonId)
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+                |> Row::intValue(...);
+
+            if ($count > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    #[Override]
     public function getMaxOrderNo(): int
     {
         $max = $this->queryFactory
