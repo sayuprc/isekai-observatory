@@ -61,14 +61,14 @@ variable "ADMIN_PROXY_IMAGE" {
 variable "BASE_IMAGES" {
   default = {
     alpine     = { image = "alpine:3.24", source = "dockerhub" }
-    bun        = { image = "oven/bun:1.4.4", source = "dockerhub" }
-    bun-slim   = { image = "oven/bun:1.4.4-slim", source = "dockerhub" }
+    bun        = { image = "oven/bun:1.4.5", source = "dockerhub" }
+    bun-slim   = { image = "oven/bun:1.4.5-slim", source = "dockerhub" }
     composer   = { image = "composer:2.11.2", source = "dockerhub" }
     debian     = { image = "debian:bookworm-slim", source = "dockerhub" }
     frankenphp = { image = "dunglas/frankenphp:php8.5.12-alpine", source = "dockerhub" }
-    mise       = { image = "jdxcode/mise:2026.11.8-debian", source = "dockerhub" }
+    mise       = { image = "jdxcode/mise:2026.11.11-debian", source = "dockerhub" }
     node       = { image = "node:26.13.1-slim", source = "dockerhub" }
-    php-cli    = { image = "php:8.5.12-cli-alpine", source = "dockerhub" }
+    php-cli    = { image = "php:8.6.0-cli-alpine", source = "dockerhub" }
     pie        = { image = "ghcr.io/php/pie:1.5.5-bin", source = "dockerhub" }
   }
 
