@@ -11,7 +11,6 @@ use Release\Application\Admin\UseCase\Group\Get\Query\ReleaseGroupDetailQuerySer
 use Release\Application\Admin\UseCase\Group\Search\Query\ReleaseGroupSearchQueryServiceInterface;
 use Release\Application\Admin\UseCase\Search\Query\ReleaseSearchQueryServiceInterface;
 use Release\Application\Public\UseCase\List\Query\ReleaseGroupQueryServiceInterface as PublicReleaseGroupQueryServiceInterface;
-use Release\Application\Viewer\UseCase\List\Query\ReleaseGroupQueryServiceInterface as ViewerReleaseGroupQueryServiceInterface;
 use Release\Domain\Models\ReleaseGroupRepositoryInterface;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Release\Infrastructures\Admin\ReleaseDetailQueryService;
@@ -21,7 +20,6 @@ use Release\Infrastructures\Admin\ReleaseSearchQueryService;
 use Release\Infrastructures\Public\ReleaseGroupQueryService as PublicReleaseGroupQueryService;
 use Release\Infrastructures\ReleaseGroupRepository;
 use Release\Infrastructures\ReleaseRepository;
-use Release\Infrastructures\Viewer\ReleaseGroupQueryService as ViewerReleaseGroupQueryService;
 
 class ReleaseServiceProvider extends ServiceProvider
 {
@@ -34,7 +32,6 @@ class ReleaseServiceProvider extends ServiceProvider
         $this->app->bind(ReleaseGroupDetailQueryServiceInterface::class, ReleaseGroupDetailQueryService::class);
         $this->app->bind(ReleaseGroupSearchQueryServiceInterface::class, ReleaseGroupSearchQueryService::class);
         $this->app->bind(ReleaseSearchQueryServiceInterface::class, ReleaseSearchQueryService::class);
-        $this->app->bind(ViewerReleaseGroupQueryServiceInterface::class, ViewerReleaseGroupQueryService::class);
         $this->app->bind(PublicReleaseGroupQueryServiceInterface::class, PublicReleaseGroupQueryService::class);
     }
 }

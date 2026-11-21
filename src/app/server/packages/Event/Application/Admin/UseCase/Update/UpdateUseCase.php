@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Event\Application\Admin\UseCase\Update;
 
-use AdminUser\Domain\Models\Permission;
 use Event\Application\Admin\Assemble\EventAssembler;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
 use Event\Domain\Services\EventIntegrityService;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

@@ -217,13 +217,13 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Viewer/UseCase/List/Query/EventListItem.php"
+file = "packages/Viewer/Application/Event/UseCase/List/Query/EventListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Viewer/UseCase/List/Query/EventReleaseSummary.php"
+file = "packages/Viewer/Application/Event/UseCase/List/Query/EventReleaseSummary.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -265,19 +265,19 @@ message = "Class has a high kan defect score."
 count = 1
 
 [[issues]]
-file = "packages/Event/Infrastructures/Viewer/EventQueryService.php"
+file = "packages/Viewer/Infrastructures/EventQueryService.php"
 code = "cyclomatic-complexity"
 message = "Class has high complexity."
 count = 1
 
 [[issues]]
-file = "packages/Event/Infrastructures/Viewer/EventQueryService.php"
+file = "packages/Viewer/Infrastructures/EventQueryService.php"
 code = "kan-defect"
 message = "Class has a high kan defect score."
 count = 1
 
 [[issues]]
-file = "packages/Event/Infrastructures/Viewer/EventQueryService.php"
+file = "packages/Viewer/Infrastructures/EventQueryService.php"
 code = "too-many-methods"
 message = "Class has too many methods."
 count = 1
@@ -337,7 +337,7 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Viewer/UseCase/List/Query/MediaListItem.php"
+file = "packages/Viewer/Application/Media/UseCase/List/Query/MediaListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -469,13 +469,13 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Viewer/UseCase/List/Query/ReleaseGroupListItem.php"
+file = "packages/Viewer/Application/Release/UseCase/List/Query/ReleaseGroupListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Viewer/UseCase/List/Query/ReleaseListItem.php"
+file = "packages/Viewer/Application/Release/UseCase/List/Query/ReleaseListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -541,13 +541,13 @@ message = "Class has a high kan defect score."
 count = 1
 
 [[issues]]
-file = "packages/Release/Infrastructures/Viewer/ReleaseGroupQueryService.php"
+file = "packages/Viewer/Infrastructures/ReleaseGroupQueryService.php"
 code = "cyclomatic-complexity"
 message = "Class has high complexity."
 count = 1
 
 [[issues]]
-file = "packages/Release/Infrastructures/Viewer/ReleaseGroupQueryService.php"
+file = "packages/Viewer/Infrastructures/ReleaseGroupQueryService.php"
 code = "kan-defect"
 message = "Class has a high kan defect score."
 count = 1
@@ -631,7 +631,7 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Viewer/UseCase/List/Query/SongListItem.php"
+file = "packages/Viewer/Application/Song/UseCase/List/Query/SongListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -679,25 +679,25 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+file = "packages/Viewer/Infrastructures/SongQueryService.php"
 code = "cyclomatic-complexity"
 message = "Class has high complexity."
 count = 1
 
 [[issues]]
-file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+file = "packages/Viewer/Infrastructures/SongQueryService.php"
 code = "kan-defect"
 message = "Class has a high kan defect score."
 count = 1
 
 [[issues]]
-file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+file = "packages/Viewer/Infrastructures/SongQueryService.php"
 code = "no-isset"
 message = "Use of the `isset` construct."
 count = 1
 
 [[issues]]
-file = "packages/Song/Infrastructures/Viewer/SongQueryService.php"
+file = "packages/Viewer/Infrastructures/SongQueryService.php"
 code = "too-many-methods"
 message = "Class has too many methods."
 count = 1

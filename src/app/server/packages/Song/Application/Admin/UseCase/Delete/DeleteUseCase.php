@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Song\Application\Admin\UseCase\Delete;
 
-use AdminUser\Domain\Models\Permission;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -38,7 +38,7 @@ readonly class DeleteUseCase
                 throw new ResourceNotFoundException('Song', $songId->value);
             }
             if ($this->repository->isUsed($songId)) {
-                throw new BusinessRuleViolationException('この楽曲はイベントで披露されているため削除できません');
+                throw new BusinessRuleViolationException('この楽曲はイベントやリリースで使われているため削除できません');
             }
 
             $this->repository->delete($songId);

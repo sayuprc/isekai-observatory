@@ -6,10 +6,10 @@ namespace Tests\Feature\Api\Viewer\V1\Song;
 
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
-use Song\Route\ViewerSongRouteMap;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
+use Viewer\Route\SongRouteMap;
 
 class PerformanceHistoryTest extends DatabaseTestCase
 {
@@ -46,7 +46,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
         ));
 
         $this
-            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->get(route(SongRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonPath('songs.0.songId', $songId)
             ->assertJsonPath('songs.0.performances.0.eventId', $eventId)
@@ -101,7 +101,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
         ));
 
         $this
-            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->get(route(SongRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonPath('songs.0.performances.0.coVocalistNames', ['ゲスト', 'グループ']);
     }
@@ -126,7 +126,7 @@ class PerformanceHistoryTest extends DatabaseTestCase
         ));
 
         $this
-            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->get(route(SongRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonPath('songs.0.songId', $songId)
             ->assertJsonCount(0, 'songs.0.performances');

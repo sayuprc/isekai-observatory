@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\Group\Update;
 
-use AdminUser\Domain\Models\Permission;
 use LogicException;
 use Person\Application\Admin\Query\PersonGroupQueryServiceInterface;
 use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonGroupRepositoryInterface;
 use Person\Domain\Services\PersonGroupIntegrityService;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

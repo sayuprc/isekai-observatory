@@ -24,6 +24,7 @@ paths = [
   "packages/Support/",
   "packages/Tag/",
   "packages/Venue/",
+  "packages/Viewer/",
   "public/",
   "routes/",
   "tests/",

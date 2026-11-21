@@ -31,7 +31,6 @@ return [
     ]),
     new Define(SupportComponent::UseCase, [
         SupportComponent::UseCase,
-        AdminUserComponent::Domain,
         SupportComponent::Contracts,
         SupportComponent::Domain,
         SupportComponent::Optional,
@@ -87,8 +86,6 @@ return [
         [
             PersonComponent::Domain,
             PersonComponent::Query,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
             SupportComponent::Contracts,
             SupportComponent::Domain,
             SupportComponent::Optional,
@@ -114,8 +111,6 @@ return [
         [
             VenueComponent::Domain,
             VenueComponent::Query,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
             SupportComponent::Contracts,
             SupportComponent::Domain,
             SupportComponent::Optional,
@@ -142,8 +137,6 @@ return [
         [
             TagComponent::Domain,
             TagComponent::Query,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
             SupportComponent::Contracts,
             SupportComponent::Domain,
             SupportComponent::Optional,
@@ -192,8 +185,6 @@ return [
             SongComponent::Query,
             SongComponent::Assemble,
             TagComponent::Domain,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
             SupportComponent::Contracts,
             SupportComponent::Domain,
             SupportComponent::Optional,

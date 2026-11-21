@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Song\Application\Admin\UseCase\Get;
 
-use AdminUser\Domain\Models\Permission;
 use Song\Application\Admin\Assemble\SongAssembler;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
 

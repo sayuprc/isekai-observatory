@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\Group\Delete;
 
-use AdminUser\Domain\Models\Permission;
 use Person\Domain\Models\PersonGroupId;
 use Person\Domain\Models\PersonGroupRepositoryInterface;
-use Person\Domain\Services\PersonGroupUsageCheckerInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
@@ -21,7 +20,6 @@ readonly class DeleteUseCase
         private UseCaseAuthorizer $authorizer,
         private TransactionInterface $transaction,
         private PersonGroupRepositoryInterface $repository,
-        private PersonGroupUsageCheckerInterface $usageChecker,
         private AuditLogRecorderInterface $recorder,
     ) {
     }
@@ -39,7 +37,7 @@ readonly class DeleteUseCase
                 return;
             }
 
-            if ($this->usageChecker->isUsed($personGroupId)) {
+            if ($this->repository->isUsed($personGroupId)) {
                 throw new BusinessRuleViolationException('この人物グループは楽曲披露に使用されているため削除できません');
             }
 

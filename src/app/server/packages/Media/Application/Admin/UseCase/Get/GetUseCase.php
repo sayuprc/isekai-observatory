@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Media\Application\Admin\UseCase\Get;
 
-use AdminUser\Domain\Models\Permission;
 use Media\Application\Admin\UseCase\Get\Query\MediaDetailQueryServiceInterface;
 use Media\Domain\Models\MediaId;
 use Media\Domain\Models\MediaRepositoryInterface;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
 use Tag\Domain\Models\TagId;

@@ -14,7 +14,6 @@ use Media\Application\Admin\UseCase\ImportYouTube\Query\YouTubeShortVideoQuerySe
 use Media\Application\Admin\UseCase\ImportYouTube\Query\YouTubeVideoQueryServiceInterface;
 use Media\Application\Admin\UseCase\Search\Query\MediaUsageCountQueryServiceInterface;
 use Media\Application\Public\UseCase\List\Query\MediaQueryServiceInterface as PublicMediaQueryServiceInterface;
-use Media\Application\Viewer\UseCase\List\Query\MediaQueryServiceInterface as ViewerMediaQueryServiceInterface;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannelRepositoryInterface;
 use Media\Infrastructures\Admin\MediaDetailQueryService;
@@ -23,7 +22,6 @@ use Media\Infrastructures\Admin\YouTubeShortVideoQueryService;
 use Media\Infrastructures\Admin\YouTubeVideoQueryService;
 use Media\Infrastructures\MediaRepository;
 use Media\Infrastructures\Public\MediaQueryService as PublicMediaQueryService;
-use Media\Infrastructures\Viewer\MediaQueryService as ViewerMediaQueryService;
 use Media\Infrastructures\YouTubeChannelRepository;
 use Override;
 
@@ -35,7 +33,6 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
         $this->app->bind(MediaDetailQueryServiceInterface::class, MediaDetailQueryService::class);
         $this->app->bind(MediaUsageCountQueryServiceInterface::class, MediaUsageCountQueryService::class);
-        $this->app->bind(ViewerMediaQueryServiceInterface::class, ViewerMediaQueryService::class);
         $this->app->bind(PublicMediaQueryServiceInterface::class, PublicMediaQueryService::class);
         $this->app->bind(YouTubeChannelRepositoryInterface::class, YouTubeChannelRepository::class);
         $this->app->bind(YouTubeVideoQueryServiceInterface::class, YouTubeVideoQueryService::class);

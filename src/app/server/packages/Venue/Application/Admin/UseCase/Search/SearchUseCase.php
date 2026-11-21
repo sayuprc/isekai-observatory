@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Venue\Application\Admin\UseCase\Search;
 
-use AdminUser\Domain\Models\Permission;
+use Support\Domain\Permission;
 use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;
