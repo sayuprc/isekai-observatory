@@ -14,7 +14,7 @@ use Event\Application\Admin\Assemble\AssembledSetlistItem;
 use Event\Application\Admin\Assemble\AssembledSource;
 use Event\Application\Admin\Assemble\AssembledTag;
 use Event\Application\Admin\Assemble\AssembledVenue;
-use Event\Application\Admin\Query\EventSummary;
+use Event\Application\Admin\Search\Query\EventSummary;
 use OpenAPI\Admin\Client\Model\AttachedTag as OpenApiAttachedTag;
 use OpenAPI\Admin\Client\Model\Event as OpenApiEvent;
 use OpenAPI\Admin\Client\Model\EventRelease as OpenApiEventRelease;

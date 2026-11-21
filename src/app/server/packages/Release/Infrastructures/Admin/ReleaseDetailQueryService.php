@@ -6,8 +6,8 @@ namespace Release\Infrastructures\Admin;
 
 use Emonkak\Orm\Sql;
 use Override;
-use Release\Application\Admin\Query\ReleaseDetailQueryServiceInterface;
-use Release\Application\Admin\Query\ReleaseReferencedSong;
+use Release\Application\Admin\Get\Query\ReleaseDetailQueryServiceInterface;
+use Release\Application\Admin\Get\Query\ReleaseReferencedSong;
 use Release\Domain\Models\ReleaseId;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;

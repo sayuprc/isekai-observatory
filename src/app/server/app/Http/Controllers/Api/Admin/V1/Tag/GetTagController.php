@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Tag;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Tag\GetPresenter;
 use Illuminate\Http\JsonResponse;
-use Tag\Application\Admin\UseCase\Get\GetInputData;
-use Tag\Application\Admin\UseCase\Get\GetUseCase;
+use Tag\Application\Admin\Get\GetInputData;
+use Tag\Application\Admin\Get\GetUseCase;
 
 final readonly class GetTagController extends Controller
 {

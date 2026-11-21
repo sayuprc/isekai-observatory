@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\ReleaseGroup;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\ReleaseGroup\DeletePresenter;
 use Illuminate\Http\JsonResponse;
-use Release\Application\Admin\UseCase\Group\Delete\DeleteInputData;
-use Release\Application\Admin\UseCase\Group\Delete\DeleteUseCase;
+use Release\Application\Admin\Group\Delete\DeleteInputData;
+use Release\Application\Admin\Group\Delete\DeleteUseCase;
 
 final readonly class DeleteReleaseGroupController extends Controller
 {

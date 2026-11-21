@@ -7,8 +7,8 @@ namespace App\Http\Presenters\Api\Admin\V1\PersonGroup;
 use OpenAPI\Admin\Client\Model\PersonGroup as OpenApiPersonGroup;
 use OpenAPI\Admin\Client\Model\PersonGroupMember as OpenApiPersonGroupMember;
 use OpenAPI\Admin\Client\Model\PersonGroupSummary as OpenApiPersonGroupSummary;
-use Person\Application\Admin\Query\PersonGroupMemberSummary;
-use Person\Application\Admin\Query\PersonGroupSummary;
+use Person\Application\Admin\Group\Query\PersonGroupMemberSummary;
+use Person\Application\Admin\Group\Query\PersonGroupSummary;
 
 class Converter
 {

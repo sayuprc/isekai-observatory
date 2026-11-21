@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Tag;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Tag\DeletePresenter;
 use Illuminate\Http\JsonResponse;
-use Tag\Application\Admin\UseCase\Delete\DeleteInputData;
-use Tag\Application\Admin\UseCase\Delete\DeleteUseCase;
+use Tag\Application\Admin\Delete\DeleteInputData;
+use Tag\Application\Admin\Delete\DeleteUseCase;
 
 final readonly class DeleteTagController extends Controller
 {

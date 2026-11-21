@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Media\Application\Admin\Query\YouTubeUploadedVideo;
+use Media\Application\Admin\ImportYouTube\Query\YouTubeUploadedVideo;
 use Media\Infrastructures\Admin\YouTubeShortVideoQueryService;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;

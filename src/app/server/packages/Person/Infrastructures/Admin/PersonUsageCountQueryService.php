@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Person\Infrastructures\Admin;
 
 use Override;
-use Person\Application\Admin\Query\PersonUsageCount;
-use Person\Application\Admin\Query\PersonUsageCountQueryServiceInterface;
+use Person\Application\Admin\Search\Query\PersonUsageCount;
+use Person\Application\Admin\Search\Query\PersonUsageCountQueryServiceInterface;
 use Person\Domain\Models\PersonId;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;

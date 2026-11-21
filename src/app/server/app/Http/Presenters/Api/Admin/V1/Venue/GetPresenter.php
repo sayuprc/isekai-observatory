@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Venue;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\VenueGetResponse;
-use Venue\Application\Admin\UseCase\Get\GetOutputData;
+use Venue\Application\Admin\Get\GetOutputData;
 
 class GetPresenter
 {

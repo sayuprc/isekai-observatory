@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\Media;
 
 use Illuminate\Console\Command;
-use Media\Application\Admin\UseCase\ImportYouTube\ImportYouTubeInputData;
-use Media\Application\Admin\UseCase\ImportYouTube\ImportYouTubeUseCase;
+use Media\Application\Admin\ImportYouTube\ImportYouTubeInputData;
+use Media\Application\Admin\ImportYouTube\ImportYouTubeUseCase;
 use Override;
 
 class ImportYouTubeCommand extends Command

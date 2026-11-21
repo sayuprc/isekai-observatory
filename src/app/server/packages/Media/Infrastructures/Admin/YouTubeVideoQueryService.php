@@ -8,8 +8,8 @@ use Generator;
 use Google\Service\YouTube;
 use Google\Service\YouTube\Resource\Channels;
 use Google\Service\YouTube\Resource\PlaylistItems;
-use Media\Application\Admin\Query\YouTubeUploadedVideo;
-use Media\Application\Admin\Query\YouTubeVideoQueryServiceInterface;
+use Media\Application\Admin\ImportYouTube\Query\YouTubeUploadedVideo;
+use Media\Application\Admin\ImportYouTube\Query\YouTubeVideoQueryServiceInterface;
 use Media\Domain\Models\YouTubeChannel\YouTubeChannelId;
 use Override;
 

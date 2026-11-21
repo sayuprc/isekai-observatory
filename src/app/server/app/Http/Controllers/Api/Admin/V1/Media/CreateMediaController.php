@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Media\CreatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Media\Application\Admin\UseCase\Create\CreateInputData;
-use Media\Application\Admin\UseCase\Create\CreateUseCase;
+use Media\Application\Admin\Create\CreateInputData;
+use Media\Application\Admin\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class CreateMediaController extends Controller

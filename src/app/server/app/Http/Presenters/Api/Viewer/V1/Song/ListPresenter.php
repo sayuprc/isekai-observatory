@@ -18,11 +18,11 @@ use OpenAPI\Viewer\Client\Model\SongPerformanceHistory as OpenApiSongPerformance
 use OpenAPI\Viewer\Client\Model\SongRelationCounts;
 use OpenAPI\Viewer\Client\Model\SongReleaseGroupSummary as OpenApiSongReleaseGroupSummary;
 use OpenAPI\Viewer\Client\Model\SongTypeValue;
-use Song\Application\Viewer\Query\SongListItem;
-use Song\Application\Viewer\Query\SongMediaSummary;
-use Song\Application\Viewer\Query\SongPerformanceHistory;
-use Song\Application\Viewer\Query\SongReleaseGroupSummary;
-use Song\Application\Viewer\UseCase\List\ListOutputData;
+use Song\Application\Viewer\List\ListOutputData;
+use Song\Application\Viewer\List\Query\SongListItem;
+use Song\Application\Viewer\List\Query\SongMediaSummary;
+use Song\Application\Viewer\List\Query\SongPerformanceHistory;
+use Song\Application\Viewer\List\Query\SongReleaseGroupSummary;
 
 class ListPresenter
 {

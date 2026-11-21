@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Auth;
 
-use Auth\Application\Admin\UseCase\Refresh\RefreshOutputData;
+use Auth\Application\Admin\Refresh\RefreshOutputData;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\RefreshTokenResponse;
 

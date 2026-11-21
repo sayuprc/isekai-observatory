@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\PersonGroup;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\PersonGroupGetResponse;
-use Person\Application\Admin\UseCase\Group\Get\GetOutputData;
+use Person\Application\Admin\Group\Get\GetOutputData;
 
 class GetPresenter
 {

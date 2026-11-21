@@ -6,8 +6,8 @@ namespace App\Console\Commands\Media;
 
 use App\Console\Commands\Concerns\ResolvesUseCaseExceptionMessage;
 use Illuminate\Console\Command;
-use Media\Application\Admin\UseCase\RemoveYouTubeChannel\RemoveYouTubeChannelInputData;
-use Media\Application\Admin\UseCase\RemoveYouTubeChannel\RemoveYouTubeChannelUseCase;
+use Media\Application\Admin\RemoveYouTubeChannel\RemoveYouTubeChannelInputData;
+use Media\Application\Admin\RemoveYouTubeChannel\RemoveYouTubeChannelUseCase;
 use Override;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Exceptions\InvalidDomainException;

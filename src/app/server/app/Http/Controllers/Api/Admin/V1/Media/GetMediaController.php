@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Media;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Media\GetPresenter;
 use Illuminate\Http\JsonResponse;
-use Media\Application\Admin\UseCase\Get\GetInputData;
-use Media\Application\Admin\UseCase\Get\GetUseCase;
+use Media\Application\Admin\Get\GetInputData;
+use Media\Application\Admin\Get\GetUseCase;
 
 final readonly class GetMediaController extends Controller
 {

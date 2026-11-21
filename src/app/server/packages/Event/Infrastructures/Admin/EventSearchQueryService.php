@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Event\Infrastructures\Admin;
 
 use Emonkak\Orm\SelectBuilder;
-use Event\Application\Admin\Query\EventSearchQueryServiceInterface;
-use Event\Application\Admin\Query\EventSummary;
+use Event\Application\Admin\Search\Query\EventSearchQueryServiceInterface;
+use Event\Application\Admin\Search\Query\EventSummary;
 use Event\Domain\Criteria\EventSearchCriteria;
 use Event\Domain\Criteria\Sort;
 use Event\Domain\Models\EventStatus;

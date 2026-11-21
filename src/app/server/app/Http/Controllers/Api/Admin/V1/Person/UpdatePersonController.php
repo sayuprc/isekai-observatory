@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Person\UpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Person\Application\Admin\UseCase\Update\UpdateInputData;
-use Person\Application\Admin\UseCase\Update\UpdateUseCase;
+use Person\Application\Admin\Update\UpdateInputData;
+use Person\Application\Admin\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class UpdatePersonController extends Controller

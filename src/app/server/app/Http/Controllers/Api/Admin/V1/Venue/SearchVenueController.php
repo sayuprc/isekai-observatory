@@ -9,8 +9,8 @@ use App\Http\Presenters\Api\Admin\V1\Venue\SearchPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
-use Venue\Application\Admin\UseCase\Search\SearchInputData;
-use Venue\Application\Admin\UseCase\Search\SearchUseCase;
+use Venue\Application\Admin\Search\SearchInputData;
+use Venue\Application\Admin\Search\SearchUseCase;
 
 final readonly class SearchVenueController extends Controller
 {

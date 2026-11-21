@@ -9,8 +9,8 @@ use App\Http\Presenters\Api\Admin\V1\Tag\CreatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
-use Tag\Application\Admin\UseCase\Create\CreateInputData;
-use Tag\Application\Admin\UseCase\Create\CreateUseCase;
+use Tag\Application\Admin\Create\CreateInputData;
+use Tag\Application\Admin\Create\CreateUseCase;
 
 final readonly class CreateTagController extends Controller
 {

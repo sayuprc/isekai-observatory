@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Auth\RecoveryStartPresenter;
-use Auth\Application\Admin\UseCase\Recovery\RecoveryStartInputData;
-use Auth\Application\Admin\UseCase\Recovery\RecoveryStartUseCase;
+use Auth\Application\Admin\Recovery\RecoveryStartInputData;
+use Auth\Application\Admin\Recovery\RecoveryStartUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;

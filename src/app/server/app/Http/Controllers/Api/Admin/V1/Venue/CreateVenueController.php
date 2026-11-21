@@ -9,8 +9,8 @@ use App\Http\Presenters\Api\Admin\V1\Venue\CreatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
-use Venue\Application\Admin\UseCase\Create\CreateInputData;
-use Venue\Application\Admin\UseCase\Create\CreateUseCase;
+use Venue\Application\Admin\Create\CreateInputData;
+use Venue\Application\Admin\Create\CreateUseCase;
 
 final readonly class CreateVenueController extends Controller
 {

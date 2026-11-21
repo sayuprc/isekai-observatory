@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\PersonGroup;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\PersonGroupCreateResponse;
-use Person\Application\Admin\UseCase\Group\Create\CreateOutputData;
+use Person\Application\Admin\Group\Create\CreateOutputData;
 
 class CreatePresenter
 {

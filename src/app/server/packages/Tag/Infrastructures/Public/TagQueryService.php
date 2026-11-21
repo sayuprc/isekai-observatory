@@ -10,10 +10,10 @@ use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
-use Tag\Application\Public\Query\TagListItem;
-use Tag\Application\Public\Query\TagListPage;
-use Tag\Application\Public\Query\TagListPageToken;
-use Tag\Application\Public\Query\TagQueryServiceInterface;
+use Tag\Application\Public\List\Query\TagListItem;
+use Tag\Application\Public\List\Query\TagListPage;
+use Tag\Application\Public\List\Query\TagListPageToken;
+use Tag\Application\Public\List\Query\TagQueryServiceInterface;
 
 readonly class TagQueryService implements TagQueryServiceInterface
 {

@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Viewer\V1\Media\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Media\Application\Viewer\UseCase\List\ListInputData;
-use Media\Application\Viewer\UseCase\List\ListUseCase;
+use Media\Application\Viewer\List\ListInputData;
+use Media\Application\Viewer\List\ListUseCase;
 
 final readonly class ListMediaController extends Controller
 {

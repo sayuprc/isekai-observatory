@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Admin\V1\AdminUser;
 
-use AdminUser\Application\Admin\UseCase\List\ListUseCase;
+use AdminUser\Application\Admin\List\ListUseCase;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\AdminUser\ListPresenter;
 use Illuminate\Http\JsonResponse;

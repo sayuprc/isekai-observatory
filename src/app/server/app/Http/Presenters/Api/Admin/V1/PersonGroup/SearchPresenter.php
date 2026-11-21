@@ -7,8 +7,8 @@ namespace App\Http\Presenters\Api\Admin\V1\PersonGroup;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\PersonGroupSearchResponse;
 use OpenAPI\Admin\Client\Model\PersonGroupSummary as OpenApiPersonGroupSummary;
-use Person\Application\Admin\Query\PersonGroupSummary;
-use Person\Application\Admin\UseCase\Group\Search\SearchOutputData;
+use Person\Application\Admin\Group\Query\PersonGroupSummary;
+use Person\Application\Admin\Group\Search\SearchOutputData;
 
 class SearchPresenter
 {

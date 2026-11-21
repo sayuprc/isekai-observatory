@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Person\Application\Admin\Group\Create;
+
+readonly class CreateInputData
+{
+    /**
+     * @param list<array{personId: string, orderNo: int}> $members
+     */
+    public function __construct(
+        public string $name,
+        public string $displayName,
+        public array $members,
+    ) {
+    }
+}

@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Media;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Media\DeletePresenter;
 use Illuminate\Http\JsonResponse;
-use Media\Application\Admin\UseCase\Delete\DeleteInputData;
-use Media\Application\Admin\UseCase\Delete\DeleteUseCase;
+use Media\Application\Admin\Delete\DeleteInputData;
+use Media\Application\Admin\Delete\DeleteUseCase;
 
 final readonly class DeleteMediaController extends Controller
 {

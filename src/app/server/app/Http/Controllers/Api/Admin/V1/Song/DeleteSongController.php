@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Song;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Song\DeletePresenter;
 use Illuminate\Http\JsonResponse;
-use Song\Application\Admin\UseCase\Delete\DeleteInputData;
-use Song\Application\Admin\UseCase\Delete\DeleteUseCase;
+use Song\Application\Admin\Delete\DeleteInputData;
+use Song\Application\Admin\Delete\DeleteUseCase;
 
 final readonly class DeleteSongController extends Controller
 {

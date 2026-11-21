@@ -9,8 +9,8 @@ use App\Http\Presenters\Api\Admin\V1\Tag\UpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
-use Tag\Application\Admin\UseCase\Update\UpdateInputData;
-use Tag\Application\Admin\UseCase\Update\UpdateUseCase;
+use Tag\Application\Admin\Update\UpdateInputData;
+use Tag\Application\Admin\Update\UpdateUseCase;
 
 final readonly class UpdateTagController extends Controller
 {

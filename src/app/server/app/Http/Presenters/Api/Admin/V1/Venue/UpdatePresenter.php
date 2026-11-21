@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Venue;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\VenueUpdateResponse;
-use Venue\Application\Admin\UseCase\Update\UpdateOutputData;
+use Venue\Application\Admin\Update\UpdateOutputData;
 
 class UpdatePresenter
 {

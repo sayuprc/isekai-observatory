@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Media\Application\Admin\ListYouTubeChannel;
+
+use Media\Domain\Models\YouTubeChannel\YouTubeChannel;
+
+readonly class ListYouTubeChannelOutputData
+{
+    /**
+     * @param array<int, YouTubeChannel> $channels
+     */
+    public function __construct(public array $channels)
+    {
+    }
+}

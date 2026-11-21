@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Song\UpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Song\Application\Admin\UseCase\Update\UpdateInputData;
-use Song\Application\Admin\UseCase\Update\UpdateUseCase;
+use Song\Application\Admin\Update\UpdateInputData;
+use Song\Application\Admin\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class UpdateSongController extends Controller

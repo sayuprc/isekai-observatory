@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Event;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Event\DeletePresenter;
-use Event\Application\Admin\UseCase\Delete\DeleteInputData;
-use Event\Application\Admin\UseCase\Delete\DeleteUseCase;
+use Event\Application\Admin\Delete\DeleteInputData;
+use Event\Application\Admin\Delete\DeleteUseCase;
 use Illuminate\Http\JsonResponse;
 
 final readonly class DeleteEventController extends Controller

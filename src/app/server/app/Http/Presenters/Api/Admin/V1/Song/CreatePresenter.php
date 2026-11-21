@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Song;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\SongCreateResponse;
-use Song\Application\Admin\UseCase\Create\CreateOutputData;
+use Song\Application\Admin\Create\CreateOutputData;
 
 class CreatePresenter
 {

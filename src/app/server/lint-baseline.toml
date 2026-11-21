@@ -25,43 +25,43 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "packages/Auth/Application/Admin/UseCase/Login/LoginFinishUseCase.php"
+file = "packages/Auth/Application/Admin/Login/LoginFinishUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Auth/Application/Admin/UseCase/Recovery/RecoveryFinishUseCase.php"
+file = "packages/Auth/Application/Admin/Recovery/RecoveryFinishUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Auth/Application/Admin/UseCase/Recovery/RecoveryStartUseCase.php"
+file = "packages/Auth/Application/Admin/Recovery/RecoveryStartUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Auth/Application/Admin/UseCase/RecoveryCode/Generate/GenerateRecoveryCodesUseCase.php"
+file = "packages/Auth/Application/Admin/RecoveryCode/Generate/GenerateRecoveryCodesUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Auth/Application/Admin/UseCase/Refresh/RefreshUseCase.php"
+file = "packages/Auth/Application/Admin/Refresh/RefreshUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCase.php"
+file = "packages/Auth/Application/Admin/RegisterFinish/RegisterFinishUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Auth/Application/Admin/UseCase/RegisterStart/RegisterStartUseCase.php"
+file = "packages/Auth/Application/Admin/RegisterStart/RegisterStartUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -157,73 +157,73 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/Query/EventSummary.php"
+file = "packages/Event/Application/Admin/Search/Query/EventSummary.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/BulkUpdate/BulkUpdateUseCase.php"
+file = "packages/Event/Application/Admin/BulkUpdate/BulkUpdateUseCase.php"
 code = "no-isset"
 message = "Use of the `isset` construct."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/Create/CreateInputData.php"
+file = "packages/Event/Application/Admin/Create/CreateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/Create/CreateUseCase.php"
+file = "packages/Event/Application/Admin/Create/CreateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/Search/SearchInputData.php"
+file = "packages/Event/Application/Admin/Search/SearchInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/Update/UpdateInputData.php"
+file = "packages/Event/Application/Admin/Update/UpdateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/Update/UpdateUseCase.php"
+file = "packages/Event/Application/Admin/Update/UpdateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/Update/UpdateUseCase.php"
+file = "packages/Event/Application/Admin/Update/UpdateUseCase.php"
 code = "halstead"
 message = "Closure has a high halstead difficulty"
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Admin/UseCase/Update/UpdateUseCase.php"
+file = "packages/Event/Application/Admin/Update/UpdateUseCase.php"
 code = "halstead"
 message = "Method has a high halstead difficulty"
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Public/Query/EventListItem.php"
+file = "packages/Event/Application/Public/List/Query/EventListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Viewer/Query/EventListItem.php"
+file = "packages/Event/Application/Viewer/List/Query/EventListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Viewer/Query/EventReleaseSummary.php"
+file = "packages/Event/Application/Viewer/List/Query/EventReleaseSummary.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -283,61 +283,61 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/BulkUpdate/BulkUpdateUseCase.php"
+file = "packages/Media/Application/Admin/BulkUpdate/BulkUpdateUseCase.php"
 code = "no-isset"
 message = "Use of the `isset` construct."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/Create/CreateInputData.php"
+file = "packages/Media/Application/Admin/Create/CreateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/Create/CreateUseCase.php"
+file = "packages/Media/Application/Admin/Create/CreateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/Search/SearchInputData.php"
+file = "packages/Media/Application/Admin/Search/SearchInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/Update/UpdateInputData.php"
+file = "packages/Media/Application/Admin/Update/UpdateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/Update/UpdateUseCase.php"
+file = "packages/Media/Application/Admin/Update/UpdateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/ImportYouTube/ImportYouTubeNotifier.php"
+file = "packages/Media/Application/Admin/ImportYouTube/ImportYouTubeNotifier.php"
 code = "no-else-clause"
 message = "Avoid `elseif` clauses."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Admin/UseCase/ImportYouTube/ImportYouTubeUseCase.php"
+file = "packages/Media/Application/Admin/ImportYouTube/ImportYouTubeUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Public/Query/MediaListItem.php"
+file = "packages/Media/Application/Public/List/Query/MediaListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Viewer/Query/MediaListItem.php"
+file = "packages/Media/Application/Viewer/List/Query/MediaListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -373,13 +373,13 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "packages/Person/Application/Admin/UseCase/Group/Create/CreateUseCase.php"
+file = "packages/Person/Application/Admin/Group/Create/CreateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Person/Application/Admin/UseCase/Group/Update/UpdateUseCase.php"
+file = "packages/Person/Application/Admin/Group/Update/UpdateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -391,91 +391,91 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/Query/ReleaseGroupReferencedRelease.php"
+file = "packages/Release/Application/Admin/Group/Get/Query/ReleaseGroupReferencedRelease.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/Query/ReleaseGroupSummary.php"
+file = "packages/Release/Application/Admin/Group/Search/Query/ReleaseGroupSummary.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/Query/ReleaseSummary.php"
+file = "packages/Release/Application/Admin/Search/Query/ReleaseSummary.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Create/CreateInputData.php"
+file = "packages/Release/Application/Admin/Create/CreateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Group/BulkUpdate/BulkUpdateUseCase.php"
+file = "packages/Release/Application/Admin/Group/BulkUpdate/BulkUpdateUseCase.php"
 code = "no-isset"
 message = "Use of the `isset` construct."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Group/Create/CreateInputData.php"
+file = "packages/Release/Application/Admin/Group/Create/CreateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Group/Create/CreateUseCase.php"
+file = "packages/Release/Application/Admin/Group/Create/CreateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Group/Search/SearchInputData.php"
+file = "packages/Release/Application/Admin/Group/Search/SearchInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Group/Update/UpdateInputData.php"
+file = "packages/Release/Application/Admin/Group/Update/UpdateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Group/Update/UpdateUseCase.php"
+file = "packages/Release/Application/Admin/Group/Update/UpdateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Admin/UseCase/Update/UpdateInputData.php"
+file = "packages/Release/Application/Admin/Update/UpdateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Public/Query/ReleaseGroupListItem.php"
+file = "packages/Release/Application/Public/List/Query/ReleaseGroupListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Public/Query/ReleaseItem.php"
+file = "packages/Release/Application/Public/List/Query/ReleaseItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Viewer/Query/ReleaseGroupListItem.php"
+file = "packages/Release/Application/Viewer/List/Query/ReleaseGroupListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Viewer/Query/ReleaseListItem.php"
+file = "packages/Release/Application/Viewer/List/Query/ReleaseListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -571,67 +571,67 @@ message = "Missing description in assert function."
 count = 3
 
 [[issues]]
-file = "packages/Song/Application/Admin/Query/SongSummary.php"
+file = "packages/Song/Application/Admin/Search/Query/SongSummary.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/BulkUpdate/BulkUpdateUseCase.php"
+file = "packages/Song/Application/Admin/BulkUpdate/BulkUpdateUseCase.php"
 code = "no-isset"
 message = "Use of the `isset` construct."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/Create/CreateInputData.php"
+file = "packages/Song/Application/Admin/Create/CreateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/Create/CreateUseCase.php"
+file = "packages/Song/Application/Admin/Create/CreateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/Search/SearchInputData.php"
+file = "packages/Song/Application/Admin/Search/SearchInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/Search/SearchUseCase.php"
+file = "packages/Song/Application/Admin/Search/SearchUseCase.php"
 code = "halstead"
 message = "Method has a high halstead difficulty"
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/Update/UpdateInputData.php"
+file = "packages/Song/Application/Admin/Update/UpdateInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/Update/UpdateUseCase.php"
+file = "packages/Song/Application/Admin/Update/UpdateUseCase.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Admin/UseCase/Update/UpdateUseCase.php"
+file = "packages/Song/Application/Admin/Update/UpdateUseCase.php"
 code = "halstead"
 message = "Method has a high halstead difficulty"
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Public/Query/SongListItem.php"
+file = "packages/Song/Application/Public/List/Query/SongListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Viewer/Query/SongListItem.php"
+file = "packages/Song/Application/Viewer/List/Query/SongListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -757,7 +757,7 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "packages/Venue/Application/Admin/UseCase/Search/SearchInputData.php"
+file = "packages/Venue/Application/Admin/Search/SearchInputData.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -877,7 +877,7 @@ message = "Literal passwords or sensitive data should not be stored in code."
 count = 1
 
 [[issues]]
-file = "tests/Integration/Auth/Application/Admin/UseCase/RefreshUseCaseTest.php"
+file = "tests/Integration/Auth/Application/Admin/RefreshUseCaseTest.php"
 code = "no-literal-password"
 message = "Literal passwords or sensitive data should not be stored in code."
 count = 1
@@ -895,13 +895,13 @@ message = "Literal passwords or sensitive data should not be stored in code."
 count = 1
 
 [[issues]]
-file = "tests/Integration/Media/Application/Admin/UseCase/UpdateUseCaseTest.php"
+file = "tests/Integration/Media/Application/Admin/UpdateUseCaseTest.php"
 code = "no-empty-catch-clause"
 message = "Do not use empty `catch` blocks."
 count = 1
 
 [[issues]]
-file = "tests/Integration/Person/Application/Admin/UseCase/Update/UpdateUseCaseTest.php"
+file = "tests/Integration/Person/Application/Admin/Update/UpdateUseCaseTest.php"
 code = "no-empty-catch-clause"
 message = "Do not use empty `catch` blocks."
 count = 1
@@ -913,13 +913,13 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "tests/Integration/Release/Application/Admin/UseCase/Group/Delete/DeleteUseCaseTest.php"
+file = "tests/Integration/Release/Application/Admin/Group/Delete/DeleteUseCaseTest.php"
 code = "no-empty-catch-clause"
 message = "Do not use empty `catch` blocks."
 count = 1
 
 [[issues]]
-file = "tests/Integration/Song/Application/Admin/UseCase/UpdateUseCaseTest.php"
+file = "tests/Integration/Song/Application/Admin/UpdateUseCaseTest.php"
 code = "no-empty-catch-clause"
 message = "Do not use empty `catch` blocks."
 count = 1
@@ -985,61 +985,61 @@ message = "Trait has too many methods."
 count = 1
 
 [[issues]]
-file = "tests/Unit/AdminUser/Application/Admin/UseCase/IssueRegistrationTokenUseCaseTest.php"
+file = "tests/Unit/AdminUser/Application/Admin/IssueRegistrationTokenUseCaseTest.php"
 code = "no-literal-password"
 message = "Literal passwords or sensitive data should not be stored in code."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/Login/LoginFinishUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/Login/LoginFinishUseCaseTest.php"
 code = "no-literal-password"
 message = "Literal passwords or sensitive data should not be stored in code."
 count = 2
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RefreshUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RefreshUseCaseTest.php"
 code = "no-empty-catch-clause"
 message = "Do not use empty `catch` blocks."
 count = 2
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RefreshUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RefreshUseCaseTest.php"
 code = "no-literal-password"
 message = "Literal passwords or sensitive data should not be stored in code."
 count = 2
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RegisterFinish/RegisterFinishUseCaseTest.php"
 code = "cyclomatic-complexity"
 message = "Class has high complexity."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RegisterFinish/RegisterFinishUseCaseTest.php"
 code = "halstead"
 message = "Method has a high halstead volume"
 count = 1
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RegisterFinish/RegisterFinishUseCaseTest.php"
 code = "no-insecure-comparison"
 message = "Insecure comparison of sensitive data."
 count = 2
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RegisterFinish/RegisterFinishUseCaseTest.php"
 code = "no-literal-password"
 message = "Literal passwords or sensitive data should not be stored in code."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterFinish/RegisterFinishUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RegisterFinish/RegisterFinishUseCaseTest.php"
 code = "too-many-properties"
 message = "Class has too many properties."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Auth/Application/Admin/UseCase/RegisterStart/RegisterStartUseCaseTest.php"
+file = "tests/Unit/Auth/Application/Admin/RegisterStart/RegisterStartUseCaseTest.php"
 code = "no-insecure-comparison"
 message = "Insecure comparison of sensitive data."
 count = 1
@@ -1069,25 +1069,25 @@ message = "Class has too many methods."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Song/Application/Admin/UseCase/CreateUseCaseTest.php"
+file = "tests/Unit/Song/Application/Admin/CreateUseCaseTest.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Song/Application/Admin/UseCase/CreateUseCaseTest.php"
+file = "tests/Unit/Song/Application/Admin/CreateUseCaseTest.php"
 code = "no-boolean-flag-parameter"
 message = "Avoid boolean flag parameters."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Song/Application/Admin/UseCase/UpdateUseCaseTest.php"
+file = "tests/Unit/Song/Application/Admin/UpdateUseCaseTest.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "tests/Unit/Song/Application/Admin/UseCase/UpdateUseCaseTest.php"
+file = "tests/Unit/Song/Application/Admin/UpdateUseCaseTest.php"
 code = "no-boolean-flag-parameter"
 message = "Avoid boolean flag parameters."
 count = 1

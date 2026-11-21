@@ -6,11 +6,11 @@ namespace Media\Infrastructures\Viewer;
 
 use DateTimeImmutable;
 use Emonkak\Orm\Sql;
-use Media\Application\Viewer\Query\MediaListCursor;
-use Media\Application\Viewer\Query\MediaListItem;
-use Media\Application\Viewer\Query\MediaListPage;
-use Media\Application\Viewer\Query\MediaQueryServiceInterface;
-use Media\Application\Viewer\Query\MediaSongSummary;
+use Media\Application\Viewer\List\Query\MediaListCursor;
+use Media\Application\Viewer\List\Query\MediaListItem;
+use Media\Application\Viewer\List\Query\MediaListPage;
+use Media\Application\Viewer\List\Query\MediaQueryServiceInterface;
+use Media\Application\Viewer\List\Query\MediaSongSummary;
 use Media\Domain\Models\MediaType;
 use Override;
 use Song\Domain\Models\SongType;

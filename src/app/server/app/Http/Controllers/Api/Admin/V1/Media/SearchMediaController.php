@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Media\SearchPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Media\Application\Admin\UseCase\Search\SearchInputData;
-use Media\Application\Admin\UseCase\Search\SearchUseCase;
+use Media\Application\Admin\Search\SearchInputData;
+use Media\Application\Admin\Search\SearchUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class SearchMediaController extends Controller

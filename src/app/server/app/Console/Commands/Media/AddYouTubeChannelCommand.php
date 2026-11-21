@@ -6,8 +6,8 @@ namespace App\Console\Commands\Media;
 
 use App\Console\Commands\Concerns\ResolvesUseCaseExceptionMessage;
 use Illuminate\Console\Command;
-use Media\Application\Admin\UseCase\AddYouTubeChannel\AddYouTubeChannelInputData;
-use Media\Application\Admin\UseCase\AddYouTubeChannel\AddYouTubeChannelUseCase;
+use Media\Application\Admin\AddYouTubeChannel\AddYouTubeChannelInputData;
+use Media\Application\Admin\AddYouTubeChannel\AddYouTubeChannelUseCase;
 use Override;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Exceptions\InvalidDomainException;

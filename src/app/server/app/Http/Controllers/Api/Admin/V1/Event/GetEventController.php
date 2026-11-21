@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Event;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Event\GetPresenter;
-use Event\Application\Admin\UseCase\Get\GetInputData;
-use Event\Application\Admin\UseCase\Get\GetUseCase;
+use Event\Application\Admin\Get\GetInputData;
+use Event\Application\Admin\Get\GetUseCase;
 use Illuminate\Http\JsonResponse;
 
 final readonly class GetEventController extends Controller

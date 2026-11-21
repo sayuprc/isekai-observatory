@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Venue;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Venue\GetPresenter;
 use Illuminate\Http\JsonResponse;
-use Venue\Application\Admin\UseCase\Get\GetInputData;
-use Venue\Application\Admin\UseCase\Get\GetUseCase;
+use Venue\Application\Admin\Get\GetInputData;
+use Venue\Application\Admin\Get\GetUseCase;
 
 final readonly class GetVenueController extends Controller
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Auth;
 
-use Auth\Application\Admin\UseCase\RegisterStart\RegisterStartOutputData;
+use Auth\Application\Admin\RegisterStart\RegisterStartOutputData;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\RegisterStartResponse;
 

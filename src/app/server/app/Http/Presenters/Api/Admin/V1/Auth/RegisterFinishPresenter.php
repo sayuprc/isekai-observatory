@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Auth;
 
-use Auth\Application\Admin\UseCase\RegisterFinish\RegisterFinishOutputData;
+use Auth\Application\Admin\RegisterFinish\RegisterFinishOutputData;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\RegisterFinishResponse;
 

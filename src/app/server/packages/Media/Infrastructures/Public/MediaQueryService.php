@@ -6,10 +6,10 @@ namespace Media\Infrastructures\Public;
 
 use DateTimeImmutable;
 use Emonkak\Orm\Sql;
-use Media\Application\Public\Query\MediaListItem;
-use Media\Application\Public\Query\MediaListPage;
-use Media\Application\Public\Query\MediaListPageToken;
-use Media\Application\Public\Query\MediaQueryServiceInterface;
+use Media\Application\Public\List\Query\MediaListItem;
+use Media\Application\Public\List\Query\MediaListPage;
+use Media\Application\Public\List\Query\MediaListPageToken;
+use Media\Application\Public\List\Query\MediaQueryServiceInterface;
 use Media\Domain\Models\MediaType;
 use Override;
 use SensitiveParameter;

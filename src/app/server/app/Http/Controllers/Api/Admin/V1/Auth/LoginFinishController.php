@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Auth\LoginFinishPresenter;
-use Auth\Application\Admin\UseCase\Login\LoginFinishInputData;
-use Auth\Application\Admin\UseCase\Login\LoginFinishUseCase;
+use Auth\Application\Admin\Login\LoginFinishInputData;
+use Auth\Application\Admin\Login\LoginFinishUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;

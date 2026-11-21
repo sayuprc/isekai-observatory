@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Media\UpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Media\Application\Admin\UseCase\Update\UpdateInputData;
-use Media\Application\Admin\UseCase\Update\UpdateUseCase;
+use Media\Application\Admin\Update\UpdateInputData;
+use Media\Application\Admin\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class UpdateMediaController extends Controller

@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Song;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\SongUpdateResponse;
-use Song\Application\Admin\UseCase\Update\UpdateOutputData;
+use Song\Application\Admin\Update\UpdateOutputData;
 
 class UpdatePresenter
 {

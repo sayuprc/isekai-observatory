@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Tag;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\TagListResponse;
-use Tag\Application\Admin\UseCase\List\ListOutputData;
+use Tag\Application\Admin\List\ListOutputData;
 
 class ListPresenter
 {

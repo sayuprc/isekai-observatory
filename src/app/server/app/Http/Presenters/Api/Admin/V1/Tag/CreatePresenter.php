@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Tag;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\TagCreateResponse;
-use Tag\Application\Admin\UseCase\Create\CreateOutputData;
+use Tag\Application\Admin\Create\CreateOutputData;
 
 class CreatePresenter
 {

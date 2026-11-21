@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Media\Application\Admin\Create;
+
+readonly class CreateInputData
+{
+    /**
+     * @param list<array{tagId: string}> $tags
+     */
+    public function __construct(
+        public string $title,
+        public string $url,
+        public string $publishedAt,
+        public int $type,
+        public bool $isDisplay,
+        public array $tags,
+    ) {
+    }
+}

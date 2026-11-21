@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\ReleaseGroup;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\ReleaseGroupSearchResponse;
-use Release\Application\Admin\UseCase\Group\Search\SearchOutputData;
+use Release\Application\Admin\Group\Search\SearchOutputData;
 
 class SearchPresenter
 {

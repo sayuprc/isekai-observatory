@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Auth\RegisterStartPresenter;
-use Auth\Application\Admin\UseCase\RegisterStart\RegisterStartInputData;
-use Auth\Application\Admin\UseCase\RegisterStart\RegisterStartUseCase;
+use Auth\Application\Admin\RegisterStart\RegisterStartInputData;
+use Auth\Application\Admin\RegisterStart\RegisterStartUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;

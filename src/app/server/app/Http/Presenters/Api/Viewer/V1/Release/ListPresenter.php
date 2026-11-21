@@ -15,12 +15,12 @@ use OpenAPI\Viewer\Client\Model\ReleaseListItem as OpenApiReleaseListItem;
 use OpenAPI\Viewer\Client\Model\ReleaseMediumItem as OpenApiReleaseMediumItem;
 use OpenAPI\Viewer\Client\Model\ReleaseTrackItem as OpenApiReleaseTrackItem;
 use OpenAPI\Viewer\Client\Model\ReleaseTrackSong as OpenApiReleaseTrackSong;
-use Release\Application\Viewer\Query\ReleaseGroupListItem;
-use Release\Application\Viewer\Query\ReleaseListItem;
-use Release\Application\Viewer\Query\ReleaseMediumItem;
-use Release\Application\Viewer\Query\ReleaseTrackItem;
-use Release\Application\Viewer\Query\ReleaseTrackSong;
-use Release\Application\Viewer\UseCase\List\ListOutputData;
+use Release\Application\Viewer\List\ListOutputData;
+use Release\Application\Viewer\List\Query\ReleaseGroupListItem;
+use Release\Application\Viewer\List\Query\ReleaseListItem;
+use Release\Application\Viewer\List\Query\ReleaseMediumItem;
+use Release\Application\Viewer\List\Query\ReleaseTrackItem;
+use Release\Application\Viewer\List\Query\ReleaseTrackSong;
 use Release\Domain\Models\ReleaseFormat;
 
 class ListPresenter

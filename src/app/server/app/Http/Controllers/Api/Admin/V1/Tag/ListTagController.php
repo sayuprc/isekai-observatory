@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api\Admin\V1\Tag;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Tag\ListPresenter;
 use Illuminate\Http\JsonResponse;
-use Tag\Application\Admin\UseCase\List\ListUseCase;
+use Tag\Application\Admin\List\ListUseCase;
 
 final readonly class ListTagController extends Controller
 {

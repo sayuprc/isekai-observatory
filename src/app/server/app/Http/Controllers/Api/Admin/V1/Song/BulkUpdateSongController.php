@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Song\BulkUpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Song\Application\Admin\UseCase\BulkUpdate\BulkUpdateInputData;
-use Song\Application\Admin\UseCase\BulkUpdate\BulkUpdateUseCase;
+use Song\Application\Admin\BulkUpdate\BulkUpdateInputData;
+use Song\Application\Admin\BulkUpdate\BulkUpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class BulkUpdateSongController extends Controller

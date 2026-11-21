@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api\Admin\V1\Person;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Person\ListPresenter;
 use Illuminate\Http\JsonResponse;
-use Person\Application\Admin\UseCase\List\ListUseCase;
+use Person\Application\Admin\List\ListUseCase;
 
 final readonly class ListPersonController extends Controller
 {
