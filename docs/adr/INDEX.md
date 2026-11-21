@@ -47,3 +47,4 @@
 | ADR-0041 | accepted | 一括操作は対象ごとの API で、全部成功か全部失敗とし、監査ログは記録ごとに残す | [api, admin] |
 | ADR-0042 | accepted | アプリケーションイメージは Docker Buildx Bake でビルドし、ベースイメージの取得元を切り替えられるようにする | [api, admin, viewer] |
 | ADR-0043 | accepted | Action 専用の Query は UseCase の Action の中に置く | [api] |
+| ADR-0044 | accepted | パッケージ間の依存を一方向の階層にし、Viewer / Public の読み取りを専用パッケージに分ける | [api] |
