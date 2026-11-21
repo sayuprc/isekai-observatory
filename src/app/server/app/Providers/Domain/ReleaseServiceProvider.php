@@ -10,14 +10,12 @@ use Release\Application\Admin\UseCase\Get\Query\ReleaseDetailQueryServiceInterfa
 use Release\Application\Admin\UseCase\Group\Get\Query\ReleaseGroupDetailQueryServiceInterface;
 use Release\Application\Admin\UseCase\Group\Search\Query\ReleaseGroupSearchQueryServiceInterface;
 use Release\Application\Admin\UseCase\Search\Query\ReleaseSearchQueryServiceInterface;
-use Release\Application\Public\UseCase\List\Query\ReleaseGroupQueryServiceInterface as PublicReleaseGroupQueryServiceInterface;
 use Release\Domain\Models\ReleaseGroupRepositoryInterface;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Release\Infrastructures\Admin\ReleaseDetailQueryService;
 use Release\Infrastructures\Admin\ReleaseGroupDetailQueryService;
 use Release\Infrastructures\Admin\ReleaseGroupSearchQueryService;
 use Release\Infrastructures\Admin\ReleaseSearchQueryService;
-use Release\Infrastructures\Public\ReleaseGroupQueryService as PublicReleaseGroupQueryService;
 use Release\Infrastructures\ReleaseGroupRepository;
 use Release\Infrastructures\ReleaseRepository;
 
@@ -32,6 +30,5 @@ class ReleaseServiceProvider extends ServiceProvider
         $this->app->bind(ReleaseGroupDetailQueryServiceInterface::class, ReleaseGroupDetailQueryService::class);
         $this->app->bind(ReleaseGroupSearchQueryServiceInterface::class, ReleaseGroupSearchQueryService::class);
         $this->app->bind(ReleaseSearchQueryServiceInterface::class, ReleaseSearchQueryService::class);
-        $this->app->bind(PublicReleaseGroupQueryServiceInterface::class, PublicReleaseGroupQueryService::class);
     }
 }

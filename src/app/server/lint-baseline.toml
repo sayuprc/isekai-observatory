@@ -211,7 +211,7 @@ message = "Method has a high halstead difficulty"
 count = 1
 
 [[issues]]
-file = "packages/Event/Application/Public/UseCase/List/Query/EventListItem.php"
+file = "packages/Public/Application/Event/UseCase/List/Query/EventListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -253,13 +253,13 @@ message = "Method has a high halstead volume"
 count = 1
 
 [[issues]]
-file = "packages/Event/Infrastructures/Public/EventQueryService.php"
+file = "packages/Public/Infrastructures/EventQueryService.php"
 code = "cyclomatic-complexity"
 message = "Class has high complexity."
 count = 1
 
 [[issues]]
-file = "packages/Event/Infrastructures/Public/EventQueryService.php"
+file = "packages/Public/Infrastructures/EventQueryService.php"
 code = "kan-defect"
 message = "Class has a high kan defect score."
 count = 1
@@ -331,7 +331,7 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Media/Application/Public/UseCase/List/Query/MediaListItem.php"
+file = "packages/Public/Application/Media/UseCase/List/Query/MediaListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -457,13 +457,13 @@ message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Public/UseCase/List/Query/ReleaseGroupListItem.php"
+file = "packages/Public/Application/Release/UseCase/List/Query/ReleaseGroupListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
 
 [[issues]]
-file = "packages/Release/Application/Public/UseCase/List/Query/ReleaseItem.php"
+file = "packages/Public/Application/Release/UseCase/List/Query/ReleaseItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1
@@ -529,13 +529,13 @@ message = "Parameter list is too long."
 count = 4
 
 [[issues]]
-file = "packages/Release/Infrastructures/Public/ReleaseGroupQueryService.php"
+file = "packages/Public/Infrastructures/ReleaseGroupQueryService.php"
 code = "cyclomatic-complexity"
 message = "Class has high complexity."
 count = 1
 
 [[issues]]
-file = "packages/Release/Infrastructures/Public/ReleaseGroupQueryService.php"
+file = "packages/Public/Infrastructures/ReleaseGroupQueryService.php"
 code = "kan-defect"
 message = "Class has a high kan defect score."
 count = 1
@@ -625,7 +625,7 @@ message = "Method has a high halstead difficulty"
 count = 1
 
 [[issues]]
-file = "packages/Song/Application/Public/UseCase/List/Query/SongListItem.php"
+file = "packages/Public/Application/Song/UseCase/List/Query/SongListItem.php"
 code = "excessive-parameter-list"
 message = "Parameter list is too long."
 count = 1

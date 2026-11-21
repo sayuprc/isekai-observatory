@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Public\V1\ReleaseGroup\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Release\Application\Public\UseCase\List\ListInputData;
-use Release\Application\Public\UseCase\List\ListUseCase;
+use Public\Application\Release\UseCase\List\ListInputData;
+use Public\Application\Release\UseCase\List\ListUseCase;
 
 final readonly class ListReleaseGroupController extends Controller
 {

@@ -8,8 +8,8 @@ use Illuminate\Http\JsonResponse;
 use OpenAPI\Public\Client\Model\Venue;
 use OpenAPI\Public\Client\Model\VenueKindValue;
 use OpenAPI\Public\Client\Model\VenueListResponse;
-use Venue\Application\Public\UseCase\List\ListOutputData;
-use Venue\Application\Public\UseCase\List\Query\VenueListItem;
+use Public\Application\Venue\UseCase\List\ListOutputData;
+use Public\Application\Venue\UseCase\List\Query\VenueListItem;
 
 class ListPresenter
 {

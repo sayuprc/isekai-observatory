@@ -6,8 +6,8 @@ namespace Tests\Feature\Api\Public\V1\Media;
 
 use DateTimeImmutable;
 use Media\Domain\Models\MediaType;
-use Media\Route\PublicMediaRouteMap;
 use PHPUnit\Framework\Attributes\Test;
+use Public\Route\MediaRouteMap;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
@@ -44,7 +44,7 @@ class ListMediaTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(PublicMediaRouteMap::List))
+            ->get(route(MediaRouteMap::List))
             ->assertOk()
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.mediaId', $mediaId)
@@ -66,12 +66,12 @@ class ListMediaTest extends DatabaseTestCase
         );
 
         $first = $this
-            ->get(route(PublicMediaRouteMap::List, ['pageSize' => 1]))
+            ->get(route(MediaRouteMap::List, ['pageSize' => 1]))
             ->assertOk()
             ->assertJsonPath('items.0.mediaId', $firstId);
 
         $this
-            ->get(route(PublicMediaRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+            ->get(route(MediaRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
             ->assertOk()
             ->assertJsonPath('items.0.mediaId', $secondId)
             ->assertJsonMissingPath('nextPageToken');

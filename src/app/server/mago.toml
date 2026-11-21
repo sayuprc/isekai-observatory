@@ -19,6 +19,7 @@ paths = [
   "packages/Event/",
   "packages/Media/",
   "packages/Person/",
+  "packages/Public/",
   "packages/Release/",
   "packages/Song/",
   "packages/Support/",
