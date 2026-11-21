@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Tag;
 
 use OpenAPI\Admin\Client\Model\Tag as OpenApiTag;
 use OpenAPI\Admin\Client\Model\TagSummary as OpenApiTagSummary;
-use Tag\Application\Admin\Search\Query\TagUsageCount;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCount;
 use Tag\Domain\Models\Tag;
 
 class Converter

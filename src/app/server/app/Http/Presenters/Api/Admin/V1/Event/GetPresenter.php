@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Event;
 
-use Event\Application\Admin\Get\GetOutputData;
+use Event\Application\Admin\UseCase\Get\GetOutputData;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\EventGetResponse;
 

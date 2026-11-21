@@ -9,8 +9,8 @@ use App\Http\Presenters\Api\Admin\V1\Tag\SearchPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
-use Tag\Application\Admin\Search\SearchInputData;
-use Tag\Application\Admin\Search\SearchUseCase;
+use Tag\Application\Admin\UseCase\Search\SearchInputData;
+use Tag\Application\Admin\UseCase\Search\SearchUseCase;
 
 final readonly class SearchTagController extends Controller
 {

@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\PersonGroup\SearchPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Person\Application\Admin\Group\Search\SearchInputData;
-use Person\Application\Admin\Group\Search\SearchUseCase;
+use Person\Application\Admin\UseCase\Group\Search\SearchInputData;
+use Person\Application\Admin\UseCase\Group\Search\SearchUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class SearchPersonGroupController extends Controller

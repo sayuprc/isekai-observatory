@@ -6,9 +6,9 @@ namespace Person\Infrastructures\Admin;
 
 use Emonkak\Orm\SelectBuilder;
 use Override;
-use Person\Application\Admin\Group\Query\PersonGroupMemberSummary;
-use Person\Application\Admin\Group\Query\PersonGroupQueryServiceInterface;
-use Person\Application\Admin\Group\Query\PersonGroupSummary;
+use Person\Application\Admin\Query\PersonGroupMemberSummary;
+use Person\Application\Admin\Query\PersonGroupQueryServiceInterface;
+use Person\Application\Admin\Query\PersonGroupSummary;
 use Person\Domain\Criteria\PersonGroupSearchCriteria;
 use Person\Domain\Models\PersonGroupId;
 use Support\Contracts\Uuid\UuidConverterInterface;

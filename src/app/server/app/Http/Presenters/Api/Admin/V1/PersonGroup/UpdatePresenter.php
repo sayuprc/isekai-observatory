@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\PersonGroup;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\PersonGroupUpdateResponse;
-use Person\Application\Admin\Group\Update\UpdateOutputData;
+use Person\Application\Admin\UseCase\Group\Update\UpdateOutputData;
 
 class UpdatePresenter
 {

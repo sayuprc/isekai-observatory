@@ -42,12 +42,12 @@ private function getInstance(): CreateUseCase
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Song\Application\Admin;
+namespace Tests\Unit\Song\Application\Admin\UseCase;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
-use Song\Application\Admin\Create\CreateUseCase;
+use Song\Application\Admin\UseCase\Create\CreateUseCase;
 use Song\Domain\Services\SongIntegrityService;
 use Tests\Support\Domain\EntityFactory;
 use Tests\TestCase;

@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Public\V1\Event;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Public\V1\Event\ListPresenter;
-use Event\Application\Public\List\ListInputData;
-use Event\Application\Public\List\ListUseCase;
+use Event\Application\Public\UseCase\List\ListInputData;
+use Event\Application\Public\UseCase\List\ListUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

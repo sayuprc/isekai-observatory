@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\ReleaseGroup;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\ReleaseGroupBulkUpdateResponse;
-use Release\Application\Admin\Group\BulkUpdate\BulkUpdateOutputData;
+use Release\Application\Admin\UseCase\Group\BulkUpdate\BulkUpdateOutputData;
 
 class BulkUpdatePresenter
 {

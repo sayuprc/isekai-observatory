@@ -14,12 +14,12 @@ use OpenAPI\Public\Client\Model\ReleaseGroupTypeValue;
 use OpenAPI\Public\Client\Model\ReleaseMedium;
 use OpenAPI\Public\Client\Model\ReleaseTrack;
 use OpenAPI\Public\Client\Model\ReleaseTrackSong;
-use Release\Application\Public\List\ListOutputData;
-use Release\Application\Public\List\Query\ReleaseGroupListItem;
-use Release\Application\Public\List\Query\ReleaseItem;
-use Release\Application\Public\List\Query\ReleaseMediumItem;
-use Release\Application\Public\List\Query\ReleaseTrackItem;
-use Release\Application\Public\List\Query\ReleaseTrackSongItem;
+use Release\Application\Public\UseCase\List\ListOutputData;
+use Release\Application\Public\UseCase\List\Query\ReleaseGroupListItem;
+use Release\Application\Public\UseCase\List\Query\ReleaseItem;
+use Release\Application\Public\UseCase\List\Query\ReleaseMediumItem;
+use Release\Application\Public\UseCase\List\Query\ReleaseTrackItem;
+use Release\Application\Public\UseCase\List\Query\ReleaseTrackSongItem;
 use Release\Domain\Models\ReleaseFormat;
 
 class ListPresenter

@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\PersonGroup\UpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Person\Application\Admin\Group\Update\UpdateInputData;
-use Person\Application\Admin\Group\Update\UpdateUseCase;
+use Person\Application\Admin\UseCase\Group\Update\UpdateInputData;
+use Person\Application\Admin\UseCase\Group\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class UpdatePersonGroupController extends Controller

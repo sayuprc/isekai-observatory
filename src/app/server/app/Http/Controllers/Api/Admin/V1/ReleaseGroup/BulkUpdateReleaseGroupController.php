@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\ReleaseGroup\BulkUpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Release\Application\Admin\Group\BulkUpdate\BulkUpdateInputData;
-use Release\Application\Admin\Group\BulkUpdate\BulkUpdateUseCase;
+use Release\Application\Admin\UseCase\Group\BulkUpdate\BulkUpdateInputData;
+use Release\Application\Admin\UseCase\Group\BulkUpdate\BulkUpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class BulkUpdateReleaseGroupController extends Controller

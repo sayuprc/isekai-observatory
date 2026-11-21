@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Media\Infrastructures\Admin;
 
-use Media\Application\Admin\Get\Query\MediaDetailQueryServiceInterface;
-use Media\Application\Admin\Get\Query\MediaReferencedSong;
+use Media\Application\Admin\UseCase\Get\Query\MediaDetailQueryServiceInterface;
+use Media\Application\Admin\UseCase\Get\Query\MediaReferencedSong;
 use Media\Domain\Models\MediaId;
 use Override;
 use Support\Contracts\Uuid\UuidConverterInterface;

@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Public\V1\Tag\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Tag\Application\Public\List\ListInputData;
-use Tag\Application\Public\List\ListUseCase;
+use Tag\Application\Public\UseCase\List\ListInputData;
+use Tag\Application\Public\UseCase\List\ListUseCase;
 
 final readonly class ListTagController extends Controller
 {

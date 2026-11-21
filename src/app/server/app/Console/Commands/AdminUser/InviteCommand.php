@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\AdminUser;
 
-use AdminUser\Application\Admin\IssueRegistrationToken\IssueRegistrationTokenInputData;
-use AdminUser\Application\Admin\IssueRegistrationToken\IssueRegistrationTokenUseCase;
+use AdminUser\Application\Admin\UseCase\IssueRegistrationToken\IssueRegistrationTokenInputData;
+use AdminUser\Application\Admin\UseCase\IssueRegistrationToken\IssueRegistrationTokenUseCase;
 use AdminUser\Domain\Models\Permission;
 use AdminUser\Domain\Models\Role;
 use App\Console\Commands\Concerns\ResolvesUseCaseExceptionMessage;

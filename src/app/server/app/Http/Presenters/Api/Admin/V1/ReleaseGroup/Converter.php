@@ -11,8 +11,8 @@ use OpenAPI\Admin\Client\Model\ReleaseGroup as OpenApiReleaseGroup;
 use OpenAPI\Admin\Client\Model\ReleaseGroupReferencedRelease as OpenApiReleaseGroupReferencedRelease;
 use OpenAPI\Admin\Client\Model\ReleaseGroupSummary as OpenApiReleaseGroupSummary;
 use OpenAPI\Admin\Client\Model\ReleaseGroupTypeValue;
-use Release\Application\Admin\Group\Get\Query\ReleaseGroupReferencedRelease;
-use Release\Application\Admin\Group\Search\Query\ReleaseGroupSummary;
+use Release\Application\Admin\UseCase\Group\Get\Query\ReleaseGroupReferencedRelease;
+use Release\Application\Admin\UseCase\Group\Search\Query\ReleaseGroupSummary;
 use Release\Domain\Models\ReleaseGroup;
 use Tag\Domain\Models\Tag;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Admin\V1\Media;
 
 use Illuminate\Http\JsonResponse;
-use Media\Application\Admin\Get\GetOutputData;
+use Media\Application\Admin\UseCase\Get\GetOutputData;
 use OpenAPI\Admin\Client\Model\MediaGetResponse;
 
 class GetPresenter

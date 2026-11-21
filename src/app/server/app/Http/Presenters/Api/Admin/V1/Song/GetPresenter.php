@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Song;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\SongGetResponse;
-use Song\Application\Admin\Get\GetOutputData;
+use Song\Application\Admin\UseCase\Get\GetOutputData;
 
 class GetPresenter
 {

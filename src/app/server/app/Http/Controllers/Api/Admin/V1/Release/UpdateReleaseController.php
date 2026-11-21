@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Release\UpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Release\Application\Admin\Update\UpdateInputData;
-use Release\Application\Admin\Update\UpdateUseCase;
+use Release\Application\Admin\UseCase\Update\UpdateInputData;
+use Release\Application\Admin\UseCase\Update\UpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class UpdateReleaseController extends Controller

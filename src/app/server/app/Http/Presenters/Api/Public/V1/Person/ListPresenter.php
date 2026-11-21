@@ -7,8 +7,8 @@ namespace App\Http\Presenters\Api\Public\V1\Person;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Public\Client\Model\Person;
 use OpenAPI\Public\Client\Model\PersonListResponse;
-use Person\Application\Public\List\ListOutputData;
-use Person\Application\Public\List\Query\PersonListItem;
+use Person\Application\Public\UseCase\List\ListOutputData;
+use Person\Application\Public\UseCase\List\Query\PersonListItem;
 
 class ListPresenter
 {

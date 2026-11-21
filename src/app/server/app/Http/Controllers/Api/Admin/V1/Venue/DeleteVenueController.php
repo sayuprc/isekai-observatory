@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Venue;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Venue\DeletePresenter;
 use Illuminate\Http\JsonResponse;
-use Venue\Application\Admin\Delete\DeleteInputData;
-use Venue\Application\Admin\Delete\DeleteUseCase;
+use Venue\Application\Admin\UseCase\Delete\DeleteInputData;
+use Venue\Application\Admin\UseCase\Delete\DeleteUseCase;
 
 final readonly class DeleteVenueController extends Controller
 {

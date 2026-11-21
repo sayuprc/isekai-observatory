@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Song;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\SongBulkUpdateResponse;
-use Song\Application\Admin\BulkUpdate\BulkUpdateOutputData;
+use Song\Application\Admin\UseCase\BulkUpdate\BulkUpdateOutputData;
 
 class BulkUpdatePresenter
 {

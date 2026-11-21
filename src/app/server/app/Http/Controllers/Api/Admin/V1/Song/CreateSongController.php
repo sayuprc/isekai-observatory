@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Song\CreatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Song\Application\Admin\Create\CreateInputData;
-use Song\Application\Admin\Create\CreateUseCase;
+use Song\Application\Admin\UseCase\Create\CreateInputData;
+use Song\Application\Admin\UseCase\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class CreateSongController extends Controller

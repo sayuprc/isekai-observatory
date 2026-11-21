@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Tag;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\TagUpdateResponse;
-use Tag\Application\Admin\Update\UpdateOutputData;
+use Tag\Application\Admin\UseCase\Update\UpdateOutputData;
 
 class UpdatePresenter
 {

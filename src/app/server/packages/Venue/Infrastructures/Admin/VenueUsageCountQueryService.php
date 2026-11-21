@@ -7,7 +7,7 @@ namespace Venue\Infrastructures\Admin;
 use Override;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
-use Venue\Application\Admin\Search\Query\VenueUsageCountQueryServiceInterface;
+use Venue\Application\Admin\UseCase\Search\Query\VenueUsageCountQueryServiceInterface;
 use Venue\Domain\Models\VenueId;
 
 readonly class VenueUsageCountQueryService implements VenueUsageCountQueryServiceInterface

@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Public\V1\PersonGroup\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Person\Application\Public\Group\List\ListInputData;
-use Person\Application\Public\Group\List\ListUseCase;
+use Person\Application\Public\UseCase\Group\List\ListInputData;
+use Person\Application\Public\UseCase\Group\List\ListUseCase;
 
 final readonly class ListPersonGroupController extends Controller
 {

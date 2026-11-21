@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Auth\RefreshPresenter;
-use Auth\Application\Admin\Refresh\RefreshInputData;
-use Auth\Application\Admin\Refresh\RefreshUseCase;
+use Auth\Application\Admin\UseCase\Refresh\RefreshInputData;
+use Auth\Application\Admin\UseCase\Refresh\RefreshUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;

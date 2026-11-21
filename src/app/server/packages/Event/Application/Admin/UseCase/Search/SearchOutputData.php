@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Event\Application\Admin\UseCase\Search;
+
+use Event\Application\Admin\UseCase\Search\Query\EventSummary;
+
+readonly class SearchOutputData
+{
+    /** @param array<int, EventSummary> $events */
+    public function __construct(
+        public array $events,
+        public int $maxPage,
+    ) {
+    }
+}

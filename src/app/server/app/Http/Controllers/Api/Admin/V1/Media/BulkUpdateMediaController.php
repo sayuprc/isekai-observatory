@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Media\BulkUpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Media\Application\Admin\BulkUpdate\BulkUpdateInputData;
-use Media\Application\Admin\BulkUpdate\BulkUpdateUseCase;
+use Media\Application\Admin\UseCase\BulkUpdate\BulkUpdateInputData;
+use Media\Application\Admin\UseCase\BulkUpdate\BulkUpdateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class BulkUpdateMediaController extends Controller

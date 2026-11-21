@@ -9,8 +9,8 @@ use App\Http\Presenters\Api\Admin\V1\Venue\UpdatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;
-use Venue\Application\Admin\Update\UpdateInputData;
-use Venue\Application\Admin\Update\UpdateUseCase;
+use Venue\Application\Admin\UseCase\Update\UpdateInputData;
+use Venue\Application\Admin\UseCase\Update\UpdateUseCase;
 
 final readonly class UpdateVenueController extends Controller
 {

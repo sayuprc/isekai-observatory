@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Person;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Person\GetPresenter;
 use Illuminate\Http\JsonResponse;
-use Person\Application\Admin\Get\GetInputData;
-use Person\Application\Admin\Get\GetUseCase;
+use Person\Application\Admin\UseCase\Get\GetInputData;
+use Person\Application\Admin\UseCase\Get\GetUseCase;
 
 final readonly class GetPersonController extends Controller
 {

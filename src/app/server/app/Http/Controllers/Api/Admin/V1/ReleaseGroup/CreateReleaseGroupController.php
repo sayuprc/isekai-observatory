@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\ReleaseGroup\CreatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Release\Application\Admin\Group\Create\CreateInputData;
-use Release\Application\Admin\Group\Create\CreateUseCase;
+use Release\Application\Admin\UseCase\Group\Create\CreateInputData;
+use Release\Application\Admin\UseCase\Group\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class CreateReleaseGroupController extends Controller

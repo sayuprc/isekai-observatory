@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Public\V1\Song\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Song\Application\Public\List\ListInputData;
-use Song\Application\Public\List\ListUseCase;
+use Song\Application\Public\UseCase\List\ListInputData;
+use Song\Application\Public\UseCase\List\ListUseCase;
 
 final readonly class ListSongController extends Controller
 {

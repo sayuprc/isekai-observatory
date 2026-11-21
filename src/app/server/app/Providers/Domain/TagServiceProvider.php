@@ -6,8 +6,8 @@ namespace App\Providers\Domain;
 
 use Illuminate\Support\ServiceProvider;
 use Override;
-use Tag\Application\Admin\Search\Query\TagUsageCountQueryServiceInterface;
-use Tag\Application\Public\List\Query\TagQueryServiceInterface as PublicTagQueryServiceInterface;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCountQueryServiceInterface;
+use Tag\Application\Public\UseCase\List\Query\TagQueryServiceInterface as PublicTagQueryServiceInterface;
 use Tag\Domain\Models\TagRepositoryInterface;
 use Tag\Infrastructures\Admin\TagUsageCountQueryService;
 use Tag\Infrastructures\Public\TagQueryService as PublicTagQueryService;

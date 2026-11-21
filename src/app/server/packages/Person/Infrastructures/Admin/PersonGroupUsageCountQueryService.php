@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Person\Infrastructures\Admin;
 
 use Override;
-use Person\Application\Admin\Group\Search\Query\PersonGroupUsageCountQueryServiceInterface;
+use Person\Application\Admin\UseCase\Group\Search\Query\PersonGroupUsageCountQueryServiceInterface;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 

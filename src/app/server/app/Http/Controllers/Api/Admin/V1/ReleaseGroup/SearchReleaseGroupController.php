@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\ReleaseGroup\SearchPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Release\Application\Admin\Group\Search\SearchInputData;
-use Release\Application\Admin\Group\Search\SearchUseCase;
+use Release\Application\Admin\UseCase\Group\Search\SearchInputData;
+use Release\Application\Admin\UseCase\Group\Search\SearchUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class SearchReleaseGroupController extends Controller

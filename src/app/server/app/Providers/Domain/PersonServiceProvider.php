@@ -6,11 +6,11 @@ namespace App\Providers\Domain;
 
 use Illuminate\Support\ServiceProvider;
 use Override;
-use Person\Application\Admin\Group\Query\PersonGroupQueryServiceInterface;
-use Person\Application\Admin\Group\Search\Query\PersonGroupUsageCountQueryServiceInterface;
-use Person\Application\Admin\Search\Query\PersonUsageCountQueryServiceInterface;
-use Person\Application\Public\Group\List\Query\PersonGroupQueryServiceInterface as PublicPersonGroupQueryServiceInterface;
-use Person\Application\Public\List\Query\PersonQueryServiceInterface as PublicPersonQueryServiceInterface;
+use Person\Application\Admin\Query\PersonGroupQueryServiceInterface;
+use Person\Application\Admin\UseCase\Group\Search\Query\PersonGroupUsageCountQueryServiceInterface;
+use Person\Application\Admin\UseCase\Search\Query\PersonUsageCountQueryServiceInterface;
+use Person\Application\Public\UseCase\Group\List\Query\PersonGroupQueryServiceInterface as PublicPersonGroupQueryServiceInterface;
+use Person\Application\Public\UseCase\List\Query\PersonQueryServiceInterface as PublicPersonQueryServiceInterface;
 use Person\Domain\Models\PersonGroupRepositoryInterface;
 use Person\Domain\Models\PersonRepositoryInterface;
 use Person\Infrastructures\Admin\PersonGroupQueryService;

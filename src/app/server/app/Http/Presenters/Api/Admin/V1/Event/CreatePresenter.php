@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Event;
 
-use Event\Application\Admin\Create\CreateOutputData;
+use Event\Application\Admin\UseCase\Create\CreateOutputData;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\EventCreateResponse;
 

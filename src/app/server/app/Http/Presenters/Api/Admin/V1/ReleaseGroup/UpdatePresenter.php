@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\ReleaseGroup;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\ReleaseGroupUpdateResponse;
-use Release\Application\Admin\Group\Update\UpdateOutputData;
+use Release\Application\Admin\UseCase\Group\Update\UpdateOutputData;
 
 class UpdatePresenter
 {

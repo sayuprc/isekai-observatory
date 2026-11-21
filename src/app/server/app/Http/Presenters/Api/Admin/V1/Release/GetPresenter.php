@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Release;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\ReleaseGetResponse;
-use Release\Application\Admin\Get\GetOutputData;
+use Release\Application\Admin\UseCase\Get\GetOutputData;
 
 class GetPresenter
 {

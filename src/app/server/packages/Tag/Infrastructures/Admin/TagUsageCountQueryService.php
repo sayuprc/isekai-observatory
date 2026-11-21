@@ -7,8 +7,8 @@ namespace Tag\Infrastructures\Admin;
 use Override;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
-use Tag\Application\Admin\Search\Query\TagUsageCount;
-use Tag\Application\Admin\Search\Query\TagUsageCountQueryServiceInterface;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCount;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCountQueryServiceInterface;
 use Tag\Domain\Models\TagId;
 
 readonly class TagUsageCountQueryService implements TagUsageCountQueryServiceInterface

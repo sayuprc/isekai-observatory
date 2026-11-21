@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Release\Infrastructures\Admin;
 
 use Override;
-use Release\Application\Admin\Group\Get\Query\ReleaseGroupDetailQueryServiceInterface;
-use Release\Application\Admin\Group\Get\Query\ReleaseGroupReferencedRelease;
+use Release\Application\Admin\UseCase\Group\Get\Query\ReleaseGroupDetailQueryServiceInterface;
+use Release\Application\Admin\UseCase\Group\Get\Query\ReleaseGroupReferencedRelease;
 use Release\Domain\Models\ReleaseGroupId;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;

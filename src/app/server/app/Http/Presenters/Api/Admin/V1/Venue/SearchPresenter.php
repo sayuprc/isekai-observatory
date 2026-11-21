@@ -7,7 +7,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Venue;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\VenueSearchResponse;
 use OpenAPI\Admin\Client\Model\VenueSummary;
-use Venue\Application\Admin\Search\SearchOutputData;
+use Venue\Application\Admin\UseCase\Search\SearchOutputData;
 use Venue\Domain\Models\Venue;
 
 class SearchPresenter

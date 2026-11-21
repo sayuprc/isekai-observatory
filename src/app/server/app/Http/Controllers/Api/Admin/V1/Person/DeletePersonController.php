@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Person;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Person\DeletePresenter;
 use Illuminate\Http\JsonResponse;
-use Person\Application\Admin\Delete\DeleteInputData;
-use Person\Application\Admin\Delete\DeleteUseCase;
+use Person\Application\Admin\UseCase\Delete\DeleteInputData;
+use Person\Application\Admin\UseCase\Delete\DeleteUseCase;
 
 final readonly class DeletePersonController extends Controller
 {

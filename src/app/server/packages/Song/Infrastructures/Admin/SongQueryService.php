@@ -6,8 +6,8 @@ namespace Song\Infrastructures\Admin;
 
 use Emonkak\Orm\SelectBuilder;
 use Override;
-use Song\Application\Admin\Search\Query\SongQueryServiceInterface;
-use Song\Application\Admin\Search\Query\SongSummary;
+use Song\Application\Admin\UseCase\Search\Query\SongQueryServiceInterface;
+use Song\Application\Admin\UseCase\Search\Query\SongSummary;
 use Song\Domain\Criteria\SongSearchCriteria;
 use Song\Domain\Models\SongType;
 use Support\Contracts\Uuid\UuidConverterInterface;

@@ -6,10 +6,10 @@ namespace Person\Infrastructures\Public;
 
 use Emonkak\Orm\Sql;
 use Override;
-use Person\Application\Public\Group\List\Query\PersonGroupListItem;
-use Person\Application\Public\Group\List\Query\PersonGroupListPage;
-use Person\Application\Public\Group\List\Query\PersonGroupListPageToken;
-use Person\Application\Public\Group\List\Query\PersonGroupQueryServiceInterface;
+use Person\Application\Public\UseCase\Group\List\Query\PersonGroupListItem;
+use Person\Application\Public\UseCase\Group\List\Query\PersonGroupListPage;
+use Person\Application\Public\UseCase\Group\List\Query\PersonGroupListPageToken;
+use Person\Application\Public\UseCase\Group\List\Query\PersonGroupQueryServiceInterface;
 use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;

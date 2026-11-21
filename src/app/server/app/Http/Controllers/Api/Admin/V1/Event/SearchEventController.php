@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Event;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Event\SearchPresenter;
-use Event\Application\Admin\Search\SearchInputData;
-use Event\Application\Admin\Search\SearchUseCase;
+use Event\Application\Admin\UseCase\Search\SearchInputData;
+use Event\Application\Admin\UseCase\Search\SearchUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Contracts\MapperInterface;

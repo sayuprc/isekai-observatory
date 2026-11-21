@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Release;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Release\GetPresenter;
 use Illuminate\Http\JsonResponse;
-use Release\Application\Admin\Get\GetInputData;
-use Release\Application\Admin\Get\GetUseCase;
+use Release\Application\Admin\UseCase\Get\GetInputData;
+use Release\Application\Admin\UseCase\Get\GetUseCase;
 
 final readonly class GetReleaseController extends Controller
 {

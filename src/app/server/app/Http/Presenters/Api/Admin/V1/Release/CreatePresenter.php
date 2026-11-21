@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Release;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\ReleaseCreateResponse;
-use Release\Application\Admin\Create\CreateOutputData;
+use Release\Application\Admin\UseCase\Create\CreateOutputData;
 
 class CreatePresenter
 {

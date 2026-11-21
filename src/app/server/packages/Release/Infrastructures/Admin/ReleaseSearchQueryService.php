@@ -6,8 +6,8 @@ namespace Release\Infrastructures\Admin;
 
 use Emonkak\Orm\SelectBuilder;
 use Override;
-use Release\Application\Admin\Search\Query\ReleaseSearchQueryServiceInterface;
-use Release\Application\Admin\Search\Query\ReleaseSummary;
+use Release\Application\Admin\UseCase\Search\Query\ReleaseSearchQueryServiceInterface;
+use Release\Application\Admin\UseCase\Search\Query\ReleaseSummary;
 use Release\Domain\Criteria\ReleaseSearchCriteria;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;

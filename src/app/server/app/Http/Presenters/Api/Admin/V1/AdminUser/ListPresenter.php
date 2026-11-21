@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\AdminUser;
 
-use AdminUser\Application\Admin\List\ListOutputData;
+use AdminUser\Application\Admin\UseCase\List\ListOutputData;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\AdminUserListResponse;
 

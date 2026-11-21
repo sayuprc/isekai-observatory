@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Person;
 
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\PersonListResponse;
-use Person\Application\Admin\List\ListOutputData;
+use Person\Application\Admin\UseCase\List\ListOutputData;
 
 class ListPresenter
 {

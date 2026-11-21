@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Presenters\Api\Admin\V1\Auth;
 
-use Auth\Application\Admin\Recovery\RecoveryFinishOutputData;
+use Auth\Application\Admin\UseCase\Recovery\RecoveryFinishOutputData;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\RecoveryFinishResponse;
 

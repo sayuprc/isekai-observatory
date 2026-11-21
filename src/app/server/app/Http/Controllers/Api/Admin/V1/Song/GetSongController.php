@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Admin\V1\Song;
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\Song\GetPresenter;
 use Illuminate\Http\JsonResponse;
-use Song\Application\Admin\Get\GetInputData;
-use Song\Application\Admin\Get\GetUseCase;
+use Song\Application\Admin\UseCase\Get\GetInputData;
+use Song\Application\Admin\UseCase\Get\GetUseCase;
 
 final readonly class GetSongController extends Controller
 {

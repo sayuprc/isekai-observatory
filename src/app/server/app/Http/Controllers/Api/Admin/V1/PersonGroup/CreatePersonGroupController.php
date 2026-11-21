@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Admin\V1\PersonGroup\CreatePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Person\Application\Admin\Group\Create\CreateInputData;
-use Person\Application\Admin\Group\Create\CreateUseCase;
+use Person\Application\Admin\UseCase\Group\Create\CreateInputData;
+use Person\Application\Admin\UseCase\Group\Create\CreateUseCase;
 use Support\Contracts\MapperInterface;
 
 final readonly class CreatePersonGroupController extends Controller
