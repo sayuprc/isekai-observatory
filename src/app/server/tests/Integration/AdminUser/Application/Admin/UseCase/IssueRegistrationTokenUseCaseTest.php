@@ -6,11 +6,11 @@ namespace Tests\Integration\AdminUser\Application\Admin\UseCase;
 
 use AdminUser\Application\Admin\UseCase\IssueRegistrationToken\IssueRegistrationTokenInputData;
 use AdminUser\Application\Admin\UseCase\IssueRegistrationToken\IssueRegistrationTokenUseCase;
-use AdminUser\Domain\Models\Permission;
 use AdminUser\Domain\Models\RegistrationToken\ConsumptionStatus;
 use AdminUser\Domain\Models\Role;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Test;
+use Support\Domain\Permission;
 use Tests\Support\DatabaseTestCase;
 
 class IssueRegistrationTokenUseCaseTest extends DatabaseTestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AdminUser\Domain\Models;
+namespace Support\Domain;
 
 enum Permission: string
 {

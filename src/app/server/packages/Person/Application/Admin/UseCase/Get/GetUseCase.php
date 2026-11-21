@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\Get;
 
-use AdminUser\Domain\Models\Permission;
 use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonRepositoryInterface;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
 

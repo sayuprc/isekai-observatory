@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Song\Infrastructures;
 
 use Override;
-use Person\Domain\Models\PersonId;
 use Song\Domain\Models\Song;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
@@ -103,38 +102,24 @@ readonly class SongRepository implements SongRepositoryInterface
     }
 
     #[Override]
-    public function isPersonUsed(PersonId $personId): bool
-    {
-        $personBinId = $this->converter->toBin($personId->value);
-
-        $songPersonCount = $this->queryFactory
-            ->select()
-            ->from('song_persons')
-            ->where('person_id', '=', $personBinId)
-            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
-            |> Row::intValue(...);
-
-        $performancePersonCount = $this->queryFactory
-            ->select()
-            ->from('song_performance_persons')
-            ->where('person_id', '=', $personBinId)
-            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
-            |> Row::intValue(...);
-
-        return $songPersonCount > 0 || $performancePersonCount > 0;
-    }
-
-    #[Override]
     public function isUsed(SongId $songId): bool
     {
-        $count = $this->queryFactory
-            ->select()
-            ->from('song_performances')
-            ->where('song_id', '=', $this->converter->toBin($songId->value))
-            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
-            |> Row::intValue(...);
+        $binSongId = $this->converter->toBin($songId->value);
 
-        return $count > 0;
+        foreach (['song_performances', 'release_track_songs'] as $table) {
+            $count = $this->queryFactory
+                ->select()
+                ->from($table)
+                ->where('song_id', '=', $binSongId)
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+                |> Row::intValue(...);
+
+            if ($count > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     #[Override]

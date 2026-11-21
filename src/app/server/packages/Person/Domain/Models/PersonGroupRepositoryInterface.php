@@ -18,4 +18,6 @@ interface PersonGroupRepositoryInterface
     public function save(PersonGroup $personGroup): PersonGroup;
 
     public function delete(PersonGroupId $personGroupId): void;
+
+    public function isUsed(PersonGroupId $personGroupId): bool;
 }

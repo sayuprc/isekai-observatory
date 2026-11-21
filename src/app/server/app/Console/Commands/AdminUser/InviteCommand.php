@@ -6,13 +6,13 @@ namespace App\Console\Commands\AdminUser;
 
 use AdminUser\Application\Admin\UseCase\IssueRegistrationToken\IssueRegistrationTokenInputData;
 use AdminUser\Application\Admin\UseCase\IssueRegistrationToken\IssueRegistrationTokenUseCase;
-use AdminUser\Domain\Models\Permission;
 use AdminUser\Domain\Models\Role;
 use App\Console\Commands\Concerns\ResolvesUseCaseExceptionMessage;
 use Illuminate\Console\Command;
 use Override;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
 use Support\Domain\Exceptions\InvalidDomainException;
+use Support\Domain\Permission;
 use Support\UseCase\Exceptions\UseCaseException;
 
 class InviteCommand extends Command

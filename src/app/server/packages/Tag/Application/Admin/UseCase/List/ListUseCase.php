@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tag\Application\Admin\UseCase\List;
 
-use AdminUser\Domain\Models\Permission;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Tag\Domain\Models\TagRepositoryInterface;
 

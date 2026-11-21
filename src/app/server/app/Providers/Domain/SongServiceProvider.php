@@ -8,13 +8,11 @@ use Illuminate\Support\ServiceProvider;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Infrastructures\MediaRepository;
 use Override;
-use Person\Domain\Services\PersonUsageCheckerInterface;
 use Song\Application\Admin\UseCase\Search\Query\SongQueryServiceInterface;
 use Song\Application\Public\UseCase\List\Query\SongQueryServiceInterface as PublicSongQueryServiceInterface;
 use Song\Application\Viewer\UseCase\List\Query\SongQueryServiceInterface as ViewerSongQueryServiceInterface;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Infrastructures\Admin\SongQueryService;
-use Song\Infrastructures\PersonUsageChecker;
 use Song\Infrastructures\Public\SongQueryService as PublicSongQueryService;
 use Song\Infrastructures\SongRepository;
 use Song\Infrastructures\Viewer\SongQueryService as ViewerSongQueryService;
@@ -25,7 +23,6 @@ class SongServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
-        $this->app->bind(PersonUsageCheckerInterface::class, PersonUsageChecker::class);
         $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
 
         $this->app->bind(SongQueryServiceInterface::class, SongQueryService::class);

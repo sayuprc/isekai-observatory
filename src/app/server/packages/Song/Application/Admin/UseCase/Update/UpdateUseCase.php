@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Song\Application\Admin\UseCase\Update;
 
-use AdminUser\Domain\Models\Permission;
 use Song\Application\Admin\Assemble\SongAssembler;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
 use Song\Domain\Services\SongIntegrityService;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AdminUser\Application\Admin\UseCase\List;
 
 use AdminUser\Domain\Models\AdminUserRepositoryInterface;
-use AdminUser\Domain\Models\Permission;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 
 readonly class ListUseCase
