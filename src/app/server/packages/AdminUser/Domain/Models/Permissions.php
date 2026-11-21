@@ -6,6 +6,7 @@ namespace AdminUser\Domain\Models;
 
 use Support\Collection\ImmutableCollection;
 use Support\Domain\Exceptions\InvalidDomainException;
+use Support\Domain\Permission;
 
 /**
  * @extends ImmutableCollection<int, Permission>

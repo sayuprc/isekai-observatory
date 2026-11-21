@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\Create;
 
-use AdminUser\Domain\Models\Permission;
 use Person\Domain\Models\PersonRepositoryInterface;
 use Person\Domain\Services\PersonIntegrityService;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

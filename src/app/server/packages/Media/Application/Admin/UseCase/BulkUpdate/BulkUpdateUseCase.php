@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Media\Application\Admin\UseCase\BulkUpdate;
 
-use AdminUser\Domain\Models\Permission;
 use Media\Domain\Models\MediaId;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\Permission;
 use Support\Optional\Arg;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;

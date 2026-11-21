@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Support\UseCase\AuditLog;
 
-use AdminUser\Domain\Models\AdminUserId;
 use Support\Domain\ValueObjects\String\UuidValueObject;
 
 interface AuditLogRecorderInterface
@@ -20,6 +19,6 @@ interface AuditLogRecorderInterface
         AuditTargetType $targetType,
         UuidValueObject $targetId,
         array $snapshot,
-        ?AdminUserId $actorId = null,
+        ?UuidValueObject $actorId = null,
     ): void;
 }

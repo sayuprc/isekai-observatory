@@ -10,15 +10,18 @@ use Person\Domain\Models\Person;
 use Person\Domain\Models\PersonId;
 use Person\Infrastructures\PersonRepository;
 use PHPUnit\Framework\Attributes\Test;
+use Song\Domain\Models\SongType;
 use Support\Domain\SearchCriteria\Order;
 use Support\Optional\None;
 use Support\Optional\Some;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
+use Tests\Support\Domain\EntityStore;
 
 class PersonRepositoryTest extends DatabaseTestCase
 {
     use EntityFactory;
+    use EntityStore;
 
     #[Test]
     public function all(): void
@@ -206,6 +209,33 @@ class PersonRepositoryTest extends DatabaseTestCase
     public function getMaxOrderNoWhenEmpty(): void
     {
         $this->assertSame(0, $this->getInstance()->getMaxOrderNo());
+    }
+
+    #[Test]
+    public function isUsedWhenCreditedOnSong(): void
+    {
+        $person = $this->createPerson($this->generateUuid(), '人物', 1);
+        $this->storePersons($person);
+        $this->storeSongs($this->createSong(
+            $this->generateUuid(),
+            '曲名',
+            '説明',
+            SongType::Original,
+            true,
+            1,
+            [],
+            [
+                ['personId' => $person->personId->value, 'role' => 1, 'orderNo' => 1],
+            ],
+        ));
+
+        $this->assertTrue($this->getInstance()->isUsed($person->personId));
+    }
+
+    #[Test]
+    public function isNotUsed(): void
+    {
+        $this->assertFalse($this->getInstance()->isUsed(new PersonId($this->generateUuid())));
     }
 
     private function getInstance(): PersonRepository

@@ -16,6 +16,8 @@ paths:
 - `src/app/server/packages/{Package}/Domain`: ビジネスルール。ほかのレイヤーに依存しない
 - `src/app/server/packages/{Package}/Application`: ユースケース。Domain にのみ依存する
 - `src/app/server/packages/{Package}/Infrastructures`: 永続化や外部接続。Domain に依存し、Application には依存しない
+- `src/app/server/packages/Viewer/`: 閲覧サイト向けの読み取り。業務パッケージの Domain と Support にだけ依存する (ADR-0044)
+- `src/app/server/packages/Public/`: Public API 向けの読み取り。業務パッケージの Domain と Support にだけ依存する (ADR-0044)
 - `src/app/server/Generated/`: OpenAPI から生成されたコード
 
 ## 実装規約

@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Public\V1\Venue\ListPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Venue\Application\Public\UseCase\List\ListInputData;
-use Venue\Application\Public\UseCase\List\ListUseCase;
+use Public\Application\Venue\UseCase\List\ListInputData;
+use Public\Application\Venue\UseCase\List\ListUseCase;
 
 final readonly class ListVenueController extends Controller
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\List;
 
-use AdminUser\Domain\Models\Permission;
 use Person\Domain\Models\PersonRepositoryInterface;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 
 readonly class ListUseCase

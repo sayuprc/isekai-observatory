@@ -55,6 +55,8 @@
       "Event\\": "packages/Event/",
       "AdminUser\\": "packages/AdminUser/",
       "Auth\\": "packages/Auth/",
+      "Viewer\\": "packages/Viewer/",
+      "Public\\": "packages/Public/",
       "Tools\\": "tools/",
       "OpenAPI\\Admin\\Client\\": "Generated/Admin/lib/",
       "OpenAPI\\Viewer\\Client\\": "Generated/Viewer/lib/",

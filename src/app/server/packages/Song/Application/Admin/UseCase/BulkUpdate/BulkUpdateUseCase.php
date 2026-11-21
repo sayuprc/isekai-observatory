@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Song\Application\Admin\UseCase\BulkUpdate;
 
-use AdminUser\Domain\Models\Permission;
 use Song\Domain\Models\SongId;
 use Song\Domain\Models\SongRepositoryInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\Permission;
 use Support\Optional\Arg;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;

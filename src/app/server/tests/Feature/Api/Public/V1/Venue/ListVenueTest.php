@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Public\V1\Venue;
 
 use PHPUnit\Framework\Attributes\Test;
+use Public\Route\VenueRouteMap;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
 use Venue\Domain\Models\VenueKind;
-use Venue\Route\PublicVenueRouteMap;
 
 class ListVenueTest extends DatabaseTestCase
 {
@@ -42,7 +42,7 @@ class ListVenueTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(PublicVenueRouteMap::List))
+            ->get(route(VenueRouteMap::List))
             ->assertOk()
             ->assertExactJson([
                 'items' => [
@@ -75,12 +75,12 @@ class ListVenueTest extends DatabaseTestCase
         );
 
         $first = $this
-            ->get(route(PublicVenueRouteMap::List, ['pageSize' => 1]))
+            ->get(route(VenueRouteMap::List, ['pageSize' => 1]))
             ->assertOk()
             ->assertJsonPath('items.0.venueId', $firstId);
 
         $this
-            ->get(route(PublicVenueRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+            ->get(route(VenueRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
             ->assertOk()
             ->assertJsonPath('items.0.venueId', $secondId)
             ->assertJsonMissingPath('nextPageToken');

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Venue\Application\Admin\UseCase\Get;
 
-use AdminUser\Domain\Models\Permission;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
 use Venue\Domain\Models\VenueId;

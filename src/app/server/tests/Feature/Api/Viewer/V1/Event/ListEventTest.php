@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Viewer\V1\Event;
 
 use Event\Domain\Models\EventType;
-use Event\Route\ViewerEventRouteMap;
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,6 +15,7 @@ use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
 use Venue\Domain\Models\VenueKind;
+use Viewer\Route\EventRouteMap;
 
 class ListEventTest extends DatabaseTestCase
 {
@@ -90,7 +90,7 @@ class ListEventTest extends DatabaseTestCase
         ));
 
         $this
-            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->get(route(EventRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $eventId)
@@ -138,7 +138,7 @@ class ListEventTest extends DatabaseTestCase
         ));
 
         $this
-            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->get(route(EventRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonPath('events.0.performances.0.coVocalists.0.name', 'メンバー')
             ->assertJsonPath('events.0.performances.0.coVocalists.0.personGroup.personGroupId', $personGroupId)
@@ -177,7 +177,7 @@ class ListEventTest extends DatabaseTestCase
         ));
 
         $this
-            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->get(route(EventRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonCount(1, 'events.0.releases')
             ->assertJsonPath('events.0.releases.0.releaseId', $visibleReleaseId)
@@ -198,7 +198,7 @@ class ListEventTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->get(route(EventRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.schedule.startOn', '2026-10-01')
@@ -218,7 +218,7 @@ class ListEventTest extends DatabaseTestCase
         $this->storeEvents($this->createEvent($eventId, tags: [['tagId' => $tagIdSecond], ['tagId' => $tagIdFirst]]));
 
         $this
-            ->get(route(ViewerEventRouteMap::List, ['limit' => 1]))
+            ->get(route(EventRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonPath('events.0.eventId', $eventId)
             ->assertJsonPath('events.0.tags', [
@@ -233,7 +233,7 @@ class ListEventTest extends DatabaseTestCase
         $this->storeEvents($this->createEvent($this->generateUuid(), isDisplay: false));
 
         $this
-            ->get(route(ViewerEventRouteMap::List))
+            ->get(route(EventRouteMap::List))
             ->assertOk()
             ->assertJsonCount(0, 'events');
     }
@@ -251,13 +251,13 @@ class ListEventTest extends DatabaseTestCase
         );
 
         $first = $this
-            ->get(route(ViewerEventRouteMap::List, ['limit' => 2]))
+            ->get(route(EventRouteMap::List, ['limit' => 2]))
             ->assertOk()
             ->assertJsonPath('events.0.eventId', $undatedId)
             ->assertJsonPath('events.1.eventId', $earlierId);
 
         $this
-            ->get(route(ViewerEventRouteMap::List, ['limit' => 2, 'cursor' => $first->json('nextCursor')]))
+            ->get(route(EventRouteMap::List, ['limit' => 2, 'cursor' => $first->json('nextCursor')]))
             ->assertOk()
             ->assertJsonCount(1, 'events')
             ->assertJsonPath('events.0.eventId', $laterId)
@@ -269,7 +269,7 @@ class ListEventTest extends DatabaseTestCase
     public function rejectsInvalidCursor(string $cursor): void
     {
         $this
-            ->get(route(ViewerEventRouteMap::List, ['cursor' => $cursor]))
+            ->get(route(EventRouteMap::List, ['cursor' => $cursor]))
             ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',

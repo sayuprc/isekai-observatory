@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests\Unit\AdminUser\Domain\Models;
 
 use AdminUser\Domain\Models\AdminUser;
-use AdminUser\Domain\Models\Permission;
 use AdminUser\Domain\Models\Role;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Support\Domain\Permission;
 use Tests\TestCase;
 
 class AdminUserTest extends TestCase

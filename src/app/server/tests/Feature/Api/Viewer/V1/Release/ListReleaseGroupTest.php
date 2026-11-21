@@ -9,11 +9,11 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseFormat;
 use Release\Domain\Models\ReleaseGroupType;
-use Release\Route\ViewerReleaseGroupRouteMap;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
+use Viewer\Route\ReleaseGroupRouteMap;
 
 class ListReleaseGroupTest extends DatabaseTestCase
 {
@@ -114,7 +114,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(ViewerReleaseGroupRouteMap::List))
+            ->get(route(ReleaseGroupRouteMap::List))
             ->assertOk()
             ->assertExactJson([
                 'releaseGroups' => [
@@ -273,7 +273,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(ViewerReleaseGroupRouteMap::List))
+            ->get(route(ReleaseGroupRouteMap::List))
             ->assertOk()
             ->assertJsonCount(2, 'releaseGroups.0.releases.0.media.0.tracks')
             ->assertJsonPath('releaseGroups.0.releases.0.media.0.tracks.0.songs.0.songId', $songId)
@@ -312,7 +312,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(ViewerReleaseGroupRouteMap::List))
+            ->get(route(ReleaseGroupRouteMap::List))
             ->assertOk()
             ->assertJsonPath('releaseGroups.0.releases.0.releaseId', $releaseId1)
             ->assertJsonPath('releaseGroups.0.releases.1.releaseId', $releaseId2);
@@ -332,7 +332,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(ViewerReleaseGroupRouteMap::List))
+            ->get(route(ReleaseGroupRouteMap::List))
             ->assertOk()
             ->assertJsonPath('releaseGroups.0.releases.0.releaseId', $releaseId)
             ->assertJsonPath('releaseGroups.0.releases.0.name', '');
@@ -367,7 +367,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         // 最古発売日の降順なので新しい作品が先
         $response = $this
-            ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1]))
+            ->get(route(ReleaseGroupRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2);
@@ -376,7 +376,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         $this->assertIsString($cursor);
 
         $this
-            ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+            ->get(route(ReleaseGroupRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
             ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
@@ -424,7 +424,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
 
         // 同じ発売日なら order_no の降順で制御する
         $response = $this
-            ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1]))
+            ->get(route(ReleaseGroupRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId2);
@@ -433,7 +433,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         $this->assertIsString($cursor);
 
         $this
-            ->get(route(ViewerReleaseGroupRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+            ->get(route(ReleaseGroupRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
             ->assertOk()
             ->assertJsonCount(1, 'releaseGroups')
             ->assertJsonPath('releaseGroups.0.releaseGroupId', $releaseGroupId1)
@@ -445,7 +445,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
     public function rejectsInvalidCursor(string $cursor): void
     {
         $this
-            ->get(route(ViewerReleaseGroupRouteMap::List, ['cursor' => $cursor]))
+            ->get(route(ReleaseGroupRouteMap::List, ['cursor' => $cursor]))
             ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',
