@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Support\Infrastructures\AuditLog;
 
-use AdminUser\Domain\Models\AdminUserId;
-use Auth\Domain\Models\AuthContext;
 use LogicException;
 use Override;
 use Support\Contracts\ClockInterface;
@@ -16,6 +14,7 @@ use Support\Infrastructures\Database\QueryFactory;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;
+use Support\UseCase\Authorizer\AuthorizationContextInterface;
 
 readonly class AuditLogRecorder implements AuditLogRecorderInterface
 {
@@ -23,7 +22,7 @@ readonly class AuditLogRecorder implements AuditLogRecorderInterface
         private ClockInterface $clock,
         private UuidGeneratorInterface $uuidGenerator,
         private UuidConverterInterface $uuidConverter,
-        private AuthContext $authContext,
+        private AuthorizationContextInterface $context,
         private QueryFactory $queryFactory,
     ) {
     }
@@ -37,9 +36,9 @@ readonly class AuditLogRecorder implements AuditLogRecorderInterface
         AuditTargetType $targetType,
         UuidValueObject $targetId,
         array $snapshot,
-        ?AdminUserId $actorId = null,
+        ?UuidValueObject $actorId = null,
     ): void {
-        $resolvedActor = $actorId ?? $this->authContext->get()?->adminUserId;
+        $resolvedActor = $actorId ?? $this->context->currentUser()?->id();
 
         if ($resolvedActor === null) {
             throw new LogicException('audit log の actor が解決できません');

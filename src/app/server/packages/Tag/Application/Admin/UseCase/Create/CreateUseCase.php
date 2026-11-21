@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tag\Application\Admin\UseCase\Create;
 
-use AdminUser\Domain\Models\Permission;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Release\Application\Admin\UseCase\Group\Search;
 
-use AdminUser\Domain\Models\Permission;
 use Release\Application\Admin\UseCase\Group\Search\Query\ReleaseGroupSearchQueryServiceInterface;
 use Release\Domain\Criteria\ReleaseGroupSearchCriteria;
 use Release\Domain\Models\ReleaseGroupType;
+use Support\Domain\Permission;
 use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;

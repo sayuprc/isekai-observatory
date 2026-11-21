@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Release\Application\Admin\UseCase\Search;
 
-use AdminUser\Domain\Models\Permission;
 use Release\Application\Admin\UseCase\Search\Query\ReleaseSearchQueryServiceInterface;
 use Release\Domain\Criteria\ReleaseSearchCriteria;
+use Support\Domain\Permission;
 use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;
