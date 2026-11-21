@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\Group\Get;
 
-use AdminUser\Domain\Models\Permission;
 use Person\Application\Admin\Query\PersonGroupQueryServiceInterface;
 use Person\Domain\Models\PersonGroupId;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
 

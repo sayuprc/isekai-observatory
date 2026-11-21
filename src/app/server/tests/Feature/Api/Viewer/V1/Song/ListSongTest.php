@@ -11,10 +11,10 @@ use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\SongType;
-use Song\Route\ViewerSongRouteMap;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
+use Viewer\Route\SongRouteMap;
 
 class ListSongTest extends DatabaseTestCase
 {
@@ -176,7 +176,7 @@ class ListSongTest extends DatabaseTestCase
         );
 
         $response = $this
-            ->get(route(ViewerSongRouteMap::List, ['limit' => 1]))
+            ->get(route(SongRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertExactJson([
                 'songs' => [
@@ -217,7 +217,7 @@ class ListSongTest extends DatabaseTestCase
         $this->assertIsString($cursor);
 
         $this
-            ->get(route(ViewerSongRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+            ->get(route(SongRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
             ->assertOk()
             ->assertExactJson([
                 'songs' => [
@@ -272,7 +272,7 @@ class ListSongTest extends DatabaseTestCase
     public function rejectsInvalidCursor(string $cursor): void
     {
         $this
-            ->get(route(ViewerSongRouteMap::List, ['cursor' => $cursor]))
+            ->get(route(SongRouteMap::List, ['cursor' => $cursor]))
             ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',

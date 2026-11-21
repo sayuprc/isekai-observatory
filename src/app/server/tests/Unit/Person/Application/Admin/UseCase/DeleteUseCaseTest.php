@@ -12,7 +12,6 @@ use Person\Application\Admin\UseCase\Delete\DeleteInputData;
 use Person\Application\Admin\UseCase\Delete\DeleteUseCase;
 use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonRepositoryInterface;
-use Person\Domain\Services\PersonUsageCheckerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Support\Contracts\TransactionInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
@@ -29,8 +28,6 @@ class DeleteUseCaseTest extends TestCase
 
     private MockInterface&PersonRepositoryInterface $repository;
 
-    private MockInterface&PersonUsageCheckerInterface $usageChecker;
-
     private AuditLogRecorderInterface&MockInterface $recorder;
 
     #[Override]
@@ -45,7 +42,6 @@ class DeleteUseCaseTest extends TestCase
             ->andReturnUsing(static fn (Closure $arg) => $arg())
             ->byDefault();
         $this->repository = Mockery::mock(PersonRepositoryInterface::class);
-        $this->usageChecker = Mockery::mock(PersonUsageCheckerInterface::class);
         $this->recorder = Mockery::mock(AuditLogRecorderInterface::class);
         $this->recorder->shouldReceive('record')->byDefault();
     }
@@ -59,7 +55,7 @@ class DeleteUseCaseTest extends TestCase
             ->andReturn($this->createPerson('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', '人物', 1))
             ->once();
 
-        $this->usageChecker
+        $this->repository
             ->shouldReceive('isUsed')
             ->withArgs(static fn (PersonId $arg): bool => $arg->value === 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA')
             ->andReturn(false)
@@ -82,7 +78,7 @@ class DeleteUseCaseTest extends TestCase
             ->andReturn($this->createPerson('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', '人物', 1))
             ->once();
 
-        $this->usageChecker
+        $this->repository
             ->shouldReceive('isUsed')
             ->withArgs(static fn (PersonId $arg): bool => $arg->value === 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA')
             ->andReturn(true)
@@ -98,7 +94,7 @@ class DeleteUseCaseTest extends TestCase
     #[Test]
     public function invalidPersonId(): void
     {
-        $this->usageChecker->shouldNotReceive('isUsed');
+        $this->repository->shouldNotReceive('isUsed');
         $this->repository->shouldNotReceive('delete');
 
         $this->expectException(InvalidDomainException::class);
@@ -114,7 +110,6 @@ class DeleteUseCaseTest extends TestCase
             $this->authorizer($context),
             $this->transaction,
             $this->repository,
-            $this->usageChecker,
             $this->recorder,
             $context,
         );

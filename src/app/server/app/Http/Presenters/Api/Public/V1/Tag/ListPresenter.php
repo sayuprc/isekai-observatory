@@ -7,8 +7,8 @@ namespace App\Http\Presenters\Api\Public\V1\Tag;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Public\Client\Model\Tag;
 use OpenAPI\Public\Client\Model\TagListResponse;
-use Tag\Application\Public\UseCase\List\ListOutputData;
-use Tag\Application\Public\UseCase\List\Query\TagListItem;
+use Public\Application\Tag\UseCase\List\ListOutputData;
+use Public\Application\Tag\UseCase\List\Query\TagListItem;
 
 class ListPresenter
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Event\Application\Admin\UseCase\Get;
 
-use AdminUser\Domain\Models\Permission;
 use Event\Application\Admin\Assemble\EventAssembler;
 use Event\Domain\Models\EventId;
 use Event\Domain\Models\EventRepositoryInterface;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Public\V1\PersonGroup;
 
-use Person\Route\PublicPersonGroupRouteMap;
 use PHPUnit\Framework\Attributes\Test;
+use Public\Route\PersonGroupRouteMap;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -82,7 +82,7 @@ class ListPersonGroupTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(PublicPersonGroupRouteMap::List))
+            ->get(route(PersonGroupRouteMap::List))
             ->assertOk()
             ->assertExactJson([
                 'items' => [

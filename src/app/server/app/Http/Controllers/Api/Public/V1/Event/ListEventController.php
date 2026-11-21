@@ -6,10 +6,10 @@ namespace App\Http\Controllers\Api\Public\V1\Event;
 
 use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Public\V1\Event\ListPresenter;
-use Event\Application\Public\UseCase\List\ListInputData;
-use Event\Application\Public\UseCase\List\ListUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Public\Application\Event\UseCase\List\ListInputData;
+use Public\Application\Event\UseCase\List\ListUseCase;
 
 final readonly class ListEventController extends Controller
 {

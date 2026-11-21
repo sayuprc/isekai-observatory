@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Support\UseCase\Authorizer;
 
-use AdminUser\Domain\Models\Permission;
+use Support\Domain\Permission;
 use Support\UseCase\Exceptions\PermissionDeniedException;
 use Support\UseCase\Exceptions\UnauthenticatedException;
 

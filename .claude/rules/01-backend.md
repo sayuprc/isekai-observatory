@@ -13,10 +13,14 @@ paths:
 ## 構成
 
 - `src/app/server/app/`: Laravel のエントリポイント、HTTP、Console、Provider などのフレームワーク接続
-- `src/app/server/packages/{Package}/Domain`: ビジネスルール。ほかのレイヤーに依存しない
-- `src/app/server/packages/{Package}/Application`: ユースケース。Domain にのみ依存する
-- `src/app/server/packages/{Package}/Infrastructures`: 永続化や外部接続。Domain に依存し、Application には依存しない
+- `src/app/server/packages/{Package}/Domain`: ビジネスルール。Domain と Support の一部にだけ依存する
+- `src/app/server/packages/{Package}/Application`: ユースケース。Domain と Support にだけ依存し、Infrastructures には依存しない
+- `src/app/server/packages/{Package}/Infrastructures`: 永続化や外部接続。Application のうち Query にだけ依存してよい
+- `src/app/server/packages/Viewer/`: 閲覧サイト向けの読み取り。業務パッケージの Domain と Support にだけ依存する (ADR-0044)
+- `src/app/server/packages/Public/`: Public API 向けの読み取り。業務パッケージの Domain と Support にだけ依存する (ADR-0044)
 - `src/app/server/Generated/`: OpenAPI から生成されたコード
+- パッケージ間の依存は ADR-0044 の階層に従い、ほかのパッケージへは下の段の Domain にだけ依存する
+- 階層表と、層ごとに依存してよい名前空間は `src/app/server/tools/Arkitect/config.php` に書き、`mise run api:architecture` で検査する
 
 ## 実装規約
 

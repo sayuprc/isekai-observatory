@@ -2,204 +2,59 @@
 
 declare(strict_types=1);
 
-use Tools\Arkitect\ComponentMaps\AdminUserComponent;
-use Tools\Arkitect\ComponentMaps\AuthComponent;
-use Tools\Arkitect\ComponentMaps\LibraryComponent;
-use Tools\Arkitect\ComponentMaps\MediaComponent;
-use Tools\Arkitect\ComponentMaps\PersonComponent;
-use Tools\Arkitect\ComponentMaps\SongComponent;
-use Tools\Arkitect\ComponentMaps\SupportComponent;
-use Tools\Arkitect\ComponentMaps\TagComponent;
-use Tools\Arkitect\ComponentMaps\VenueComponent;
-use Tools\Arkitect\Define;
+use Tools\Arkitect\PackageRules;
 
-return [
-    new Define(LibraryComponent::DateType),
-    new Define(LibraryComponent::ResultType),
-
-    new Define(SupportComponent::Domain, [
-        SupportComponent::Domain,
-        LibraryComponent::DateType,
-        LibraryComponent::ResultType,
-    ]),
-    new Define(SupportComponent::Contracts),
-    new Define(SupportComponent::Optional),
-    new Define(SupportComponent::Collection),
-    new Define(SupportComponent::Pagination, [
-        SupportComponent::Pagination,
-        SupportComponent::Domain,
-    ]),
-    new Define(SupportComponent::UseCase, [
-        SupportComponent::UseCase,
-        AdminUserComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Domain,
-        SupportComponent::Optional,
-        LibraryComponent::ResultType,
-    ]),
-
-    new Define(AdminUserComponent::Domain, [
-        AdminUserComponent::Domain,
-        SupportComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Collection,
-        LibraryComponent::ResultType,
-    ]),
-    new Define(AdminUserComponent::UseCase, [
-        AdminUserComponent::Domain,
-        AuthComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Domain,
-        SupportComponent::UseCase,
-        LibraryComponent::ResultType,
-    ]),
-
-    new Define(AuthComponent::Domain, [
-        AuthComponent::Domain,
-        AdminUserComponent::Domain,
-        SupportComponent::Domain,
-        SupportComponent::Contracts,
-        LibraryComponent::ResultType,
-    ]),
-    new Define(AuthComponent::UseCase, [
-        AuthComponent::Domain,
-        AdminUserComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Domain,
-        SupportComponent::UseCase,
-        LibraryComponent::ResultType,
-    ]),
-
-    new Define(PersonComponent::Domain, [
-        PersonComponent::Domain,
-        SupportComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Collection,
-        SupportComponent::Optional,
-        LibraryComponent::ResultType,
-    ]),
-    new Define(PersonComponent::Query, [
-        PersonComponent::Domain,
-        SupportComponent::Pagination,
-    ]),
-    new Define(
-        PersonComponent::UseCase,
+// 規則の意味は ADR-0044 を参照する
+return new PackageRules(
+    // 列ごとに下の段から並べる
+    // 上の段のパッケージは、同じ列の下の段のパッケージの Domain と Support にだけ依存してよい
+    columns: [
+        // 業務パッケージと、その読み取り
         [
-            PersonComponent::Domain,
-            PersonComponent::Query,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
-            SupportComponent::Contracts,
-            SupportComponent::Domain,
-            SupportComponent::Optional,
-            SupportComponent::UseCase,
-            LibraryComponent::ResultType,
+            ['Tag', 'Person', 'Venue'],
+            ['Media'],
+            ['Song'],
+            ['Release'],
+            ['Event'],
+            ['Viewer', 'Public'],
         ],
-        [PersonComponent::Query],
-    ),
-
-    new Define(VenueComponent::Domain, [
-        VenueComponent::Domain,
-        SupportComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Optional,
-        LibraryComponent::ResultType,
-    ]),
-    new Define(VenueComponent::Query, [
-        VenueComponent::Domain,
-        SupportComponent::Pagination,
-    ]),
-    new Define(
-        VenueComponent::UseCase,
+        // 管理者パッケージ
         [
-            VenueComponent::Domain,
-            VenueComponent::Query,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
-            SupportComponent::Contracts,
-            SupportComponent::Domain,
-            SupportComponent::Optional,
-            SupportComponent::UseCase,
-            LibraryComponent::ResultType,
+            ['AdminUser'],
+            ['Auth'],
         ],
-        [VenueComponent::Query],
-    ),
-
-    new Define(TagComponent::Domain, [
-        TagComponent::Domain,
-        SupportComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Collection,
-        SupportComponent::Optional,
-        LibraryComponent::ResultType,
-    ]),
-    new Define(TagComponent::Query, [
-        TagComponent::Domain,
-        SupportComponent::Pagination,
-    ]),
-    new Define(
-        TagComponent::UseCase,
-        [
-            TagComponent::Domain,
-            TagComponent::Query,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
-            SupportComponent::Contracts,
-            SupportComponent::Domain,
-            SupportComponent::Optional,
-            SupportComponent::UseCase,
-            LibraryComponent::ResultType,
-        ],
-        [TagComponent::Query],
-    ),
-
-    new Define(MediaComponent::Domain, [
-        MediaComponent::Domain,
-        TagComponent::Domain,
-        LibraryComponent::DateType,
-        SupportComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Optional,
-        LibraryComponent::ResultType,
-    ]),
-
-    new Define(SongComponent::Domain, [
-        SongComponent::Domain,
-        MediaComponent::Domain,
-        PersonComponent::Domain,
-        TagComponent::Domain,
-        SupportComponent::Domain,
-        SupportComponent::Contracts,
-        SupportComponent::Collection,
-        SupportComponent::Optional,
-        LibraryComponent::ResultType,
-    ]),
-    new Define(SongComponent::Query, [
-        SongComponent::Domain,
-        MediaComponent::Domain,
-        SupportComponent::Pagination,
-    ]),
-    new Define(SongComponent::Assemble, [
-        SongComponent::Domain,
-        MediaComponent::Domain,
-        PersonComponent::Domain,
-        TagComponent::Domain,
-    ]),
-    new Define(
-        SongComponent::UseCase,
-        [
-            SongComponent::Domain,
-            SongComponent::Query,
-            SongComponent::Assemble,
-            TagComponent::Domain,
-            AdminUserComponent::Domain,
-            AuthComponent::Domain,
-            SupportComponent::Contracts,
-            SupportComponent::Domain,
-            SupportComponent::Optional,
-            SupportComponent::UseCase,
-            LibraryComponent::ResultType,
-        ],
-        [SongComponent::Query],
-    ),
-];
+    ],
+    // Support の区分ごとに、自分のほかに依存してよい名前空間
+    // ここにない区分は、パッケージと app に依存しない限り自由とする
+    kernel: [
+        'Support\Domain' => ['DateType'],
+        'Support\Contracts' => [],
+        'Support\Optional' => [],
+        'Support\Collection' => [],
+        'Support\Pagination' => ['Support\Domain'],
+        'Support\UseCase' => ['Support\Contracts', 'Support\Domain', 'Support\Optional'],
+    ],
+    // 各パッケージの層が、自分の層と下のパッケージの Domain のほかに依存してよい名前空間
+    domain: [
+        'Support\Domain',
+        'Support\Contracts',
+        'Support\Collection',
+        'Support\Optional',
+        'DateType',
+    ],
+    application: [
+        'Support\Domain',
+        'Support\Contracts',
+        'Support\Collection',
+        'Support\Optional',
+        'Support\Pagination',
+        'Support\UseCase',
+        'Support\Notification\Contracts',
+        'Support\Notification\NotificationService',
+        'DateType',
+    ],
+    query: [
+        'Support\Domain',
+        'Support\Pagination',
+    ],
+);

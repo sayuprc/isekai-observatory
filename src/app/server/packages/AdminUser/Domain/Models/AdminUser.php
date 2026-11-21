@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AdminUser\Domain\Models;
 
 use DateTimeImmutable;
+use Support\Domain\Permission;
 
 readonly class AdminUser
 {

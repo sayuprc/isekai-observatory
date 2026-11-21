@@ -10,9 +10,9 @@ use OpenAPI\Public\Client\Model\SongCredit as OpenApiSongCredit;
 use OpenAPI\Public\Client\Model\SongCreditRoleValue;
 use OpenAPI\Public\Client\Model\SongListResponse;
 use OpenAPI\Public\Client\Model\SongTypeValue;
-use Song\Application\Public\UseCase\List\ListOutputData;
-use Song\Application\Public\UseCase\List\Query\SongCredit;
-use Song\Application\Public\UseCase\List\Query\SongListItem;
+use Public\Application\Song\UseCase\List\ListOutputData;
+use Public\Application\Song\UseCase\List\Query\SongCredit;
+use Public\Application\Song\UseCase\List\Query\SongListItem;
 
 class ListPresenter
 {

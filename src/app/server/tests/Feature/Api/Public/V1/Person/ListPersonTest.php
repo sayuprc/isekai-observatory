@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Public\V1\Person;
 
-use Person\Route\PublicPersonRouteMap;
 use PHPUnit\Framework\Attributes\Test;
+use Public\Route\PersonRouteMap;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
@@ -104,7 +104,7 @@ class ListPersonTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(PublicPersonRouteMap::List))
+            ->get(route(PersonRouteMap::List))
             ->assertOk()
             ->assertExactJson([
                 'items' => [
@@ -140,12 +140,12 @@ class ListPersonTest extends DatabaseTestCase
         ));
 
         $first = $this
-            ->get(route(PublicPersonRouteMap::List, ['pageSize' => 1]))
+            ->get(route(PersonRouteMap::List, ['pageSize' => 1]))
             ->assertOk()
             ->assertJsonPath('items.0.personId', $firstId);
 
         $this
-            ->get(route(PublicPersonRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+            ->get(route(PersonRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
             ->assertOk()
             ->assertJsonPath('items.0.personId', $secondId)
             ->assertJsonMissingPath('nextPageToken');

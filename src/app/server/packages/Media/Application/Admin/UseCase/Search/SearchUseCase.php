@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Media\Application\Admin\UseCase\Search;
 
-use AdminUser\Domain\Models\Permission;
 use Media\Application\Admin\UseCase\Search\Query\MediaUsageCountQueryServiceInterface;
 use Media\Domain\Criteria\MediaSearchCriteria;
 use Media\Domain\Models\Media;
 use Media\Domain\Models\MediaId;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Domain\Models\MediaType;
+use Support\Domain\Permission;
 use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;

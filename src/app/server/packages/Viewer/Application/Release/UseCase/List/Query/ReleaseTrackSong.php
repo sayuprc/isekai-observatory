@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Viewer\Application\Release\UseCase\List\Query;
+
+readonly class ReleaseTrackSong
+{
+    public function __construct(
+        public string $songId,
+        public string $title,
+        public bool $isDisplay,
+    ) {
+    }
+}

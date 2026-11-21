@@ -6,9 +6,9 @@ namespace Tests\Feature\Api\Public\V1\ReleaseGroup;
 
 use DateType\ImmutableDate;
 use PHPUnit\Framework\Attributes\Test;
+use Public\Route\ReleaseGroupRouteMap;
 use Release\Domain\Models\ReleaseFormat;
 use Release\Domain\Models\ReleaseGroupType;
-use Release\Route\PublicReleaseGroupRouteMap;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
@@ -73,7 +73,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(PublicReleaseGroupRouteMap::List))
+            ->get(route(ReleaseGroupRouteMap::List))
             ->assertOk()
             ->assertExactJson([
                 'items' => [
@@ -143,7 +143,7 @@ class ListReleaseGroupTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(PublicReleaseGroupRouteMap::List))
+            ->get(route(ReleaseGroupRouteMap::List))
             ->assertOk()
             ->assertExactJson(['items' => []]);
     }
@@ -163,12 +163,12 @@ class ListReleaseGroupTest extends DatabaseTestCase
         );
 
         $first = $this
-            ->get(route(PublicReleaseGroupRouteMap::List, ['pageSize' => 1]))
+            ->get(route(ReleaseGroupRouteMap::List, ['pageSize' => 1]))
             ->assertOk()
             ->assertJsonPath('items.0.releaseGroupId', $firstId);
 
         $this
-            ->get(route(PublicReleaseGroupRouteMap::List, [
+            ->get(route(ReleaseGroupRouteMap::List, [
                 'pageSize' => 1,
                 'pageToken' => $first->json('nextPageToken'),
             ]))

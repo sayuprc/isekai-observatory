@@ -6,9 +6,6 @@ namespace App\Http\Presenters\Api\Viewer\V1\Media;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
-use Media\Application\Viewer\UseCase\List\ListOutputData;
-use Media\Application\Viewer\UseCase\List\Query\MediaListItem;
-use Media\Application\Viewer\UseCase\List\Query\MediaSongSummary;
 use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\MediaListItem as OpenApiMediaListItem;
 use OpenAPI\Viewer\Client\Model\MediaListResponse;
@@ -16,6 +13,9 @@ use OpenAPI\Viewer\Client\Model\MediaRelationCounts;
 use OpenAPI\Viewer\Client\Model\MediaSongSummary as OpenApiMediaSongSummary;
 use OpenAPI\Viewer\Client\Model\MediaTypeValue;
 use OpenAPI\Viewer\Client\Model\SongTypeValue;
+use Viewer\Application\Media\UseCase\List\ListOutputData;
+use Viewer\Application\Media\UseCase\List\Query\MediaListItem;
+use Viewer\Application\Media\UseCase\List\Query\MediaSongSummary;
 
 class ListPresenter
 {

@@ -6,13 +6,13 @@ namespace Tests\Feature\Api\Viewer\V1\Media;
 
 use DateTimeImmutable;
 use Media\Domain\Models\MediaType;
-use Media\Route\ViewerMediaRouteMap;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Song\Domain\Models\SongType;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
+use Viewer\Route\MediaRouteMap;
 
 class ListMediaTest extends DatabaseTestCase
 {
@@ -120,7 +120,7 @@ class ListMediaTest extends DatabaseTestCase
         );
 
         $response = $this
-            ->get(route(ViewerMediaRouteMap::List, ['limit' => 1]))
+            ->get(route(MediaRouteMap::List, ['limit' => 1]))
             ->assertOk()
             ->assertExactJson([
                 'media' => [
@@ -152,7 +152,7 @@ class ListMediaTest extends DatabaseTestCase
         $this->assertIsString($cursor);
 
         $this
-            ->get(route(ViewerMediaRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
+            ->get(route(MediaRouteMap::List, ['limit' => 1, 'cursor' => $cursor]))
             ->assertOk()
             ->assertExactJson([
                 'media' => [
@@ -175,7 +175,7 @@ class ListMediaTest extends DatabaseTestCase
     public function rejectsInvalidCursor(string $cursor): void
     {
         $this
-            ->get(route(ViewerMediaRouteMap::List, ['cursor' => $cursor]))
+            ->get(route(MediaRouteMap::List, ['cursor' => $cursor]))
             ->assertBadRequest()
             ->assertExactJson([
                 'code' => 'business_rule_violation',

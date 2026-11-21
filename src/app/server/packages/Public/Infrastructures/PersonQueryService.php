@@ -1,0 +1,76 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Public\Infrastructures;
+
+use Emonkak\Orm\Sql;
+use Override;
+use Public\Application\Person\UseCase\List\Query\PersonListItem;
+use Public\Application\Person\UseCase\List\Query\PersonListPage;
+use Public\Application\Person\UseCase\List\Query\PersonListPageToken;
+use Public\Application\Person\UseCase\List\Query\PersonQueryServiceInterface;
+use SensitiveParameter;
+use Support\Contracts\Uuid\UuidConverterInterface;
+use Support\Infrastructures\Database\QueryFactory;
+use Support\Infrastructures\Database\Row;
+
+readonly class PersonQueryService implements PersonQueryServiceInterface
+{
+    public function __construct(
+        private QueryFactory $queryFactory,
+        private UuidConverterInterface $converter,
+    ) {
+    }
+
+    #[Override]
+    public function list(#[SensitiveParameter] ?string $pageToken, int $pageSize): PersonListPage
+    {
+        $query = $this->queryFactory
+            ->select()
+            ->withSelect(['person_id', 'name', 'order_no'])
+            ->from('persons')
+            ->where(new Sql('person_id IN (' . PublicReferenceSql::PERSON_IDS . ')'));
+
+        if (is_string($pageToken)) {
+            $decoded = PersonListPageToken::decode($pageToken);
+
+            $query = Sql::format(
+                '(order_no > %s OR (order_no = %s AND person_id > %s))',
+                Sql::value($decoded->orderNo),
+                Sql::value($decoded->orderNo),
+                Sql::value($this->converter->toBin($decoded->personId)),
+            )
+                |> $query->where(...);
+        }
+
+        $rows = $query
+            ->orderBy('order_no')
+            ->orderBy('person_id')
+            ->limit($pageSize + 1)
+            |> $this->queryFactory->fetchAll(...);
+
+        $hasNextPage = count($rows) > $pageSize;
+        $pageRows = $hasNextPage ? array_slice($rows, 0, $pageSize) : $rows;
+
+        $persons = array_map(
+            fn (array $row): PersonListItem => new PersonListItem(
+                $this->converter->toUuid(Row::string($row, 'person_id')),
+                Row::string($row, 'name'),
+            ),
+            $pageRows,
+        );
+
+        $lastRow = $hasNextPage && $pageRows !== [] ? $pageRows[count($pageRows) - 1] : null;
+
+        return new PersonListPage(
+            $persons,
+            $lastRow === null
+                ? null
+                : PersonListPageToken::encode(
+                    Row::int($lastRow, 'order_no'),
+                    $this->converter->toUuid(Row::string($lastRow, 'person_id')),
+                ),
+        );
+    }
+}

@@ -6,9 +6,9 @@ namespace Tests\Feature\Api\Public\V1\Song;
 
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
+use Public\Route\SongRouteMap;
 use Song\Domain\Models\Persons\SongPersonRole;
 use Song\Domain\Models\SongType;
-use Song\Route\PublicSongRouteMap;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
@@ -59,7 +59,7 @@ class ListSongTest extends DatabaseTestCase
         ));
 
         $this
-            ->get(route(PublicSongRouteMap::List))
+            ->get(route(SongRouteMap::List))
             ->assertOk()
             ->assertExactJson([
                 'items' => [
@@ -85,7 +85,7 @@ class ListSongTest extends DatabaseTestCase
         $this->storeSongs($this->createSong($this->generateUuid(), '非公開楽曲', '説明', SongType::Original, false, 1));
 
         $this
-            ->get(route(PublicSongRouteMap::List))
+            ->get(route(SongRouteMap::List))
             ->assertOk()
             ->assertExactJson(['items' => []]);
     }
@@ -103,13 +103,13 @@ class ListSongTest extends DatabaseTestCase
         );
 
         $first = $this
-            ->get(route(PublicSongRouteMap::List, ['pageSize' => 2]))
+            ->get(route(SongRouteMap::List, ['pageSize' => 2]))
             ->assertOk()
             ->assertJsonPath('items.0.songId', $firstId)
             ->assertJsonPath('items.1.songId', $secondId);
 
         $this
-            ->get(route(PublicSongRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
+            ->get(route(SongRouteMap::List, ['pageSize' => 2, 'pageToken' => $first->json('nextPageToken')]))
             ->assertOk()
             ->assertJsonCount(1, 'items')
             ->assertJsonPath('items.0.songId', $thirdId)
@@ -120,7 +120,7 @@ class ListSongTest extends DatabaseTestCase
     public function rejectsInvalidPageToken(): void
     {
         $this
-            ->get(route(PublicSongRouteMap::List, ['pageToken' => '***']))
+            ->get(route(SongRouteMap::List, ['pageToken' => '***']))
             ->assertBadRequest()
             ->assertJsonPath('code', 'business_rule_violation');
     }

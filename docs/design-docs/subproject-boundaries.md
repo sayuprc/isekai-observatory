@@ -17,11 +17,15 @@
 - `src/app/server/`: PHP 8.5 / Laravel API サーバー
 - `src/app/server/app/`: Laravel 固有の wiring
 - `src/app/server/packages/{Package}/`: 業務ドメイン
+- `src/app/server/packages/Viewer/`: 閲覧サイト向けの読み取り。業務パッケージの Domain と Support にだけ依存する (ADR-0044)
+- `src/app/server/packages/Public/`: Public API 向けの読み取り。業務パッケージの Domain と Support にだけ依存する (ADR-0044)
 - `src/app/server/database/`: Atlas によるスキーマ管理
 - `src/app/server/tests/`: Unit / Integration / Feature テスト
 - `src/app/server/Generated/`: OpenAPI 由来の生成コード
 
 業務ロジックは ADR-0006 の ADOP を前提にし、`Domain`、`Application`、`Infrastructures`、`DebugInfrastructures` の境界を守ります
+
+パッケージ間の依存は ADR-0044 の階層に従います。階層表は `src/app/server/tools/Arkitect/config.php` にあります
 
 ## Admin
 

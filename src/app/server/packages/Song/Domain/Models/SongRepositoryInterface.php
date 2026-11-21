@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Song\Domain\Models;
 
-use Person\Domain\Models\PersonId;
-
 interface SongRepositoryInterface
 {
     public function find(SongId $songId): ?Song;
@@ -14,8 +12,6 @@ interface SongRepositoryInterface
      * @return array<int, Song>
      */
     public function findByIds(SongId ...$songIds): array;
-
-    public function isPersonUsed(PersonId $personId): bool;
 
     public function isUsed(SongId $songId): bool;
 

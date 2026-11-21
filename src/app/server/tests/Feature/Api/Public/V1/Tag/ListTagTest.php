@@ -6,9 +6,9 @@ namespace Tests\Feature\Api\Public\V1\Tag;
 
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
+use Public\Route\TagRouteMap;
 use Release\Domain\Models\ReleaseGroupType;
 use Song\Domain\Models\SongType;
-use Tag\Route\PublicTagRouteMap;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Domain\EntityFactory;
 use Tests\Support\Domain\EntityStore;
@@ -123,7 +123,7 @@ class ListTagTest extends DatabaseTestCase
         );
 
         $this
-            ->get(route(PublicTagRouteMap::List))
+            ->get(route(TagRouteMap::List))
             ->assertOk()
             ->assertExactJson([
                 'items' => [
@@ -155,12 +155,12 @@ class ListTagTest extends DatabaseTestCase
         );
 
         $first = $this
-            ->get(route(PublicTagRouteMap::List, ['pageSize' => 1]))
+            ->get(route(TagRouteMap::List, ['pageSize' => 1]))
             ->assertOk()
             ->assertJsonPath('items.0.tagId', $firstId);
 
         $this
-            ->get(route(PublicTagRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
+            ->get(route(TagRouteMap::List, ['pageSize' => 1, 'pageToken' => $first->json('nextPageToken')]))
             ->assertOk()
             ->assertJsonPath('items.0.tagId', $secondId)
             ->assertJsonMissingPath('nextPageToken');

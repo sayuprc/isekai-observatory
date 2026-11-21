@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tests\Unit\Support\UseCase\Authorizer;
 
 use AdminUser\Domain\Models\AdminUser;
-use AdminUser\Domain\Models\Permission;
 use AdminUser\Domain\Models\Role;
 use Auth\Domain\Models\AuthContext;
 use Auth\Infrastructures\Auth\UseCaseAuthorizationContext;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
+use Support\Domain\Permission;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\PermissionDeniedException;
 use Support\UseCase\Exceptions\UnauthenticatedException;
