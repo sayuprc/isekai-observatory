@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "typecheck": "astro check && tsc --noEmit",
+    "typecheck": "astro check && bun check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --fix",
