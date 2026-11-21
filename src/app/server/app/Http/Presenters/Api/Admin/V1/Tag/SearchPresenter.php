@@ -7,7 +7,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Tag;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\TagSearchResponse;
 use OpenAPI\Admin\Client\Model\TagSummary;
-use Tag\Application\Admin\Query\TagUsageCount;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCount;
 use Tag\Application\Admin\UseCase\Search\SearchOutputData;
 use Tag\Domain\Models\Tag;
 

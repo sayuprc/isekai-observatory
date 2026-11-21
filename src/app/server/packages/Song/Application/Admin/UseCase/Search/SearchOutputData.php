@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Song\Application\Admin\UseCase\Search;
 
-use Song\Application\Admin\Query\SongSummary;
+use Song\Application\Admin\UseCase\Search\Query\SongSummary;
 
 readonly class SearchOutputData
 {

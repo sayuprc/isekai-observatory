@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tag\Application\Public\UseCase\List;
 
 use SensitiveParameter;
-use Tag\Application\Public\Query\TagListItem;
+use Tag\Application\Public\UseCase\List\Query\TagListItem;
 
 readonly class ListOutputData
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Event\Application\Public\UseCase\List;
 
-use Event\Application\Public\Query\EventListItem;
+use Event\Application\Public\UseCase\List\Query\EventListItem;
 use SensitiveParameter;
 
 readonly class ListOutputData

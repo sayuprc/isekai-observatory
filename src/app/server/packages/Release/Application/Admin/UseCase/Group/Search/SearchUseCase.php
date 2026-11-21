@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Release\Application\Admin\UseCase\Group\Search;
 
 use AdminUser\Domain\Models\Permission;
-use Release\Application\Admin\Query\ReleaseGroupSearchQueryServiceInterface;
+use Release\Application\Admin\UseCase\Group\Search\Query\ReleaseGroupSearchQueryServiceInterface;
 use Release\Domain\Criteria\ReleaseGroupSearchCriteria;
 use Release\Domain\Models\ReleaseGroupType;
 use Support\Optional\Arg;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Release\Application\Admin\UseCase\Group\Get;
 
-use Release\Application\Admin\Query\ReleaseGroupReferencedRelease;
+use Release\Application\Admin\UseCase\Group\Get\Query\ReleaseGroupReferencedRelease;
 use Release\Domain\Models\ReleaseGroup;
 use Tag\Domain\Models\Tag;
 

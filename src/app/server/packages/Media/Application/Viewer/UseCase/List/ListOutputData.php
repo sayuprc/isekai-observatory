@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Media\Application\Viewer\UseCase\List;
 
-use Media\Application\Viewer\Query\MediaListItem;
+use Media\Application\Viewer\UseCase\List\Query\MediaListItem;
 
 readonly class ListOutputData
 {

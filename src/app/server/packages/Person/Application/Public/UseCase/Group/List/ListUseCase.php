@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Person\Application\Public\UseCase\Group\List;
 
-use Person\Application\Public\Query\PersonGroupQueryServiceInterface;
+use Person\Application\Public\UseCase\Group\List\Query\PersonGroupQueryServiceInterface;
 
 readonly class ListUseCase
 {

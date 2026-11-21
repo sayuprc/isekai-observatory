@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Event\Application\Viewer\UseCase\List;
 
-use Event\Application\Viewer\Query\EventListItem;
+use Event\Application\Viewer\UseCase\List\Query\EventListItem;
 
 readonly class ListOutputData
 {

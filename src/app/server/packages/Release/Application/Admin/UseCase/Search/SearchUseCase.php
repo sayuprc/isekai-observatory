@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Release\Application\Admin\UseCase\Search;
 
 use AdminUser\Domain\Models\Permission;
-use Release\Application\Admin\Query\ReleaseSearchQueryServiceInterface;
+use Release\Application\Admin\UseCase\Search\Query\ReleaseSearchQueryServiceInterface;
 use Release\Domain\Criteria\ReleaseSearchCriteria;
 use Support\Optional\Arg;
 use Support\Optional\None;

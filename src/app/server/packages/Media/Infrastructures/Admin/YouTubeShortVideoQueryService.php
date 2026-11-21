@@ -8,8 +8,8 @@ use Generator;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
-use Media\Application\Admin\Query\YouTubeShortVideoQueryServiceInterface;
-use Media\Application\Admin\Query\YouTubeUploadedVideo;
+use Media\Application\Admin\UseCase\ImportYouTube\Query\YouTubeShortVideoQueryServiceInterface;
+use Media\Application\Admin\UseCase\ImportYouTube\Query\YouTubeUploadedVideo;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 

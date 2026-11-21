@@ -6,7 +6,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Person;
 
 use OpenAPI\Admin\Client\Model\Person as OpenApiPerson;
 use OpenAPI\Admin\Client\Model\PersonSummary as OpenApiPersonSummary;
-use Person\Application\Admin\Query\PersonUsageCount;
+use Person\Application\Admin\UseCase\Search\Query\PersonUsageCount;
 use Person\Domain\Models\Person;
 
 class Converter

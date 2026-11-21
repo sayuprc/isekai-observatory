@@ -6,8 +6,8 @@ namespace App\Http\Presenters\Api\Public\V1\Media;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
-use Media\Application\Public\Query\MediaListItem;
 use Media\Application\Public\UseCase\List\ListOutputData;
+use Media\Application\Public\UseCase\List\Query\MediaListItem;
 use OpenAPI\Public\Client\Model\Media;
 use OpenAPI\Public\Client\Model\MediaListResponse;
 use OpenAPI\Public\Client\Model\MediaTypeValue;

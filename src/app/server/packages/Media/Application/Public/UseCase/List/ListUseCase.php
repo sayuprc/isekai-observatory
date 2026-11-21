@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Media\Application\Public\UseCase\List;
 
-use Media\Application\Public\Query\MediaQueryServiceInterface;
+use Media\Application\Public\UseCase\List\Query\MediaQueryServiceInterface;
 
 readonly class ListUseCase
 {

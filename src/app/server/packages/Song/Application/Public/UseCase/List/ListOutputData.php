@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Song\Application\Public\UseCase\List;
 
 use SensitiveParameter;
-use Song\Application\Public\Query\SongListItem;
+use Song\Application\Public\UseCase\List\Query\SongListItem;
 
 readonly class ListOutputData
 {

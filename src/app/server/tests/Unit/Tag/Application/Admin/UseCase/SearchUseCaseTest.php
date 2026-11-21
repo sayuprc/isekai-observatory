@@ -14,7 +14,7 @@ use Override;
 use PHPUnit\Framework\Attributes\Test;
 use Support\UseCase\Exceptions\PermissionDeniedException;
 use Support\UseCase\Exceptions\UnauthenticatedException;
-use Tag\Application\Admin\Query\TagUsageCountQueryServiceInterface;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCountQueryServiceInterface;
 use Tag\Application\Admin\UseCase\Search\SearchInputData;
 use Tag\Application\Admin\UseCase\Search\SearchUseCase;
 use Tag\Domain\Criteria\TagSearchCriteria;

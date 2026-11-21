@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Song\Application\Viewer\UseCase\List;
 
-use Song\Application\Viewer\Query\SongQueryServiceInterface;
+use Song\Application\Viewer\UseCase\List\Query\SongQueryServiceInterface;
 
 readonly class ListUseCase
 {

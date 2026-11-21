@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tag\Application\Admin\UseCase\Search;
 
-use Tag\Application\Admin\Query\TagUsageCount;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCount;
 use Tag\Domain\Models\Tag;
 
 readonly class SearchOutputData

@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\SongSearchResponse;
 use OpenAPI\Admin\Client\Model\SongSummary as OpenApiSongSummary;
 use OpenAPI\Admin\Client\Model\SongTypeValue;
-use Song\Application\Admin\Query\SongSummary;
+use Song\Application\Admin\UseCase\Search\Query\SongSummary;
 use Song\Application\Admin\UseCase\Search\SearchOutputData;
 
 class SearchPresenter

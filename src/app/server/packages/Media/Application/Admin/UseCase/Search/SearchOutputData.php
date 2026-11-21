@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Media\Application\Admin\UseCase\Search;
 
-use Media\Application\Admin\Query\MediaUsageCount;
+use Media\Application\Admin\UseCase\Search\Query\MediaUsageCount;
 use Media\Domain\Models\Media;
 
 readonly class SearchOutputData

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Media\Application\Admin\UseCase\Get;
 
-use Media\Application\Admin\Query\MediaReferencedSong;
+use Media\Application\Admin\UseCase\Get\Query\MediaReferencedSong;
 use Media\Domain\Models\Media;
 use Tag\Domain\Models\Tag;
 

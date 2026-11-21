@@ -7,7 +7,7 @@ namespace Person\Application\Admin\UseCase\Group\Search;
 use AdminUser\Domain\Models\Permission;
 use Person\Application\Admin\Query\PersonGroupQueryServiceInterface;
 use Person\Application\Admin\Query\PersonGroupSummary;
-use Person\Application\Admin\Query\PersonGroupUsageCountQueryServiceInterface;
+use Person\Application\Admin\UseCase\Group\Search\Query\PersonGroupUsageCountQueryServiceInterface;
 use Person\Domain\Criteria\PersonGroupSearchCriteria;
 use Support\Optional\Arg;
 use Support\Optional\None;

@@ -10,10 +10,10 @@ use SensitiveParameter;
 use Support\Contracts\Uuid\UuidConverterInterface;
 use Support\Infrastructures\Database\QueryFactory;
 use Support\Infrastructures\Database\Row;
-use Venue\Application\Public\Query\VenueListItem;
-use Venue\Application\Public\Query\VenueListPage;
-use Venue\Application\Public\Query\VenueListPageToken;
-use Venue\Application\Public\Query\VenueQueryServiceInterface;
+use Venue\Application\Public\UseCase\List\Query\VenueListItem;
+use Venue\Application\Public\UseCase\List\Query\VenueListPage;
+use Venue\Application\Public\UseCase\List\Query\VenueListPageToken;
+use Venue\Application\Public\UseCase\List\Query\VenueQueryServiceInterface;
 use Venue\Domain\Models\VenueKind;
 
 readonly class VenueQueryService implements VenueQueryServiceInterface

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Event\Application\Viewer\UseCase\List;
 
-use Event\Application\Viewer\Query\EventQueryServiceInterface;
+use Event\Application\Viewer\UseCase\List\Query\EventQueryServiceInterface;
 
 readonly class ListUseCase
 {

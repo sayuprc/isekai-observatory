@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Public\V1\Event;
 
 use DateTime;
-use Event\Application\Public\Query\CoVocalistItem;
-use Event\Application\Public\Query\EventListItem;
-use Event\Application\Public\Query\EventSourceItem;
-use Event\Application\Public\Query\PerformanceItem;
-use Event\Application\Public\Query\SetlistItem;
 use Event\Application\Public\UseCase\List\ListOutputData;
+use Event\Application\Public\UseCase\List\Query\CoVocalistItem;
+use Event\Application\Public\UseCase\List\Query\EventListItem;
+use Event\Application\Public\UseCase\List\Query\EventSourceItem;
+use Event\Application\Public\UseCase\List\Query\PerformanceItem;
+use Event\Application\Public\UseCase\List\Query\SetlistItem;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Public\Client\Model\CoVocalist;
 use OpenAPI\Public\Client\Model\Event;

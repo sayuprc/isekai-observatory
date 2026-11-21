@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Release\Application\Admin\UseCase\Group\Search\Query;
+
+use Release\Domain\Criteria\ReleaseGroupSearchCriteria;
+
+interface ReleaseGroupSearchQueryServiceInterface
+{
+    /**
+     * @return array<int, ReleaseGroupSummary>
+     */
+    public function search(ReleaseGroupSearchCriteria $criteria): array;
+
+    public function maxPage(ReleaseGroupSearchCriteria $criteria): int;
+}

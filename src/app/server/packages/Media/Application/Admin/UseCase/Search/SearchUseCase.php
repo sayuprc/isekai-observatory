@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Media\Application\Admin\UseCase\Search;
 
 use AdminUser\Domain\Models\Permission;
-use Media\Application\Admin\Query\MediaUsageCountQueryServiceInterface;
+use Media\Application\Admin\UseCase\Search\Query\MediaUsageCountQueryServiceInterface;
 use Media\Domain\Criteria\MediaSearchCriteria;
 use Media\Domain\Models\Media;
 use Media\Domain\Models\MediaId;

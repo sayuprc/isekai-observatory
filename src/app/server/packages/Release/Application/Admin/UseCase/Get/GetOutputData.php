@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Release\Application\Admin\UseCase\Get;
 
-use Release\Application\Admin\Query\ReleaseReferencedSong;
+use Release\Application\Admin\UseCase\Get\Query\ReleaseReferencedSong;
 use Release\Domain\Models\Release;
 use Release\Domain\Models\ReleaseGroup;
 

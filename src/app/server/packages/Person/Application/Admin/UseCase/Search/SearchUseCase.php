@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Person\Application\Admin\UseCase\Search;
 
 use AdminUser\Domain\Models\Permission;
-use Person\Application\Admin\Query\PersonUsageCountQueryServiceInterface;
+use Person\Application\Admin\UseCase\Search\Query\PersonUsageCountQueryServiceInterface;
 use Person\Domain\Criteria\PersonSearchCriteria;
 use Person\Domain\Models\Person;
 use Person\Domain\Models\PersonId;

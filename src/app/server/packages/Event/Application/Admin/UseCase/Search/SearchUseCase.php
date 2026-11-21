@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Event\Application\Admin\UseCase\Search;
 
 use AdminUser\Domain\Models\Permission;
-use Event\Application\Admin\Query\EventSearchQueryServiceInterface;
+use Event\Application\Admin\UseCase\Search\Query\EventSearchQueryServiceInterface;
 use Event\Domain\Criteria\EventSearchCriteria;
 use Event\Domain\Models\EventStatus;
 use Event\Domain\Models\EventType;

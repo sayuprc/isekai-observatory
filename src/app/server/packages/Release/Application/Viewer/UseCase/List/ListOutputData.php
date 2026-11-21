@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Release\Application\Viewer\UseCase\List;
 
-use Release\Application\Viewer\Query\ReleaseGroupListItem;
+use Release\Application\Viewer\UseCase\List\Query\ReleaseGroupListItem;
 
 readonly class ListOutputData
 {

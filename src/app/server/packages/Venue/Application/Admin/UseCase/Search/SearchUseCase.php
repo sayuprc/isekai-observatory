@@ -9,7 +9,7 @@ use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
-use Venue\Application\Admin\Query\VenueUsageCountQueryServiceInterface;
+use Venue\Application\Admin\UseCase\Search\Query\VenueUsageCountQueryServiceInterface;
 use Venue\Domain\Criteria\VenueSearchCriteria;
 use Venue\Domain\Models\Venue;
 use Venue\Domain\Models\VenueId;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Release\Application\Admin\UseCase\Search;
 
-use Release\Application\Admin\Query\ReleaseSummary;
+use Release\Application\Admin\UseCase\Search\Query\ReleaseSummary;
 
 readonly class SearchOutputData
 {

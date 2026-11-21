@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Release\Application\Admin\UseCase\Get;
 
 use AdminUser\Domain\Models\Permission;
-use Release\Application\Admin\Query\ReleaseDetailQueryServiceInterface;
+use Release\Application\Admin\UseCase\Get\Query\ReleaseDetailQueryServiceInterface;
 use Release\Domain\Models\ReleaseGroupRepositoryInterface;
 use Release\Domain\Models\ReleaseId;
 use Release\Domain\Models\ReleaseRepositoryInterface;

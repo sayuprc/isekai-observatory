@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Event\Application\Admin\UseCase\Search;
 
-use Event\Application\Admin\Query\EventSummary;
+use Event\Application\Admin\UseCase\Search\Query\EventSummary;
 
 readonly class SearchOutputData
 {

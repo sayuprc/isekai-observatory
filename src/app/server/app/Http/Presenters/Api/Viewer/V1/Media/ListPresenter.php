@@ -6,9 +6,9 @@ namespace App\Http\Presenters\Api\Viewer\V1\Media;
 
 use DateTime;
 use Illuminate\Http\JsonResponse;
-use Media\Application\Viewer\Query\MediaListItem;
-use Media\Application\Viewer\Query\MediaSongSummary;
 use Media\Application\Viewer\UseCase\List\ListOutputData;
+use Media\Application\Viewer\UseCase\List\Query\MediaListItem;
+use Media\Application\Viewer\UseCase\List\Query\MediaSongSummary;
 use OpenAPI\Viewer\Client\Model\AttachedTag;
 use OpenAPI\Viewer\Client\Model\MediaListItem as OpenApiMediaListItem;
 use OpenAPI\Viewer\Client\Model\MediaListResponse;

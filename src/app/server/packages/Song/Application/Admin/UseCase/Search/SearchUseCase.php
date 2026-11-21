@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Song\Application\Admin\UseCase\Search;
 
 use AdminUser\Domain\Models\Permission;
-use Song\Application\Admin\Query\SongQueryServiceInterface;
+use Song\Application\Admin\UseCase\Search\Query\SongQueryServiceInterface;
 use Song\Domain\Criteria\SongSearchCriteria;
 use Song\Domain\Models\SongType;
 use Support\Optional\Arg;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Person\Application\Public\UseCase\List;
 
-use Person\Application\Public\Query\PersonListItem;
+use Person\Application\Public\UseCase\List\Query\PersonListItem;
 use SensitiveParameter;
 
 readonly class ListOutputData

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Admin\V1\Media;
 
 use DateTime;
-use Media\Application\Admin\Query\MediaReferencedSong;
-use Media\Application\Admin\Query\MediaUsageCount;
+use Media\Application\Admin\UseCase\Get\Query\MediaReferencedSong;
+use Media\Application\Admin\UseCase\Search\Query\MediaUsageCount;
 use Media\Domain\Models\Media;
 use OpenAPI\Admin\Client\Model\AttachedTag as OpenApiAttachedTag;
 use OpenAPI\Admin\Client\Model\Media as OpenApiMedia;

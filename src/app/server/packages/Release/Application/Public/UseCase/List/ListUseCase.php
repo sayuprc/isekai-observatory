@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Release\Application\Public\UseCase\List;
 
-use Release\Application\Public\Query\ReleaseGroupQueryServiceInterface;
+use Release\Application\Public\UseCase\List\Query\ReleaseGroupQueryServiceInterface;
 
 readonly class ListUseCase
 {

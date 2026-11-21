@@ -9,7 +9,7 @@ use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
-use Tag\Application\Admin\Query\TagUsageCountQueryServiceInterface;
+use Tag\Application\Admin\UseCase\Search\Query\TagUsageCountQueryServiceInterface;
 use Tag\Domain\Criteria\TagSearchCriteria;
 use Tag\Domain\Models\Tag;
 use Tag\Domain\Models\TagId;

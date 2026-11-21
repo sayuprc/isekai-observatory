@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Release\Application\Admin\UseCase\Group\Get\Query;
+
+readonly class ReleaseGroupReferencedRelease
+{
+    /**
+     * @param array<int, int> $formatValues
+     */
+    public function __construct(
+        public string $releaseId,
+        public string $name,
+        public string $releasedOn,
+        public bool $isDisplay,
+        public int $orderNo,
+        public array $formatValues,
+    ) {
+    }
+}

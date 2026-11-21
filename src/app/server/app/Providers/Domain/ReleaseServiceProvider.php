@@ -6,12 +6,12 @@ namespace App\Providers\Domain;
 
 use Illuminate\Support\ServiceProvider;
 use Override;
-use Release\Application\Admin\Query\ReleaseDetailQueryServiceInterface;
-use Release\Application\Admin\Query\ReleaseGroupDetailQueryServiceInterface;
-use Release\Application\Admin\Query\ReleaseGroupSearchQueryServiceInterface;
-use Release\Application\Admin\Query\ReleaseSearchQueryServiceInterface;
-use Release\Application\Public\Query\ReleaseGroupQueryServiceInterface as PublicReleaseGroupQueryServiceInterface;
-use Release\Application\Viewer\Query\ReleaseGroupQueryServiceInterface as ViewerReleaseGroupQueryServiceInterface;
+use Release\Application\Admin\UseCase\Get\Query\ReleaseDetailQueryServiceInterface;
+use Release\Application\Admin\UseCase\Group\Get\Query\ReleaseGroupDetailQueryServiceInterface;
+use Release\Application\Admin\UseCase\Group\Search\Query\ReleaseGroupSearchQueryServiceInterface;
+use Release\Application\Admin\UseCase\Search\Query\ReleaseSearchQueryServiceInterface;
+use Release\Application\Public\UseCase\List\Query\ReleaseGroupQueryServiceInterface as PublicReleaseGroupQueryServiceInterface;
+use Release\Application\Viewer\UseCase\List\Query\ReleaseGroupQueryServiceInterface as ViewerReleaseGroupQueryServiceInterface;
 use Release\Domain\Models\ReleaseGroupRepositoryInterface;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Release\Infrastructures\Admin\ReleaseDetailQueryService;

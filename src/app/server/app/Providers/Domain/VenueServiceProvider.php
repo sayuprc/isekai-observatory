@@ -6,8 +6,8 @@ namespace App\Providers\Domain;
 
 use Illuminate\Support\ServiceProvider;
 use Override;
-use Venue\Application\Admin\Query\VenueUsageCountQueryServiceInterface;
-use Venue\Application\Public\Query\VenueQueryServiceInterface as PublicVenueQueryServiceInterface;
+use Venue\Application\Admin\UseCase\Search\Query\VenueUsageCountQueryServiceInterface;
+use Venue\Application\Public\UseCase\List\Query\VenueQueryServiceInterface as PublicVenueQueryServiceInterface;
 use Venue\Domain\Models\VenueRepositoryInterface;
 use Venue\Infrastructures\Admin\VenueUsageCountQueryService;
 use Venue\Infrastructures\Public\VenueQueryService as PublicVenueQueryService;

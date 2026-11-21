@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Admin\V1\Media;
 
 use Illuminate\Http\JsonResponse;
-use Media\Application\Admin\Query\MediaUsageCount;
+use Media\Application\Admin\UseCase\Search\Query\MediaUsageCount;
 use Media\Application\Admin\UseCase\Search\SearchOutputData;
 use Media\Domain\Models\Media;
 use OpenAPI\Admin\Client\Model\MediaSearchResponse;

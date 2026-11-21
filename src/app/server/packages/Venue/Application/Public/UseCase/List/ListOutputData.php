@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Venue\Application\Public\UseCase\List;
 
 use SensitiveParameter;
-use Venue\Application\Public\Query\VenueListItem;
+use Venue\Application\Public\UseCase\List\Query\VenueListItem;
 
 readonly class ListOutputData
 {

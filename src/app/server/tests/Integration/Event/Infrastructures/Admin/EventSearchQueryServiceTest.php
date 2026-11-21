@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Event\Infrastructures\Admin;
 
-use Event\Application\Admin\Query\EventSummary;
+use Event\Application\Admin\UseCase\Search\Query\EventSummary;
 use Event\Domain\Criteria\EventSearchCriteria;
 use Event\Domain\Criteria\Sort;
 use Event\Domain\Models\Event;

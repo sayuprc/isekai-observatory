@@ -8,7 +8,7 @@ use Event\Infrastructures\EventRepository;
 use Media\Domain\Models\MediaType;
 use PHPUnit\Framework\Attributes\Test;
 use Release\Domain\Models\ReleaseGroupType;
-use Song\Application\Admin\Query\SongSummary;
+use Song\Application\Admin\UseCase\Search\Query\SongSummary;
 use Song\Domain\Criteria\SongSearchCriteria;
 use Song\Domain\Criteria\Sort;
 use Song\Domain\Models\Persons\SongPersonRole;

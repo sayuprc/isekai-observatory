@@ -7,7 +7,7 @@ namespace App\Http\Presenters\Api\Admin\V1\Person;
 use Illuminate\Http\JsonResponse;
 use OpenAPI\Admin\Client\Model\PersonSearchResponse;
 use OpenAPI\Admin\Client\Model\PersonSummary;
-use Person\Application\Admin\Query\PersonUsageCount;
+use Person\Application\Admin\UseCase\Search\Query\PersonUsageCount;
 use Person\Application\Admin\UseCase\Search\SearchOutputData;
 use Person\Domain\Models\Person;
 

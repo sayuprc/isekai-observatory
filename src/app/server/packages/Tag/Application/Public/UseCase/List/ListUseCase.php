@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tag\Application\Public\UseCase\List;
 
-use Tag\Application\Public\Query\TagQueryServiceInterface;
+use Tag\Application\Public\UseCase\List\Query\TagQueryServiceInterface;
 
 readonly class ListUseCase
 {

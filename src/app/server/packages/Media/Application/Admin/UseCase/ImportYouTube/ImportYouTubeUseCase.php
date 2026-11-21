@@ -6,9 +6,9 @@ namespace Media\Application\Admin\UseCase\ImportYouTube;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Media\Application\Admin\Query\YouTubeShortVideoQueryServiceInterface;
-use Media\Application\Admin\Query\YouTubeUploadedVideo;
-use Media\Application\Admin\Query\YouTubeVideoQueryServiceInterface;
+use Media\Application\Admin\UseCase\ImportYouTube\Query\YouTubeShortVideoQueryServiceInterface;
+use Media\Application\Admin\UseCase\ImportYouTube\Query\YouTubeUploadedVideo;
+use Media\Application\Admin\UseCase\ImportYouTube\Query\YouTubeVideoQueryServiceInterface;
 use Media\Domain\Models\Media;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Domain\Models\MediaType;

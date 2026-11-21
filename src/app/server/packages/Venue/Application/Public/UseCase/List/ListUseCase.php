@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Venue\Application\Public\UseCase\List;
 
-use Venue\Application\Public\Query\VenueQueryServiceInterface;
+use Venue\Application\Public\UseCase\List\Query\VenueQueryServiceInterface;
 
 readonly class ListUseCase
 {

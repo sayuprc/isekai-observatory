@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Media\Infrastructures\Admin;
 
-use Media\Application\Admin\Query\MediaUsageCount;
-use Media\Application\Admin\Query\MediaUsageCountQueryServiceInterface;
+use Media\Application\Admin\UseCase\Search\Query\MediaUsageCount;
+use Media\Application\Admin\UseCase\Search\Query\MediaUsageCountQueryServiceInterface;
 use Media\Domain\Models\MediaId;
 use Override;
 use Support\Contracts\Uuid\UuidConverterInterface;

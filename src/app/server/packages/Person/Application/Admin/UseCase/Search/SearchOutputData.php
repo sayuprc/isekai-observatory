@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\Search;
 
-use Person\Application\Admin\Query\PersonUsageCount;
+use Person\Application\Admin\UseCase\Search\Query\PersonUsageCount;
 use Person\Domain\Models\Person;
 
 readonly class SearchOutputData

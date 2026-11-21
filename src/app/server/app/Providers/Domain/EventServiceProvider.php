@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers\Domain;
 
-use Event\Application\Admin\Query\EventSearchQueryServiceInterface;
-use Event\Application\Public\Query\EventQueryServiceInterface as PublicEventQueryServiceInterface;
-use Event\Application\Viewer\Query\EventQueryServiceInterface as ViewerEventQueryServiceInterface;
+use Event\Application\Admin\UseCase\Search\Query\EventSearchQueryServiceInterface;
+use Event\Application\Public\UseCase\List\Query\EventQueryServiceInterface as PublicEventQueryServiceInterface;
+use Event\Application\Viewer\UseCase\List\Query\EventQueryServiceInterface as ViewerEventQueryServiceInterface;
 use Event\Domain\Models\EventRepositoryInterface;
 use Event\Infrastructures\Admin\EventSearchQueryService;
 use Event\Infrastructures\EventRepository;
