@@ -11,9 +11,11 @@ runs:
 
     - name: Install MoonBit
       shell: bash
+      env:
+        MOONBIT_VERSION: ${{ steps.moonbit-version.outputs.version }}
       run: |
         curl -fsSL https://cli.moonbitlang.com/install/unix.sh \
-          | bash -s -- "${{ steps.moonbit-version.outputs.version }}"
+          | bash -s -- "${MOONBIT_VERSION}"
         echo "${HOME}/.moon/bin" >> "$GITHUB_PATH"
         ${HOME}/.moon/bin/moon update
 
