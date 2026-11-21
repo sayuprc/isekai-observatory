@@ -25,6 +25,8 @@
 
 業務ロジックは ADR-0006 の ADOP を前提にし、`Domain`、`Application`、`Infrastructures`、`DebugInfrastructures` の境界を守ります
 
+パッケージ間の依存は ADR-0044 の階層に従います。階層表は `src/app/server/tools/Arkitect/config.php` にあります
+
 ## Admin
 
 - `src/app/admin/`: Astro / SolidJS / Elysia による管理画面
