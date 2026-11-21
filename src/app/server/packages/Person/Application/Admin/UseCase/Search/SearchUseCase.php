@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Person\Application\Admin\UseCase\Search;
 
-use AdminUser\Domain\Models\Permission;
 use Person\Application\Admin\UseCase\Search\Query\PersonUsageCountQueryServiceInterface;
 use Person\Domain\Criteria\PersonSearchCriteria;
 use Person\Domain\Models\Person;
 use Person\Domain\Models\PersonId;
 use Person\Domain\Models\PersonRepositoryInterface;
+use Support\Domain\Permission;
 use Support\Optional\Arg;
 use Support\Optional\None;
 use Support\Optional\Some;

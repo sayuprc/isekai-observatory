@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Presenters\Api\Admin\V1\AdminUser;
 
 use AdminUser\Domain\Models\AdminUser;
-use AdminUser\Domain\Models\Permission;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeImmutable;
 use OpenAPI\Admin\Client\Model\AdminUser as OpenApiAdminUser;
 use OpenAPI\Admin\Client\Model\PermissionValue;
 use OpenAPI\Admin\Client\Model\RoleValue;
+use Support\Domain\Permission;
 
 class Converter
 {

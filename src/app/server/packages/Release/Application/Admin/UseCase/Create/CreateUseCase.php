@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Release\Application\Admin\UseCase\Create;
 
-use AdminUser\Domain\Models\Permission;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Release\Domain\Services\ReleaseIntegrityService;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

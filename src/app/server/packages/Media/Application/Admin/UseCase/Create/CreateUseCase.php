@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Media\Application\Admin\UseCase\Create;
 
-use AdminUser\Domain\Models\Permission;
 use Media\Domain\Models\MediaRepositoryInterface;
 use Media\Domain\Services\MediaIntegrityService;
 use Support\Contracts\TransactionInterface;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

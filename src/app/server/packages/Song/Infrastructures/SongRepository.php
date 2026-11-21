@@ -127,14 +127,22 @@ readonly class SongRepository implements SongRepositoryInterface
     #[Override]
     public function isUsed(SongId $songId): bool
     {
-        $count = $this->queryFactory
-            ->select()
-            ->from('song_performances')
-            ->where('song_id', '=', $this->converter->toBin($songId->value))
-            ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
-            |> Row::intValue(...);
+        $binSongId = $this->converter->toBin($songId->value);
 
-        return $count > 0;
+        foreach (['song_performances', 'release_track_songs'] as $table) {
+            $count = $this->queryFactory
+                ->select()
+                ->from($table)
+                ->where('song_id', '=', $binSongId)
+                ->aggregate($this->queryFactory->pdo(), 'COUNT(*)')
+                |> Row::intValue(...);
+
+            if ($count > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     #[Override]

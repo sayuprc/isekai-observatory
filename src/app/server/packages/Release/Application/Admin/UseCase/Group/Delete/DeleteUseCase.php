@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Release\Application\Admin\UseCase\Group\Delete;
 
-use AdminUser\Domain\Models\Permission;
 use Release\Domain\Models\ReleaseGroupId;
 use Release\Domain\Models\ReleaseGroupRepositoryInterface;
 use Release\Domain\Models\ReleaseRepositoryInterface;
 use Support\Contracts\TransactionInterface;
 use Support\Domain\Exceptions\BusinessRuleViolationException;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\AuditAction;
 use Support\UseCase\AuditLog\AuditLogRecorderInterface;
 use Support\UseCase\AuditLog\AuditTargetType;

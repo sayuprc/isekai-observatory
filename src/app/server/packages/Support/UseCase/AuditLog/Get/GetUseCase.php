@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Support\UseCase\AuditLog\Get;
 
-use AdminUser\Domain\Models\Permission;
+use Support\Domain\Permission;
 use Support\UseCase\AuditLog\Query\AuditLogQueryServiceInterface;
 use Support\UseCase\Authorizer\UseCaseAuthorizer;
 use Support\UseCase\Exceptions\ResourceNotFoundException;
